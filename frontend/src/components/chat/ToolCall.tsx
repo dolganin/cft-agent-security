@@ -38,8 +38,12 @@ export function ToolCall({ tool }: { tool: TimelineTool }) {
 
         {command ? (
           <div className="terminal-block">
-            <div className="terminal-title">команда</div>
-            <pre>$ {command}</pre>
+            <div className="terminal-title">
+              {tool.capability === "sandbox_command"
+                ? "Команда песочницы"
+                : "Точный вызов capability"}
+            </div>
+            <pre>{tool.capability === "sandbox_command" ? "$" : "›"} {command}</pre>
           </div>
         ) : null}
         {tool.stdout ? (

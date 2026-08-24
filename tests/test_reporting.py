@@ -129,3 +129,23 @@ def test_sandbox_command_summary_is_bounded_redacted_and_ui_ready() -> None:
     assert summary.stdout == "line one\npassword=<redacted>\nline three"
     assert summary.duration_ms == 17
     assert summary.sandbox_session_id == "sandbox-1"
+
+
+def test_registered_capability_summary_exposes_safe_exact_invocation() -> None:
+    action = ActionProposal(
+        id="action-dockerfile-1",
+        tool="inspect_dockerfile_user",
+        target="demo",
+        environment="local",
+        parameters={"artifact_id": "web-dockerfile-dockerfile"},
+        purpose="Inspect the final Dockerfile USER.",
+        expected_evidence="Structured Dockerfile user evidence.",
+    )
+
+    summary = _sandbox_actions({"proposed_action": action})[0]
+
+    assert summary.command == [
+        "inspect_dockerfile_user",
+        "--artifact-id",
+        "web-dockerfile-dockerfile",
+    ]

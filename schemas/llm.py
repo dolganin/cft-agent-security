@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class _LLMActionFields(BaseModel):
@@ -91,3 +91,26 @@ class LLMDynamicPlanChoice(BaseModel):
     continuation_reason: str = Field(min_length=1, max_length=1000)
     stop_conditions: list[str] = Field(default_factory=list, max_length=8)
     steps: list[LLMPlanStepChoice] = Field(min_length=1, max_length=8)
+
+
+class LLMRegisteredPlanStepChoice(BaseModel):
+    """A plan step that can reference only an application-owned capability."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: Literal["candidate"] = "candidate"
+    candidate_id: str = Field(min_length=1, max_length=256)
+    expected_observation: str = Field(min_length=1, max_length=1000)
+    continue_if: str = Field(min_length=1, max_length=1000)
+
+
+class LLMRegisteredDynamicPlanChoice(BaseModel):
+    """Provider-facing plan for findings with a dedicated trusted capability."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    goal: str = Field(min_length=1, max_length=1000)
+    max_steps: int = Field(ge=1, le=8)
+    continuation_reason: str = Field(min_length=1, max_length=1000)
+    stop_conditions: list[str] = Field(default_factory=list, max_length=8)
+    steps: list[LLMRegisteredPlanStepChoice] = Field(min_length=1, max_length=8)

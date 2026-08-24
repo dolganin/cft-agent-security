@@ -29,6 +29,22 @@ describe("chat interactions", () => {
     expect(screen.getByText("USER app")).toBeTruthy();
   });
 
+  it("shows the exact registered capability invocation", () => {
+    render(<ToolCall tool={{ actionId: "a2", capability: "inspect_dockerfile_user", purpose: "Inspect USER", target: "demo", environment: "local", status: "completed", exitCode: 0, durationMs: 8, timedOut: false, parameterNames: ["artifact_id"], command: ["inspect_dockerfile_user", "--artifact-id", "web-dockerfile-dockerfile"], cwd: null, stdout: null, stderr: null, sandboxSessionId: "s1" }} />);
+
+    expect(
+      screen.getByText(
+        "inspect_dockerfile_user --artifact-id web-dockerfile-dockerfile",
+      ),
+    ).toBeTruthy();
+    fireEvent.click(
+      screen.getByText(
+        "inspect_dockerfile_user --artifact-id web-dockerfile-dockerfile",
+      ),
+    );
+    expect(screen.getByText("Точный вызов capability")).toBeTruthy();
+  });
+
   it("renders gate, finding and evidence as compact conversation blocks", () => {
     const report = {
       finding_id: "f1",

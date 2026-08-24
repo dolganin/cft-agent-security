@@ -215,15 +215,40 @@ def _sandbox_actions(state: AgentState) -> list[SandboxActionSummary]:
 
 
 def _display_command(action) -> list[str]:
-    if action.tool != "sandbox_command":
+    if action.tool == "sandbox_command":
+        raw = action.parameters.get("argv")
+        if not isinstance(raw, list):
+            return []
+        return [
+            redact_error_message(str(item), max_length=1024)
+            for item in raw[:32]
+        ]
+
+    displayable_parameters = {
+        "inspect_dockerfile_user": ("artifact_id",),
+        "inspect_python_password_assignment": ("artifact_id",),
+        "inspect_react_dangerous_html_flow": (
+            "frontend_artifact_id",
+            "model_artifact_id",
+            "serializer_artifact_id",
+            "view_artifact_id",
+            "field",
+        ),
+    }.get(action.tool)
+    if displayable_parameters is None:
         return []
-    raw = action.parameters.get("argv")
-    if not isinstance(raw, list):
-        return []
-    return [
-        redact_error_message(str(item), max_length=1024)
-        for item in raw[:32]
-    ]
+
+    invocation = [action.tool]
+    for name in displayable_parameters:
+        value = action.parameters.get(name)
+        if isinstance(value, str) and value:
+            invocation.extend(
+                [
+                    f"--{name.replace('_', '-')}",
+                    redact_error_message(value, max_length=1024),
+                ]
+            )
+    return invocation
 
 
 def _display_cwd(action) -> str | None:

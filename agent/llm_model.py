@@ -14,6 +14,7 @@ from schemas.llm import (
     LLMGeneralActionChoice,
     LLMPythonPasswordActionChoice,
     LLMReactHtmlFlowActionChoice,
+    LLMRegisteredDynamicPlanChoice,
 )
 from schemas.plan import DynamicPlan, PlannedAction
 from schemas.state import AgentState
@@ -124,32 +125,52 @@ class FallbackLLMAgentModel:
         hypothesis: Hypothesis,
     ) -> DynamicPlan:
         candidates = _allowed_plan_candidates(state)
-        choice = self.client.complete_model(
-            output_model=LLMDynamicPlanChoice,
-            system_prompt=SYSTEM_PROMPT,
-            user_payload={
-                "task": (
-                    "Build a bounded verification plan. You may either choose a deterministic "
-                    "registered candidate or propose a sandbox_command argv. sandbox_command runs "
-                    "only inside the disposable Docker lab with a read-only target mount, bounded "
-                    "resources and no arbitrary network. Use registered runtime candidates for "
-                    "network observations. Never invent target identity or sandbox session ids."
+        registered_only = _requires_registered_candidate(state)
+        task = (
+            "Build a bounded verification plan using only the supplied registered "
+            "candidate. A sandbox_command is not allowed for this finding because a "
+            "dedicated deterministic capability exists. Never invent target identity "
+            "or sandbox session ids."
+            if registered_only
+            else (
+                "Build a bounded verification plan. You may either choose a deterministic "
+                "registered candidate or propose a sandbox_command argv. sandbox_command runs "
+                "only inside the disposable Docker lab with a read-only target mount, bounded "
+                "resources and no arbitrary network. Use registered runtime candidates for "
+                "network observations. Never invent target identity or sandbox session ids."
+            )
+        )
+        user_payload: dict[str, Any] = {
+            "task": task,
+            "state": _reasoning_context(state),
+            "analysis": analysis.model_dump(mode="json"),
+            "hypothesis": hypothesis.model_dump(mode="json"),
+            "registered_candidates": [
+                _public_candidate(candidate) for candidate in candidates
+            ],
+        }
+        if not registered_only:
+            user_payload["sandbox_command_contract"] = {
+                "kind": "sandbox_command",
+                "argv": (
+                    "1-32 argv tokens; shell text is allowed only through an explicit "
+                    "argv such as sh -lc"
                 ),
-                "state": _reasoning_context(state),
-                "analysis": analysis.model_dump(mode="json"),
-                "hypothesis": hypothesis.model_dump(mode="json"),
-                "registered_candidates": [
-                    _public_candidate(candidate) for candidate in candidates
-                ],
-                "sandbox_command_contract": {
-                    "kind": "sandbox_command",
-                    "argv": "1-32 argv tokens; shell text is allowed only through an explicit argv such as sh -lc",
-                    "cwd": ["/target", "/workspace"],
-                    "network": "none; use registered runtime candidates for target HTTP",
-                    "target_mount": "read-only at /target",
-                    "workspace": "ephemeral writable /workspace",
-                },
-            },
+                "cwd": ["/target", "/workspace"],
+                "network": (
+                    "none; use registered runtime candidates for target HTTP"
+                ),
+                "target_mount": "read-only at /target",
+                "workspace": "ephemeral writable /workspace",
+            }
+        choice = self.client.complete_model(
+            output_model=(
+                LLMRegisteredDynamicPlanChoice
+                if registered_only
+                else LLMDynamicPlanChoice
+            ),
+            system_prompt=SYSTEM_PROMPT,
+            user_payload=user_payload,
             operation="build_dynamic_plan",
         )
 
@@ -368,11 +389,7 @@ def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
 
 
 def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
-    if (
-        _is_dockerfile_user_finding(state)
-        or _is_unvalidated_password_finding(state)
-        or _is_react_dangerous_html_finding(state)
-    ):
+    if _requires_registered_candidate(state):
         return [
             {
                 "candidate_id": item["name"],
@@ -428,6 +445,14 @@ def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
                 }
             )
     return candidates
+
+
+def _requires_registered_candidate(state: AgentState) -> bool:
+    return (
+        _is_dockerfile_user_finding(state)
+        or _is_unvalidated_password_finding(state)
+        or _is_react_dangerous_html_finding(state)
+    )
 
 
 def _public_candidate(candidate: dict[str, Any]) -> dict[str, Any]:

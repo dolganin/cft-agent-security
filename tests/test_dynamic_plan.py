@@ -9,20 +9,31 @@ from schemas.action import ActionProposal
 from schemas.agent_outputs import AnalysisResult
 from schemas.finding import Finding
 from schemas.hypothesis import Hypothesis
-from schemas.llm import LLMDynamicPlanChoice, LLMPlanStepChoice
+from schemas.llm import (
+    LLMDynamicPlanChoice,
+    LLMPlanStepChoice,
+    LLMRegisteredDynamicPlanChoice,
+    LLMRegisteredPlanStepChoice,
+)
 from schemas.plan import DynamicPlan, PlannedAction
 from schemas.runtime import RuntimeService, RuntimeServiceMap
-from schemas.target import TargetProfile, TargetService
+from schemas.target import TargetArtifact, TargetProfile, TargetService
 
 
 class _FakeClient:
-    def __init__(self, output: LLMDynamicPlanChoice) -> None:
+    def __init__(
+        self,
+        output: LLMDynamicPlanChoice | LLMRegisteredDynamicPlanChoice,
+        *,
+        expected_output_model=LLMDynamicPlanChoice,
+    ) -> None:
         self.output = output
+        self.expected_output_model = expected_output_model
         self.calls: list[dict] = []
 
     def complete_model(self, **kwargs):
         self.calls.append(kwargs)
-        assert kwargs["output_model"] is LLMDynamicPlanChoice
+        assert kwargs["output_model"] is self.expected_output_model
         return self.output
 
 
@@ -374,6 +385,60 @@ def test_llm_can_plan_generic_networkless_sandbox_command() -> None:
     assert DynamicPlanValidator().validate(plan, state).approved is True
     contract = client.calls[0]["user_payload"]["sandbox_command_contract"]
     assert contract["network"].startswith("none")
+
+
+def test_llm_dockerfile_plan_can_only_use_registered_capability() -> None:
+    choice = LLMRegisteredDynamicPlanChoice(
+        goal="Inspect the trusted Dockerfile artifact.",
+        max_steps=1,
+        continuation_reason="Stop after capability-specific Evidence.",
+        stop_conditions=["terminal_evidence"],
+        steps=[
+            LLMRegisteredPlanStepChoice(
+                candidate_id="inspect_dockerfile_user",
+                expected_observation="Structured Dockerfile USER evidence.",
+                continue_if="The capability returns inconclusive Evidence.",
+            )
+        ],
+    )
+    client = _FakeClient(
+        choice,
+        expected_output_model=LLMRegisteredDynamicPlanChoice,
+    )
+    model = FallbackLLMAgentModel(client)
+    state = _state()
+    state["finding"] = Finding(
+        id="dockerfile.security.last-user-is-root.last-user-is-root:Dockerfile:4",
+        source="semgrep",
+        rule_id="dockerfile.security.last-user-is-root.last-user-is-root",
+        title="The last Dockerfile user is root",
+        description="The final Dockerfile stage explicitly selects root.",
+        file="Dockerfile",
+        line_start=4,
+        severity="ERROR",
+        service="api",
+    )
+    state["target_profile"] = state["target_profile"].model_copy(
+        update={
+            "artifacts": {
+                "web-dockerfile": TargetArtifact(
+                    id="web-dockerfile",
+                    kind="dockerfile",
+                    path="Dockerfile",
+                )
+            }
+        }
+    )
+
+    plan = model.build_plan(
+        state,
+        AnalysisResult(summary="The source condition requires verification."),
+        state["hypothesis"],
+    )
+
+    assert [step.action.tool for step in plan.steps] == ["inspect_dockerfile_user"]
+    assert plan.steps[0].action.parameters == {"artifact_id": "web-dockerfile"}
+    assert "sandbox_command_contract" not in client.calls[0]["user_payload"]
 
 
 def test_dynamic_plan_rejects_sandbox_command_with_runtime_scope() -> None:
