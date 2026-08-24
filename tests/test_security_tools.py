@@ -101,14 +101,30 @@ def _worker_payload(
 def test_agent_maps_both_docker_findings_to_one_reusable_capability() -> None:
     model = DeterministicAgentModel()
     cases = [
-        ("backend/Dockerfile", "backend", "backend_dockerfile"),
-        ("frontend/frontend/Dockerfile", "frontend", "frontend_dockerfile"),
+        (
+            "dockerfile.security.missing-user.missing-user",
+            "backend/Dockerfile",
+            "backend",
+            "backend_dockerfile",
+        ),
+        (
+            "dockerfile.security.missing-user.missing-user",
+            "frontend/frontend/Dockerfile",
+            "frontend",
+            "frontend_dockerfile",
+        ),
+        (
+            "dockerfile.security.last-user-is-root.last-user-is-root",
+            "backend/Dockerfile",
+            "backend",
+            "backend_dockerfile",
+        ),
     ]
 
-    for file, service, artifact_id in cases:
+    for rule_id, file, service, artifact_id in cases:
         state = _state(
             _finding(
-                rule_id="dockerfile.security.missing-user.missing-user",
+                rule_id=rule_id,
                 file=file,
                 service=service,
             )

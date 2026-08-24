@@ -116,7 +116,7 @@ class DeterministicAgentModel:
             parameters = {}
             purpose = "Exercise the deterministic Validator deny path."
             expected_evidence = hypothesis.expected_evidence
-        elif _is_missing_user_finding(finding.rule_id):
+        elif _is_dockerfile_user_finding(finding.rule_id):
             tool = "inspect_dockerfile_user"
             parameters = _dockerfile_user_parameters(finding.file, target_profile)
             purpose = (
@@ -353,8 +353,16 @@ def _requested_test_outcome(state: AgentState) -> str:
     return mapping.get(severity, "inconclusive")
 
 
-def _is_missing_user_finding(rule_id: str) -> bool:
-    return rule_id.lower().startswith("dockerfile.security.missing-user")
+def _is_dockerfile_user_finding(rule_id: str) -> bool:
+    """Match Semgrep rules covered by the final-stage USER capability."""
+
+    normalized = rule_id.lower()
+    return normalized.startswith(
+        (
+            "dockerfile.security.missing-user",
+            "dockerfile.security.last-user-is-root",
+        )
+    )
 
 
 def _is_unvalidated_password_finding(rule_id: str) -> bool:

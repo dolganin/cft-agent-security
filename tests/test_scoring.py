@@ -30,6 +30,16 @@ def test_docker_missing_user_is_cvss_not_applicable() -> None:
     assert "false precision" in result.reasoning
 
 
+def test_docker_last_user_is_root_is_cvss_not_applicable() -> None:
+    result = ScoringService().score_cvss(
+        _finding(rule_id="dockerfile.security.last-user-is-root.last-user-is-root")
+    )
+
+    assert result.vector == "N/A"
+    assert result.score is None
+    assert result.severity == "N/A"
+
+
 def test_semgrep_severity_is_not_guessed_into_cvss() -> None:
     result = ScoringService().score_cvss(_finding(rule_id="python.security.example"))
 

@@ -426,7 +426,12 @@ def _unsupported_verification_reason(profile: TargetProfile, finding) -> str | N
     required_roles: list[str] = []
     required_metadata: list[str] = []
 
-    if rule_id.startswith("dockerfile.security.missing-user"):
+    if rule_id.startswith(
+        (
+            "dockerfile.security.missing-user",
+            "dockerfile.security.last-user-is-root",
+        )
+    ):
         required_paths.append((finding.file, "dockerfile"))
     elif "unvalidated-password" in rule_id:
         required_paths.append((finding.file, "python"))

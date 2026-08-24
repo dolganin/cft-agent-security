@@ -71,7 +71,7 @@ class FallbackLLMAgentModel:
         hypothesis: Hypothesis,
     ) -> ActionProposal:
         allowed_tools = _allowed_execution_tools(state)
-        if _is_missing_user_finding(state):
+        if _is_dockerfile_user_finding(state):
             choice_model = LLMDockerfileUserActionChoice
         elif _is_unvalidated_password_finding(state):
             choice_model = LLMPythonPasswordActionChoice
@@ -319,7 +319,7 @@ def _reasoning_context(state: AgentState) -> dict[str, Any]:
 
 
 def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
-    if _is_missing_user_finding(state):
+    if _is_dockerfile_user_finding(state):
         return [
             {
                 "name": "inspect_dockerfile_user",
@@ -369,7 +369,7 @@ def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
 
 def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
     if (
-        _is_missing_user_finding(state)
+        _is_dockerfile_user_finding(state)
         or _is_unvalidated_password_finding(state)
         or _is_react_dangerous_html_finding(state)
     ):
@@ -444,8 +444,10 @@ def _optional_string(value: object) -> str | None:
     return value if isinstance(value, str) else None
 
 
-def _is_missing_user_finding(state: AgentState) -> bool:
-    return state["finding"].rule_id.lower().startswith("dockerfile.security.missing-user")
+def _is_dockerfile_user_finding(state: AgentState) -> bool:
+    from agent.model import _is_dockerfile_user_finding as matches_rule
+
+    return matches_rule(state["finding"].rule_id)
 
 
 def _is_unvalidated_password_finding(state: AgentState) -> bool:

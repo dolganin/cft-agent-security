@@ -89,6 +89,39 @@ def test_llm_action_keeps_security_sensitive_fields_deterministic() -> None:
     assert "/" not in action.id
 
 
+def test_llm_maps_last_user_is_root_to_dockerfile_capability() -> None:
+    choice = LLMDockerfileUserActionChoice(
+        tool="inspect_dockerfile_user",
+        parameters={},
+        purpose="Verify the final Dockerfile user.",
+        expected_evidence="Structured Dockerfile user evidence.",
+    )
+    model = FallbackLLMAgentModel(_FakeClient([choice]))
+    state = _state()
+    state["finding"] = state["finding"].model_copy(
+        update={
+            "id": "dockerfile.security.last-user-is-root.last-user-is-root:"
+            "backend/Dockerfile:4",
+            "rule_id": "dockerfile.security.last-user-is-root.last-user-is-root",
+            "line_start": 4,
+        }
+    )
+
+    action = model.propose_action(
+        state,
+        AnalysisResult(summary="Needs verification"),
+        Hypothesis(
+            statement="The effective final-stage user is root.",
+            based_on=["finding"],
+            expected_evidence="Dockerfile evidence",
+            confidence=0.8,
+        ),
+    )
+
+    assert action.tool == "inspect_dockerfile_user"
+    assert action.parameters == {"artifact_id": "backend_dockerfile"}
+
+
 def test_llm_cannot_confirm_without_matching_evidence() -> None:
     model = FallbackLLMAgentModel(
         _FakeClient(

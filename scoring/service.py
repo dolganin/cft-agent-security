@@ -4,6 +4,7 @@ from schemas.scoring import ContextPriority, CVSSResult
 
 _NON_CVSS_RULE_PREFIXES = (
     "dockerfile.security.missing-user",
+    "dockerfile.security.last-user-is-root",
 )
 
 _CRITICALITY_POINTS = {
