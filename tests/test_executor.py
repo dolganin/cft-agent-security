@@ -572,3 +572,31 @@ def test_sandbox_command_never_falls_back_to_process_sandbox(tmp_path) -> None:
     assert result.status == "denied"
     assert "Docker security boundary" in result.stderr
     assert sandbox.requests == []
+
+
+def test_sandbox_command_does_not_use_networked_managed_lab(tmp_path) -> None:
+    action = _proposal(
+        tool="sandbox_command",
+        parameters={"argv": ["python", "-V"], "cwd": "/target"},
+    )
+    approvals, _ = _approve(action)
+    executor, sandbox, _ = _executor(tmp_path, approvals)
+    lab = FakeSandbox()
+    executor._managed_lab = lab
+
+    result = executor.execute(action)
+
+    assert result.status == "denied"
+    assert sandbox.requests == []
+    assert lab.requests == []
+
+
+def test_sandbox_command_cannot_mix_with_target_network_capability(tmp_path) -> None:
+    action = _proposal(
+        tool="sandbox_command",
+        parameters={"argv": ["python", "-V"], "cwd": "/target"},
+    )
+    executor, _, _ = _executor(tmp_path, InMemoryApprovalStore())
+    observation = _proposal(action_id="observation", tool="observe_http_surface")
+    with pytest.raises(ValueError, match="cannot share"):
+        executor.execute_sequence([action, observation])

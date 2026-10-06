@@ -1,4 +1,4 @@
-"""One CI entrypoint for discovery, sandbox lifecycle and the security gate."""
+"""Единая CI точка входа для discovery, sandbox lifecycle и security gate"""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import os
 import re
 import subprocess
 from collections.abc import Callable, Mapping
+from dataclasses import asdict, is_dataclass
 from pathlib import Path
 
 from app.config import settings
@@ -77,7 +78,7 @@ def _parse_args() -> argparse.Namespace:
 def target_subprocess_environment(
     source: Mapping[str, str] | None = None,
 ) -> dict[str, str]:
-    """Return an environment that cannot expose CI/LLM credentials to target tools."""
+    """Собираем окружение без CI/LLM credentials для target tools"""
 
     source = source or os.environ
     clean: dict[str, str] = {}
@@ -116,7 +117,7 @@ def run_ci_pipeline(
     runtime_builder: RuntimeServiceMapBuilder | None = None,
     pipeline_runner: Callable[..., int] = run_pipeline,
 ) -> int:
-    """Execute the complete CI flow and keep technical failures on exit code 2."""
+    """Запускаем полный CI flow, технические сбои возвращаем с exit code 2"""
 
     token: CancellationToken | None = getattr(args, "cancellation_token", None)
     with cancellation_scope(token):
@@ -150,6 +151,7 @@ def _run_ci_pipeline_inner(
         "agent_mode": settings.agent_mode,
     }
 
+    session = None
     try:
         check_cancelled()
         target = Path(args.target).expanduser().resolve(strict=True)
@@ -220,6 +222,7 @@ def _run_ci_pipeline_inner(
             )
 
             pipeline_args = _pipeline_args(args, profile_path=profile_path)
+            pipeline_args.discovery = discovery
             check_cancelled()
             exit_code = pipeline_runner(
                 pipeline_args,
@@ -253,7 +256,9 @@ def _run_ci_pipeline_inner(
         return exit_code
     except RunCancelled:
         raise
-    except Exception as exc:  # noqa: BLE001 - CI boundary converts failures into Gate
+    except Exception as exc:  # noqa: BLE001 - на границе CI сбои превращаются в Gate
+        if session is not None:
+            _write_sandbox_logs(output_dir, session)
         progress.stage(
             "pipeline",
             status="failed",
@@ -351,6 +356,16 @@ def _write_technical_failure(output_dir: Path, exc: Exception) -> int:
     )
     _print_technical_failure(gate)
     return TECHNICAL_FAILURE_EXIT_CODE
+
+
+def _write_sandbox_logs(output_dir: Path, session: object) -> None:
+    logs = getattr(session, "logs", ())
+    entries = [
+        asdict(item) if is_dataclass(item) else str(item)
+        for item in logs
+    ]
+    if entries:
+        _write_json(output_dir / "sandbox-logs.json", {"entries": entries})
 
 
 def _write_json(path: Path, payload: object) -> None:

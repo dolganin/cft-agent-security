@@ -1,4 +1,4 @@
-"""Lifecycle management for one trusted Docker Compose target session."""
+"""Управление lifecycle одной trusted Docker Compose сессии таргета"""
 
 from __future__ import annotations
 
@@ -69,7 +69,7 @@ def _bounded(text: str, limit: int = 16_384) -> str:
 
 
 def normalize_compose_ps(stdout: str) -> list[dict[str, object]]:
-    """Normalize Compose JSON arrays, single objects, and JSON Lines."""
+    """Нормализуем Compose JSON array, отдельные object и JSON Lines"""
     text = stdout.strip()
     if not text:
         return []
@@ -77,7 +77,7 @@ def normalize_compose_ps(stdout: str) -> list[dict[str, object]]:
         decoded = json.loads(text)
     except json.JSONDecodeError:
         records: list[dict[str, object]] = []
-        # Compose v5 can emit one JSON object per line; a bad line must not hide its neighbours.
+        # Compose v5 может писать по одному JSON object на строку, битая строка не скрывает остальные
         for line in text.splitlines():
             if not line.strip():
                 continue
@@ -122,14 +122,14 @@ def _run_command(argv: list[str], cwd: Path, timeout: float) -> subprocess.Compl
 
 def _probe_health(url: str, timeout: float) -> bool:
     try:
-        with urlopen(url, timeout=timeout) as response:  # nosec B310: URL is target-owned
+        with urlopen(url, timeout=timeout) as response:  # nosec B310: URL принадлежит таргету
             return 200 <= response.status < 300
     except (OSError, URLError):
         return False
 
 
 class SandboxSession:
-    """Start and always remove one Compose project owned by this session."""
+    """Поднимаем и всегда удаляем Compose project этой сессии"""
 
     def __init__(
         self,
@@ -251,7 +251,7 @@ class SandboxSession:
             raise SandboxSessionError("docker compose config returned invalid YAML") from exc
         if not isinstance(document, dict):
             raise SandboxSessionError("docker compose config must be a mapping")
-        # Внешние ресурсы и bind-mount нельзя надёжно привязать к session_id и удалить.
+        # Внешние ресурсы и bind-mount нельзя надежно привязать к session_id и удалить
         for kind in ("networks", "volumes"):
             for name, definition in (document.get(kind, {}) or {}).items():
                 if isinstance(definition, dict) and definition.get("external"):
@@ -289,10 +289,7 @@ class SandboxSession:
             self.prepare()
             self.info.status = SessionStatus.STARTING
             self.info.started_at = self._clock()
-            self._command(
-                self._compose("up", "--build", "--detach"),
-                timeout=self.startup_timeout,
-            )
+            self._start_compose()
             self._wait_until_ready()
             self.info.status = SessionStatus.READY
             self.collect_state()
@@ -309,6 +306,18 @@ class SandboxSession:
             self.info.status = SessionStatus.FAILED
             self.teardown(raise_on_failure=False)
             raise
+
+    def _start_compose(self) -> None:
+        command = self._compose("up", "--build", "--detach")
+        try:
+            self._command(command, timeout=self.startup_timeout)
+        except SandboxSessionError:
+            # Docker Desktop иногда роняет первый up, чистим только свою сессию и пробуем еще раз
+            self._command(
+                self._compose("down", "--volumes", "--remove-orphans"),
+                allow_failure=True,
+            )
+            self._command(command, timeout=self.startup_timeout)
 
     def _wait_until_ready(self) -> None:
         urls = [self.target.build_url(path) for path in self._readiness_paths] if self.target.runtime.base_url else []

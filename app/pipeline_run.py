@@ -2,15 +2,21 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 from collections import Counter
 from collections.abc import Callable
 from pathlib import Path
 
 from agent.graph import build_graph
+from agent.lab import ManagedAgentLab
+from agent.llm import LLMUnavailableError
+from agent.llm_model import FallbackLLMAgentModel
+from agent.repository_scout import RepositoryScout
 from app.config import settings
 from app.e2e_inputs import build_real_initial_state
 from architecture.service import ArchitectureService
+from discovery.scout import validate_scout_candidates
 from pipeline.cancellation import RunCancelled, check_cancelled
 from pipeline.errors import error_from_exception
 from pipeline.gate import evaluate_gate
@@ -27,6 +33,8 @@ from schemas.report import CIGateImpact, FinalReport, ReportFinding, Verificatio
 from schemas.runtime import RuntimeServiceMap
 from schemas.target import TargetProfile
 from tools.runtime import LocalCodeReader
+
+logger = logging.getLogger(__name__)
 
 
 def _parse_args() -> argparse.Namespace:
@@ -105,11 +113,10 @@ def run_pipeline(
     profile_override: TargetProfile | None = None,
     runtime_services: RuntimeServiceMap | None = None,
 ) -> int:
-    """Run the SAST -> agent -> FinalReport -> Gate part of the pipeline.
+    """Запускаем часть пайплайна SAST -> agent -> FinalReport -> Gate
 
-    The CI orchestrator passes a discovered profile and the service map of an
-    already running sandbox.  The ordinary CLI can still call this function
-    without either value and keeps its previous behaviour.
+    CI orchestrator передает discovered profile и service map уже поднятого sandbox
+    Обычный CLI по-прежнему может вызвать функцию без них
     """
     if args.max_iterations < 1:
         raise SystemExit("--max-iterations must be at least 1")
@@ -179,6 +186,7 @@ def run_pipeline(
         return gate.exit_code
 
     findings = JsonFindingRepository(findings_path).list_findings()
+    findings = _append_scout_findings(findings, getattr(args, "discovery", None))
     progress.sast_done(len(findings))
     if args.base_ref:
         if not args.base_findings:
@@ -309,10 +317,14 @@ def run_pipeline(
             if runtime_services is not None:
                 # Все действия одного CI-запуска используют уже поднятую sandbox-сессию.
                 state["runtime_services"] = runtime_services
-            # build_real_initial_state loads the source artifact; PR metadata is an
-            # additive pipeline concern and is attached without rewriting that artifact.
+            # PR metadata добавляем поверх source artifact, не переписывая его
             state["finding"] = finding
-            result = graph.invoke(state)
+            if runtime_services is None or settings.agent_mode != "llm":
+                result = graph.invoke(state)
+            else:
+                # Один finding может пройти несколько итерации, workspace должен пережить их все.
+                with ManagedAgentLab(profile, runtime_services):
+                    result = graph.invoke(state)
             check_cancelled()
             report = result["final_report"]
             report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
@@ -333,7 +345,8 @@ def run_pipeline(
         # Падение одного финдинга не прячет остальные, но гейт это обязательно увидит
         except RunCancelled:
             raise
-        except Exception as exc:  # noqa: BLE001 - граница этапа должна стать ошибкой гейта
+        except Exception as exc:
+            logger.exception("Finding workflow failed: %s", finding.id)
             error = error_from_exception(
                 exc,
                 layer="pipeline",
@@ -351,13 +364,33 @@ def run_pipeline(
     return gate.exit_code
 
 
+def _append_scout_findings(findings, discovery):
+    """Scout дает дополнительные гипотезы, но сбой LLM не ломает SAST pipeline."""
+    if settings.agent_mode != "llm" or discovery is None:
+        return findings
+    try:
+        client = FallbackLLMAgentModel.from_settings(settings).client
+        batch = RepositoryScout(client).scout(discovery)
+    except LLMUnavailableError:
+        return findings
+    candidates = validate_scout_candidates(batch.candidates, discovery)
+    existing = {(item.rule_id, item.file, item.line_start) for item in findings}
+    for index, candidate in enumerate(candidates, start=1):
+        identity = (candidate.rule_id, candidate.file, candidate.line_start)
+        if identity in existing:
+            continue
+        findings.append(candidate.to_finding(finding_id=f"model-scout-{index:03d}"))
+        existing.add(identity)
+    return findings
+
+
 def _build_static_finding_report(
     finding,
     target: Path,
     *,
     reason: str,
 ) -> FinalReport:
-    """Create an auditable report when no trusted active verification is available."""
+    """Собираем auditable report когда trusted active verification недоступен"""
 
     code = LocalCodeReader(target).read_code(
         finding.file,
@@ -419,7 +452,7 @@ def _build_static_finding_report(
 
 
 def _unsupported_verification_reason(profile: TargetProfile, finding) -> str | None:
-    """Return why a specialized capability cannot be bound to trusted profile data."""
+    """Объясняем почему capability нельзя привязать к trusted данным профиля"""
 
     rule_id = finding.rule_id.lower()
     required_paths: list[tuple[str, str | None]] = []

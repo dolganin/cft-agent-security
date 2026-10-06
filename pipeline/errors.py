@@ -16,7 +16,7 @@ def error_from_exception(
     layer: ErrorLayer,
     public_message: str,
 ) -> ErrorDetail:
-    """Map an exception at a pipeline boundary without exposing its raw text."""
+    """На границе пайплайна маппим исключение без утечки raw text"""
 
     causes = tuple(_exception_chain(exc))
     code: ErrorCode
@@ -34,7 +34,14 @@ def error_from_exception(
         code = "DEPENDENCY_UNAVAILABLE"
         retryable = True
         message = _sandbox_public_message(causes)
-    elif isinstance(exc, SemgrepError) or any(isinstance(item, OSError) for item in causes):
+    elif isinstance(exc, SemgrepError):
+        if "CLI was not found" in str(exc):
+            code = "DEPENDENCY_UNAVAILABLE"
+            retryable = True
+        else:
+            code = "EXECUTION_FAILED"
+            message = "Semgrep scan failed while validating rules"
+    elif any(isinstance(item, OSError) for item in causes):
         code = "DEPENDENCY_UNAVAILABLE"
         retryable = True
     elif isinstance(exc, (TypeError, ValueError)):
