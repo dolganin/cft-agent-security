@@ -45,6 +45,8 @@ A hypothesis must contain:
 
 DYNAMIC PLAN REQUIREMENTS
 A DynamicPlan must:
+- propose exactly one next action; the workflow records Evidence and asks for a fresh plan
+  on the next iteration;
 - state one verification goal and reference the current hypothesis;
 - use registered deterministic candidates when they fit the question;
 - otherwise sandbox_command may contain an argv chosen by the model for repository inspection,

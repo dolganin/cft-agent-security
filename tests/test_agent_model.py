@@ -1,5 +1,5 @@
 
-from agent.model import DeterministicAgentModel
+from agent.model import DeterministicAgentModel, _build_action_id
 from agent.prompts import SYSTEM_PROMPT
 from schemas.action import ActionProposal
 from schemas.architecture import ArchitectureContext
@@ -135,3 +135,13 @@ def test_real_finding_id_produces_validator_safe_action_id() -> None:
         target_file="targets/sberlab.yaml",
     ).validate(proposal)
     assert validation.approved is True
+
+
+def test_long_finding_ids_remain_unique_after_action_id_truncation() -> None:
+    shared_prefix = "javascript.express.security.audit.express-check-directory-listing." * 3
+    first = _build_action_id(f"{shared_prefix}server.ts:288", 1)
+    second = _build_action_id(f"{shared_prefix}server.ts:292", 1)
+
+    assert first != second
+    assert len(first) <= 128
+    assert len(second) <= 128

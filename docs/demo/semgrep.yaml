@@ -1,0 +1,21 @@
+# Deliberately scoped demonstration, not the full benchmark ruleset.
+rules:
+  - id: sequelize-injection.presentation
+    languages: [typescript]
+    severity: WARNING
+    message: "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных."
+    paths:
+      include: [routes/login.ts, routes/search.ts]
+    patterns:
+      - pattern: $DB.query($QUERY, ...)
+      - metavariable-regex:
+          metavariable: $QUERY
+          regex: '(?s).*\$\{.*'
+  - id: directory-listing.presentation
+    languages: [typescript]
+    severity: WARNING
+    message: "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен."
+    paths:
+      include: [server.ts]
+    patterns:
+      - pattern: serveIndex($PATH, ...)

@@ -444,6 +444,14 @@ failure may trigger fallback, but no provider can bypass Validator or Executor p
 
 Do not rewrite LangGraph nodes around a provider SDK.
 
+RepositoryScout additionally performs bounded read-only source exploration before
+the finding workflows. It reads numbered application-source windows from the trusted
+Discovery inventory, follows model-selected read/literal-search requests and reports
+its coverage and stopping reason. Candidates must anchor read lines and read-file
+provenance. They merge into the canonical Finding queue and remain unverified until
+the existing Validator/Executor/Evidence workflow. See `docs/source-scout.md` for
+budgets, exclusions and the standalone source-exploration command.
+
 ---
 
 # 11. System prompt

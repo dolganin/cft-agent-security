@@ -4,6 +4,7 @@ from pathlib import Path
 
 from architecture.service import ArchitectureService
 from sast.repository import JsonFindingRepository
+from schemas.finding import Finding
 from schemas.state import AgentState
 from schemas.target import TargetProfile
 from tools.runtime import LocalCodeReader
@@ -17,18 +18,24 @@ def build_real_initial_state(
     target_profile: TargetProfile | None = None,
     architecture_overrides_path: str | Path | None = None,
     finding_id: str | None = None,
+    finding_override: Finding | None = None,
     finding_index: int = 0,
     max_iterations: int = 1,
 ) -> AgentState:
     if max_iterations < 1:
         raise ValueError("max_iterations must be at least 1")
 
-    findings = JsonFindingRepository(findings_path)
-    finding = (
-        findings.get_finding(finding_id)
-        if finding_id is not None
-        else findings.get_by_index(finding_index)
-    )
+    if finding_override is not None:
+        if finding_id is not None and finding_override.id != finding_id:
+            raise ValueError("finding_override id does not match finding_id")
+        finding = finding_override
+    else:
+        findings = JsonFindingRepository(findings_path)
+        finding = (
+            findings.get_finding(finding_id)
+            if finding_id is not None
+            else findings.get_by_index(finding_index)
+        )
 
     service = target_profile.resolve_service(finding.file) if target_profile else None
     service = service or finding.service

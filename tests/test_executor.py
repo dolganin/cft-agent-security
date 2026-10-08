@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 import executor.executor as executor_module
+from app.config import settings as app_settings
 from evidence.audit import JsonlAuditLog
 from evidence.store import JsonExecutionEvidenceStore
 from executor.approvals import InMemoryApprovalStore
@@ -18,6 +19,8 @@ from executor.sandbox_policy import SandboxLimits, SandboxPolicy
 from executor.sandbox_session import SessionCleanupError
 from executor.targets import TargetArtifactDefinition, TargetDefinition, TargetRegistry
 from schemas.action import ActionProposal
+from schemas.runtime import RuntimeService, RuntimeServiceMap
+from schemas.target import TargetArtifact, TargetProfile, TargetService
 from schemas.validation import ValidationResult
 from validator.validator import PolicyValidator
 
@@ -32,6 +35,7 @@ class FakeSandbox:
         timed_out: bool = False,
         raises: bool = False,
         exception_message: str = "synthetic sandbox failure",
+        runtime_backend: str = "process",
     ) -> None:
         self.exit_code = exit_code
         self.stdout = stdout
@@ -39,6 +43,7 @@ class FakeSandbox:
         self.timed_out = timed_out
         self.raises = raises
         self.exception_message = exception_message
+        self.runtime_backend = runtime_backend
         self.requests: list[SandboxRequest] = []
 
     def run(self, request: SandboxRequest) -> SandboxResult:
@@ -53,6 +58,7 @@ class FakeSandbox:
             duration_ms=1,
             timed_out=self.timed_out,
             workspace_id=f"run-{request.run_id}",
+            runtime_backend=self.runtime_backend,
         )
 
 
@@ -269,6 +275,144 @@ def test_http_observation_refuses_process_sandbox_without_starting_target(tmp_pa
     assert sandbox.requests == []
 
 
+def test_target_network_capability_uses_managed_address_without_target_base_url(
+    tmp_path, monkeypatch,
+) -> None:
+    action = _proposal(
+        action_id="juice-directory-check",
+        target="juice-test",
+        tool="verify_sensitive_directory",
+        parameters={
+            "artifact_id": "source-server",
+            "line": 288,
+            "check": "source_metadata",
+        },
+        service="juice",
+        endpoint="/ftp",
+    ).model_copy(update={"environment": "sandbox"})
+    approvals = InMemoryApprovalStore()
+    approvals.record(
+        action,
+        ValidationResult(
+            approved=True,
+            action_id=action.id,
+            reason="Synthetic test approval",
+        ),
+    )
+    sandbox = FakeSandbox(runtime_backend="docker")
+    executor, sandbox, audit_log = _executor(
+        tmp_path, approvals, environment="sandbox", sandbox=sandbox
+    )
+    target = TargetProfile(
+        id="juice-test",
+        environment="sandbox",
+        services={
+            "juice": TargetService(
+                id="juice",
+                type="node",
+                internal_port=3000,
+                runtime_endpoints=["/ftp"],
+            )
+        },
+        artifacts={
+            "source-server": TargetArtifact(
+                id="source-server",
+                kind="javascript",
+                path="server.ts",
+            )
+        },
+    )
+    executor._targets = TargetRegistry([target])
+    executor._policy = SandboxPolicy(
+        backend="process",
+        network_mode="none",
+        allowed_environments={"local", "sandbox", "staging"},
+        limits=executor._policy.limits,
+        sandbox_image="python@sha256:" + "a" * 64,
+    )
+    opened: list[tuple[str, str]] = []
+
+    class FakeSequenceRuntime:
+        runtime_instance_id = "runtime-target-sequence"
+
+        def __enter__(self):
+            return self
+
+        def run(self, request):
+            return sandbox.run(request)
+
+        def __exit__(self, *_: object) -> bool:
+            return False
+
+    class FakeDockerSandbox:
+        def __init__(self, policy) -> None:
+            assert policy.backend == "docker"
+            assert "@sha256:" in policy.sandbox_image
+
+        def open_sequence(self, *, network_name: str, repository_path: str = ""):
+            opened.append((network_name, repository_path))
+            return FakeSequenceRuntime()
+
+    monkeypatch.setattr(executor_module, "DockerSandbox", FakeDockerSandbox)
+    runtime_services = RuntimeServiceMap(
+        session_id="juice-session",
+        network_name="cft-sandbox-juice_default",
+        services={
+            "juice": RuntimeService(
+                name="juice",
+                type="node",
+                address="http://juice:3000",
+                ready=True,
+                readiness_source="compose_health",
+                allowed_endpoints=["/ftp"],
+            )
+        },
+    )
+
+    result = executor.execute_sequence([action], runtime_services=runtime_services)
+
+    assert result.results[0].execution.status == "completed"
+    assert sandbox.requests[0].base_url == "http://juice:3000"
+    assert sandbox.requests[0].endpoint == "/ftp"
+    assert opened == [("cft-sandbox-juice_default", "")]
+    assert result.runtime_instance_id == "runtime-target-sequence"
+    assert audit_log.records()[0]["runtime_backend"] == "docker"
+    assert audit_log.records()[0]["network_mode"] == "target"
+
+
+def test_target_network_capability_without_runtime_map_never_uses_process_sandbox(
+    tmp_path,
+) -> None:
+    action = _proposal(
+        action_id="juice-directory-check-without-map",
+        target="juice-test",
+        tool="verify_sensitive_directory",
+        parameters={"artifact_id": "source-server", "line": 288, "check": "source_metadata"},
+        service="juice",
+        endpoint="/ftp",
+    ).model_copy(update={"environment": "sandbox"})
+    approvals = InMemoryApprovalStore()
+    approvals.record(
+        action,
+        ValidationResult(approved=True, action_id=action.id, reason="Synthetic approval"),
+    )
+    executor, sandbox, _ = _executor(tmp_path, approvals, environment="sandbox")
+    executor._targets = TargetRegistry([
+        TargetProfile(
+            id="juice-test",
+            environment="sandbox",
+            services={"juice": TargetService(id="juice", type="node", internal_port=3000, runtime_endpoints=["/ftp"])},
+            artifacts={"source-server": TargetArtifact(id="source-server", kind="javascript", path="server.ts")},
+        )
+    ])
+
+    result = executor.execute_sequence([action])
+
+    assert result.status == "denied"
+    assert "trusted ready RuntimeServiceMap" in result.results[0].stderr
+    assert sandbox.requests == []
+
+
 @pytest.mark.parametrize(
     ("failure", "expected_code"),
     [
@@ -450,11 +594,14 @@ def test_executor_exposes_only_predefined_tools(tmp_path) -> None:
 
     assert executor.registered_tools() == (
         "inspect_dockerfile_user",
-            "inspect_python_password_assignment",
-            "inspect_react_dangerous_html_flow",
-            "observe_http_surface",
-            "safe_noop",
-            "sandbox_command",
+        "inspect_javascript_security",
+        "inspect_python_password_assignment",
+        "inspect_react_dangerous_html_flow",
+        "observe_http_surface",
+        "safe_noop",
+        "sandbox_command",
+        "verify_sensitive_directory",
+        "verify_sql_injection",
     )
 
 
@@ -557,6 +704,36 @@ limits:
             audit_log_path=tmp_path / "audit.jsonl",
             workspace_directory=tmp_path / "workspace",
         )
+
+
+def test_executor_uses_dotenv_sandbox_image_when_process_environment_is_unset(
+    monkeypatch, tmp_path: Path,
+) -> None:
+    pinned_image = "registry.example/sandbox@sha256:" + "b" * 64
+    monkeypatch.delenv("CFT_SANDBOX_IMAGE", raising=False)
+    monkeypatch.setattr(app_settings, "sandbox_image", pinned_image)
+    policy_file = tmp_path / "policy.yaml"
+    policy_file.write_text(
+        """
+runtime:
+  backend: process
+  network_mode: none
+  sandbox_image: example.invalid/sandbox@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+environments:
+  allowed: [local, sandbox, staging]
+""",
+        encoding="utf-8",
+    )
+    configured = SafeExecutor.from_config(
+        approvals=InMemoryApprovalStore(),
+        policy_file=policy_file,
+        target_profile=TargetProfile(id="dotenv-image-test"),
+        evidence_directory=tmp_path / "configured-evidence",
+        audit_log_path=tmp_path / "configured-audit.jsonl",
+        workspace_directory=tmp_path / "configured-workspaces",
+    )
+
+    assert configured._policy.sandbox_image == pinned_image
 
 
 def test_sandbox_command_never_falls_back_to_process_sandbox(tmp_path) -> None:

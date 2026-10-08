@@ -18,6 +18,7 @@ from typing import ClassVar, Literal, Protocol, Self
 from executor.sandbox_policy import SandboxLimits, SandboxPolicy
 from executor.sandbox_runtime import DockerRuntimeBuilder
 from pipeline.cancellation import RunCancelled, current_token, suspend_cancellation
+from security.error_redaction import redact_error_message
 
 logger = logging.getLogger(__name__)
 
@@ -465,7 +466,13 @@ class DockerSequenceRuntime:
         )
         result = subprocess.run(spec.argv, capture_output=True, text=True, timeout=20, shell=False, check=False)
         if result.returncode:
-            raise RuntimeError("Persistent Docker runner could not be started")
+            diagnostic = redact_error_message(
+                result.stderr or result.stdout or "Docker returned a non-zero exit code",
+                max_length=512,
+            )
+            raise RuntimeError(
+                f"Persistent Docker runner could not be started: {diagnostic}"
+            )
         self.runtime_instance_id = result.stdout.strip() or spec.container_name
         self._container_name = spec.container_name
         return self

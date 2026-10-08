@@ -1,7 +1,7 @@
 import logging
 import os
 import shutil
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 from time import perf_counter
 from typing import Literal, cast
@@ -25,7 +25,11 @@ from executor.sandbox_audit import AuditRecord
 from executor.sandbox_manager import SandboxConfigurationError, SandboxManager
 from executor.sandbox_policy import SandboxLimits, SandboxPolicy
 from executor.sandbox_runner import SandboxRunner
-from executor.sandbox_session import SessionCleanupError, SessionTimeoutError
+from executor.sandbox_session import (
+    SandboxSessionError,
+    SessionCleanupError,
+    SessionTimeoutError,
+)
 from executor.targets import TargetRegistry
 from pipeline.cancellation import RunCancelled
 from schemas.action import ActionProposal
@@ -121,6 +125,9 @@ def _sandbox_result_error(result) -> ErrorDetail | None:
     return None
 
 CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
+    "inspect_javascript_security": True,
+    "verify_sql_injection": False,
+    "verify_sensitive_directory": False,
     "safe_noop": False,
     "sandbox_command": True,
     "observe_http_surface": False,
@@ -131,6 +138,9 @@ CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
 
 # Определяет, какой сетевой доступ разрешен для каждой capability
 CAPABILITY_NETWORK_ACCESS: dict[str, str] = {
+    "inspect_javascript_security": "none",
+    "verify_sql_injection": "target",
+    "verify_sensitive_directory": "target",
     "safe_noop": "none",
     "sandbox_command": "none",
     "observe_http_surface": "target",
@@ -162,6 +172,9 @@ class SafeExecutor:
         self._policy = policy
         self._registry = ToolRegistry()
         self._registry.register("safe_noop", self._safe_noop)
+        self._registry.register("inspect_javascript_security", self._javascript_parameters)
+        self._registry.register("verify_sql_injection", self._sql_parameters)
+        self._registry.register("verify_sensitive_directory", self._javascript_parameters)
         self._registry.register("sandbox_command", self._sandbox_command_parameters)
         self._registry.register("observe_http_surface", self._no_parameters)
         self._active_runtime_services: RuntimeServiceMap | None = None
@@ -190,7 +203,7 @@ class SafeExecutor:
             return self._managed_lab.runtime_instance_id
         if not isinstance(self._sandbox, DockerSandbox):
             self._sandbox_before_lab = self._sandbox
-            self._sandbox = DockerSandbox(self._policy)
+            self._sandbox = DockerSandbox(self._target_runtime_policy())
         if runtime_services.network_name is None:
             raise RuntimeError("RuntimeServiceMap has no trusted sandbox network")
         if target.repository_path is None:
@@ -199,8 +212,20 @@ class SafeExecutor:
             network_name=runtime_services.network_name,
             repository_path=str(target.repository_path),
         )
-        self._managed_lab.start()
+        try:
+            self._managed_lab.start()
+        except RuntimeError as exc:
+            self._managed_lab = None
+            raise SandboxSessionError(
+                "Managed Docker verification runner could not be started"
+            ) from exc
         return self._managed_lab.runtime_instance_id
+
+    def _target_runtime_policy(self) -> SandboxPolicy:
+        """Target-network workers always use a digest-pinned Docker boundary."""
+        if self._policy.backend == "docker":
+            return self._policy
+        return replace(self._policy, backend="docker")
 
     def close_managed_lab(self) -> None:
         """Lab живет ровно до конца run, даже если граф упал посередине."""
@@ -261,9 +286,15 @@ class SafeExecutor:
 
         runtime_policy = policy_data.get("runtime", {})
 
-        sandbox_image = os.getenv("CFT_SANDBOX_IMAGE") or runtime_policy.get(
-            "sandbox_image",
-            policy_data.get("sandbox_image", ""),
+        from app.config import settings as app_settings
+
+        sandbox_image = (
+            os.getenv("CFT_SANDBOX_IMAGE")
+            or app_settings.sandbox_image
+            or runtime_policy.get(
+                "sandbox_image",
+                policy_data.get("sandbox_image", ""),
+            )
         )
 
         if backend == "docker" and shutil.which("docker") is None:
@@ -440,56 +471,89 @@ class SafeExecutor:
                 "sandbox_command cannot share one execution sequence with target-network capabilities"
             )
         # Generic argv must never inherit the persistent lab's target network.
-        if self._managed_lab is not None and not has_sandbox_command:
+        if self._managed_lab is not None and requires_target_network:
             if runtime_services is None:
                 raise RuntimeError("Managed agent lab requires RuntimeServiceMap")
             self._active_runtime_services = runtime_services
             original_sandbox = self._sandbox
             self._sandbox = self._managed_lab
             try:
-                return self._runner.run(actions, runtime_services=runtime_services)
-            finally:
-                self._sandbox = original_sandbox
-                self._active_runtime_services = None
-        if has_sandbox_command and not isinstance(self._sandbox, DockerSandbox):
-            return self._runner.run(actions, runtime_services=runtime_services)
-        # HTTP observation capability остается только в Docker
-        if any(action.tool == "observe_http_surface" for action in actions) and not isinstance(
-            self._sandbox, DockerSandbox
-        ):
-            return self._runner.run(actions, runtime_services=None)
-        if (
-            runtime_services is None
-            or not isinstance(self._sandbox, DockerSandbox)
-            or not requires_target_network
-        ):
-            self._active_runtime_services = runtime_services
-            try:
-                return self._runner.run(actions, runtime_services=runtime_services)
-            finally:
-                self._active_runtime_services = None
-        if runtime_services.network_name is None:
-            raise RuntimeError("RuntimeServiceMap has no trusted sandbox network")
-        target = self._targets.get(actions[0].target) if actions else None
-        repository = str(target.repository_path) if target and target.repository_path else ""
-        original_sandbox = self._sandbox
-        with original_sandbox.open_sequence(
-            network_name=runtime_services.network_name,
-            repository_path=repository,
-        ) as runtime:
-            self._sandbox = runtime  # type: ignore[assignment]
-            self._active_runtime_services = runtime_services
-            try:
                 result = self._runner.run(actions, runtime_services=runtime_services)
             finally:
                 self._sandbox = original_sandbox
                 self._active_runtime_services = None
+            return self._with_runtime_instance(result, self._managed_lab.runtime_instance_id)
+        if has_sandbox_command and not isinstance(self._sandbox, DockerSandbox):
+            return self._runner.run(actions, runtime_services=runtime_services)
+        if requires_target_network:
+            if runtime_services is None or runtime_services.network_name is None:
+                return self._deny_sequence(
+                    actions[0],
+                    "Target-network capability requires a trusted ready RuntimeServiceMap",
+                )
+            try:
+                target_sandbox = (
+                    self._sandbox
+                    if isinstance(self._sandbox, DockerSandbox)
+                    else DockerSandbox(self._target_runtime_policy())
+                )
+            except ValueError:
+                return self._deny_sequence(
+                    actions[0],
+                    "Target-network capability requires a digest-pinned Docker sandbox image",
+                )
+            with target_sandbox.open_sequence(
+                network_name=runtime_services.network_name,
+                repository_path="",
+            ) as runtime:
+                original_sandbox = self._sandbox
+                self._sandbox = runtime  # type: ignore[assignment]
+                self._active_runtime_services = runtime_services
+                try:
+                    result = self._runner.run(actions, runtime_services=runtime_services)
+                finally:
+                    self._sandbox = original_sandbox
+                    self._active_runtime_services = None
+            return self._with_runtime_instance(result, runtime.runtime_instance_id)
+        if not requires_target_network:
+            self._active_runtime_services = runtime_services
+            try:
+                return self._runner.run(actions, runtime_services=runtime_services)
+            finally:
+                self._active_runtime_services = None
+
+    @staticmethod
+    def _with_runtime_instance(result, runtime_instance_id: str):
         updated = [
-            item.model_copy(update={"runtime_instance_id": runtime.runtime_instance_id})
+            item.model_copy(update={"runtime_instance_id": runtime_instance_id})
             for item in result.results
         ]
         return result.model_copy(
-            update={"runtime_instance_id": runtime.runtime_instance_id, "results": updated}
+            update={"runtime_instance_id": runtime_instance_id, "results": updated}
+        )
+
+    def _deny_sequence(self, action: ActionProposal, reason: str):
+        from schemas.sandbox_runner import SandboxActionResult, SandboxRunResult
+
+        run_id = uuid4().hex
+        execution = self._runner_denied(action, run_id, reason, False)
+        return SandboxRunResult(
+            run_id=run_id,
+            status="denied",
+            results=[SandboxActionResult(
+                run_id=run_id,
+                action_id=action.id,
+                tool=action.tool,
+                service=action.service,
+                status="denied",
+                stdout="",
+                stderr=execution.stderr,
+                exit_code=execution.exit_code,
+                timed_out=False,
+                duration_ms=0,
+                evidence_ref=execution.evidence_ref,
+                execution=execution,
+            )],
         )
 
     def _execute_one(
@@ -577,12 +641,25 @@ class SafeExecutor:
             try:
                 base_url = ""
                 if network_access == "target":
-                    base_url = target.base_url
-                request_host = None
-                if self._active_runtime_services is not None and action.service is not None:
-                    service = self._active_runtime_services.services[action.service]
-                    base_url = service.address
-                    request_host = service.request_host
+                    if self._active_runtime_services is not None:
+                        if action.service is None:
+                            raise ValueError(
+                                "Target-network action requires an approved runtime service"
+                            )
+                        service = self._active_runtime_services.services.get(
+                            action.service
+                        )
+                        if service is None or not service.ready:
+                            raise ValueError(
+                                "Target-network action service is not ready in the managed runtime"
+                            )
+                        base_url = service.address
+                        request_host = service.request_host
+                    else:
+                        base_url = target.base_url
+                        request_host = None
+                else:
+                    request_host = None
                 sandbox_result = self._sandbox.run(
                     SandboxRequest(
                         run_id=run_id,
@@ -653,6 +730,12 @@ class SafeExecutor:
             decision_reason="Sandbox execution completed" if sandbox_result.exit_code == 0 else "Sandbox execution failed",
             error=_sandbox_result_error(sandbox_result),
             session_id=session_id,
+            runtime_backend=sandbox_result.runtime_backend,
+            network_mode=(
+                "target"
+                if network_access == "target"
+                else self._policy.network_mode
+            ),
         )
 
     def _runner_denied(
@@ -717,6 +800,8 @@ class SafeExecutor:
         workspace_id: str = "",
         error: ErrorDetail | None = None,
         session_id: str | None = None,
+        runtime_backend: str | None = None,
+        network_mode: str | None = None,
     ) -> ExecutionResult:
         duration_ms = int((perf_counter() - started) * 1000)
         policy_dict = self._json_safe(asdict(self._policy))
@@ -794,8 +879,17 @@ class SafeExecutor:
             ),
             evidence_dict=evidence_payload,
             policy_dict=policy_dict,
-            runtime_backend=self._policy.backend,
-            network_mode=self._policy.network_mode,
+            runtime_backend=runtime_backend or (
+                "docker"
+                if isinstance(self._sandbox, (DockerSandbox, DockerSequenceRuntime))
+                else self._policy.backend
+            ),
+            network_mode=network_mode or (
+                "target"
+                if CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target"
+                and self._active_runtime_services is not None
+                else self._policy.network_mode
+            ),
             evidence_ref=evidence_ref,
             session_id=session_id,
         )
@@ -848,6 +942,29 @@ class SafeExecutor:
             duration_ms=duration_ms,
             error=error,
         )
+
+    @staticmethod
+    def _javascript_parameters(parameters: dict) -> dict:
+        if set(parameters) != {"artifact_id", "line", "check"}:
+            raise CapabilityInputError("Source inspection requires artifact_id, line and check")
+        if not isinstance(parameters["artifact_id"], str) or not parameters["artifact_id"] or len(parameters["artifact_id"]) > 64:
+            raise CapabilityInputError("Invalid source artifact id")
+        line = parameters["line"]
+        if type(line) is not int or not 1 <= line <= 100_000:
+            raise CapabilityInputError("Invalid source line")
+        check = parameters["check"]
+        if not isinstance(check, str) or check not in {"source_metadata", "sql_interpolation"}:
+            raise CapabilityInputError("Invalid source verification check")
+        return {"artifact_id": str(parameters["artifact_id"]), "line": line, "check": check}
+
+    @staticmethod
+    def _sql_parameters(parameters: dict) -> dict:
+        if (set(parameters) != {"mode", "artifact_id", "line", "check"}
+                or not isinstance(parameters["mode"], str)
+                or parameters["mode"] not in {"authentication", "search"}):
+            raise CapabilityInputError("Invalid SQL differential mode")
+        SafeExecutor._javascript_parameters({k: parameters[k] for k in ("artifact_id", "line", "check")})
+        return dict(parameters)
 
     @staticmethod
     def _safe_noop(parameters: dict) -> dict:

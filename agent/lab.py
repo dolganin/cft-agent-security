@@ -32,6 +32,9 @@ class ManagedAgentLab(AbstractContextManager[SafeExecutor]):
             workspace_directory=settings.executor_work_dir,
             target_base_url=settings.target_base_url,
             target_repository_path=settings.target_repository_path,
+            # CI-managed verification already requires Docker. Reuse that
+            # boundary for networkless sandbox_command actions as well.
+            backend_override="docker",
         )
         self._token = None
 

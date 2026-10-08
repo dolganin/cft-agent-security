@@ -29,7 +29,10 @@ class ProjectDiscovery:
         signals = []
         for detector in self.detectors:
             signals.extend(detector.detect(context))
-        return self.resolver.resolve(context.root, signals)
+        result = self.resolver.resolve(context.root, signals)
+        # Resolver's signal paths are not a repository inventory: route files may
+        # generate no technology signals and must still be available to source readers.
+        return result.model_copy(update={"project_files": list(context.files)})
 
     def interpret(
         self,

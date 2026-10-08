@@ -38,6 +38,7 @@ from schemas.fix import (
     FixVerificationArtifact,
     FixVerificationPlan,
     PatchApplicationResult,
+    PatchReviewArtifact,
     ProposedPatch,
 )
 from schemas.hypothesis import Hypothesis
@@ -62,6 +63,11 @@ from schemas.security_tools import (
     DockerfileUserCheckResult,
     PythonPasswordAssignmentCheckResult,
     ReactDangerousHtmlFlowCheckResult,
+)
+from schemas.source_map import (
+    ExpressMiddlewareRegistration,
+    ExpressRouteRegistration,
+    ExpressSourceMap,
 )
 from schemas.target import TargetProfile, TargetService
 from schemas.validation import ValidationResult
@@ -97,6 +103,9 @@ __all__ = [
     "EvidenceScope",
     "ExecutionResult",
     "ExpectedFinding",
+    "ExpressMiddlewareRegistration",
+    "ExpressRouteRegistration",
+    "ExpressSourceMap",
     "FinalReport",
     "Finding",
     "FixCheck",
@@ -110,6 +119,7 @@ __all__ = [
     "PRAnalysisSummary",
     "PRFindingContext",
     "PatchApplicationResult",
+    "PatchReviewArtifact",
     "PipelineFindingResult",
     "PlanValidationResult",
     "PlannedAction",

@@ -85,6 +85,8 @@ export function stageLabel(stage: string): string {
       return "Запуск sandbox-окружения";
     case "sast":
       return "SAST-анализ";
+    case "scout":
+      return "Поиск по исходному коду";
     case "verification":
       return "Проверка находок агентом";
     case "pipeline":
@@ -153,6 +155,26 @@ export function stageDetailLabel(detail: string | null, status: string): string 
   if (services) return `Готово сервисов: ${services[1]}`;
   const findings = detail.match(/^(\d+) findings?$/i);
   if (findings) return `Находок: ${findings[1]}`;
+  const scoutProgress = detail.match(/^turn (\d+)\/(\d+); reviewed files (\d+); candidates (\d+)$/i);
+  if (scoutProgress) {
+    return `Шаг ${scoutProgress[1]} из ${scoutProgress[2]}; файлов просмотрено: ${scoutProgress[3]}; кандидатов: ${scoutProgress[4]}`;
+  }
+  const scoutDone = detail.match(/^(\d+) candidates; reviewed files (\d+); stop ([\w-]+)$/i);
+  if (scoutDone) {
+    const stopReasons: Record<string, string> = {
+      completed: "исследование завершено",
+      model_finished: "исследование завершено",
+      turn_budget: "лимит шагов",
+      source_budget: "лимит исходного кода",
+      candidate_budget: "лимит кандидатов",
+      wall_clock_budget: "лимит времени",
+      source_exhausted: "доступный код просмотрен",
+      model_unavailable: "модель недоступна",
+      no_application_source: "исходный код приложения не найден",
+      cancelled: "запуск отменен",
+    };
+    return `Кандидатов: ${scoutDone[1]}; файлов просмотрено: ${scoutDone[2]}; ${stopReasons[scoutDone[3]] ?? "остановлено"}`;
+  }
   return detail;
 }
 

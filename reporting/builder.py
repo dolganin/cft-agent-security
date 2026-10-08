@@ -224,6 +224,25 @@ def _display_command(action) -> list[str]:
             for item in raw[:32]
         ]
 
+    fixed_invocations = {
+        "inspect_javascript_security": ("artifact_id", "line", "check"),
+        "verify_sql_injection": ("artifact_id", "line", "mode", "check"),
+        "verify_sensitive_directory": ("artifact_id", "line", "check"),
+    }
+    if action.tool in fixed_invocations:
+        invocation = [action.tool]
+        if action.tool == "verify_sql_injection":
+            invocation.extend(["--method", "POST" if action.parameters.get("mode") == "authentication" else "GET"])
+        elif action.tool == "verify_sensitive_directory":
+            invocation.extend(["--method", "GET", "--metadata-only"])
+        if action.endpoint:
+            invocation.extend(["--endpoint", redact_error_message(action.endpoint, max_length=1024)])
+        for name in fixed_invocations[action.tool]:
+            value = action.parameters.get(name)
+            if value is not None:
+                invocation.extend([f"--{name.replace('_', '-')}", redact_error_message(str(value), max_length=1024)])
+        return invocation
+
     displayable_parameters = {
         "inspect_dockerfile_user": ("artifact_id",),
         "inspect_python_password_assignment": ("artifact_id",),

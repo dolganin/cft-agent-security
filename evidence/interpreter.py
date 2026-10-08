@@ -13,6 +13,7 @@ from schemas.evidence import (
 )
 from schemas.execution import ExecutionResult
 from schemas.security_tools import (
+    BoundedVerificationResult,
     DockerfileUserCheckResult,
     PythonPasswordAssignmentCheckResult,
     ReactDangerousHtmlFlowCheckResult,
@@ -26,6 +27,9 @@ SANDBOX_COMMAND_TOOL = "sandbox_command"
 
 
 _SPECIALIZED_RESULTS: dict[str, tuple[type[BaseModel], str]] = {
+    "inspect_javascript_security": (BoundedVerificationResult, "javascript_source_metadata"),
+    "verify_sql_injection": (BoundedVerificationResult, "sql_differential_check"),
+    "verify_sensitive_directory": (BoundedVerificationResult, "sensitive_directory_check"),
     DOCKERFILE_USER_TOOL: (DockerfileUserCheckResult, "dockerfile_user_check"),
     PYTHON_PASSWORD_TOOL: (
         PythonPasswordAssignmentCheckResult,
@@ -185,6 +189,16 @@ def _structured_capability_evidence(
             sandbox_session_id=sandbox_session_id,
         )
 
+    if isinstance(payload, BoundedVerificationResult) and not _bounded_result_matches_action(payload, action):
+        return _evidence(
+            action=action, execution=execution, evidence_type=evidence_type,
+            summary="Executor output did not match the approved verification action.",
+            facts={"schema_valid": True, "action_binding_valid": False},
+            scope_description="bounded capability result failed action binding",
+            artifact_refs=artifact_refs, reliability="low", verdict="inconclusive",
+            hypothesis_id=hypothesis_id, sandbox_session_id=sandbox_session_id,
+        )
+
     data = payload.model_dump(by_alias=True)
     verdict = data.get("verdict")
     explanation = str(data.get("explanation", "Capability verification completed."))
@@ -207,6 +221,59 @@ def _structured_capability_evidence(
         hypothesis_id=hypothesis_id,
         sandbox_session_id=sandbox_session_id,
     )
+
+
+def _bounded_result_matches_action(payload: BoundedVerificationResult, action: ActionProposal) -> bool:
+    facts = payload.facts
+    if facts.get("artifact_id") != action.parameters.get("artifact_id") or facts.get("line") != action.parameters.get("line"):
+        return False
+    if action.tool == "inspect_javascript_security":
+        if facts.get("check") != action.parameters.get("check"):
+            return False
+        if payload.scope == "source_metadata":
+            return payload.verdict == "inconclusive"
+        return (
+            payload.scope == "source_sql_interpolation"
+            and action.parameters.get("check") == "sql_interpolation"
+            and payload.verdict == "confirmed"
+            and facts.get("raw_sql_call") is True
+            and facts.get("request_derived_interpolations", 0) > 0
+            and facts.get("query_binding_present") is False
+            and facts.get("recognized_sanitizer_present") is False
+            and facts.get("runtime_exploitability_verified") is False
+        )
+    if action.tool == "verify_sql_injection":
+        if (payload.scope != "runtime_sql_differential"
+                or facts.get("mode") != action.parameters.get("mode")
+                or facts.get("check") != action.parameters.get("check")
+                or facts.get("endpoint") != action.endpoint
+                or len(facts.get("observations", [])) != 4):
+            return False
+        observations = facts["observations"]
+        if action.parameters.get("mode") == "search":
+            controls = all(observations[i].get("valid_json") and observations[i].get("status") == 200
+                           and observations[i].get("result_count") == 0 for i in (0, 2))
+            probes = all(observations[i].get("valid_json") and observations[i].get("status") == 200
+                         and isinstance(observations[i].get("result_count"), int)
+                         and observations[i]["result_count"] > 0 for i in (1, 3))
+        else:
+            controls = all(observations[i].get("status") in {400, 401, 403}
+                           and not observations[i].get("authenticated") for i in (0, 2))
+            probes = all(observations[i].get("status") == 200 and observations[i].get("valid_json")
+                         and observations[i].get("authenticated") for i in (1, 3))
+        expected = "confirmed" if controls and probes else "inconclusive"
+        return payload.verdict == expected
+    if action.tool == "verify_sensitive_directory":
+        if (payload.scope != "runtime_directory_metadata"
+                or facts.get("check") != action.parameters.get("check")
+                or facts.get("endpoint") != action.endpoint):
+            return False
+        names = facts.get("sensitive_file_names")
+        evidence = (facts.get("status") == 200 and facts.get("directory_listing") is True
+                    and facts.get("file_contents_read") is False
+                    and isinstance(names, list) and bool(names))
+        return payload.verdict == ("confirmed" if evidence else "inconclusive")
+    return False
 
 
 def _evidence(

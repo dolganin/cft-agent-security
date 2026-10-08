@@ -26,6 +26,10 @@ def _after_validation(state: AgentState) -> str:
     return "report"
 
 
+def _after_proposal(state: AgentState) -> str:
+    return "report" if state.get("status") == "inconclusive" else "validate_action"
+
+
 def _after_budget_guard(state: AgentState) -> str:
     return "analyse" if state.get("status") == "budget_ok" else "report"
 
@@ -65,7 +69,11 @@ def build_graph():
     )
     graph.add_edge("analyse", "form_hypothesis")
     graph.add_edge("form_hypothesis", "propose_action")
-    graph.add_edge("propose_action", "validate_action")
+    graph.add_conditional_edges(
+        "propose_action",
+        _after_proposal,
+        {"validate_action": "validate_action", "report": "report"},
+    )
 
     graph.add_conditional_edges(
         "validate_action",

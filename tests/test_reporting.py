@@ -149,3 +149,41 @@ def test_registered_capability_summary_exposes_safe_exact_invocation() -> None:
         "--artifact-id",
         "web-dockerfile-dockerfile",
     ]
+
+
+def test_bounded_runtime_summary_shows_command_without_probe_values() -> None:
+    action = ActionProposal(
+        id="action-sql-1",
+        tool="verify_sql_injection",
+        target="juice-test",
+        environment="sandbox",
+        parameters={
+            "mode": "search",
+            "artifact_id": "source-search",
+            "line": 23,
+            "check": "sql_interpolation",
+        },
+        purpose="Check trusted product-search endpoint",
+        expected_evidence="Repeated control/probe response difference",
+        service="juice",
+        endpoint="/rest/products/search",
+    )
+
+    summary = _sandbox_actions({"proposed_action": action})[0]
+
+    assert summary.command == [
+        "verify_sql_injection",
+        "--method",
+        "GET",
+        "--endpoint",
+        "/rest/products/search",
+        "--artifact-id",
+        "source-search",
+        "--line",
+        "23",
+        "--mode",
+        "search",
+        "--check",
+        "sql_interpolation",
+    ]
+    assert not any("cft-no-match" in item or "' OR" in item for item in summary.command)

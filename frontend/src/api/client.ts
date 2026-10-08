@@ -12,6 +12,7 @@ import type {
   RunDiscoveryView,
   RunProgress,
   RunTimeline,
+  PatchReviewArtifact,
 } from "./types";
 
 const BASE_URL: string = import.meta.env.VITE_API_BASE_URL ?? "/api";
@@ -152,6 +153,14 @@ export function getRunProgress(runId: string): Promise<RunProgress> {
 
 export function getRunDiscovery(runId: string): Promise<RunDiscoveryView> {
   return request(`/runs/${runId}/discovery`);
+}
+
+export function getPatchProposal(runId: string): Promise<PatchReviewArtifact | null> {
+  return request(`/demo/runs/${encodeURIComponent(runId)}/patch-proposal`);
+}
+
+export function proposePatch(runId: string): Promise<PatchReviewArtifact> {
+  return request(`/demo/runs/${encodeURIComponent(runId)}/patch-proposal`, { method: "POST" });
 }
 
 // ----- Чат -----

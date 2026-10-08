@@ -18,7 +18,7 @@ TModel = TypeVar("TModel", bound=BaseModel)
 
 
 DEFAULT_ROUTE_SPECS: tuple[str, ...] = (
-    "nsu:deepseek-ai/DeepSeek-V4-Flash",
+    "nsu:deepseek-ai/DeepSeek-V4-Flash-0731",
     "nsu:Qwen3.8-27B",
     "groq:openai/gpt-oss-120b",
     "mistral:mistral-large-latest",
@@ -131,9 +131,10 @@ class ProviderFailoverClient:
         routes: tuple[LLMRoute, ...],
         credentials: Mapping[str, str] | None = None,
         timeout_seconds: float = 25.0,
-        max_output_tokens: int = 1200,
+        max_output_tokens: int = 3072,
         reasoning_effort: str = "high",
         trace: bool = False,
+        diagnostics_path=None,
     ) -> None:
         self.routes = routes
         self.credentials = {
@@ -147,6 +148,7 @@ class ProviderFailoverClient:
             raise ValueError("reasoning_effort must be low, high or max")
         self.reasoning_effort = reasoning_effort
         self.trace = trace
+        self.diagnostics_path = diagnostics_path
         self.last_attempts: list[LLMAttempt] = []
         self.last_selected_route: LLMRoute | None = None
 
@@ -191,6 +193,7 @@ class ProviderFailoverClient:
                 self.last_attempts.append(
                     LLMAttempt(route=route.label, ok=True, status="ok", latency_ms=elapsed)
                 )
+                self.record_event(operation=operation, route=route, status="ok", latency_ms=elapsed)
                 self.last_selected_route = route
                 self._trace(operation, route, elapsed, "ok")
                 return result
@@ -207,6 +210,7 @@ class ProviderFailoverClient:
                         error=message,
                     )
                 )
+                self.record_event(operation=operation, route=route, status=status, latency_ms=elapsed)
                 self._trace(operation, route, elapsed, status)
                 if block_provider:
                     # Ошибка доступа или лимита блокирует провайдера до конца запроса
@@ -217,6 +221,33 @@ class ProviderFailoverClient:
             f"No LLM route returned valid {output_model.__name__} for {operation}. "
             f"Attempted: {attempted}"
         )
+
+    def record_event(self, *, operation: str, status: str, category: str = "", route=None, latency_ms=None) -> None:
+        """Append credential-free model diagnostics; failures here never change a run."""
+        if self.diagnostics_path is None:
+            return
+        try:
+            import os
+            from datetime import UTC, datetime
+            path = self.diagnostics_path
+            path.parent.mkdir(parents=True, exist_ok=True)
+            event = {
+                "timestamp": datetime.now(UTC).isoformat(),
+                "operation": operation,
+                "provider": route.provider if route is not None else None,
+                "model": route.model if route is not None else None,
+                "status": status,
+                "category": category or None,
+                "latency_ms": latency_ms,
+            }
+            encoded = (json.dumps(event, ensure_ascii=False, separators=(",", ":")) + "\n").encode()
+            descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+            try:
+                os.write(descriptor, encoded)
+            finally:
+                os.close(descriptor)
+        except OSError:
+            return
 
     def _request_route(self, route: LLMRoute, system_prompt: str, user_prompt: str) -> str:
         if route.protocol == "openai":
@@ -246,7 +277,12 @@ class ProviderFailoverClient:
             "response_format": {"type": "json_object"},
         }
         if route.provider == "nsu":
-            payload["reasoning_effort"] = self.reasoning_effort
+            effort = self.reasoning_effort
+            # The current NSU OpenAI-compatible endpoint advertises xhigh/medium/low.
+            # Map the app's high/max settings to its supported highest level.
+            if effort in {"high", "max"}:
+                effort = "xhigh"
+            payload["reasoning_effort"] = effort
         result = _post_json(url, payload, headers=headers, timeout=self.timeout_seconds)
         choices = result.get("choices") or []
         if not choices:

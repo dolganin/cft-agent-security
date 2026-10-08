@@ -1,3 +1,4 @@
+import hashlib
 import re
 from typing import Protocol
 
@@ -334,9 +335,10 @@ def _build_action_id(finding_id: str, iteration: int) -> str:
     """Создать безопасный для валидатора понятный идентификатор действия из произвольного идентификатора находки."""
     normalized = re.sub(r"[^A-Za-z0-9._:-]+", "-", finding_id).strip("-")
     normalized = normalized or "finding"
-    # Оставляем место для префикса действия, суффикса итерации и разделителей
-    normalized = normalized[:96]
-    return f"action-{normalized}-{iteration}"
+    digest = hashlib.sha256(finding_id.encode("utf-8")).hexdigest()[:16]
+    suffix = f"-{digest}-{iteration}"
+    prefix_limit = 128 - len("action-") - len(suffix)
+    return f"action-{normalized[:prefix_limit]}{suffix}"
 
 
 def _requested_test_outcome(state: AgentState) -> str:

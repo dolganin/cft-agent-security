@@ -1,0 +1,13 @@
+services:
+  juice:
+    type: api
+    public: true
+    criticality: high
+    authentication: mixed
+    trust_zone: application
+    connects_to: [database]
+  database:
+    type: database
+    public: false
+    criticality: critical
+    trust_zone: data

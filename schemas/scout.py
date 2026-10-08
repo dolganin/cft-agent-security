@@ -42,7 +42,8 @@ class CandidateFinding(BaseModel):
             file=self.file,
             line_start=self.line_start,
             line_end=self.line_end,
-            severity=self.severity,
+            # Model labels are not calibrated benchmark severity or CVSS evidence.
+            severity=None,
             service=self.service,
         )
 
@@ -52,4 +53,24 @@ class CandidateFindingBatch(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    candidates: list[CandidateFinding] = Field(default_factory=list, max_length=256)
+
+
+class ScoutReadRequest(BaseModel):
+    """Read-only request against the application-owned source inventory."""
+
+    model_config = ConfigDict(extra="forbid")
+    file: str = Field(min_length=1, max_length=500)
+    line_start: int = Field(default=1, ge=1)
+    line_end: int | None = Field(default=None, ge=1)
+
+
+class ScoutTurn(BaseModel):
+    """One bounded model response; the accumulated run has a separate limit."""
+
+    model_config = ConfigDict(extra="forbid")
+
     candidates: list[CandidateFinding] = Field(default_factory=list, max_length=32)
+    read_requests: list[ScoutReadRequest] = Field(default_factory=list, max_length=8)
+    search_queries: list[str] = Field(default_factory=list, max_length=4)
+    stop: bool = False

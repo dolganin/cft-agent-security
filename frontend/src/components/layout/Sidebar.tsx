@@ -140,6 +140,10 @@ export function Sidebar({
       </nav>
 
       <div className="sidebar-footer">
+        <NavLink to="/demo" onClick={onCloseMobile}>
+          <ShieldCheck size={15} />
+          Демонстрация продукта
+        </NavLink>
         <NavLink to="/debug/runs" onClick={onCloseMobile}>
           <Bug size={15} />
           Прогоны и диагностика

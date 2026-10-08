@@ -21,8 +21,10 @@ class PolicyValidator:
         *,
         target_environments: dict[str, str] | None = None,
         target_artifacts: dict[str, set[str]] | None = None,
+        target_profiles: dict[str, TargetProfile] | None = None,
     ) -> None:
         self.policy = policy
+        self.target_profiles = dict(target_profiles or {})
         self.target_environments = dict(target_environments or {})
         self.target_artifacts = {
             target_id: set(artifact_ids)
@@ -52,6 +54,7 @@ class PolicyValidator:
             data,
             target_environments=target_environments,
             target_artifacts=target_artifacts,
+            target_profiles={profile.id: profile} if profile is not None else {},
         )
 
     def validate(self, action: ActionProposal) -> ValidationResult:
@@ -282,6 +285,26 @@ class PolicyValidator:
         self,
         action: ActionProposal,
     ) -> tuple[str, str] | None:
+        if action.tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory"}:
+            profile = self.target_profiles.get(action.target)
+            artifact = profile.artifacts.get(action.parameters.get("artifact_id")) if profile else None
+            line = action.parameters.get("line")
+            if artifact is None or artifact.kind != "javascript" or type(line) is not int or not 1 <= line <= 100_000:
+                return "Invalid bound source artifact or line", "target_artifact_denied"
+            key = f"verification.{artifact.relative_path}:{line}"
+            expected_check = profile.metadata.get(key + ".check", "source_metadata") if profile else None
+            if action.parameters.get("check") != expected_check:
+                return "Source verification check differs from trusted profile", "target_artifact_denied"
+            if action.tool != "inspect_javascript_security":
+                service_profile = profile.services.get(action.service or "")
+                if (not action.endpoint
+                        or profile.metadata.get(key + ".endpoint") != action.endpoint
+                        or action.service != profile.resolve_service(artifact.relative_path)
+                        or service_profile is None
+                        or action.endpoint not in service_profile.runtime_endpoints):
+                    return "Runtime verification is not bound to this source finding", "target_endpoint_denied"
+                if action.tool == "verify_sql_injection" and profile.metadata.get(key + ".mode") != action.parameters.get("mode"):
+                    return "Runtime verification mode differs from trusted profile", "target_endpoint_denied"
         registered = self.target_artifacts.get(action.target)
         if registered is None:
             return None

@@ -68,6 +68,8 @@ def _exception_chain(exc: BaseException) -> Iterator[BaseException]:
 
 def _sandbox_public_message(causes: tuple[BaseException, ...]) -> str:
     diagnostic = " ".join(str(item) for item in causes)
+    if "persistent docker runner" in diagnostic.lower():
+        return "Managed Docker verification runner could not start; check the pinned sandbox image"
     if "port is already allocated" in diagnostic.lower():
         return "Sandbox could not start because a required host port is already allocated"
     if "cannot connect to the docker daemon" in diagnostic.lower():

@@ -45,6 +45,24 @@ export interface CreateRunRequest {
   analysis_request?: string | null;
 }
 
+export interface PatchReviewArtifact {
+  schema_version: "1.0";
+  id: string;
+  run_id: string;
+  finding_id: string;
+  file: string;
+  status: "ready_for_review" | "rejected";
+  source_sha256: string;
+  proposal_sha256: string;
+  model: string | null;
+  generated_at: string;
+  proposal: { finding_id: string; rationale: string; unified_diff: string };
+  validation_detail: string;
+  applied: false;
+  security_verified: false;
+  limitations: string[];
+}
+
 // ----- Evidence -----
 
 export interface EvidenceAction {

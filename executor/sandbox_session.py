@@ -175,6 +175,7 @@ class SandboxSession:
             working_directory=workdir,
         )
         self._compose_override_file = workdir / "compose.sandbox.override.yml"
+        self._compose_service_names: set[str] = set()
         self._torn_down = False
 
     @property
@@ -235,6 +236,21 @@ class SandboxSession:
             raise SandboxSessionError(f"Trusted Compose file does not exist: {self.info.compose_file}")
         source_config = self._command(self._base_compose("config"))
         document = self._validate_compose_config(source_config.stdout)
+        configured_services = document.get("services", {})
+        if not isinstance(configured_services, dict):
+            raise SandboxSessionError("Docker Compose target has no valid services mapping")
+        self._compose_service_names = {str(name) for name in configured_services}
+        invalid_mappings = {
+            service.compose_service
+            for service in self.target.services.values()
+            if service.compose_service is not None
+            and service.compose_service not in self._compose_service_names
+        }
+        if invalid_mappings:
+            names = ", ".join(sorted(invalid_mappings))
+            raise SandboxSessionError(
+                f"TargetProfile maps unknown Docker Compose service(s): {names}"
+            )
         self._write_compose_override(document)
         effective_config = self._command(self._compose("config"))
         self._validate_compose_config(effective_config.stdout, reject_host_ports=True)
@@ -341,7 +357,16 @@ class SandboxSession:
         """Compose health принадлежит sandbox-сессии и не требует host URL."""
         result = self._command(self._compose("ps", "--format", "json"), allow_failure=True)
         services = normalize_compose_ps(result.stdout or "")
-        expected = {service.compose_service or service.id for service in self.target.services.values()}
+        # Discovery may add source components that are not runnable Compose services
+        # (for example, Juice Shop's frontend package inside a single prebuilt image).
+        # Only profile services that actually exist in the trusted Compose config can
+        # gate startup readiness.
+        expected = {
+            name
+            for service in self.target.services.values()
+            if (name := service.compose_service or service.id)
+            in self._compose_service_names
+        }
         by_name = {
             str(item.get("Service") or item.get("service")): item
             for item in services

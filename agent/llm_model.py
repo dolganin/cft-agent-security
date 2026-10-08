@@ -7,6 +7,7 @@ from typing import Any
 from agent.llm import LLMUnavailableError, ProviderFailoverClient, parse_route_specs
 from agent.model import DeterministicAgentModel
 from agent.prompts import SYSTEM_PROMPT
+from agent.verification import verification_candidates
 from schemas.action import ActionProposal
 from schemas.agent_outputs import AnalysisResult, ReevaluationResult
 from schemas.hypothesis import Hypothesis
@@ -41,6 +42,11 @@ class FallbackLLMAgentModel:
                 max_output_tokens=settings.llm_max_output_tokens,
                 reasoning_effort=settings.llm_reasoning_effort,
                 trace=settings.llm_trace,
+                diagnostics_path=(
+                    settings.executor_audit_log.parent / "llm-attempts.jsonl"
+                    if getattr(settings, "executor_audit_log", None) is not None
+                    else None
+                ),
             )
         )
 
@@ -152,13 +158,15 @@ class FallbackLLMAgentModel:
         candidates = _allowed_plan_candidates(state)
         registered_only = _requires_registered_candidate(state)
         task = (
-            "Build a bounded verification plan using only the supplied registered "
-            "candidate. A sandbox_command is not allowed for this finding because a "
-            "dedicated deterministic capability exists. Never invent target identity "
-            "or sandbox session ids."
+            "Choose exactly one next verification action from the supplied registered "
+            "candidates. Set max_steps to 1 and provide exactly one step because the "
+            "workflow re-analyzes Evidence before it requests another action. Do not "
+            "invent target identity, parameters, endpoint or sandbox session ids."
             if registered_only
             else (
-                "Build a bounded verification plan. You may either choose a deterministic "
+                "Build a one-action next-step plan. Set max_steps to 1 and provide exactly "
+                "one step; the workflow re-analyzes Evidence before it requests another "
+                "action. You may either choose a deterministic "
                 "registered candidate or propose a sandbox_command argv. sandbox_command runs "
                 "only inside the disposable Docker lab with a read-only target mount, bounded "
                 "resources and no arbitrary network. Use registered runtime candidates for "
@@ -202,6 +210,8 @@ class FallbackLLMAgentModel:
 
             if len(choice.steps) > choice.max_steps:
                 raise ValueError("LLM DynamicPlan contains more steps than max_steps")
+            if choice.max_steps != 1 or len(choice.steps) != 1:
+                raise ValueError("Each reasoning iteration must propose exactly one next action")
 
             by_id = {str(candidate["candidate_id"]): candidate for candidate in candidates}
             selected_ids = [
@@ -261,7 +271,7 @@ class FallbackLLMAgentModel:
                 environment=profile.environment,
                 hypothesis_id=hypothesis.id,
                 goal=choice.goal,
-                max_steps=choice.max_steps,
+                max_steps=1,
                 sandbox_session_id=(
                     runtime_services.session_id if runtime_services is not None else None
                 ),
@@ -269,15 +279,58 @@ class FallbackLLMAgentModel:
                 stop_conditions=choice.stop_conditions,
                 steps=planned_steps,
             )
-        except (LLMUnavailableError, ValueError):
-            return self._deterministic_result(
+        except (LLMUnavailableError, ValueError) as exc:
+            self._record_application_event("build_dynamic_plan", "fallback", type(exc).__name__)
+            plan = self._deterministic_result(
                 "build_dynamic_plan",
-                lambda: DeterministicAgentModel().build_plan(
-                    state,
-                    analysis,
-                    hypothesis,
-                ),
+                lambda: self._fallback_plan(state, analysis, hypothesis),
             )
+            from agent.planning import DynamicPlanValidator
+
+            validation = DynamicPlanValidator().validate(plan, state)
+            if not validation.approved:
+                self._record_application_event("build_dynamic_plan", "plan_rejected", "scope_or_budget")
+            return plan
+
+    def _fallback_plan(self, state, analysis, hypothesis):
+        from agent.model import _build_action_id, _build_plan_id
+
+        profile = _target_profile(state)
+        iteration = int(state.get("iteration_count", 0)) + 1
+        candidates = verification_candidates(state) if _has_javascript_artifact(state) else []
+        if not candidates:
+            candidates = _allowed_plan_candidates(state)
+        if not candidates:
+            if _has_javascript_artifact(state):
+                raise LLMUnavailableError("No unused registered JavaScript verification remains")
+            return DeterministicAgentModel().build_plan(state, analysis, hypothesis)
+        candidate = candidates[0]
+        runtime_services = state.get("runtime_services")
+        action = ActionProposal(
+            id=_build_action_id(state["finding"].id, iteration),
+            tool=str(candidate["tool"]), target=profile.id, environment=profile.environment,
+            iteration=iteration, parameters=dict(candidate.get("parameters", {})),
+            purpose=str(candidate["purpose"]), expected_evidence=(
+                "Structured result from the registered, bounded verification capability."
+            ), service=_optional_string(candidate.get("service")),
+            endpoint=_optional_string(candidate.get("endpoint")),
+        )
+        step = PlannedAction(index=1, action=action,
+                             expected_observation=action.expected_evidence,
+                             continue_if="Use accumulated Evidence to choose the next single action.")
+        return DynamicPlan(
+            id=_build_plan_id(state["finding"].id, iteration), target=profile.id,
+            environment=profile.environment, hypothesis_id=hypothesis.id,
+            goal=f"Collect bounded Evidence for: {hypothesis.statement}", max_steps=1,
+            sandbox_session_id=runtime_services.session_id if runtime_services is not None else None,
+            continuation_reason="Reconsider the hypothesis after this action.",
+            stop_conditions=["terminal_evidence", "step_limit_reached"], steps=[step],
+        )
+
+    def _record_application_event(self, operation, status, category):
+        recorder = getattr(self.client, "record_event", None)
+        if callable(recorder):
+            recorder(operation=operation, status=status, category=category)
 
     def reevaluate(self, state: AgentState) -> ReevaluationResult:
         from evidence.guard import evaluate_evidence
@@ -341,7 +394,8 @@ class FallbackLLMAgentModel:
     ) -> Any:
         try:
             return llm_call()
-        except (LLMUnavailableError, ValueError):
+        except (LLMUnavailableError, ValueError) as exc:
+            self._record_application_event(operation, "fallback", type(exc).__name__)
             return self._deterministic_result(operation, deterministic_call)
 
     def _deterministic_result(
@@ -448,6 +502,8 @@ def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
 
 
 def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
+    if _has_javascript_artifact(state):
+        return verification_candidates(state)
     if _requires_registered_candidate(state):
         return [
             {
@@ -511,7 +567,17 @@ def _requires_registered_candidate(state: AgentState) -> bool:
         _is_dockerfile_user_finding(state)
         or _is_unvalidated_password_finding(state)
         or _is_react_dangerous_html_finding(state)
+        or _has_javascript_artifact(state)
     )
+
+
+def _has_javascript_artifact(state: AgentState) -> bool:
+    finding = state.get("finding")
+    profile = state.get("target_profile")
+    if finding is None or profile is None:
+        return False
+    return any(item.kind == "javascript" and item.relative_path == finding.file
+               for item in profile.artifacts.values())
 
 
 def _public_candidate(candidate: dict[str, Any]) -> dict[str, Any]:

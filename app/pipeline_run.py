@@ -16,7 +16,9 @@ from agent.repository_scout import RepositoryScout
 from app.config import settings
 from app.e2e_inputs import build_real_initial_state
 from architecture.service import ArchitectureService
-from discovery.scout import validate_scout_candidates
+from discovery.express_routes import build_express_source_map, link_candidates_to_routes
+from discovery.scout import merge_scout_candidates, validate_scout_candidates
+from discovery.service import ProjectDiscovery
 from pipeline.cancellation import RunCancelled, check_cancelled
 from pipeline.errors import error_from_exception
 from pipeline.gate import evaluate_gate
@@ -186,8 +188,19 @@ def run_pipeline(
         return gate.exit_code
 
     findings = JsonFindingRepository(findings_path).list_findings()
-    findings = _append_scout_findings(findings, getattr(args, "discovery", None))
     progress.sast_done(len(findings))
+    discovery = getattr(args, "discovery", None)
+    if settings.agent_mode == "llm" and discovery is None:
+        check_cancelled()
+        discovery = ProjectDiscovery().discover(target)
+    findings = _append_scout_findings(
+        findings, discovery, output_dir=output_dir,
+        service_resolver=profile.resolve_service,
+        progress=progress,
+    )
+    from agent.verification import register_source_artifacts
+
+    profile = register_source_artifacts(profile, findings, target)
     if args.base_ref:
         if not args.base_findings:
             pipeline_errors.append(
@@ -312,6 +325,7 @@ def run_pipeline(
                 target_profile=profile,
                 architecture_overrides_path=architecture_overrides,
                 finding_id=finding.id,
+                finding_override=finding,
                 max_iterations=args.max_iterations,
             )
             if runtime_services is not None:
@@ -364,24 +378,100 @@ def run_pipeline(
     return gate.exit_code
 
 
-def _append_scout_findings(findings, discovery):
+def _append_scout_findings(
+    findings, discovery, *, output_dir=None, service_resolver=None, progress=None,
+):
     """Scout дает дополнительные гипотезы, но сбой LLM не ломает SAST pipeline."""
     if settings.agent_mode != "llm" or discovery is None:
         return findings
+    if progress is not None:
+        progress.scout(status="running", max_turns=settings.scout_max_turns)
     try:
         client = FallbackLLMAgentModel.from_settings(settings).client
-        batch = RepositoryScout(client).scout(discovery)
-    except LLMUnavailableError:
+        try:
+            source_map = build_express_source_map(discovery)
+        except (OSError, TypeError, ValueError) as exc:
+            source_map = None
+            logger.warning("Express source map unavailable: %s", type(exc).__name__)
+        scout = RepositoryScout(
+            client, max_turns=settings.scout_max_turns,
+            max_source_chars=settings.scout_max_source_chars,
+            max_candidates=settings.scout_max_candidates,
+            wall_clock_seconds=settings.scout_wall_clock_seconds,
+            check_cancelled=check_cancelled,
+            on_progress=(
+                lambda event: progress.scout(
+                    status="running", turn=event["turn"], max_turns=event["max_turns"],
+                    reviewed_files=event["reviewed_files"],
+                    candidates=event["candidate_count"],
+                )
+                if progress is not None else None
+            ),
+        )
+        batch = scout.scout(discovery, source_map=source_map)
+    except (LLMUnavailableError, ValueError, OSError) as exc:
+        logger.warning("Repository scout unavailable: %s", type(exc).__name__)
+        if progress is not None:
+            progress.scout(
+                status="done", candidates=0, stop_reason="model_unavailable",
+            )
         return findings
     candidates = validate_scout_candidates(batch.candidates, discovery)
-    existing = {(item.rule_id, item.file, item.line_start) for item in findings}
-    for index, candidate in enumerate(candidates, start=1):
-        identity = (candidate.rule_id, candidate.file, candidate.line_start)
-        if identity in existing:
-            continue
-        findings.append(candidate.to_finding(finding_id=f"model-scout-{index:03d}"))
-        existing.add(identity)
-    return findings
+    route_links = (
+        link_candidates_to_routes(candidates, source_map)
+        if source_map is not None else []
+    )
+    merged, duplicates = merge_scout_candidates(
+        findings, candidates, service_resolver=service_resolver,
+    )
+    audit = getattr(scout, "audit", {})
+    audit.update(merged_candidates=len(merged) - len(findings), duplicates=duplicates)
+    if source_map is not None:
+        audit["route_candidate_links"] = {
+            "candidates": len(route_links),
+            "mapped": sum(item["binding_status"] != "unmapped" for item in route_links),
+            "ambiguous": sum(item["binding_status"] == "ambiguous" for item in route_links),
+            "authorization_assessed": False,
+        }
+    if source_map is not None:
+        audit["express_source_map"] = {
+            "analyzed_files": len(source_map.analyzed_files),
+            "routes": len(source_map.routes),
+            "middleware_mounts": len(source_map.middleware_mounts),
+            "dynamic_routes": source_map.dynamic_routes,
+            "omitted_routes": source_map.omitted_routes,
+            "omitted_middleware_mounts": source_map.omitted_middleware_mounts,
+            "unsupported_files": source_map.unsupported_files,
+        }
+    if progress is not None:
+        progress.scout(
+            status="done", candidates=len(candidates),
+            reviewed_files=len({item["file"] for item in audit.get("reviewed_ranges", [])}),
+            stop_reason=audit.get("stop_reason"),
+        )
+    if output_dir is not None:
+        destination = Path(output_dir) / "scout"
+        destination.mkdir(parents=True, exist_ok=True)
+        if source_map is not None:
+            (destination / "express-source-map.json").write_text(
+                source_map.model_dump_json(indent=2), encoding="utf-8",
+            )
+            (destination / "candidate-route-links.json").write_text(
+                json.dumps(route_links, ensure_ascii=False, indent=2), encoding="utf-8",
+            )
+        (destination / "summary.json").write_text(
+            json.dumps(audit, ensure_ascii=False, indent=2), encoding="utf-8",
+        )
+        (destination / "candidates.json").write_text(
+            batch.model_dump_json(indent=2), encoding="utf-8",
+        )
+        (destination / "merged-findings.json").write_text(
+            json.dumps([item.model_dump(mode="json") for item in merged],
+                       ensure_ascii=False, indent=2), encoding="utf-8",
+        )
+    print(f"Scout: {len(candidates)} source-backed candidates, "
+          f"{duplicates} duplicates, stop={audit.get('stop_reason', 'unknown')}")
+    return merged
 
 
 def _build_static_finding_report(

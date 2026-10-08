@@ -3,6 +3,17 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class BoundedVerificationResult(BaseModel):
+    """Fixed worker output, never a verdict parsed from generic command stdout."""
+
+    model_config = ConfigDict(populate_by_name=True, extra="forbid")
+    schema_version: Literal["cft.bounded_verification.v1"] = Field(alias="schema")
+    scope: Literal["source_metadata", "source_sql_interpolation", "runtime_sql_differential", "runtime_directory_metadata"]
+    verdict: Literal["confirmed", "inconclusive"]
+    explanation: str = Field(min_length=1, max_length=1000)
+    facts: dict[str, object]
+
+
 class DockerfileUserCheckResult(BaseModel):
     """Структурированное доказательство по исходному коду доверенного Dockerfile."""
 

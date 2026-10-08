@@ -13,7 +13,7 @@ from executor.sandbox_session import (
     SessionTimeoutError,
     normalize_compose_ps,
 )
-from schemas.target import TargetProfile
+from schemas.target import TargetProfile, TargetService
 
 
 class FakeCompose:
@@ -109,6 +109,41 @@ def test_lifecycle_order_state_and_idempotent_teardown(tmp_path: Path) -> None:
     assert names.index(next(item for item in names if item.endswith(" config"))) < names.index(next(item for item in names if " up --build --detach" in item))
     assert any(" down --volumes --remove-orphans" in item for item in names)
     assert all(isinstance(command, list) for command in fake.commands)
+
+
+def test_discovered_non_compose_components_do_not_block_compose_readiness(
+    tmp_path: Path,
+) -> None:
+    class HealthyAppCompose(FakeCompose):
+        def __call__(self, argv, cwd, timeout):
+            if argv[-1] == "json":
+                self.commands.append(argv)
+                self.timeouts.append(timeout)
+                return subprocess.CompletedProcess(
+                    argv,
+                    0,
+                    '{"Service":"app","State":"running","Health":"healthy"}',
+                    "",
+                )
+            return super().__call__(argv, cwd, timeout)
+
+    profile = _target(tmp_path)
+    profile = profile.model_copy(
+        update={
+            "services": {
+                **profile.services,
+                "discovered-frontend": TargetService(
+                    id="discovered-frontend", type="angular", root="."
+                ),
+            }
+        }
+    )
+    session = SandboxSession(profile, runner=HealthyAppCompose())
+
+    session.start()
+
+    assert session.status == SessionStatus.READY
+    session.teardown()
 
 
 def test_compose_session_resets_all_host_ports_with_server_owned_override(

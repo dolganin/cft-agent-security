@@ -1,0 +1,41 @@
+id: juice-presentation
+name: Juice Shop | демонстрационный проход
+repository_path: artifacts/presentation-2026-10-08/juice-shop
+environment: sandbox
+architecture:
+  file: targets/juice-presentation-architecture.yaml
+runtime:
+  type: docker_compose
+  compose_file: docker-compose.presentation.yml
+services:
+  juice:
+    type: node
+    root: .
+    dependency_files: [package.json]
+    compose_service: juice
+    internal_port: 3000
+    healthcheck:
+      path: /
+    runtime_endpoints: [/, /rest/products/search, /rest/user/login, /ftp, /.well-known, /encryptionkeys, /support/logs]
+metadata:
+  demo.scope: "Selected SQL interpolation and directory-listing rules plus bounded source exploration; not a full benchmark"
+  demo.target_version: "20.2.0"
+  demo.target_commit: "5658473cf8814459bf89000ce373b20ed0b4eb37"
+  "verification.routes/login.ts:34.check": sql_interpolation
+  "verification.routes/login.ts:34.endpoint": /rest/user/login
+  "verification.routes/login.ts:34.mode": authentication
+  "verification.routes/search.ts:23.check": sql_interpolation
+  "verification.routes/search.ts:23.endpoint": /rest/products/search
+  "verification.routes/search.ts:23.mode": search
+  "verification.routes/search.ts:21.check": sql_interpolation
+  "verification.routes/search.ts:21.endpoint": /rest/products/search
+  "verification.routes/search.ts:21.mode": search
+  "verification.server.ts:288.endpoint": /ftp
+  "verification.server.ts:292.endpoint": /.well-known
+  "verification.server.ts:296.endpoint": /encryptionkeys
+  "verification.server.ts:300.endpoint": /support/logs
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false

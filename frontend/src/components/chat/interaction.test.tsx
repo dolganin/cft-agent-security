@@ -42,7 +42,8 @@ describe("chat interactions", () => {
         "inspect_dockerfile_user --artifact-id web-dockerfile-dockerfile",
       ),
     );
-    expect(screen.getByText("Точный вызов capability")).toBeTruthy();
+    expect(screen.getByText("Вызов инструмента")).toBeTruthy();
+    expect(screen.getByText("Зарегистрированный инструмент и его параметры, не команда оболочки.")).toBeTruthy();
   });
 
   it("renders gate, finding and evidence as compact conversation blocks", () => {

@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
 import { ChatPage } from "./pages/ChatPage";
 import { DebugRunsPage } from "./pages/DebugRunsPage";
+import { DemoPage } from "./pages/DemoPage";
 import { RunPage } from "./pages/RunPage";
 
 const queryClient = new QueryClient({
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/" element={<ChatPage />} />
             <Route path="/chats/:sessionId" element={<ChatPage />} />
             <Route path="/debug/runs" element={<DebugRunsPage />} />
+            <Route path="/demo" element={<DemoPage />} />
             <Route path="/dashboard" element={<Navigate to="/debug/runs" replace />} />
             <Route path="/runs/:runId" element={<RunPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />

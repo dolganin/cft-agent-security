@@ -4,6 +4,7 @@ import pytest
 
 from app.e2e_inputs import build_real_initial_state
 from sast.repository import JsonFindingRepository
+from schemas.finding import Finding
 from tools.runtime import LocalCodeReader
 
 
@@ -145,3 +146,53 @@ def test_build_real_initial_state_applies_architecture_overrides(tmp_path) -> No
     assert state["architecture_context"].public_exposure is False
     assert state["architecture_context"].authentication == "admin"
     assert state["architecture_context"].databases == ["database"]
+
+
+def test_build_real_initial_state_accepts_validated_finding_not_in_sast_file(tmp_path) -> None:
+    findings_path = tmp_path / "findings.json"
+    _write_findings(findings_path)
+    target = tmp_path / "target"
+    source = target / "backend" / "app.py"
+    source.parent.mkdir(parents=True)
+    source.write_text("def handler():\n    return 'ok'\n", encoding="utf-8")
+    architecture_path = tmp_path / "architecture.yaml"
+    _write_architecture(architecture_path)
+    scout_finding = Finding(
+        id="model-scout-001",
+        source="model_scout",
+        rule_id="scout.test",
+        title="Scout candidate",
+        description="An inventory-backed hypothesis awaiting verification.",
+        file="backend/app.py",
+        line_start=2,
+        line_end=2,
+        service="backend",
+    )
+
+    state = build_real_initial_state(
+        findings_path=findings_path,
+        target_root=target,
+        architecture_path=architecture_path,
+        finding_id=scout_finding.id,
+        finding_override=scout_finding,
+    )
+
+    assert state["finding"].id == "model-scout-001"
+    assert "return 'ok'" in state["code_context"]
+
+
+def test_build_real_initial_state_rejects_mismatched_finding_override(tmp_path) -> None:
+    findings_path = tmp_path / "findings.json"
+    _write_findings(findings_path)
+    finding = Finding(
+        id="candidate-1", source="model_scout", rule_id="candidate",
+        title="Candidate", description="Candidate finding", file="backend/Dockerfile",
+    )
+
+    with pytest.raises(ValueError, match="does not match"):
+        build_real_initial_state(
+            findings_path=findings_path,
+            target_root=tmp_path,
+            finding_id="different-id",
+            finding_override=finding,
+        )

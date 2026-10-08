@@ -1,6 +1,8 @@
 """Фиксированный worker для capability, не являющийся интерпретатором команд."""
 
 import ast
+import hashlib
+import html
 import json
 import re
 import subprocess
@@ -8,7 +10,7 @@ import sys
 import warnings
 from pathlib import Path, PurePosixPath
 from urllib.error import HTTPError, URLError
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urlencode, urljoin, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 _DOCKERFILE_USER_TOOL = "inspect_dockerfile_user"
@@ -774,6 +776,20 @@ def _execute(payload: dict) -> tuple[int, str, str]:
     if tool == _SANDBOX_COMMAND_TOOL:
         return _sandbox_command(repository_path, parameters, timeout, output_limit)
 
+    if tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory"}:
+        try:
+            if tool == "inspect_javascript_security":
+                artifacts = _validated_artifacts(payload.get("artifacts", {}))
+                return _inspect_javascript_security(repository_path, artifacts, parameters)
+            if not isinstance(endpoint, str):
+                raise TypeError("Missing trusted runtime endpoint")
+            url = _fixed_url(base_url, endpoint)
+            if tool == "verify_sql_injection":
+                return _verify_sql_injection(url, parameters, timeout, request_host)
+            return _verify_sensitive_directory(url, parameters, timeout, request_host)
+        except (OSError, UnicodeError, TypeError, ValueError) as exc:
+            return 1, "", f"Bounded verification failed: {type(exc).__name__}"
+
     if tool in {_DOCKERFILE_USER_TOOL, _PYTHON_PASSWORD_TOOL, _REACT_HTML_FLOW_TOOL}:
         try:
             artifacts = _validated_artifacts(payload.get("artifacts", {}))
@@ -799,6 +815,153 @@ def _execute(payload: dict) -> tuple[int, str, str]:
             return 1, "", f"HTTP observation failed: {type(exc).__name__}: {exc}"
 
     return 126, "", f"Unknown worker capability: {tool}"
+
+
+def _verification_result(scope, confirmed, explanation, facts):
+    result = {"schema": "cft.bounded_verification.v1", "scope": scope,
+              "verdict": "confirmed" if confirmed else "inconclusive",
+              "explanation": explanation, "facts": facts}
+    return 0, json.dumps(result, ensure_ascii=False, separators=(",", ":")), ""
+
+
+def _source_binding(parameters, extra=()):
+    if set(parameters) != {"artifact_id", "line", "check", *extra}:
+        raise ValueError("Invalid capability parameters")
+    if not isinstance(parameters["artifact_id"], str) or type(parameters["line"]) is not int or not 1 <= parameters["line"] <= 100_000:
+        raise ValueError("Invalid source binding")
+    if not isinstance(parameters.get("check"), str) or parameters.get("check") not in {"source_metadata", "sql_interpolation"}:
+        raise ValueError("Invalid source verification check")
+    return {key: parameters[key] for key in ("artifact_id", "line", "check")}
+
+
+def _inspect_javascript_security(repository_path, artifacts, parameters):
+    facts = _source_binding(parameters)
+    file, source = _read_artifact(repository_path=repository_path, artifacts=artifacts,
+                                  artifact_id=parameters["artifact_id"], expected_kind="javascript")
+    lines = source.splitlines()
+    if parameters["line"] > len(lines):
+        raise ValueError("Source line outside artifact")
+    if parameters["check"] == "sql_interpolation":
+        line_text = lines[parameters["line"] - 1]
+        expressions = re.findall(r"\$\{([^{}]{1,500})\}", line_text)
+        tainted = [expr for expr in expressions if re.search(r"\breq\.(?:body|query|params)\b", expr)]
+        sanitized = any(re.search(r"\b(?:escape|escapeLike|sanitize|parameterize|encodeURIComponent)\s*\(", expr, re.IGNORECASE)
+                        for expr in tainted)
+        raw_query = bool(re.search(r"\bsequelize\.query\s*\(", line_text))
+        template_query = "`" in line_text and bool(expressions)
+        has_binding = bool(re.search(r"\b(?:replacements|bind)\s*:", line_text))
+        confirmed = bool(tainted and raw_query and template_query and not has_binding and not sanitized)
+        facts.update(file=file, line=parameters["line"], raw_sql_call=raw_query,
+                     request_derived_interpolations=len(tainted), query_binding_present=has_binding,
+                     recognized_sanitizer_present=sanitized,
+                     runtime_exploitability_verified=False,
+                     evidence_class="direct_request_interpolation_into_raw_sql" if confirmed else "insufficient_static_pattern")
+        return _verification_result("source_sql_interpolation", confirmed,
+                                    "Mapped source directly interpolates request data into raw SQL; runtime exploitability was not tested."
+                                    if confirmed else "The mapped source line did not establish direct request interpolation into raw SQL.", facts)
+    if parameters["check"] != "source_metadata":
+        raise ValueError("Unsupported source verification check")
+    # Deliberately emits metadata, not strings containing private keys or passwords.
+    facts.update(file=file, total_lines=len(lines), source_sha256=hashlib.sha256(source.encode()).hexdigest(),
+                 runtime_verified=False, values_redacted=True)
+    return _verification_result("source_metadata", False,
+                                "Trusted source artifact read. Metadata alone does not prove exploitability.", facts)
+
+
+def _json_probe(url, mode, value, timeout, request_host):
+    headers = {"User-Agent": "cft-bounded-verification/1", "Accept": "application/json"}
+    if request_host:
+        headers["Host"] = request_host
+    if mode == "authentication":
+        headers["Content-Type"] = "application/json"
+        data = json.dumps({"email": value, "password": "cft-invalid-control-password"}).encode()
+        request = Request(url, data=data, headers=headers, method="POST")
+    else:
+        request = Request(url + "?" + urlencode({"q": value}), headers=headers, method="GET")
+    try:
+        response = build_opener(_NoRedirect).open(request, timeout=timeout)
+    except HTTPError as exc:
+        response = exc
+    with response:
+        status = int(response.status)
+        body = response.read(262_145)
+        if len(body) > 262_144 or "json" not in response.headers.get("Content-Type", "").lower():
+            return {"status": status, "valid_json": False, "result_count": None, "authenticated": False}
+        try:
+            payload = json.loads(body)
+        except (ValueError, UnicodeError):
+            payload = None
+        if not isinstance(payload, dict):
+            return {"status": status, "valid_json": False, "result_count": None, "authenticated": False}
+        data = payload.get("data")
+        auth = payload.get("authentication")
+        return {"status": status, "valid_json": True,
+                "result_count": len(data) if isinstance(data, list) else None,
+                "authenticated": bool(isinstance(auth, dict) and isinstance(auth.get("token"), str) and auth["token"])}
+
+
+def _verify_sql_injection(url, parameters, timeout, request_host):
+    facts = _source_binding(parameters, ("mode",))
+    mode = parameters["mode"]
+    if mode not in {"search", "authentication"}:
+        raise ValueError("Invalid differential mode")
+    if parameters["check"] != "sql_interpolation":
+        raise ValueError("Runtime SQL check is not bound to a SQL interpolation finding")
+    control = "cft-no-match-" + hashlib.sha256(url.encode()).hexdigest()[:20] + "@invalid.example"
+    # Fixed non-destructive boolean probes; no table extraction or state changes.
+    injection = "' OR 1=1--" if mode == "authentication" else "')) OR 1=1--"
+    request_timeout = min(max(timeout / 4, 0.1), 1.0)
+    observations = [_json_probe(url, mode, v, request_timeout, request_host)
+                    for v in (control, injection, control, injection)]
+    before, positive, after, repeated = observations
+    if mode == "authentication":
+        negative = all(o["status"] in {400, 401, 403} and not o["authenticated"] for o in (before, after))
+        success = all(o["status"] == 200 and o["valid_json"] and o["authenticated"] for o in (positive, repeated))
+    else:
+        negative = all(o["status"] == 200 and o["valid_json"] and o["result_count"] == 0 for o in (before, after))
+        success = all(o["status"] == 200 and o["valid_json"] and isinstance(o["result_count"], int)
+                      and o["result_count"] > 0 for o in (positive, repeated))
+    confirmed = negative and success
+    facts.update(mode=mode, endpoint=urlsplit(url).path, observations=observations, requests=4,
+                 response_values_redacted=True, control_repeated=True, probe_repeated=True)
+    return _verification_result("runtime_sql_differential", confirmed,
+                                "Repeated boolean SQL probe changed structured results while repeated negative controls did not."
+                                if confirmed else "The bounded SQL differential did not establish a reproducible bypass.", facts)
+
+
+def _verify_sensitive_directory(url, parameters, timeout, request_host):
+    facts = _source_binding(parameters)
+    if parameters["check"] != "source_metadata":
+        raise ValueError("Directory check is not bound to a directory-listing source finding")
+    headers = {"User-Agent": "cft-bounded-verification/1"}
+    if request_host:
+        headers["Host"] = request_host
+    try:
+        response = build_opener(_NoRedirect).open(Request(url, headers=headers), timeout=timeout)
+    except HTTPError as exc:
+        response = exc
+    with response:
+        status = int(response.status)
+        content_type = response.headers.get("Content-Type", "").lower()
+        body = response.read(65_537)
+    text = body[:65_536].decode("utf-8", errors="replace")
+    directory = "Index of" in text or "listing directory" in text.lower()
+    paths = [html.unescape(link) for link in re.findall(r'href=[\"\x27]([^\"\x27]+)', text)]
+    base_path = urlsplit(url).path.rstrip("/") + "/"
+    sensitive = []
+    for link in paths:
+        parsed = urlsplit(urljoin(url.rstrip("/") + "/", link))
+        if parsed.netloc != urlsplit(url).netloc or not parsed.path.startswith(base_path):
+            continue
+        name = parsed.path.rsplit("/", 1)[-1]
+        if re.search(r"(?:\.bak|\.log|\.kdbx|\.env|\.pem|\.key)$", name, re.IGNORECASE):
+            sensitive.append(name[:128])
+    confirmed = status == 200 and "html" in content_type and directory and bool(sensitive)
+    facts.update(endpoint=urlsplit(url).path, status=status, directory_listing=directory,
+                 sensitive_file_names=sorted(set(sensitive))[:16], file_contents_read=False, truncated=len(body) > 65_536)
+    return _verification_result("runtime_directory_metadata", confirmed,
+                                "Unauthenticated directory listing exposes sensitive file names; contents were not downloaded."
+                                if confirmed else "No sensitive directory metadata was established by this bounded observation.", facts)
 
 
 def main() -> int:

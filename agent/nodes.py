@@ -16,7 +16,7 @@ from evidence.interpreter import build_evidence
 from evidence.runtime import build_http_surface_evidence
 from evidence.store import JsonExecutionEvidenceStore
 from executor.approvals import InMemoryApprovalStore
-from executor.executor import SafeExecutor
+from executor.executor import CAPABILITY_NETWORK_ACCESS, SafeExecutor
 from pipeline.cancellation import check_cancelled
 from reporting.builder import build_final_report
 from schemas.agent_loop import AgentActionRecord, AgentDecisionRecord
@@ -151,6 +151,25 @@ def form_hypothesis(state: AgentState) -> dict:
 def propose_action(state: AgentState) -> dict:
     check_cancelled()
     model = get_agent_model()
+    if settings.agent_mode == "llm":
+        from agent.llm_model import _allowed_plan_candidates, _has_javascript_artifact
+
+        if _has_javascript_artifact(state) and not _allowed_plan_candidates(state):
+            reason = "No unused registered verification action remains for the accumulated Evidence."
+            return {
+                "status": "inconclusive",
+                "stop_reason": "insufficient_evidence",
+                "decision_history": [
+                    *state.get("decision_history", []),
+                    AgentDecisionRecord(
+                        step=int(state.get("iteration_count", 0)), outcome="stop",
+                        reason=reason,
+                        evidence_ids=[item.id for item in state.get("evidence", [])],
+                        plan_id=state["dynamic_plan"].id if state.get("dynamic_plan") else None,
+                        stop_reason="insufficient_evidence",
+                    ),
+                ],
+            }
 
     plan = model.build_plan(
         state,
@@ -243,7 +262,7 @@ def execute_action(state: AgentState) -> dict:
     else:
         # Approval все еще привязан к конкретному proposal, lab не дает обход policy.
         executor.record_approval(action, validation)
-        if action.tool == "sandbox_command" and runtime_services is not None:
+        if CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target" and runtime_services is not None:
             executor.open_managed_lab(runtime_services, state["target_profile"])
 
     if runtime_services is None:

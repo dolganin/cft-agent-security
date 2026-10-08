@@ -51,10 +51,10 @@ def test_scout_candidate_enters_normal_finding_list(monkeypatch) -> None:
     )
 
     class _Scout:
-        def __init__(self, _client) -> None:
+        def __init__(self, _client, **_kwargs) -> None:
             pass
 
-        def scout(self, _inventory):
+        def scout(self, _inventory, *, source_map=None):
             return CandidateFindingBatch(candidates=[candidate])
 
     class _Model:

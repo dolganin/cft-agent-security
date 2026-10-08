@@ -47,10 +47,14 @@ class Settings(BaseSettings):
     agent_model_name: str = ""
     llm_routes: str = ""
     llm_timeout_seconds: float = 25.0
-    llm_max_output_tokens: int = 1200
+    llm_max_output_tokens: int = 3072
     llm_reasoning_effort: Literal["low", "high", "max"] = "high"
     llm_allow_external_fallbacks: bool = False
     llm_trace: bool = False
+    scout_max_turns: int = Field(default=8, ge=1, le=32)
+    scout_max_source_chars: int = Field(default=160_000, ge=1, le=1_000_000)
+    scout_max_candidates: int = Field(default=32, ge=1, le=256)
+    scout_wall_clock_seconds: float = Field(default=240.0, gt=0, le=1800)
 
     nsu_openwebui_key: SecretStr | None = Field(
         default=None,

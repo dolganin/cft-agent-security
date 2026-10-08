@@ -236,7 +236,7 @@ def test_deterministic_model_wraps_existing_action_in_dynamic_plan() -> None:
     assert plan.steps[0].action.iteration == 1
 
 
-def test_llm_builds_multistep_plan_only_from_runtime_candidates() -> None:
+def test_llm_rejects_multistep_plans_before_single_action_iterations() -> None:
     choice = LLMDynamicPlanChoice(
         goal="Compare health and application route observations.",
         max_steps=2,
@@ -263,12 +263,10 @@ def test_llm_builds_multistep_plan_only_from_runtime_candidates() -> None:
 
     plan = model.build_plan(state, analysis, hypothesis)
 
-    assert [step.action.tool for step in plan.steps] == [
-        "observe_http_surface",
-        "observe_http_surface",
-    ]
-    assert [step.action.endpoint for step in plan.steps] == ["/health/", "/api/items/"]
-    assert [step.action.iteration for step in plan.steps] == [1, 2]
+    assert [step.action.tool for step in plan.steps] == ["observe_http_surface"]
+    assert plan.max_steps == 1
+    assert plan.steps[0].action.endpoint in {"/health/", "/api/items/"}
+    assert [step.action.iteration for step in plan.steps] == [1]
     assert all(step.action.target == "demo-target" for step in plan.steps)
     assert all(step.action.environment == "sandbox" for step in plan.steps)
     assert all(step.action.service == "api" for step in plan.steps)
@@ -277,7 +275,7 @@ def test_llm_builds_multistep_plan_only_from_runtime_candidates() -> None:
     assert client.calls[0]["operation"] == "build_dynamic_plan"
 
 
-def test_llm_invented_runtime_candidate_uses_deterministic_plan() -> None:
+def test_llm_invented_runtime_candidate_falls_back_to_trusted_observation() -> None:
     choice = LLMDynamicPlanChoice(
         goal="Try an out-of-scope route.",
         max_steps=1,
@@ -299,8 +297,9 @@ def test_llm_invented_runtime_candidate_uses_deterministic_plan() -> None:
         state["hypothesis"],
     )
 
-    assert plan.steps[0].action.tool == "safe_noop"
-    assert plan.steps[0].action.service is None
+    assert plan.steps[0].action.tool == "observe_http_surface"
+    assert plan.steps[0].action.service == "api"
+    assert plan.steps[0].action.endpoint in {"/health/", "/api/items/"}
 
 
 def test_plan_node_persists_scope_validation_before_policy(monkeypatch) -> None:

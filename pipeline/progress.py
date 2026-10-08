@@ -51,6 +51,16 @@ class PipelineProgressRecorder:
     def sast_done(self, finding_count: int) -> None:
         self.stage(_STAGE_SAST, status="done", detail=f"{finding_count} findings")
 
+    def scout(
+        self, *, status: str, reviewed_files: int = 0, candidates: int = 0,
+        turn: int = 0, max_turns: int = 0, stop_reason: str | None = None,
+    ) -> None:
+        if status == "running":
+            detail = f"turn {turn}/{max_turns}; reviewed files {reviewed_files}; candidates {candidates}"
+        else:
+            detail = f"{candidates} candidates; reviewed files {reviewed_files}; stop {stop_reason or 'unknown'}"
+        self.stage("scout", status=status, detail=detail)
+
     def verification_started(self) -> None:
         self.stage(_STAGE_VERIFICATION, status="running")
 

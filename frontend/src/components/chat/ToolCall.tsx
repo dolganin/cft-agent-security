@@ -41,9 +41,12 @@ export function ToolCall({ tool }: { tool: TimelineTool }) {
             <div className="terminal-title">
               {tool.capability === "sandbox_command"
                 ? "Команда песочницы"
-                : "Точный вызов capability"}
+                : "Вызов инструмента"}
             </div>
             <pre>{tool.capability === "sandbox_command" ? "$" : "›"} {command}</pre>
+            {tool.capability !== "sandbox_command" ? (
+              <p className="tool-invocation-note">Зарегистрированный инструмент и его параметры, не команда оболочки.</p>
+            ) : null}
           </div>
         ) : null}
         {tool.stdout ? (
