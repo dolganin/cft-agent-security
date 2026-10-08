@@ -1,5 +1,78 @@
 # Демонстрация CFT Security Agent
 
+## Реальный Stage 1 Fix Verification
+
+После подготовки Juice Shop v20.2.0 и локальных images:
+
+```bash
+python -m app.stage1_e2e
+```
+
+Команда проверяет Docker, immutable image digests, exact target commit и clean
+checkout. Если сохранённого report/review нет, получает confirmed report через
+реальный Validator/Executor/Evidence и подаёт зарегистрированное SQL-предложение
+в обычный strict PatchReview. Затем запускает FixVerificationService.
+
+Каждый запуск сохраняет `artifacts/stage1-e2e/stage1-<unique-id>/`:
+`confirmed-report.json`, `patch-review.json`, `fix-verification.json`,
+`images.json`, `target-profile.json`, `original-before.json`,
+`original-after.json`, persistent execution Evidence и audit.
+BEFORE/AFTER работают в новых Docker контейнерах, source checkout не меняется.
+
+Подготовка dependencies выполняется отдельно, исключительно внутри Docker:
+
+```bash
+git -c core.autocrlf=false clone --depth 1 --branch v20.2.0 https://github.com/juice-shop/juice-shop.git artifacts/stage1-juice-shop
+docker pull python:3.12-alpine
+docker build -f docs/demo/fix-verification.Dockerfile -t cft-fix-juice:stage1 artifacts/stage1-juice-shop
+```
+
+Checkout должен иметь LF endings: Linux-тесты Juice Shop сравнивают подписи,
+зависящие от точных bytes `encryptionkeys/jwt.pub`. Windows CRLF checkout может
+падать на двух исходных JWT-тестах до patch. Original checkout не переписывается:
+готовится отдельный LF clone того же commit.
+
+Entrypoint разрешает локальные tags только для начального `image inspect` и
+сразу фиксирует RepoDigest; runtime использует digest и `--pull never`.
+Можно явно передать `--worker-image name@sha256:...` и
+`--fix-image name@sha256:...`. Внешняя сеть/install во время verification не нужны.
+У upstream v20.2.0 нет lockfile; dependency tree заморожен в provisioned image.
+Этот image следует сохранить/распространять по digest для повторения результата.
+
+Опциональные `--report` и `--review` позволяют использовать ранее сохранённые
+штатные artifacts. `--target` и `--output-dir` — параметры оператора, не модели.
+Output должен находиться вне original checkout.
+
+Два полных реальных прогона с проверкой уникальных sessions и cleanup:
+
+```bash
+CFT_RUN_STAGE1_E2E=1 python -m pytest tests/test_stage1_e2e.py -m integration -q
+```
+
+В PowerShell задайте `$env:CFT_RUN_STAGE1_E2E = '1'` перед той же pytest командой.
+Без opt-in этот дорогой внешний integration test явно skipped.
+
+Подробности реализации и фактические результаты:
+[`stage1-fix-verification-report.md`](../stage1-fix-verification-report.md).
+
+Для demo API/UI добавьте в операторский registered TargetProfile после
+provisioning (подставьте фактический `docker image inspect ... RepoDigests`):
+
+```yaml
+fix_verification:
+  adapter: juice_node_v1
+  image: cft-fix-juice@sha256:<actual-64-hex-digest>
+  service: juice
+  source_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+  timeout_seconds: 300
+  wall_clock_budget_seconds: 1800
+```
+
+Нужен LF target checkout. Без этого операторского config API возвращает
+INCONCLUSIVE с `security_verified=false`; модель не подбирает image/команды.
+Proposal artifact остаётся read-only историей ревью; результат выполненной
+проверки показывается и сохраняется отдельным Fix Verification artifact.
+
 Это короткий проход для презентации 9 октября, не замена полного бенчмарка.
 
 [Проверенный результат реального прогона 8 октября](verified-result-2026-10-08.md).

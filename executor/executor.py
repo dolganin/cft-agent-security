@@ -11,7 +11,7 @@ import yaml
 
 from evidence.audit import JsonlAuditLog
 from evidence.store import JsonExecutionEvidenceStore
-from executor.approvals import InMemoryApprovalStore
+from executor.approvals import InMemoryApprovalStore, proposal_digest
 from executor.runtime_service_map import RuntimeServiceMapBuilder
 from executor.sandbox import (
     DockerSandbox,
@@ -125,6 +125,7 @@ def _sandbox_result_error(result) -> ErrorDetail | None:
     return None
 
 CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
+    "fix_target_stage": False,
     "inspect_javascript_security": True,
     "verify_sql_injection": False,
     "verify_sensitive_directory": False,
@@ -138,6 +139,7 @@ CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
 
 # Определяет, какой сетевой доступ разрешен для каждой capability
 CAPABILITY_NETWORK_ACCESS: dict[str, str] = {
+    "fix_target_stage": "none",
     "inspect_javascript_security": "none",
     "verify_sql_injection": "target",
     "verify_sensitive_directory": "target",
@@ -172,6 +174,8 @@ class SafeExecutor:
         self._policy = policy
         self._registry = ToolRegistry()
         self._registry.register("safe_noop", self._safe_noop)
+        self._registry.register("fix_target_stage", self._fix_stage_parameters)
+        self._fix_runtime = None
         self._registry.register("inspect_javascript_security", self._javascript_parameters)
         self._registry.register("verify_sql_injection", self._sql_parameters)
         self._registry.register("verify_sensitive_directory", self._javascript_parameters)
@@ -192,6 +196,12 @@ class SafeExecutor:
 
     def registered_tools(self) -> tuple[str, ...]:
         return self._registry.names()
+
+    def bind_fix_runtime(self, runtime) -> None:
+        from executor.fix_runtime import DockerFixRuntime
+        if not isinstance(runtime, DockerFixRuntime):
+            raise TypeError("Only the disposable Docker fix runtime is supported")
+        self._fix_runtime = runtime
 
     def open_managed_lab(
         self,
@@ -660,7 +670,15 @@ class SafeExecutor:
                         request_host = None
                 else:
                     request_host = None
-                sandbox_result = self._sandbox.run(
+                runner = self._sandbox
+                if action.tool == "fix_target_stage":
+                    if (self._fix_runtime is None
+                            or self._fix_runtime.profile != target
+                            or target.fix_verification is None
+                            or parameters["adapter"] != target.fix_verification.adapter):
+                        raise ValueError("Fix stage requires a matching trusted Docker runtime")
+                    runner = self._fix_runtime
+                sandbox_result = runner.run(
                     SandboxRequest(
                         run_id=run_id,
                         tool=action.tool,
@@ -707,7 +725,7 @@ class SafeExecutor:
 
         stdout = sandbox_result.stdout
         stderr = sandbox_result.stderr
-        if action.tool == "sandbox_command":
+        if action.tool in {"sandbox_command", "fix_target_stage"}:
             stdout = redact_error_message(
                 stdout,
                 max_length=self._policy.limits.max_output_bytes,
@@ -729,9 +747,11 @@ class SafeExecutor:
             workspace_id=sandbox_result.workspace_id,
             decision_reason="Sandbox execution completed" if sandbox_result.exit_code == 0 else "Sandbox execution failed",
             error=_sandbox_result_error(sandbox_result),
-            session_id=session_id,
+            session_id=(self._fix_runtime.id if action.tool == "fix_target_stage" else session_id),
             runtime_backend=sandbox_result.runtime_backend,
             network_mode=(
+                "internal" if self._fix_runtime.connected else "none"
+            ) if action.tool == "fix_target_stage" else (
                 "target"
                 if network_access == "target"
                 else self._policy.network_mode
@@ -826,6 +846,7 @@ class SafeExecutor:
             "action_id": action.id,
             "tool": action.tool,
             "target": action.target,
+            "action_digest": proposal_digest(action),
             "status": status,
             "exit_code": exit_code,
             "stdout": stdout,
@@ -942,6 +963,16 @@ class SafeExecutor:
             duration_ms=duration_ms,
             error=error,
         )
+
+    @staticmethod
+    def _fix_stage_parameters(parameters: dict) -> dict:
+        from executor.fix_runtime import STAGES
+        if (set(parameters) != {"adapter", "stage"}
+                or parameters["adapter"] != "juice_node_v1"
+                or not isinstance(parameters["stage"], str)
+                or parameters["stage"] not in STAGES):
+            raise CapabilityInputError("Fix stages accept only an operator adapter and stage id")
+        return dict(parameters)
 
     @staticmethod
     def _javascript_parameters(parameters: dict) -> dict:

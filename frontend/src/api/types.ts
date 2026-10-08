@@ -45,6 +45,20 @@ export interface CreateRunRequest {
   analysis_request?: string | null;
 }
 
+export interface FixVerificationArtifact {
+  id: string;
+  run_id: string;
+  status: "FIXED" | "NOT_FIXED" | "REGRESSION" | "INCONCLUSIVE" | "REJECTED";
+  applied: boolean;
+  security_verified: boolean;
+  original_unchanged: boolean;
+  cleanup_complete: boolean;
+  explanation: string;
+  before_evidence: { verdict: string } | null;
+  after_evidence: { verdict: string } | null;
+  stages: { phase: string; stage: string; status: string; duration_ms: number }[];
+}
+
 export interface PatchReviewArtifact {
   schema_version: "1.0";
   id: string;

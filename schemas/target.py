@@ -176,6 +176,19 @@ class TargetConstraints(BaseModel):
     ci_secrets: bool = False
 
 
+class TargetFixConfig(BaseModel):
+    """Operator-owned adapter selection. No commands or caller paths."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    adapter: Literal["juice_node_v1"] = "juice_node_v1"
+    image: str = Field(pattern=r"^[^\s@]+@sha256:[a-f0-9]{64}$")
+    service: str
+    source_commit: str = Field(pattern=r"^[a-f0-9]{40}$")
+    timeout_seconds: int = Field(default=300, ge=1, le=900)
+    wall_clock_budget_seconds: int = Field(default=1800, ge=1, le=3600)
+
+
+
 class TargetProfile(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -190,6 +203,7 @@ class TargetProfile(BaseModel):
     artifacts: dict[str, TargetArtifact] = Field(default_factory=dict)
     constraints: TargetConstraints = Field(default_factory=TargetConstraints)
     metadata: dict[str, str] = Field(default_factory=dict)
+    fix_verification: TargetFixConfig | None = None
 
     @model_validator(mode="before")
     @classmethod

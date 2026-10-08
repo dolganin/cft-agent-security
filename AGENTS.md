@@ -970,3 +970,30 @@ Rules:
 5. Security Gate semantics remain unchanged: exit `1` is a completed security/policy failure, exit `2` is a technical pipeline failure.
 6. T23 deliberately uses one background worker. Parallel runs, cancellation and shared sandbox quotas belong to T29.
 7. UI work in T24 consumes this API; it must not bypass the canonical pipeline or read executor internals directly.
+
+---
+
+# 25. Fix Verification — Stage 1
+
+`FixVerificationService` verifies only evidence-backed confirmed findings and
+strict `PatchReviewArtifact` proposals. It freezes inputs, binds source/proposal
+digests, creates a bounded disposable snapshot, reproduces the original runtime
+capability, applies the reviewed patch only in the snapshot, and repeats build,
+required tests, startup/smoke and the exact original verification binding.
+
+`fix_target_stage` is a registered deterministic capability. Validator allows
+only operator-owned adapter/stage identifiers; model argv, URLs and host paths
+are not accepted. Its Docker adapter mounts the snapshot read-only and creates
+the writable application copy in container tmpfs. Build/tests are networkless;
+startup and original runtime verification use an internal target network.
+
+`security_verified=true` requires BEFORE confirmed, AFTER explicitly rejected,
+all required stages passed, matching persisted execution/audit Evidence,
+original integrity and successful cleanup. Absence of confirmation alone is
+inconclusive. Fix artifacts never mutate the original report or CI Gate.
+
+Real Juice Shop SQL integration: `python -m app.stage1_e2e`. Prerequisites and
+operator config are in `docs/demo/README.md`; final results and limitations are
+in `docs/stage1-fix-verification-report.md`. The opt-in Docker integration test
+in `tests/test_stage1_e2e.py` runs two independent cycles. Benchmark, DAST, new
+security capabilities and PR automation remain outside this stage.

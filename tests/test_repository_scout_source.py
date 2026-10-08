@@ -105,7 +105,10 @@ def test_source_reader_blocks_links_tests_secrets_and_answer_annotations(tmp_pat
     })
     outside = tmp_path.parent / "scout-outside.ts"
     outside.write_text("outside", encoding="utf-8")
-    (tmp_path / "link.ts").symlink_to(outside)
+    try:
+        (tmp_path / "link.ts").symlink_to(outside)
+    except OSError:
+        pytest.skip("Windows symlinks require developer mode or privilege")
     discovery.project_files.append("link.ts")
     source = RepositorySource(discovery)
     assert source.files == ["routes/search.ts"]

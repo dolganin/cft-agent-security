@@ -922,11 +922,24 @@ def _verify_sql_injection(url, parameters, timeout, request_host):
         success = all(o["status"] == 200 and o["valid_json"] and isinstance(o["result_count"], int)
                       and o["result_count"] > 0 for o in (positive, repeated))
     confirmed = negative and success
+    blocked = negative and all(
+        o["valid_json"] and (
+            (o["status"] == 200 and o["result_count"] == 0)
+            if mode == "search" else
+            (o["status"] in {400, 401, 403} and not o["authenticated"])
+        ) for o in (positive, repeated)
+    )
     facts.update(mode=mode, endpoint=urlsplit(url).path, observations=observations, requests=4,
                  response_values_redacted=True, control_repeated=True, probe_repeated=True)
-    return _verification_result("runtime_sql_differential", confirmed,
+    code, stdout, stderr = _verification_result("runtime_sql_differential", confirmed,
                                 "Repeated boolean SQL probe changed structured results while repeated negative controls did not."
                                 if confirmed else "The bounded SQL differential did not establish a reproducible bypass.", facts)
+    if blocked:
+        payload = json.loads(stdout)
+        payload["verdict"] = "rejected"
+        payload["explanation"] = "Repeated valid controls and probes show no bypass for the original bounded SQL probe."
+        stdout = json.dumps(payload, separators=(",", ":"))
+    return code, stdout, stderr
 
 
 def _verify_sensitive_directory(url, parameters, timeout, request_host):

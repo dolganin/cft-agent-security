@@ -261,7 +261,15 @@ def _bounded_result_matches_action(payload: BoundedVerificationResult, action: A
                            and not observations[i].get("authenticated") for i in (0, 2))
             probes = all(observations[i].get("status") == 200 and observations[i].get("valid_json")
                          and observations[i].get("authenticated") for i in (1, 3))
-        expected = "confirmed" if controls and probes else "inconclusive"
+        blocked = controls and all(
+            observations[i].get("valid_json") and (
+                observations[i].get("status") == 200 and observations[i].get("result_count") == 0
+                if action.parameters.get("mode") == "search" else
+                observations[i].get("status") in {400, 401, 403}
+                and not observations[i].get("authenticated")
+            ) for i in (1, 3)
+        )
+        expected = "confirmed" if controls and probes else "rejected" if blocked else "inconclusive"
         return payload.verdict == expected
     if action.tool == "verify_sensitive_directory":
         if (payload.scope != "runtime_directory_metadata"

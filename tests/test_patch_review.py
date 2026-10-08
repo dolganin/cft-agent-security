@@ -64,9 +64,17 @@ def test_patch_review_is_read_only_and_rebuilds_exact_source_diff(tmp_path):
     assert artifact.status == "ready_for_review"
     assert artifact.applied is False and artifact.security_verified is False
     assert target.read_text() == SOURCE
-    assert artifact.source_sha256 == hashlib.sha256(SOURCE.encode()).hexdigest()
+    assert artifact.source_sha256 == hashlib.sha256(target.read_bytes()).hexdigest()
     assert "-unsafe() // vuln-code-snippet" in artifact.proposal.unified_diff
     assert artifact.model == "test/model"
+
+
+def test_reviewed_canonical_annotations_replay_with_identical_digest_and_scope(tmp_path):
+    from fix_verification.workspace import check_review
+    (tmp_path / "app.ts").write_text(SOURCE)
+    artifact = prepare_patch_review(client=Client(), report=report(), repository=tmp_path,
+                                    run_id="run-1", editable_start=2, editable_end=2)
+    assert check_review(artifact, tmp_path, "finding-1", "run-1", "app.ts") == artifact.proposal.unified_diff
 
 
 @pytest.mark.parametrize("diff", [
@@ -78,6 +86,7 @@ def test_patch_review_is_read_only_and_rebuilds_exact_source_diff(tmp_path):
     DIFF.replace(" first", " stale"),
     DIFF + "--- a/other.ts\n+++ b/other.ts\n",
     DIFF.replace("+safe()", "+<redacted>"),
+    DIFF.replace("+safe()", "+safe() "),
     DIFF.replace("+safe()", "+sk-" + "x" * 32),
     DIFF.replace(" first", "-first"),
 ])
@@ -107,7 +116,10 @@ def test_patch_review_refuses_changed_source_before_model_call(tmp_path):
 def test_patch_review_refuses_symlink_source(tmp_path):
     outside = tmp_path / "outside"
     outside.write_text(SOURCE)
-    (tmp_path / "app.ts").symlink_to(outside)
+    try:
+        (tmp_path / "app.ts").symlink_to(outside)
+    except OSError:
+        pytest.skip("Windows symlinks require developer mode or privilege")
     with pytest.raises(ValueError, match="Linked"):
         prepare_patch_review(client=Client(), report=report(), repository=tmp_path,
                              run_id="run-1", editable_start=2, editable_end=2)
@@ -154,7 +166,7 @@ def test_demo_patch_endpoint_resolves_scope_and_reuses_saved_artifact(tmp_path):
         service.get_run = lambda _: SimpleNamespace(target_id="other", status="completed")
         assert api.post("/demo/runs/run-1/patch-proposal").status_code == 409
     assert (tmp_path / "routes/search.ts").read_text() == source
-    assert (directory / "proposal.patch").read_text() == result.json()["proposal"]["unified_diff"]
+    assert (directory / "proposal.patch").read_bytes().decode() == result.json()["proposal"]["unified_diff"]
 
 
 @pytest.mark.parametrize("option,placeholder", [("replacements", ":criteria"), ("bind", "$criteria")])

@@ -96,6 +96,8 @@ class TargetProfileBuilder:
         }
         if sast is not None:
             payload["sast"] = sast
+        if base_profile is not None:
+            payload["fix_verification"] = base_profile.fix_verification
         return TargetProfile.model_validate(payload)
 
 

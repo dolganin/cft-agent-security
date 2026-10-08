@@ -21,7 +21,8 @@ from api.store import ApiStore
 from app.ci_pipeline import run_ci_pipeline
 from app.config import settings
 from fix_verification.review import prepare_patch_review, validate_sequelize_search_proposal
-from schemas.fix import PatchReviewArtifact
+from fix_verification.service import FixVerificationService
+from schemas.fix import FixVerificationArtifact, PatchReviewArtifact
 
 ROOT = Path(__file__).resolve().parent.parent
 PROFILE = ROOT / "targets/juice-presentation.yaml"
@@ -30,8 +31,8 @@ PATCH_FINDING = "sequelize-injection.presentation:routes/search.ts:23"
 PATCH_REVIEW_POLICY = "sequelize_search_review_v1"
 
 
-def create_demo_app(service: RunOrchestrator, *, patch_client_factory=None):
-    """Opt-in proposal endpoints. Never invoke the old host check runner."""
+def create_demo_app(service: RunOrchestrator, *, patch_client_factory=None, fix_service=None):
+    """Demo artifacts remain separate from the original reports and CI Gate."""
     app = create_app(service)
     patch_lock = Lock()
 
@@ -98,7 +99,7 @@ def create_demo_app(service: RunOrchestrator, *, patch_client_factory=None):
             temporary.write_text(artifact.model_dump_json(indent=2), encoding="utf-8")
             temporary.replace(destination)
             if artifact.status == "ready_for_review":
-                (directory / "proposal.patch").write_text(artifact.proposal.unified_diff, encoding="utf-8")
+                (directory / "proposal.patch").write_bytes(artifact.proposal.unified_diff.encode("utf-8"))
             return artifact
         except KeyError as exc:
             raise HTTPException(404, "Confirmed SQL report not found") from exc
@@ -106,6 +107,33 @@ def create_demo_app(service: RunOrchestrator, *, patch_client_factory=None):
             raise HTTPException(409, "Исходник или предложение не прошли проверку; патч не применялся") from exc
         except RuntimeError as exc:
             raise HTTPException(503, "Модель не вернула корректное предложение; патч не применялся") from exc
+        finally:
+            patch_lock.release()
+
+    @app.get("/demo/runs/{run_id}/fix-verification", response_model=FixVerificationArtifact | None)
+    def get_fix(run_id: str):
+        path = selected_run(run_id) / "fix-verification.json"
+        return FixVerificationArtifact.model_validate_json(path.read_text(encoding="utf-8")) if path.is_file() else None
+
+    @app.post("/demo/runs/{run_id}/fix-verification", response_model=FixVerificationArtifact)
+    def verify_fix(run_id: str):
+        directory = selected_run(run_id)
+        if not patch_lock.acquire(blocking=False):
+            raise HTTPException(409, "Проверка или подготовка патча уже выполняется")
+        try:
+            review = get_patch(run_id)
+            if review is None or review.status != "ready_for_review" or review.run_id != run_id:
+                raise HTTPException(409, "Требуется проверенное предложение патча")
+            report = service.get_report(run_id, PATCH_FINDING)
+            profile = service.registry.get("juice-presentation").profile
+            result = (fix_service or FixVerificationService()).verify(
+                report=report, review=review, profile=profile, artifact_directory=directory,
+            )
+            path = directory / "fix-verification.json"
+            temporary = path.with_suffix(".tmp")
+            temporary.write_text(result.model_dump_json(indent=2), encoding="utf-8")
+            temporary.replace(path)
+            return result
         finally:
             patch_lock.release()
 

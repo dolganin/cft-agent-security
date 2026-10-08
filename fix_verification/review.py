@@ -65,8 +65,8 @@ def validate_review_diff(
     if path.is_absolute() or ".." in path.parts or "\\" in file:
         raise ValueError("Unsafe source path")
     diff = proposal.unified_diff
-    if len(diff.encode()) > 16_384 or "\r" in diff or _CREDENTIAL.search(diff):
-        raise ValueError("Oversized diff, CR line endings or credential/redaction content")
+    if len(diff.encode()) > 16_384 or "\r" in diff.replace("\r\n", "") or _CREDENTIAL.search(diff):
+        raise ValueError("Oversized diff, invalid CR line endings or credential/redaction content")
     lines = diff.splitlines()
     if lines and lines[0] == f"diff --git a/{file} b/{file}":
         lines.pop(0)
@@ -75,7 +75,10 @@ def validate_review_diff(
     original = source.splitlines(keepends=True)
     if not original or any(not line.endswith("\n") for line in original):
         raise ValueError("Only newline-terminated UTF-8 source is supported")
-    clean = [_safe_line(line.rstrip("\n")) for line in original]
+    newline = "\r\n" if all(line.endswith("\r\n") for line in original) else "\n"
+    if newline == "\n" and any(line.endswith("\r\n") for line in original):
+        raise ValueError("Mixed source line endings are not supported")
+    clean = [_safe_line(line.rstrip("\r\n")) for line in original]
     output: list[str] = []
     cursor = 0
     index = 2
@@ -102,10 +105,14 @@ def validate_review_diff(
             if not line or line[0] not in " +-":
                 raise ValueError("Unsupported diff content")
             prefix, text = line[0], line[1:]
+            if prefix == "+" and text != text.rstrip():
+                raise ValueError("Added source lines must not introduce trailing whitespace")
             if len(text) > 2_000:
                 raise ValueError("Diff line exceeds the bounded source width")
             if prefix in " -":
-                if cursor >= len(clean) or clean[cursor] != text:
+                if cursor >= len(clean) or text not in {
+                    clean[cursor], original[cursor].rstrip("\r\n"),
+                }:
                     raise ValueError("Diff context does not match the source snapshot")
                 if prefix == "-" and not editable_start <= cursor + 1 <= editable_end:
                     raise ValueError("Removal is outside the operator-selected source window")
@@ -119,7 +126,7 @@ def validate_review_diff(
             else:
                 if not editable_start <= cursor + 1 <= editable_end + 1:
                     raise ValueError("Addition is outside the operator-selected source window")
-                output.append(text + "\n")
+                output.append(text + newline)
                 added += 1
                 changed += 1
             index += 1
@@ -222,6 +229,7 @@ def prepare_patch_review(
         model=route.label if route else None, generated_at=datetime.now(UTC),
         proposal=proposal, validation_detail=detail,
         validation_policy=validation_policy,
+        editable_start=editable_start, editable_end=editable_end,
         limitations=[
             "Это предложение для ревью, не доказанное исправление.",
             "Патч не применялся; сборка, тесты и повтор security-проверки не выполнялись.",

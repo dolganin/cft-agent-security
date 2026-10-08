@@ -9,7 +9,7 @@ class BoundedVerificationResult(BaseModel):
     model_config = ConfigDict(populate_by_name=True, extra="forbid")
     schema_version: Literal["cft.bounded_verification.v1"] = Field(alias="schema")
     scope: Literal["source_metadata", "source_sql_interpolation", "runtime_sql_differential", "runtime_directory_metadata"]
-    verdict: Literal["confirmed", "inconclusive"]
+    verdict: Literal["confirmed", "rejected", "inconclusive"]
     explanation: str = Field(min_length=1, max_length=1000)
     facts: dict[str, object]
 

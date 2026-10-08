@@ -132,6 +132,14 @@ class PolicyValidator:
             )
         rules.append("tool_allowed")
 
+        if action.tool == "fix_target_stage":
+            profile = self.target_profiles.get(action.target)
+            if (profile is None or profile.fix_verification is None
+                    or action.parameters.get("adapter") != profile.fix_verification.adapter
+                    or action.service is not None or action.endpoint is not None):
+                return self._deny(action, "Fix stage requires an operator-owned profile",
+                                  rules, "fix_profile_denied")
+
         max_iterations = int(self.policy.get("limits", {}).get("max_iterations", 0))
         if max_iterations < 1 or action.iteration > max_iterations:
             return self._deny(

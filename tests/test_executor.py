@@ -593,6 +593,7 @@ def test_executor_exposes_only_predefined_tools(tmp_path) -> None:
     executor, _, _ = _executor(tmp_path, InMemoryApprovalStore())
 
     assert executor.registered_tools() == (
+        "fix_target_stage",
         "inspect_dockerfile_user",
         "inspect_javascript_security",
         "inspect_python_password_assignment",

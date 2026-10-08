@@ -71,3 +71,6 @@ exclude = [
     "targets*",
     "policies*",
 ]
+
+[tool.setuptools.package-data]
+executor = ["fix_test_reporter.mjs"]

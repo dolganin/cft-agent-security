@@ -27,6 +27,7 @@ limits:
     max_concurrent_runs: 1
 tools:
   allowed:
+  - fix_target_stage
   - inspect_javascript_security
   - verify_sql_injection
   - verify_sensitive_directory
@@ -37,6 +38,12 @@ tools:
   - inspect_python_password_assignment
   - inspect_react_dangerous_html_flow
   parameter_contracts:
+    fix_target_stage:
+      allowed_keys: [adapter, stage]
+      required_keys: [adapter, stage]
+      enum_values:
+        adapter: [juice_node_v1]
+        stage: [prepare, build, tests, start, smoke]
     inspect_javascript_security:
       allowed_keys: [artifact_id, line, check]
       required_keys: [artifact_id, line, check]
