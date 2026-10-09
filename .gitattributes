@@ -1,0 +1,2 @@
+# Dataset locks hash exact bytes; preserve LF even with core.autocrlf=true.
+benchmarks/juice-shop-v20.2.0/* text eol=lf

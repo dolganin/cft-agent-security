@@ -1,0 +1,20 @@
+id: juice-shop-v20.2.0-v1
+profile: targets/juice-presentation.yaml
+rules: docs/demo/semgrep.yaml
+policy: policies/default.yaml
+ground_truth: ground_truth.yaml
+settings:
+  agent_mode: llm
+  llm_routes: nsu:Qwen3.8-27B
+  llm_reasoning_effort: low
+  llm_max_output_tokens: 8192
+  llm_timeout_seconds: 55.0
+  scout_max_turns: 2
+  scout_max_candidates: 4
+  scout_max_source_chars: 160000
+  scout_wall_clock_seconds: 60.0
+  agent_wall_clock_seconds: 120.0
+max_iterations: 2
+required_images:
+  - bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b
+worker_image: python:3.12-alpine

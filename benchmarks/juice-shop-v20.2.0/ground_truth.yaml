@@ -1,0 +1,154 @@
+id: juice-shop-v20.2.0-v1
+version: '1'
+target_name: OWASP Juice Shop v20.2.0
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+scope: >-
+  Ten selected positive source conditions in six categories and two SQL-safe
+  source conditions at the pinned commit. Non-exhaustive real-world subset;
+  recall is relative to benchmark-v1 scope, never all Juice Shop.
+exhaustive: false
+negative_universe: true
+line_tolerance: 0
+family_aliases:
+  sql-injection: [sql-injection, sequelize-injection, sqli]
+  file-exposure: [file-exposure, directory-listing, sensitive-directory]
+  access-control: [access-control, idor, broken-authorization, bola]
+  open-redirect: [open-redirect, redirect]
+  code-injection: [code-injection, ssti, unsafe-eval, rce]
+  authentication: [authentication, authn, credential, password-change]
+cases:
+  - id: JS-SQL-001
+    expected: vulnerable
+    category: sql-injection
+    cwe: CWE-89
+    artifact: routes/search.ts
+    line_start: 21
+    line_end: 23
+    endpoint: /rest/products/search
+    service: juice
+    verification_capability: verify_sql_injection
+    rationale: Request query q is interpolated into the raw SQL LIKE expression without parameter binding. Input length truncation does not escape SQL metacharacters.
+    provenance: [routes/search.ts, data/static/challenges.yml]
+  - id: JS-SQL-002
+    expected: vulnerable
+    category: sql-injection
+    cwe: CWE-89
+    artifact: routes/login.ts
+    line_start: 34
+    line_end: 34
+    endpoint: /rest/user/login
+    service: juice
+    verification_capability: verify_sql_injection
+    rationale: Request email is directly interpolated in the raw SQL authentication query. Password hashing does not protect the email predicate.
+    provenance: [routes/login.ts, data/static/challenges.yml]
+  - id: JS-FILE-001
+    expected: vulnerable
+    category: file-exposure
+    cwe: CWE-548
+    artifact: server.ts
+    line_start: 288
+    line_end: 288
+    endpoint: /ftp
+    service: juice
+    verification_capability: verify_sensitive_directory
+    rationale: The public FTP route serves a directory index containing internal documents. The claim is directory listing, not successful download of every listed file.
+    provenance: [server.ts, data/static/challenges.yml]
+  - id: JS-FILE-002
+    expected: vulnerable
+    category: file-exposure
+    cwe: CWE-548
+    artifact: server.ts
+    line_start: 296
+    line_end: 296
+    endpoint: /encryptionkeys
+    service: juice
+    verification_capability: verify_sensitive_directory
+    rationale: The encryptionkeys path publishes directory entries before file-specific handlers. The label concerns enumeration of sensitive key filenames, not contents.
+    provenance: [server.ts, encryptionkeys]
+  - id: JS-FILE-003
+    expected: vulnerable
+    category: file-exposure
+    cwe: CWE-548
+    artifact: server.ts
+    line_start: 300
+    line_end: 300
+    endpoint: /support/logs
+    service: juice
+    verification_capability: verify_sensitive_directory
+    rationale: Log directory indexing is registered before the access-control challenge handler, exposing log filenames. This is directory enumeration only.
+    provenance: [server.ts, data/static/challenges.yml]
+  - id: JS-ACCESS-001
+    expected: vulnerable
+    category: access-control
+    cwe: CWE-639
+    artifact: routes/basket.ts
+    line_start: 18
+    line_end: 30
+    endpoint: /rest/basket/:id
+    service: juice
+    rationale: Basket lookup and response use the requested id without enforcing ownership. The mismatching owner comparison only solves a challenge rather than rejecting access.
+    provenance: [routes/basket.ts, data/static/challenges.yml, server.ts]
+  - id: JS-ACCESS-002
+    expected: vulnerable
+    category: access-control
+    cwe: CWE-639
+    artifact: routes/basketItems.ts
+    line_start: 37
+    line_end: 49
+    endpoint: /api/BasketItems
+    service: juice
+    rationale: Ownership validation checks the first BasketId but persistence uses the last BasketId in a custom parsed request, permitting a different basket to be selected.
+    provenance: [routes/basketItems.ts, data/static/challenges.yml, server.ts]
+  - id: JS-REDIRECT-001
+    expected: vulnerable
+    category: open-redirect
+    cwe: CWE-601
+    artifact: routes/redirect.ts
+    line_start: 13
+    line_end: 19
+    endpoint: /redirect
+    service: juice
+    rationale: Untrusted query.to is redirected after an allowlist predicate which accepts substring containment, so an allowed URL in another URL's query can pass.
+    provenance: [routes/redirect.ts, lib/insecurity.ts, data/static/challenges.yml]
+  - id: JS-CODE-001
+    expected: vulnerable
+    category: code-injection
+    cwe: CWE-95
+    artifact: routes/userProfile.ts
+    line_start: 57
+    line_end: 65
+    endpoint: /profile
+    service: juice
+    rationale: Challenge-enabled profile rendering extracts code from a stored username and calls eval. The claim is conditional on the default enabled challenge configuration.
+    provenance: [routes/userProfile.ts, data/static/challenges.yml, config/default.yml]
+  - id: JS-AUTH-001
+    expected: vulnerable
+    category: authentication
+    cwe: CWE-620
+    artifact: routes/changePassword.ts
+    line_start: 36
+    line_end: 51
+    endpoint: /rest/user/change-password
+    service: juice
+    rationale: Authenticated password change validates the current password only if supplied. Omission bypasses reauthentication and still reaches user.update.
+    provenance: [routes/changePassword.ts, data/static/challenges.yml, server.ts]
+  - id: JS-SAFE-SQL-001
+    expected: safe
+    category: sql-injection
+    cwe: CWE-89
+    artifact: routes/search.ts
+    line_start: 47
+    line_end: 47
+    service: juice
+    rationale: This particular sequelize.query uses a constant SELECT sql FROM sqlite_master without request interpolation. Safe only for SQL injection at this statement, not the containing handler.
+    provenance: [routes/search.ts]
+  - id: JS-SAFE-SQL-002
+    expected: safe
+    category: sql-injection
+    cwe: CWE-89
+    artifact: routes/basket.ts
+    line_start: 19
+    line_end: 19
+    service: juice
+    rationale: This ORM findOne supplies id through a structured where object, rather than concatenated raw SQL. It is SQL-injection-safe at this statement while separately vulnerable to access control.
+    provenance: [routes/basket.ts]

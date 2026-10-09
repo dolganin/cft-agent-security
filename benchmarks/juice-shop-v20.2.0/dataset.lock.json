@@ -1,0 +1,18 @@
+{
+  "dataset": "juice-shop-v20.2.0-v1",
+  "version": "1",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "ground_truth_digest": "3a13a0a41d5fd86d4ab75e23dbc7a61cc81439f034a574b9341a369c82b1aafe",
+  "configuration_digest": "fdd5182aa12aa245d10381f81c760888c2a693214357430afe53f77ff42642a4",
+  "policy": "frozen before any scored full run; changes require new dataset version",
+  "artifact_digests": {
+    "routes/search.ts": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+    "routes/login.ts": "cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b",
+    "server.ts": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+    "routes/basket.ts": "89dc1768e5e5b7c34ae22b753140cfe4ba529903d4d743e7fc5ef28be5b49dd3",
+    "routes/basketItems.ts": "be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6",
+    "routes/redirect.ts": "f1345c3bb3a276a4e80db74f5d1eee04cd62013e8d4d7730ef92153154484607",
+    "routes/userProfile.ts": "07251f3d0dd9f4c530da60e3911091d8ff1bded650f72c31cbee499093979b39",
+    "routes/changePassword.ts": "8856fd47ef909e64924def8f29c9bf282881aea3658bd7bb94f177aadee422a4"
+  }
+}
