@@ -1,0 +1,926 @@
+schema_version: a03.control_candidates.v1
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+challenge_metadata_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+candidates:
+- id: JS-PATCH-CAND-accessLogDisclosureChallenge-1
+  control_type: patched_safe
+  challenge_key: accessLogDisclosureChallenge
+  family: Observability Failures
+  correct_file: data/static/codefixes/accessLogDisclosureChallenge_1_correct.ts
+  correct_sha256: aef0a6d84367d7c6300f3275c1f0c592a31802952b932160c01c61e77f48c531
+  metadata_file: data/static/codefixes/accessLogDisclosureChallenge.info.yml
+  metadata_sha256: 11f8a26910711950b131e9b7e59bfd031bec039a15e447d803ab11d80720d57f
+  explanation: There should generally be no good reason to expose server logs through
+    a web URL of the server itself, epecially not when that server is Internet-facing.
+  source_anchors:
+  - file: server.ts
+    start: 286
+    end: 309
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: c50550e024c616476b0781401ae0c0023345f3d8d50a5fd0b777af9d279dacac
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-access-log-disclosure
+  independence_group: juice-annotation-access-log-disclosure
+  split: holdout
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-adminSectionChallenge-1
+  control_type: patched_safe
+  challenge_key: adminSectionChallenge
+  family: Broken Access Control
+  correct_file: data/static/codefixes/adminSectionChallenge_1_correct.ts
+  correct_sha256: c6b54c785d5a75c914faeae158c11b343b9ea3d66f30ac6937b23720244a73bc
+  metadata_file: data/static/codefixes/adminSectionChallenge.info.yml
+  metadata_sha256: d88158f7a07fc16b73881ea46d103d89beb83820b0a49d7f00706f29c9879cfc
+  explanation: While attempts could be made to limit access to administrative functions
+    of a web shop through access control, it is definitely safer to apply the "separation
+    of concerns" pattern more strictly by internally hosting a distinct admin backend
+    application with no Internet exposure.
+  source_anchors:
+  - file: frontend/src/app/app.routing.ts
+    start: 76
+    end: 277
+    sha256: a6f595ba38cd53dd0b07403b5f7bfc78f6538adc0896442b51a39e5d2ea18d1a
+    region_sha256: 9ab473b0d9cd115bd568a08b5b75cd57e46cce12411ec32c9638d1c756f2f3bf
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-admin-section
+  independence_group: juice-annotation-admin-section
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-changeProductChallenge-3
+  control_type: patched_safe
+  challenge_key: changeProductChallenge
+  family: Broken Access Control
+  correct_file: data/static/codefixes/changeProductChallenge_3_correct.ts
+  correct_sha256: c1e75efbfb7c98df366a890c2a2c004a6c0539d6c370a3aada07d19d9639003e
+  metadata_file: data/static/codefixes/changeProductChallenge.info.yml
+  metadata_sha256: a29db3b6d08fa9d0df7f43ece6c5836f60bf5585bf5c220739e7c5407ee2be32
+  explanation: Disabling all HTTP verbs other than GET for the products API is indeed
+    the only safe way to implement secure access control. Shop administrators should
+    not use the customer facing web UI to manage the store's inventory anyway.
+  source_anchors:
+  - file: server.ts
+    start: 369
+    end: 474
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 4930f18579ea252e13b60220570e00d7ab3821c9f1a5e927d7fe64873f164dd5
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-change-product
+  independence_group: juice-annotation-change-product
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-chatbotGreedyInjectionChallenge-2
+  control_type: patched_safe
+  challenge_key: chatbotGreedyInjectionChallenge
+  family: Injection
+  correct_file: data/static/codefixes/chatbotGreedyInjectionChallenge_2_correct.ts
+  correct_sha256: 67224817d193603dec45ace689f73f1cd5fb6e0cecfa68dc348eb26f4c2c7974
+  metadata_file: data/static/codefixes/chatbotGreedyInjectionChallenge.info.yml
+  metadata_sha256: 4705face94a6c1d3b022cb1d1e716fabb22ddeb22e90c397182e46b0aa966135
+  explanation: Adding schema validation with .max(10) enforces the discount limit
+    server-side. Even if the LLM is tricked into requesting a higher discount, the
+    validation will reject it before the coupon is generated. This is the correct
+    approach because it does not rely on the LLM following instructions.
+  source_anchors:
+  - file: routes/chat.ts
+    start: 81
+    end: 188
+    sha256: d4e711f5eb0b072feb7f31ab73870ab18f25b689c0c0d469921e37ac19d24fee
+    region_sha256: ee648ab5f061a1bef60341331a2323a0677f8585b1199b067bddc9bb72729d4f
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-chatbot-greedy-injection
+  independence_group: juice-annotation-chatbot-greedy-injection
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-chatbotPromptInjectionChallenge-2
+  control_type: patched_safe
+  challenge_key: chatbotPromptInjectionChallenge
+  family: Injection
+  correct_file: data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts
+  correct_sha256: cf7f53e1cd35d8ae423ecdacbf6ad3c9d4b63de661c90dd98c6cba1cd99d5e6f
+  metadata_file: data/static/codefixes/chatbotPromptInjectionChallenge.info.yml
+  metadata_sha256: 2bc733360e858642643c25228a98f642656d65240670190ae3a3088b1e4d655e
+  explanation: Requiring an order ID and verifying it against the database is the
+    correct approach. Server-side validation ensures coupons can only be generated
+    for real, existing orders - regardless of what the LLM is tricked into believing.
+  source_anchors:
+  - file: routes/chat.ts
+    start: 175
+    end: 188
+    sha256: d4e711f5eb0b072feb7f31ab73870ab18f25b689c0c0d469921e37ac19d24fee
+    region_sha256: 78a2c846470eb68a047a1e2a11a41042f67493cb5a9d3428c2c4abca6c503047
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-chatbot-prompt-injection
+  independence_group: juice-annotation-chatbot-prompt-injection
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-dbSchemaChallenge-2
+  control_type: patched_safe
+  challenge_key: dbSchemaChallenge
+  family: Injection
+  correct_file: data/static/codefixes/dbSchemaChallenge_2_correct.ts
+  correct_sha256: 2f3f58fb6d322729a5e6de6841a35da25fac8ac18a4f8715f1abfcb55626583f
+  metadata_file: data/static/codefixes/dbSchemaChallenge.info.yml
+  metadata_sha256: 277e3c9bcbd58b81fba2246f2c2ecb3484a3f35e4c68a65db81cab91f0fff345
+  explanation: Using the built-in replacement (or binding) mechanism of Sequelize
+    is equivalent to creating a Prepared Statement. This prevents tampering with the
+    query syntax through malicious user input as it is "set in stone" before the criteria
+    parameter is inserted.
+  source_anchors:
+  - file: routes/search.ts
+    start: 18
+    end: 74
+    sha256: de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057
+    region_sha256: b5e05c04d12cc862d68c98e2460e4a225bb7db505c221544c5d8a94b97a0a6af
+  review_status: pending
+  truth_validated: false
+  reason: correct_fix_not_applicable
+  root_cause_key: search-query-sql-interpolation
+  independence_group: juice-search-query-sql-interpolation
+  split: holdout
+  reconciliation_required: false
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-directoryListingChallenge-1
+  control_type: patched_safe
+  challenge_key: directoryListingChallenge
+  family: Sensitive Data Exposure
+  correct_file: data/static/codefixes/directoryListingChallenge_1_correct.ts
+  correct_sha256: a23fc3dec0538151dda7992690aac393396bd5596beb6f05c96c9d76996b3498
+  metadata_file: data/static/codefixes/directoryListingChallenge.info.yml
+  metadata_sha256: 98a9cd0e8dc9c3e4f8185b4c88f16e70311e27cce6c030a034d760fe5805ea33
+  explanation: Getting rid of the /ftp folder entirely is the only way to plumb this
+    data leakage for good. Valid static content in it needs to be moved to a more
+    suitable location and order confirmation PDFs had no business to be placed there
+    publicly accessible in the first place. Everything else in that folder was just
+    accidentally put & forgotten there anyway.
+  source_anchors:
+  - file: server.ts
+    start: 286
+    end: 309
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: c50550e024c616476b0781401ae0c0023345f3d8d50a5fd0b777af9d279dacac
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-directory-listing
+  independence_group: juice-annotation-directory-listing
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-exposedMetricsChallenge-3
+  control_type: patched_safe
+  challenge_key: exposedMetricsChallenge
+  family: Observability Failures
+  correct_file: data/static/codefixes/exposedMetricsChallenge_3_correct.ts
+  correct_sha256: 6aeb7611256fcd6c6b5b933e86a961d4d620ae541ddbf2fe178304e3fc7f143b
+  metadata_file: data/static/codefixes/exposedMetricsChallenge.info.yml
+  metadata_sha256: c7012d738e44d4cf57281d0c9a4652c16b9fda3f73ee32e9b2c3772168ef1327
+  explanation: Access will now be restricted only to users with administrator permissions,
+    which seems reasonable protection, assuming that it is not possible for a regular
+    user to escalate admin priviliges. If that were a risk, the metrics should better
+    be stored behind the scenes not be made accessible via the shop application at
+    all.
+  source_anchors:
+  - file: server.ts
+    start: 746
+    end: 793
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: d55b871daaabdf0b07be922bfeb02024fb7ac056b919fa2afdf24e4256789d98
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-exposed-metrics
+  independence_group: juice-annotation-exposed-metrics
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-forgedReviewChallenge-2
+  control_type: patched_safe
+  challenge_key: forgedReviewChallenge
+  family: Broken Access Control
+  correct_file: data/static/codefixes/forgedReviewChallenge_2_correct.ts
+  correct_sha256: b71dab0d02cd5d092f2a75c9b238d5afcea367213a8a5f905916452284cd02ea
+  metadata_file: data/static/codefixes/forgedReviewChallenge.info.yml
+  metadata_sha256: 51a9153e16e6e394c396dd4abee21f502bad1760c2683ee91fae6fe60c82733c
+  explanation: Setting the author on server-side based on the user retrieved from
+    the authentication token in the HTTP request is the right call. It prevents users
+    from just passing any author email they like along with the request.
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    start: 13
+    end: 31
+    sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+    region_sha256: ab3fc39c2d62d62452f4ebdb50cf4596705b0f184665d4c2cd9de37365e3ed6d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-forged-review
+  independence_group: juice-annotation-forged-review
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-iacLeakedKeyChallenge-3
+  control_type: patched_safe
+  challenge_key: iacLeakedKeyChallenge
+  family: Sensitive Data Exposure
+  correct_file: data/static/codefixes/iacLeakedKeyChallenge_3_correct.tf
+  correct_sha256: 9a7b1707fb344923d003f8511fd41147935df065fe94f36e3ddfa11e792f770e
+  metadata_file: data/static/codefixes/iacLeakedKeyChallenge.info.yml
+  metadata_sha256: cba8777d30398a726f1e7f97c1cb56639a648c75b9f4ad180f30ac55057974f3
+  explanation: Loading the private key from a separate file that is excluded from
+    version control (via .gitignore) is a proper fix. This ensures the secret is not
+    committed to the repository and can be managed independently.
+  source_anchors: []
+  review_status: pending
+  truth_validated: false
+  reason: source_mismatch
+  root_cause_key: annotation-iac-leaked-key
+  independence_group: juice-annotation-iac-leaked-key
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-localXssChallenge-2
+  control_type: patched_safe
+  challenge_key: localXssChallenge
+  family: XSS
+  correct_file: data/static/codefixes/localXssChallenge_2_correct.ts
+  correct_sha256: f601e1779ee682e98d37b49dd3d8eb2996deb065bae92d4586c47ad92421957f
+  metadata_file: data/static/codefixes/localXssChallenge.info.yml
+  metadata_sha256: ccfc512b529e31b8cc21c00862cca1150a013f98c18a59c67450c7e2d9003a06
+  explanation: Removing the bypass of sanitization entirely is the best way to fix
+    this vulnerability. Fiddling with Angular's built-in sanitization was entirely
+    unnecessary as the user input for a text search should not be expected to contain
+    HTML that needs to be rendered but merely plain text.
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    start: 135
+    end: 161
+    sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: f77fa2c0c22412cf4a0ff8d88055f5a70009a66f15d008527af8ccd4efa36565
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-local-xss
+  independence_group: juice-annotation-local-xss
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-loginAdminChallenge-4
+  control_type: patched_safe
+  challenge_key: loginAdminChallenge
+  family: Injection
+  correct_file: data/static/codefixes/loginAdminChallenge_4_correct.ts
+  correct_sha256: 9d41f2879260f5ecc2662b16eef16e9bd5683ee47e11736e2c978275fd3a6847
+  metadata_file: data/static/codefixes/loginAdminChallenge.info.yml
+  metadata_sha256: 2793c993eb0ca8e5909057f2cdfd148180770e3228016d88d079c3fae3df85e5
+  explanation: Using the built-in binding (or replacement) mechanism of Sequelize
+    is equivalent to creating a Prepared Statement. This prevents tampering with the
+    query syntax through malicious user input as it is "set in stone" before the criteria
+    parameter is inserted.
+  source_anchors:
+  - file: routes/login.ts
+    start: 17
+    end: 56
+    sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+    region_sha256: 677018df91714a7f2608fcb1e660eaac116b8076a0408d656ef61b2f47a836fd
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-login-admin
+  independence_group: juice-annotation-login-admin
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-loginBenderChallenge-2
+  control_type: patched_safe
+  challenge_key: loginBenderChallenge
+  family: Injection
+  correct_file: data/static/codefixes/loginBenderChallenge_2_correct.ts
+  correct_sha256: aba2a46d763fc0ea78e01e632694081835e451091bbe64234a5f3a644186fe20
+  metadata_file: data/static/codefixes/loginBenderChallenge.info.yml
+  metadata_sha256: aa59f3490dceaa1758b2f33e1a1260ef275bbe64ec6880000f9cb9140081159c
+  explanation: Using the built-in binding (or replacement) mechanism of Sequelize
+    is equivalent to creating a Prepared Statement. This prevents tampering with the
+    query syntax through malicious user input as it is "set in stone" before the criteria
+    parameter is inserted.
+  source_anchors:
+  - file: routes/login.ts
+    start: 17
+    end: 56
+    sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+    region_sha256: 677018df91714a7f2608fcb1e660eaac116b8076a0408d656ef61b2f47a836fd
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-login-bender
+  independence_group: juice-annotation-login-bender
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-loginJimChallenge-1
+  control_type: patched_safe
+  challenge_key: loginJimChallenge
+  family: Injection
+  correct_file: data/static/codefixes/loginJimChallenge_1_correct.ts
+  correct_sha256: 9d41f2879260f5ecc2662b16eef16e9bd5683ee47e11736e2c978275fd3a6847
+  metadata_file: data/static/codefixes/loginJimChallenge.info.yml
+  metadata_sha256: 44295013172322cc758eb7db9716a43fd70207dae8baa68002c105475317254f
+  explanation: Using the built-in binding (or replacement) mechanism of Sequelize
+    is equivalent to creating a Prepared Statement. This prevents tampering with the
+    query syntax through malicious user input as it is "set in stone" before the criteria
+    parameter is inserted.
+  source_anchors:
+  - file: routes/login.ts
+    start: 17
+    end: 56
+    sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+    region_sha256: 677018df91714a7f2608fcb1e660eaac116b8076a0408d656ef61b2f47a836fd
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-login-jim
+  independence_group: juice-annotation-login-jim
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-nftMintChallenge-4
+  control_type: patched_safe
+  challenge_key: nftMintChallenge
+  family: Improper Input Validation
+  correct_file: data/static/codefixes/nftMintChallenge_4_correct.sol
+  correct_sha256: d7be5bf351d6434efd0d4829f1c8d5860cfeee369716f2b211e7fd59ff9f29d7
+  metadata_file: data/static/codefixes/nftMintChallenge.info.yml
+  metadata_sha256: d249d10fc737670dde089c1c5a6f3f6c92f7afb0085f5b5b9a07af11023963b9
+  explanation: Using SafeMath's sub() fuction fixes any potential underflow attack
+    against the tokenId variable of type uint256.
+  source_anchors:
+  - file: data/static/web3-snippets/HoneyPotNFT.sol
+    start: 2
+    end: 34
+    sha256: 07da47bc08dc1912b301bbdf6732f6a57befb37a60cafb18153fbdaad29f5367
+    region_sha256: ef95bcd8305ed84ef7899b7dbf88e8d683be4b87951a2b420e6a2bd4a139f03b
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-nft-mint
+  independence_group: juice-annotation-nft-mint
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-nftUnlockChallenge-2
+  control_type: patched_safe
+  challenge_key: nftUnlockChallenge
+  family: Sensitive Data Exposure
+  correct_file: data/static/codefixes/nftUnlockChallenge_2_correct.sol
+  correct_sha256: 4b3b6c1e859c4219c53c774a4da71be89d91271efde2388d64ae1246501937c8
+  metadata_file: data/static/codefixes/nftUnlockChallenge.info.yml
+  metadata_sha256: cf898d8fd03bc28358df6576dfc97b1ebafc1173790804affcd2ff07be5a668d
+  explanation: Using a hash of contextual data like the timestamp, recipient address
+    and token URI to generate the token ID makes it non-predictable and prevents an
+    attacker from guessing or front-running token IDs.
+  source_anchors:
+  - file: data/static/web3-snippets/JuiceShopSBT.sol
+    start: 2
+    end: 46
+    sha256: 11e36447a1a19e5629ed14e516ee9510e3a7e564e5ec2b8e4e8599c410ddae6d
+    region_sha256: 8bf5be4756b0c2d589ae445b1da433b7b4d75fe549df102af1176687840216e5
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-nft-unlock
+  independence_group: juice-annotation-nft-unlock
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-noSqlReviewsChallenge-3
+  control_type: patched_safe
+  challenge_key: noSqlReviewsChallenge
+  family: Injection
+  correct_file: data/static/codefixes/noSqlReviewsChallenge_3_correct.ts
+  correct_sha256: 91a37d919710a5661f42478955841489d417504a5802be3cb26c2d78412297a8
+  metadata_file: data/static/codefixes/noSqlReviewsChallenge.info.yml
+  metadata_sha256: 3c73c3f795c58d6d5d804e359aa5de2f08becda302a16992686c5b2805096614
+  explanation: Removing the option to update multiple documents at once combined with
+    only allowing plain strings in the ID parameter is the right call. This will prevent
+    any attacker from injecting their own JSON payload to manipulate the query in
+    their favor.
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    start: 13
+    end: 31
+    sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+    region_sha256: ab3fc39c2d62d62452f4ebdb50cf4596705b0f184665d4c2cd9de37365e3ed6d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-no-sql-reviews
+  independence_group: juice-annotation-no-sql-reviews
+  split: holdout
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-redirectChallenge-4
+  control_type: patched_safe
+  challenge_key: redirectChallenge
+  family: Unvalidated Redirects
+  correct_file: data/static/codefixes/redirectChallenge_4_correct.ts
+  correct_sha256: 9cd52c7b353ae8c08a439859ab88d8d5501f96c173279988ad0b95119b66794e
+  metadata_file: data/static/codefixes/redirectChallenge.info.yml
+  metadata_sha256: f19a18df5737cd16067b0c5381aa31645ed8b9891c43bd23640a65d129ebf8bf
+  explanation: Using includes allowed any URLs as long as they contained any allow-listed
+    URL, even if it just would be as a parameter. Replacing this with a strict equality
+    check mitigates this lapse and makes the redirect only work for allow-listed URLs.
+  source_anchors:
+  - file: lib/insecurity.ts
+    start: 121
+    end: 140
+    sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: db26930771e705a050b314d0752c992bf96541c2b28371ff387ef6e4bf6e958d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: redirect-substring-allowlist
+  independence_group: juice-redirect-substring-allowlist
+  split: development
+  reconciliation_required: false
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-redirectCryptoCurrencyChallenge-3
+  control_type: patched_safe
+  challenge_key: redirectCryptoCurrencyChallenge
+  family: Unvalidated Redirects
+  correct_file: data/static/codefixes/redirectCryptoCurrencyChallenge_3_correct.ts
+  correct_sha256: 7c66c1e041371ec9f675935cf3b83738f4b9d1dd2efbc9f054903c7d07076848
+  metadata_file: data/static/codefixes/redirectCryptoCurrencyChallenge.info.yml
+  metadata_sha256: 1b1c3c66dc434191ead9d31310f4ad226b364a460dae34e0c0b997342bed68a3
+  explanation: When cleaning up any allow list of deprecated entries, it is crucial
+    to be thorough and re-check the list regularly. Otherwise allow lists tend to
+    become weaker over time.
+  source_anchors:
+  - file: lib/insecurity.ts
+    start: 121
+    end: 140
+    sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: db26930771e705a050b314d0752c992bf96541c2b28371ff387ef6e4bf6e958d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-redirect-crypto-currency
+  independence_group: juice-annotation-redirect-crypto-currency
+  split: holdout
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-registerAdminChallenge-3
+  control_type: patched_safe
+  challenge_key: registerAdminChallenge
+  family: Improper Input Validation
+  correct_file: data/static/codefixes/registerAdminChallenge_3_correct.ts
+  correct_sha256: 4a1071a5ab5cd6b627f9ee327fb139f132a09379fe796f9cebfc6d1ff2950bf3
+  metadata_file: data/static/codefixes/registerAdminChallenge.info.yml
+  metadata_sha256: 2e2514abfe96b42a2506992010e65d1e0bffe651acd9bdc2edd26ae15be5b50c
+  explanation: This actually fixes the role assignment issue, by overriding any value
+    pre-set via the POST request with a static "customer" default role.
+  source_anchors:
+  - file: server.ts
+    start: 498
+    end: 537
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 8c9b4e028df20354bc3c8517b7db4711f07c7ce259be12fc3242e4eb196ca099
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-register-admin
+  independence_group: juice-annotation-register-admin
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-resetPasswordBenderChallenge-2
+  control_type: patched_safe
+  challenge_key: resetPasswordBenderChallenge
+  family: Broken Authentication
+  correct_file: data/static/codefixes/resetPasswordBenderChallenge_2_correct.yml
+  correct_sha256: 053ffdcadc062a690c9bb47dac2b99f62b08ecb8859513a52f6e67a2808292a5
+  metadata_file: data/static/codefixes/resetPasswordBenderChallenge.info.yml
+  metadata_sha256: 0bbd81ad8edd0c9e0b6e94bc37629b569fe53b5874dc38e0ac07425270ee2caf
+  explanation: When answered truthfully, all security questions are susceptible to
+    online research (on Facebook, LinkedIn etc.) and often even brute force. If at
+    all, they should not be used as the only factor for a security-relevant function.
+  source_anchors:
+  - file: data/static/securityQuestions.yml
+    start: 1
+    end: 30
+    sha256: c969d655037ab3af67280f00dc402fc4329a47d2d6747909c7a4287fb9c53490
+    region_sha256: b58fcbe910bc92ea5dad71156844e19ff7ca43c27a960d28ae937bbddbe02d8d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-reset-password-bender
+  independence_group: juice-annotation-reset-password-bender
+  split: holdout
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-resetPasswordBjoernChallenge-1
+  control_type: patched_safe
+  challenge_key: resetPasswordBjoernChallenge
+  family: Broken Authentication
+  correct_file: data/static/codefixes/resetPasswordBjoernChallenge_1_correct.yml
+  correct_sha256: 053ffdcadc062a690c9bb47dac2b99f62b08ecb8859513a52f6e67a2808292a5
+  metadata_file: data/static/codefixes/resetPasswordBjoernChallenge.info.yml
+  metadata_sha256: deaeeeb901ba87a7e2f39a2977b678f390701bde0080401c01664087afa8196d
+  explanation: When answered truthfully, all security questions are susceptible to
+    online research (on Facebook, LinkedIn etc.) and often even brute force. If at
+    all, they should not be used as the only factor for a security-relevant function.
+  source_anchors:
+  - file: data/static/securityQuestions.yml
+    start: 1
+    end: 30
+    sha256: c969d655037ab3af67280f00dc402fc4329a47d2d6747909c7a4287fb9c53490
+    region_sha256: b58fcbe910bc92ea5dad71156844e19ff7ca43c27a960d28ae937bbddbe02d8d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-reset-password-bjoern
+  independence_group: juice-annotation-reset-password-bjoern
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-resetPasswordBjoernOwaspChallenge-2
+  control_type: patched_safe
+  challenge_key: resetPasswordBjoernOwaspChallenge
+  family: Broken Authentication
+  correct_file: data/static/codefixes/resetPasswordBjoernOwaspChallenge_2_correct.yml
+  correct_sha256: 053ffdcadc062a690c9bb47dac2b99f62b08ecb8859513a52f6e67a2808292a5
+  metadata_file: data/static/codefixes/resetPasswordBjoernOwaspChallenge.info.yml
+  metadata_sha256: a91452b8cf2de3edcaa5a72ea7b09f7275efe58288ecde88fc3e906f982ae863
+  explanation: When answered truthfully, all security questions are susceptible to
+    online research (on Facebook, LinkedIn etc.) and often even brute force. If at
+    all, they should not be used as the only factor for a security-relevant function.
+  source_anchors:
+  - file: data/static/securityQuestions.yml
+    start: 1
+    end: 30
+    sha256: c969d655037ab3af67280f00dc402fc4329a47d2d6747909c7a4287fb9c53490
+    region_sha256: b58fcbe910bc92ea5dad71156844e19ff7ca43c27a960d28ae937bbddbe02d8d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-reset-password-bjoern-owasp
+  independence_group: juice-annotation-reset-password-bjoern-owasp
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-resetPasswordJimChallenge-3
+  control_type: patched_safe
+  challenge_key: resetPasswordJimChallenge
+  family: Broken Authentication
+  correct_file: data/static/codefixes/resetPasswordJimChallenge_3_correct.yml
+  correct_sha256: 053ffdcadc062a690c9bb47dac2b99f62b08ecb8859513a52f6e67a2808292a5
+  metadata_file: data/static/codefixes/resetPasswordJimChallenge.info.yml
+  metadata_sha256: a8f3dbfed23a6679803ac79f02d49c23476fb1f7b25191c9d8dbe8c412712a0c
+  explanation: When answered truthfully, all security questions are susceptible to
+    online research (on Facebook, LinkedIn etc.) and often even brute force. If at
+    all, they should not be used as the only factor for a security-relevant function.
+  source_anchors:
+  - file: data/static/securityQuestions.yml
+    start: 1
+    end: 30
+    sha256: c969d655037ab3af67280f00dc402fc4329a47d2d6747909c7a4287fb9c53490
+    region_sha256: b58fcbe910bc92ea5dad71156844e19ff7ca43c27a960d28ae937bbddbe02d8d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-reset-password-jim
+  independence_group: juice-annotation-reset-password-jim
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-resetPasswordMortyChallenge-4
+  control_type: patched_safe
+  challenge_key: resetPasswordMortyChallenge
+  family: Broken Anti Automation
+  correct_file: data/static/codefixes/resetPasswordMortyChallenge_4_correct.ts
+  correct_sha256: fa648160031e31afd178c8a59c754959c83159bccae9e7ed8c16d6f65db3b74e
+  metadata_file: data/static/codefixes/resetPasswordMortyChallenge.info.yml
+  metadata_sha256: d108dd8326218821859fa1c1a9ec5e104568ce2d8d1906092791fbb37d2dbbbb
+  explanation: Removing the custom key generator that lets an arbitrary HTTP header
+    take precedence over the client IP is the best option here. Now an attacker at
+    least needs to fake their actual IP to bypass the rate limiting, as this is the
+    default key for the RateLimit module used here. There is a functional downside
+    though, as now users behin e.g. corporate proxies might be rate limited as a group
+    and not individually. But with 100 allowed password resets in 5min this should
+    not occur too frequently.
+  source_anchors:
+  - file: server.ts
+    start: 359
+    end: 367
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 5346739f86c91ed3b89700c668dba2e033870f67c4049c946108f52258a3e8c5
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-reset-password-morty
+  independence_group: juice-annotation-reset-password-morty
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-resetPasswordUvoginChallenge-3
+  control_type: patched_safe
+  challenge_key: resetPasswordUvoginChallenge
+  family: Sensitive Data Exposure
+  correct_file: data/static/codefixes/resetPasswordUvoginChallenge_3_correct.yml
+  correct_sha256: 053ffdcadc062a690c9bb47dac2b99f62b08ecb8859513a52f6e67a2808292a5
+  metadata_file: data/static/codefixes/resetPasswordUvoginChallenge.info.yml
+  metadata_sha256: 6ff33644e6ee6b3ec62ea0fc73d00d3c53d65082832d047a27267375f1395f26
+  explanation: When answered truthfully, all security questions are susceptible to
+    online research (on Facebook, LinkedIn etc.) and often even brute force. If at
+    all, they should not be used as the only factor for a security-relevant function.
+  source_anchors:
+  - file: data/static/securityQuestions.yml
+    start: 1
+    end: 30
+    sha256: c969d655037ab3af67280f00dc402fc4329a47d2d6747909c7a4287fb9c53490
+    region_sha256: b58fcbe910bc92ea5dad71156844e19ff7ca43c27a960d28ae937bbddbe02d8d
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-reset-password-uvogin
+  independence_group: juice-annotation-reset-password-uvogin
+  split: holdout
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-restfulXssChallenge-1
+  control_type: patched_safe
+  challenge_key: restfulXssChallenge
+  family: XSS
+  correct_file: data/static/codefixes/restfulXssChallenge_1_correct.ts
+  correct_sha256: 3d8c0c912f2d29e03907550dd008ee14920b838c6e051518ead1beb8f50acd96
+  metadata_file: data/static/codefixes/restfulXssChallenge.info.yml
+  metadata_sha256: 4960b9e0b1177e72d873e483cc3ca51e622d8f90399a880eb32c18b2a62b642a
+  explanation: Removing the bypass of sanitization entirely is the best way to fix
+    the XSS vulnerability here. It should be noted, that XSS is only a consequence
+    of broken authorization in this case, as users should not be allowed to change
+    product descriptions in the first place.
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    start: 61
+    end: 115
+    sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: fe1d7da354e4ab2c9994c770e076d267fc90b625308a68bfd3f5b5eaf9c95077
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-restful-xss
+  independence_group: juice-annotation-restful-xss
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-scoreBoardChallenge-1
+  control_type: patched_safe
+  challenge_key: scoreBoardChallenge
+  family: Miscellaneous
+  correct_file: data/static/codefixes/scoreBoardChallenge_1_correct.ts
+  correct_sha256: 4fe75f6ffe6a0f05570f9d2bd4aa887b0c4343dd0b64b6e740895afefb14c381
+  metadata_file: data/static/codefixes/scoreBoardChallenge.info.yml
+  metadata_sha256: c3ddbece7159597a1f5b13c11d641d2c36fd8c6e7d33e2ee20455bdc2301aff3
+  explanation: In this one-of-a-kind scenario it is really best to just leave the
+    code unchanged. Fiddling with it might either break accessibility of the crucial
+    Score Board screen or make it unnecessarily harder to find it.
+  source_anchors:
+  - file: frontend/src/app/app.routing.ts
+    start: 76
+    end: 277
+    sha256: a6f595ba38cd53dd0b07403b5f7bfc78f6538adc0896442b51a39e5d2ea18d1a
+    region_sha256: 9ab473b0d9cd115bd568a08b5b75cd57e46cce12411ec32c9638d1c756f2f3bf
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-score-board
+  independence_group: juice-annotation-score-board
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-tokenSaleChallenge-3
+  control_type: patched_safe
+  challenge_key: tokenSaleChallenge
+  family: Security through Obscurity
+  correct_file: data/static/codefixes/tokenSaleChallenge_3_correct.ts
+  correct_sha256: e676b7affafa0008d60761d7650339c248301335ed2fb74da1a1b502bf57ffce
+  metadata_file: data/static/codefixes/tokenSaleChallenge.info.yml
+  metadata_sha256: bbf5b4975d2ffb22cacd316c25b8b7273fe5e88c042d993308194cff31b88e8a
+  explanation: The only viable way to prevent access to a soon-to-be-released Token
+    Sale page is to not have it in the client-side code before its actual release.
+    It then makes sense to not have any premature route mapping declarations either.
+    This then makes the whole obfuscation code-madness unnecessary as well.
+  source_anchors:
+  - file: frontend/src/app/app.routing.ts
+    start: 254
+    end: 322
+    sha256: a6f595ba38cd53dd0b07403b5f7bfc78f6538adc0896442b51a39e5d2ea18d1a
+    region_sha256: b012bfbae5e181fd17481a30b1aba98b861830c303abb418d6c223e7b6352fc3
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-token-sale
+  independence_group: juice-annotation-token-sale
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-unionSqlInjectionChallenge-2
+  control_type: patched_safe
+  challenge_key: unionSqlInjectionChallenge
+  family: Injection
+  correct_file: data/static/codefixes/unionSqlInjectionChallenge_2_correct.ts
+  correct_sha256: 2f3f58fb6d322729a5e6de6841a35da25fac8ac18a4f8715f1abfcb55626583f
+  metadata_file: data/static/codefixes/unionSqlInjectionChallenge.info.yml
+  metadata_sha256: de852a7cda32d5a5753dd4bd97d15b21bd44bff0c300036e2066c9356f0437b3
+  explanation: Using the built-in replacement (or binding) mechanism of Sequelize
+    is equivalent to creating a Prepared Statement. This prevents tampering with the
+    query syntax through malicious user input as it is "set in stone" before the criteria
+    parameter is inserted.
+  source_anchors:
+  - file: routes/search.ts
+    start: 18
+    end: 74
+    sha256: de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057
+    region_sha256: b5e05c04d12cc862d68c98e2460e4a225bb7db505c221544c5d8a94b97a0a6af
+  review_status: pending
+  truth_validated: false
+  reason: correct_fix_not_applicable
+  root_cause_key: search-query-sql-interpolation
+  independence_group: juice-search-query-sql-interpolation
+  split: holdout
+  reconciliation_required: false
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-vulnerableDockerImageChallenge-3
+  control_type: patched_safe
+  challenge_key: vulnerableDockerImageChallenge
+  family: Vulnerable Components
+  correct_file: data/static/codefixes/vulnerableDockerImageChallenge_3_correct.yml
+  correct_sha256: 542acd2a93565772da3d23a8ad823fc507c783fb57764f525e44900d1f7e081e
+  metadata_file: data/static/codefixes/vulnerableDockerImageChallenge.info.yml
+  metadata_sha256: 0c71a7b70bb70f8d368b338c99278091fd399c37635856aae221ae1e072fc0d0
+  explanation: Updating to a current stable version like MongoDB 8.0 is the recommended
+    fix. It ensures you have the latest security patches and long-term support.
+  source_anchors:
+  - file: infrastructure/docker-compose.yml
+    start: 1
+    end: 85
+    sha256: 0d766ec7e7bdc2e2527208cbc41143d1c78e1d3178ab28e92b5fe15cfb8108b8
+    region_sha256: 0d766ec7e7bdc2e2527208cbc41143d1c78e1d3178ab28e92b5fe15cfb8108b8
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-vulnerable-docker-image
+  independence_group: juice-annotation-vulnerable-docker-image
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-weakPasswordChallenge-1
+  control_type: patched_safe
+  challenge_key: weakPasswordChallenge
+  family: Broken Authentication
+  correct_file: data/static/codefixes/weakPasswordChallenge_1_correct.ts
+  correct_sha256: 364ca42a2bb0a86707a3b6bffed4e213656c261b8dcfc201a743e99744a2a357
+  metadata_file: data/static/codefixes/weakPasswordChallenge.info.yml
+  metadata_sha256: 4bf6b65f19084283c145b2c5f08f376e1edddbe3dc3ad12231c417e450bed882
+  explanation: According to NIST-800-63B, passwords (Memorized Secrets) should have
+    at least eight characters to prevent 'online attacks'. Furthermore, NIST-800-63B
+    requires that passwords don't appear in common dictionaries. If you want to have
+    more fun with secrets, check out OWASP Wrong Secrets at https://www.wrongsecrets.com,
+    specially challenge 16 and 23.
+  source_anchors:
+  - file: models/user.ts
+    start: 36
+    end: 75
+    sha256: 89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59
+    region_sha256: 922da033b27096489e463c026060806b7fd607f68d7c8e0c310405744c0975aa
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-weak-password
+  independence_group: juice-annotation-weak-password
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-web3SandboxChallenge-1
+  control_type: patched_safe
+  challenge_key: web3SandboxChallenge
+  family: Broken Access Control
+  correct_file: data/static/codefixes/web3SandboxChallenge_1_correct.ts
+  correct_sha256: 1d62c0ecdc7f97ad6ea4b2675495cf6e7782cec33d4f9c8690b4882ef641dd9a
+  metadata_file: data/static/codefixes/web3SandboxChallenge.info.yml
+  metadata_sha256: e6815ede2dbd23b09c39d921b592c1e13b45b36d2ffdba938814e53e357c5f2e
+  explanation: This sandbox is for the developers of the application and was added
+    for easy testing and prototyping. Functionality like this does under no circumstances
+    belong into an application when it goes into production!
+  source_anchors:
+  - file: frontend/src/app/app.routing.ts
+    start: 76
+    end: 277
+    sha256: a6f595ba38cd53dd0b07403b5f7bfc78f6538adc0896442b51a39e5d2ea18d1a
+    region_sha256: 9ab473b0d9cd115bd568a08b5b75cd57e46cce12411ec32c9638d1c756f2f3bf
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-web3-sandbox
+  independence_group: juice-annotation-web3-sandbox
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-web3WalletChallenge-3
+  control_type: patched_safe
+  challenge_key: web3WalletChallenge
+  family: Miscellaneous
+  correct_file: data/static/codefixes/web3WalletChallenge_3_correct.sol
+  correct_sha256: 7309aaa87a9e9901563f97c4d6181fcd8d71f650b4d7f8499986d2a16ab8c3a3
+  metadata_file: data/static/codefixes/web3WalletChallenge.info.yml
+  metadata_sha256: 30bbbc2d23e167b5b1f50a3fc6609034728f7dbce6ae830bce94a29a31fa7d9c
+  explanation: The reentrancy attacks is prevented by updating the balance before
+    transferring funds via the external call.
+  source_anchors:
+  - file: data/static/web3-snippets/ETHWalletBank.sol
+    start: 2
+    end: 44
+    sha256: 04311a42037afb23da417e690861663d11c81bfb3ca5785234cb6a8b58ec93e4
+    region_sha256: 33476ab6f6cacb0df8204facaffb471537053473e80484054c6cb38ac72c71c7
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-web3-wallet
+  independence_group: juice-annotation-web3-wallet
+  split: development
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate
+- id: JS-PATCH-CAND-xssBonusChallenge-1
+  control_type: patched_safe
+  challenge_key: xssBonusChallenge
+  family: XSS
+  correct_file: data/static/codefixes/xssBonusChallenge_1_correct.ts
+  correct_sha256: f601e1779ee682e98d37b49dd3d8eb2996deb065bae92d4586c47ad92421957f
+  metadata_file: data/static/codefixes/xssBonusChallenge.info.yml
+  metadata_sha256: 3a089fd29f1470dea56e47cac53065f625365862bed014b44643060578b3bd65
+  explanation: Removing the bypass of sanitization entirely is the best way to fix
+    this vulnerability. Fiddling with Angular's built-in sanitization was entirely
+    unnecessary as the user input for a text search should not be expected to contain
+    HTML that needs to be rendered but merely plain text.
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    start: 135
+    end: 161
+    sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: f77fa2c0c22412cf4a0ff8d88055f5a70009a66f15d008527af8ccd4efa36565
+  review_status: pending
+  truth_validated: false
+  reason: cannot_prove_safe
+  root_cause_key: annotation-xss-bonus
+  independence_group: juice-annotation-xss-bonus
+  split: holdout
+  reconciliation_required: true
+  agent_verifiable_now: false
+  runtime_eligibility: unverified_candidate

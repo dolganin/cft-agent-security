@@ -16,6 +16,7 @@ from schemas.benchmark import (
     BenchmarkScore,
     DetectionMetrics,
     VerificationMetrics,
+    VerificationMetricsV2,
 )
 from security.source_paths import normalize_source_path
 
@@ -292,4 +293,92 @@ def aggregate(runs: list[BenchmarkRunResult]) -> BenchmarkAggregate:
         stability=stability,
         stability_summary=summary,
         runs=runs,
+    )
+
+
+def verification_metrics_v2(
+    matched: BenchmarkScore,
+    observations: list[BenchmarkObservation],
+    *,
+    technically_valid: bool = True,
+) -> VerificationMetricsV2 | None:
+    """Reduce existing matching to case-level V2 metrics; no new detection scorer.
+
+    Input must be one frozen evaluated split/sample slice. ``evidence_backed``
+    must certify the observation's *own* verdict, including rejected, using the
+    persisted execution/audit checks. The historical V1 adapter certifies only
+    confirmed: it must not be used to claim evidence-backed rejections in V2.
+    Invalid runs retain their diagnostics/artifacts but have no security metrics.
+    """
+    if not technically_valid:
+        return None
+    by_id = {o.id: o for o in observations}
+    if len(by_id) != len(observations):
+        raise ValueError("Observation IDs must be unique")
+    if {m.observation_id for m in matched.matches} != set(by_id):
+        raise ValueError("Observations must equal the scored producer view")
+    cases = {c.case_id: c for c in matched.cases}
+    if len(cases) != len(matched.cases):
+        raise ValueError("Case IDs must be unique")
+    linked: dict[str, list[BenchmarkObservation]] = {cid: [] for cid in cases}
+    for match in matched.matches:
+        if match.case_id is not None:
+            if match.case_id not in cases:
+                raise ValueError("Match refers to an unknown case")
+            linked[match.case_id].append(by_id[match.observation_id])
+    counts = Counter({
+        "labeled_cases": len(cases),
+        "positive_cases": sum(c.expected == "vulnerable" for c in cases.values()),
+        "negative_cases": sum(c.expected == "safe" for c in cases.values()),
+        "confirmed_cases": 0, "rejected_cases": 0, "decided_cases": 0,
+        "correct_confirmations": 0, "false_confirmations": 0,
+        "correct_rejections": 0, "false_rejections": 0,
+        "correct_decisions": 0, "abstained_cases": 0,
+        "outside_ground_truth": matched.detection.outside_ground_truth,
+        "unreviewed": matched.detection.unreviewed,
+        "duplicates": matched.detection.duplicates,
+    })
+    reasons = Counter(dict.fromkeys((
+        "inconclusive", "unsupported", "timeout", "policy_blocked", "technical_error",
+        "not_detected", "not_run", "invalid_evidence", "conflicting_evidence",
+    ), 0))
+    for cid, case in cases.items():
+        if case.expected not in {"vulnerable", "safe"}:
+            raise ValueError("Only labeled positive/negative cases may enter V2 metrics")
+        verdicts = {
+            o.verification for o in linked[cid]
+            if o.evidence_backed and o.verification in {"confirmed", "rejected"}
+        }
+        if len(verdicts) == 1:
+            verdict = verdicts.pop()
+            counts[verdict + "_cases"] += 1
+            counts["decided_cases"] += 1
+            correct = (verdict == "confirmed") == (case.expected == "vulnerable")
+            counts["correct_decisions"] += int(correct)
+            term = "confirmations" if verdict == "confirmed" else "rejections"
+            counts[("correct_" if correct else "false_") + term] += 1
+        else:
+            if verdicts:
+                reason = "conflicting_evidence"
+            elif not linked[cid]:
+                reason = "not_detected"
+            else:
+                primary = by_id.get(case.finding_id)
+                if primary is None:
+                    raise ValueError("Matched case requires a primary observation")
+                reason = primary.verification
+                if reason in {"confirmed", "rejected"}:
+                    reason = "invalid_evidence"
+            reasons[reason] += 1
+            counts["abstained_cases"] += 1
+    from schemas.benchmark import V2_METRIC_TERMS
+
+    names = (
+        "confirmed_precision", "supported_verified_recall", "false_confirmation_rate",
+        "answered_accuracy", "decision_coverage", "abstention_rate",
+    )
+    return VerificationMetricsV2(
+        counts=dict(counts), abstention_reasons=dict(reasons),
+        **{name: ratio(counts[n], counts[d]) for name in names
+           for n, d in [V2_METRIC_TERMS[name]]},
     )

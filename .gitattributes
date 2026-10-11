@@ -1,2 +1,12 @@
 # Dataset locks hash exact bytes; preserve LF even with core.autocrlf=true.
 benchmarks/juice-shop-v20.2.0/* text eol=lf
+benchmarks/juice-shop-v20.2.0-v2/* text eol=lf
+benchmarks/juice-shop-v20.2.0-v2/catalog/* text eol=lf
+benchmarks/juice-shop-v20.2.0-v2/controls/** text eol=lf
+evaluation/control_*.cjs text eol=lf
+evaluation/control_*.py text eol=lf
+evaluation/positive_catalog.py text eol=lf
+schemas/benchmark_catalog.py text eol=lf
+schemas/benchmark_controls.py text eol=lf
+tests/test_a03_controls.py text eol=lf
+docs/a03-safe-controls-and-reset.md text eol=lf

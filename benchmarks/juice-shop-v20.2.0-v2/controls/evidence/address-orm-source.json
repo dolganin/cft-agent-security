@@ -1,0 +1,14 @@
+{
+  "schema_version": "a03.source_proof.v1",
+  "property": "address_id_is_orm_where_value",
+  "anchor": {
+    "file": "routes/address.ts",
+    "start": 18,
+    "end": 18,
+    "sha256": "99413492a060638771636237a5c178a6a5907948f17cb8bf50dda648386d2084",
+    "region_sha256": "979e76399d62767d03c48d4d28406fdfca558ea6706474a5e7d9bb4be6f431fd"
+  },
+  "model_sha256": "305b4a190461279351ae449be0f2be636c7d8389b0a8d3d8db553ebf2c76a92a",
+  "reviewed_expression": "const address = await AddressModel.findOne({ where: { id: req.params.id, UserId: req.body.UserId } })",
+  "proof_scope": "source construction only; no runtime injection verdict"
+}

@@ -1,0 +1,55 @@
+{
+  "action_digest": "3a8cc8dd157db335d804b2da9d784505b6ea547ef06accd2562cae1c5d3099d7",
+  "action_id": "a031-9f8ec31459024682b09017d60376da44-smoke",
+  "audit_ref": "audit:c16072a7b2b9429096ed4862473edd46",
+  "created_at": "2026-10-11T16:13:06.780108+00:00",
+  "duration_ms": 3434,
+  "error": null,
+  "exit_code": 0,
+  "id": "execution-d8240bf51d7946d6a8d26a1c00b24580",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "example.invalid/cft-sandbox@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "run_id": "c16072a7b2b9429096ed4862473edd46",
+  "session_id": "cft-fix-d11e807c5cda42119360",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "normal search and no-match regression checks passed",
+  "target": "juice-presentation",
+  "timed_out": false,
+  "tool": "fix_target_stage",
+  "type": "executor_result",
+  "workspace_id": "cft-fix-d11e807c5cda42119360"
+}

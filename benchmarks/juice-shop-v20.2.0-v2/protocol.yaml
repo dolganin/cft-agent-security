@@ -1,0 +1,272 @@
+schema_version: benchmark.protocol.v2
+dataset_id: juice-shop-v20.2.0-v2
+dataset_version: '2'
+ground_truth_status: pending_A02_A03_A04
+target_name: OWASP Juice Shop v20.2.0
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+scope: Non-exhaustive independently reviewed positive root causes and explicitly labeled negative controls
+  at the pinned commit. Evaluate development/holdout and original/patched/synthetic slices separately;
+  no claim of full Juice Shop recall or production generalization. Corpus is pending A02/A03 and freeze
+  A04.
+slices:
+- original
+- patched
+- synthetic
+case_unit:
+  unit: independent_security_root_cause
+  group_field: independence_group
+  positive_limit_per_group_and_slice: 1
+  max_tp_per_case: 1
+  max_primary_cases_per_finding: 1
+  anchors:
+  - source
+  - http
+  - caller_helper
+  variants: same_group_separate_original_patched_synthetic_slices
+  duplicates: extra_compatible_findings_never_extra_tp
+matching: reuse_v1_normalized_file_inclusive_range_family_declared_service_maximum_matching
+matching_extensions: review_explicit_anchors_before_A04_no_new_matcher_in_A01
+line_tolerance: 0
+detection_counts:
+- detection_tp
+- detection_fp
+- detection_fn
+- detection_tn
+negative_universe: explicit_labeled_controls_only_tn_otherwise_null
+verdicts:
+  decided:
+  - confirmed
+  - rejected
+  evidence: matching_verdict_high_or_medium_persisted_execution_and_audit
+  conflicts: inconclusive_preserve_all_evidence
+  missing_detection: not_detected_abstention_never_rejected
+  unbacked_decision: invalid_evidence_abstention
+  abstentions:
+  - inconclusive
+  - unsupported
+  - timeout
+  - policy_blocked
+  - technical_error
+  - not_detected
+  - not_run
+  - invalid_evidence
+  - conflicting_evidence
+  reason_selection: primary_observation_unless_valid_duplicate_decides
+  unknown: outside_ground_truth_or_unreviewed_excluded_retained_counted
+  run_invalid: TECHNICALLY_INVALID_excluded_from_security_metrics
+  run_invalid_examples:
+  - docker_unavailable
+  - target_start_failed
+  - required_provider_fully_unavailable
+  - corrupted_artifacts
+  - benchmark_configuration_mismatch
+  case_error: abstention_no_runtime_error_as_detection_fn
+metrics:
+  confirmed_precision:
+    layer: verification
+    numerator: correct_confirmations
+    denominator: confirmed_cases
+    undefined: 'null'
+    note: Distinct correctly evidence-confirmed positives / all distinct evidence-confirmed labeled cases;
+      unknown findings excluded.
+  supported_verified_recall:
+    layer: verification
+    numerator: correct_confirmations
+    denominator: positive_cases
+    undefined: 'null'
+    note: All labeled positives in the evaluated scope remain in the denominator, including unsupported
+      or undetected positives; supported names the numerator, not a smaller supported-only denominator.
+  false_confirmation_rate:
+    layer: verification
+    numerator: false_confirmations
+    denominator: negative_cases
+    undefined: 'null'
+    note: False confirmations / all labeled negative controls; no controls means N/A.
+  answered_accuracy:
+    layer: verification
+    numerator: correct_decisions
+    denominator: decided_cases
+    undefined: 'null'
+    note: Correct positive confirmations plus correct negative rejections / all cases with a valid evidence-backed
+      binary decision.
+  decision_coverage:
+    layer: verification
+    numerator: decided_cases
+    denominator: labeled_cases
+    undefined: 'null'
+    note: Distinct valid evidence-backed binary decisions / all labeled cases.
+  abstention_rate:
+    layer: verification
+    numerator: abstained_cases
+    denominator: labeled_cases
+    undefined: 'null'
+    note: All cases without a valid evidence-backed binary decision / all labeled cases; complements decision
+      coverage.
+  detection_precision:
+    layer: detection
+    numerator: detection_tp
+    denominator: detection_tp + detection_fp
+    undefined: 'null'
+    note: 'Diagnostic only: matches to positives / all matches to labeled cases.'
+  detection_recall:
+    layer: detection
+    numerator: detection_tp
+    denominator: detection_tp + detection_fn
+    undefined: 'null'
+    note: 'Diagnostic only: detected positives / all labeled positives. Runtime failures cannot alter
+      detection FN.'
+  detection_f1:
+    layer: detection
+    numerator: 2 * detection_precision * detection_recall
+    denominator: detection_precision + detection_recall
+    undefined: 'null'
+    note: N/A if precision or recall is undefined; 0 when both are defined and zero, otherwise harmonic
+      mean.
+  technical_failure_rate:
+    layer: technical
+    numerator: invalid_attempts
+    denominator: all_attempts
+    undefined: 'null'
+    note: All TECHNICALLY_INVALID attempts / all attempts, including originals and retries; never silently
+      discard failed attempts.
+  severity_accuracy:
+    layer: rubric
+    numerator: correct_severity_labels
+    denominator: assessed_severity_cases
+    undefined: 'null'
+    note: Only independently reviewed rubric labels and actual assessments; absence of labels or assessment
+      means N/A.
+  severity_assessed_coverage:
+    layer: rubric
+    numerator: assessed_severity_cases
+    denominator: reviewed_severity_cases
+    undefined: 'null'
+    note: Actual assessments among independently reviewed severity cases; also report reviewed cases /
+      all labeled cases.
+  context_priority_accuracy:
+    layer: rubric
+    numerator: correct_context_labels
+    denominator: assessed_context_cases
+    undefined: 'null'
+    note: Only independently reviewed Context Priority labels and actual assessments; no proxy labels.
+  context_priority_assessed_coverage:
+    layer: rubric
+    numerator: assessed_context_cases
+    denominator: reviewed_context_cases
+    undefined: 'null'
+    note: Actual assessments among independently reviewed Context Priority cases; also report reviewed
+      cases / all labeled cases.
+split:
+  algorithm: sha256_seed_nul_group_uint256_threshold
+  seed: cft-juice-shop-v2-a01-2026-10-11
+  development_percent: 70
+  group_field: independence_group
+  assignment: development_if_hash_times_100_lt_70_times_2pow256_else_holdout
+  encoding: utf8_exact_no_normalization
+  freeze: before_tuning_no_score_based_reassignment
+  families: report_actual_distribution_no_post_score_rebalancing
+freeze:
+  protocol: A01_raw_bytes_sha256
+  dataset: A04_new_dataset_lock_no_overwrite
+  scanners: A06
+  changes: new_version_changelog_reason_new_digest_preserve_old_locks_and_results
+  discovered_unknown: review_only_for_new_dataset_version
+repeats:
+  real_independent_runs: 3
+  unchanged:
+  - ground_truth
+  - matching
+  - split
+  - target_commit
+  - model
+  - budgets
+  - policies
+  - scanner_configuration
+  - producer_configuration
+  retries: retain_attempt_reason_error_retry_of_never_silently_replace
+  aggregate: valid_runs_only_report_attempts_failure_rate_and_na_counts
+  independence: fresh_run_directory_and_reset_target_state_each_attempt
+baseline:
+  source: Existing benchmark.yaml overrides plus sealed Stage 2 configuration.json executor/image settings,
+    cross-checked against current app/config.py and provider adapter. Current production policy/profile/code
+    digests, no credentials.
+  profile: targets/juice-presentation.yaml
+  policy: policies/default.yaml
+  settings:
+    agent_mode: llm
+    llm_routes: nsu:Qwen3.8-27B
+    llm_reasoning_effort: low
+    llm_max_output_tokens: 8192
+    llm_timeout_seconds: 55.0
+    scout_max_turns: 2
+    scout_max_candidates: 4
+    scout_max_source_chars: 160000
+    scout_wall_clock_seconds: 60.0
+    agent_wall_clock_seconds: 120.0
+    executor_timeout_seconds: 5.0
+    executor_cpu_time_seconds: 2
+    executor_memory_mb: 256
+    executor_max_file_bytes: 1048576
+    executor_max_processes: 8
+    executor_max_output_bytes: 16384
+    executor_max_runs_per_action: 1
+    executor_max_concurrent_runs: 1
+    llm_allow_external_fallbacks: false
+    sandbox_image: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
+  max_iterations: 2
+  llm_transport:
+    provider: nsu
+    model: Qwen3.8-27B
+    base_url: https://deepcode.ci.nsu.ru/api
+    protocol: openai
+    temperature: 0.1
+    stream: false
+    response_format: json_object
+    request_seed: not_sent_provider_nondeterminism_retained
+    fallback: existing_deterministic_adapter_fallback_logged_not_a_model_response
+  deterministic_limits:
+    source_index_files: 256
+    source_index_bytes: 4194304
+    source_file_bytes: 131072
+    source_line_chars: 2000
+    scout_seed_window_lines: 160
+    scout_turn_source_chars: 24000
+    scout_import_context_chars: 12000
+    semgrep_timeout_seconds: 600
+    infrastructure_probe_timeout_seconds: 30
+    source_read_window_chars: 10000
+    scout_search_matches_per_turn: 16
+    scout_search_match_chars: 400
+    scout_search_query_chars: 120
+  required_images:
+  - bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b
+  worker_image: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
+  input_digests:
+    benchmarks/juice-shop-v20.2.0/benchmark.yaml: fdd5182aa12aa245d10381f81c760888c2a693214357430afe53f77ff42642a4
+    benchmarks/juice-shop-v20.2.0/dataset.lock.json: e8958085ca01af5168da9983a3414e2b2f047de613fb1e412a10839dc3c37362
+    benchmarks/juice-shop-v20.2.0/ground_truth.yaml: 3a13a0a41d5fd86d4ab75e23dbc7a61cc81439f034a574b9341a369c82b1aafe
+    benchmarks/juice-shop-v20.2.0/README.md: d18e2a4e7a15dcd015f0dcda3e50a269195ee14bc4b24cc4f2b5c52849bc6df6
+    benchmarks/juice-shop-v20.2.0/scorecard.py: d190c9ca3fd216627e76c0da075a8fe98099a96855ae2c2569f75b66170c6880
+    docs/stage2-benchmark-report.md: e87f5bb84c35902507fe3405dee052eb81d1ec255c200a1374ad5b1f174311f8
+    app/config.py: 80ef174ccc0ae4185fae517d8a6fc346855bdcd5b73569edcb28ba1283315035
+    agent/llm.py: a1199fc06f926e4ff24b69cfe1b2e4a17ed3cb032ffb1c0fdf03b761b1683b3a
+    agent/llm_model.py: 03fecd44dc1e75b0f62fe39d628c6e096da92ea09909aaaf86a2459a7fb5b8d2
+    agent/prompts.py: 76f18b0acb402edd7d39ef6c1dd8eafc59680f59737eb4a875b29640fd68d4d0
+    agent/repository_scout.py: 7562e436fdc1bbfa04ce85947af00c9d36f8b94d1349840b1c9c3441c75bcfdf
+    tools/repository_source.py: 82c7a68d9771cab6998c2a85581cc63f5c7c259aedf5f1cac7a9636913799dcb
+    targets/juice-presentation.yaml: 687ea7a6d4f9d9ad067cc53bf219ff012b9c21a503462b23e9a2938d2be9b0e1
+    policies/default.yaml: 311d8155a2b43cc065ac33c2cdea0cfc4023a5d130dce463c12c78fb3b9e3714
+    evaluation/benchmark.py: ade8236ee28317da2a93e31adef015daa9a0394f556905c20c3e7c0b56cc9404
+    evaluation/benchmark_protocol.py: 622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf
+    schemas/benchmark.py: 1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8
+  input_digest_encoding: historical_v1_raw_other_text_lf
+leakage:
+- expected_labels
+- split_labels
+- ground_truth_answers
+- expected_verdicts
+- nonproduction_expected_anchors
+- safe_vulnerable_status
+- protocol_metadata
+rubric: independent_reviewed_labels_only_no_difficulty_scanner_challenge_confidence_proxy
+history: v1_byte_identical_development_regression_never_relabel_or_rescore_as_history

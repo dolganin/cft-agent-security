@@ -1,0 +1,162 @@
+{
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "candidate": "nosql",
+  "patch": {
+    "file": "routes/updateProductReviews.ts",
+    "source_sha256": "711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2",
+    "patch_sha256": "83c6f5e93d07b0bff6f035edef7252757b98dba9482e472f693d522de936c465",
+    "correct_file": "data/static/codefixes/noSqlReviewsChallenge_3_correct.ts",
+    "correct_sha256": "91a37d919710a5661f42478955841489d417504a5802be3cb26c2d78412297a8"
+  },
+  "original_tree_sha256": "3673ec989f4e472fe42b40257f1634116f5ce7656f1542de9321d4233daf199c",
+  "oracle_sha256": "819265d7819d0ed0264afe4f98773b9997a1250637ebe186afdf5acfc31cb7c7",
+  "image": "cft-fix-juice@sha256:b3c854f853e6bb2f2b5bd261d1766c11904afd1bc497b481d2b9a3b77033c9c5",
+  "cycles": [
+    {
+      "stages": {
+        "prepare": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-1/evidence/execution-bf2eb2c85a6a4e1b9eb975c7a85f667e.json",
+          "sha256": "ac90c27a2b94c7ad644a18d79aec27075292b05166f467e46f4f91efa316da93",
+          "classification": null
+        },
+        "build": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-1/evidence/execution-e7165168eaae408cb3ae4274495a8198.json",
+          "sha256": "50fd57767a335581d4e5f7dd93f29f497415114c937edfbecaa9adbb231c9e06",
+          "classification": null
+        },
+        "tests": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-1/evidence/execution-9507824e81f24777a263190c09cc382d.json",
+          "sha256": "4c40462bd7dd61c84f770538319b0b0a80c948b29e740a6e5c7b3a0e3d83cc0a",
+          "classification": {
+            "accepted": true,
+            "classification": "all_required_tests_passed",
+            "exceptions": [],
+            "summary": {
+              "success": true,
+              "counts": {
+                "tests": 415,
+                "failed": 0,
+                "passed": 413,
+                "cancelled": 0,
+                "skipped": 2,
+                "todo": 0,
+                "topLevel": 40,
+                "suites": 130
+              },
+              "duration_ms": 28214.561628
+            }
+          }
+        },
+        "start": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-1/evidence/execution-52e4321f21784e2ca9b550bdeb899a03.json",
+          "sha256": "b538ed09845a0e8b1ebde891270db460070182e861a316b8d8ca5e03aa78baf1",
+          "classification": null
+        },
+        "smoke": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-1/evidence/execution-3777737c7723474ca62fcd4f1944ff84.json",
+          "sha256": "536f55e0b9754af0196fa3cdcb2f0f82c1ef041af4517732e42705c93b346d2c",
+          "classification": null
+        }
+      },
+      "oracle": true,
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-6d184ebf2bbb4ee2b275",
+      "oracle_result": {
+        "reachable": true,
+        "identity": true,
+        "resource_exists": true,
+        "legitimate": true,
+        "negative_assertion": true,
+        "post_available": true,
+        "post_identity": true
+      },
+      "audit": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-1/audit.jsonl",
+      "audit_sha256": "aefc475bee78f7d8fbc688affce238789019b0fd10c9e8e6dcc537444a1ddb24",
+      "snapshot_removed": true
+    },
+    {
+      "stages": {
+        "prepare": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-2/evidence/execution-a9eef27f0b69451290d9cc904026b9c6.json",
+          "sha256": "7aaf7029405408c48fe38a624461efe599ff69f83e9f4e9539665b7900ada700",
+          "classification": null
+        },
+        "build": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-2/evidence/execution-b77c91b2bc714ca5a39cd754885030a9.json",
+          "sha256": "47e5eb90cc00ed01ea5a42ef780f758330757b5b3383ea70e5acc42f6df01c82",
+          "classification": null
+        },
+        "tests": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-2/evidence/execution-ea468c871b0d4fb9a51423021fcaef8e.json",
+          "sha256": "4122e5a8adbfd62d7537e6fb02ac7c87770e694c9122e3b58bba15b6878bb086",
+          "classification": {
+            "accepted": true,
+            "classification": "all_required_tests_passed",
+            "exceptions": [],
+            "summary": {
+              "success": true,
+              "counts": {
+                "tests": 415,
+                "failed": 0,
+                "passed": 413,
+                "cancelled": 0,
+                "skipped": 2,
+                "todo": 0,
+                "topLevel": 40,
+                "suites": 130
+              },
+              "duration_ms": 27160.816125
+            }
+          }
+        },
+        "start": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-2/evidence/execution-47a7d11f0f894455b1adefdffc592cf3.json",
+          "sha256": "9e6868ae1b9e34f7f4994fb7178dc9e30efd4cb0aed2505ca89b9fc916c677e3",
+          "classification": null
+        },
+        "smoke": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-2/evidence/execution-63c471f53eee46ea988145761725c4e1.json",
+          "sha256": "6fc2fa34b2799e4d2de7baabbfe699fc8988612d49ee47737db724a8837b04a2",
+          "classification": null
+        }
+      },
+      "oracle": true,
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-f4809e02029b406f81ef",
+      "oracle_result": {
+        "reachable": true,
+        "identity": true,
+        "resource_exists": true,
+        "legitimate": true,
+        "negative_assertion": true,
+        "post_available": true,
+        "post_identity": true
+      },
+      "audit": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/cycle-2/audit.jsonl",
+      "audit_sha256": "69dc8c7bc72be644f2424f18350e610307756de03ab6141f4b8a62ce0004fe1e",
+      "snapshot_removed": true
+    }
+  ]
+}

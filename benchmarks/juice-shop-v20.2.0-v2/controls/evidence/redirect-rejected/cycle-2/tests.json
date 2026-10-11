@@ -1,0 +1,60 @@
+{
+  "action_digest": "07ac9cc0ac6cfa9cef23b1b11c4350af90aa0d94c784b627ff42163c7947f8a7",
+  "action_id": "a03-bee8029b0a494c439b8c19e8cb54d35f-tests",
+  "audit_ref": "audit:e49eb506dd2443ed93404882ae12d405",
+  "created_at": "2026-10-11T13:42:30.902345+00:00",
+  "duration_ms": 26271,
+  "error": {
+    "code": "EXECUTION_FAILED",
+    "layer": "executor",
+    "message": "Sandbox execution failed",
+    "retryable": false
+  },
+  "exit_code": 1,
+  "id": "execution-684da686d702461f92560602bf9a64e8",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "example.invalid/cft-sandbox@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "run_id": "e49eb506dd2443ed93404882ae12d405",
+  "session_id": "cft-fix-5b3b3134308a4e81bd8b",
+  "status": "failed",
+  "stderr": "",
+  "stdout": "SKIP infinite loop payload does not succeed but solves \"rceChallenge\": true SKIP timeout after 2 seconds solves \"rceOccupyChallenge\": true FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error [ERR_TEST_FAILURE]: 1 subtest failed FAIL insecurity: Error [ERR_TEST_FAILURE]: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error [ERR_TEST_FAILURE]: 1 subtest failed TEST SUMMARY {\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":25934.876133}",
+  "target": "juice-presentation",
+  "timed_out": false,
+  "tool": "fix_target_stage",
+  "type": "executor_result",
+  "workspace_id": "cft-fix-5b3b3134308a4e81bd8b"
+}

@@ -1,0 +1,200 @@
+schema_version: a03.controls.v1
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+controls:
+- id: JS-SAFE-AUTHZ-001
+  family: authorization
+  control_type: original_safe
+  root_cause_key: address-read-owner-scope
+  independence_group: juice-address-read-owner-scope
+  split: holdout
+  security_property: An authenticated user cannot read another fixture user's address
+    by ID; own address remains accessible.
+  source_anchors:
+  - file: routes/address.ts
+    start: 16
+    end: 25
+    sha256: 99413492a060638771636237a5c178a6a5907948f17cb8bf50dda648386d2084
+    region_sha256: 136db9d15c00dbd31a84832aef830f7385e67199c00eb322fb11da6731ce22d6
+  - file: server.ts
+    start: 467
+    end: 471
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: b6f27ee9a3fb616364472973975f780512fb6074b4adb57897aa8f26fece5601
+  - file: lib/insecurity.ts
+    start: 175
+    end: 184
+    sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: 887dbcee8174f6d6950771da608ae7a96826ce8a58df297f50d809720d7da3ab
+  http_anchors: &id001
+  - /api/Addresss/{id}
+  service: juice
+  required_identities:
+  - owner
+  - other_user
+  required_test_data:
+  - owner and other_user fixture objects
+  availability_checks:
+  - build/tests/start/smoke passed
+  - legitimate request succeeds before and after assertion
+  - server identity and owned object verified
+  safe_expected_behaviour: An authenticated user cannot read another fixture user's
+    address by ID; own address remains accessible.
+  failure_meaning: Any missing precondition is unavailable/inconclusive, never safe
+  provenance:
+  - Pinned upstream source plus manual property review
+  - Two actual disposable Docker fixture cycles
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements: &id002
+  - container absent
+  - network absent
+  - snapshot removed
+  - original byte-identical
+  review_status: reviewed
+  validation_basis: runtime
+  truth_validated: true
+  agent_verifiable_now: false
+  runtime_eligibility: evaluator_fixture_only
+  property_key: address_owner
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/original/reset-evidence.json
+  evidence_sha256: c3852db0f133521157b7f60933bc2cfeb3728dee1e2570ab88164ec88a9772fa
+- id: JS-SAFE-AUTHZ-002
+  family: authorization
+  control_type: original_safe
+  root_cause_key: card-read-owner-scope
+  independence_group: juice-card-read-owner-scope
+  split: development
+  security_property: An authenticated user cannot read another fixture user's payment
+    method by ID; own card remains accessible.
+  source_anchors:
+  - file: routes/payment.ts
+    start: 43
+    end: 69
+    sha256: 91ef541a6e38235575c565c15c246bae358e6be4e60fccb48922b6116d1de44e
+    region_sha256: d8667fc0df513603c9c6790268fea5a85917a20764bf5f87d98688568cdd19e6
+  - file: server.ts
+    start: 457
+    end: 461
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: ed33daa1517de4c98db43449def62add075e6290e72df73d3b9e5b0731e9cf5c
+  - file: lib/insecurity.ts
+    start: 175
+    end: 184
+    sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: 887dbcee8174f6d6950771da608ae7a96826ce8a58df297f50d809720d7da3ab
+  http_anchors:
+  - /api/Cards/{id}
+  service: juice
+  required_identities:
+  - owner
+  - other_user
+  required_test_data:
+  - owner and other_user fixture objects
+  availability_checks:
+  - build/tests/start/smoke passed
+  - legitimate request succeeds before and after assertion
+  - server identity and owned object verified
+  safe_expected_behaviour: An authenticated user cannot read another fixture user's
+    payment method by ID; own card remains accessible.
+  failure_meaning: Any missing precondition is unavailable/inconclusive, never safe
+  provenance:
+  - Pinned upstream source plus manual property review
+  - Two actual disposable Docker fixture cycles
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - container absent
+  - network absent
+  - snapshot removed
+  - original byte-identical
+  review_status: reviewed
+  validation_basis: runtime
+  truth_validated: true
+  agent_verifiable_now: false
+  runtime_eligibility: evaluator_fixture_only
+  property_key: card_owner
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/original/reset-evidence.json
+  evidence_sha256: c3852db0f133521157b7f60933bc2cfeb3728dee1e2570ab88164ec88a9772fa
+- id: JS-SAFE-DATA-001
+  family: sensitive_data
+  control_type: original_safe
+  root_cause_key: card-number-response-mask
+  independence_group: juice-card-number-response-mask
+  split: holdout
+  security_property: Fixture card number is masked in owner list and item GET responses,
+    exposing only the last four digits.
+  source_anchors:
+  - file: routes/payment.ts
+    start: 20
+    end: 68
+    sha256: 91ef541a6e38235575c565c15c246bae358e6be4e60fccb48922b6116d1de44e
+    region_sha256: c65e511a1618d72c6d46a359d8da6cc325de8d3a4133afae11bd073674694a64
+  http_anchors:
+  - /api/Cards and /api/Cards/{id}
+  service: juice
+  required_identities: []
+  required_test_data:
+  - fixed legitimate fixture request
+  availability_checks:
+  - build/tests/start/smoke passed
+  - legitimate request succeeds before and after assertion
+  - successful expected response, no timeout
+  safe_expected_behaviour: Fixture card number is masked in owner list and item GET
+    responses, exposing only the last four digits.
+  failure_meaning: Any missing precondition is unavailable/inconclusive, never safe
+  provenance:
+  - Pinned upstream source plus manual property review
+  - Two actual disposable Docker fixture cycles
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - container absent
+  - network absent
+  - snapshot removed
+  - original byte-identical
+  review_status: reviewed
+  validation_basis: runtime
+  truth_validated: true
+  agent_verifiable_now: false
+  runtime_eligibility: evaluator_fixture_only
+  property_key: card_mask
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/original/reset-evidence.json
+  evidence_sha256: c3852db0f133521157b7f60933bc2cfeb3728dee1e2570ab88164ec88a9772fa
+- id: JS-SAFE-SQL-001
+  family: sql_injection
+  control_type: original_safe
+  root_cause_key: address-id-orm-lookup
+  independence_group: juice-address-id-orm-lookup
+  split: holdout
+  security_property: In the reviewed address item lookup, route id is a Sequelize
+    where value rather than interpolated SQL statement text.
+  source_anchors:
+  - file: routes/address.ts
+    start: 18
+    end: 18
+    sha256: 99413492a060638771636237a5c178a6a5907948f17cb8bf50dda648386d2084
+    region_sha256: 979e76399d62767d03c48d4d28406fdfca558ea6706474a5e7d9bb4be6f431fd
+  - file: models/address.ts
+    start: 7
+    end: 16
+    sha256: 305b4a190461279351ae449be0f2be636c7d8389b0a8d3d8db553ebf2c76a92a
+    region_sha256: 72e4d0783de46198f34770b9ae969a662bebe25d77077bf596e11b3f78eaa598
+  http_anchors: *id001
+  service: juice
+  required_identities: []
+  required_test_data:
+  - exact pinned source expression and Sequelize model provenance
+  availability_checks:
+  - not applicable to source-only property; no runtime SQL verdict
+  safe_expected_behaviour: Source construction uses ORM where object; does not establish
+    safety of other queries/endpoints
+  failure_meaning: Any missing precondition is unavailable/inconclusive, never safe
+  provenance:
+  - Manual review of exact getAddressById expression and ORM model import
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements: *id002
+  review_status: reviewed
+  validation_basis: source_review
+  truth_validated: true
+  agent_verifiable_now: false
+  runtime_eligibility: truth_only
+  property_key: address_orm
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/address-orm-source.json
+  evidence_sha256: 4b26f22b656020fa0f0a765b0fbd55e65b06b15dea728ca03a2cfeeb4dba334f

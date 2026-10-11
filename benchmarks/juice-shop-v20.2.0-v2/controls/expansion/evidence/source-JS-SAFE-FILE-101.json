@@ -1,0 +1,18 @@
+{
+  "oracle": "reviewed_exact_source_branch_v1",
+  "scope": "source acceptance gate only; no claim that every accepted image is harmless",
+  "expressions": [
+    "const uploadedFileType = await fileType.fromBuffer(buffer)",
+    "if (uploadedFileType === undefined) {",
+    "if (uploadedFileType === null || !uploadedFileType.mime.startsWith('image')) {",
+    "await fs.writeFile(filePath, buffer)"
+  ],
+  "anchor": {
+    "file": "routes/profileImageFileUpload.ts",
+    "start": 14,
+    "end": 58,
+    "sha256": "6c19407cb05fbb2e8b676f2d964eccec79db13d302cc806ed1fef0e757b312c7",
+    "region_sha256": "e1c46dc8dfe64c9d19ea63e956671d16f182cb1ba3187ebd4e51751a2f0b7683"
+  },
+  "runtime_verdict": null
+}

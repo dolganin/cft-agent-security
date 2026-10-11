@@ -1,0 +1,17 @@
+{
+  "oracle": "reviewed_exact_source_branch_v1",
+  "scope": "source upper-bound branch only; negative quantities remain vulnerable and are not a twin of JS-BIZ-001",
+  "expressions": [
+    "if (product.quantity >= quantity) {",
+    "next()",
+    "res.status(400).json({ error: res.__('We are out of stock! Sorry for the inconvenience.') })"
+  ],
+  "anchor": {
+    "file": "routes/basketItems.ts",
+    "start": 85,
+    "end": 101,
+    "sha256": "be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6",
+    "region_sha256": "9f6973bcd624933f93dd05d7d09aa4a4f30b2bbd4134afd95eabbf5d9f3e49bc"
+  },
+  "runtime_verdict": null
+}

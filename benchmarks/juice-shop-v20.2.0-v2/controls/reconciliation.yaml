@@ -1,0 +1,113 @@
+schema_version: a03.1.reconciliation.v1
+positives_sha256: 2ec007ab1450cc5bfb43b78d50a9ec394525f7d9f79e498ec6c9a84058f9310f
+controls:
+- control_id: JS-SAFE-AUTH-101
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-twofactor-disable-password-gate
+  positive_groups: []
+  split: holdout
+  status: independent_safe_property
+- control_id: JS-SAFE-AUTHZ-001
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-address-read-owner-scope
+  positive_groups: []
+  split: holdout
+  status: independent_safe_property
+- control_id: JS-SAFE-AUTHZ-002
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-card-read-owner-scope
+  positive_groups: []
+  split: development
+  status: independent_safe_property
+- control_id: JS-SAFE-BIZ-101
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-basket-quantity-stock-upper-bound
+  positive_groups: []
+  split: holdout
+  status: independent_safe_property
+- control_id: JS-SAFE-CODE-101
+  related_positive_case_ids:
+  - JS-CODE-001
+  related_root_cause_key: profile-username-expression-eval
+  control_group: juice-profile-username-expression-eval
+  positive_groups:
+  - juice-profile-username-expression-eval
+  split: development
+  status: matched
+- control_id: JS-SAFE-DATA-001
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-card-number-response-mask
+  positive_groups: []
+  split: holdout
+  status: independent_safe_property
+- control_id: JS-SAFE-FILE-101
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-profile-upload-byte-signature-gate
+  positive_groups: []
+  split: holdout
+  status: independent_safe_property
+- control_id: JS-SAFE-NOSQL-101
+  related_positive_case_ids:
+  - JS-NOSQL-001
+  related_root_cause_key: review-selector-operator-injection
+  control_group: juice-review-selector-operator-injection
+  positive_groups:
+  - juice-review-selector-operator-injection
+  split: development
+  status: matched
+- control_id: JS-SAFE-PATH-101
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-profile-upload-server-selected-filename
+  positive_groups: []
+  split: development
+  status: independent_safe_property
+- control_id: JS-SAFE-PATH-102
+  related_positive_case_ids:
+  - JS-PATH-001
+  related_root_cause_key: zip-entry-write-outside-upload-directory
+  control_group: juice-zip-entry-write-outside-upload-directory
+  positive_groups:
+  - juice-zip-entry-write-outside-upload-directory
+  split: development
+  status: matched
+- control_id: JS-SAFE-REDIRECT-101
+  related_positive_case_ids:
+  - JS-REDIRECT-001
+  related_root_cause_key: redirect-substring-allowlist
+  control_group: juice-redirect-substring-allowlist
+  positive_groups:
+  - juice-redirect-substring-allowlist
+  split: development
+  status: matched
+- control_id: JS-SAFE-SQL-001
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  control_group: juice-address-id-orm-lookup
+  positive_groups: []
+  split: holdout
+  status: independent_safe_property
+- control_id: JS-SAFE-XSS-101
+  related_positive_case_ids:
+  - JS-XSS-001
+  related_root_cause_key: search-query-dom-trust-bypass
+  control_group: juice-search-query-dom-trust-bypass
+  positive_groups:
+  - juice-search-query-dom-trust-bypass
+  split: development
+  status: matched
+- control_id: JS-SAFE-XXE-101
+  related_positive_case_ids:
+  - JS-XXE-001
+  related_root_cause_key: xml-external-entity-enabled-parser
+  control_group: juice-xml-external-entity-enabled-parser
+  positive_groups:
+  - juice-xml-external-entity-enabled-parser
+  split: development
+  status: matched

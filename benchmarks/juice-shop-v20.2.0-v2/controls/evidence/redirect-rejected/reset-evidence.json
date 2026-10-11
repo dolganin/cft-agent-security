@@ -1,0 +1,85 @@
+{
+  "schema_version": "a03.reset_evidence.v1",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "image": "cft-fix-juice@sha256:b3c854f853e6bb2f2b5bd261d1766c11904afd1bc497b481d2b9a3b77033c9c5",
+  "original_tree_sha256": "3673ec989f4e472fe42b40257f1634116f5ce7656f1542de9321d4233daf199c",
+  "cycles": [
+    {
+      "properties": {},
+      "stages": {
+        "prepare": {
+          "passed": true,
+          "execution_ref": "execution-43ad4c6f39524c32aeb10621f3db44e2",
+          "audit_ref": "audit:14484d5c26a34328aece921651a14fda",
+          "record_file": "cycle-1/prepare.json",
+          "record_sha256": "4f3731db10ef252b5c50fbe7e69e8b510bfd1d9e55e298503a3daadbbed64434"
+        },
+        "build": {
+          "passed": true,
+          "execution_ref": "execution-ded04e9ed52f41eca585820d80199de8",
+          "audit_ref": "audit:9cdd10c7ab834e1cab8a9709f23b05fb",
+          "record_file": "cycle-1/build.json",
+          "record_sha256": "625340267478818087dc1b8cc6bfdebb6cf70d46d239679841266a57516c2611"
+        },
+        "tests": {
+          "passed": false,
+          "execution_ref": "execution-15c1338b62064f70a79858c9be1665df",
+          "audit_ref": "audit:0417c7f470f54697a3c417fbd35e8449",
+          "record_file": "cycle-1/tests.json",
+          "record_sha256": "4c94af7eae7ef2752ad9a2ca6a8ae3df9ca2a637a69dd0b3eeeab79f3e37fef3"
+        }
+      },
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-572a2067024c42a78f77",
+      "network": "cft-fix-572a2067024c42a78f77-net",
+      "failure": "Runtime preparation/assertion failed; no safe verdict",
+      "snapshot_removed": true,
+      "audit_file": "cycle-1/audit.jsonl",
+      "audit_sha256": "90ec03112d87d8573318547b18d8f955d9678cc82f4e467743b0078d2f99181b"
+    },
+    {
+      "properties": {},
+      "stages": {
+        "prepare": {
+          "passed": true,
+          "execution_ref": "execution-013cd906a1d845e29547e741bc71267f",
+          "audit_ref": "audit:0dc408ad30134b32a5423750de78a2a0",
+          "record_file": "cycle-2/prepare.json",
+          "record_sha256": "a931e2bbd5a675a24f565c23bd428396685a7b1b321d6568c3269546c3d69725"
+        },
+        "build": {
+          "passed": true,
+          "execution_ref": "execution-3f0f2d1701954fd7afcb2dc5a22f207d",
+          "audit_ref": "audit:8a5ef99237164952972b24e97e2b6d23",
+          "record_file": "cycle-2/build.json",
+          "record_sha256": "f1d9d31ba3a4d16c7599414593dac812df5255cfc0267d4169b160064f92fa97"
+        },
+        "tests": {
+          "passed": false,
+          "execution_ref": "execution-684da686d702461f92560602bf9a64e8",
+          "audit_ref": "audit:e49eb506dd2443ed93404882ae12d405",
+          "record_file": "cycle-2/tests.json",
+          "record_sha256": "1666f8d9a429a3ba7cca54ad6c441ef3a552c9efd3184deaef0ec8f30e403de9"
+        }
+      },
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-5b3b3134308a4e81bd8b",
+      "network": "cft-fix-5b3b3134308a4e81bd8b-net",
+      "failure": "Runtime preparation/assertion failed; no safe verdict",
+      "snapshot_removed": true,
+      "audit_file": "cycle-2/audit.jsonl",
+      "audit_sha256": "8bd900932a0b137b144057a8951a08115166ff4a255fc69ae750c5754a2e87b1"
+    }
+  ],
+  "bootstrap_sha256": "9e6c697b115f96b15b8a771cc1e8857afe87d71e3a3ee3118dbfc14773731d63",
+  "patch": {
+    "file": "lib/insecurity.ts",
+    "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+    "patch_sha256": "b67e41dac259982a17f9badec0be5fb528fc80bddfe67ba4c050f1a1b8c04640",
+    "correct_file": "data/static/codefixes/redirectChallenge_4_correct.ts",
+    "correct_sha256": "9cd52c7b353ae8c08a439859ab88d8d5501f96c173279988ad0b95119b66794e",
+    "editable_line": 136
+  }
+}

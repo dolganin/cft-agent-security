@@ -1,0 +1,48 @@
+schema_version: a03.reset.v1
+id: juice-fresh-stage1-v1
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+operator_adapter: juice_node_v1
+case_isolation: one_case_one_fresh_container
+startup:
+  implementation: executor.fix_runtime.DockerFixRuntime
+  stages: [prepare, build, tests, start, smoke]
+  approval: every fix_target_stage passes existing Validator and Executor
+  image: installed immutable Stage1 fix image; never pull or install dependencies
+  source: bounded Stage1 snapshot; host checkout read-only; writable copy in container tmpfs
+clean_state:
+  database: server.start sequelize.sync(force=true); fresh process and tmpfs; no volumes
+  users: seeded upstream users plus fresh operator owner and other_user per experiment
+  sessions: fresh process tokenMap/idMap; no reused cookies or tokens
+  objects: owner and other_user start with empty address/card lists; one object each
+  challenges: all solved=false before bootstrap; compare sorted key/solved baseline between cycles
+  filesystem: data/mongodb collections seeded in fresh writable copy; destroyed with tmpfs
+identities:
+  owner:
+    email: cft-a03-owner@example.invalid
+    credential_source: OS CSPRNG 32 random bytes inside disposable Node process
+  other_user:
+    email: cft-a03-other_user@example.invalid
+    credential_source: OS CSPRNG 32 random bytes inside disposable Node process
+  registration: fixed POST /api/Users; require 201 and distinct server IDs
+  login: fixed POST /rest/user/login; require 200, token, expected email and basket ID
+  identity_check: GET /rest/user/whoami with bearer and token cookie; compare server user.id and user.email
+  secrecy: passwords/tokens live only in fixture process memory; never log, serialize or send to LLM
+objects:
+  setup: fixed POST /api/Addresss and /api/Cards under each valid identity
+  ownership: server UserId matches owner despite forged client UserId; own GET/list succeeds
+  fixtures: artificial address and nonpayment card number; no real customer information
+availability:
+  - existing Stage1 normal Apple search and no-match smoke pass
+  - valid owner and other_user identities before assertion
+  - resource exists and legitimate own GET succeeds
+  - legitimate GET and identity succeed again after denied cross-user GET
+  - redirect positive request has 302 and exact Location; never follow redirect
+failure_semantics: any failed stage, lost session, missing resource, timeout or failed legitimate request is unavailable/inconclusive; never safe
+cleanup:
+  - existing DockerFixRuntime.close removes container and internal network
+  - operator checks docker container/network ls succeeds and exact names are absent
+  - temporary snapshot directory removed
+  - original Stage1 snapshot tree digest unchanged
+reproducibility: compare logical state, not random passwords/tokens/container IDs/timestamps
+evaluator_entrypoint: python -m evaluation.control_reset
+agent_exposure: none; no new Executor registry entry or model setup commands

@@ -1,0 +1,7 @@
+{
+  "schema_version": "benchmark.protocol.lock.v2",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_version": "2",
+  "protocol_sha256": "565d4ebe6ff2f3c57b4892b653542873d07cc2f5521846d79e78394401795031",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37"
+}

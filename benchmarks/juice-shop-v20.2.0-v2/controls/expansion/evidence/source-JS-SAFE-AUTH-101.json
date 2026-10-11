@@ -1,0 +1,17 @@
+{
+  "oracle": "reviewed_exact_source_branch_v1",
+  "scope": "source cached-password gate only; does not establish database reauthentication, cache freshness or hashing strength",
+  "expressions": [
+    "if (user.password !== security.hash(password)) {",
+    "throw new Error('Password doesnt match stored password')",
+    "userModel.totpSecret = ''"
+  ],
+  "anchor": {
+    "file": "routes/2fa.ts",
+    "start": 142,
+    "end": 170,
+    "sha256": "5c899e51dc17e5576b1d8041038b003ebfe35253e062a30aa01bc631d7df4996",
+    "region_sha256": "5720920609b9d58aeab06b2682e577dfdd4fad278d4ef28481fc36700277153f"
+  },
+  "runtime_verdict": null
+}

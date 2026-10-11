@@ -1,0 +1,455 @@
+schema_version: a03.1.controls.v1
+controls:
+- id: JS-SAFE-AUTH-101
+  control_type: original_safe
+  family: authentication
+  security_property: The 2FA disable function rejects a password that differs from
+    the authenticated cache's stored hash before clearing the TOTP secret.
+  oracle: reviewed_exact_source_branch_v1
+  root_cause_key: twofactor-disable-password-gate
+  independence_group: juice-twofactor-disable-password-gate
+  split: holdout
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  relation: independent_safe_property
+  source_anchors:
+  - file: routes/2fa.ts
+    start: 142
+    end: 170
+    sha256: 5c899e51dc17e5576b1d8041038b003ebfe35253e062a30aa01bc631d7df4996
+    region_sha256: 5720920609b9d58aeab06b2682e577dfdd4fad278d4ef28481fc36700277153f
+  http_anchors:
+  - POST /rest/2fa/disable
+  service: juice
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Source-only scoped proof; no runtime verdict
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Pinned source and explicit operator-reviewed oracle
+  validation_basis: source_review
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-AUTH-101.json
+  evidence_sha256: c72bbd0979031df86a99c8a1be08efc0c718917106f46d06021e35b5a6e2db47
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: source cached-password gate only; does not establish database reauthentication,
+    cache freshness or hashing strength
+- id: JS-SAFE-FILE-101
+  control_type: original_safe
+  family: file-validation
+  security_property: The upload handler obtains type from buffer bytes and returns
+    before file write for unknown or non-image detected type.
+  oracle: reviewed_exact_source_branch_v1
+  root_cause_key: profile-upload-byte-signature-gate
+  independence_group: juice-profile-upload-byte-signature-gate
+  split: holdout
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  relation: independent_safe_property
+  source_anchors:
+  - file: routes/profileImageFileUpload.ts
+    start: 14
+    end: 58
+    sha256: 6c19407cb05fbb2e8b676f2d964eccec79db13d302cc806ed1fef0e757b312c7
+    region_sha256: e1c46dc8dfe64c9d19ea63e956671d16f182cb1ba3187ebd4e51751a2f0b7683
+  http_anchors:
+  - POST /profile/image/file
+  service: juice
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Source-only scoped proof; no runtime verdict
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Pinned source and explicit operator-reviewed oracle
+  validation_basis: source_review
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-FILE-101.json
+  evidence_sha256: c1f882f6e5462546f1ad464735b586931d1920361dd816d2ebe1ee7eb16570c1
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: source acceptance gate only; no claim that every accepted image is
+    harmless
+- id: JS-SAFE-PATH-101
+  control_type: original_safe
+  family: path-traversal
+  security_property: The upload destination expression uses cached server user ID
+    and detected type extension rather than the client filename.
+  oracle: reviewed_exact_source_branch_v1
+  root_cause_key: profile-upload-server-selected-filename
+  independence_group: juice-profile-upload-server-selected-filename
+  split: development
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  relation: independent_safe_property
+  source_anchors:
+  - file: routes/profileImageFileUpload.ts
+    start: 14
+    end: 58
+    sha256: 6c19407cb05fbb2e8b676f2d964eccec79db13d302cc806ed1fef0e757b312c7
+    region_sha256: e1c46dc8dfe64c9d19ea63e956671d16f182cb1ba3187ebd4e51751a2f0b7683
+  http_anchors:
+  - POST /profile/image/file
+  service: juice
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Source-only scoped proof; no runtime verdict
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Pinned source and explicit operator-reviewed oracle
+  validation_basis: source_review
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-PATH-101.json
+  evidence_sha256: 2b7337dc608277dc0f8fa3f92ae878249cc5e97f0befc5b62dc92b8f2edfd437
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: source filename construction only; no claim about arbitrary corrupted
+    authentication cache
+- id: JS-SAFE-BIZ-101
+  control_type: original_safe
+  family: business-logic
+  security_property: For an existing stock row, the quantity check only calls next
+    when requested quantity does not exceed stock; the alternative returns 400.
+  oracle: reviewed_exact_source_branch_v1
+  root_cause_key: basket-quantity-stock-upper-bound
+  independence_group: juice-basket-quantity-stock-upper-bound
+  split: holdout
+  related_positive_case_ids: []
+  related_root_cause_key: null
+  relation: independent_safe_property
+  source_anchors:
+  - file: routes/basketItems.ts
+    start: 85
+    end: 101
+    sha256: be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6
+    region_sha256: 9f6973bcd624933f93dd05d7d09aa4a4f30b2bbd4134afd95eabbf5d9f3e49bc
+  http_anchors:
+  - POST /api/BasketItems
+  service: juice
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Source-only scoped proof; no runtime verdict
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Pinned source and explicit operator-reviewed oracle
+  validation_basis: source_review
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-BIZ-101.json
+  evidence_sha256: 067944a5b7744a298936a858918b0233254ff298e41bd1208c99d12e9b12415d
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: source upper-bound branch only; negative quantities remain vulnerable
+    and are not a twin of JS-BIZ-001
+- id: JS-SAFE-REDIRECT-101
+  control_type: patched_safe
+  family: open-redirect
+  security_property: Exact allowlisted redirect succeeds; four unapproved URL variants
+    return no Location while the service remains available.
+  oracle: fixed_independent_http_fixture_v1
+  root_cause_key: redirect-substring-allowlist
+  independence_group: juice-redirect-substring-allowlist
+  split: development
+  related_positive_case_ids:
+  - JS-REDIRECT-001
+  related_root_cause_key: redirect-substring-allowlist
+  relation: direct_safe_twin
+  source_anchors:
+  - file: lib/insecurity.ts
+    start: 1
+    end: 197
+    sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+  http_anchors:
+  - GET /redirect
+  service: juice
+  required_identities: []
+  required_test_data:
+  - Exact allowlisted URL
+  availability_checks:
+  - Legitimate before request
+  - Negative assertion
+  - Legitimate/session after request
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - data/static/codefixes/redirectChallenge_4_correct.ts
+  - Two fresh Stage1 cycles with persisted stages and independent oracle
+  validation_basis: runtime
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/report.json
+  evidence_sha256: 31c272cc54541396e6f7c74863c6e4cca3d1d61eff889bc79ed696b2cee617b5
+  patch_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/patches/redirect.patch
+  patch_sha256: b67e41dac259982a17f9badec0be5fb528fc80bddfe67ba4c050f1a1b8c04640
+  source_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+  limitations: Scoped evaluator truth only; no production Agent capability or runtime
+    REJECTED inferred
+- id: JS-SAFE-NOSQL-101
+  control_type: patched_safe
+  family: nosql-injection
+  security_property: A literal existing review ID updates one fixture review; operator-object,
+    number and null IDs are denied without changing reviews.
+  oracle: fixed_independent_http_fixture_v1
+  root_cause_key: review-selector-operator-injection
+  independence_group: juice-review-selector-operator-injection
+  split: development
+  related_positive_case_ids:
+  - JS-NOSQL-001
+  related_root_cause_key: review-selector-operator-injection
+  relation: direct_safe_twin
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    start: 1
+    end: 31
+    sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+    region_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+  http_anchors:
+  - PATCH /rest/products/reviews
+  service: juice
+  required_identities:
+  - operator-owned review user
+  required_test_data:
+  - Existing operator-owned fixture review
+  availability_checks:
+  - Legitimate before request
+  - Negative assertion
+  - Legitimate/session after request
+  reset_contract: juice-fresh-stage1-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - data/static/codefixes/noSqlReviewsChallenge_3_correct.ts
+  - Two fresh Stage1 cycles with persisted stages and independent oracle
+  validation_basis: runtime
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/report.json
+  evidence_sha256: 5b5e0f1720259b812c32f08cd92b3bfc2c0c2c079f53ce4133b076bd7cc9575c
+  patch_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/patches/nosql.patch
+  patch_sha256: 83c6f5e93d07b0bff6f035edef7252757b98dba9482e472f693d522de936c465
+  source_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+  limitations: Scoped evaluator truth only; no production Agent capability or runtime
+    REJECTED inferred
+- id: JS-SAFE-XSS-101
+  control_type: synthetic_safe
+  family: xss
+  security_property: Plain text is HTML-escaped inside a fixed paragraph; controlled
+    script markup cannot form an element.
+  oracle: html_text
+  root_cause_key: search-query-dom-trust-bypass
+  independence_group: juice-search-query-dom-trust-bypass
+  split: development
+  related_positive_case_ids:
+  - JS-XSS-001
+  related_root_cause_key: search-query-dom-trust-bypass
+  relation: direct_safe_twin
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    start: 1
+    end: 31
+    sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+    region_sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+  http_anchors: []
+  service: synthetic-fixture
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Legitimate before request
+  - Negative assertion
+  - Legitimate/session after request
+  reset_contract: synthetic-fresh-process-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Minimal stdlib synthetic fixture, separate from Juice Shop
+  - Two networkless fresh Docker processes
+  validation_basis: fixture_behavior
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  evidence_sha256: ef3e2c3bc2fbab4ceafd6dc4ef16b71748e31a9d2593ef9400c8d44f5bf273b4
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full
+    parser/browser behavior
+- id: JS-SAFE-PATH-102
+  control_type: synthetic_safe
+  family: path-traversal
+  security_property: Archive destination normalizes within the fixed approved root
+    and rejects absolute, backslash and escaping names.
+  oracle: archive_path
+  root_cause_key: zip-entry-write-outside-upload-directory
+  independence_group: juice-zip-entry-write-outside-upload-directory
+  split: development
+  related_positive_case_ids:
+  - JS-PATH-001
+  related_root_cause_key: zip-entry-write-outside-upload-directory
+  relation: direct_safe_twin
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    start: 1
+    end: 31
+    sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+    region_sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+  http_anchors: []
+  service: synthetic-fixture
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Legitimate before request
+  - Negative assertion
+  - Legitimate/session after request
+  reset_contract: synthetic-fresh-process-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Minimal stdlib synthetic fixture, separate from Juice Shop
+  - Two networkless fresh Docker processes
+  validation_basis: fixture_behavior
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  evidence_sha256: ef3e2c3bc2fbab4ceafd6dc4ef16b71748e31a9d2593ef9400c8d44f5bf273b4
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full
+    parser/browser behavior
+- id: JS-SAFE-XXE-101
+  control_type: synthetic_safe
+  family: xml-external-entities
+  security_property: The small XML fixture rejects DTD/entity declarations before
+    parsing and accepts ordinary XML text.
+  oracle: xml_no_dtd
+  root_cause_key: xml-external-entity-enabled-parser
+  independence_group: juice-xml-external-entity-enabled-parser
+  split: development
+  related_positive_case_ids:
+  - JS-XXE-001
+  related_root_cause_key: xml-external-entity-enabled-parser
+  relation: direct_safe_twin
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    start: 1
+    end: 31
+    sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+    region_sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+  http_anchors: []
+  service: synthetic-fixture
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Legitimate before request
+  - Negative assertion
+  - Legitimate/session after request
+  reset_contract: synthetic-fresh-process-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Minimal stdlib synthetic fixture, separate from Juice Shop
+  - Two networkless fresh Docker processes
+  validation_basis: fixture_behavior
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  evidence_sha256: ef3e2c3bc2fbab4ceafd6dc4ef16b71748e31a9d2593ef9400c8d44f5bf273b4
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full
+    parser/browser behavior
+- id: JS-SAFE-CODE-101
+  control_type: synthetic_safe
+  family: code-evaluation
+  security_property: Profile names are treated as literal strings; expression-looking
+    input is returned as data without evaluation.
+  oracle: profile_literal
+  root_cause_key: profile-username-expression-eval
+  independence_group: juice-profile-username-expression-eval
+  split: development
+  related_positive_case_ids:
+  - JS-CODE-001
+  related_root_cause_key: profile-username-expression-eval
+  relation: direct_safe_twin
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    start: 1
+    end: 31
+    sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+    region_sha256: 37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4
+  http_anchors: []
+  service: synthetic-fixture
+  required_identities: []
+  required_test_data: []
+  availability_checks:
+  - Legitimate before request
+  - Negative assertion
+  - Legitimate/session after request
+  reset_contract: synthetic-fresh-process-v1
+  cleanup_requirements:
+  - Original unchanged
+  - Disposable runtime/snapshot absent when used
+  provenance:
+  - Minimal stdlib synthetic fixture, separate from Juice Shop
+  - Two networkless fresh Docker processes
+  validation_basis: fixture_behavior
+  runtime_verdict: null
+  truth_validated: true
+  agent_verifiable_now: false
+  review_status: reviewed
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  evidence_sha256: ef3e2c3bc2fbab4ceafd6dc4ef16b71748e31a9d2593ef9400c8d44f5bf273b4
+  patch_reference: null
+  patch_sha256: null
+  source_sha256: null
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full
+    parser/browser behavior

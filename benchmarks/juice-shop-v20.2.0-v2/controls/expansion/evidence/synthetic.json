@@ -1,0 +1,29 @@
+{
+  "fixture_sha256": "37d518601d950a455caf6b2c39d9145776366db482b703777b493a3f6292d7c4",
+  "oracle_sha256": "26b169784eefdf4e4e95c8f2be4700d866a83a0091c7a7dac4a896f6c50cf365",
+  "image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4",
+  "cycles": [
+    {
+      "container": "cft-a031-synthetic-793d4f7035584c01",
+      "passed": true,
+      "assertions": {
+        "archive_path": true,
+        "html_text": true,
+        "profile_literal": true,
+        "xml_no_dtd": true
+      },
+      "cleanup": true
+    },
+    {
+      "container": "cft-a031-synthetic-b3758a45ba934c07",
+      "passed": true,
+      "assertions": {
+        "archive_path": true,
+        "html_text": true,
+        "profile_literal": true,
+        "xml_no_dtd": true
+      },
+      "cleanup": true
+    }
+  ]
+}

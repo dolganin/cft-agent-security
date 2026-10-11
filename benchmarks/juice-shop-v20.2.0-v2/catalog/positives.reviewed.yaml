@@ -1,0 +1,3110 @@
+schema_version: benchmark.positive_catalog.a02.v1
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+protocol_sha256: 565d4ebe6ff2f3c57b4892b653542873d07cc2f5521846d79e78394401795031
+status: A02_source_reviewed_not_A04_frozen_ground_truth
+reviewer_status: single_reviewer_pending_independent_review
+cases:
+- id: JS-AUTH-001
+  expected: vulnerable
+  category: authentication
+  cwe: CWE-620
+  independence_group: juice-password-change-optional-current-password
+  root_cause_key: password-change-optional-current-password
+  root_cause_summary: Reauthentication only rejects when a current password is supplied; omission reaches
+    user.update for the authenticated account.
+  primary_candidate: changePasswordBenderChallenge
+  challenge_keys:
+  - changePasswordBenderChallenge
+  source_anchors:
+  - file: routes/changePassword.ts
+    line_start: 33
+    line_end: 56
+    role: sink
+    file_sha256: 8856fd47ef909e64924def8f29c9bf282881aea3658bd7bb94f177aadee422a4
+    region_sha256: cda8a3fe3a261eed22a3133ed2b0d65c9771d1639daecb2ad3379e08239cc38e
+    required_tokens:
+    - if (currentPassword &&
+    - 'user.update({ password:'
+  http_anchors:
+  - method: GET
+    endpoint: /rest/user/change-password
+    parameter: query.current/new/repeat
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 616
+      line_end: 617
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 6cb6f5abc6bba328fd4c34313efa8ffa45a4fe3c406a2bd26300252ec4454187
+      required_tokens:
+      - /rest/user/change-password
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Valid session for the disposable account being modified.
+  expected_vulnerable_effect: Possession of an active test session permits password change without knowledge
+    of the current password.
+  verification_criterion: For an operator-owned disposable account, omit current password, verify the
+    new credential independently, and restore credentials/session state.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 195
+      line_end: 205
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: dc789d423397f54661bfc40648d3954fed1cd62680a423ee2566dd65adcdb6a7
+      required_tokens:
+      - 'key: changePasswordBenderChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/changePassword.ts
+      line_start: 33
+      line_end: 56
+      role: sink
+      file_sha256: 8856fd47ef909e64924def8f29c9bf282881aea3658bd7bb94f177aadee422a4
+      region_sha256: cda8a3fe3a261eed22a3133ed2b0d65c9771d1639daecb2ad3379e08239cc38e
+      required_tokens:
+      - if (currentPassword &&
+      - 'user.update({ password:'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/changePassword.spec.ts
+      line_start: 21
+      line_end: 21
+      role: provenance
+      file_sha256: 461dab87ae50f37db8be8148037cf536796cce32ca9dc7076ae88bd488303b21
+      region_sha256: 8af7ea04c79830234e5729943f7b040927e89ba4af6cf81b310a0d369ccde239
+      required_tokens:
+      - changePasswordBenderChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-AUTHZ-001
+  expected: vulnerable
+  category: authorization
+  cwe: CWE-862
+  independence_group: juice-product-update-missing-authentication
+  root_cause_key: product-update-missing-authentication
+  root_cause_summary: The product PUT authentication middleware is commented out while the generated Finale
+    update endpoint remains registered.
+  primary_candidate: changeProductChallenge
+  challenge_keys:
+  - changeProductChallenge
+  source_anchors:
+  - file: server.ts
+    line_start: 387
+    line_end: 390
+    role: sink
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 0275fac3357a5c7e1218ec5cb32ecbd94ab1e9241728f5cddd15e3507c3ac7ff
+    required_tokens:
+    - // app.put('/api/Products/:id'
+  - file: server.ts
+    line_start: 502
+    line_end: 526
+    role: caller
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 709ac8cb5bfc6c2a65d527a5ab13c36ed92d34dec478dcc67c17422c587a24d6
+    required_tokens:
+    - 'name: ''Product'''
+    - finale.resource
+  http_anchors:
+  - method: PUT
+    endpoint: /api/Products/:id
+    parameter: body.description
+    basis: finale_generated
+    registration:
+      file: server.ts
+      line_start: 500
+      line_end: 526
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 7a944eccccae1a5492a68757f8989b152b14c887bf6db4fea6b236e70b7eed93
+      required_tokens:
+      - finale.resource({
+      - 'endpoints:'
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: An unauthenticated caller can modify a test product through the generated
+    API.
+  verification_criterion: Change a harmless field of an operator-owned product without credentials, verify
+    server-side persistence and restore it; availability and denied-operation controls are required.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 893
+      line_end: 902
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 7a2db1081cd86302fbfbc59178a81d7221d8a024976b4e84c1e84e1af9c97b29
+      required_tokens:
+      - 'key: changeProductChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: server.ts
+      line_start: 387
+      line_end: 390
+      role: sink
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 0275fac3357a5c7e1218ec5cb32ecbd94ab1e9241728f5cddd15e3507c3ac7ff
+      required_tokens:
+      - // app.put('/api/Products/:id'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: server.ts
+      line_start: 389
+      line_end: 389
+      role: provenance
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 14c3fc6f2ca370e0e9f262c01614af8c2ddbc000b22ea5406ada4d64bfdcb5e4
+      required_tokens:
+      - changeProductChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/restApi.spec.ts
+      line_start: 48
+      line_end: 48
+      role: provenance
+      file_sha256: b58c71d43d4b63d6194786523a4d8fc15733af3654671d7938188c920f19aad2
+      region_sha256: 4e5d148dc0a0293f6fe760075c96194c9f61293d89650899ee8eadf132e62bb1
+      required_tokens:
+      - changeProductChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-AUTHZ-002
+  expected: vulnerable
+  category: authorization
+  cwe: CWE-915
+  independence_group: juice-registration-role-mass-assignment
+  root_cause_key: registration-role-mass-assignment
+  root_cause_summary: The public generated User create endpoint passes a supplied role to the model setter,
+    which allows admin instead of forcing customer.
+  primary_candidate: registerAdminChallenge
+  challenge_keys:
+  - registerAdminChallenge
+  source_anchors:
+  - file: models/user.ts
+    line_start: 76
+    line_end: 95
+    role: sink
+    file_sha256: 89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59
+    region_sha256: db12f4e3323d34a7d513eae562ecead0975f738f1aabb2be0c910eb1cbddb887
+    required_tokens:
+    - '''admin'''
+    - this.setDataValue('role', role)
+  - file: server.ts
+    line_start: 500
+    line_end: 535
+    role: caller
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 8da61cd1d02f42ec48d8ca952524d5ab35be6fd98312efa7237d27fde4d34f5c
+    required_tokens:
+    - 'name: ''User'''
+    - finale.resource
+  http_anchors:
+  - method: POST
+    endpoint: /api/Users
+    parameter: body.role
+    basis: finale_generated
+    registration:
+      file: server.ts
+      line_start: 500
+      line_end: 526
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 7a944eccccae1a5492a68757f8989b152b14c887bf6db4fea6b236e70b7eed93
+      required_tokens:
+      - finale.resource({
+      - 'endpoints:'
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Public registration can create an account with administrator role.
+  verification_criterion: Register a uniquely named disposable test account with admin role; independently
+    verify persisted role and authorized identity, then remove the test account.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 41
+      line_end: 51
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: f5be37b512e4e3a7287ccb2b74e99d129750cc5fdd63999051078d1027f8793e
+      required_tokens:
+      - 'key: registerAdminChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: models/user.ts
+      line_start: 76
+      line_end: 95
+      role: sink
+      file_sha256: 89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59
+      region_sha256: db12f4e3323d34a7d513eae562ecead0975f738f1aabb2be0c910eb1cbddb887
+      required_tokens:
+      - '''admin'''
+      - this.setDataValue('role', role)
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: server.ts
+      line_start: 530
+      line_end: 530
+      role: provenance
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 689ecbc2f0d8ee27f58f1a86df1b8517ec4e758c32930c19d537c8588b05f466
+      required_tokens:
+      - registerAdminChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/register.spec.ts
+      line_start: 49
+      line_end: 49
+      role: provenance
+      file_sha256: 421d4d9d95dc1fbb15e54f4e854a574b10e156071e7d32b04c14ad587f3310d4
+      region_sha256: 0f7be1b6ad35af650dc69bbc9ea1f97c860f8f631b05a50f3c857ce8e5c642c1
+      required_tokens:
+      - registerAdminChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-BIZ-001
+  expected: vulnerable
+  category: business-logic
+  cwe: CWE-20
+  independence_group: juice-basket-negative-quantity-price-arithmetic
+  root_cause_key: basket-negative-quantity-price-arithmetic
+  root_cause_summary: BasketItem quantity has no minimum constraint; stock checks accept negative values
+    and order price arithmetic multiplies them into a negative total.
+  primary_candidate: negativeOrderChallenge
+  challenge_keys:
+  - negativeOrderChallenge
+  source_anchors:
+  - file: models/basketitem.ts
+    line_start: 25
+    line_end: 40
+    role: model
+    file_sha256: 222c79eed31c745926610d2f8c7a380e19f0c0edabf89dbcf19699e4f385db17
+    region_sha256: 75a7e118f20b2457392402d4f0c87824dd8a0bb528721b565ebcc81a849ef257
+    required_tokens:
+    - 'quantity: DataTypes.INTEGER'
+  - file: routes/basketItems.ts
+    line_start: 85
+    line_end: 99
+    role: helper
+    file_sha256: be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6
+    region_sha256: 6725d2e00d24a2702a775a0d44e7a32d7e5b5fb47802aa9125cde386795f1b16
+    required_tokens:
+    - product.quantity >= quantity
+  - file: routes/order.ts
+    line_start: 93
+    line_end: 107
+    role: sink
+    file_sha256: 747a80d5fcd79d88f906ad396adb00c1c68a376fd47a6c80628ca91c70e02300
+    region_sha256: 89ed21922190ea924a21c0121cfc37a257ba5db4ed0b046a28c05ff3f70b6198
+    required_tokens:
+    - itemPrice * BasketItem.quantity
+    - totalPrice += itemTotal
+  http_anchors:
+  - method: PUT
+    endpoint: /api/BasketItems/:id
+    parameter: body.quantity
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 445
+      line_end: 446
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: d7cf8bbba57a092790cea86ef46a52850d4b6a860f31818c635045734619a96f
+      required_tokens:
+      - /api/BasketItems/:id
+  - method: POST
+    endpoint: /rest/basket/:id/checkout
+    parameter: null
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 623
+      line_end: 624
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 8217d90ffbdc70686880ea619fede061851b7189c568bf62e6fef6e8f353e798
+      required_tokens:
+      - /rest/basket/:id/checkout
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Authenticated customer with an own basket and disposable wallet.
+  expected_vulnerable_effect: A controlled order can acquire a negative item total and potentially credit
+    wallet balance instead of charging it.
+  verification_criterion: Use only a disposable own basket/product and small negative quantity; independently
+    inspect total and wallet effect with reset/cleanup. No large inventory corruption.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 836
+      line_end: 845
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 8d43a77a2cb8b7e87ee09deb773c1352347a6874dd2b3bdeff5df4ad009709ef
+      required_tokens:
+      - 'key: negativeOrderChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/order.ts
+      line_start: 93
+      line_end: 107
+      role: sink
+      file_sha256: 747a80d5fcd79d88f906ad396adb00c1c68a376fd47a6c80628ca91c70e02300
+      region_sha256: 89ed21922190ea924a21c0121cfc37a257ba5db4ed0b046a28c05ff3f70b6198
+      required_tokens:
+      - itemPrice * BasketItem.quantity
+      - totalPrice += itemTotal
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/basket.spec.ts
+      line_start: 7
+      line_end: 7
+      role: provenance
+      file_sha256: f039d6cfe170a5045aef4992db51841a79f1ccb5ddccbe004d656beba255ee85
+      region_sha256: 2e800d188b61816f253d164d048cb4befc2244dcd738f22651c54f2b11a01d90
+      required_tokens:
+      - negativeOrderChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-BIZ-002
+  expected: vulnerable
+  category: business-logic
+  cwe: CWE-345
+  independence_group: juice-coupon-encoding-without-integrity
+  root_cause_key: coupon-encoding-without-integrity
+  root_cause_summary: Coupon generation merely Z85-encodes month/year and discount; redemption decodes
+    these attacker-controlled values without a signature or server-issued coupon lookup.
+  primary_candidate: forgedCouponChallenge
+  challenge_keys:
+  - forgedCouponChallenge
+  source_anchors:
+  - file: lib/insecurity.ts
+    line_start: 97
+    line_end: 118
+    role: sink
+    file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: f90b1df82d4f3aeb5653e7852e0fdea9269b163446d3d643aacc3c58f70241a2
+    required_tokens:
+    - z85.encode(coupon)
+    - z85.decode(coupon)
+    - return parseInt(discount)
+  - file: routes/coupon.ts
+    line_start: 13
+    line_end: 26
+    role: caller
+    file_sha256: 481aa9a06b38d2a3467a48be15aeebb5fdbfc50d34b03db9a35143463c39d6df
+    region_sha256: 3e57542baf7c25f6fec533e6f5203670cdbf944f60063198707e00cf8e5e2a9b
+    required_tokens:
+    - security.discountFromCoupon(coupon)
+  - file: routes/order.ts
+    line_start: 190
+    line_end: 194
+    role: caller
+    file_sha256: 747a80d5fcd79d88f906ad396adb00c1c68a376fd47a6c80628ca91c70e02300
+    region_sha256: d82c08e7be4c60ef88d835f8323362029b1a1ab300fd7c6d5db285f479c16c12
+    required_tokens:
+    - return discount
+  http_anchors:
+  - method: PUT
+    endpoint: /rest/basket/:id/coupon/:coupon
+    parameter: path.coupon
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 624
+      line_end: 625
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: f83d4d18f71a336ba3b0485570f897a447abc1f480b97f205dd93f301c8a9d50
+      required_tokens:
+      - /rest/basket/:id/coupon/:coupon
+  client_route: null
+  relations:
+  - from_anchor: 1
+    to_anchor: 0
+    relation: calls
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Authenticated test customer owning the selected basket.
+  expected_vulnerable_effect: An attacker can construct an unissued coupon with an excessive discount
+    for a controlled order.
+  verification_criterion: Use a harmless disposable own order and independently verify the applied unissued
+    discount; preserve normal coupon controls and restore state.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 406
+      line_end: 420
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 7ac5fb38a7d450426852c9cdf60146c981c21f4ef24aed0ac05abc75bc451837
+      required_tokens:
+      - 'key: forgedCouponChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: lib/insecurity.ts
+      line_start: 97
+      line_end: 118
+      role: sink
+      file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+      region_sha256: f90b1df82d4f3aeb5653e7852e0fdea9269b163446d3d643aacc3c58f70241a2
+      required_tokens:
+      - z85.encode(coupon)
+      - z85.decode(coupon)
+      - return parseInt(discount)
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/basket.spec.ts
+      line_start: 105
+      line_end: 105
+      role: provenance
+      file_sha256: f039d6cfe170a5045aef4992db51841a79f1ccb5ddccbe004d656beba255ee85
+      region_sha256: 897008e19d08de68c2805948de3df238f634e9e1dc3e8a04dcebdf01c590cf7f
+      required_tokens:
+      - forgedCouponChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-BOLA-001
+  expected: vulnerable
+  category: access-control
+  cwe: CWE-639
+  independence_group: juice-basket-read-missing-owner
+  root_cause_key: basket-read-missing-owner
+  root_cause_summary: Basket lookup uses the requested id; the ownership mismatch merely solves a challenge
+    and does not reject the response.
+  primary_candidate: basketAccessChallenge
+  challenge_keys:
+  - basketAccessChallenge
+  source_anchors:
+  - file: routes/basket.ts
+    line_start: 18
+    line_end: 31
+    role: sink
+    file_sha256: 89dc1768e5e5b7c34ae22b753140cfe4ba529903d4d743e7fc5ef28be5b49dd3
+    region_sha256: 7ab6b6e0e5519fefca0fef999bcd63c4e45349070c735ad2f169df246215aa8e
+    required_tokens:
+    - req.params.id
+    - res.json
+  - file: server.ts
+    line_start: 418
+    line_end: 418
+    role: registration
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: cb5ff934c5ecc2872fbb38f20d91c5d94ae21de98878c0a701a13c43508c2e38
+    required_tokens:
+    - security.isAuthorized()
+  http_anchors:
+  - method: GET
+    endpoint: /rest/basket/:id
+    parameter: path.id
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 622
+      line_end: 623
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: cf0ebcd7c898845d2702e7c32dc27aa2cd76884871be025e6f3f12341bb521ca
+      required_tokens:
+      - /rest/basket/:id
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Authenticated customer; another operator-owned test basket.
+  expected_vulnerable_effect: An authenticated user can read another test user basket by selecting its
+    id.
+  verification_criterion: Use two independently identified local users and known nonempty baskets; confirm
+    returned owner/object data and a same-owner availability control.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1199
+      line_end: 1214
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: b6dcbdd99ec8af104e2550709b93aec0dc7979142168b0e5a82d1febd4733c4f
+      required_tokens:
+      - 'key: basketAccessChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/basket.ts
+      line_start: 18
+      line_end: 31
+      role: sink
+      file_sha256: 89dc1768e5e5b7c34ae22b753140cfe4ba529903d4d743e7fc5ef28be5b49dd3
+      region_sha256: 7ab6b6e0e5519fefca0fef999bcd63c4e45349070c735ad2f169df246215aa8e
+      required_tokens:
+      - req.params.id
+      - res.json
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/basket.spec.ts
+      line_start: 43
+      line_end: 43
+      role: provenance
+      file_sha256: f039d6cfe170a5045aef4992db51841a79f1ccb5ddccbe004d656beba255ee85
+      region_sha256: 728aca7d1e7091a9715c2e6429bef33dc940d9b02dd66ad1cfacda408e102577
+      required_tokens:
+      - basketAccessChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-BOLA-002
+  expected: vulnerable
+  category: access-control
+  cwe: CWE-20
+  independence_group: juice-basket-id-first-last-parser-mismatch
+  root_cause_key: basket-id-first-last-parser-mismatch
+  root_cause_summary: Duplicate JSON BasketId fields are collected; ownership checks the first value while
+    persistence writes the last value.
+  primary_candidate: basketManipulateChallenge
+  challenge_keys:
+  - basketManipulateChallenge
+  source_anchors:
+  - file: routes/basketItems.ts
+    line_start: 21
+    line_end: 49
+    role: sink
+    file_sha256: be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6
+    region_sha256: c4b33a28131df664e90fcecc113b761b4d806ba02596960ffcd15be896c37f74
+    required_tokens:
+    - basketIds[0]
+    - basketIds[basketIds.length - 1]
+  - file: lib/utils.ts
+    line_start: 178
+    line_end: 194
+    role: helper
+    file_sha256: 6233b057735241abc124a47309ff6cf89ed010a64e59fefd8a8bfc9535e62f9c
+    region_sha256: c8e11df0f5c4d7866f2b8ec22a29aeb80d5a838c3285b9159c653b219cee6021
+    required_tokens:
+    - parseJsonCustom
+    - parser.onkey
+  http_anchors:
+  - method: POST
+    endpoint: /api/BasketItems
+    parameter: raw JSON BasketId fields
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 446
+      line_end: 447
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: e11588ec5fc901ff9c87c30f6a576dd3ace0297afa1b24e829a227eba33aa193
+      required_tokens:
+      - /api/BasketItems
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: calls
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Authenticated customer with own basket; second operator-owned basket.
+  expected_vulnerable_effect: The stored basket item may belong to a basket different from the one used
+    in the ownership check.
+  verification_criterion: With two approved test baskets, compare ordinary JSON with duplicate-id JSON
+    and independently read back the affected basket; restore changes afterwards.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 710
+      line_end: 720
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: f465c7db5d79464dc8f22d721038a853b983f76848849ebbeb64751a777cb82d
+      required_tokens:
+      - 'key: basketManipulateChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/basketItems.ts
+      line_start: 21
+      line_end: 49
+      role: sink
+      file_sha256: be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6
+      region_sha256: c4b33a28131df664e90fcecc113b761b4d806ba02596960ffcd15be896c37f74
+      required_tokens:
+      - basketIds[0]
+      - basketIds[basketIds.length - 1]
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/basket.spec.ts
+      line_start: 56
+      line_end: 56
+      role: provenance
+      file_sha256: f039d6cfe170a5045aef4992db51841a79f1ccb5ddccbe004d656beba255ee85
+      region_sha256: 1e144d4806b7fa95805b022b55a7c09f24cc5a60c969cb054c749a368e15ea68
+      required_tokens:
+      - basketManipulateChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-BOLA-003
+  expected: vulnerable
+  category: access-control
+  cwe: CWE-862
+  independence_group: juice-review-update-missing-owner
+  root_cause_key: review-update-missing-owner
+  root_cause_summary: Review update retrieves an authenticated user but the selector contains no author/ownership
+    constraint for a scalar review id.
+  primary_candidate: forgedReviewChallenge
+  challenge_keys:
+  - forgedReviewChallenge
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    line_start: 16
+    line_end: 25
+    role: sink
+    file_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+    region_sha256: 5954ca5e798e099b49c746834475178d1def1664c8570012a61d0dde79dcaa18
+    required_tokens:
+    - '_id: req.body.id'
+    - author !== user.data.email
+  http_anchors:
+  - method: PATCH
+    endpoint: /rest/products/reviews
+    parameter: body.id scalar
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 653
+      line_end: 654
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 2beb7f60341f1302abafeccd7c26a76adb9eaf69f783daaa92af52c1a8f4c690
+      required_tokens:
+      - /rest/products/reviews
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Authenticated customer; review owned by a second test customer.
+  expected_vulnerable_effect: An authenticated user can update a review owned by another test user.
+  verification_criterion: Supply a scalar id of a known other-user review, then independently read back
+    its message; separate this from NoSQL operator injection and restore data.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 436
+      line_end: 447
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: fc051c56c5c514e8c0a5cb050c810a4723aefb961f4b6543cae79fb9304d00be
+      required_tokens:
+      - 'key: forgedReviewChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/updateProductReviews.ts
+      line_start: 16
+      line_end: 25
+      role: sink
+      file_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+      region_sha256: 5954ca5e798e099b49c746834475178d1def1664c8570012a61d0dde79dcaa18
+      required_tokens:
+      - '_id: req.body.id'
+      - author !== user.data.email
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: routes/updateProductReviews.ts
+      line_start: 16
+      line_end: 16
+      role: provenance
+      file_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+      region_sha256: 8f5ee9a8d55c270dbc55cb184d8484a04af01fc817dc1d1a559332c3faf7ad8d
+      required_tokens:
+      - forgedReviewChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/noSql.spec.ts
+      line_start: 74
+      line_end: 74
+      role: provenance
+      file_sha256: 48772cd2f8052473d5e62cd5a1d661c03dab8257ac805ff5ecf6c58a0aea99e4
+      region_sha256: c63a35d554ac5231696729eb375a2e689185d4fe33c00ca5faefb430c98a9ebf
+      required_tokens:
+      - forgedReviewChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-BOLA-004
+  expected: vulnerable
+  category: access-control
+  cwe: CWE-639
+  independence_group: juice-feedback-client-controlled-author
+  root_cause_key: feedback-client-controlled-author
+  root_cause_summary: Feedback creation accepts the caller supplied UserId; the mismatch check records
+    a challenge then calls next without enforcing identity.
+  primary_candidate: forgedFeedbackChallenge
+  challenge_keys:
+  - forgedFeedbackChallenge
+  source_anchors:
+  - file: routes/verify.ts
+    line_start: 30
+    line_end: 37
+    role: sink
+    file_sha256: 9564a950864d515bbb9aff2718e6b904691bb8dc71a60a13905db80a04b8feff
+    region_sha256: 3f11fcd21520cf265a64b27916f8d322eb7ee129eb5666b8b851bb74f0b86769
+    required_tokens:
+    - req.body.UserId != userId
+    - next()
+  - file: models/feedback.ts
+    line_start: 29
+    line_end: 33
+    role: model
+    file_sha256: 24ef867d9854df2889c9286a688b6cee8668a08a5e1d987f867c9268dbeb4750
+    region_sha256: cacc1bda3b7854a78513111f9136d6ae6d18f0060c5fb2a65afd51e333ed259f
+    required_tokens:
+    - 'UserId:'
+    - DataTypes.INTEGER
+  - file: server.ts
+    line_start: 502
+    line_end: 526
+    role: caller
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 709ac8cb5bfc6c2a65d527a5ab13c36ed92d34dec478dcc67c17422c587a24d6
+    required_tokens:
+    - 'name: ''Feedback'''
+    - finale.resource
+  http_anchors:
+  - method: POST
+    endpoint: /api/Feedbacks
+    parameter: body.UserId
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 425
+      line_end: 426
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: b3fc89fa4fb56df9947563ddb30b907d7be9851d6c35cb4eb7438cf08b13136a
+      required_tokens:
+      - /api/Feedbacks
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: A test user or unauthenticated submitter with a valid test CAPTCHA.
+  expected_vulnerable_effect: A submitted feedback can be attributed to a different user-selected identity.
+  verification_criterion: Use controlled user identities and a valid CAPTCHA; persist a harmless feedback
+    with a foreign UserId and independently inspect attribution before cleanup.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 421
+      line_end: 435
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 451fe0c13cd1970c42bf2e641b31179548f10561a9f383cc336404bbb9ded1dc
+      required_tokens:
+      - 'key: forgedFeedbackChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/verify.ts
+      line_start: 30
+      line_end: 37
+      role: sink
+      file_sha256: 9564a950864d515bbb9aff2718e6b904691bb8dc71a60a13905db80a04b8feff
+      region_sha256: 3f11fcd21520cf265a64b27916f8d322eb7ee129eb5666b8b851bb74f0b86769
+      required_tokens:
+      - req.body.UserId != userId
+      - next()
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/server/verify.unit.test.ts
+      line_start: 33
+      line_end: 33
+      role: provenance
+      file_sha256: 906d755fbed0cc7d3cccb481bd399bd71e6ee5936c01bb73057e37a0c2c0a268
+      region_sha256: c5863a004a9b6c4b9d06cb2db88094991b006b1400a6aff49e5cfd8c72eb6b02
+      required_tokens:
+      - forgedFeedbackChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-CAPTCHA-001
+  expected: vulnerable
+  category: anti-automation
+  cwe: CWE-602
+  independence_group: juice-captcha-disclosed-reusable-answer
+  root_cause_key: captcha-disclosed-reusable-answer
+  root_cause_summary: The public CAPTCHA API returns the answer; verification compares that answer without
+    consuming or binding the persisted CAPTCHA to a single request.
+  primary_candidate: captchaBypassChallenge
+  challenge_keys:
+  - captchaBypassChallenge
+  source_anchors:
+  - file: routes/captcha.ts
+    line_start: 24
+    line_end: 41
+    role: sink
+    file_sha256: b48ecb634f38f033ce1331148a2a0c1dc24aecd3a01e72c773fd74b716cf17e1
+    region_sha256: 7b562ada90eeb3d07090323729885827c65485fc3c1354a370d4a6d2aa1965d7
+    required_tokens:
+    - answer
+    - res.json(captcha)
+    - captcha.answer
+  http_anchors:
+  - method: GET
+    endpoint: /rest/captcha
+    parameter: null
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 634
+      line_end: 635
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 4ab35473a06483bcefc58027bd9d3adbd13285f5a279fdc6bba3a47d824b8396
+      required_tokens:
+      - /rest/captcha
+  - method: POST
+    endpoint: /api/Feedbacks
+    parameter: body.captchaId/captcha
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 425
+      line_end: 426
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: b3fc89fa4fb56df9947563ddb30b907d7be9851d6c35cb4eb7438cf08b13136a
+      required_tokens:
+      - /api/Feedbacks
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: A client can automate CAPTCHA solution retrieval and reuse the same answer
+    to submit feedback.
+  verification_criterion: Use a small preapproved number of harmless feedback requests with a returned
+    test CAPTCHA, inspect independent persistence, and clean up; no load testing or external targets.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 180
+      line_end: 194
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 6f96b8aeb22c210a5d86f9a9760bbd45518e3d4d905b12398cb20fd6e93dc1c1
+      required_tokens:
+      - 'key: captchaBypassChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/captcha.ts
+      line_start: 24
+      line_end: 41
+      role: sink
+      file_sha256: b48ecb634f38f033ce1331148a2a0c1dc24aecd3a01e72c773fd74b716cf17e1
+      region_sha256: 7b562ada90eeb3d07090323729885827c65485fc3c1354a370d4a6d2aa1965d7
+      required_tokens:
+      - answer
+      - res.json(captcha)
+      - captcha.answer
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/contact.spec.ts
+      line_start: 183
+      line_end: 183
+      role: provenance
+      file_sha256: ff6960cd5697c0c8312c02550185e8ca385ab6c60011a7939ae06c8eb2b181c9
+      region_sha256: a17a11b52fe6dad430517e3a39df466b5a1cec6c4c7c0965a7ea1e8420bcdedb
+      required_tokens:
+      - captchaBypassChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-CODE-001
+  expected: vulnerable
+  category: code-evaluation
+  cwe: CWE-95
+  independence_group: juice-profile-username-expression-eval
+  root_cause_key: profile-username-expression-eval
+  root_cause_summary: Under the usernameXss challenge branch a persisted username expression is extracted
+    and passed to JavaScript eval before template rendering.
+  primary_candidate: sstiChallenge
+  challenge_keys:
+  - sstiChallenge
+  - usernameXssChallenge
+  source_anchors:
+  - file: routes/updateUserProfile.ts
+    line_start: 24
+    line_end: 42
+    role: source
+    file_sha256: 2eec586af91cd04ab60503ec3477e52dd7c524cfdbfad9ffcfeb4000a23b0641
+    region_sha256: 2c752eee9a46598adefd0a3353a835e87ce32b3ae940e3bffd5391338c785f33
+    required_tokens:
+    - 'username: req.body.username'
+  - file: routes/userProfile.ts
+    line_start: 57
+    line_end: 76
+    role: sink
+    file_sha256: 07251f3d0dd9f4c530da60e3911091d8ff1bded650f72c31cbee499093979b39
+    region_sha256: eec969ff0766dfa34b5ee3a166f5d704b5120c44a0bae98fb8d47456f15887a1
+    required_tokens:
+    - isChallengeEnabled(challenges.usernameXssChallenge)
+    - username = eval(code)
+  http_anchors:
+  - method: POST
+    endpoint: /profile
+    parameter: body.username
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 686
+      line_end: 687
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 56479f55973bb715fa0515612273fbe068ac4e973b0bc82f9aface45ec0eaff1
+      required_tokens:
+      - /profile
+  - method: GET
+    endpoint: /profile
+    parameter: null
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 685
+      line_end: 686
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: a6604872bc20d6fa813d3c78e9f5059517e28887efbc2d57a8fc58abe75ccbba
+      required_tokens:
+      - /profile
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: supplies
+  service: juice
+  runtime_prerequisites:
+  - Unsafe branch depends on usernameXssChallenge enablement; default Docker disallows it.
+  required_identity: Authenticated disposable account with cookie-backed profile access.
+  expected_vulnerable_effect: In the unsafe upstream environment a stored username can be evaluated as
+    server-side JavaScript.
+  verification_criterion: Detection-only now. Never run the upstream malware test. Any future approved
+    proof must be a harmless bounded expression in a disposable environment and must not relax baseline
+    safety mode.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1018
+      line_end: 1036
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: ca51c6ef28a7c5533d475ebd8df0047c62a1fa4d9e087568088628bcd94b64aa
+      required_tokens:
+      - 'key: sstiChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/userProfile.ts
+      line_start: 57
+      line_end: 76
+      role: sink
+      file_sha256: 07251f3d0dd9f4c530da60e3911091d8ff1bded650f72c31cbee499093979b39
+      region_sha256: eec969ff0766dfa34b5ee3a166f5d704b5120c44a0bae98fb8d47456f15887a1
+      required_tokens:
+      - isChallengeEnabled(challenges.usernameXssChallenge)
+      - username = eval(code)
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/profile.spec.ts
+      line_start: 49
+      line_end: 49
+      role: provenance
+      file_sha256: de5a8399ce82ee380defcffaab6bfa18a1dff4c08a6e32e3f93fcfcd52cc6edd
+      region_sha256: 873c9f1232ef85fc19835f836d7651fa56bf935fac8f8a3f70d749bf4019e23e
+      required_tokens:
+      - sstiChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: false
+  eligibility_reason: sstiChallenge and its source guard usernameXssChallenge are Docker-disabled; current
+    Docker takes the non-eval template branch.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-CRYPTO-001
+  expected: vulnerable
+  category: weak-cryptography
+  cwe: CWE-328
+  independence_group: juice-password-unsalted-md5-storage
+  root_cause_key: password-unsalted-md5-storage
+  root_cause_summary: The User password setter calls a fast unsalted MD5 helper; identical passwords receive
+    identical stored hashes without a per-user salt or password KDF.
+  primary_candidate: weakPasswordChallenge
+  challenge_keys:
+  - weakPasswordChallenge
+  source_anchors:
+  - file: models/user.ts
+    line_start: 70
+    line_end: 75
+    role: caller
+    file_sha256: 89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59
+    region_sha256: 9f39d571ced6287b4fb374b3c3b4749f02de831e5c00c01b956f9b6e34220c60
+    required_tokens:
+    - security.hash(clearTextPassword)
+  - file: lib/insecurity.ts
+    line_start: 41
+    line_end: 41
+    role: sink
+    file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: f3694364e69db0831bf668d0b4290de8f185dc0486339e8ca3bfba2a03803cbc
+    required_tokens:
+    - createHash('md5')
+  http_anchors:
+  - method: POST
+    endpoint: /api/Users
+    parameter: body.password
+    basis: finale_generated
+    registration:
+      file: server.ts
+      line_start: 500
+      line_end: 526
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 7a944eccccae1a5492a68757f8989b152b14c887bf6db4fea6b236e70b7eed93
+      required_tokens:
+      - finale.resource({
+      - 'endpoints:'
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: calls
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Disclosure of the stored hash permits inexpensive offline guessing and cross-account
+    hash comparison; the case claims the insecure source algorithm, not a measured crack.
+  verification_criterion: Source verification checks the User setter-to-MD5 binding. Any future runtime
+    comparison uses operator-owned test credentials and never publishes actual password/hash literals.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 819
+      line_end: 835
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 4a4f485e6eb685c0060fbd37b2d0d0d151ac0f2a7030cb2c648191adf34485e0
+      required_tokens:
+      - 'key: weakPasswordChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: lib/insecurity.ts
+      line_start: 41
+      line_end: 41
+      role: sink
+      file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+      region_sha256: f3694364e69db0831bf668d0b4290de8f185dc0486339e8ca3bfba2a03803cbc
+      required_tokens:
+      - createHash('md5')
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: models/user.ts
+      line_start: 73
+      line_end: 73
+      role: provenance
+      file_sha256: 89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59
+      region_sha256: a6cf0f2ca590b5ceb67a63f77763413a0e9ec068bda84251452ae872872e0cd7
+      required_tokens:
+      - weakPasswordChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/login.spec.ts
+      line_start: 51
+      line_end: 51
+      role: provenance
+      file_sha256: aa63fed3a9038e2fb74d0fdaacd2ec6d3cdcf31bf45afe60d49e3ce8fa58836b
+      region_sha256: ae3f9d9a747b736380dc2415dba0f4c3b474dec3397425577189b3ddcd57ac2e
+      required_tokens:
+      - weakPasswordChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-DATA-001
+  expected: vulnerable
+  category: sensitive-data-exposure
+  cwe: CWE-200
+  independence_group: juice-whoami-client-selected-secret-fields
+  root_cause_key: whoami-client-selected-secret-fields
+  root_cause_summary: The whoami fields parameter selects arbitrary user.data properties instead of a
+    response allowlist, including password hashes and other internal account properties.
+  primary_candidate: passwordHashLeakChallenge
+  challenge_keys:
+  - passwordHashLeakChallenge
+  source_anchors:
+  - file: routes/currentUser.ts
+    line_start: 20
+    line_end: 44
+    role: sink
+    file_sha256: b91a6dee202f62b69b27c0b6b6b4c0bacaa6621a2c8c2fd706baf1154e0d4886
+    region_sha256: 9bbdfc097b165ecc644f7e2bad8cf7900e9e8993ed38f81890c75cf120f96556
+    required_tokens:
+    - req.query?.fields
+    - baseUser[field] = user?.data[field
+  http_anchors:
+  - method: GET
+    endpoint: /rest/user/whoami
+    parameter: query.fields
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 619
+      line_end: 620
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: fa838d9813fb5accb8eba3266cd1f2201e492a79767a0669ad4c320519c441c4
+      required_tokens:
+      - /rest/user/whoami
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Valid cookie token of a disposable account.
+  expected_vulnerable_effect: A cookie-authenticated caller can receive a stored password hash that the
+    default whoami response omits.
+  verification_criterion: With an operator-owned account compare default fields with an explicit secret
+    field request; retain only presence/type or a digest, never literal credential values.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 2
+      line_end: 12
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 2543c1208932ad83eb4ce7301453391fbe8dbde3c318b84b0162beda07ac4500
+      required_tokens:
+      - 'key: passwordHashLeakChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/currentUser.ts
+      line_start: 20
+      line_end: 44
+      role: sink
+      file_sha256: b91a6dee202f62b69b27c0b6b6b4c0bacaa6621a2c8c2fd706baf1154e0d4886
+      region_sha256: 9bbdfc097b165ecc644f7e2bad8cf7900e9e8993ed38f81890c75cf120f96556
+      required_tokens:
+      - req.query?.fields
+      - baseUser[field] = user?.data[field
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/passwordHashLeak.spec.ts
+      line_start: 1
+      line_end: 1
+      role: provenance
+      file_sha256: 022ecef2a79ef8a2cae99dd052c014fdf89b86c5903f372528c684e2e82ae2c9
+      region_sha256: 7bd2c04cdca1a56a714154bdefd6d3a8eed707c5fb65da0acb8f8bfadae1997c
+      required_tokens:
+      - passwordHashLeakChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-DATA-002
+  expected: vulnerable
+  category: sensitive-data-exposure
+  cwe: CWE-862
+  independence_group: juice-metrics-route-missing-authentication
+  root_cause_key: metrics-route-missing-authentication
+  root_cause_summary: The Prometheus metrics endpoint is directly registered without authorization and
+    publishes internal application/runtime counters.
+  primary_candidate: exposedMetricsChallenge
+  challenge_keys:
+  - exposedMetricsChallenge
+  source_anchors:
+  - file: server.ts
+    line_start: 746
+    line_end: 750
+    role: sink
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 74f0f2792b6ce4a1174066bc043a965fb03f7fa35db4c3e94390be339f36e61f
+    required_tokens:
+    - app.get('/metrics'
+  - file: routes/metrics.ts
+    line_start: 84
+    line_end: 94
+    role: helper
+    file_sha256: b00e6a62b4f97338ea263bba9efafe7158d6d23829d468186c00c9078eeffd8f
+    region_sha256: 2671ce5d7a1af5f940f5504344e99e844c5eb2d1bb9971fc583abe2a5951f9e1
+    required_tokens:
+    - res.end(await register.metrics())
+  http_anchors:
+  - method: GET
+    endpoint: /metrics
+    parameter: null
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 750
+      line_end: 750
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: b8d3433bd939299ec02f489c310512f00fca4d3b9200a925eb7adf46afa1f9fe
+      required_tokens:
+      - /metrics
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Anonymous users can read internal operational metrics from the target.
+  verification_criterion: Compare an anonymous metrics response with an application availability control;
+    record harmless metric names and status without treating challenge completion as evidence.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1338
+      line_end: 1350
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 5d3ee6e4b81c35822f96d5de240ef399b46d8e3494a2c792b92f8881f9225fb6
+      required_tokens:
+      - 'key: exposedMetricsChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: server.ts
+      line_start: 746
+      line_end: 750
+      role: sink
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 74f0f2792b6ce4a1174066bc043a965fb03f7fa35db4c3e94390be339f36e61f
+      required_tokens:
+      - app.get('/metrics'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: server.ts
+      line_start: 750
+      line_end: 750
+      role: provenance
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: b8d3433bd939299ec02f489c310512f00fca4d3b9200a925eb7adf46afa1f9fe
+      required_tokens:
+      - exposedMetricsChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/api/metrics.test.ts
+      line_start: 51
+      line_end: 51
+      role: provenance
+      file_sha256: fa3b28982cd848719b7560433e2bacd92fdbd208318b01ed5bd96243f7dcd72b
+      region_sha256: cc57b2c6d2cdef214d61a1398c530d98f8b05497c48d29f889967a3eb33308ec
+      required_tokens:
+      - exposedMetricsChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-FILE-001
+  expected: vulnerable
+  category: file-exposure
+  cwe: CWE-548
+  independence_group: juice-public-sensitive-directory-mounts
+  root_cause_key: public-sensitive-directory-mounts
+  root_cause_summary: Sensitive FTP, key-name and access-log directories are published through public
+    serveIndex mounts without an authentication boundary.
+  primary_candidate: directoryListingChallenge
+  challenge_keys:
+  - directoryListingChallenge
+  - accessLogDisclosureChallenge
+  source_anchors:
+  - file: server.ts
+    line_start: 286
+    line_end: 302
+    role: sink
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 373a650cc5c832e5d555fc9512898ed9e9838f2530e5fc971848ba4e5fcdbe89
+    required_tokens:
+    - serveIndex('ftp'
+    - serveIndex('encryptionkeys'
+    - serveIndex('logs'
+  http_anchors:
+  - method: GET
+    endpoint: /ftp
+    parameter: null
+    basis: middleware_mount
+    registration:
+      file: server.ts
+      line_start: 288
+      line_end: 288
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: e9a7bcaef3f2397e7cf91f67e0e8e732ba6a50824e80c0cb36dab7615e5e5218
+      required_tokens:
+      - /ftp
+  - method: GET
+    endpoint: /encryptionkeys
+    parameter: null
+    basis: middleware_mount
+    registration:
+      file: server.ts
+      line_start: 296
+      line_end: 296
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 5340dae7babbd99468554374748d928af48acca440d8e66a47a4f0769f227b56
+      required_tokens:
+      - /encryptionkeys
+  - method: GET
+    endpoint: /support/logs
+    parameter: null
+    basis: middleware_mount
+    registration:
+      file: server.ts
+      line_start: 300
+      line_end: 300
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: aa7f1d46a7ba7dda737abf529650781289d89047dff04d71deb3bc1dfc78ccab
+      required_tokens:
+      - /support/logs
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Anonymous requests can enumerate sensitive filenames; FTP also serves allowlisted
+    confidential documents. Enumeration does not prove every file can be downloaded.
+  verification_criterion: Observe sensitive-name enumeration on the local target and compare with a working
+    public listing control. Do not claim key contents, arbitrary downloads or runtime root access.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 252
+      line_end: 263
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 6fc23c8e79f6cf9435e0dd6b471b609b4e663468f1d8d2fd6d39d1fbf4563cc7
+      required_tokens:
+      - 'key: directoryListingChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: server.ts
+      line_start: 286
+      line_end: 302
+      role: sink
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 373a650cc5c832e5d555fc9512898ed9e9838f2530e5fc971848ba4e5fcdbe89
+      required_tokens:
+      - serveIndex('ftp'
+      - serveIndex('encryptionkeys'
+      - serveIndex('logs'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: server.ts
+      line_start: 288
+      line_end: 288
+      role: provenance
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: e9a7bcaef3f2397e7cf91f67e0e8e732ba6a50824e80c0cb36dab7615e5e5218
+      required_tokens:
+      - directoryListingChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/publicFtp.spec.ts
+      line_start: 2
+      line_end: 2
+      role: provenance
+      file_sha256: c4ff6c0375c7655898bc7e06df1dd1589923bc962fdeb71add6d4b09678b182f
+      region_sha256: ced42d77241b11dbc9e4cdebc741501dd8f8acd93e252abfbe302c4a87dc9a87
+      required_tokens:
+      - directoryListingChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-FILE-002
+  expected: vulnerable
+  category: file-validation
+  cwe: CWE-180
+  independence_group: juice-file-suffix-check-before-null-canonicalization
+  root_cause_key: file-suffix-check-before-null-canonicalization
+  root_cause_summary: servePublicFiles validates a suffix before cutting off the encoded poison-null marker,
+    then serves the resulting different filename.
+  primary_candidate: nullByteChallenge
+  challenge_keys:
+  - nullByteChallenge
+  - forgottenBackupChallenge
+  - forgottenDevBackupChallenge
+  - misplacedSignatureFileChallenge
+  - easterEggLevelOneChallenge
+  source_anchors:
+  - file: routes/fileServer.ts
+    line_start: 25
+    line_end: 35
+    role: sink
+    file_sha256: dd70181dab51217f0cb2d8d3d563eb52d0e7015cd98cd42960232ddcfa8dd243
+    region_sha256: 0d994aa963c287a357d334922cd1d23d2e98d7265ee99561650f26a7d702c0b9
+    required_tokens:
+    - endsWithAllowlistedFileType(file)
+    - cutOffPoisonNullByte(file)
+    - res.sendFile
+  - file: lib/insecurity.ts
+    line_start: 44
+    line_end: 50
+    role: helper
+    file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: 7e4a30d987f3be60b8d3cc704b7c3464f7cfc2a05a68175529986d60d9c65a00
+    required_tokens:
+    - const nullByte = '%00'
+  http_anchors:
+  - method: GET
+    endpoint: /ftp(?!/quarantine)/:file
+    parameter: path.file
+    basis: middleware_mount
+    registration:
+      file: server.ts
+      line_start: 289
+      line_end: 289
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 35dd5358d8425c604de162b6c7c117589aabff01a95fa1bd8317278aa5ce5ef1
+      required_tokens:
+      - /ftp(?!/quarantine)/:file
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: calls
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: A nonallowlisted FTP backup can be returned after the initial filename passed
+    a misleading allowlisted suffix.
+  verification_criterion: Use an operator-selected harmless upstream backup fixture and compare its rejected
+    normal name with the canonicalization bypass; verify file identity without accessing host paths.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1441
+      line_end: 1454
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: b81142431f2dbcd8281690904fe35ca6fa6b86c4c1abba49ccc22b59d91fbd02
+      required_tokens:
+      - 'key: nullByteChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/fileServer.ts
+      line_start: 25
+      line_end: 35
+      role: sink
+      file_sha256: dd70181dab51217f0cb2d8d3d563eb52d0e7015cd98cd42960232ddcfa8dd243
+      region_sha256: 0d994aa963c287a357d334922cd1d23d2e98d7265ee99561650f26a7d702c0b9
+      required_tokens:
+      - endsWithAllowlistedFileType(file)
+      - cutOffPoisonNullByte(file)
+      - res.sendFile
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/publicFtp.spec.ts
+      line_start: 49
+      line_end: 49
+      role: provenance
+      file_sha256: c4ff6c0375c7655898bc7e06df1dd1589923bc962fdeb71add6d4b09678b182f
+      region_sha256: 588041e65043436d9118cde9477f88780de53738c3f0cfd5a5a425c6e715fdfe
+      required_tokens:
+      - nullByteChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-NOSQL-001
+  expected: vulnerable
+  category: nosql-injection
+  cwe: CWE-943
+  independence_group: juice-review-selector-operator-injection
+  root_cause_key: review-selector-operator-injection
+  root_cause_summary: A JSON object in body.id becomes the _id query selector and multi:true permits an
+    injected operator to update more than one review.
+  primary_candidate: noSqlReviewsChallenge
+  challenge_keys:
+  - noSqlReviewsChallenge
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    line_start: 17
+    line_end: 25
+    role: sink
+    file_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+    region_sha256: 4b97f93d78926ca24c4a9f4a63b589af586081eb0cf9c708b8fc6c2e2d1bd6a7
+    required_tokens:
+    - '_id: req.body.id'
+    - 'multi: true'
+  http_anchors:
+  - method: PATCH
+    endpoint: /rest/products/reviews
+    parameter: body.id object
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 653
+      line_end: 654
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 2beb7f60341f1302abafeccd7c26a76adb9eaf69f783daaa92af52c1a8f4c690
+      required_tokens:
+      - /rest/products/reviews
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: Authenticated test customer with several operator-owned review fixtures.
+  expected_vulnerable_effect: A crafted selector can modify multiple controlled reviews instead of one
+    scalar-id record.
+  verification_criterion: Use only operator-owned review fixtures, demonstrate a non-scalar selector affecting
+    multiple rows with independent readback, and restore them; do not conflate ownership bypass.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 795
+      line_end: 805
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 6c2ac33e32c9bc3bb5d78056982bfb8db7586c6f666579f6343e8f58b1a756ab
+      required_tokens:
+      - 'key: noSqlReviewsChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/updateProductReviews.ts
+      line_start: 17
+      line_end: 25
+      role: sink
+      file_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+      region_sha256: 4b97f93d78926ca24c4a9f4a63b589af586081eb0cf9c708b8fc6c2e2d1bd6a7
+      required_tokens:
+      - '_id: req.body.id'
+      - 'multi: true'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: routes/updateProductReviews.ts
+      line_start: 18
+      line_end: 18
+      role: provenance
+      file_sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+      region_sha256: 41753835256bf43fc11e24220e910d577bc842a8f465f5433c991e308fc1b757
+      required_tokens:
+      - noSqlReviewsChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/noSql.spec.ts
+      line_start: 51
+      line_end: 51
+      role: provenance
+      file_sha256: 48772cd2f8052473d5e62cd5a1d661c03dab8257ac805ff5ecf6c58a0aea99e4
+      region_sha256: 5c1d9987ce1654a107fcf75efce8d33f2be47985e3ae130e2069d62eae2b26ae
+      required_tokens:
+      - noSqlReviewsChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-NOSQL-002
+  expected: vulnerable
+  category: nosql-injection
+  cwe: CWE-943
+  independence_group: juice-track-order-where-expression-injection
+  root_cause_key: track-order-where-expression-injection
+  root_cause_summary: When reflected-XSS challenge code is enabled, the path id is concatenated into a
+    NeDB $where JavaScript expression without escaping.
+  primary_candidate: noSqlOrdersChallenge
+  challenge_keys:
+  - noSqlOrdersChallenge
+  - reflectedXssChallenge
+  source_anchors:
+  - file: routes/trackOrder.ts
+    line_start: 14
+    line_end: 24
+    role: sink
+    file_sha256: 8f0d91a9c902a7634ecb5822e8d348354f6bc7ee0c10e21079134e7f4aa17958
+    region_sha256: a9004036b45cbab20bbc9057635dd5d46fe896a1e31f768a1b033f8ca85fbb8f
+    required_tokens:
+    - isChallengeEnabled(challenges.reflectedXssChallenge)
+    - '$where:'
+  http_anchors:
+  - method: GET
+    endpoint: /rest/track-order/:id
+    parameter: path.id
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 636
+      line_end: 637
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: f816f5fd0e0991e2141fa0a50f1404a3660deb6e6a613c99b48f045abc0be77c
+      required_tokens:
+      - /rest/track-order/:id
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Unsafe upstream branch requires reflectedXssChallenge enabled; forbidden to relax the current Docker
+    safety boundary.
+  required_identity: null
+  expected_vulnerable_effect: Under the non-Docker unsafe branch, expression injection can select more
+    orders than the requested order id.
+  verification_criterion: 'Detection-only now: establish the input-to-$where flow and guard. A future
+    approved non-Docker-equivalent disposable environment must use harmless fixture predicates, never
+    sleep/eval/DoS.'
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 778
+      line_end: 794
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 6ce07359d4a62c438ca45eb604f1504eb1da43c89c5bb2115a749671ee2b1fe8
+      required_tokens:
+      - 'key: noSqlOrdersChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/trackOrder.ts
+      line_start: 14
+      line_end: 24
+      role: sink
+      file_sha256: 8f0d91a9c902a7634ecb5822e8d348354f6bc7ee0c10e21079134e7f4aa17958
+      region_sha256: a9004036b45cbab20bbc9057635dd5d46fe896a1e31f768a1b033f8ca85fbb8f
+      required_tokens:
+      - isChallengeEnabled(challenges.reflectedXssChallenge)
+      - '$where:'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/noSql.spec.ts
+      line_start: 30
+      line_end: 30
+      role: provenance
+      file_sha256: 48772cd2f8052473d5e62cd5a1d661c03dab8257ac805ff5ecf6c58a0aea99e4
+      region_sha256: 7b9c37ff2d54aba70d063c3a5d44ac2844696caf71d21f4bfd6d188acc663378
+      required_tokens:
+      - noSqlOrdersChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: false
+  eligibility_reason: Docker disables reflectedXssChallenge and noSqlOrdersChallenge; the source sanitizes
+    id in that environment. Do not disable safety mode to include it.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-PATH-001
+  expected: vulnerable
+  category: path-traversal
+  cwe: CWE-22
+  independence_group: juice-zip-entry-write-outside-upload-directory
+  root_cause_key: zip-entry-write-outside-upload-directory
+  root_cause_summary: ZIP entry paths are resolved from the complaints upload folder but checked only
+    against the broad application directory before writing the original relative entry path.
+  primary_candidate: fileWriteChallenge
+  challenge_keys:
+  - fileWriteChallenge
+  source_anchors:
+  - file: routes/fileUpload.ts
+    line_start: 27
+    line_end: 51
+    role: sink
+    file_sha256: c2a5c6d051272fe45683fbf67d4beb707c28fb09450b21d514a59d732b376aa0
+    region_sha256: b6f1ad420fa8623e916866b7535afbb97558601297323e248acec6db800f999d
+    required_tokens:
+    - path.resolve('uploads/complaints/' + fileName)
+    - absolutePath.includes
+    - fs.createWriteStream('uploads/complaints/' + fileName)
+  http_anchors:
+  - method: POST
+    endpoint: /file-upload
+    parameter: multipart ZIP entry path
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 328
+      line_end: 329
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 946c7060655db89bf83abfe855723bd99b622a4dd33d1fe7440996a4c806834f
+      required_tokens:
+      - /file-upload
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Unsafe ZIP handler branch must be enabled only in a separately approved future disposable environment.
+  required_identity: null
+  expected_vulnerable_effect: When ZIP handling is enabled, a traversal entry can overwrite an application
+    file outside the intended complaints upload directory.
+  verification_criterion: 'Detection-only now: validate path containment logic. Future proof may write
+    only a preapproved disposable marker; no host writes, executable payloads or overwrite of live target
+    content.'
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 69
+      line_end: 86
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 2738f097eb3043435b978f5edbcfef4047950d6d73f20241415a8a808d83fd13
+      required_tokens:
+      - 'key: fileWriteChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/fileUpload.ts
+      line_start: 27
+      line_end: 51
+      role: sink
+      file_sha256: c2a5c6d051272fe45683fbf67d4beb707c28fb09450b21d514a59d732b376aa0
+      region_sha256: b6f1ad420fa8623e916866b7535afbb97558601297323e248acec6db800f999d
+      required_tokens:
+      - path.resolve('uploads/complaints/' + fileName)
+      - absolutePath.includes
+      - fs.createWriteStream('uploads/complaints/' + fileName)
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/complain.spec.ts
+      line_start: 136
+      line_end: 136
+      role: provenance
+      file_sha256: 042e4e24dd742a26e9d9c95970c4704d13e9b3a827792b7111c47be6c1b11997
+      region_sha256: dcceba7c243f2bbaa80476dea4beb4d90f772b30ded5b0db070279eb47e65a36
+      required_tokens:
+      - fileWriteChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: false
+  eligibility_reason: fileWriteChallenge is Docker-disabled and handleZipFileUpload checks challenge enablement;
+    never change safety mode for current benchmark.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-RATE-001
+  expected: vulnerable
+  category: rate-limiting
+  cwe: CWE-807
+  independence_group: juice-reset-password-trust-proxy-rate-key
+  root_cause_key: reset-password-trust-proxy-rate-key
+  root_cause_summary: The application trusts forwarding proxies globally and chooses a forwarding header
+    or derived ip as rate-limit identity without a trusted-hop boundary.
+  primary_candidate: resetPasswordMortyChallenge
+  challenge_keys:
+  - resetPasswordMortyChallenge
+  source_anchors:
+  - file: server.ts
+    line_start: 359
+    line_end: 366
+    role: sink
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 4dffc3f59548bf9e925b1657dbd71333638fb97c1dc18f4ff822221022faf671
+    required_tokens:
+    - app.enable('trust proxy')
+    - keyGenerator
+    - ?? ip
+  http_anchors:
+  - method: POST
+    endpoint: /rest/user/reset-password
+    parameter: X-Forwarded-For / request ip
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 617
+      line_end: 618
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 7259126fee8cccb96849547fccd421db63925998fe31ea79a7391a821899b7dc
+      required_tokens:
+      - /rest/user/reset-password
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Direct access to the local app without an upstream proxy stripping caller forwarding headers; reset
+    endpoint available.
+  required_identity: null
+  expected_vulnerable_effect: Caller-controlled forwarding identity can partition the rate-limit bucket
+    for password-reset requests.
+  verification_criterion: Source condition is reviewed. Future verification must demonstrate fixed versus
+    varied forwarding identities within a preapproved small request budget and working limiter controls;
+    never brute-force accounts.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 978
+      line_end: 992
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: ea8460acb04ac3438822556636a10f3a446c038c0f61cccf76fba0d0e51b79f3
+      required_tokens:
+      - 'key: resetPasswordMortyChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: server.ts
+      line_start: 359
+      line_end: 366
+      role: sink
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 4dffc3f59548bf9e925b1657dbd71333638fb97c1dc18f4ff822221022faf671
+      required_tokens:
+      - app.enable('trust proxy')
+      - keyGenerator
+      - ?? ip
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: server.ts
+      line_start: 365
+      line_end: 365
+      role: provenance
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 94acb0de1168e587350522000db7734a36bd5f8288c14f150f3e1f3e8eab4022
+      required_tokens:
+      - resetPasswordMortyChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/forgotPassword.spec.ts
+      line_start: 86
+      line_end: 86
+      role: provenance
+      file_sha256: 07891e2c8d22e5b04dc4c0a7b146d5909af3dc987dc30f71825bf81516c1df46
+      region_sha256: d3c50249ac70f28cbc4afe246d8c8e5c69e3641a3f1387a2d0fc3c1ba4a92469
+      required_tokens:
+      - resetPasswordMortyChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-REDIRECT-001
+  expected: vulnerable
+  category: open-redirect
+  cwe: CWE-601
+  independence_group: juice-redirect-substring-allowlist
+  root_cause_key: redirect-substring-allowlist
+  root_cause_summary: The redirect helper accepts any URL containing an allowed URL as a substring, then
+    the route redirects to the whole attacker-controlled value.
+  primary_candidate: redirectChallenge
+  challenge_keys:
+  - redirectChallenge
+  source_anchors:
+  - file: routes/redirect.ts
+    line_start: 13
+    line_end: 18
+    role: caller
+    file_sha256: f1345c3bb3a276a4e80db74f5d1eee04cd62013e8d4d7730ef92153154484607
+    region_sha256: 20e57ccf54edc73c737312fe3c152c0e67cc8dce4822389a13d665107e69c984
+    required_tokens:
+    - isRedirectAllowed(toUrl)
+    - res.redirect(toUrl)
+  - file: lib/insecurity.ts
+    line_start: 133
+    line_end: 139
+    role: sink
+    file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: 4b0cf359f7594a535eadca0150ede3634eef12d3a22d3bacdac3510a0742fa3b
+    required_tokens:
+    - url.includes(allowedUrl)
+  http_anchors:
+  - method: GET
+    endpoint: /redirect
+    parameter: query.to
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 678
+      line_end: 679
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 93b16a378cd4cbbbf84c37867bca9f08a72fb3931cf7d51953edc932098c38c1
+      required_tokens:
+      - /redirect
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: calls
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: An off-allowlist destination can pass by embedding an allowed URL elsewhere
+    in its string.
+  verification_criterion: Use a non-resolving controlled destination and inspect the Location header without
+    following it; compare with legitimate allowlisted and rejected controls.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1238
+      line_end: 1251
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: a3ab93e3b51d3fe31b8f99a11d6625e0010cdc3c20ddf889fa43a9dcd708701c
+      required_tokens:
+      - 'key: redirectChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: lib/insecurity.ts
+      line_start: 133
+      line_end: 139
+      role: sink
+      file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+      region_sha256: 4b0cf359f7594a535eadca0150ede3634eef12d3a22d3bacdac3510a0742fa3b
+      required_tokens:
+      - url.includes(allowedUrl)
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: lib/insecurity.ts
+      line_start: 136
+      line_end: 136
+      role: provenance
+      file_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+      region_sha256: 8ee4557074ac34bd8fe5049e25259a7ea05b499ad9df8366bfab4f387286a62f
+      required_tokens:
+      - redirectChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/redirect.spec.ts
+      line_start: 2
+      line_end: 2
+      role: provenance
+      file_sha256: 2d33e1d7075e92e58b7f16a08f75a6566d9857b5991b9be1e4cb3d7024b8c991
+      region_sha256: 413c74f7cd0832027c2aed6d7ed99f9ef79ca46a9bceaf5998878253d0a76768
+      required_tokens:
+      - redirectChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-SQL-001
+  expected: vulnerable
+  category: sql-injection
+  cwe: CWE-89
+  independence_group: juice-search-query-sql-interpolation
+  root_cause_key: search-query-sql-interpolation
+  root_cause_summary: The search q value is interpolated into raw SQL LIKE clauses; truncation does not
+    bind or escape SQL syntax.
+  primary_candidate: unionSqlInjectionChallenge
+  challenge_keys:
+  - unionSqlInjectionChallenge
+  - dbSchemaChallenge
+  source_anchors:
+  - file: routes/search.ts
+    line_start: 21
+    line_end: 23
+    role: sink
+    file_sha256: de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057
+    region_sha256: 131727446bf466511fc9e6b9b953ed3546442db39ca1649526db79227af3833c
+    required_tokens:
+    - req.query.q
+    - models.sequelize.query
+  - file: server.ts
+    line_start: 621
+    line_end: 621
+    role: registration
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: cb46fde3b073595529ed6c365dc6ac05c4851044dfeba431df2f032fca5f9ce6
+    required_tokens:
+    - /rest/products/search
+  http_anchors:
+  - method: GET
+    endpoint: /rest/products/search
+    parameter: query.q
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 621
+      line_end: 622
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: fa10b43ee9f5a639a8e09c50378f8969ec6f7296a6f6e4a275107c79a74c0e8d
+      required_tokens:
+      - /rest/products/search
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Request input can change SQL predicates or return data beyond the product
+    search contract.
+  verification_criterion: In a future bounded local differential test, demonstrate changed SQL semantics
+    with controlled rows and a working benign search; no data dumping is required.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1169
+      line_end: 1181
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: f17e1e3510716b2603a64a64607ff79b4e6c6528c3aa83d7722ca68bf6ee575f
+      required_tokens:
+      - 'key: unionSqlInjectionChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/search.ts
+      line_start: 21
+      line_end: 23
+      role: sink
+      file_sha256: de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057
+      region_sha256: 131727446bf466511fc9e6b9b953ed3546442db39ca1649526db79227af3833c
+      required_tokens:
+      - req.query.q
+      - models.sequelize.query
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: routes/search.ts
+      line_start: 23
+      line_end: 23
+      role: provenance
+      file_sha256: de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057
+      region_sha256: 0489196b89c1cb9eb802488da2980aa864fde1376e85d75382f7e1390bc76afc
+      required_tokens:
+      - unionSqlInjectionChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/search.spec.ts
+      line_start: 34
+      line_end: 34
+      role: provenance
+      file_sha256: 241d6c65a1d16dc4ef4bb82be167e6a9ed0bc9f059a4dde8bbef220a2e4f6af2
+      region_sha256: 309f398e261c29b675f3be76b1894d511a72752706e5fb3e07d82222eed300c0
+      required_tokens:
+      - unionSqlInjectionChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-SQL-002
+  expected: vulnerable
+  category: sql-injection
+  cwe: CWE-89
+  independence_group: juice-login-email-sql-interpolation
+  root_cause_key: login-email-sql-interpolation
+  root_cause_summary: The email field is concatenated into the authentication SQL query before password
+    checks, allowing predicate manipulation.
+  primary_candidate: loginAdminChallenge
+  challenge_keys:
+  - loginAdminChallenge
+  - loginBenderChallenge
+  - loginJimChallenge
+  - ghostLoginChallenge
+  - ephemeralAccountantChallenge
+  source_anchors:
+  - file: routes/login.ts
+    line_start: 32
+    line_end: 50
+    role: sink
+    file_sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+    region_sha256: a72b07fd7fd62f256e24b33b0a8d0468838836d23be90428bf931c23cbed2ae2
+    required_tokens:
+    - req.body.email
+    - models.sequelize.query
+  - file: server.ts
+    line_start: 615
+    line_end: 615
+    role: registration
+    file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: a9a9950726a8f4d8d75e4594b2c98b86740ebd0f4a3fc7c3d6acd2d73a57031c
+    required_tokens:
+    - /rest/user/login
+  http_anchors:
+  - method: POST
+    endpoint: /rest/user/login
+    parameter: body.email
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 615
+      line_end: 616
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 317ab0006bb56d5d2c7e168663282ef29038412f0fd910c41fe7ec01e429d15b
+      required_tokens:
+      - /rest/user/login
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Authentication query manipulation may return another account and issue its
+    authenticated token.
+  verification_criterion: Compare a controlled account login with invalid credentials against a bounded
+    predicate manipulation; verify server identity rather than treating HTTP 200 as proof.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 603
+      line_end: 620
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 6508ce207a8cf49cfd615ca8e3a77e31390fa0ed5a306e49614302cdbdba0cfd
+      required_tokens:
+      - 'key: loginAdminChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/login.ts
+      line_start: 32
+      line_end: 50
+      role: sink
+      file_sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+      region_sha256: a72b07fd7fd62f256e24b33b0a8d0468838836d23be90428bf931c23cbed2ae2
+      required_tokens:
+      - req.body.email
+      - models.sequelize.query
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: routes/login.ts
+      line_start: 34
+      line_end: 34
+      role: provenance
+      file_sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+      region_sha256: 78718083440c5a11e97423b92f130991b0a3df2738edc20d3dd021a470a89b6c
+      required_tokens:
+      - loginAdminChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/api/vuln-code-snippet.test.ts
+      line_start: 60
+      line_end: 60
+      role: provenance
+      file_sha256: 66fc9c16823300e9333ec437775abf785b0209e10922d6fcdab62d89cb80d5ab
+      region_sha256: 0ea12b4b3e30c3b8a7d0366b065ca3a5018d3e452b0d188fb970b59b655ba459
+      required_tokens:
+      - loginAdminChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: holdout
+- id: JS-SSRF-001
+  expected: vulnerable
+  category: ssrf
+  cwe: CWE-918
+  independence_group: juice-profile-image-url-unrestricted-fetch
+  root_cause_key: profile-image-url-unrestricted-fetch
+  root_cause_summary: The image URL supplied by an authenticated profile request is fetched server-side
+    without a destination or redirect scope restriction.
+  primary_candidate: ssrfChallenge
+  challenge_keys:
+  - ssrfChallenge
+  source_anchors:
+  - file: routes/profileImageUrlUpload.ts
+    line_start: 18
+    line_end: 36
+    role: sink
+    file_sha256: 75140f35e65141135d3abb4b3b86aad1556c0d2a22d733ae1d50a127cd0cbb26
+    region_sha256: 667ca44c45d4d334ff79a140cb3eb781ea11ee5e0b72c2fb60b00b3626099dde
+    required_tokens:
+    - req.body.imageUrl
+    - await fetch(url)
+  http_anchors:
+  - method: POST
+    endpoint: /profile/image/url
+    parameter: body.imageUrl
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 330
+      line_end: 331
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 05abaa6b8ff65291f4f3fe07d1a5a7e3763560c59a851fcd22ae71ca3614bf82
+      required_tokens:
+      - /profile/image/url
+  client_route: null
+  relations: []
+  service: juice
+  runtime_prerequisites:
+  - An approved local internal observation fixture must exist before any SSRF runtime action.
+  required_identity: Authenticated disposable user with token cookie.
+  expected_vulnerable_effect: A user-controlled URL can make the target server request internal resources
+    outside the intended image-origin contract.
+  verification_criterion: Source-reviewed only. Future runtime proof requires an operator-owned internal
+    callback/resource fixture and independent request observation; never arbitrary Internet or production
+    destinations.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1004
+      line_end: 1017
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 2928c5f5a554d27bb02334b1a9b5586a6ab766811dc7639b7d5ad817b4e647dc
+      required_tokens:
+      - 'key: ssrfChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: routes/profileImageUrlUpload.ts
+      line_start: 18
+      line_end: 36
+      role: sink
+      file_sha256: 75140f35e65141135d3abb4b3b86aad1556c0d2a22d733ae1d50a127cd0cbb26
+      region_sha256: 667ca44c45d4d334ff79a140cb3eb781ea11ee5e0b72c2fb60b00b3626099dde
+      required_tokens:
+      - req.body.imageUrl
+      - await fetch(url)
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/profile.spec.ts
+      line_start: 5
+      line_end: 5
+      role: provenance
+      file_sha256: de5a8399ce82ee380defcffaab6bfa18a1dff4c08a6e32e3f93fcfcd52cc6edd
+      region_sha256: aa1344653365bb4fd7fdcb63a8e1151ad5ab052606f1e3ae1bf886d3bda1c213
+      required_tokens:
+      - ssrfChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: false
+  eligibility_reason: Docker code is present, but no approved bounded SSRF callback fixture is prepared
+    in A02; runtime eligibility remains false until its scope is independently reviewed.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-XSS-001
+  expected: vulnerable
+  category: xss
+  cwe: CWE-79
+  independence_group: juice-search-query-dom-trust-bypass
+  root_cause_key: search-query-dom-trust-bypass
+  root_cause_summary: Frontend search q is explicitly trusted as HTML and rendered with innerHTML, bypassing
+    Angular sanitization for attacker-controlled URL data.
+  primary_candidate: localXssChallenge
+  challenge_keys:
+  - localXssChallenge
+  - xssBonusChallenge
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    line_start: 135
+    line_end: 144
+    role: source
+    file_sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: f469ba3aa3c2b0d75d198863ac4a42198f07e03e54b7c6869ed5e1cd7c2664a4
+    required_tokens:
+    - queryParams.q
+    - bypassSecurityTrustHtml(queryParam)
+  - file: frontend/src/app/search-result/search-result.component.html
+    line_start: 8
+    line_end: 11
+    role: sink
+    file_sha256: 7736a256738752b90ff090c98174e2baff81d34e71e61718ee26c4f20f500929
+    region_sha256: 5ab0d5d65afe2bb50cb3c709390476760d24daf2304c6933beb520c19dcb8ef2
+    required_tokens:
+    - '[innerHTML]="searchValue"'
+  http_anchors: []
+  client_route: /#/search
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: renders
+  service: juice
+  runtime_prerequisites:
+  - Pinned target initialized with default application data; local disposable Docker only.
+  required_identity: null
+  expected_vulnerable_effect: Opening a crafted local search URL may execute attacker-controlled HTML
+    in the application origin.
+  verification_criterion: Use an inert marker or harmless origin-local browser effect with an availability
+    control in a disposable browser; no network exfiltration or external callbacks.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 264
+      line_end: 278
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: b3ed50be94900884de12634a8e7c199b42a5545be7f2ab4553d4ee35f7694a28
+      required_tokens:
+      - 'key: localXssChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: frontend/src/app/search-result/search-result.component.html
+      line_start: 8
+      line_end: 11
+      role: sink
+      file_sha256: 7736a256738752b90ff090c98174e2baff81d34e71e61718ee26c4f20f500929
+      region_sha256: 5ab0d5d65afe2bb50cb3c709390476760d24daf2304c6933beb520c19dcb8ef2
+      required_tokens:
+      - '[innerHTML]="searchValue"'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: frontend/src/app/search-result/search-result.component.ts
+      line_start: 144
+      line_end: 144
+      role: provenance
+      file_sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+      region_sha256: 2af28060d9273a6cb0ce0c67196169ea27fd0ed9fc7270bf835df37417b24f5a
+      required_tokens:
+      - localXssChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/cypress/e2e/search.spec.ts
+      line_start: 7
+      line_end: 7
+      role: provenance
+      file_sha256: 241d6c65a1d16dc4ef4bb82be167e6a9ed0bc9f059a4dde8bbef220a2e4f6af2
+      region_sha256: cc2233a953536dbeed2ebefdc582978c3a9ca3f4cadeb66d8258056305b89aff
+      required_tokens:
+      - localXssChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: true
+  eligibility_reason: No Docker disabling metadata or source guard for this reviewed flow; eligibility
+    is conditional on the stated local prerequisites, not existing capability support.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-XSS-002
+  expected: vulnerable
+  category: xss
+  cwe: CWE-79
+  independence_group: juice-product-description-stored-trust-bypass
+  root_cause_key: product-description-stored-trust-bypass
+  root_cause_summary: The challenge-enabled Product setter stores unsanitized descriptions, which frontend
+    trustProductDescription promotes to trusted HTML for a rendering sink.
+  primary_candidate: restfulXssChallenge
+  challenge_keys:
+  - restfulXssChallenge
+  source_anchors:
+  - file: models/product.ts
+    line_start: 43
+    line_end: 55
+    role: source
+    file_sha256: dfd8d17b1c7cd1055c987c6476017416447669af34f10926d9460541279b4da8
+    region_sha256: 6302cc7009a3ce75c6b7cde78858fc8c8c2001889f2e9eee1d9fe3eb26310c2d
+    required_tokens:
+    - isChallengeEnabled(challenges.restfulXssChallenge)
+    - setDataValue
+  - file: frontend/src/app/search-result/search-result.component.ts
+    line_start: 61
+    line_end: 78
+    role: helper
+    file_sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: e00bdeb093d4845afefd54ec85ecaf353f5d3aff02777faa01f6dcf7d99f8da7
+    required_tokens:
+    - trustProductDescription(products)
+    - 'description: product.description'
+  - file: frontend/src/app/search-result/search-result.component.ts
+    line_start: 109
+    line_end: 113
+    role: helper
+    file_sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: 69fd9898f30387594669ae5feefcf2e0b301bb1c45a3d5cecae3058fb781e41b
+    required_tokens:
+    - bypassSecurityTrustHtml
+  - file: frontend/src/app/product/product.component.ts
+    line_start: 182
+    line_end: 189
+    role: caller
+    file_sha256: fb913a7780fab60eb6d423da46f5e73c235625b1887da7eb42ad6d34cffb9e08
+    region_sha256: d74093752b1d2043c1b4f1fe0b88a78822cd4af3645e46542435b139d276c8dc
+    required_tokens:
+    - 'productData: product'
+  - file: frontend/src/app/product-details/product-details.component.html
+    line_start: 14
+    line_end: 16
+    role: sink
+    file_sha256: 13580c47a113dd45139c16701eab0d092acbc4ddf4ac6d78c4ed4a8dff20cb81
+    region_sha256: 31f6bef48174dca096a04588b88a1a0e2abf37d93029d986283656d93aa9d520
+    required_tokens:
+    - '[innerHTML]="data.productData.description"'
+  http_anchors:
+  - method: POST
+    endpoint: /api/Products
+    parameter: body.description
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 388
+      line_end: 388
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 9ce859f761ff09ecd4a4aaaf113457875b4bae954e465649c4f14376737607af
+      required_tokens:
+      - /api/Products
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: supplies
+  - from_anchor: 1
+    to_anchor: 2
+    relation: calls
+  - from_anchor: 3
+    to_anchor: 4
+    relation: renders
+  service: juice
+  runtime_prerequisites:
+  - The unsafe product setter requires restfulXssChallenge enabled outside the baseline Docker environment.
+  required_identity: Authenticated customer creating a controlled product; separate viewing session.
+  expected_vulnerable_effect: With the unsafe upstream branch enabled, a stored product description can
+    reach HTML execution in another product view.
+  verification_criterion: 'Detection-only now: trace guarded persistence and trusted rendering. The upstream
+    REST API test is xit and Docker-guarded, so it is not proof of current runtime execution.'
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 13
+      line_end: 28
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: 9972686bb1e1e32ba2aecd844ab4f1bd5ca303b794e04e31f591b87e879ff20f
+      required_tokens:
+      - 'key: restfulXssChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: frontend/src/app/product-details/product-details.component.html
+      line_start: 14
+      line_end: 16
+      role: sink
+      file_sha256: 13580c47a113dd45139c16701eab0d092acbc4ddf4ac6d78c4ed4a8dff20cb81
+      region_sha256: 31f6bef48174dca096a04588b88a1a0e2abf37d93029d986283656d93aa9d520
+      required_tokens:
+      - '[innerHTML]="data.productData.description"'
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: source_annotation
+    anchor:
+      file: frontend/src/app/search-result/search-result.component.ts
+      line_start: 111
+      line_end: 111
+      role: provenance
+      file_sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+      region_sha256: be429e52f8c2bc589f8cf66b8bb4ab9165da9e8bc1dc46e41342a43738522212
+      required_tokens:
+      - restfulXssChallenge
+    explanation: Official vulnerable-line annotation links this scenario to source; the reviewed flow,
+      not the annotation alone, establishes the cause.
+  - kind: upstream_test
+    anchor:
+      file: test/api/product.test.ts
+      line_start: 57
+      line_end: 57
+      role: provenance
+      file_sha256: 79c3eb348cba1da09de4553ac0a60c507e76817a63a2f609d97a58f702818ba5
+      region_sha256: 7d339d6224548b6288e22d4fa3e70b8540c463652033b71b95a024bf66f23478
+      required_tokens:
+      - restfulXssChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: false
+  eligibility_reason: restfulXssChallenge is Docker-disabled; models/product.ts sanitizes description
+    in the normal Docker branch. Upstream exploit test is explicitly skipped.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development
+- id: JS-XXE-001
+  expected: vulnerable
+  category: xml-external-entities
+  cwe: CWE-611
+  independence_group: juice-xml-external-entity-enabled-parser
+  root_cause_key: xml-external-entity-enabled-parser
+  root_cause_summary: The XML parser enables entity substitution and external DTD loading and explicitly
+    registers host filesystem input providers inside the target process.
+  primary_candidate: xxeFileDisclosureChallenge
+  challenge_keys:
+  - xxeFileDisclosureChallenge
+  - xxeDosChallenge
+  source_anchors:
+  - file: routes/fileUpload.ts
+    line_start: 70
+    line_end: 79
+    role: caller
+    file_sha256: c2a5c6d051272fe45683fbf67d4beb707c28fb09450b21d514a59d732b376aa0
+    region_sha256: befcaeca38336c5ed4b1f5339b0412b066cf61561f5b18130c2430952e870fd9
+    required_tokens:
+    - isChallengeEnabled(challenges.deprecatedInterfaceChallenge)
+    - parseXmlString(data)
+  - file: lib/xml.ts
+    line_start: 17
+    line_end: 38
+    role: sink
+    file_sha256: 5ce88c29216dceb3a14393476df0729719cebc4e5a59b47e033ca67cb9a8c357
+    region_sha256: 9424e346be8e082c400615c3b5356eeef597cda21d85bfa6a4939ecf343a6962
+    required_tokens:
+    - xmlRegisterFsInputProviders()
+    - XML_PARSE_NOENT
+    - XML_PARSE_DTDLOAD
+  http_anchors:
+  - method: POST
+    endpoint: /file-upload
+    parameter: multipart XML document
+    basis: direct_express
+    registration:
+      file: server.ts
+      line_start: 328
+      line_end: 329
+      role: registration
+      file_sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+      region_sha256: 946c7060655db89bf83abfe855723bd99b622a4dd33d1fe7440996a4c806834f
+      required_tokens:
+      - /file-upload
+  client_route: null
+  relations:
+  - from_anchor: 0
+    to_anchor: 1
+    relation: calls
+  service: juice
+  runtime_prerequisites:
+  - Unsafe XML branch requires deprecatedInterfaceChallenge enabled outside the baseline environment.
+  required_identity: null
+  expected_vulnerable_effect: In the unsafe branch an external entity may read target-container files
+    and surface their substituted content through an error response.
+  verification_criterion: Detection-only now. Any future independently reviewed test must use a harmless
+    container-only fixture; never host file disclosure, external entities to Internet destinations or
+    expansion bombs.
+  provenance:
+  - kind: challenge_metadata
+    anchor:
+      file: data/static/challenges.yml
+      line_start: 1252
+      line_end: 1267
+      role: provenance
+      file_sha256: 8efa070380ab8f39783eb92cbaaf9df67bcee0f1715eee98a06fb1176051c2b7
+      region_sha256: c53f418c45235ffab4b014a39c84e46b9feaed62c1a3b7bfee443d262796a7dd
+      required_tokens:
+      - 'key: xxeFileDisclosureChallenge'
+    explanation: Official upstream challenge metadata identifies the related scenario, not a separate
+      independent root cause.
+  - kind: source_code
+    anchor:
+      file: lib/xml.ts
+      line_start: 17
+      line_end: 38
+      role: sink
+      file_sha256: 5ce88c29216dceb3a14393476df0729719cebc4e5a59b47e033ca67cb9a8c357
+      region_sha256: 9424e346be8e082c400615c3b5356eeef597cda21d85bfa6a4939ecf343a6962
+      required_tokens:
+      - xmlRegisterFsInputProviders()
+      - XML_PARSE_NOENT
+      - XML_PARSE_DTDLOAD
+    explanation: Reviewed application source contains the decisive unsafe operation; source condition
+      is not runtime Evidence.
+  - kind: upstream_test
+    anchor:
+      file: test/api/file-upload.test.ts
+      line_start: 63
+      line_end: 63
+      role: provenance
+      file_sha256: c5939e9dc9c4e815a56f6dd5ea9ba6749d64b88dc25250ba9ed538f292a6c510
+      region_sha256: cbc59e043870f6a864124a4438a900b8a32e4d56792e68abecf9cf103cf2c957
+      required_tokens:
+      - xxeFileDisclosureChallenge
+    explanation: Upstream test source references this scenario. Tests were read, not executed; skipped
+      or guarded tests do not establish current Docker behavior.
+  runtime_eligible: false
+  eligibility_reason: xxeFileDisclosureChallenge, xxeDosChallenge and the deprecatedInterface source guard
+    are Docker-disabled; default Docker does not enter the unsafe XML parser.
+  detection_only_eligible: true
+  future_runtime_evaluation: possible_with_reviewed_environment
+  execution_restrictions:
+  - No execution in A02; no production targets or host execution.
+  - Any future action requires an independently approved bounded verification and working availability
+    controls; no permission is granted by this catalog.
+  review_status: source_reviewed_positive
+  reviewer_status: single_reviewer_pending_independent_review
+  review_basis: 'Codex source review: traced input to the specified sink at the pinned commit, checked
+    metadata and related source/test references, and compared remediation/root cause against the other
+    selected cases. Independent human review remains pending A04.'
+  split: development

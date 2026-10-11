@@ -1,0 +1,332 @@
+schema_version: a03.1.dispositions.v1
+candidates:
+- id: JS-PATCH-CAND-accessLogDisclosureChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-accessLogDisclosureChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-adminSectionChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-adminSectionChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-changeProductChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-changeProductChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-chatbotGreedyInjectionChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-chatbotGreedyInjectionChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-chatbotPromptInjectionChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-chatbotPromptInjectionChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-dbSchemaChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-dbSchemaChallenge-2
+    reason: correct_fix_not_applicable
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-directoryListingChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-directoryListingChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-exposedMetricsChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-exposedMetricsChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: excluded
+  reason: official isAdmin helper is absent in pinned insecurity module; two route
+    registrations need coverage
+- id: JS-PATCH-CAND-forgedReviewChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-forgedReviewChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-iacLeakedKeyChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-iacLeakedKeyChallenge-3
+    reason: source_mismatch
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-localXssChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-localXssChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: frontend source snippet; Stage1 copies prebaked frontend-dist and does not
+    build this source
+- id: JS-PATCH-CAND-loginAdminChallenge-4
+  previous_disposition:
+    id: JS-PATCH-CAND-loginAdminChallenge-4
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-loginBenderChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-loginBenderChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-loginJimChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-loginJimChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-nftMintChallenge-4
+  previous_disposition:
+    id: JS-PATCH-CAND-nftMintChallenge-4
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-nftUnlockChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-nftUnlockChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-noSqlReviewsChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-noSqlReviewsChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: reviewed
+  reason: All functional stages and independent oracle accepted
+  candidate: nosql
+  control_id: JS-SAFE-NOSQL-101
+- id: JS-PATCH-CAND-redirectChallenge-4
+  previous_disposition:
+    id: JS-PATCH-CAND-redirectChallenge-4
+    reason: build_failure
+    disposition: excluded
+    detail: 'Patch applies and builds, but upstream tests intentionally require vulnerable
+      substring redirects: 2 failures, no safe verdict'
+    patch_reference: patches/redirect-exact.patch
+    patch_sha256: b67e41dac259982a17f9badec0be5fb528fc80bddfe67ba4c050f1a1b8c04640
+    source_sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/redirect-rejected/reset-evidence.json
+    evidence_sha256: 8e7a275e690b026412c481bf4f691e1f42705407ef12a4d673af5bd2b4429f8e
+    original_unchanged: true
+    cleanup_complete: true
+  status: reviewed
+  reason: All functional stages and independent oracle accepted
+  candidate: redirect
+  control_id: JS-SAFE-REDIRECT-101
+- id: JS-PATCH-CAND-redirectCryptoCurrencyChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-redirectCryptoCurrencyChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-registerAdminChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-registerAdminChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: official send.before changes role after database creation; persisted role
+    correspondence not proven
+- id: JS-PATCH-CAND-resetPasswordBenderChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-resetPasswordBenderChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-resetPasswordBjoernChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-resetPasswordBjoernChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-resetPasswordBjoernOwaspChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-resetPasswordBjoernOwaspChallenge-2
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-resetPasswordJimChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-resetPasswordJimChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-resetPasswordMortyChallenge-4
+  previous_disposition:
+    id: JS-PATCH-CAND-resetPasswordMortyChallenge-4
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-resetPasswordUvoginChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-resetPasswordUvoginChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-restfulXssChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-restfulXssChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: frontend source snippet; independent browser/render and rebuilt frontend
+    unavailable in existing adapter
+- id: JS-PATCH-CAND-scoreBoardChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-scoreBoardChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-tokenSaleChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-tokenSaleChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-unionSqlInjectionChallenge-2
+  previous_disposition:
+    id: JS-PATCH-CAND-unionSqlInjectionChallenge-2
+    reason: correct_fix_not_applicable
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-vulnerableDockerImageChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-vulnerableDockerImageChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-weakPasswordChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-weakPasswordChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-web3SandboxChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-web3SandboxChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-web3WalletChallenge-3
+  previous_disposition:
+    id: JS-PATCH-CAND-web3WalletChallenge-3
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage
+- id: JS-PATCH-CAND-xssBonusChallenge-1
+  previous_disposition:
+    id: JS-PATCH-CAND-xssBonusChallenge-1
+    reason: cannot_prove_safe
+    disposition: pending
+    detail: No complete applied patch/build/availability/property proof; official
+      answer alone is insufficient
+  status: pending
+  reason: not_selected_after_static_triage

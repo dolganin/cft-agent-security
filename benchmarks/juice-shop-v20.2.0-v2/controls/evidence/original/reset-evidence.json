@@ -1,0 +1,205 @@
+{
+  "schema_version": "a03.reset_evidence.v1",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "image": "cft-fix-juice@sha256:b3c854f853e6bb2f2b5bd261d1766c11904afd1bc497b481d2b9a3b77033c9c5",
+  "original_tree_sha256": "3673ec989f4e472fe42b40257f1634116f5ce7656f1542de9321d4233daf199c",
+  "cycles": [
+    {
+      "properties": {
+        "address_owner": {
+          "reachable": true,
+          "legitimate_request": true,
+          "property_assertion": true,
+          "fresh_state": true,
+          "owner_identity": true,
+          "other_identity": true,
+          "owned_object": true,
+          "ownership": true,
+          "sessions_after": true,
+          "build": true,
+          "tests": true,
+          "start": true,
+          "smoke": true,
+          "cleanup": true,
+          "original_unchanged": true,
+          "snapshot_removed": true
+        },
+        "card_owner": {
+          "reachable": true,
+          "legitimate_request": true,
+          "property_assertion": true,
+          "fresh_state": true,
+          "owner_identity": true,
+          "other_identity": true,
+          "owned_object": true,
+          "ownership": true,
+          "sessions_after": true,
+          "build": true,
+          "tests": true,
+          "start": true,
+          "smoke": true,
+          "cleanup": true,
+          "original_unchanged": true,
+          "snapshot_removed": true
+        },
+        "card_mask": {
+          "reachable": true,
+          "legitimate_request": true,
+          "property_assertion": true,
+          "fresh_state": true,
+          "build": true,
+          "tests": true,
+          "start": true,
+          "smoke": true,
+          "cleanup": true,
+          "original_unchanged": true,
+          "snapshot_removed": true
+        }
+      },
+      "stages": {
+        "prepare": {
+          "passed": true,
+          "execution_ref": "execution-400665001f14446eb92f83d00b63fdb8",
+          "audit_ref": "audit:d496575ddfd244469ece7a7cf270656d",
+          "record_file": "cycle-1/prepare.json",
+          "record_sha256": "0476c20c5d1e807287dde27e0b3aa1f4547b32461ab49781d7681b81937bc4bf"
+        },
+        "build": {
+          "passed": true,
+          "execution_ref": "execution-6ea41dda5f574f2d81fad04d95c6f5f9",
+          "audit_ref": "audit:b798fe5476db4d37921d088e2023d9b8",
+          "record_file": "cycle-1/build.json",
+          "record_sha256": "7c548dcb1fec661e6adb488eaa25400d8c7a84182409c8f6e6d643f416f05bc9"
+        },
+        "tests": {
+          "passed": true,
+          "execution_ref": "execution-63a1a921a7c14a83a35a43da668295e4",
+          "audit_ref": "audit:138465f443e9426fba55fc1278bcf4cb",
+          "record_file": "cycle-1/tests.json",
+          "record_sha256": "763059f5917ee84a9813ab675141d1a667d6ba629f6a11e850a9679cb4fe100b"
+        },
+        "start": {
+          "passed": true,
+          "execution_ref": "execution-dd1dda9df03549b6adee93b9196fb615",
+          "audit_ref": "audit:381e9f1319424bc5897cdbea87626579",
+          "record_file": "cycle-1/start.json",
+          "record_sha256": "d806414cda0345962154d6a658dd2757e30221a89352033b46bd57ef9da80b4b"
+        },
+        "smoke": {
+          "passed": true,
+          "execution_ref": "execution-bb899d22500b4893b4783b6ce3515b4a",
+          "audit_ref": "audit:56892ab4947646b1b53f1ac586210603",
+          "record_file": "cycle-1/smoke.json",
+          "record_sha256": "cb5220e45aef255d05638c20120a95bf859fa81a6043487265c9621d53412589"
+        }
+      },
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-248f7ecb894c4f3c8258",
+      "network": "cft-fix-248f7ecb894c4f3c8258-net",
+      "baseline": "ea2ce6b7a568e3f7634d3a0b5ebc8e91c583a8c49ddb5d6308895f7002176806",
+      "snapshot_removed": true,
+      "audit_file": "cycle-1/audit.jsonl",
+      "audit_sha256": "c385476e1eba78b2f45ca320b96e984c200867af115cff6b3a4ea1320789b6d1"
+    },
+    {
+      "properties": {
+        "address_owner": {
+          "reachable": true,
+          "legitimate_request": true,
+          "property_assertion": true,
+          "fresh_state": true,
+          "owner_identity": true,
+          "other_identity": true,
+          "owned_object": true,
+          "ownership": true,
+          "sessions_after": true,
+          "build": true,
+          "tests": true,
+          "start": true,
+          "smoke": true,
+          "cleanup": true,
+          "original_unchanged": true,
+          "snapshot_removed": true
+        },
+        "card_owner": {
+          "reachable": true,
+          "legitimate_request": true,
+          "property_assertion": true,
+          "fresh_state": true,
+          "owner_identity": true,
+          "other_identity": true,
+          "owned_object": true,
+          "ownership": true,
+          "sessions_after": true,
+          "build": true,
+          "tests": true,
+          "start": true,
+          "smoke": true,
+          "cleanup": true,
+          "original_unchanged": true,
+          "snapshot_removed": true
+        },
+        "card_mask": {
+          "reachable": true,
+          "legitimate_request": true,
+          "property_assertion": true,
+          "fresh_state": true,
+          "build": true,
+          "tests": true,
+          "start": true,
+          "smoke": true,
+          "cleanup": true,
+          "original_unchanged": true,
+          "snapshot_removed": true
+        }
+      },
+      "stages": {
+        "prepare": {
+          "passed": true,
+          "execution_ref": "execution-d461d26726664312b318654608851fe8",
+          "audit_ref": "audit:9e3aab8c1e4d48feaf1c8fd0bdab9fa1",
+          "record_file": "cycle-2/prepare.json",
+          "record_sha256": "a88431e1ef8ed4650df62eb1e9740c1c4ad3ad3fe6b66b8824465d57b9b74177"
+        },
+        "build": {
+          "passed": true,
+          "execution_ref": "execution-b1089e0e6c1f4950a1390c799c972eca",
+          "audit_ref": "audit:137498f9da2a47f4ac76eb34f0276308",
+          "record_file": "cycle-2/build.json",
+          "record_sha256": "81d1a90a1932b484e63be887f8d30b6c96fef993ce6c5863f773918b0c46d888"
+        },
+        "tests": {
+          "passed": true,
+          "execution_ref": "execution-e19f3c0586e8427aa1b750ae326029bf",
+          "audit_ref": "audit:ae560cca8b924ddbab9e2fceed1af237",
+          "record_file": "cycle-2/tests.json",
+          "record_sha256": "02f8cb2a6f6ba77d4592a05985538cffb46b64707852f808607ddfaecc4cf5f7"
+        },
+        "start": {
+          "passed": true,
+          "execution_ref": "execution-4bf70c2398dd430d98d3f576a05e25b0",
+          "audit_ref": "audit:1851e78a355e4a33a3ec4cb84f974e52",
+          "record_file": "cycle-2/start.json",
+          "record_sha256": "2e47b414039b5275e1328f3c83195298e9cc08ff9cd8090b6deef257d8405fb9"
+        },
+        "smoke": {
+          "passed": true,
+          "execution_ref": "execution-5b5f7c08e74a4b0dbc8ee0fa97837fc8",
+          "audit_ref": "audit:16d0ce816c2241f8ae2ad748ebe22a1c",
+          "record_file": "cycle-2/smoke.json",
+          "record_sha256": "a09981da15ce9c758bb7e490795468f499d7cf4e294df33cdddb1d71c4d4f8e1"
+        }
+      },
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-9ae87de4d8ed40bda552",
+      "network": "cft-fix-9ae87de4d8ed40bda552-net",
+      "baseline": "ea2ce6b7a568e3f7634d3a0b5ebc8e91c583a8c49ddb5d6308895f7002176806",
+      "snapshot_removed": true,
+      "audit_file": "cycle-2/audit.jsonl",
+      "audit_sha256": "a0fca2c70d93476a5f4ad7c85566727bd9c078c57ec02d5bcf5fe1faa4dce1a8"
+    }
+  ],
+  "bootstrap_sha256": "9e6c697b115f96b15b8a771cc1e8857afe87d71e3a3ee3118dbfc14773731d63"
+}

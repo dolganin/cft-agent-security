@@ -86,6 +86,14 @@ jobs:
           persist-credentials: false
           token: ${{ secrets.AGENT_REPOSITORY_TOKEN || github.token }}
 
+      - name: Checkout pinned Juice Shop source fixtures
+        uses: actions/checkout@v4
+        with:
+          repository: juice-shop/juice-shop
+          ref: 5658473cf8814459bf89000ce373b20ed0b4eb37
+          path: artifacts/benchmark-target/juice-shop
+          persist-credentials: false
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

@@ -1,0 +1,582 @@
+schema_version: benchmark.exclusions.a02.v1
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+exclusions:
+- candidate_key: accessLogDisclosureChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-FILE-001; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-FILE-001
+  not_a_negative_label: true
+- candidate_key: adminSectionChallenge
+  reason: other
+  detail: Deferred source review for Admin Section (Broken Access Control). 3 source-reference files are
+    inventoried, but an additional independent vulnerable effect was not fully established in the bounded
+    A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: aiDebuggingChallenge
+  reason: requires_external_service
+  detail: This AI Debugging scenario depends on provider/chain functionality or additional service assumptions
+    not established in the controlled pinned benchmark; source references are retained for future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: chatbotGreedyInjectionChallenge
+  reason: requires_external_service
+  detail: This Greedy Chatbot Manipulation scenario depends on provider/chain functionality or additional
+    service assumptions not established in the controlled pinned benchmark; source references are retained
+    for future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: chatbotPromptInjectionChallenge
+  reason: requires_external_service
+  detail: This Chatbot Prompt Injection scenario depends on provider/chain functionality or additional
+    service assumptions not established in the controlled pinned benchmark; source references are retained
+    for future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: christmasSpecialChallenge
+  reason: other
+  detail: Deferred source review for Christmas Special (Injection). 2 source-reference files are inventoried,
+    but an additional independent vulnerable effect was not fully established in the bounded A02 review.
+    This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: closeNotificationsChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Mass Dispel remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: continueCodeChallenge
+  reason: other
+  detail: Deferred source review for Imaginary Challenge (Cryptographic Issues). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: csafChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Security Advisory remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: csrfChallenge
+  reason: other
+  detail: Deferred source review for CSRF (Broken Access Control). 2 source-reference files are inventoried,
+    but an additional independent vulnerable effect was not fully established in the bounded A02 review.
+    This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: dataExportChallenge
+  reason: other
+  detail: Deferred source review for GDPR Data Theft (Sensitive Data Exposure). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: dbSchemaChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-SQL-001; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-SQL-001
+  not_a_negative_label: true
+- candidate_key: deprecatedInterfaceChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Deprecated Interface remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: dlpPasswordSprayingChallenge
+  reason: pure_game_or_osint
+  detail: This Leaked Access Logs challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: dlpPastebinDataLeakChallenge
+  reason: pure_game_or_osint
+  detail: This Leaked Unsafe Product challenge requires game/OSINT or externally obtained facts; it is
+    not accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: easterEggLevelOneChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-FILE-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-FILE-002
+  not_a_negative_label: true
+- candidate_key: easterEggLevelTwoChallenge
+  reason: pure_game_or_osint
+  detail: This Nested Easter Egg challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: emailLeakChallenge
+  reason: other
+  detail: Deferred source review for Email Leak (Sensitive Data Exposure). 2 source-reference files are
+    inventoried, but an additional independent vulnerable effect was not fully established in the bounded
+    A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: emptyUserRegistration
+  reason: other
+  detail: Deferred source review for Empty User Registration (Improper Input Validation). 2 source-reference
+    files are inventoried, but an additional independent vulnerable effect was not fully established in
+    the bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: ephemeralAccountantChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-SQL-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-SQL-002
+  not_a_negative_label: true
+- candidate_key: errorHandlingChallenge
+  reason: other
+  detail: Deferred source review for Error Handling (Security Misconfiguration). 3 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: exposedCredentialsChallenge
+  reason: other
+  detail: Deferred source review for Exposed Credentials (Sensitive Data Exposure). 2 source-reference
+    files are inventoried, but an additional independent vulnerable effect was not fully established in
+    the bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: extraLanguageChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Extra Language remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: feedbackChallenge
+  reason: other
+  detail: Deferred source review for Five-Star Feedback (Broken Access Control). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: forgottenBackupChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-FILE-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-FILE-002
+  not_a_negative_label: true
+- candidate_key: forgottenDevBackupChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-FILE-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-FILE-002
+  not_a_negative_label: true
+- candidate_key: freeDeluxeChallenge
+  reason: other
+  detail: Deferred source review for Deluxe Fraud (Improper Input Validation). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: geoStalkingMetaChallenge
+  reason: pure_game_or_osint
+  detail: This Meta Geo Stalking challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: geoStalkingVisualChallenge
+  reason: pure_game_or_osint
+  detail: This Visual Geo Stalking challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: ghostLoginChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-SQL-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-SQL-002
+  not_a_negative_label: true
+- candidate_key: hiddenImageChallenge
+  reason: pure_game_or_osint
+  detail: This Steganography challenge requires game/OSINT or externally obtained facts; it is not accepted
+    as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: httpHeaderXssChallenge
+  reason: docker_disabled
+  detail: Upstream disables HTTP-Header XSS in Docker. No separate source-reviewed positive for this flow
+    is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: iacLeakedKeyChallenge
+  reason: other
+  detail: Deferred source review for Login Cloud Admin (Sensitive Data Exposure). 4 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: jwtForgedChallenge
+  reason: other
+  detail: Deferred source review for Forged Signed JWT (Vulnerable Components). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: jwtUnsignedChallenge
+  reason: other
+  detail: Deferred source review for Unsigned JWT (Vulnerable Components). 2 source-reference files are
+    inventoried, but an additional independent vulnerable effect was not fully established in the bounded
+    A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: knownVulnerableComponentChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Vulnerable Library remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: leakedApiKeyChallenge
+  reason: other
+  detail: Deferred source review for Leaked API Key (Sensitive Data Exposure). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: lfrChallenge
+  reason: docker_disabled
+  detail: Upstream disables Local File Read in Docker. No separate source-reviewed positive for this flow
+    is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: loginAmyChallenge
+  reason: pure_game_or_osint
+  detail: This Login Amy challenge requires game/OSINT or externally obtained facts; it is not accepted
+    as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: loginBenderChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-SQL-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-SQL-002
+  not_a_negative_label: true
+- candidate_key: loginJimChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-SQL-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-SQL-002
+  not_a_negative_label: true
+- candidate_key: loginRapperChallenge
+  reason: pure_game_or_osint
+  detail: This Login MC SafeSearch challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: loginSupportChallenge
+  reason: other
+  detail: Deferred source review for Login Support Team (Security Misconfiguration). 3 source-reference
+    files are inventoried, but an additional independent vulnerable effect was not fully established in
+    the bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: manipulateClockChallenge
+  reason: other
+  detail: Deferred source review for Expired Coupon (Improper Input Validation). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: misplacedIacFiles
+  reason: other
+  detail: Deferred source review for Misplaced IaC Files (Security Misconfiguration). 3 source-reference
+    files are inventoried, but an additional independent vulnerable effect was not fully established in
+    the bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: misplacedSignatureFileChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-FILE-002; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-FILE-002
+  not_a_negative_label: true
+- candidate_key: missingEncodingChallenge
+  reason: pure_game_or_osint
+  detail: This Missing Encoding challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: nftMintChallenge
+  reason: requires_external_service
+  detail: This Mint the Honey Pot scenario depends on provider/chain functionality or additional service
+    assumptions not established in the controlled pinned benchmark; source references are retained for
+    future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: nftUnlockChallenge
+  reason: requires_external_service
+  detail: This NFT Takeover scenario depends on provider/chain functionality or additional service assumptions
+    not established in the controlled pinned benchmark; source references are retained for future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: noSqlCommandChallenge
+  reason: docker_disabled
+  detail: Upstream disables NoSQL DoS in Docker. No separate source-reviewed positive for this flow is
+    claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: oauthUserPasswordChallenge
+  reason: other
+  detail: Deferred source review for Login Bjoern (Broken Authentication). 2 source-reference files are
+    inventoried, but an additional independent vulnerable effect was not fully established in the bounded
+    A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: passwordRepeatChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Repetitive Registration remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: persistedXssFeedbackChallenge
+  reason: docker_disabled
+  detail: Upstream disables Server-side XSS Protection in Docker. No separate source-reviewed positive
+    for this flow is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: persistedXssUserChallenge
+  reason: docker_disabled
+  detail: Upstream disables Client-side XSS Protection in Docker. No separate source-reviewed positive
+    for this flow is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: premiumPaywallChallenge
+  reason: other
+  detail: Deferred source review for Premium Paywall (Cryptographic Issues). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: privacyPolicyChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Privacy Policy remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: privacyPolicyProofChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Privacy Policy Inspection remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: rceChallenge
+  reason: docker_disabled
+  detail: Upstream disables Blocked RCE DoS in Docker. No separate source-reviewed positive for this flow
+    is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: rceOccupyChallenge
+  reason: docker_disabled
+  detail: Upstream disables Successful RCE DoS in Docker. No separate source-reviewed positive for this
+    flow is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: redirectCryptoCurrencyChallenge
+  reason: other
+  detail: Deferred source review for Outdated Allowlist (Unvalidated Redirects). 3 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: reflectedXssChallenge
+  reason: docker_disabled
+  detail: The separate reflected-XSS rendering effect is Docker-disabled and not counted as the selected
+    NoSQL root cause. Its flag is retained as the unsafe input-branch prerequisite of JS-NOSQL-002.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: resetPasswordBenderChallenge
+  reason: pure_game_or_osint
+  detail: This Reset Bender's Password challenge requires game/OSINT or externally obtained facts; it
+    is not accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: resetPasswordBjoernChallenge
+  reason: pure_game_or_osint
+  detail: This Reset Bjoern's Password challenge requires game/OSINT or externally obtained facts; it
+    is not accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: resetPasswordBjoernOwaspChallenge
+  reason: pure_game_or_osint
+  detail: This Bjoern's Favorite Pet challenge requires game/OSINT or externally obtained facts; it is
+    not accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: resetPasswordJimChallenge
+  reason: pure_game_or_osint
+  detail: This Reset Jim's Password challenge requires game/OSINT or externally obtained facts; it is
+    not accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: resetPasswordUvoginChallenge
+  reason: pure_game_or_osint
+  detail: This Reset Uvogin's Password challenge requires game/OSINT or externally obtained facts; it
+    is not accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: retrieveBlueprintChallenge
+  reason: pure_game_or_osint
+  detail: This Retrieve Blueprint challenge requires game/OSINT or externally obtained facts; it is not
+    accepted as a new independently source-substantiated root cause in this A02 review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: scoreBoardChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Score Board remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: securityPolicyChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Security Policy remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: supplyChainAttackChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Supply Chain Attack remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: svgInjectionChallenge
+  reason: other
+  detail: Deferred source review for Cross-Site Imaging (Security Misconfiguration). 2 source-reference
+    files are inventoried, but an additional independent vulnerable effect was not fully established in
+    the bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: systemPromptExtractionChallenge
+  reason: requires_external_service
+  detail: This System Prompt Extraction scenario depends on provider/chain functionality or additional
+    service assumptions not established in the controlled pinned benchmark; source references are retained
+    for future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: timingAttackChallenge
+  reason: other
+  detail: Deferred source review for Multiple Likes (Broken Anti Automation). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: tokenSaleChallenge
+  reason: requires_external_service
+  detail: This Blockchain Hype scenario depends on provider/chain functionality or additional service
+    assumptions not established in the controlled pinned benchmark; source references are retained for
+    future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: twoFactorAuthUnsafeSecretStorageChallenge
+  reason: other
+  detail: Deferred source review for Two Factor Authentication (Broken Authentication). 2 source-reference
+    files are inventoried, but an additional independent vulnerable effect was not fully established in
+    the bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: typosquattingAngularChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Frontend Typosquatting remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: typosquattingNpmChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Legacy Typosquatting remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: uploadSizeChallenge
+  reason: other
+  detail: Deferred source review for Upload Size (Improper Input Validation). 3 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: uploadTypeChallenge
+  reason: other
+  detail: Deferred source review for Upload Type (Improper Input Validation). 3 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: usernameXssChallenge
+  reason: docker_disabled
+  detail: The separate CSP/XSS effect is Docker-disabled and is not counted as an additional reviewed
+    cause. Its enablement guard is retained as a prerequisite of JS-CODE-001.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: videoXssChallenge
+  reason: docker_disabled
+  detail: Upstream disables Video XSS in Docker. No separate source-reviewed positive for this flow is
+    claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: vulnerableDockerImageChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Vulnerable Infrastructure remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: web3SandboxChallenge
+  reason: requires_external_service
+  detail: This Web3 Sandbox scenario depends on provider/chain functionality or additional service assumptions
+    not established in the controlled pinned benchmark; source references are retained for future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: web3WalletChallenge
+  reason: requires_external_service
+  detail: This Wallet Depletion scenario depends on provider/chain functionality or additional service
+    assumptions not established in the controlled pinned benchmark; source references are retained for
+    future review.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: weirdCryptoChallenge
+  reason: not_security_vulnerability
+  detail: The game/discovery or component-identification goal alone does not establish an additional vulnerable
+    application flow. Weird Crypto remains inventoried; no negative security label is inferred.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: xssBonusChallenge
+  reason: duplicate_root_cause
+  detail: This additional challenge/scenario is represented by the reviewed cause JS-XSS-001; it does
+    not create another positive. See that case source anchors and grouping rationale.
+  represented_by:
+  - JS-XSS-001
+  not_a_negative_label: true
+- candidate_key: xxeDosChallenge
+  reason: unsafe_to_execute
+  detail: Entity-expansion DoS shares the selected unsafe XML parser configuration but is not a separate
+    counted positive; expansion-bomb execution is forbidden in this catalog.
+  represented_by:
+  - JS-XXE-001
+  not_a_negative_label: true
+- candidate_key: yamlBombChallenge
+  reason: docker_disabled
+  detail: Upstream disables Memory Bomb in Docker. No separate source-reviewed positive for this flow
+    is claimed here; retain the candidate without relaxing environment safety.
+  represented_by: []
+  not_a_negative_label: true
+- candidate_key: zeroStarsChallenge
+  reason: other
+  detail: Deferred source review for Zero Stars (Improper Input Validation). 2 source-reference files
+    are inventoried, but an additional independent vulnerable effect was not fully established in the
+    bounded A02 review. This is not a safe label or a Pentester-based exclusion.
+  represented_by: []
+  not_a_negative_label: true

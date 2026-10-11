@@ -1,0 +1,119 @@
+schema_version: a03.1.triage.v1
+original_safe_review_first:
+- JS-SAFE-AUTH-101
+- JS-SAFE-FILE-101
+- JS-SAFE-PATH-101
+- JS-SAFE-BIZ-101
+selected_candidates:
+- candidate_id: JS-PATCH-CAND-exposedMetricsChallenge-3
+  correct_file: data/static/codefixes/exposedMetricsChallenge_3_correct.ts
+  correct_sha256: 6aeb7611256fcd6c6b5b933e86a961d4d620ae541ddbf2fe178304e3fc7f143b
+  source_anchors:
+  - file: server.ts
+    start: 746
+    end: 793
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: d55b871daaabdf0b07be922bfeb02024fb7ac056b919fa2afdf24e4256789d98
+  priority: 2
+  disposition: excluded
+  reason: official isAdmin helper is absent in pinned insecurity module; two route
+    registrations need coverage
+  truth_validated: false
+- candidate_id: JS-PATCH-CAND-localXssChallenge-2
+  correct_file: data/static/codefixes/localXssChallenge_2_correct.ts
+  correct_sha256: f601e1779ee682e98d37b49dd3d8eb2996deb065bae92d4586c47ad92421957f
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    start: 135
+    end: 161
+    sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: f77fa2c0c22412cf4a0ff8d88055f5a70009a66f15d008527af8ccd4efa36565
+  priority: 2
+  disposition: pending
+  reason: frontend source snippet; Stage1 copies prebaked frontend-dist and does not
+    build this source
+  truth_validated: false
+- candidate_id: JS-PATCH-CAND-noSqlReviewsChallenge-3
+  correct_file: data/static/codefixes/noSqlReviewsChallenge_3_correct.ts
+  correct_sha256: 91a37d919710a5661f42478955841489d417504a5802be3cb26c2d78412297a8
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    start: 13
+    end: 31
+    sha256: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+    region_sha256: ab3fc39c2d62d62452f4ebdb50cf4596705b0f184665d4c2cd9de37365e3ed6d
+  priority: 1
+  disposition: selected_runtime
+  reason: exact type guard/removal of multi; bounded own-review mutation oracle
+  truth_validated: false
+- candidate_id: JS-PATCH-CAND-redirectChallenge-4
+  correct_file: data/static/codefixes/redirectChallenge_4_correct.ts
+  correct_sha256: 9cd52c7b353ae8c08a439859ab88d8d5501f96c173279988ad0b95119b66794e
+  source_anchors:
+  - file: lib/insecurity.ts
+    start: 121
+    end: 140
+    sha256: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+    region_sha256: db26930771e705a050b314d0752c992bf96541c2b28371ff387ef6e4bf6e958d
+  priority: 1
+  disposition: selected_runtime
+  reason: exact one-line comparison; two classified tests; bounded HTTP Location oracle
+  truth_validated: false
+- candidate_id: JS-PATCH-CAND-registerAdminChallenge-3
+  correct_file: data/static/codefixes/registerAdminChallenge_3_correct.ts
+  correct_sha256: 4a1071a5ab5cd6b627f9ee327fb139f132a09379fe796f9cebfc6d1ff2950bf3
+  source_anchors:
+  - file: server.ts
+    start: 498
+    end: 537
+    sha256: 1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b
+    region_sha256: 8c9b4e028df20354bc3c8517b7db4711f07c7ce259be12fc3242e4eb196ca099
+  priority: 2
+  disposition: pending
+  reason: official send.before changes role after database creation; persisted role
+    correspondence not proven
+  truth_validated: false
+- candidate_id: JS-PATCH-CAND-restfulXssChallenge-1
+  correct_file: data/static/codefixes/restfulXssChallenge_1_correct.ts
+  correct_sha256: 3d8c0c912f2d29e03907550dd008ee14920b838c6e051518ead1beb8f50acd96
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    start: 61
+    end: 115
+    sha256: a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12
+    region_sha256: fe1d7da354e4ab2c9994c770e076d267fc90b625308a68bfd3f5b5eaf9c95077
+  priority: 2
+  disposition: pending
+  reason: frontend source snippet; independent browser/render and rebuilt frontend
+    unavailable in existing adapter
+  truth_validated: false
+unselected_candidates:
+- JS-PATCH-CAND-accessLogDisclosureChallenge-1
+- JS-PATCH-CAND-adminSectionChallenge-1
+- JS-PATCH-CAND-changeProductChallenge-3
+- JS-PATCH-CAND-chatbotGreedyInjectionChallenge-2
+- JS-PATCH-CAND-chatbotPromptInjectionChallenge-2
+- JS-PATCH-CAND-dbSchemaChallenge-2
+- JS-PATCH-CAND-directoryListingChallenge-1
+- JS-PATCH-CAND-forgedReviewChallenge-2
+- JS-PATCH-CAND-iacLeakedKeyChallenge-3
+- JS-PATCH-CAND-loginAdminChallenge-4
+- JS-PATCH-CAND-loginBenderChallenge-2
+- JS-PATCH-CAND-loginJimChallenge-1
+- JS-PATCH-CAND-nftMintChallenge-4
+- JS-PATCH-CAND-nftUnlockChallenge-2
+- JS-PATCH-CAND-redirectCryptoCurrencyChallenge-3
+- JS-PATCH-CAND-resetPasswordBenderChallenge-2
+- JS-PATCH-CAND-resetPasswordBjoernChallenge-1
+- JS-PATCH-CAND-resetPasswordBjoernOwaspChallenge-2
+- JS-PATCH-CAND-resetPasswordJimChallenge-3
+- JS-PATCH-CAND-resetPasswordMortyChallenge-4
+- JS-PATCH-CAND-resetPasswordUvoginChallenge-3
+- JS-PATCH-CAND-scoreBoardChallenge-1
+- JS-PATCH-CAND-tokenSaleChallenge-3
+- JS-PATCH-CAND-unionSqlInjectionChallenge-2
+- JS-PATCH-CAND-vulnerableDockerImageChallenge-3
+- JS-PATCH-CAND-weakPasswordChallenge-1
+- JS-PATCH-CAND-web3SandboxChallenge-1
+- JS-PATCH-CAND-web3WalletChallenge-3
+- JS-PATCH-CAND-xssBonusChallenge-1

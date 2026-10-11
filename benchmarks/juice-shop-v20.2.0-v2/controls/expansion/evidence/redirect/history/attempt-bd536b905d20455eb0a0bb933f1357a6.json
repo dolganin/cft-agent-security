@@ -1,0 +1,151 @@
+{
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "candidate": "redirect",
+  "patch": {
+    "file": "lib/insecurity.ts",
+    "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+    "patch_sha256": "b67e41dac259982a17f9badec0be5fb528fc80bddfe67ba4c050f1a1b8c04640",
+    "correct_file": "data/static/codefixes/redirectChallenge_4_correct.ts",
+    "correct_sha256": "9cd52c7b353ae8c08a439859ab88d8d5501f96c173279988ad0b95119b66794e",
+    "editable_line": 136
+  },
+  "original_tree_sha256": "3673ec989f4e472fe42b40257f1634116f5ce7656f1542de9321d4233daf199c",
+  "oracle_sha256": "819265d7819d0ed0264afe4f98773b9997a1250637ebe186afdf5acfc31cb7c7",
+  "image": "cft-fix-juice@sha256:b3c854f853e6bb2f2b5bd261d1766c11904afd1bc497b481d2b9a3b77033c9c5",
+  "cycles": [
+    {
+      "stages": {
+        "prepare": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-1/evidence/execution-62706fa64fa84804848314a91349a7eb.json",
+          "sha256": "c21fa5f1c6e6e8aa4e413d69f419d901b0aa73eeb182375c51f2072ecdc207d6",
+          "classification": null
+        },
+        "build": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-1/evidence/execution-19863ad4d1f84f119fbbab755c8f4048.json",
+          "sha256": "fb3be9c822fefcbd83dee7686dde57a99f89134d1ac1282f8b77e57c0014acaa",
+          "classification": null
+        },
+        "tests": {
+          "accepted": false,
+          "exit_code": 1,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-1/evidence/execution-8eadb824984a42f783a7f1564334f89f.json",
+          "sha256": "c7e1b8b3782570b9819bdd186481719b19bec16f11ef91d7858065d13cd7b0d2",
+          "classification": {
+            "accepted": false,
+            "classification": "functional_regression_or_unknown",
+            "exceptions": [],
+            "summary": {
+              "success": false,
+              "counts": {
+                "tests": 415,
+                "failed": 2,
+                "passed": 411,
+                "cancelled": 0,
+                "skipped": 2,
+                "todo": 0,
+                "topLevel": 40,
+                "suites": 130
+              },
+              "duration_ms": 26597.201127
+            }
+          }
+        }
+      },
+      "oracle": false,
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-b65346dbe0094f0c9219",
+      "failure": "No safe verdict: stage or independent oracle failed",
+      "audit": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-1/audit.jsonl",
+      "audit_sha256": "d43cb38ff5b52231b01561212d98e09cda81046c4657435fd3703b508e124ba1",
+      "snapshot_removed": true
+    },
+    {
+      "stages": {
+        "prepare": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-2/evidence/execution-b3b0bc225d724519b2fb19e7b2c4157f.json",
+          "sha256": "30b1aea302a3fddaa57f013ccb91d52b607c55d9ddd92856b6c961026117979b",
+          "classification": null
+        },
+        "build": {
+          "accepted": true,
+          "exit_code": 0,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-2/evidence/execution-11155c8c7cb64b4e8272a585e5a21a9c.json",
+          "sha256": "3e07081ca51ffbcd57902ca43ccde22b23ae9e213a60d5327c94db072e20a5c0",
+          "classification": null
+        },
+        "tests": {
+          "accepted": false,
+          "exit_code": 1,
+          "record": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-2/evidence/execution-fc0bd6a131164654b7782b8daba129d1.json",
+          "sha256": "7f6e65846043ea86d86c9c666f3dabb0cb5335cd65ea61a8ba102d970e3307f5",
+          "classification": {
+            "accepted": false,
+            "classification": "functional_regression_or_unknown",
+            "exceptions": [],
+            "summary": {
+              "success": false,
+              "counts": {
+                "tests": 415,
+                "failed": 2,
+                "passed": 411,
+                "cancelled": 0,
+                "skipped": 2,
+                "todo": 0,
+                "topLevel": 40,
+                "suites": 130
+              },
+              "duration_ms": 27744.791273
+            }
+          }
+        }
+      },
+      "oracle": false,
+      "cleanup": true,
+      "original_unchanged": true,
+      "container": "cft-fix-28926426405b4cf59108",
+      "failure": "No safe verdict: stage or independent oracle failed",
+      "audit": "benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/cycle-2/audit.jsonl",
+      "audit_sha256": "09fcc00fcd9ef17f9ed62e5271d37cf73c429e5d2c5b14e7a09eeb8dab3eb8cc",
+      "snapshot_removed": true
+    }
+  ],
+  "test_provenance": [
+    {
+      "file": "test/server/insecurity.unit.test.ts",
+      "start": 258,
+      "end": 260,
+      "name": "returns true for URLs containing allowed URLs",
+      "classification": "vulnerable_behavior_expectation",
+      "reason": "Asserts true for an allowlist URL with unapproved appended path; contradicts exact-match property",
+      "anchor": {
+        "file": "test/server/insecurity.unit.test.ts",
+        "start": 258,
+        "end": 260,
+        "sha256": "b5527abae401896346caa23845d57d68a26982962043191f08a84bc37300f9f3",
+        "region_sha256": "ac6d4f5bff09d66efe4dcd273f14fb62ebbf52ca0f998d428ac435441b006d3c"
+      }
+    },
+    {
+      "file": "test/server/redirect.unit.test.ts",
+      "start": 77,
+      "end": 85,
+      "name": "tricking the allowlist should solve \"redirectChallenge\"",
+      "classification": "vulnerable_behavior_expectation",
+      "reason": "Asserts challenge solved by off-domain URL containing allowlisted URL; directly asserts the old vulnerability",
+      "anchor": {
+        "file": "test/server/redirect.unit.test.ts",
+        "start": 77,
+        "end": 85,
+        "sha256": "cb724ac8dccaaa25aa0b62344e065beed38646cc2726d9cc659ae20bd10e6895",
+        "region_sha256": "4414dfde031eb6a70f0b28c5d70e765ae4d1de1e45412725877a574cc76302f8"
+      }
+    }
+  ]
+}
