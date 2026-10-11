@@ -1,0 +1,3 @@
+{
+  "decision": "fail", "exit_code": 2, "stage_errors": ["Synthetic pipeline failure"]
+}

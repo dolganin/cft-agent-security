@@ -1,0 +1,7 @@
+{
+  "original_finding": {"id": "example-finding-1", "source": "semgrep", "rule_id": "example.rule", "title": "Synthetic candidate", "file": "src/example.ts"},
+  "original_status": "confirmed",
+  "proposed_patch": {"finding_id": "example-finding-1", "rationale": "Synthetic serialization example", "unified_diff": ""},
+  "patch_application": {"status": "rejected", "detail": "No executable patch in example"},
+  "verdict": "inconclusive", "explanation": "No BEFORE/AFTER chain; not a verified fix"
+}

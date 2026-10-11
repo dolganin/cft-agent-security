@@ -18,7 +18,7 @@ TModel = TypeVar("TModel", bound=BaseModel)
 
 
 DEFAULT_ROUTE_SPECS: tuple[str, ...] = (
-    "nsu:deepseek-ai/DeepSeek-V4-Flash-0731",
+    "nsu:qwen3.8-flash-next",
     "nsu:Qwen3.8-27B",
     "groq:openai/gpt-oss-120b",
     "mistral:mistral-large-latest",

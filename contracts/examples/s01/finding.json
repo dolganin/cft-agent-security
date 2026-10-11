@@ -1,0 +1,5 @@
+{
+  "id": "example-finding-1", "source": "semgrep", "rule_id": "example.rule",
+  "title": "Synthetic candidate", "description": "Contract example, not a benchmark finding",
+  "file": "src/example.ts", "line_start": 4, "severity": "WARNING"
+}

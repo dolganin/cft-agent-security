@@ -25,6 +25,9 @@ def test_route_parser_preserves_model_suffixes() -> None:
 
 def test_default_routes_stay_inside_nsu_until_external_fallback_is_enabled() -> None:
     assert [route.provider for route in parse_route_specs(None)] == ["nsu", "nsu"]
+    assert [route.model for route in parse_route_specs(None)] == [
+        "qwen3.8-flash-next", "Qwen3.8-27B",
+    ]
     assert len(parse_route_specs(None, allow_external_fallbacks=True)) > 2
 
 
@@ -33,7 +36,7 @@ def test_default_routes_stay_inside_nsu_until_external_fallback_is_enabled() -> 
 ])
 def test_nsu_request_carries_configured_reasoning_effort(monkeypatch, configured, expected) -> None:
     client = ProviderFailoverClient(
-        routes=parse_route_specs("nsu:deepseek-ai/DeepSeek-V4-Flash"),
+        routes=parse_route_specs("nsu:qwen3.8-flash-next"),
         credentials={"NSU_OPENWEBUI_KEY": "test-key"},
         reasoning_effort=configured,
     )

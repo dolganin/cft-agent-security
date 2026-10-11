@@ -38,6 +38,12 @@ class PatchReviewArtifact(BaseModel):
     security_verified: Literal[False] = False
     limitations: list[str] = Field(default_factory=list)
 
+    @model_validator(mode="after")
+    def require_matching_proposal(self):
+        if self.finding_id != self.proposal.finding_id:
+            raise ValueError("Patch review finding_id must match proposal.finding_id")
+        return self
+
 
 class FixCheck(BaseModel):
     id: str

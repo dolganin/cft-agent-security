@@ -360,7 +360,10 @@ class RunOrchestrator:
     def get_report(self, run_id: str, finding_id: str) -> FinalReport:
         self._require_completed(run_id)
         path = self.store.report_path(run_id, finding_id)
-        return FinalReport.model_validate_json(path.read_text(encoding="utf-8"))
+        report = FinalReport.model_validate_json(path.read_text(encoding="utf-8"))
+        if report.finding_id != finding_id:
+            raise ValueError("Stored report does not match the requested finding")
+        return report
 
     def list_reports(self, run_id: str) -> list[FinalReport]:
         self._require_completed(run_id)

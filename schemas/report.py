@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from schemas.agent_loop import AgentDecisionRecord, AgentStopReason
 from schemas.architecture import ArchitectureContext
@@ -105,3 +105,9 @@ class FinalReport(BaseModel):
     next_step: str
     iterations: int = 0
     stop_reason: AgentStopReason | None = None
+
+    @model_validator(mode="after")
+    def require_matching_finding(self):
+        if self.finding_id != self.finding.id:
+            raise ValueError("Report finding_id must match finding.id")
+        return self

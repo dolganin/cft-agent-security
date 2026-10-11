@@ -1,0 +1,6 @@
+{
+  "finding_id": "example-finding-1",
+  "finding": {"id": "example-finding-1", "source": "semgrep", "rule_id": "example.rule", "title": "Synthetic candidate", "file": "src/example.ts"},
+  "status": "inconclusive", "verification": {},
+  "explanation": "No execution evidence in this synthetic example", "next_step": "Verify in an approved environment"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "example-review-1", "run_id": "example-run-1", "finding_id": "example-finding-1",
+  "file": "src/example.ts", "status": "rejected",
+  "source_sha256": "synthetic-not-executable", "proposal_sha256": "synthetic-not-executable",
+  "generated_at": "2026-10-11T00:00:00Z",
+  "proposal": {"finding_id": "example-finding-1", "rationale": "Synthetic serialization example", "unified_diff": ""},
+  "validation_detail": "Shape example only; source and digest checks will reject execution"
+}
