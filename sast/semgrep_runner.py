@@ -83,7 +83,9 @@ def run_semgrep_scan(
     except OSError as exc:
         raise SemgrepError(f"Failed to start Semgrep: {exc}") from exc
 
+    scanner_root = None
     if completed.returncode != 0 and _needs_windows_docker_fallback(completed):
+        scanner_root = "/src"
         completed = run_cancellable_process(
             _docker_command(target_path, config),
             cwd=target_path,
@@ -104,11 +106,17 @@ def run_semgrep_scan(
     if not isinstance(raw, dict):
         raise SemgrepError("Semgrep JSON root must be an object")
 
+    try:
+        findings = normalize_semgrep_payload(raw, service_resolver=service_resolver,
+                                             repository_root=target_path, scanner_root=scanner_root)
+    except (TypeError, ValueError) as exc:
+        raise SemgrepError("Semgrep returned invalid or unsafe source locations") from exc
+
     return SemgrepScanResult(
         target=target_path,
         config=config,
         raw=raw,
-        findings=normalize_semgrep_payload(raw, service_resolver=service_resolver),
+        findings=findings,
         stderr=completed.stderr,
     )
 

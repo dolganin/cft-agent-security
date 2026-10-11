@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import hashlib
 import json
-from pathlib import PurePosixPath
 
 from architecture.context import ArchitectureContextProvider
 from pr_analysis.git_diff import GitDiff
 from schemas.finding import Finding
 from schemas.pr import PRAnalysisSummary, PRFindingContext
+from security.source_paths import normalize_source_path
 
 
 def finding_fingerprint(finding: Finding) -> str:
@@ -98,13 +98,10 @@ class PRAnalysisService:
 
 
 def _normalize_path(value: str) -> str:
-    normalized = value.replace("\\", "/")
-    while normalized.startswith("./"):
-        normalized = normalized[2:]
-    path = PurePosixPath(normalized)
-    if not normalized or path.is_absolute() or ".." in path.parts:
-        raise ValueError("PR finding path must stay inside the repository")
-    return path.as_posix()
+    try:
+        return normalize_source_path(value)
+    except ValueError as exc:
+        raise ValueError("PR finding path must stay inside the repository") from exc
 
 
 def _finding_lines(finding: Finding) -> set[int]:

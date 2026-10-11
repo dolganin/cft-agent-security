@@ -39,6 +39,7 @@ def main() -> int:
     batch = scout.scout(discovery, source_map=source_map)
     findings, duplicates = merge_scout_candidates(
         [], batch.candidates, service_resolver=discovery.resolve_component,
+        repository_root=discovery.repository_root,
     )
     scout.audit.update(duplicates=duplicates, merged_candidates=len(findings))
     scout.audit["express_source_map"] = {

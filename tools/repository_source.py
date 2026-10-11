@@ -6,6 +6,7 @@ import re
 from pathlib import PurePosixPath
 
 from schemas.discovery import ProjectDiscoveryResult
+from security.source_paths import normalize_source_path
 
 _SOURCE_SUFFIXES = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".py"}
 _EXCLUDED_PARTS = {
@@ -59,6 +60,11 @@ class RepositorySource:
         total_bytes = 0
         paths = sorted(set(inventory.project_files), key=lambda p: (self._path_rank(p), p))
         for file in paths:
+            try:
+                file = normalize_source_path(file, self.root)
+            except ValueError:
+                self._skip("unsafe_path")
+                continue
             if not _source_path(file):
                 self._skip("outside_application_source")
                 continue

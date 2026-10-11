@@ -206,19 +206,20 @@ def test_scout_cannot_assign_measured_severity():
     assert item.to_finding(finding_id="candidate").severity is None
 
 
-def test_merge_deduplicates_family_but_preserves_different_defects_and_stable_ids():
+def test_merge_deduplicates_family_but_preserves_different_defects_and_stable_ids(tmp_path):
+    inventory(tmp_path, {"routes/search.ts": "query(req.query.q)\n" * 8})
     initial = [Finding(id="sast", source="semgrep", rule_id="vendor.sequelize-injection",
                        title="SQL", description="SAST", file="routes/search.ts",
-                       line_start=2, line_end=3)]
+                       line_start=2, line_end=2)]
     merged, duplicates = merge_scout_candidates(initial, [
         candidate(line=2), candidate(line=2, rule="access-control"), candidate(line=8),
-    ], service_resolver=lambda file: "backend")
+    ], service_resolver=lambda file: "backend", repository_root=tmp_path)
     assert duplicates == 1
     assert len(merged) == 3
     assert initial[0].description == "SAST"
     assert len(initial) == 1
     assert merged[1].service == "backend"
-    again, _ = merge_scout_candidates([], [candidate(line=8)])
+    again, _ = merge_scout_candidates([], [candidate(line=8)], repository_root=tmp_path)
     assert merged[-1].id == again[0].id
 
 

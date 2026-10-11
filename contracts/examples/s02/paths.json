@@ -1,0 +1,10 @@
+[
+  {"raw": "backend/core/management/commands/seed_demo.py", "expected": "backend/core/management/commands/seed_demo.py", "origin": "archived SberLab SAST"},
+  {"raw": "./backend/core/management/commands/seed_demo.py", "expected": "backend/core/management/commands/seed_demo.py", "origin": "relative spelling variant"},
+  {"raw": "frontend\\frontend\\src\\App.jsx", "expected": "frontend/frontend/src/App.jsx", "origin": "Windows variant of archived SberLab finding"},
+  {"raw": "routes/search.ts", "expected": "routes/search.ts", "origin": "archived Juice Shop Scout"},
+  {"raw": ".\\routes\\search.ts", "expected": "routes/search.ts", "origin": "Windows Scout spelling variant"},
+  {"raw": ".github/workflows/ci.yml", "expected": ".github/workflows/ci.yml", "origin": "archived scanner path; dot prefix must remain"},
+  {"raw": "C:\\workspace\\juice\\routes\\search.ts", "root": "C:\\workspace\\juice", "expected": "routes/search.ts", "origin": "offline Windows absolute-path fixture"},
+  {"raw": "\\\\server\\share\\juice\\routes\\search.ts", "root": "\\\\server\\share\\juice", "expected": "routes/search.ts", "origin": "offline UNC fixture"}
+]

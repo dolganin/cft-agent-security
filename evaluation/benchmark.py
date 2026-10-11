@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 import json
-import re
 from collections import Counter
-from pathlib import PurePosixPath
 from statistics import mean, pstdev
 
 from schemas.benchmark import (
@@ -19,16 +17,11 @@ from schemas.benchmark import (
     DetectionMetrics,
     VerificationMetrics,
 )
+from security.source_paths import normalize_source_path
 
 
 def normalize_path(value: str) -> str:
-    value = value.replace("\\", "/")
-    path = PurePosixPath(value)
-    if path.is_absolute() or re.match(r"^[a-zA-Z]:", value) or ".." in path.parts:
-        raise ValueError("Benchmark paths must be relative to the target")
-    if not path.parts:
-        raise ValueError("Empty source path")
-    return path.as_posix()  # Preserve case: target is Linux, not Windows.
+    return normalize_source_path(value)
 
 
 def family(rule: str, dataset: BenchmarkDataset) -> str:

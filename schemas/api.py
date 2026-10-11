@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from schemas.agent_loop import AgentDecisionRecord
 from schemas.errors import ErrorDetail
 from schemas.evidence import Evidence
+from schemas.finding import FindingProvenance
 from schemas.pipeline import GateResult
 from schemas.report import FinalReport, SandboxActionSummary
 
@@ -74,6 +75,7 @@ class ApiFinding(BaseModel):
     file: str
     line_start: int | None = None
     report_available: bool = True
+    provenance: FindingProvenance | None = None
 
 
 class ApiEvidence(BaseModel):

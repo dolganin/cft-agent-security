@@ -5,13 +5,18 @@ from pathlib import Path
 
 from discovery.scout import rule_family
 from schemas.target import TargetArtifact
+from security.source_paths import normalize_source_path
 
 
 def register_source_artifacts(profile, findings, repository):
     root = Path(repository).resolve()
     artifacts = dict(profile.artifacts)
     for finding in findings:
-        path = root / finding.file
+        try:
+            relative = normalize_source_path(finding.file, root)
+        except ValueError:
+            continue
+        path = root / relative
         if path.suffix.lower() not in {".js", ".ts", ".jsx", ".tsx"}:
             continue
         try:
@@ -33,17 +38,21 @@ def register_source_artifacts(profile, findings, repository):
 def verification_candidates(state):
     profile = state["target_profile"]
     finding = state["finding"]
+    try:
+        file = normalize_source_path(finding.file, profile.repository_path)
+    except ValueError:
+        return []
     artifact = next((a for a in profile.artifacts.values()
-                     if a.kind == "javascript" and a.relative_path == finding.file), None)
+                     if a.kind == "javascript" and a.relative_path == file), None)
     if artifact is None:
         return []
     candidates = []
     family = rule_family(finding.rule_id)
     # These bindings belong to the operator's trusted profile, not model guesses.
-    key = f"verification.{finding.file}:{finding.line_start}"
+    key = f"verification.{file}:{finding.line_start}"
     endpoint = profile.metadata.get(key + ".endpoint")
     runtime = state.get("runtime_services")
-    service_id = profile.resolve_service(finding.file)
+    service_id = profile.resolve_service(file)
     service = runtime.services.get(service_id) if runtime else None
     if service and service.ready and endpoint in service.allowed_endpoints:
         tool = None

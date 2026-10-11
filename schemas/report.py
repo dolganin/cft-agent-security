@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field, model_validator
 from schemas.agent_loop import AgentDecisionRecord, AgentStopReason
 from schemas.architecture import ArchitectureContext
 from schemas.evidence import Evidence
+from schemas.finding import FindingProvenance
 from schemas.pipeline import FindingGateEffect, GateCategory
 from schemas.pr import PRFindingContext
 from schemas.scoring import ContextPriority, CVSSResult
@@ -32,6 +33,7 @@ class ReportFinding(BaseModel):
     line_start: int | None = None
     line_end: int | None = None
     pr_context: PRFindingContext | None = None
+    provenance: FindingProvenance | None = None
 
 
 class VerificationSummary(BaseModel):

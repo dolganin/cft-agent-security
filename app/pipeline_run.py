@@ -423,9 +423,15 @@ def _append_scout_findings(
     )
     merged, duplicates = merge_scout_candidates(
         findings, candidates, service_resolver=service_resolver,
+        repository_root=discovery.repository_root,
     )
     audit = getattr(scout, "audit", {})
-    audit.update(merged_candidates=len(merged) - len(findings), duplicates=duplicates)
+    original_ids = {item.id for item in findings}
+    added = sum(not original_ids.intersection(
+        {item.id, *(item.provenance.aliases if item.provenance else [])},
+    ) for item in merged)
+    audit.update(merged_candidates=added, duplicates=duplicates,
+                 queue_before=len(findings), queue_after=len(merged))
     if source_map is not None:
         audit["route_candidate_links"] = {
             "candidates": len(route_links),
@@ -512,6 +518,7 @@ def _build_static_finding_report(
             line_start=finding.line_start,
             line_end=finding.line_end,
             pr_context=finding.pr_context,
+            provenance=finding.provenance,
         ),
         status="inconclusive",
         analysis_summary=(
@@ -609,9 +616,22 @@ def _resolve_findings(
 ) -> Path:
     if existing_findings:
         path = Path(existing_findings).expanduser()
-        JsonFindingRepository(path).list_findings()
+        from sast.identity import deduplicate_findings, normalize_finding
+
+        findings = JsonFindingRepository(path).list_findings()
+        normalized, _ = deduplicate_findings([
+            normalize_finding(item, repository_root=target, service_resolver=service_resolver)
+            for item in findings
+        ])
+        output_dir.mkdir(parents=True, exist_ok=True)
+        normalized_path = output_dir / "findings.json"
+        if normalized_path.resolve() == path.resolve():
+            normalized_path = output_dir / "normalized-findings.json"
+        normalized_path.write_text(json.dumps(
+            [item.model_dump(mode="json") for item in normalized], ensure_ascii=False, indent=2,
+        ), encoding="utf-8")
         print(f"SAST: using existing normalized findings: {path}")
-        return path
+        return normalized_path
 
     output_dir.mkdir(parents=True, exist_ok=True)
     print(f"SAST: scanning with Semgrep config={sast_config}")
@@ -636,6 +656,9 @@ def _resolve_findings(
     )
     summary = {
         "total": len(scan.findings),
+        "raw_total": sum(isinstance(item, dict) for item in scan.raw.get("results", [])),
+        "duplicates": sum(isinstance(item, dict) for item in scan.raw.get("results", [])) - len(scan.findings),
+        "normalization_version": "s02.v1",
         "by_severity": dict(
             sorted(
                 Counter(

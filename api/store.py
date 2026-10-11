@@ -20,6 +20,7 @@ from schemas.api import (
 )
 from schemas.errors import ErrorDetail
 from schemas.evidence import Evidence
+from schemas.finding import FindingProvenance
 from schemas.report import FinalReport
 from schemas.target import TargetProfile
 
@@ -165,6 +166,7 @@ class ApiStore:
             # Старые базы T23 созданы до колонок отмены и chat prompt
             _ensure_column(connection, "runs", "cancellation_reason", "TEXT")
             _ensure_column(connection, "runs", "analysis_request", "TEXT")
+            _ensure_column(connection, "findings", "provenance_json", "TEXT")
             connection.execute(
                 """
                 INSERT OR IGNORE INTO chat_session_runs (session_id, run_id, linked_at)
@@ -436,8 +438,8 @@ class ApiStore:
                     """
                     INSERT INTO findings (
                         run_id, finding_id, status, source, rule_id, title,
-                        severity, service, file, line_start, report_path
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        severity, service, file, line_start, report_path, provenance_json
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         run_id,
@@ -451,6 +453,8 @@ class ApiStore:
                         finding.file,
                         finding.line_start,
                         str(report_path.resolve()),
+                        (finding.provenance.public_copy().model_dump_json()
+                         if finding.provenance else None),
                     ),
                 )
                 for item in report.evidence:
@@ -719,6 +723,8 @@ def _finding_from_row(row: sqlite3.Row) -> ApiFinding:
         file=row["file"],
         line_start=row["line_start"],
         report_available=Path(row["report_path"]).is_file(),
+        provenance=(FindingProvenance.model_validate_json(row["provenance_json"])
+                    if row["provenance_json"] else None),
     )
 
 

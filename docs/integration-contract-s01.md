@@ -101,12 +101,14 @@ run/file/source/proposal binding в `check_review` перед применени
 Смена байтов исходника после review требует нового review, не автоматического retry.
 Не менять алгоритм сериализации hashes в S01: это обесценит сохраненные reviews.
 
-Пробел: общий Finding/FinalReport пока не содержит полного source-version binding.
-S02 вводит в `schemas/` единый optional provenance-блок (commit, tree/file digest,
-нормализованный путь, fingerprint, список исходных scan IDs), затем обновляет
-нормализатор, builder, API/store и evaluator вместе. S03 добавляет типизированный
+S02 реализован отдельным коммитом поверх S01: общий Finding/ReportFinding теперь
+имеет optional `FindingProvenance` (file/anchor digest, normalized_file, family,
+fingerprint, aliases и observations). Commit/tree provenance не выдумывается:
+полный snapshot и runtime source-version binding остаются следующей задачей.
+См. `s02-finding-normalization.md` для фактических полей и границ совместимости.
+Нормализатор, builder, API/store и evaluator используют общий контракт. S03 добавляет типизированный
 verification binding к source anchor, service, capability и версии policy.
-Названия полей финализируются отдельным PR; отсутствие provenance означает
+Отсутствие provenance означает
 `unknown`, не разрешение перепроверить произвольный текущий исходник.
 
 ## 5. Статусы: не смешивать разные уровни

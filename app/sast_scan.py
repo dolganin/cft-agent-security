@@ -95,6 +95,9 @@ def main() -> int:
     if not isinstance(semgrep_errors, list):
         semgrep_errors = []
     summary = _summary(result.findings, semgrep_errors)
+    raw_total = sum(isinstance(item, dict) for item in result.raw.get("results", []))
+    summary.update(raw_total=raw_total, duplicates=raw_total - len(result.findings),
+                   normalization_version="s02.v1")
     summary_path.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",

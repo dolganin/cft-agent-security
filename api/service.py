@@ -363,6 +363,10 @@ class RunOrchestrator:
         report = FinalReport.model_validate_json(path.read_text(encoding="utf-8"))
         if report.finding_id != finding_id:
             raise ValueError("Stored report does not match the requested finding")
+        if report.finding.provenance is not None:
+            report = report.model_copy(update={"finding": report.finding.model_copy(update={
+                "provenance": report.finding.provenance.public_copy(),
+            })})
         return report
 
     def list_reports(self, run_id: str) -> list[FinalReport]:

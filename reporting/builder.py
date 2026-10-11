@@ -127,6 +127,7 @@ def build_final_report(state: AgentState) -> FinalReport:
             line_start=finding.line_start,
             line_end=finding.line_end,
             pr_context=finding.pr_context,
+            provenance=finding.provenance,
         ),
         status=status,
         analysis_summary=analysis.summary if analysis is not None else None,

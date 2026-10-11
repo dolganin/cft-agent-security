@@ -31,7 +31,7 @@ from schemas.evidence import (
     EvidenceScope,
 )
 from schemas.execution import ExecutionResult
-from schemas.finding import Finding
+from schemas.finding import Finding, FindingObservation, FindingProvenance
 from schemas.fix import (
     FixCheck,
     FixCheckResult,
@@ -108,6 +108,8 @@ __all__ = [
     "ExpressSourceMap",
     "FinalReport",
     "Finding",
+    "FindingObservation",
+    "FindingProvenance",
     "FixCheck",
     "FixCheckResult",
     "FixVerificationArtifact",

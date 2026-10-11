@@ -11,6 +11,7 @@ from agent.prompts import SYSTEM_PROMPT
 from schemas.discovery import ProjectDiscoveryResult
 from schemas.scout import CandidateFinding, CandidateFindingBatch, ScoutTurn
 from schemas.source_map import ExpressSourceMap
+from security.source_paths import normalize_source_path
 from tools.repository_source import RepositorySource
 
 
@@ -289,15 +290,20 @@ class RepositoryScout:
 
 
 def _has_read_provenance(candidate: CandidateFinding, observed: dict) -> bool:
-    if candidate.line_start is None or candidate.file not in candidate.provenance_paths:
+    try:
+        file = normalize_source_path(candidate.file)
+        paths = {normalize_source_path(path) for path in candidate.provenance_paths}
+    except ValueError:
         return False
-    if not set(candidate.provenance_paths).issubset(observed):
+    if candidate.line_start is None or file not in paths:
+        return False
+    if not paths.issubset(observed):
         return False
     end = candidate.line_end or candidate.line_start
     if end < candidate.line_start:
         return False
     cursor = candidate.line_start
-    for start, stop in sorted(observed.get(candidate.file, [])):
+    for start, stop in sorted(observed.get(file, [])):
         if stop < cursor:
             continue
         if start > cursor:

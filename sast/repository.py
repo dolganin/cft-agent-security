@@ -32,9 +32,16 @@ class JsonFindingRepository:
             raise ValueError(f"Invalid normalized finding in {self.path}") from exc
 
     def get_finding(self, finding_id: str) -> Finding:
-        for finding in self.list_findings():
-            if finding.id == finding_id:
-                return finding
+        findings = self.list_findings()
+        exact = [item for item in findings if item.id == finding_id]
+        if len(exact) == 1:
+            return exact[0]
+        matches = [item for item in findings if item.provenance
+                   and finding_id in item.provenance.aliases]
+        if len(exact) > 1 or len(matches) > 1:
+            raise ValueError("Ambiguous historical finding identifier")
+        if matches:
+            return matches[0]
         raise KeyError(f"Finding not found: {finding_id}")
 
     def get_by_index(self, index: int) -> Finding:
