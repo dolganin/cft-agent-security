@@ -1,0 +1,72 @@
+{
+  "id": "synthetic-r01-auth-rejected-032",
+  "action_id": "synthetic-r01-auth-action-032",
+  "type": "r01_auth_bypass_observation_v1",
+  "summary": "SYNTHETIC ONLY: authorization-claim run; every control passed, both role-A attempts on the protected operation were denied, and B's availability control succeeded.",
+  "artifact_refs": ["execution-synthetic-r01-032", "audit:synthetic-r01-032", "source:synthetic-fixture-manifest-032"],
+  "reliability": "high",
+  "verdict": "rejected",
+  "source": "runtime",
+  "sandbox_session_id": "synthetic-sandbox-session-032",
+  "hypothesis_id": "synthetic-r01-auth-hypothesis-032",
+  "action": {
+    "id": "synthetic-r01-auth-action-032",
+    "tool": "r01_synthetic_fixture",
+    "run_id": "synthetic-r01-run-032"
+  },
+  "observation": {
+    "kind": "r01_auth_bypass_observation_v1",
+    "facts": {
+      "synthetic": true,
+      "target_id": "synthetic-target-local-001",
+      "service_id": "synthetic-service-001",
+      "endpoint_id": "synthetic-endpoint-protected-001",
+      "source_snapshot_id": "sha256:synthetic-source-snapshot-032",
+      "fixture_id": "synthetic-fixture-032",
+      "reset_adapter_id": "synthetic-reset-adapter-001",
+      "role_a_id": "synthetic-role-a",
+      "role_b_id": "synthetic-role-b",
+      "claim_id": "authorization_bypass",
+      "operation_id": "synthetic-operation-protected-marker",
+      "auth_control_operation_id": "synthetic-operation-b-reserved-control",
+      "auth_claim": "authorization_bypass",
+      "principal_state": "role_a",
+      "session_state_id": "synthetic-session-state-role-a",
+      "server_observed_principal_id": "synthetic-principal-a",
+      "server_observed_role_id": "synthetic-role-a",
+      "role_a_permission": "denied_by_fixture_policy",
+      "permission_denial_proved": true,
+      "normal_output_control_passed": true,
+      "positive_control": "passed",
+      "role_a_allowed_control_passed": true,
+      "negative_control": "denied_as_expected_distinct_operation",
+      "negative_control_denied": true,
+      "identity_proof_established": true,
+      "trials_after_reset": 2,
+      "executed_exchanges": ["oc-a-protected", "sc-a-self", "nc-a-different", "sc-a-allowed", "probe-a-t1", "verify-a-s1", "probe-a-t2", "verify-a-s2", "cleanup-a-verify"],
+      "unauthorized_effect_observed": false,
+      "effect_marker_observed_each_trial": false,
+      "trial_outcome_denied_or_absent": true,
+      "privilege_state_changed": false,
+      "output_truncated": false,
+      "distinguishable_only_by_status_or_reflection": false,
+      "binding_match": true,
+      "cleanup_baseline_restored": true,
+      "cleanup_sessions_revoked": true,
+      "side_effects_unexplained": false
+    },
+    "captured_at": "2026-10-11T00:00:00Z"
+  },
+  "scope": {
+    "target": "synthetic-target-local-001",
+    "environment": "sandbox",
+    "service": "synthetic-service-001",
+    "description": "SYNTHETIC ONLY; local disposable auth fixture, one registered protected operation, one claim per run, synthetic identities only."
+  },
+  "artifacts": [
+    {"ref": "execution-synthetic-r01-032", "role": "execution"},
+    {"ref": "audit:synthetic-r01-032", "role": "audit"},
+    {"ref": "source:synthetic-fixture-manifest-032", "role": "source"}
+  ],
+  "created_at": "2026-10-11T00:00:00Z"
+}

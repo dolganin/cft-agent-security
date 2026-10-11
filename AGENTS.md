@@ -873,6 +873,14 @@ python3 -m app.main
 
 # 21. Next development order
 
+Current MVP delivery order (11 October 2026) is maintained in
+`docs/mvp-three-stage-plan-2026-10-11.md` and its linked Miro A/B/C cards:
+benchmark and baseline metrics first, improved detection/verification second,
+model-generated independently verified fixes third. Each stage produces a
+standalone report; completion of all historical role-based tasks is not required
+before the first metrics delivery. The historical SberLab order below remains
+background context, not the active team queue. Security invariants still apply.
+
 Current correct order:
 
 ```text
@@ -997,3 +1005,15 @@ operator config are in `docs/demo/README.md`; final results and limitations are
 in `docs/stage1-fix-verification-report.md`. The opt-in Docker integration test
 in `tests/test_stage1_e2e.py` runs two independent cycles. Benchmark, DAST, new
 security capabilities and PR automation remain outside this stage.
+
+Operator provisioning: `python -m app.lab_prepare` creates separate pinned
+analysis/fix clones, excludes only the operator Compose in Git's local excludes,
+and records preparation before measurement. Docker pull/build requires the
+explicit `--provision-images` option; target scripts never run on the host.
+Fix images accept installed repository digests or full immutable Docker image
+IDs; mutable tags are resolved before runtime. Sandbox worker policy still
+requires repository digests. See `docs/k01-environment-passport.md`.
+
+`docs/r01-verification-specifications.md` and `contracts/examples/r01/` define
+future capability acceptance criteria and synthetic examples, NOT newly enabled
+tools or runtime Evidence. They cannot expand target or execution permissions.

@@ -9,6 +9,18 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 _REQUEST_HOST = re.compile(r"^(?:[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?|\[[0-9A-Fa-f:.]+\])(?::([0-9]{1,5}))?$")
+IMMUTABLE_IMAGE_ID = re.compile(r"^sha256:[a-f0-9]{64}$")
+REPOSITORY_DIGEST = re.compile(r"^[^\s@]+@sha256:[a-f0-9]{64}$")
+
+
+def is_immutable_image_id(value: object) -> bool:
+    """Check full image-ID syntax; the resolver separately verifies installation."""
+    return isinstance(value, str) and bool(IMMUTABLE_IMAGE_ID.fullmatch(value))
+
+
+def is_repository_digest(value: object) -> bool:
+    """True only for an immutable repository digest, never for a mutable tag."""
+    return isinstance(value, str) and bool(REPOSITORY_DIGEST.fullmatch(value))
 
 
 def validate_request_host(value: str) -> str:
@@ -177,15 +189,32 @@ class TargetConstraints(BaseModel):
 
 
 class TargetFixConfig(BaseModel):
-    """Operator-owned adapter selection. No commands or caller paths."""
+    """Operator-owned adapter selection. No commands or caller paths.
+
+    ``image`` is always an immutable reference: a repository digest or the full
+    Docker image ID returned by an actual ``docker image inspect`` of a locally
+    provisioned build. Mutable tags stay a provisioning input only.
+    """
 
     model_config = ConfigDict(extra="forbid", frozen=True)
     adapter: Literal["juice_node_v1"] = "juice_node_v1"
-    image: str = Field(pattern=r"^[^\s@]+@sha256:[a-f0-9]{64}$")
+    image: str
     service: str
     source_commit: str = Field(pattern=r"^[a-f0-9]{40}$")
     timeout_seconds: int = Field(default=300, ge=1, le=900)
     wall_clock_budget_seconds: int = Field(default=1800, ge=1, le=3600)
+
+    @field_validator("image")
+    @classmethod
+    def validate_image(cls, value: str) -> str:
+        value = value.strip()
+        if is_repository_digest(value) or is_immutable_image_id(value):
+            return value
+        raise ValueError(
+            "fix_verification.image must be an immutable reference: either a repository "
+            "digest name@sha256:<64 hex> or a full Docker image ID sha256:<64 hex>. "
+            "Mutable tags are never accepted at runtime."
+        )
 
 
 

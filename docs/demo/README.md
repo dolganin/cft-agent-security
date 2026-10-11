@@ -22,10 +22,19 @@ BEFORE/AFTER работают в новых Docker контейнерах, sourc
 Подготовка dependencies выполняется отдельно, исключительно внутри Docker:
 
 ```bash
-git -c core.autocrlf=false clone --depth 1 --branch v20.2.0 https://github.com/juice-shop/juice-shop.git artifacts/stage1-juice-shop
-docker pull python:3.12-alpine
-docker build -f docs/demo/fix-verification.Dockerfile -t cft-fix-juice:stage1 artifacts/stage1-juice-shop
+PYTHONDONTWRITEBYTECODE=1 python -m app.lab_prepare \
+  --output artifacts/operator-lab-v20.2.0 --provision-images
+PYTHONDONTWRITEBYTECODE=1 python -m app.stage1_e2e \
+  --target artifacts/operator-lab-v20.2.0/fix/juice-shop \
+  --output-dir artifacts/operator-lab-v20.2.0/stage1-runs
 ```
+
+Output подготовки должен отсутствовать. Команда создает отдельные чистые LF-копии
+для анализа и исправлений, проверяет exact commit и исключает только операторский
+Compose через локальный `.git/info/exclude`. Если source и images уже подготовлены,
+можно использовать `--source artifacts/presentation-2026-10-08/juice-shop` без
+`--provision-images`; новые клоны создаются, но install/build/pull не выполняются.
+Полный [паспорт и жизненный цикл](../k01-environment-passport.md).
 
 Checkout должен иметь LF endings: Linux-тесты Juice Shop сравнивают подписи,
 зависящие от точных bytes `encryptionkeys/jwt.pub`. Windows CRLF checkout может
@@ -34,10 +43,16 @@ Checkout должен иметь LF endings: Linux-тесты Juice Shop сра�
 
 Entrypoint разрешает локальные tags только для начального `image inspect` и
 сразу фиксирует RepoDigest; runtime использует digest и `--pull never`.
+Локальная сборка без RepoDigest фиксируется в полный immutable image ID
+`sha256:<64 hex>`, который реально вернул `docker image inspect`; digest не
+придумывается, а mutable tag в runtime не проходит. Worker-образ это не ослабляет:
+`SandboxPolicy` по-прежнему требует `name@sha256:<64 hex>`.
 Можно явно передать `--worker-image name@sha256:...` и
-`--fix-image name@sha256:...`. Внешняя сеть/install во время verification не нужны.
+`--fix-image name@sha256:...` или `--fix-image sha256:<64 hex>`.
+Внешняя сеть/install во время verification не нужны.
 У upstream v20.2.0 нет lockfile; dependency tree заморожен в provisioned image.
-Этот image следует сохранить/распространять по digest для повторения результата.
+Этот image следует сохранить/распространять по digest или полному image ID
+для повторения результата.
 
 Опциональные `--report` и `--review` позволяют использовать ранее сохранённые
 штатные artifacts. `--target` и `--output-dir` — параметры оператора, не модели.

@@ -1,0 +1,374 @@
+{
+  "schema": "r01-family-specifications/contract-fixture-v1",
+  "synthetic": true,
+  "contract_fixture_only": true,
+  "not_ground_truth": true,
+  "production_tool_registered": false,
+  "conformance_evaluator": "tests/test_r01_specifications.py",
+  "evaluator_kind": "test_only_not_production_evidence_model",
+  "docs_reference": "docs/r01-verification-specifications.md",
+  "common": {
+    "common_max_http_exchanges": 8,
+    "max_exchange_counted_classes": [
+      "local http test-service exchange",
+      "container evaluation invocation (R01-CODE)"
+    ],
+    "operator_reset_note": "Resets run through the pinned operator reset adapter (fixture reload/reseed, session revocation, container destruction) and are never unreviewed model writes; adapter invocations are not HTTP exchanges, but every verification read they require is counted.",
+    "mandatory_controls": ["positive_control", "negative_control"],
+    "control_separation_rule": "positive control, negative control and the candidate probe are distinct requests; no single request may simultaneously expect a denial and an unauthorized success",
+    "min_required_trials": 2,
+    "required_artifact_roles": ["execution", "audit", "source"],
+    "binding_fields": ["scope.target==facts.target_id", "scope.service==facts.service_id", "facts.source_snapshot_id", "facts.endpoint_id", "action_id==action.id"],
+    "shared_required_facts": [
+      "synthetic",
+      "target_id",
+      "service_id",
+      "endpoint_id",
+      "source_snapshot_id",
+      "fixture_id",
+      "role_a_id",
+      "role_b_id",
+      "claim_id",
+      "role_a_permission",
+      "normal_output_control_passed",
+      "positive_control",
+      "negative_control",
+      "trials_after_reset",
+      "binding_match",
+      "cleanup_baseline_restored",
+      "cleanup_sessions_revoked",
+      "output_truncated",
+      "distinguishable_only_by_status_or_reflection",
+      "side_effects_unexplained"
+    ],
+    "insufficient_basis_fact": "distinguishable_only_by_status_or_reflection"
+  },
+  "families": [
+    {
+      "id": "R01-OWN-READ",
+      "observation_kind": "r01_ownership_read_observation_v1",
+      "claims": ["cross_owner_read"],
+      "permission_proof_required_for": "always",
+      "budget": {
+        "max_http_exchanges": 7,
+        "reserved_capacity": 0,
+        "is_family_specific_above_common": false,
+        "basis": "controls, baseline, two trials and cleanup verification fit a budget tighter than the common default; tightened bounds are explicit, never a loosening"
+      },
+      "exchanges": [
+        {"id": "oc-r-read", "class": "positive_control", "count": 1},
+        {"id": "nc-r-deny", "class": "negative_security_control", "count": 1},
+        {"id": "sc-r-self", "class": "session_wiring_control", "count": 1},
+        {"id": "baseline-r-digest", "class": "baseline_proof_read", "count": 1},
+        {"id": "probe-r-t1", "class": "trial_probe", "count": 1},
+        {"id": "probe-r-t2", "class": "trial_probe_after_operator_reset", "count": 1},
+        {"id": "cleanup-r-verify", "class": "cleanup_verification_read", "count": 1}
+      ],
+      "family_required_facts_for_confirm_or_reject": [
+        "object_a_id",
+        "object_b_id",
+        "negative_control_object_id",
+        "baseline_object_version_digest",
+        "object_b_owner_manifest_verified",
+        "role_a_own_control_passed",
+        "owner_proved_from_manifest",
+        "identity_proof_established",
+        "permission_denial_proved",
+        "unauthorized_effect_observed",
+        "effect_marker_observed_each_trial",
+        "trial_outcome_denied_or_absent"
+      ],
+      "positive_control_fact": "positive_control",
+      "negative_control_fact": "negative_control",
+      "trial_outcome_fact": "trial_outcome_denied_or_absent",
+      "unauthorized_effect_fact": "unauthorized_effect_observed",
+      "effect_marker_fact": "effect_marker_observed_each_trial",
+      "mutations_applicable": [
+        "missing_negative_control",
+        "drop_negative_control_fact",
+        "no_repeat",
+        "binding_mismatch",
+        "ambiguous_owner",
+        "status_only"
+      ],
+      "examples": {
+        "confirmed": "evidence-owned-read-confirmed.synthetic.json",
+        "rejected": "evidence-owned-read-rejected.synthetic.json",
+        "inconclusive": "evidence-owned-read-inconclusive.synthetic.json"
+      },
+      "inconclusive_expected_deficiencies": ["ambiguous_owner"]
+    },
+    {
+      "id": "R01-OWN-WRITE",
+      "observation_kind": "r01_ownership_write_observation_v1",
+      "claims": ["cross_owner_write"],
+      "permission_proof_required_for": "always",
+      "budget": {
+        "max_http_exchanges": 12,
+        "reserved_capacity": 1,
+        "is_family_specific_above_common": true,
+        "basis": "two control cycles plus two write/readback trials, one reserved retry and one cleanup verification read cannot fit the common 8; explicit reviewed family budget"
+      },
+      "exchanges": [
+        {"id": "oc-w-update", "class": "positive_control", "count": 1},
+        {"id": "oc-w-readback", "class": "positive_control_readback", "count": 1},
+        {"id": "sc-w-self", "class": "session_wiring_control", "count": 1},
+        {"id": "nc-w-deny", "class": "negative_security_control", "count": 1},
+        {"id": "nc-w-readback", "class": "negative_control_readback", "count": 1},
+        {"id": "baseline-w-digest", "class": "baseline_proof_read", "count": 1},
+        {"id": "probe-w-t1", "class": "trial_write_and_independent_readback", "count": 2},
+        {"id": "probe-w-t2", "class": "trial_write_and_independent_readback_after_operator_reset", "count": 2},
+        {"id": "retry-w-reserve", "class": "reserved_retry", "count": 0},
+        {"id": "cleanup-w-verify", "class": "cleanup_verification_read", "count": 1}
+      ],
+      "family_required_facts_for_confirm_or_reject": [
+        "object_a_id",
+        "object_b_id",
+        "control_object_b_id",
+        "negative_control_object_id",
+        "writable_field_id",
+        "baseline_value_digest",
+        "object_b_owner_manifest_verified",
+        "baseline_captured_before_trials",
+        "role_a_own_control_passed",
+        "negative_control_value_unchanged",
+        "negative_control_denied",
+        "owner_proved_from_manifest",
+        "identity_proof_established",
+        "permission_denial_proved",
+        "independent_readback_as_role_b",
+        "unauthorized_effect_observed",
+        "effect_marker_observed_each_trial",
+        "trial_outcome_denied_or_absent"
+      ],
+      "positive_control_fact": "positive_control",
+      "negative_control_fact": "negative_control",
+      "trial_outcome_fact": "trial_outcome_denied_or_absent",
+      "unauthorized_effect_fact": "unauthorized_effect_observed",
+      "effect_marker_fact": "effect_marker_observed_each_trial",
+      "mutations_applicable": [
+        "missing_negative_control",
+        "drop_negative_control_fact",
+        "no_repeat",
+        "binding_mismatch",
+        "status_only"
+      ],
+      "examples": {
+        "confirmed": "evidence-owned-write-confirmed.synthetic.json",
+        "rejected": "evidence-owned-write-rejected.synthetic.json",
+        "inconclusive": "evidence-owned-write-inconclusive.synthetic.json"
+      },
+      "inconclusive_expected_deficiencies": ["truncated_output"]
+    },
+    {
+      "id": "R01-AUTH",
+      "observation_kind": "r01_auth_bypass_observation_v1",
+      "claims": ["authentication_bypass", "authorization_bypass"],
+      "permission_proof_required_for": "authorization_claim_only",
+      "budget": {
+        "max_http_exchanges": 10,
+        "reserved_capacity": 1,
+        "is_family_specific_above_common": true,
+        "basis": "controls must be separate requests from the probe; explicit reviewed family budget: authz-claim runs execute all rows (10), authn-claim runs skip the two authz-only rows (9); one claim per run"
+      },
+      "exchanges": [
+        {"id": "oc-a-protected", "class": "positive_control", "applies_to": "both", "count": 1},
+        {"id": "sc-a-self", "class": "session_wiring_and_baseline_read", "applies_to": "both", "count": 1},
+        {"id": "nc-a-anon", "class": "authentication_negative_control", "applies_to": "authn-only", "count": 1},
+        {"id": "nc-a-different", "class": "authorization_negative_control_distinct_operation", "applies_to": "authz-only", "count": 1},
+        {"id": "sc-a-allowed", "class": "authorization_wiring_control", "applies_to": "authz-only", "count": 1},
+        {"id": "probe-a-t1", "class": "trial_unauthorized_attempt", "applies_to": "both", "count": 1},
+        {"id": "probe-a-t2", "class": "trial_unauthorized_attempt_after_operator_reset", "applies_to": "both", "count": 1},
+        {"id": "verify-a-s1", "class": "session_principal_state_verification", "applies_to": "both", "count": 1},
+        {"id": "verify-a-s2", "class": "session_principal_state_verification", "applies_to": "both", "count": 1},
+        {"id": "retry-a-reserve", "class": "reserved_retry", "applies_to": "both", "count": 0},
+        {"id": "cleanup-a-verify", "class": "cleanup_verification_read", "applies_to": "both", "count": 1}
+      ],
+      "family_required_facts_for_confirm_or_reject": [
+        "operation_id",
+        "auth_control_operation_id",
+        "auth_claim",
+        "principal_state",
+        "session_state_id",
+        "server_observed_principal_id",
+        "server_observed_role_id",
+        "role_a_allowed_control_passed",
+        "negative_control_denied",
+        "unauthorized_effect_observed",
+        "effect_marker_observed_each_trial",
+        "trial_outcome_denied_or_absent",
+        "identity_proof_established",
+        "permission_denial_proved",
+        "privilege_state_changed"
+      ],
+      "positive_control_fact": "positive_control",
+      "negative_control_fact": "negative_control",
+      "trial_outcome_fact": "trial_outcome_denied_or_absent",
+      "unauthorized_effect_fact": "unauthorized_effect_observed",
+      "effect_marker_fact": "effect_marker_observed_each_trial",
+      "mutations_applicable": [
+        "missing_negative_control",
+        "drop_negative_control_fact",
+        "no_repeat",
+        "binding_mismatch",
+        "status_only"
+      ],
+      "examples": {
+        "confirmed": "evidence-auth-confirmed.synthetic.json",
+        "rejected": "evidence-auth-rejected.synthetic.json",
+        "inconclusive": "evidence-auth-inconclusive.synthetic.json"
+      },
+      "inconclusive_expected_deficiencies": ["identity_unverified"]
+    },
+    {
+      "id": "R01-REDIRECT",
+      "observation_kind": "r01_redirect_observation_v1",
+      "claims": ["untrusted_redirect_destination"],
+      "permission_proof_required_for": "authorization_claim_only",
+      "budget": {
+        "max_http_exchanges": 8,
+        "reserved_capacity": 1,
+        "is_family_specific_above_common": false,
+        "basis": "separate positive control, negative control and probe requests plus in-context allowed controls for two trials and one cleanup counter read fit inside the common envelope with the reserved retry; explicit family schedule, no silent loosening"
+      },
+      "exchanges": [
+        {"id": "oc-rd-allowed", "class": "positive_control", "count": 1},
+        {"id": "nc-rd-reject", "class": "negative_security_control", "count": 1},
+        {"id": "probe-rd-t1a", "class": "trial_in_context_allowed_control", "count": 1},
+        {"id": "probe-rd-t1p", "class": "trial_probe", "count": 1},
+        {"id": "probe-rd-t2a", "class": "trial_in_context_allowed_control_after_operator_reset", "count": 1},
+        {"id": "probe-rd-t2p", "class": "trial_probe_after_operator_reset", "count": 1},
+        {"id": "retry-rd-reserve", "class": "reserved_retry", "count": 0},
+        {"id": "cleanup-rd-verify", "class": "cleanup_verification_read", "count": 1}
+      ],
+      "family_required_facts_for_confirm_or_reject": [
+        "parameter_id",
+        "allowed_destination_id",
+        "rejected_destination_id",
+        "negative_control_destination_id",
+        "probe_destination_id",
+        "sink_id",
+        "redirect_not_followed",
+        "sink_request_count",
+        "sink_contacted",
+        "location_header_parse_unambiguous",
+        "canonicalization_applied",
+        "location_matches_sink_exactly",
+        "negative_control_denied",
+        "unauthorized_effect_observed",
+        "effect_marker_observed_each_trial",
+        "trial_outcome_denied_or_absent",
+        "identity_proof_established",
+        "permission_denial_proved"
+      ],
+      "positive_control_fact": "positive_control",
+      "negative_control_fact": "negative_control",
+      "trial_outcome_fact": "trial_outcome_denied_or_absent",
+      "unauthorized_effect_fact": "unauthorized_effect_observed",
+      "effect_marker_fact": "effect_marker_observed_each_trial",
+      "mutations_applicable": [
+        "missing_negative_control",
+        "drop_negative_control_fact",
+        "no_repeat",
+        "binding_mismatch",
+        "status_only"
+      ],
+      "examples": {
+        "confirmed": "evidence-redirect-confirmed.synthetic.json",
+        "rejected": "evidence-redirect-rejected.synthetic.json",
+        "inconclusive": "evidence-redirect-inconclusive.synthetic.json"
+      },
+      "inconclusive_expected_deficiencies": ["ambiguous_normalization"]
+    },
+    {
+      "id": "R01-CODE",
+      "observation_kind": "r01_code_evaluation_observation_v1",
+      "claims": ["inert_expression_evaluation"],
+      "permission_proof_required_for": "authorization_claim_only",
+      "budget": {
+        "max_http_exchanges": 6,
+        "reserved_capacity": 1,
+        "is_family_specific_above_common": false,
+        "basis": "container evaluation invocations are counted as exchanges; controls plus two trials plus reserved retry fit inside the common envelope with margin"
+      },
+      "exchanges": [
+        {"id": "oc-c-normal", "class": "normal_output_control", "count": 1},
+        {"id": "oc-c-observable", "class": "evaluation_observability_control", "count": 1},
+        {"id": "nc-c-literal", "class": "negative_security_control", "count": 1},
+        {"id": "probe-c-t1", "class": "trial_evaluation", "count": 1},
+        {"id": "probe-c-t2", "class": "trial_evaluation_after_operator_reset", "count": 1},
+        {"id": "retry-c-reserve", "class": "reserved_retry", "count": 0}
+      ],
+      "family_required_facts_for_confirm_or_reject": [
+        "marker_id",
+        "expression_digest",
+        "evaluation_context_id",
+        "safe_evaluating_control_context_id",
+        "expected_scalar",
+        "observed_scalar",
+        "normal_output_control_passed",
+        "evaluation_observability_control_passed",
+        "negative_control_literal_output",
+        "evaluation_demonstrated_in_safe_context",
+        "container_destroyed",
+        "network_connections",
+        "secrets_read",
+        "host_paths_mounted",
+        "filesystem_mutations",
+        "marker_reflected_only",
+        "unauthorized_effect_observed",
+        "effect_marker_observed_each_trial",
+        "trial_outcome_denied_or_absent"
+      ],
+      "positive_control_fact": "evaluation_observability_control_passed",
+      "negative_control_fact": "negative_control_literal_output",
+      "trial_outcome_fact": "trial_outcome_denied_or_absent",
+      "unauthorized_effect_fact": "unauthorized_effect_observed",
+      "effect_marker_fact": "effect_marker_observed_each_trial",
+      "mutations_applicable": [
+        "missing_negative_control",
+        "drop_negative_control_fact",
+        "no_repeat",
+        "binding_mismatch",
+        "reflection_only"
+      ],
+      "examples": {
+        "confirmed": "evidence-code-eval-confirmed.synthetic.json",
+        "rejected": "evidence-code-eval-rejected.synthetic.json",
+        "inconclusive": "evidence-code-eval-inconclusive.synthetic.json"
+      },
+      "inconclusive_expected_deficiencies": ["truncated_output", "insufficient_basis"]
+    }
+  ],
+  "deficiency_codes": {
+    "not_synthetic": "facts are not marked synthetic contract examples",
+    "missing_required_facts": "a fact required for a confirm/reject decision is absent",
+    "positive_control_not_passed": "the operator positive control did not pass",
+    "positive_control_missing": "no positive control was recorded",
+    "negative_control_not_enforced": "the separate negative control was not recorded as denied/enforced",
+    "negative_control_missing": "no negative control was recorded",
+    "trial_count_insufficient": "fewer than two repeated trials after operator reset",
+    "binding_mismatch": "target/service/endpoint/snapshot/action binding facts do not match",
+    "artifact_roles_incomplete": "execution, audit and source artifacts are not all present",
+    "cleanup_incomplete": "baseline restore, session revocation or side-effect check failed",
+    "truncated_output": "output was truncated or partial",
+    "insufficient_basis": "result distinguishable only by HTTP status, reflection or token-shaped value",
+    "ambiguous_owner": "object ownership is unproved, ambiguous or shared",
+    "identity_unverified": "the server-observed principal could not be independently established",
+    "ambiguous_normalization": "the parsed Location cannot be canonicalized unambiguously",
+    "redirect_followed": "any evidence that the redirect destination was contacted",
+    "not_evaluated": "only literal reflection was observed; evaluation is not established",
+    "missing_permission_proof": "the permission/denial basis is not proved for the claim",
+    "unexpected_trial_result": "trial outcomes are inconsistent with the claimed verdict",
+    "unsupported_verdict": "a non-terminal verdict is not permitted"
+  },
+  "mutation_kinds": {
+    "missing_negative_control": "set the family negative-control fact to not_run",
+    "drop_negative_control_fact": "remove the family negative-control fact entirely",
+    "no_repeat": "reduce trials_after_reset to 1",
+    "binding_mismatch": "set binding_match false and target_id to a different synthetic id",
+    "ambiguous_owner": "set owner manifest/proof facts false or unknown",
+    "status_only": "mark the result distinguishable only by status/reflection",
+    "reflection_only": "mark the code marker as reflected without evaluation"
+  }
+}

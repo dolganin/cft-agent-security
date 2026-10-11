@@ -1,0 +1,69 @@
+template_only: true
+status: draft_unreviewed
+verdict_rubric:
+  confirmed:
+    required:
+      - positive_control_passed
+      - negative_control_passed
+      - target_service_endpoint_and_snapshot_binding_match
+      - action_id_matches_approved_action
+      - execution_and_audit_records_are_persisted_and_match
+      - required_family_facts_directly_establish_unauthorized_effect
+      - independent_repeat_after_reset_matches
+      - cleanup_passed_and_baseline_restored
+  rejected:
+    required:
+      - positive_control_passed
+      - negative_control_passed
+      - target_service_endpoint_and_snapshot_binding_match
+      - action_id_matches_approved_action
+      - execution_and_audit_records_are_persisted_and_match
+      - protected_effect_absent_or_denied_on_both_trials
+      - independent_repeat_after_reset_matches
+      - cleanup_passed_and_baseline_restored
+  inconclusive:
+    examples:
+      - owner_or_permission_basis_unknown
+      - required_control_failed_or_unavailable
+      - session_or_identity_lost_or_unverified
+      - response_truncated_or_ambiguous
+      - technical_error_or_timeout
+      - source_snapshot_or_endpoint_binding_mismatch
+      - independent_readback_or_repeat_missing
+      - cleanup_failed_or_side_effect_uncertain
+      - marker_reflected_without_proof_of_evaluation
+      - redirect_followed_or_destination_unverified
+  policy_denial:
+    workflow_status: policy_blocked
+    finding_verdict: null
+    counts_as_rejected: false
+evidence_review:
+  model: schemas.evidence.Evidence
+  source_requirement: runtime evidence requires sandbox_session_id
+  identity_bindings:
+    - approved_action_id
+    - executor_run_id
+    - audit_record
+    - target_id
+    - service_id
+    - endpoint_id
+    - source_snapshot_id
+    - fixture_id
+    - sandbox_session_id
+  forbidden_content:
+    - credentials
+    - session_tokens
+    - real_user_data
+    - unrestricted_response_bodies
+cvss:
+  status_without_explicit_metrics: UNASSESSED
+  derive_from_scanner_severity: false
+  deterministic_calculation_required: true
+context_priority:
+  independent_of_cvss: true
+  require_known_fact_contributions_and_explicit_unknowns: true
+review:
+  reviewer_id: null
+  second_reviewer_id: null
+  status: unreviewed
+  disagreement_resolution: null

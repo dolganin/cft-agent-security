@@ -1,0 +1,69 @@
+{
+  "id": "synthetic-r01-or-rejected-012",
+  "action_id": "synthetic-r01-or-action-012",
+  "type": "r01_ownership_read_observation_v1",
+  "summary": "SYNTHETIC ONLY: all controls passed, including the separate negative-control denial, and both role A reads of B's object were denied with no B-only data.",
+  "artifact_refs": ["execution-synthetic-r01-012", "audit:synthetic-r01-012", "source:synthetic-fixture-manifest-012"],
+  "reliability": "high",
+  "verdict": "rejected",
+  "source": "runtime",
+  "sandbox_session_id": "synthetic-sandbox-session-012",
+  "hypothesis_id": "synthetic-r01-or-hypothesis-012",
+  "action": {
+    "id": "synthetic-r01-or-action-012",
+    "tool": "r01_synthetic_fixture",
+    "run_id": "synthetic-r01-run-012"
+  },
+  "observation": {
+    "kind": "r01_ownership_read_observation_v1",
+    "facts": {
+      "synthetic": true,
+      "target_id": "synthetic-target-local-001",
+      "service_id": "synthetic-service-001",
+      "endpoint_id": "synthetic-endpoint-read-001",
+      "source_snapshot_id": "sha256:synthetic-source-snapshot-012",
+      "fixture_id": "synthetic-fixture-012",
+      "reset_adapter_id": "synthetic-reset-adapter-001",
+      "role_a_id": "synthetic-role-a",
+      "role_b_id": "synthetic-role-b",
+      "claim_id": "cross_owner_read",
+      "object_a_id": "synthetic-object-a",
+      "object_b_id": "synthetic-object-b",
+      "negative_control_object_id": "synthetic-negative-control-object-012",
+      "baseline_object_version_digest": "sha256:synthetic-baseline-digest-012",
+      "object_b_owner_manifest_verified": true,
+      "owner_proved_from_manifest": true,
+      "role_a_permission": "denied_by_fixture_policy",
+      "permission_denial_proved": true,
+      "normal_output_control_passed": true,
+      "positive_control": "passed",
+      "role_a_own_control_passed": true,
+      "negative_control": "denied_as_expected",
+      "identity_proof_established": true,
+      "trials_after_reset": 2,
+      "executed_exchanges": ["oc-r-read", "nc-r-deny", "sc-r-self", "baseline-r-digest", "probe-r-t1", "probe-r-t2", "cleanup-r-verify"],
+      "unauthorized_effect_observed": false,
+      "effect_marker_observed_each_trial": false,
+      "trial_outcome_denied_or_absent": true,
+      "output_truncated": false,
+      "distinguishable_only_by_status_or_reflection": false,
+      "binding_match": true,
+      "cleanup_baseline_restored": true,
+      "cleanup_sessions_revoked": true,
+      "side_effects_unexplained": false
+    },
+    "captured_at": "2026-10-11T00:00:00Z"
+  },
+  "scope": {
+    "target": "synthetic-target-local-001",
+    "environment": "sandbox",
+    "service": "synthetic-service-001",
+    "description": "SYNTHETIC ONLY; local disposable ownership-read fixture, one registered endpoint and synthetic data."
+  },
+  "artifacts": [
+    {"ref": "execution-synthetic-r01-012", "role": "execution"},
+    {"ref": "audit:synthetic-r01-012", "role": "audit"},
+    {"ref": "source:synthetic-fixture-manifest-012", "role": "source"}
+  ],
+  "created_at": "2026-10-11T00:00:00Z"
+}

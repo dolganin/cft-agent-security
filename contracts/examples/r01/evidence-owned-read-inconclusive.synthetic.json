@@ -1,0 +1,69 @@
+{
+  "id": "synthetic-r01-or-inconclusive-013",
+  "action_id": "synthetic-r01-or-action-013",
+  "type": "r01_ownership_read_observation_v1",
+  "summary": "SYNTHETIC ONLY: the B owner manifest was missing and ownership was unproved, so neither a confirmed nor a rejected verdict is admissible.",
+  "artifact_refs": ["execution-synthetic-r01-013", "audit:synthetic-r01-013", "source:synthetic-fixture-manifest-013"],
+  "reliability": "low",
+  "verdict": "inconclusive",
+  "source": "runtime",
+  "sandbox_session_id": "synthetic-sandbox-session-013",
+  "hypothesis_id": "synthetic-r01-or-hypothesis-013",
+  "action": {
+    "id": "synthetic-r01-or-action-013",
+    "tool": "r01_synthetic_fixture",
+    "run_id": "synthetic-r01-run-013"
+  },
+  "observation": {
+    "kind": "r01_ownership_read_observation_v1",
+    "facts": {
+      "synthetic": true,
+      "target_id": "synthetic-target-local-001",
+      "service_id": "synthetic-service-001",
+      "endpoint_id": "synthetic-endpoint-read-001",
+      "source_snapshot_id": "sha256:synthetic-source-snapshot-013",
+      "fixture_id": "synthetic-fixture-013",
+      "reset_adapter_id": "synthetic-reset-adapter-001",
+      "role_a_id": "synthetic-role-a",
+      "role_b_id": "synthetic-role-b",
+      "claim_id": "cross_owner_read",
+      "object_a_id": "synthetic-object-a",
+      "object_b_id": "synthetic-object-b",
+      "negative_control_object_id": "synthetic-negative-control-object-013",
+      "baseline_object_version_digest": "sha256:synthetic-baseline-digest-013",
+      "object_b_owner_manifest_verified": false,
+      "owner_proved_from_manifest": false,
+      "role_a_permission": "unknown",
+      "permission_denial_proved": false,
+      "normal_output_control_passed": true,
+      "positive_control": "passed",
+      "role_a_own_control_passed": true,
+      "negative_control": "denied_as_expected",
+      "identity_proof_established": true,
+      "trials_after_reset": 2,
+      "executed_exchanges": ["oc-r-read", "nc-r-deny", "sc-r-self", "probe-r-t1", "probe-r-t2", "cleanup-r-verify"],
+      "unauthorized_effect_observed": false,
+      "effect_marker_observed_each_trial": false,
+      "trial_outcome_denied_or_absent": true,
+      "output_truncated": false,
+      "distinguishable_only_by_status_or_reflection": false,
+      "binding_match": true,
+      "cleanup_baseline_restored": true,
+      "cleanup_sessions_revoked": true,
+      "side_effects_unexplained": false
+    },
+    "captured_at": "2026-10-11T00:00:00Z"
+  },
+  "scope": {
+    "target": "synthetic-target-local-001",
+    "environment": "sandbox",
+    "service": "synthetic-service-001",
+    "description": "SYNTHETIC ONLY; local disposable ownership-read fixture, one registered endpoint and synthetic data."
+  },
+  "artifacts": [
+    {"ref": "execution-synthetic-r01-013", "role": "execution"},
+    {"ref": "audit:synthetic-r01-013", "role": "audit"},
+    {"ref": "source:synthetic-fixture-manifest-013", "role": "source"}
+  ],
+  "created_at": "2026-10-11T00:00:00Z"
+}

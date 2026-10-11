@@ -1,0 +1,79 @@
+template_only: true
+status: draft_unreviewed
+dataset_id: null
+dataset_version: null
+target:
+  name: null
+  pinned_version: null
+  commit: null
+cases:
+  - case_id: R01-EXAMPLE-001
+    family: ownership_read # ownership_read | ownership_write | authentication_authorization | redirect | code_injection
+    service_id: null
+    endpoint_id: null
+    source_anchors:
+      - repository: null
+        commit: null
+        path: null
+        line_start: null
+        line_end: null
+        url: null
+    http_anchors:
+      - method: null
+        endpoint_id: null
+        operation_id: null
+        parameter_ids: []
+    root_cause_hypothesis: null
+    expected_verdict: null # confirmed | rejected | inconclusive | unreviewed
+    controls:
+      positive_control: null
+      negative_control: null
+      expected_control_observations: []
+    prerequisites:
+      fixture_id: null
+      reset_adapter_id: null
+      source_snapshot_id: null
+      role_a_id: null
+      role_b_id: null
+      owner_manifest_ref: null
+      production_access: false
+    scope:
+      target_id: null
+      environment: local # local | sandbox only
+      service_id: null
+      endpoint_ids: []
+      object_ids: []
+      request_budget: 8
+      response_bytes_per_request: 65536
+      wall_time_seconds: 20
+      repeat_after_reset: true
+    required_facts: []
+    sources:
+      - url: null
+        commit: null
+        anchor: null
+        source_role: primary # primary | pinned_target_source
+    severity:
+      rationale: null
+      cvss:
+        status: UNASSESSED # UNASSESSED | NOT_APPLICABLE | ASSESSED
+        version: "4.0"
+        vector: null
+        score: null
+        metric_inputs: {}
+        deterministic_calculator: null
+    context_priority:
+      status: unknown
+      known_architecture_facts: []
+      contributions: []
+      unknowns: []
+      score: null
+    unknown_reason: null
+    reviewer:
+      name_or_id: null
+      reviewed_at: null
+      notes: null
+    review_status: unreviewed # unreviewed | accepted | rejected | needs_changes
+    eligible_fix:
+      status: unknown # unknown | eligible | ineligible
+      rationale: null

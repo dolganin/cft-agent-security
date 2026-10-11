@@ -14,16 +14,23 @@ def test_image_preflight_resolves_only_installed_digest(monkeypatch):
     calls = []
     def inspect(argv):
         calls.append(argv)
-        return json.dumps(["image@sha256:" + "a" * 64])
+        return json.dumps([{"Id": "sha256:" + "b" * 64, "RepoDigests": ["image@sha256:" + "a" * 64]}])
     monkeypatch.setattr(stage1_e2e, "_command", inspect)
     assert stage1_e2e.pinned_image("image:local") == "image@sha256:" + "a" * 64
     assert calls[0][:3] == ["docker", "image", "inspect"]
 
 
-def test_image_without_digest_is_refused(monkeypatch):
-    monkeypatch.setattr(stage1_e2e, "_command", lambda _: "[]")
+def test_image_without_any_immutable_reference_is_refused(monkeypatch):
+    monkeypatch.setattr(stage1_e2e, "_command", lambda _: json.dumps([{"Id": "", "RepoDigests": []}]))
     with pytest.raises(ValueError, match="immutable"):
         stage1_e2e.pinned_image("image:local")
+
+
+def test_local_build_without_repo_digests_is_pinned_to_inspected_image_id(monkeypatch):
+    monkeypatch.setattr(
+        stage1_e2e, "_command", lambda _: json.dumps([{"Id": "sha256:" + "b" * 64, "RepoDigests": []}])
+    )
+    assert stage1_e2e.pinned_image("cft-fix-juice:stage1") == "sha256:" + "b" * 64
 
 
 def test_registered_sql_proposal_is_bounded_and_has_no_execution_interface():

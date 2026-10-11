@@ -1,0 +1,53 @@
+{
+  "id": "synthetic-r01-evidence-rejected-001",
+  "action_id": "synthetic-r01-action-002",
+  "type": "r01_ownership_read_observation_v1",
+  "summary": "SYNTHETIC ONLY: controls passed and role A could not read role B's private object in two reset-separated trials.",
+  "artifact_refs": ["execution-synthetic-r01-002", "audit:synthetic-r01-002", "source:synthetic-fixture-manifest-002"],
+  "reliability": "high",
+  "verdict": "rejected",
+  "source": "runtime",
+  "sandbox_session_id": "synthetic-sandbox-session-002",
+  "hypothesis_id": "synthetic-r01-hypothesis-002",
+  "action": {
+    "id": "synthetic-r01-action-002",
+    "tool": "r01_synthetic_fixture",
+    "run_id": "synthetic-r01-run-002"
+  },
+  "observation": {
+    "kind": "r01_ownership_read_observation_v1",
+    "facts": {
+      "synthetic": true,
+      "target_id": "synthetic-target-local-001",
+      "service_id": "synthetic-service-001",
+      "endpoint_id": "synthetic-endpoint-read-001",
+      "source_snapshot_id": "sha256:synthetic-source-snapshot-002",
+      "fixture_id": "synthetic-fixture-002",
+      "role_a_id": "synthetic-role-a",
+      "role_b_id": "synthetic-role-b",
+      "object_b_id": "synthetic-object-b",
+      "owner_manifest_verified": true,
+      "role_a_permission": "denied_by_fixture_policy",
+      "role_b_positive_control": "passed",
+      "role_a_own_object_control": "passed",
+      "trials_after_reset": 2,
+      "role_a_observed_owner_bound_marker_each_trial": false,
+      "both_role_a_reads_denied_or_private_data_absent": true,
+      "binding_match": true,
+      "cleanup_baseline_restored": true
+    },
+    "captured_at": "2026-10-11T00:00:00Z"
+  },
+  "scope": {
+    "target": "synthetic-target-local-001",
+    "environment": "sandbox",
+    "service": "synthetic-service-001",
+    "description": "SYNTHETIC ONLY; local disposable ownership-read fixture, one registered endpoint and synthetic data."
+  },
+  "artifacts": [
+    {"ref": "execution-synthetic-r01-002", "role": "execution"},
+    {"ref": "audit:synthetic-r01-002", "role": "audit"},
+    {"ref": "source:synthetic-fixture-manifest-002", "role": "source"}
+  ],
+  "created_at": "2026-10-11T00:00:00Z"
+}

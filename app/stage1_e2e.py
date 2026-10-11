@@ -16,7 +16,12 @@ from fix_verification.service import FixVerificationService
 from fix_verification.workspace import digest, original_commit, snapshot, tree_digest
 from schemas.fix import PatchReviewArtifact, ProposedPatch
 from schemas.report import FinalReport, ReportFinding, VerificationSummary
-from schemas.target import TargetFixConfig, TargetProfile
+from schemas.target import (
+    TargetFixConfig,
+    TargetProfile,
+    is_immutable_image_id,
+    is_repository_digest,
+)
 from security.error_redaction import redact_error_message
 from tools.repository_source import _safe_line
 
@@ -31,14 +36,54 @@ def _command(argv):
     return result.stdout.strip()
 
 
+def _inspect_image(value: str) -> dict:
+    records = json.loads(_command(["docker", "image", "inspect", value]))
+    if not isinstance(records, list) or not records or not isinstance(records[0], dict):
+        raise ValueError("Docker image inspect returned no record for: " + value)
+    return records[0]
+
+
 def pinned_image(value: str) -> str:
-    """Resolve only already installed images; never pull during verification."""
-    digests = json.loads(_command(["docker", "image", "inspect", value, "--format", "{{json .RepoDigests}}"]))
-    if "@sha256:" in value:
-        return value
-    if not digests:
-        raise ValueError("Image has no immutable repository digest: " + value)
-    return digests[0]
+    """Resolve only already installed images; never pull during verification.
+
+    Repository digests and full image IDs are accepted as-is after inspect proves
+    the image is present. A locally provisioned tag without RepoDigests resolves to
+    the full immutable image ID reported by inspect; no digest is ever synthesized
+    and no mutable tag can reach the runtime.
+    """
+    candidate = value.strip()
+    if not candidate or any(character.isspace() for character in candidate):
+        raise ValueError("Image reference must be one non-empty operator token")
+    if candidate.startswith("sha256:") and not is_immutable_image_id(candidate):
+        raise ValueError("Image ID must be the full sha256:<64 lowercase hex> form: " + candidate)
+    if "@sha256:" in candidate and not is_repository_digest(candidate):
+        raise ValueError("Repository digest must be name@sha256:<64 lowercase hex>: " + candidate)
+    record = _inspect_image(candidate)
+    image_id = record.get("Id")
+    if is_immutable_image_id(candidate):
+        if image_id != candidate:
+            raise ValueError("Pinned image ID does not match the inspected image")
+        return candidate
+    if is_repository_digest(candidate):
+        return candidate
+    digests = sorted(item for item in (record.get("RepoDigests") or [])
+                     if isinstance(item, str) and is_repository_digest(item))
+    if digests:
+        return digests[0]
+    if is_immutable_image_id(image_id):
+        return image_id
+    raise ValueError("Image has no immutable repository digest or image ID: " + candidate)
+
+
+def digest_pinned_worker_image(value: str) -> str:
+    """Worker images feed SandboxPolicy, which still requires a repository digest."""
+    reference = pinned_image(value)
+    if not is_repository_digest(reference):
+        raise ValueError(
+            "Worker image has no repository digest; the Docker sandbox policy requires "
+            "name@sha256:<64 hex>, so a digest-less local worker build is not accepted"
+        )
+    return reference
 
 
 class IntegrationPatchClient:
@@ -65,7 +110,7 @@ class IntegrationPatchClient:
 
 def run(args) -> int:
     _command(["docker", "info", "--format", "{{.ServerVersion}}"])
-    worker_image = pinned_image(args.worker_image or os.getenv("CFT_SANDBOX_IMAGE") or "python:3.12-alpine")
+    worker_image = digest_pinned_worker_image(args.worker_image or os.getenv("CFT_SANDBOX_IMAGE") or "python:3.12-alpine")
     fix_image = pinned_image(args.fix_image or os.getenv("CFT_FIX_IMAGE") or "cft-fix-juice:stage1")
     os.environ["CFT_SANDBOX_IMAGE"] = worker_image
     profile = TargetProfile.from_yaml(PROFILE, repository_path_override=args.target)
