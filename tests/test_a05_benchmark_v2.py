@@ -231,6 +231,10 @@ def test_offline_rescore_is_byte_deterministic(tmp_path):
     (artifacts / "gate.json").write_text(
         json.dumps({"technical_errors": 0, "stage_errors": []}), encoding="utf-8"
     )
+    (artifacts / "configuration.json").write_text(json.dumps({
+        "api_key": "do-not-store",
+        "max_output_tokens": 1024,
+    }), encoding="utf-8")
     observations = [observation("one", verification="inconclusive").model_dump(mode="json")]
     (artifacts / "observations-v2.json").write_text(
         json.dumps(observations), encoding="utf-8"
@@ -240,6 +244,9 @@ def test_offline_rescore_is_byte_deterministic(tmp_path):
     assert rescore(truth, artifacts, first) == rescore(truth, artifacts, second)
     for name in ("scorecard-v2.json", "scorecard-v2.md", "history-v2.json"):
         assert (first / name).read_bytes() == (second / name).read_bytes()
+    history = json.loads((first / "history-v2.json").read_text(encoding="utf-8"))
+    assert history["configurations"]["configuration.json"]["api_key"] == "[REDACTED]"
+    assert history["configurations"]["configuration.json"]["max_output_tokens"] == 1024
 
 
 def test_trace_keeps_history_and_redacts_secret_values(tmp_path):

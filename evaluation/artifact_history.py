@@ -10,7 +10,11 @@ from pydantic import BaseModel
 
 from security.error_redaction import redact_error_message
 
-_SECRET_KEY = re.compile(r"(?:secret|password|passwd|token|api[_-]?key|credential)", re.I)
+_SECRET_KEY = re.compile(
+    r"(?:^|[_-])(?:secret|password|passwd|access_token|refresh_token|api_key|credential)s?$"
+    r"|(?:^|[_-])token$",
+    re.I,
+)
 
 
 def sanitize(value, *, key: str = ""):

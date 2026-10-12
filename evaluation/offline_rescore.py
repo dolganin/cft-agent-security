@@ -10,6 +10,7 @@ from pathlib import Path
 import yaml
 
 from evaluation.benchmark_v2 import score_v2
+from evaluation.artifact_history import sanitize
 from evaluation.benchmark_harness import persisted_evidence_matches
 from evaluation.catalog_adapter import load_catalog_dataset
 from schemas.benchmark_v2 import (
@@ -149,23 +150,29 @@ def artifact_history(root: Path, *, run_id: str, attempt_id: str, retry_of: str 
         run_id=run_id,
         attempt_id=attempt_id,
         retry_of=retry_of,
-        configurations=configuration,
-        versions=versions,
-        reports=reports,
-        plans=[entry for trace in traces for entry in trace.get("plans", [])],
-        validator_decisions=[
+        configurations=sanitize(configuration),
+        versions=sanitize(versions),
+        reports=sanitize(reports),
+        plans=sanitize([entry for trace in traces for entry in trace.get("plans", [])]),
+        validator_decisions=sanitize([
             action.get("validation", {}) for action in actions if action.get("validation")
-        ],
-        action_proposals=[action.get("action", {}) for action in actions if action.get("action")],
-        executions=[action.get("execution", {}) for action in actions if action.get("execution")],
-        evidence=evidence + [entry for trace in traces for entry in trace.get("evidence", [])],
-        agent_decisions=[
+        ]),
+        action_proposals=sanitize([
+            action.get("action", {}) for action in actions if action.get("action")
+        ]),
+        executions=sanitize([
+            action.get("execution", {}) for action in actions if action.get("execution")
+        ]),
+        evidence=sanitize(
+            evidence + [entry for trace in traces for entry in trace.get("evidence", [])]
+        ),
+        agent_decisions=sanitize([
             entry for trace in traces for entry in trace.get("decisions", [])
-        ],
-        errors=list(gate.get("errors", [])) + [
+        ]),
+        errors=sanitize(list(gate.get("errors", [])) + [
             {"message": message} for message in gate.get("stage_errors", [])
-        ],
-        retries=_read_jsonl(pipeline / "audit" / "llm-attempts.jsonl"),
+        ]),
+        retries=sanitize(_read_jsonl(pipeline / "audit" / "llm-attempts.jsonl")),
         artifact_sha256=hashes,
     )
 
