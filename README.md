@@ -207,6 +207,16 @@ ci-summary.json
 
 ## Проверки проекта
 
+Сопоставимые scanner baseline для Juice Shop (A06): отдельные Semgrep community
+rules и OWASP ZAP в изолированной Docker lab, сырые результаты и экспорт для A05.
+Подготовка, бюджеты и ограничения описаны в [A06](docs/a06-scanner-baselines.md).
+
+```bash
+python -m app.scanner_baseline validate
+python -m app.scanner_baseline preflight --provision-images
+python -m app.scanner_baseline run --output artifacts/a06/attempt-001
+```
+
 ```bash
 python -m pytest -q
 python -m ruff check .

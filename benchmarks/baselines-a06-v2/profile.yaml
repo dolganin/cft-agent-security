@@ -1,0 +1,24 @@
+schema_version: baseline.profile.a06.v1
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+target_image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b
+semgrep_image: semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade
+zap_image: ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab
+role: anonymous
+rules_file: semgrep-rules.yaml
+budgets:
+  sast_seconds: 600
+  startup_seconds: 180
+  spider_seconds: 60
+  ajax_seconds: 60
+  active_seconds: 180
+  passive_seconds: 180
+  passive_body_bytes: 262144
+  max_urls: 200
+  max_alerts: 10000
+# Generic navigation only. No ground-truth catalog is mounted into a scanner.
+seeds:
+  - /
+  - /robots.txt
+  - /rest/products/search?q=apple
+  - /api/Products
+  - /rest/admin/application-configuration

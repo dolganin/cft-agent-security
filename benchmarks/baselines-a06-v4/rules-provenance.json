@@ -1,0 +1,2155 @@
+{
+  "upstream": "https://github.com/semgrep/semgrep-rules",
+  "commit": "9bbf021d0acffa3095fcffd17b2bc7787eb4796d",
+  "selection": {
+    "language_directories": [
+      "javascript",
+      "typescript",
+      "generic",
+      "dockerfile",
+      "yaml",
+      "html",
+      "json"
+    ],
+    "required_path_component": "security",
+    "target_or_expected_label_filters": false
+  },
+  "rule_count": 310,
+  "files": [
+    {
+      "path": "javascript/ajv/security/audit/ajv-allerrors-true.yaml",
+      "sha256": "5a0444a9990fe8a333ac76a72726daa5ed89b8e0b5282ce2d98402e51a84628d",
+      "rule_ids": [
+        "javascript.ajv.security.audit.ajv-allerrors-true.ajv-allerrors-true"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-element-methods.yaml",
+      "sha256": "06ff1622c51c13dc16e96ecb4e4957f23aa1ae60005669c346cd953653a63385",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-element-methods.detect-angular-element-methods"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-element-taint.yaml",
+      "sha256": "dcbfbc90f7c9e42ca013df1779f621a494a72cf94910ff398260430b8a780899",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-element-taint.detect-angular-element-taint"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-open-redirect.yaml",
+      "sha256": "e94d3ee4133af6657382d2f9db67ce0ea31edaaccee0c85e0e8d51011c92734a",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-open-redirect.detect-angular-open-redirect"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-resource-loading.yaml",
+      "sha256": "1f808d561f9996de936da4077f48a166e4cfdb795364da35cf2a05d778a8da24",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-resource-loading.detect-angular-resource-loading"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-sce-disabled.yaml",
+      "sha256": "e6711427e5078bba28cbb154dc764cfcdea8a0f11a6f9159091d649155868477",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-sce-disabled.detect-angular-sce-disabled"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-trust-as-css.yaml",
+      "sha256": "2e941f4a89658c356f38df6adb7c6343ac676b0d97bebeedb2411263640969b7",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-trust-as-css.detect-angular-trust-as-css-method"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-trust-as-html-method.yaml",
+      "sha256": "c7807b6a43b4feaf97eb2767c588ce17b19d74a695f99661f626dd8ab8b83551",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-trust-as-html-method.detect-angular-trust-as-html-method"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-trust-as-js-method.yaml",
+      "sha256": "119521ed5135db82fbe5c54effa56cb1b0ae9eab5b047045ffc415800a8c910a",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-trust-as-js-method.detect-angular-trust-as-js-method"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-trust-as-method.yaml",
+      "sha256": "d99c8b9e29c80e060f39fec738f64341f5d2bbc465b43805af97233f7cdf2ccd",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-trust-as-method.detect-angular-trust-as-method"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-trust-as-resourceurl-method.yaml",
+      "sha256": "36dc560f4ab898af531c09e14a28cadb4acec590af11c1cec10cdcc686e02f67",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-trust-as-resourceurl-method.detect-angular-trust-as-resourceurl-method"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-angular-trust-as-url-method.yaml",
+      "sha256": "d4f7aff1f1409b43a7fd9fcd7a09315fc4642010dfd5dd441ef2724941786bd9",
+      "rule_ids": [
+        "javascript.angular.security.detect-angular-trust-as-url-method.detect-angular-trust-as-url-method"
+      ]
+    },
+    {
+      "path": "javascript/angular/security/detect-third-party-angular-translate.yaml",
+      "sha256": "2255fc0022029a6c5871afeb66013686a02a460cc6fec6df7e7224289bd23fb9",
+      "rule_ids": [
+        "javascript.angular.security.detect-third-party-angular-translate.detect-angular-translateprovider-translations-method"
+      ]
+    },
+    {
+      "path": "javascript/apollo/security/apollo-axios-ssrf.yaml",
+      "sha256": "daf9095319549308425a9461c386eaa5f0c3d44230f4f7962c8e9eb5432d5f9c",
+      "rule_ids": [
+        "javascript.apollo.security.apollo-axios-ssrf.apollo-axios-ssrf"
+      ]
+    },
+    {
+      "path": "javascript/argon2/security/unsafe-argon2-config.yaml",
+      "sha256": "93d892d3760c6a8578b59f6e80a50f34e2bede33e8562a5bbf42528f2457d1f7",
+      "rule_ids": [
+        "javascript.argon2.security.unsafe-argon2-config.unsafe-argon2-config"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/detect-child-process.yaml",
+      "sha256": "ba800ed021858d33c75a0ab3b17cd74dc255de409ac36d4bc6741d03def36c60",
+      "rule_ids": [
+        "javascript.aws-lambda.security.detect-child-process.detect-child-process"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/dynamodb-request-object.yaml",
+      "sha256": "30bd17f3ed40ad4bee86cea4e0b3aaf328eec2eb0fb3dbdc02650ae810d467a5",
+      "rule_ids": [
+        "javascript.aws-lambda.security.dynamodb-request-object.dynamodb-request-object"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/knex-sqli.yaml",
+      "sha256": "f3d08a7d604a9af6c3691e60f16e0e320510e71d950b334ff63b5688e654cf2b",
+      "rule_ids": [
+        "javascript.aws-lambda.security.knex-sqli.knex-sqli"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/mysql-sqli.yaml",
+      "sha256": "ef3d45c2dead702cc18b53070ddb92d10e2b51acd9411a279f15e9caf2241b16",
+      "rule_ids": [
+        "javascript.aws-lambda.security.mysql-sqli.mysql-sqli"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/pg-sqli.yaml",
+      "sha256": "3a7c98a8e0f7109a684620acea794ed4347cf418254814d96a53995fc230e96a",
+      "rule_ids": [
+        "javascript.aws-lambda.security.pg-sqli.pg-sqli"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/sequelize-sqli.yaml",
+      "sha256": "e384102dfda85f20ff899f0b7a70c2f921552b4614c8bf0b019d8e84f1461141",
+      "rule_ids": [
+        "javascript.aws-lambda.security.sequelize-sqli.sequelize-sqli"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/tainted-eval.yaml",
+      "sha256": "21f8a900d35a78af7f8ada7eedad6be6b35d92fb7cce55d7b9a2fa26afe89cd0",
+      "rule_ids": [
+        "javascript.aws-lambda.security.tainted-eval.tainted-eval"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/tainted-html-response.yaml",
+      "sha256": "cf3dfe74c00bb7d39840434eca5280ce5d67f6c5eb89cf506e277a0c25acee54",
+      "rule_ids": [
+        "javascript.aws-lambda.security.tainted-html-response.tainted-html-response"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/tainted-html-string.yaml",
+      "sha256": "effb7b6bf08d23db2e8ecc1335875169f851bb886affff65761e862c243840e7",
+      "rule_ids": [
+        "javascript.aws-lambda.security.tainted-html-string.tainted-html-string"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/tainted-sql-string.yaml",
+      "sha256": "b0df1b1a99cbf389645bf80f3365926aa8d75dbc23768b7b97a766b36d1ac7cd",
+      "rule_ids": [
+        "javascript.aws-lambda.security.tainted-sql-string.tainted-sql-string"
+      ]
+    },
+    {
+      "path": "javascript/aws-lambda/security/vm-runincontext-injection.yaml",
+      "sha256": "bc1eed4776fa89913873bfd8d4191238978db4c173332aaee87266dbc778861a",
+      "rule_ids": [
+        "javascript.aws-lambda.security.vm-runincontext-injection.vm-runincontext-injection"
+      ]
+    },
+    {
+      "path": "javascript/bluebird/security/audit/tofastproperties-code-execution.yaml",
+      "sha256": "2975cdb3d5269cee863b5f0b8e1cc183710373c64231c3a4c98cf01fae1f5046",
+      "rule_ids": [
+        "javascript.bluebird.security.audit.tofastproperties-code-execution.tofastproperties-code-execution"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/dom-based-xss.yaml",
+      "sha256": "f827042ec558d18849507fd41f378eadc50b9a469f137d8811a15503a95a9d44",
+      "rule_ids": [
+        "javascript.browser.security.dom-based-xss.dom-based-xss"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/eval-detected.yaml",
+      "sha256": "138c478c249ec00c8c28534a05865c6417718bbc9405c2fadb1a4feee98b51fb",
+      "rule_ids": [
+        "javascript.browser.security.eval-detected.eval-detected"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/insecure-document-method.yaml",
+      "sha256": "058e6740e25088102f5c24756ee11e642b8632598a882c5805baa8edf2ca564c",
+      "rule_ids": [
+        "javascript.browser.security.insecure-document-method.insecure-document-method"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/insecure-innerhtml.yaml",
+      "sha256": "2bbb8d64655b0fe8659bcb6c9466309548c7c75e85d2b51eec34a448810f4702",
+      "rule_ids": [
+        "javascript.browser.security.insecure-innerhtml.insecure-innerhtml"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/insufficient-postmessage-origin-validation.yaml",
+      "sha256": "6a172f3adcb10a1c035788f037d7d1da3f4778a75ccde2c63b2b71cc99ff24d1",
+      "rule_ids": [
+        "javascript.browser.security.insufficient-postmessage-origin-validation.insufficient-postmessage-origin-validation"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/open-redirect-from-function.yaml",
+      "sha256": "838a14000be08fe618f37774e7a37264b7578d6e4ed65d801aebb6fbc4961786",
+      "rule_ids": [
+        "javascript.browser.security.open-redirect-from-function.js-open-redirect-from-function"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/open-redirect.yaml",
+      "sha256": "80634d73ae8cd44542e14ec6aa001aad0289daae3f4e5e5ee7ae16bc1a3140df",
+      "rule_ids": [
+        "javascript.browser.security.open-redirect.js-open-redirect"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/raw-html-concat.yaml",
+      "sha256": "a29ffb1a9928d60b137fbc04e605a3599c3a3b091929f0fb6502c4b949e7e5b6",
+      "rule_ids": [
+        "javascript.browser.security.raw-html-concat.raw-html-concat"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/raw-html-join.yaml",
+      "sha256": "972d7436edca7adfb7cf0489b929791445580862d877efd3f504341c97624c5c",
+      "rule_ids": [
+        "javascript.browser.security.raw-html-join.raw-html-join"
+      ]
+    },
+    {
+      "path": "javascript/browser/security/wildcard-postmessage-configuration.yaml",
+      "sha256": "6ebb06ddbe4048653e371862c378c75e6ac2fb2e486ba1e71db8438cff80e148",
+      "rule_ids": [
+        "javascript.browser.security.wildcard-postmessage-configuration.wildcard-postmessage-configuration"
+      ]
+    },
+    {
+      "path": "javascript/chrome-remote-interface/security/audit/chrome-remote-interface-compilescript-injection.yaml",
+      "sha256": "7beecba18c5cb5e16c420b9dc95f18fdf09318b84936e4497cf01f73635efd5f",
+      "rule_ids": [
+        "javascript.chrome-remote-interface.security.audit.chrome-remote-interface-compilescript-injection.chrome-remote-interface-compilescript-injection"
+      ]
+    },
+    {
+      "path": "javascript/deno/security/audit/deno-dangerous-run.yaml",
+      "sha256": "613bc6cf5468cc2be1f860e97da1a77529bf4f02fd92ab1f02e4668899105bbe",
+      "rule_ids": [
+        "javascript.deno.security.audit.deno-dangerous-run.deno-dangerous-run"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-check-csurf-middleware-usage.yaml",
+      "sha256": "106e12163e179a880080b4b1c483d0f73a7bf4564eee25e17ff90bb53cfd9e68",
+      "rule_ids": [
+        "javascript.express.security.audit.express-check-csurf-middleware-usage.express-check-csurf-middleware-usage"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-check-directory-listing.yaml",
+      "sha256": "645ca2d4348a07a3edf4686212439630a283b1d32462ca43e627c698c6fce8fa",
+      "rule_ids": [
+        "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-cookie-settings.yaml",
+      "sha256": "762f483ab0e984440c0e0d78e03bc6499d19add6657ea7ddd07f32fb84614d47",
+      "rule_ids": [
+        "javascript.express.security.audit.express-cookie-settings.express-cookie-session-default-name",
+        "javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-secure",
+        "javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-httponly",
+        "javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-domain",
+        "javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-path",
+        "javascript.express.security.audit.express-cookie-settings.express-cookie-session-no-expires"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-detect-notevil-usage.yaml",
+      "sha256": "7b5669f045c9896f4d9dfd52313a49ce980616e20c5c4841d1c0236ab1079047",
+      "rule_ids": [
+        "javascript.express.security.audit.express-detect-notevil-usage.express-detect-notevil-usage"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-jwt-not-revoked.yaml",
+      "sha256": "b4f29979dca31e192fbe1676a5df088288931fecded4d6ae8c028b60da66504f",
+      "rule_ids": [
+        "javascript.express.security.audit.express-jwt-not-revoked.express-jwt-not-revoked"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-libxml-noent.yaml",
+      "sha256": "2bfaef3dce0467cde88ba0bf2044231b9b036b1e2a7723aacdc9a476f1c1bcc6",
+      "rule_ids": [
+        "javascript.express.security.audit.express-libxml-noent.express-libxml-noent"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-libxml-vm-noent.yaml",
+      "sha256": "a2046cc26c1edd5ef1b77a11655295f67b8a80cec762572df56f5c7e68088042",
+      "rule_ids": [
+        "javascript.express.security.audit.express-libxml-vm-noent.express-libxml-vm-noent"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-open-redirect.yaml",
+      "sha256": "5862c2e71ee8130cb0528a400e6699bb0958416b20110d5c995fcd5a139d414d",
+      "rule_ids": [
+        "javascript.express.security.audit.express-open-redirect.express-open-redirect"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-path-join-resolve-traversal.yaml",
+      "sha256": "410f69c0755f4dea546a4968357169dfd9d2b8e5b21db4111ed31c1601bdb717",
+      "rule_ids": [
+        "javascript.express.security.audit.express-path-join-resolve-traversal.express-path-join-resolve-traversal"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-res-sendfile.yaml",
+      "sha256": "6ed48bab2f11a7ec9fdb9b3e2b6ff83df06cb27fdb25d12e7f333fee1f54f407",
+      "rule_ids": [
+        "javascript.express.security.audit.express-res-sendfile.express-res-sendfile"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-session-hardcoded-secret.yaml",
+      "sha256": "978343fbc45664d463fc93a77f2647a545961d0fb687158a0665b4f608038597",
+      "rule_ids": [
+        "javascript.express.security.audit.express-session-hardcoded-secret.express-session-hardcoded-secret"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-ssrf.yaml",
+      "sha256": "04b0f37ce7b9ed609c9680fc7e5aad695e8933f9ad37f625e8cec8c86e20330f",
+      "rule_ids": [
+        "javascript.express.security.audit.express-ssrf.express-ssrf"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-third-party-object-deserialization.yaml",
+      "sha256": "e03fbf0c181a9c9be4929948a251f8fb005c26eb309861c71fe3bcc34df9c0ec",
+      "rule_ids": [
+        "javascript.express.security.audit.express-third-party-object-deserialization.express-third-party-object-deserialization"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/express-xml2json-xxe-event.yaml",
+      "sha256": "53e82db5699dae493a67bf8ff60b8a3d5f32423427b8468a45ccff47a1f00d2f",
+      "rule_ids": [
+        "javascript.express.security.audit.express-xml2json-xxe-event.express-xml2json-xxe-event"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/possible-user-input-redirect.yaml",
+      "sha256": "6a684e86fcdc23ce2c1a0ccab5db96d9aa8a0a049ff0b5c55b30cc35ca1ad9b9",
+      "rule_ids": [
+        "javascript.express.security.audit.possible-user-input-redirect.unknown-value-in-redirect"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/remote-property-injection.yaml",
+      "sha256": "87b7c1427e11c5bf9d1ebad14fda5ccc0cf090584c828fe9a20d8f17f3710397",
+      "rule_ids": [
+        "javascript.express.security.audit.remote-property-injection.remote-property-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/res-render-injection.yaml",
+      "sha256": "a9b1c818082098df51d198c379724c9ddc8365e112383a1ca2d844dea2bed971",
+      "rule_ids": [
+        "javascript.express.security.audit.res-render-injection.res-render-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/direct-response-write.yaml",
+      "sha256": "986578dfc72c3b9fc554fad236ef3dd883b554ab225874acc48cd0c402665d86",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.direct-response-write.direct-response-write"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/ejs/explicit-unescape.yaml",
+      "sha256": "610ddb249de215ad8442c7e780fa44989f665e87e138e868b7c78e3178b9b7d7",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.ejs.explicit-unescape.template-explicit-unescape"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/ejs/var-in-href.yaml",
+      "sha256": "74e483f9f54172fbdc332e2facc45f984374e1a66da9a2623f4ee7b96d970d81",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.ejs.var-in-href.var-in-href"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/ejs/var-in-script-src.yaml",
+      "sha256": "677d041c916ab899fb3d6d7741b48fb1bd09856b3ce9c74cb50f34398a1b304a",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.ejs.var-in-script-src.var-in-script-src"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/ejs/var-in-script-tag.yaml",
+      "sha256": "a29f65b55d9b95f7a4ba3b08bedfa736f4f70654ad6f76a67112fd0acf4f632a",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.ejs.var-in-script-tag.var-in-script-tag"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/mustache/escape-function-overwrite.yaml",
+      "sha256": "b0e6243866885e748c49b644e33167793c558ac368e6b8891704a7183e9f7507",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.mustache.escape-function-overwrite.escape-function-overwrite"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/mustache/explicit-unescape.yaml",
+      "sha256": "527ba4b2d4296a7c34779cbc5bc182189073fb5e19eaee984359270244f1dfdc",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.mustache.explicit-unescape.template-explicit-unescape"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/mustache/var-in-script-tag.yaml",
+      "sha256": "1206b47408c538562a2a383201a5138a7c9dcde5cf711b45f82b225fc359ac27",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.mustache.var-in-script-tag.var-in-script-tag"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/pug/and-attributes.yaml",
+      "sha256": "14f84b1e45ede4959bfd4ba61a8f1a870203e39747428e6f00c587cc4ecbe4cf",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.pug.and-attributes.template-and-attributes"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/pug/explicit-unescape.yaml",
+      "sha256": "a9e6579aff9240d664f95055b18385c3a2692d71739f89ca76d4609dff7653a4",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.pug.explicit-unescape.template-explicit-unescape"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/pug/var-in-href.yaml",
+      "sha256": "4b67c9a21df04457cb693c1abddbe9eb1803bfa8a85c49f18969c6c466044ece",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.pug.var-in-href.var-in-href"
+      ]
+    },
+    {
+      "path": "javascript/express/security/audit/xss/pug/var-in-script-tag.yaml",
+      "sha256": "a629b9dc965ed4dd1a96f2d46c8e0e89542294b620ea73ef352827b2b47c0bd9",
+      "rule_ids": [
+        "javascript.express.security.audit.xss.pug.var-in-script-tag.var-in-script-tag"
+      ]
+    },
+    {
+      "path": "javascript/express/security/cors-misconfiguration.yaml",
+      "sha256": "ae702010e822930881b43ebf1ea695b4d3f7e16a4c30b6a963f2597444831831",
+      "rule_ids": [
+        "javascript.express.security.cors-misconfiguration.cors-misconfiguration"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-data-exfiltration.yaml",
+      "sha256": "1e633f8c3114161b0afffd25810a8c8b2c8d132c777322d155cf305563179455",
+      "rule_ids": [
+        "javascript.express.security.express-data-exfiltration.express-data-exfiltration"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-expat-xxe.yaml",
+      "sha256": "d82a4edd86edc0865db394cb9ea871ada60425cddaddbfd3cbc2cfe29513ae3e",
+      "rule_ids": [
+        "javascript.express.security.express-expat-xxe.express-expat-xxe"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-insecure-template-usage.yaml",
+      "sha256": "25fbc7a9edcc232e95298f94fe117c6844528443973e33b38fab17feaeab59bd",
+      "rule_ids": [
+        "javascript.express.security.express-insecure-template-usage.express-insecure-template-usage"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-jwt-hardcoded-secret.yaml",
+      "sha256": "3471797bb78774d9d12789aecfea7507ac01c7d5b0ef005b9fa584d2f32779ab",
+      "rule_ids": [
+        "javascript.express.security.express-jwt-hardcoded-secret.express-jwt-hardcoded-secret"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-phantom-injection.yaml",
+      "sha256": "8644a6634367a29e8b0ff733401e535375e0ca2cc596f5afc4dcae5624a20cdb",
+      "rule_ids": [
+        "javascript.express.security.express-phantom-injection.express-phantom-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-puppeteer-injection.yaml",
+      "sha256": "c199b6614bf8d9778ddc0d9e234a5d35d78918bc32166f3a9f980c23f0794fa7",
+      "rule_ids": [
+        "javascript.express.security.express-puppeteer-injection.express-puppeteer-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-sandbox-injection.yaml",
+      "sha256": "00e3fba411ac5d4fe9a8841171f385802e6f936a02c4b6fc4c27cde78a5e57df",
+      "rule_ids": [
+        "javascript.express.security.express-sandbox-injection.express-sandbox-code-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-vm-injection.yaml",
+      "sha256": "4ae26f7d16e271e9ddb9757537b51e0e7cb3105d37774838e41e0d69e3e0735b",
+      "rule_ids": [
+        "javascript.express.security.express-vm-injection.express-vm-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-vm2-injection.yaml",
+      "sha256": "c5175e188f80305cfc32cbf9369e52abd786ffc87de1c372f215f53698b567b9",
+      "rule_ids": [
+        "javascript.express.security.express-vm2-injection.express-vm2-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-wkhtml-injection.yaml",
+      "sha256": "75f98fcee9c4871db3c8f61cb05fde7c275c3d50b1426c5146f4a46894b07602",
+      "rule_ids": [
+        "javascript.express.security.express-wkhtml-injection.express-wkhtmltoimage-injection",
+        "javascript.express.security.express-wkhtml-injection.express-wkhtmltopdf-injection"
+      ]
+    },
+    {
+      "path": "javascript/express/security/express-xml2json-xxe.yaml",
+      "sha256": "36615fbd1f2a523187dd87fbb6d3e8bdeaf9c576986b5e4315c82ce3484c92f7",
+      "rule_ids": [
+        "javascript.express.security.express-xml2json-xxe.express-xml2json-xxe"
+      ]
+    },
+    {
+      "path": "javascript/express/security/injection/raw-html-format.yaml",
+      "sha256": "a0d5237e69e8f9df9fd7104f735204ba682bf4bbaa3ffcc29e9d06d1703cd924",
+      "rule_ids": [
+        "javascript.express.security.injection.raw-html-format.raw-html-format"
+      ]
+    },
+    {
+      "path": "javascript/express/security/injection/tainted-sql-string.yaml",
+      "sha256": "905bdb994c9cae616a6fee7da6178ffb1f13b25e56feaa431b3181f282de1216",
+      "rule_ids": [
+        "javascript.express.security.injection.tainted-sql-string.tainted-sql-string"
+      ]
+    },
+    {
+      "path": "javascript/express/security/require-request.yaml",
+      "sha256": "6567afd831b7496fb02fe83f4048dac3721736347d13236d92a71962fca4ed14",
+      "rule_ids": [
+        "javascript.express.security.require-request.require-request"
+      ]
+    },
+    {
+      "path": "javascript/express/security/x-frame-options-misconfiguration.yaml",
+      "sha256": "48a033b0d96d0fbba452b4175165a72fed67a7e906148fa6ad07cc23cbfc6a79",
+      "rule_ids": [
+        "javascript.express.security.x-frame-options-misconfiguration.x-frame-options-misconfiguration"
+      ]
+    },
+    {
+      "path": "javascript/fbjs/security/audit/insecure-createnodesfrommarkup.yaml",
+      "sha256": "371faede38191319f03b4ebdd0f3a2d792bef9628ad6cd57a35ce9a895fbee2b",
+      "rule_ids": [
+        "javascript.fbjs.security.audit.insecure-createnodesfrommarkup.insecure-createnodesfrommarkup"
+      ]
+    },
+    {
+      "path": "javascript/grpc/security/grpc-nodejs-insecure-connection.yaml",
+      "sha256": "66f211a07a376c308e5922c5fcda830c48832f00f7c1e37273b78ac4784b3fe3",
+      "rule_ids": [
+        "javascript.grpc.security.grpc-nodejs-insecure-connection.grpc-nodejs-insecure-connection"
+      ]
+    },
+    {
+      "path": "javascript/intercom/security/audit/intercom-settings-user-identifier-without-user-hash.yaml",
+      "sha256": "56d378977468c0811f4ea2a6b4b52da5304eaf2dd2cacd04478836d4efc18ffc",
+      "rule_ids": [
+        "javascript.intercom.security.audit.intercom-settings-user-identifier-without-user-hash.intercom-settings-user-identifier-without-user-hash"
+      ]
+    },
+    {
+      "path": "javascript/jose/security/audit/jose-exposed-data.yaml",
+      "sha256": "2340d5c62be60aec294e50f0f618b71da62278b34f973fd3142979ee1cdfa387",
+      "rule_ids": [
+        "javascript.jose.security.audit.jose-exposed-data.jose-exposed-data"
+      ]
+    },
+    {
+      "path": "javascript/jose/security/jwt-hardcode.yaml",
+      "sha256": "8d72235a8156b8e9f1c297def998ed54a80cdbe6da9ebee9519ccf4d24100192",
+      "rule_ids": [
+        "javascript.jose.security.jwt-hardcode.hardcoded-jwt-secret"
+      ]
+    },
+    {
+      "path": "javascript/jose/security/jwt-none-alg.yaml",
+      "sha256": "1e122f0e767e3ce6ccebaf4767f12a070bb6703d432ada8fdf2f3d6609ff76b4",
+      "rule_ids": [
+        "javascript.jose.security.jwt-none-alg.jwt-none-alg"
+      ]
+    },
+    {
+      "path": "javascript/jquery/security/audit/jquery-insecure-method.yaml",
+      "sha256": "3e39ea0d1341bce13e125f9fb2d306ef759a06f52e879b9c9c86ff9a1a6070bf",
+      "rule_ids": [
+        "javascript.jquery.security.audit.jquery-insecure-method.jquery-insecure-method"
+      ]
+    },
+    {
+      "path": "javascript/jquery/security/audit/jquery-insecure-selector.yaml",
+      "sha256": "953f3613c881cb2eade7d8306f805947374190115370cb456d686997e28f92a7",
+      "rule_ids": [
+        "javascript.jquery.security.audit.jquery-insecure-selector.jquery-insecure-selector"
+      ]
+    },
+    {
+      "path": "javascript/jquery/security/audit/prohibit-jquery-html.yaml",
+      "sha256": "9fd411241591fbe4909491c0ec782a3918f7779ac99ad34c6f88631a7323073c",
+      "rule_ids": [
+        "javascript.jquery.security.audit.prohibit-jquery-html.prohibit-jquery-html"
+      ]
+    },
+    {
+      "path": "javascript/jsonwebtoken/security/audit/jwt-decode-without-verify.yaml",
+      "sha256": "2503df2d7543e9859e5f4e4da5ad5e64c9a5249e469a759441387a3bdc98128d",
+      "rule_ids": [
+        "javascript.jsonwebtoken.security.audit.jwt-decode-without-verify.jwt-decode-without-verify"
+      ]
+    },
+    {
+      "path": "javascript/jsonwebtoken/security/audit/jwt-exposed-data.yaml",
+      "sha256": "bd3313f33e93bc21d52bb80d15826c53c61f370960998fdbad9b5c40d473af5c",
+      "rule_ids": [
+        "javascript.jsonwebtoken.security.audit.jwt-exposed-data.jwt-exposed-data"
+      ]
+    },
+    {
+      "path": "javascript/jsonwebtoken/security/jwt-hardcode.yaml",
+      "sha256": "bcc63a19cc7a5acb8b6a0fa847d93db051d26d7038120b7dc47462ba68c0d70a",
+      "rule_ids": [
+        "javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret"
+      ]
+    },
+    {
+      "path": "javascript/jsonwebtoken/security/jwt-none-alg.yaml",
+      "sha256": "ec6a0aa4cbfe0657bb9b7f4cacea7ab0d0f3653ac6d919ecab588fce17629fb6",
+      "rule_ids": [
+        "javascript.jsonwebtoken.security.jwt-none-alg.jwt-none-alg"
+      ]
+    },
+    {
+      "path": "javascript/jwt-simple/security/jwt-simple-noverify.yaml",
+      "sha256": "0e298a53e60e5963208c1ec6c0c08a9fc0a32e6949d8a4815e209ea4f9fb3441",
+      "rule_ids": [
+        "javascript.jwt-simple.security.jwt-simple-noverify.jwt-simple-noverify"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/code-string-concat.yaml",
+      "sha256": "77ae5fc8ffae0650cc7d97d1f34d31d8425ea9355dad4bc305572367c493194e",
+      "rule_ids": [
+        "javascript.lang.security.audit.code-string-concat.code-string-concat"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/dangerous-spawn-shell.yaml",
+      "sha256": "67e9d47bd23b0b378ff531bc0ebf02a80ebed396436d7b28ed26e31d551e0083",
+      "rule_ids": [
+        "javascript.lang.security.audit.dangerous-spawn-shell.dangerous-spawn-shell"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/detect-non-literal-fs-filename.yaml",
+      "sha256": "e049e686f092cc33223e8e2bf40494c04d1fd44e7e77178f77664eaff105f993",
+      "rule_ids": [
+        "javascript.lang.security.audit.detect-non-literal-fs-filename.detect-non-literal-fs-filename"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/detect-non-literal-regexp.yaml",
+      "sha256": "937ab06d433cd05d917aecaa957d9e7307314ba04dede3ae049b81ee345cf1ac",
+      "rule_ids": [
+        "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/detect-non-literal-require.yaml",
+      "sha256": "e56fd7c3a87149e626e0462d3e7fb92d990a0fa552e79ab43ec07fb31bcc3c66",
+      "rule_ids": [
+        "javascript.lang.security.audit.detect-non-literal-require.detect-non-literal-require"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/detect-redos.yaml",
+      "sha256": "0bdedb6ef8a22b99426e7dd06a594a781a43e82f4f0b68052f7d981975e0545f",
+      "rule_ids": [
+        "javascript.lang.security.audit.detect-redos.detect-redos"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/hardcoded-hmac-key.yaml",
+      "sha256": "5e2ff76ee235ef5512aeae0044a9c078ba109acb7e5232476b15be68b770ee6e",
+      "rule_ids": [
+        "javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/incomplete-sanitization.yaml",
+      "sha256": "d7673657d4300d478deea76b505f667ea6ecba39ad9cabf0a6f9269cd92d052f",
+      "rule_ids": [
+        "javascript.lang.security.audit.incomplete-sanitization.incomplete-sanitization"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/md5-used-as-password.yaml",
+      "sha256": "f8fbf11133e58a46c3e342403805f8f115c28b8cc189c2eff2f5604b029fea45",
+      "rule_ids": [
+        "javascript.lang.security.audit.md5-used-as-password.md5-used-as-password"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/path-traversal/path-join-resolve-traversal.yaml",
+      "sha256": "cfcd8dd1c89bff06d607c846ffbc3caeaac53c4790169efc148840de7670b8a9",
+      "rule_ids": [
+        "javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/prototype-pollution/prototype-pollution-assignment.yaml",
+      "sha256": "f8c96b294320349dc51c8ecccaa6c35dde5872df36bf7d6867c07e485f7bfeb0",
+      "rule_ids": [
+        "javascript.lang.security.audit.prototype-pollution.prototype-pollution-assignment.prototype-pollution-assignment"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/prototype-pollution/prototype-pollution-loop.yaml",
+      "sha256": "9d693e6422b54c448bdeeef22783106712a130042eab06dbf200fd2055471984",
+      "rule_ids": [
+        "javascript.lang.security.audit.prototype-pollution.prototype-pollution-loop.prototype-pollution-loop"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/spawn-shell-true.yaml",
+      "sha256": "01f7c2ad22fa80a6bc48ac628b63dd4ffbe9b96c802ddf75b03c5ac90117b5d2",
+      "rule_ids": [
+        "javascript.lang.security.audit.spawn-shell-true.spawn-shell-true"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/sqli/node-knex-sqli.yaml",
+      "sha256": "9573c9b0bf51e27fc7decf94d81282eb70603eda18a3f00febc064544f8a16c6",
+      "rule_ids": [
+        "javascript.lang.security.audit.sqli.node-knex-sqli.node-knex-sqli"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/sqli/node-mssql-sqli.yaml",
+      "sha256": "557815d27e5f9dbe80edbd49c322e9c0c182df03bd52832a26570ca6f17029a9",
+      "rule_ids": [
+        "javascript.lang.security.audit.sqli.node-mssql-sqli.node-mssql-sqli"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/sqli/node-mysql-sqli.yaml",
+      "sha256": "0ae95213cbff84615dd0ac9305e5be6f55fba8b4bb2add63c0c79adc01c77787",
+      "rule_ids": [
+        "javascript.lang.security.audit.sqli.node-mysql-sqli.node-mysql-sqli"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/sqli/node-postgres-sqli.yaml",
+      "sha256": "4cb4f877cc5ab05b945b92c64f91b0f940b04e616ee89e493228eb0050c0908d",
+      "rule_ids": [
+        "javascript.lang.security.audit.sqli.node-postgres-sqli.node-postgres-sqli"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/unknown-value-with-script-tag.yaml",
+      "sha256": "e1756e1b64052d35df99b8959b1954cdb03d6f88e9bb37fd9f23202e16e6eb28",
+      "rule_ids": [
+        "javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/unsafe-dynamic-method.yaml",
+      "sha256": "a57988ceb04d8928a8459baff1ce4be62650b2baeba61acc938363da659cd277",
+      "rule_ids": [
+        "javascript.lang.security.audit.unsafe-dynamic-method.unsafe-dynamic-method"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/audit/unsafe-formatstring.yaml",
+      "sha256": "7ceff02d5ee165072b91aebcb7ec1dfc024f26e19e54f1b6292742bc801e0de4",
+      "rule_ids": [
+        "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-buffer-noassert.yaml",
+      "sha256": "370cf96d2e83ec44709a3b412bec7b6fc11e4657e641611fc26f6124b2a7a54f",
+      "rule_ids": [
+        "javascript.lang.security.detect-buffer-noassert.detect-buffer-noassert"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-child-process.yaml",
+      "sha256": "5d92cb38a15c86798a666d58317cd101097090e2cb0fa4d7824f311c3e9501a6",
+      "rule_ids": [
+        "javascript.lang.security.detect-child-process.detect-child-process"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-disable-mustache-escape.yaml",
+      "sha256": "9282ce61347a92d170db9fa72e9e7bca4ba4d431ab78630014ec90ab1c26a4df",
+      "rule_ids": [
+        "javascript.lang.security.detect-disable-mustache-escape.detect-disable-mustache-escape"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-eval-with-expression.yaml",
+      "sha256": "b4419c38f5852d4772fce899d16259675e315a9b07c930eec0a488ad40820ff1",
+      "rule_ids": [
+        "javascript.lang.security.detect-eval-with-expression.detect-eval-with-expression"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-insecure-websocket.yaml",
+      "sha256": "0d0982202bc8ec3dd682b43c5b7f7e20298843f86623619391d75dfc1d10b0bf",
+      "rule_ids": [
+        "javascript.lang.security.detect-insecure-websocket.detect-insecure-websocket"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-no-csrf-before-method-override.yaml",
+      "sha256": "5aeeb45a107ece1f4a441a88e0365ccc98fff627b0deb6058b2cca5fa3eaec12",
+      "rule_ids": [
+        "javascript.lang.security.detect-no-csrf-before-method-override.detect-no-csrf-before-method-override"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/detect-pseudoRandomBytes.yaml",
+      "sha256": "c28558002851eb212928f6fbc9871cd2d6dff213942befe8c7bcbf5fd3790a6f",
+      "rule_ids": [
+        "javascript.lang.security.detect-pseudoRandomBytes.detect-pseudoRandomBytes"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/html-in-template-string.yaml",
+      "sha256": "66678d7103a0d146e36c5a5d42b235f85cb56e14b76c31c61e8e731b55afe3bd",
+      "rule_ids": [
+        "javascript.lang.security.html-in-template-string.html-in-template-string"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/insecure-object-assign.yaml",
+      "sha256": "159d89159f589d7006c0f9106bfadd1185f99f3fef5ad6e04a1fa65beafaba36",
+      "rule_ids": [
+        "javascript.lang.security.insecure-object-assign.insecure-object-assign"
+      ]
+    },
+    {
+      "path": "javascript/lang/security/spawn-git-clone.yaml",
+      "sha256": "51039bb2c1ffc8058a604baebbda839e1e176c6955dcf0c6584ddf02d339b13e",
+      "rule_ids": [
+        "javascript.lang.security.spawn-git-clone.spawn-git-clone"
+      ]
+    },
+    {
+      "path": "javascript/monaco-editor/security/audit/monaco-hover-htmlsupport.yaml",
+      "sha256": "13f8bf1d5d21f8884c2e0b3bcfeea3f396d490b3f65cf9a93b2d278010a8a6cb",
+      "rule_ids": [
+        "javascript.monaco-editor.security.audit.monaco-hover-htmlsupport.monaco-hover-htmlsupport"
+      ]
+    },
+    {
+      "path": "javascript/node-crypto/security/aead-no-final.yaml",
+      "sha256": "de39c7602ad6917661f798a07d752575e3e13abf7bb031590fe5248c719f16f7",
+      "rule_ids": [
+        "javascript.node-crypto.security.aead-no-final.aead-no-final"
+      ]
+    },
+    {
+      "path": "javascript/node-crypto/security/create-de-cipher-no-iv.yaml",
+      "sha256": "a2edabacf3aa051ab3454bcda83b90ce97c35d70bd28bd36be9cd31b6ec8fcde",
+      "rule_ids": [
+        "javascript.node-crypto.security.create-de-cipher-no-iv.create-de-cipher-no-iv"
+      ]
+    },
+    {
+      "path": "javascript/node-crypto/security/gcm-no-tag-length.yaml",
+      "sha256": "33aa7623b551509904be6d45b7938701530087622664b3803e9f0cbf3f2e007f",
+      "rule_ids": [
+        "javascript.node-crypto.security.gcm-no-tag-length.gcm-no-tag-length"
+      ]
+    },
+    {
+      "path": "javascript/node-expat/security/audit/expat-xxe.yaml",
+      "sha256": "730e4f8c1c7c131d7ca5eb6107579fbe80fa47cb34cc6a61e25576f1726101a9",
+      "rule_ids": [
+        "javascript.node-expat.security.audit.expat-xxe.expat-xxe"
+      ]
+    },
+    {
+      "path": "javascript/passport-jwt/security/passport-hardcode.yaml",
+      "sha256": "ffd04bcf5c74ab9590e46902482bd763b7a99723969f9c2ff27b64a73205d4e1",
+      "rule_ids": [
+        "javascript.passport-jwt.security.passport-hardcode.hardcoded-passport-secret"
+      ]
+    },
+    {
+      "path": "javascript/phantom/security/audit/phantom-injection.yaml",
+      "sha256": "b4ddd1f2362d6c33ba070690841c1c8c122aa986e9a3df69910fb15f4cc6f412",
+      "rule_ids": [
+        "javascript.phantom.security.audit.phantom-injection.phantom-injection"
+      ]
+    },
+    {
+      "path": "javascript/playwright/security/audit/playwright-addinitscript-code-injection.yaml",
+      "sha256": "6aeb56342b9102a9f2bb050d4e4561e196d4a0385ba8128b54ffe7007dba9a1a",
+      "rule_ids": [
+        "javascript.playwright.security.audit.playwright-addinitscript-code-injection.playwright-addinitscript-code-injection"
+      ]
+    },
+    {
+      "path": "javascript/playwright/security/audit/playwright-evaluate-arg-injection.yaml",
+      "sha256": "007eebd2175a67bcd4d59fb6301714d78459c5a1738d2007e3eadbc7f8d2318e",
+      "rule_ids": [
+        "javascript.playwright.security.audit.playwright-evaluate-arg-injection.playwright-evaluate-arg-injection"
+      ]
+    },
+    {
+      "path": "javascript/playwright/security/audit/playwright-evaluate-code-injection.yaml",
+      "sha256": "5c94dd27fb3bd76083a1d737ced8e702c2ba5baab7bcf6b0d9f8bbf30a93f838",
+      "rule_ids": [
+        "javascript.playwright.security.audit.playwright-evaluate-code-injection.playwright-evaluate-code-injection"
+      ]
+    },
+    {
+      "path": "javascript/playwright/security/audit/playwright-exposed-chrome-devtools.yaml",
+      "sha256": "f182433faf01c09aaa89ef56266431fdb12bb82ab275b52e3ae9ea78dbb555a0",
+      "rule_ids": [
+        "javascript.playwright.security.audit.playwright-exposed-chrome-devtools.playwright-exposed-chrome-devtools"
+      ]
+    },
+    {
+      "path": "javascript/playwright/security/audit/playwright-goto-injection.yaml",
+      "sha256": "cf743b67808e77c3f2dc18c998627080ed7a8b0605ffb3087165a4cf1e55cc70",
+      "rule_ids": [
+        "javascript.playwright.security.audit.playwright-goto-injection.playwright-goto-injection"
+      ]
+    },
+    {
+      "path": "javascript/playwright/security/audit/playwright-setcontent-injection.yaml",
+      "sha256": "894850b20455ba371c31d6190819878905ea049bf6b21e8e14d55f0a2db31ee4",
+      "rule_ids": [
+        "javascript.playwright.security.audit.playwright-setcontent-injection.playwright-setcontent-injection"
+      ]
+    },
+    {
+      "path": "javascript/puppeteer/security/audit/puppeteer-evaluate-arg-injection.yaml",
+      "sha256": "38ef7405cfc6e8fb1f12fc0fe6d35bb8473a1a8777d0c5fccf0911f8af9e6835",
+      "rule_ids": [
+        "javascript.puppeteer.security.audit.puppeteer-evaluate-arg-injection.puppeteer-evaluate-arg-injection"
+      ]
+    },
+    {
+      "path": "javascript/puppeteer/security/audit/puppeteer-evaluate-code-injection.yaml",
+      "sha256": "b1c655978b6cf7188b7642d95bb4c09ff6ee7479063302d1132514ebb39b8359",
+      "rule_ids": [
+        "javascript.puppeteer.security.audit.puppeteer-evaluate-code-injection.puppeteer-evaluate-code-injection"
+      ]
+    },
+    {
+      "path": "javascript/puppeteer/security/audit/puppeteer-exposed-chrome-devtools.yaml",
+      "sha256": "673e8997cb9670d4e27d8ab55d3f6bdd3fd6df0a4a29c067684b4efac7e3f158",
+      "rule_ids": [
+        "javascript.puppeteer.security.audit.puppeteer-exposed-chrome-devtools.puppeteer-exposed-chrome-devtools"
+      ]
+    },
+    {
+      "path": "javascript/puppeteer/security/audit/puppeteer-goto-injection.yaml",
+      "sha256": "a347d23892887b84486b24e01b3f06039fc0c8d129f9785b40bf2ff1e914adc8",
+      "rule_ids": [
+        "javascript.puppeteer.security.audit.puppeteer-goto-injection.puppeteer-goto-injection"
+      ]
+    },
+    {
+      "path": "javascript/puppeteer/security/audit/puppeteer-setcontent-injection.yaml",
+      "sha256": "a8a9ae82deef65357e71fff54fc852fd50acb4d639201937039ce6ee4449d577",
+      "rule_ids": [
+        "javascript.puppeteer.security.audit.puppeteer-setcontent-injection.puppeteer-setcontent-injection"
+      ]
+    },
+    {
+      "path": "javascript/sandbox/security/audit/sandbox-code-injection.yaml",
+      "sha256": "0daf679451dae004a7c65bc578cd548002e786058c03c487a6d5d4ba8c222a4a",
+      "rule_ids": [
+        "javascript.sandbox.security.audit.sandbox-code-injection.sandbox-code-injection"
+      ]
+    },
+    {
+      "path": "javascript/sax/security/audit/sax-xxe.yaml",
+      "sha256": "82b0314063a019619dedd5a77292a2922d1cf4133de6f5f2739dbb7523bd1d3c",
+      "rule_ids": [
+        "javascript.sax.security.audit.sax-xxe.sax-xxe"
+      ]
+    },
+    {
+      "path": "javascript/sequelize/security/audit/sequelize-enforce-tls.yaml",
+      "sha256": "b65ca3edde030492f26649a1a8e58623b020a33a39a11176e2d47c44e286a01b",
+      "rule_ids": [
+        "javascript.sequelize.security.audit.sequelize-enforce-tls.sequelize-enforce-tls"
+      ]
+    },
+    {
+      "path": "javascript/sequelize/security/audit/sequelize-injection-express.yaml",
+      "sha256": "d1bbea520872f785d04fcbfdcafd1952797d441b84db4f7c2d032644e2df8a8a",
+      "rule_ids": [
+        "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection"
+      ]
+    },
+    {
+      "path": "javascript/sequelize/security/audit/sequelize-raw-query.yaml",
+      "sha256": "a734c6c911e8ad8a81afbf1d1a9da3e745463c8fc94f0041594986309f8df002",
+      "rule_ids": [
+        "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query"
+      ]
+    },
+    {
+      "path": "javascript/sequelize/security/audit/sequelize-tls-disabled-cert-validation.yaml",
+      "sha256": "095423271fc09e372da3082035019fb6075eca79d66883ba0e431a2d30508558",
+      "rule_ids": [
+        "javascript.sequelize.security.audit.sequelize-tls-disabled-cert-validation.sequelize-tls-disabled-cert-validation"
+      ]
+    },
+    {
+      "path": "javascript/sequelize/security/audit/sequelize-weak-tls-version.yaml",
+      "sha256": "999d988a643ecedac2eae3e57f55ca04dd855f39de580d9a9e8c23fff0b2940b",
+      "rule_ids": [
+        "javascript.sequelize.security.audit.sequelize-weak-tls-version.sequelize-weak-tls-version"
+      ]
+    },
+    {
+      "path": "javascript/serialize-javascript/security/audit/unsafe-serialize-javascript.yaml",
+      "sha256": "720f4ef6dad662c5651b6474bac31a6f5ae932b883c09225c2b11d1b4b936fa8",
+      "rule_ids": [
+        "javascript.serialize-javascript.security.audit.unsafe-serialize-javascript.unsafe-serialize-javascript"
+      ]
+    },
+    {
+      "path": "javascript/shelljs/security/shelljs-exec-injection.yaml",
+      "sha256": "cd8ed3775a3097674b34e656fc4b96b8cb4d070c4888881028788516875ae3c7",
+      "rule_ids": [
+        "javascript.shelljs.security.shelljs-exec-injection.shelljs-exec-injection"
+      ]
+    },
+    {
+      "path": "javascript/thenify/security/audit/multiargs-code-execution.yaml",
+      "sha256": "adc95913e28d68923d491a185d4812de319652cc5b0dd8385aeefb6fa2e3a471",
+      "rule_ids": [
+        "javascript.thenify.security.audit.multiargs-code-execution.multiargs-code-execution"
+      ]
+    },
+    {
+      "path": "javascript/vm2/security/audit/vm2-code-injection.yaml",
+      "sha256": "d54b60c7df30252b9cc2005f80ddafbf87ceb6c3e12c0fc645bd7e40e486a9c1",
+      "rule_ids": [
+        "javascript.vm2.security.audit.vm2-code-injection.vm2-code-injection"
+      ]
+    },
+    {
+      "path": "javascript/vm2/security/audit/vm2-context-injection.yaml",
+      "sha256": "c21179dfed6c8aea2116abcfac1ff8b8a9c9519eadaa7c68de366d5aceb13344",
+      "rule_ids": [
+        "javascript.vm2.security.audit.vm2-context-injection.vm2-context-injection"
+      ]
+    },
+    {
+      "path": "javascript/vue/security/audit/xss/templates/avoid-v-html.yaml",
+      "sha256": "934cbbbc249471cbf4a725bff027d7571de109a018de18bd55e901eda0a0170f",
+      "rule_ids": [
+        "javascript.vue.security.audit.xss.templates.avoid-v-html.avoid-v-html"
+      ]
+    },
+    {
+      "path": "javascript/wkhtmltoimage/security/audit/wkhtmltoimage-injection.yaml",
+      "sha256": "e8a359a42da754c64a48455efef0704e2176ff22f47ec38161c12b2478bd9d4d",
+      "rule_ids": [
+        "javascript.wkhtmltoimage.security.audit.wkhtmltoimage-injection.wkhtmltoimage-injection"
+      ]
+    },
+    {
+      "path": "javascript/wkhtmltopdf/security/audit/wkhtmltopdf-injection.yaml",
+      "sha256": "19b0b799c42b74b11a5ca0af10cd8c854b6859af7d0df493cc1578da25ec78d3",
+      "rule_ids": [
+        "javascript.wkhtmltopdf.security.audit.wkhtmltopdf-injection.wkhtmltopdf-injection"
+      ]
+    },
+    {
+      "path": "javascript/xml2json/security/audit/xml2json-xxe.yaml",
+      "sha256": "2ae6ecdc3cb68bdcf4f5ac80f32ed93f5dd882ec5de4d0653d97788acdce4b85",
+      "rule_ids": [
+        "javascript.xml2json.security.audit.xml2json-xxe.xml2json-xxe"
+      ]
+    },
+    {
+      "path": "typescript/angular/security/audit/angular-domsanitizer.yaml",
+      "sha256": "23550f3c116af279f4a70560722134c12b664826f56b3d2995fa408cc7c45030",
+      "rule_ids": [
+        "typescript.angular.security.audit.angular-domsanitizer.angular-bypasssecuritytrust"
+      ]
+    },
+    {
+      "path": "typescript/lang/security/audit/cors-regex-wildcard.yaml",
+      "sha256": "8179d36138e0d74ff3d94b8fb168585bb3f7818039bcc9c0e7f9613bcf293e2f",
+      "rule_ids": [
+        "typescript.lang.security.audit.cors-regex-wildcard.cors-regex-wildcard"
+      ]
+    },
+    {
+      "path": "typescript/mcp/security/mcp-command-injection-typescript.yaml",
+      "sha256": "9caeacfdb09f75560411218ece5acd2c7fc791a1dadc405387c29cbb7df5da75",
+      "rule_ids": [
+        "typescript.mcp.security.mcp-command-injection-typescript.mcp-command-injection-typescript"
+      ]
+    },
+    {
+      "path": "typescript/mcp/security/mcp-ssrf-typescript.yaml",
+      "sha256": "67ffbecc852f389ce7a144d55f52b09c4a3c356873bbc65114dcf03e952051b1",
+      "rule_ids": [
+        "typescript.mcp.security.mcp-ssrf-typescript.mcp-ssrf-typescript"
+      ]
+    },
+    {
+      "path": "typescript/nestjs/security/audit/nestjs-header-cors-any.yaml",
+      "sha256": "22f55603cb669f8e3b17c1b7c945349b2c1703ee832ad1d0032c290ba1dd9cd7",
+      "rule_ids": [
+        "typescript.nestjs.security.audit.nestjs-header-cors-any.nestjs-header-cors-any"
+      ]
+    },
+    {
+      "path": "typescript/nestjs/security/audit/nestjs-header-xss-disabled.yaml",
+      "sha256": "9ace52f5037a95a5cee0e700b180b0a195be874359bacb8e936352585f97066d",
+      "rule_ids": [
+        "typescript.nestjs.security.audit.nestjs-header-xss-disabled.nestjs-header-xss-disabled"
+      ]
+    },
+    {
+      "path": "typescript/nestjs/security/audit/nestjs-open-redirect.yaml",
+      "sha256": "036e7481fa5302f7127b18e2c371431107b0f60f09cb8f310d88dd17a01ce8a9",
+      "rule_ids": [
+        "typescript.nestjs.security.audit.nestjs-open-redirect.nestjs-open-redirect"
+      ]
+    },
+    {
+      "path": "typescript/react/security/audit/react-dangerouslysetinnerhtml.yaml",
+      "sha256": "6ed9fcbcf3e130c89478ee74fdc66a63ec3c753e3eb913364a4facd62ffc08b3",
+      "rule_ids": [
+        "typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml"
+      ]
+    },
+    {
+      "path": "typescript/react/security/audit/react-href-var.yaml",
+      "sha256": "c0db2fc3380d34a33dccbd80c2d18214d3863ed9d38f1fc7c8aa5767b65ba162",
+      "rule_ids": [
+        "typescript.react.security.audit.react-href-var.react-href-var"
+      ]
+    },
+    {
+      "path": "typescript/react/security/audit/react-jwt-decoded-property.yaml",
+      "sha256": "f00874a1331f9f3ffd15ec6ddc94abbb3bde59f12dcd7396f356f3105ecec537",
+      "rule_ids": [
+        "typescript.react.security.audit.react-jwt-decoded-property.react-jwt-decoded-property"
+      ]
+    },
+    {
+      "path": "typescript/react/security/audit/react-jwt-in-localstorage.yaml",
+      "sha256": "175fba8f99ab916d990cd9d23d9915533974e7204bd8aa3986993b13b2366c74",
+      "rule_ids": [
+        "typescript.react.security.audit.react-jwt-in-localstorage.react-jwt-in-localstorage"
+      ]
+    },
+    {
+      "path": "typescript/react/security/audit/react-unsanitized-method.yaml",
+      "sha256": "d96e32fa656a245b4247d38f02aec082a6bcfbac07f0246fed2f9ace54eaea03",
+      "rule_ids": [
+        "typescript.react.security.audit.react-unsanitized-method.react-unsanitized-method"
+      ]
+    },
+    {
+      "path": "typescript/react/security/audit/react-unsanitized-property.yaml",
+      "sha256": "9f8c3ab7ca4eaa707bd24d227006864831b58d9cfdce506fb8862f4d5084b005",
+      "rule_ids": [
+        "typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property"
+      ]
+    },
+    {
+      "path": "typescript/react/security/react-insecure-request.yaml",
+      "sha256": "2a3c5c88308f747e0e25e6d7ae0f870688517595c6112f60838879f3f2c3e7e1",
+      "rule_ids": [
+        "typescript.react.security.react-insecure-request.react-insecure-request"
+      ]
+    },
+    {
+      "path": "typescript/react/security/react-markdown-insecure-html.yaml",
+      "sha256": "de76af5d10d0302389b5065405d4e608f7a4dbf2a4322a955eb694508821deda",
+      "rule_ids": [
+        "typescript.react.security.react-markdown-insecure-html.react-markdown-insecure-html"
+      ]
+    },
+    {
+      "path": "generic/bicep/security/secure-parameter-for-secrets.yaml",
+      "sha256": "bad2caea8e9f6d6989c063e328c83d33bb9c69d10720c4b58b1c843cb7a92a6c",
+      "rule_ids": [
+        "generic.bicep.security.secure-parameter-for-secrets.secure-parameter-for-secrets"
+      ]
+    },
+    {
+      "path": "generic/ci/security/bash-reverse-shell.yaml",
+      "sha256": "517ae165b91224268f4e07555f3f4eee81b348ae92cd28313666cf7c89f77e65",
+      "rule_ids": [
+        "generic.ci.security.bash-reverse-shell.bash_reverse_shell"
+      ]
+    },
+    {
+      "path": "generic/gradle/security/build-gradle-password-hardcoded.yaml",
+      "sha256": "5878d4d7917adbab16c6d5e2dd7e8dcecb3b6b8f089e11fded9e6019014d8ec9",
+      "rule_ids": [
+        "generic.gradle.security.build-gradle-password-hardcoded.build-gradle-password-hardcoded"
+      ]
+    },
+    {
+      "path": "generic/html-templates/security/unquoted-attribute-var.yaml",
+      "sha256": "686f47f9430c31f5fc9ee44559762a4ae4eb3e616191d3d94983bdbc91c8478f",
+      "rule_ids": [
+        "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var"
+      ]
+    },
+    {
+      "path": "generic/html-templates/security/var-in-href.yaml",
+      "sha256": "778805a2945b98f1603c8db4fd8aab416eb7e0b7d75cdc3933ee6e15cbde381f",
+      "rule_ids": [
+        "generic.html-templates.security.var-in-href.var-in-href"
+      ]
+    },
+    {
+      "path": "generic/html-templates/security/var-in-script-src.yaml",
+      "sha256": "7b02d1fe3a1c13579aa9fc134a6c06c38c3cbd8689ab0dfb1e89957c24e4ab93",
+      "rule_ids": [
+        "generic.html-templates.security.var-in-script-src.var-in-script-src"
+      ]
+    },
+    {
+      "path": "generic/html-templates/security/var-in-script-tag.yaml",
+      "sha256": "507d790f73254129e21b7b06a7160b7fa2ae2d69526e63e38df853494f7d54db",
+      "rule_ids": [
+        "generic.html-templates.security.var-in-script-tag.var-in-script-tag"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/alias-path-traversal.yaml",
+      "sha256": "8c958f1835cf18db976de6553166d3c35e3315a279857e993f41032d4d53b578",
+      "rule_ids": [
+        "generic.nginx.security.alias-path-traversal.alias-path-traversal"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/dynamic-proxy-host.yaml",
+      "sha256": "ecf3ce1a52e01ada1d29c5ab076f52ed9bcddd90b83061353a21336b59eaa0d3",
+      "rule_ids": [
+        "generic.nginx.security.dynamic-proxy-host.dynamic-proxy-host"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/dynamic-proxy-scheme.yaml",
+      "sha256": "d92b6a94f41edf09f3e27d345812b427edf2eda6aab9abccbeab8d243ea6640d",
+      "rule_ids": [
+        "generic.nginx.security.dynamic-proxy-scheme.dynamic-proxy-scheme"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/header-injection.yaml",
+      "sha256": "c3f970035142dc8062e738aca73b2a6f88530119a49491f0bcfee55a4f010209",
+      "rule_ids": [
+        "generic.nginx.security.header-injection.header-injection"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/header-redefinition.yaml",
+      "sha256": "217f290ca4ded79a269362bddedd246c1ccdad0560996ac46fc2758bcfde1e33",
+      "rule_ids": [
+        "generic.nginx.security.header-redefinition.header-redefinition"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/insecure-redirect.yaml",
+      "sha256": "8d3a23078551186f0b2ac45fa1217b1d9ee09039da03a634dd5f42a76b1b06f8",
+      "rule_ids": [
+        "generic.nginx.security.insecure-redirect.insecure-redirect"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/insecure-ssl-version.yaml",
+      "sha256": "4713635d327480c50a9491b83ea8a72bac5539e9a66d57c9a5822fa792a57c9b",
+      "rule_ids": [
+        "generic.nginx.security.insecure-ssl-version.insecure-ssl-version"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/missing-internal.yaml",
+      "sha256": "00d229b78a35c3f75a3e9f336822bdc166207e90e793667abe52f25b77de09fc",
+      "rule_ids": [
+        "generic.nginx.security.missing-internal.missing-internal"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/missing-ssl-version.yaml",
+      "sha256": "9fb4b5e427cfbf0a8564a839bdcab1e28615dc2a59e39f077144f4794d5f37e5",
+      "rule_ids": [
+        "generic.nginx.security.missing-ssl-version.missing-ssl-version"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/possible-h2c-smuggling.yaml",
+      "sha256": "ecfda21dcf9187b30cd71dd6dd23493e88ab42c6916ca9c1021f85859f3021d0",
+      "rule_ids": [
+        "generic.nginx.security.possible-h2c-smuggling.possible-nginx-h2c-smuggling"
+      ]
+    },
+    {
+      "path": "generic/nginx/security/request-host-used.yaml",
+      "sha256": "45758cf659d25fd415be89742807da97d498e447c949ecb345d50208f7f14e4b",
+      "rule_ids": [
+        "generic.nginx.security.request-host-used.request-host-used"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-amazon-mws-auth-token.yaml",
+      "sha256": "d082193e09525402c2ca28ef3e6842b50e34151d2fcec5fe8aca0d0ea2524993",
+      "rule_ids": [
+        "generic.secrets.security.detected-amazon-mws-auth-token.detected-amazon-mws-auth-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-artifactory-password.yaml",
+      "sha256": "fc4fb21db3df69bbc7ef316a55097286340b8f04528850b08bad2c2938147931",
+      "rule_ids": [
+        "generic.secrets.security.detected-artifactory-password.detected-artifactory-password"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-artifactory-token.yaml",
+      "sha256": "fbb78da0d5af5ed554fe72cfb221ff52983c2d3c459e669985a68f4cfc8b75c7",
+      "rule_ids": [
+        "generic.secrets.security.detected-artifactory-token.detected-artifactory-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-aws-access-key-id-value.yaml",
+      "sha256": "35e4c9403ad39b7aaa9fb3a0d130223e08f384ae8d9d5b841b38777e90f4b0de",
+      "rule_ids": [
+        "generic.secrets.security.detected-aws-access-key-id-value.detected-aws-access-key-id-value"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-aws-account-id.yaml",
+      "sha256": "b30b41e2a5a6e16469546ecda60add2e1905227904615337c53500a3b5968609",
+      "rule_ids": [
+        "generic.secrets.security.detected-aws-account-id.detected-aws-account-id"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-aws-appsync-graphql-key.yaml",
+      "sha256": "4d9ba3eb2c75a1bc4590ae40783b55bd2605d259f0836c2c75cbf2be162f660c",
+      "rule_ids": [
+        "generic.secrets.security.detected-aws-appsync-graphql-key.detected-aws-appsync-graphql-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-aws-secret-access-key.yaml",
+      "sha256": "7655ffbf1a8309170bc72c16aa3a010bc9931166b39982526ac5e112ae7a704c",
+      "rule_ids": [
+        "generic.secrets.security.detected-aws-secret-access-key.detected-aws-secret-access-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-aws-session-token.yaml",
+      "sha256": "ff2af9a5b462d3924fa36ebeb6d306956774fdcfd367bffe204a0cf435570fad",
+      "rule_ids": [
+        "generic.secrets.security.detected-aws-session-token.detected-aws-session-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-bcrypt-hash.yaml",
+      "sha256": "438401b1bb667eef24be2bb6483762c0b2c1ee10532c0a269e2db27707a92793",
+      "rule_ids": [
+        "generic.secrets.security.detected-bcrypt-hash.detected-bcrypt-hash"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-codeclimate.yaml",
+      "sha256": "31b1084e281b1e8d3ade42319f5428a3af9438dd1a6fd15c3b4483b1c3fb6fa8",
+      "rule_ids": [
+        "generic.secrets.security.detected-codeclimate.detected-codeclimate"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-etc-shadow.yaml",
+      "sha256": "606ccb9252103fd4adbc53065bcbd9ea6fa60f93db61dde5dfc238f6dd32607e",
+      "rule_ids": [
+        "generic.secrets.security.detected-etc-shadow.detected-etc-shadow"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-facebook-access-token.yaml",
+      "sha256": "c9ac1039e1d86d53854a74c768a1ffd024a40734533675c65d1167c2b884dc13",
+      "rule_ids": [
+        "generic.secrets.security.detected-facebook-access-token.detected-facebook-access-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-facebook-oauth.yaml",
+      "sha256": "92cb9159583e2bc6eade64cbb8e0cf6354a3abc4fb7763b2fc063cfb6d809e8f",
+      "rule_ids": [
+        "generic.secrets.security.detected-facebook-oauth.detected-facebook-oauth"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-generic-api-key.yaml",
+      "sha256": "f20eb424024d5e5e07b880fea8a530e2c544d1d4a77c757dedca22ad37390da4",
+      "rule_ids": [
+        "generic.secrets.security.detected-generic-api-key.detected-generic-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-generic-secret.yaml",
+      "sha256": "c412a4b4a73e2b2ae85c10f0cf1088ff02cc9268a30b8edc90674846ff0614ca",
+      "rule_ids": [
+        "generic.secrets.security.detected-generic-secret.detected-generic-secret"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-github-token.yaml",
+      "sha256": "48ecbe7e99b46bc79f5b2ff50e47797af6c983858a011a98cd258ccd536324a0",
+      "rule_ids": [
+        "generic.secrets.security.detected-github-token.detected-github-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-google-api-key.yaml",
+      "sha256": "81436eb9662d10654ed1a8a7a96520fe10b0793e53940376650a1344be8d9310",
+      "rule_ids": [
+        "generic.secrets.security.detected-google-api-key.detected-google-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-google-cloud-api-key.yaml",
+      "sha256": "83f81bad5c9cabfe03a01cda07bdbe929608c89b2ca02765eb9e2ae4b2628623",
+      "rule_ids": [
+        "generic.secrets.security.detected-google-cloud-api-key.detected-google-cloud-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-google-gcm-service-account.yaml",
+      "sha256": "326a88d52943f6b52d43af63f9e79194650cc65cea5be41533cd393c54f82420",
+      "rule_ids": [
+        "generic.secrets.security.detected-google-gcm-service-account.detected-google-gcm-service-account"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-google-oauth-access-token.yaml",
+      "sha256": "7cf2cc562c6bb907a736612712da582ee2b350515993cd85f7f91bd7555b1d2a",
+      "rule_ids": [
+        "generic.secrets.security.detected-google-oauth-access-token.detected-google-oauth-access-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-google-oauth.yaml",
+      "sha256": "4309cfb27e1e602afa9a31f7795309a4f1526b6274e4985455772f5667af4ffd",
+      "rule_ids": [
+        "generic.secrets.security.detected-google-oauth.detected-google-oauth-url"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-heroku-api-key.yaml",
+      "sha256": "b650e0f8444c0d05f718740d302c3a423f0615d09c2e203d676f91c90ba767d4",
+      "rule_ids": [
+        "generic.secrets.security.detected-heroku-api-key.detected-heroku-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-hockeyapp.yaml",
+      "sha256": "a601eb7d934856e759adf079ca79a53d32b78b4278d1ee40bc3fc41eb29c8920",
+      "rule_ids": [
+        "generic.secrets.security.detected-hockeyapp.detected-hockeyapp"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-jwt-token.yaml",
+      "sha256": "f68027e777af3e94a09fcfe1e47a94e11fe9595fec2bf2d564ec405cd2852db6",
+      "rule_ids": [
+        "generic.secrets.security.detected-jwt-token.detected-jwt-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-kolide-api-key.yaml",
+      "sha256": "7307235e8037f86029c98c8198b0c4f7aa9283d04b18f3bc7bf7960f0df1c46f",
+      "rule_ids": [
+        "generic.secrets.security.detected-kolide-api-key.detected-kolide-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-mailchimp-api-key.yaml",
+      "sha256": "c22c64ce200433c2ff1031a16529894cc3a2091e8c821634739ebd29ab4c8392",
+      "rule_ids": [
+        "generic.secrets.security.detected-mailchimp-api-key.detected-mailchimp-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-mailgun-api-key.yaml",
+      "sha256": "5eebfd7a2b8ff874071273fd66f63459dcc00b6688745b0309ded6d912cf63ec",
+      "rule_ids": [
+        "generic.secrets.security.detected-mailgun-api-key.detected-mailgun-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-npm-registry-auth-token.yaml",
+      "sha256": "35b35db78aa02bba808e91ea52e6da890a111ad115730da33f33210855ca7f11",
+      "rule_ids": [
+        "generic.secrets.security.detected-npm-registry-auth-token.detected-npm-registry-auth-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-onfido-live-api-token.yaml",
+      "sha256": "2db435a754deba552b5c03e14ccc1171058f476de71b7ad2ff3a7a5b9f627ac1",
+      "rule_ids": [
+        "generic.secrets.security.detected-onfido-live-api-token.detected-onfido-live-api-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-outlook-team.yaml",
+      "sha256": "65cbdb98e85ffd26711fa537df062c37bfc7738ec391228837b05c75931c789d",
+      "rule_ids": [
+        "generic.secrets.security.detected-outlook-team.detected-outlook-team"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-paypal-braintree-access-token.yaml",
+      "sha256": "9cd82b69c34457d0f1164cb196ed227d7b49986ddae3c48d2020205b13883fcb",
+      "rule_ids": [
+        "generic.secrets.security.detected-paypal-braintree-access-token.detected-paypal-braintree-access-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-pgp-private-key-block.yaml",
+      "sha256": "7807989060c5b0d6b78b4699d5c127c9053eb75c3405aa2f8f250167a0c052dc",
+      "rule_ids": [
+        "generic.secrets.security.detected-pgp-private-key-block.detected-pgp-private-key-block"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-picatic-api-key.yaml",
+      "sha256": "9d418f0ed16c01ac4333a2f2327e41ebf5b4ddd8d31901557a1a2a1b2daa22a6",
+      "rule_ids": [
+        "generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-private-key.yaml",
+      "sha256": "dd989686a2ffbe9edd7f2c3041e99b6b89fc6bff89493f96505b8629285b9562",
+      "rule_ids": [
+        "generic.secrets.security.detected-private-key.detected-private-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-sauce-token.yaml",
+      "sha256": "d707d05a3a1e0ffeb8adc31d90179d2cf4bf85aed45a90342ba39e88754df7f3",
+      "rule_ids": [
+        "generic.secrets.security.detected-sauce-token.detected-sauce-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-sendgrid-api-key.yaml",
+      "sha256": "ca77b6850e42928e7bd3ba1403c93e26cc09f46747e962b30fd99590d850b4f9",
+      "rule_ids": [
+        "generic.secrets.security.detected-sendgrid-api-key.detected-sendgrid-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-slack-token.yaml",
+      "sha256": "41418bc7f14f929fa54e0aa707fb398feec7cbae5baf2fc42606b4e8a0f0c7d5",
+      "rule_ids": [
+        "generic.secrets.security.detected-slack-token.detected-slack-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-slack-webhook.yaml",
+      "sha256": "a292ebcc9b721d920b6b38490866e955875c9caf0993b79a256482a118a3909a",
+      "rule_ids": [
+        "generic.secrets.security.detected-slack-webhook.detected-slack-webhook"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-snyk-api-key.yaml",
+      "sha256": "a2f7e0f2bf6a56b4cef3f98a58b0fc8e7de3054f77705cb5bdae3c442357aa5e",
+      "rule_ids": [
+        "generic.secrets.security.detected-snyk-api-key.detected-snyk-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-softlayer-api-key.yaml",
+      "sha256": "f339ce4e5debbb5d00ebe4bf1eb7a4191110b5bfcafdf93389f84a7d4bda7085",
+      "rule_ids": [
+        "generic.secrets.security.detected-softlayer-api-key.detected-softlayer-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-sonarqube-docs-api-key.yaml",
+      "sha256": "777a17bdf06febde71560401262ef3dc51e41c0c3dc4b5a71635e43a377553f1",
+      "rule_ids": [
+        "generic.secrets.security.detected-sonarqube-docs-api-key.detected-sonarqube-docs-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-square-access-token.yaml",
+      "sha256": "c2671861c729200307127c3fc753399ef0908570047a6f3c4530705b29c71214",
+      "rule_ids": [
+        "generic.secrets.security.detected-square-access-token.detected-square-access-token"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-square-oauth-secret.yaml",
+      "sha256": "9612c1cb144058fd3056fd0805c42f6587432dcc79d2b83096a62c61e5900882",
+      "rule_ids": [
+        "generic.secrets.security.detected-square-oauth-secret.detected-square-oauth-secret"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-ssh-password.yaml",
+      "sha256": "e293ebfb831e1519fae3927e3f4fccf2c9684a35aa7ed3848da2fbe60aa1bda1",
+      "rule_ids": [
+        "generic.secrets.security.detected-ssh-password.detected-ssh-password"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-stripe-api-key.yaml",
+      "sha256": "b526b68ea7774b62456bed5f3185317545a0465f50e5203e255ddb54c4792b2e",
+      "rule_ids": [
+        "generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-stripe-restricted-api-key.yaml",
+      "sha256": "8e71880d5a5295add30f5d7d147fc07f0ab9e154407c199e2e231739577b5828",
+      "rule_ids": [
+        "generic.secrets.security.detected-stripe-restricted-api-key.detected-stripe-restricted-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-telegram-bot-api-key.yaml",
+      "sha256": "03c7dcdfb0d3f1fb0d5a2d043fa062ea453d26f01112525ccba7360d6511feb7",
+      "rule_ids": [
+        "generic.secrets.security.detected-telegram-bot-api-key.detected-telegram-bot-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-twilio-api-key.yaml",
+      "sha256": "d4b9c0dc8a639fae469e1c87af431249237518e801bac73afa503ad7202db5b4",
+      "rule_ids": [
+        "generic.secrets.security.detected-twilio-api-key.detected-twilio-api-key"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/detected-username-and-password-in-uri.yaml",
+      "sha256": "7fb33bf5951641e7622b25cfa73f0b55dcd7d49b8bb84e1da9437d27a13c169c",
+      "rule_ids": [
+        "generic.secrets.security.detected-username-and-password-in-uri.detected-username-and-password-in-uri"
+      ]
+    },
+    {
+      "path": "generic/secrets/security/google-maps-apikeyleak.yaml",
+      "sha256": "17342ba8a8808b29861923c932e6bb30d18e8561e57385a2a9ae0fefd762b8fc",
+      "rule_ids": [
+        "generic.secrets.security.google-maps-apikeyleak.google-maps-apikeyleak"
+      ]
+    },
+    {
+      "path": "generic/visualforce/security/ncino/html/UseSRIForCDNs.yaml",
+      "sha256": "01564f6eb3e4b7ac940f2f8457db4c96975f128a5835d6cee173730b5c100cfc",
+      "rule_ids": [
+        "generic.visualforce.security.ncino.html.UseSRIForCDNs.use-SRI-for-CDNs"
+      ]
+    },
+    {
+      "path": "generic/visualforce/security/ncino/vf/XSSFromUnescapedURLParam.yaml",
+      "sha256": "d5f5f2373c7b549d3f0e894fad7bfd2abbf9013c0aa15777c29a7fe250ccd898",
+      "rule_ids": [
+        "generic.visualforce.security.ncino.vf.XSSFromUnescapedURLParam.xss-from-unescaped-url-param"
+      ]
+    },
+    {
+      "path": "generic/visualforce/security/ncino/xml/CSPHeaderAttribute.yaml",
+      "sha256": "b975585d447b156a3ceeafeee4dffe182927411dfee44682ab6d2ba21f73ab8f",
+      "rule_ids": [
+        "generic.visualforce.security.ncino.xml.CSPHeaderAttribute.csp-header-attribute"
+      ]
+    },
+    {
+      "path": "generic/visualforce/security/ncino/xml/VisualForceAPIVersion.yaml",
+      "sha256": "311bf5f62be0612e9b054f339e4e143713200b440322761cdee131fca8faef92",
+      "rule_ids": [
+        "generic.visualforce.security.ncino.xml.VisualForceAPIVersion.visualforce-page-api-version"
+      ]
+    },
+    {
+      "path": "dockerfile/security/dockerd-socket-mount.yaml",
+      "sha256": "b763e501d93df44e847775783e9876627f5a30b06e99a48198b57fb2b09fd3ff",
+      "rule_ids": [
+        "dockerfile.security.dockerd-socket-mount.dockerfile-dockerd-socket-mount"
+      ]
+    },
+    {
+      "path": "dockerfile/security/last-user-is-root.yaml",
+      "sha256": "d34680c0434d3722500e3e7e089181bd678b003b892bc86c1f2ab1a8976d01c7",
+      "rule_ids": [
+        "dockerfile.security.last-user-is-root.last-user-is-root"
+      ]
+    },
+    {
+      "path": "dockerfile/security/missing-user-entrypoint.yaml",
+      "sha256": "51a0bf6260556ff6a39f66d098514a51d056765ca1a5036073a3a437591c08dd",
+      "rule_ids": [
+        "dockerfile.security.missing-user-entrypoint.missing-user-entrypoint"
+      ]
+    },
+    {
+      "path": "dockerfile/security/missing-user.yaml",
+      "sha256": "e2ab6f35a562ac0a8f41f8f029d3c6ab41ec1d8603d07920068daaf0ac40ee95",
+      "rule_ids": [
+        "dockerfile.security.missing-user.missing-user"
+      ]
+    },
+    {
+      "path": "dockerfile/security/no-sudo-in-dockerfile.yaml",
+      "sha256": "45acd9265149b4ad93caf061e0cc303c89ee235d7ee985dcc7ae1879f9a122b9",
+      "rule_ids": [
+        "dockerfile.security.no-sudo-in-dockerfile.no-sudo-in-dockerfile"
+      ]
+    },
+    {
+      "path": "dockerfile/security/secret-in-build-arg.yaml",
+      "sha256": "422350d846abb9fabe29008f4a201e26592c5ee7ab72fccc73bc5c60f0429526",
+      "rule_ids": [
+        "dockerfile.security.secret-in-build-arg.secret-in-build-arg"
+      ]
+    },
+    {
+      "path": "yaml/argo/security/argo-workflow-parameter-command-injection.yaml",
+      "sha256": "a01c75a4cc51fb3c285e2027bb24a80c2c681d747a1ac28e09ecd178269f3f36",
+      "rule_ids": [
+        "yaml.argo.security.argo-workflow-parameter-command-injection.argo-workflow-parameter-command-injection"
+      ]
+    },
+    {
+      "path": "yaml/docker-compose/security/exposing-docker-socket-volume.yaml",
+      "sha256": "b25adbd86ad2e7b9d7ec6ee6be5b1211f7145f6c7c6c9d7bf7157155170092f1",
+      "rule_ids": [
+        "yaml.docker-compose.security.exposing-docker-socket-volume.exposing-docker-socket-volume"
+      ]
+    },
+    {
+      "path": "yaml/docker-compose/security/no-new-privileges.yaml",
+      "sha256": "c3200369d0ca34ab9f513227f44379f43cb2b5c2fc87cc1d3027b219334b520d",
+      "rule_ids": [
+        "yaml.docker-compose.security.no-new-privileges.no-new-privileges"
+      ]
+    },
+    {
+      "path": "yaml/docker-compose/security/privileged-service.yaml",
+      "sha256": "e14f3dbf30fd34148129ce29d1e1412000ed870ad56ca2ddb7e56fdf52f65ec4",
+      "rule_ids": [
+        "yaml.docker-compose.security.privileged-service.privileged-service"
+      ]
+    },
+    {
+      "path": "yaml/docker-compose/security/seccomp-confinement-disabled.yaml",
+      "sha256": "4c940614b465f8886dd76a1f06511c4abb107eef45fe735f7b31e82924a541bc",
+      "rule_ids": [
+        "yaml.docker-compose.security.seccomp-confinement-disabled.seccomp-confinement-disabled"
+      ]
+    },
+    {
+      "path": "yaml/docker-compose/security/selinux-separation-disabled.yaml",
+      "sha256": "2d9b4f221ddb41d03655005516566b9f623c2fecfed135da1172d2f2e15bd02c",
+      "rule_ids": [
+        "yaml.docker-compose.security.selinux-separation-disabled.selinux-separation-disabled"
+      ]
+    },
+    {
+      "path": "yaml/docker-compose/security/writable-filesystem-service.yaml",
+      "sha256": "f64f7103643ad040270c6ecc67a0bfff6481cbaecd3033ee8568e61c0cd90d24",
+      "rule_ids": [
+        "yaml.docker-compose.security.writable-filesystem-service.writable-filesystem-service"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/allowed-unsecure-commands.yaml",
+      "sha256": "448d7a60ac447cce8952dbb8581e3edf5f119a39e1d772d8df5a69dcf7f86b52",
+      "rule_ids": [
+        "yaml.github-actions.security.allowed-unsecure-commands.allowed-unsecure-commands"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/audit/unsafe-add-mask-workflow-command.yaml",
+      "sha256": "523e838df16e3d100b613eb967d23adecca00a0f6292fab063702c8468dc141e",
+      "rule_ids": [
+        "yaml.github-actions.security.audit.unsafe-add-mask-workflow-command.unsafe-add-mask-workflow-command"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/curl-eval.yaml",
+      "sha256": "954cf6327571b948b8e18c1a0484c13e7a1586a1511f215f0bfac85583984e98",
+      "rule_ids": [
+        "yaml.github-actions.security.curl-eval.curl-eval"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/detect-shai-hulud-backdoor.yaml",
+      "sha256": "c9183ba6eb999dbd3a2c9c2afbe9526882ab9fa7c345bbf2d473af7961378914",
+      "rule_ids": [
+        "yaml.github-actions.security.detect-shai-hulud-backdoor.detect-shai-hulud-backdoor"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/gha-curl-pipe-shell.yaml",
+      "sha256": "5f7f3fcdff7cb12c643faa2d7ce51b9747d68995be07b501b9a2109551f50bc5",
+      "rule_ids": [
+        "yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/gha-workflow-env-secret.yaml",
+      "sha256": "1d01527249326a8863af0a69a9a101aa3bed127bfb3108e2817412530fd18bad",
+      "rule_ids": [
+        "yaml.github-actions.security.gha-workflow-env-secret.gha-workflow-env-secret"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/github-actions-mutable-action-tag.yaml",
+      "sha256": "3a72ee3831fd28d95f9061ad17ad2ce029c1e4a7020bfa042b22612f57dbc325",
+      "rule_ids": [
+        "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/github-script-injection.yaml",
+      "sha256": "c1a8cc1a951ff5c23c3fb60f35ac53f967def8c0c8454981d52bea39de81559b",
+      "rule_ids": [
+        "yaml.github-actions.security.github-script-injection.github-script-injection"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/pull-request-target-code-checkout.yaml",
+      "sha256": "1761993cc1cd2e94ed38c068f013575f6f92a41200ed579cfaff05bb2e8207dc",
+      "rule_ids": [
+        "yaml.github-actions.security.pull-request-target-code-checkout.pull-request-target-code-checkout"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/run-shell-injection.yaml",
+      "sha256": "c3cfd7f5ce434ad3aa6ded512b0dd257733cfcab285d855f68787dd5dd230325",
+      "rule_ids": [
+        "yaml.github-actions.security.run-shell-injection.run-shell-injection"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/secrets-inherit.yaml",
+      "sha256": "c832ea36b82f970cdd5603674dc7ec9c89484c807f6ae4c18c568ba12a37b103",
+      "rule_ids": [
+        "yaml.github-actions.security.secrets-inherit.secrets-inherit"
+      ]
+    },
+    {
+      "path": "yaml/github-actions/security/workflow-run-target-code-checkout.yaml",
+      "sha256": "f88909fd849663419fdebaddb4099eb228e97342b71ede07b139b53127803c5a",
+      "rule_ids": [
+        "yaml.github-actions.security.workflow-run-target-code-checkout.workflow-run-target-code-checkout"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/allow-privilege-escalation-no-securitycontext.yaml",
+      "sha256": "23a04cbbdb7f0b757f3926c216b4a3963d7b6ad0774e7a6410fd6574722da5cb",
+      "rule_ids": [
+        "yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/allow-privilege-escalation-true.yaml",
+      "sha256": "bd75f243a42b855e52ac035a34a9ab44dacffd285d2ad2f5dbd81f012d30b93b",
+      "rule_ids": [
+        "yaml.kubernetes.security.allow-privilege-escalation-true.allow-privilege-escalation-true"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/allow-privilege-escalation.yaml",
+      "sha256": "29a17441d3a548866d7f23691da8d888e43638930aa553213fc25d5c833275e6",
+      "rule_ids": [
+        "yaml.kubernetes.security.allow-privilege-escalation.allow-privilege-escalation"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/env/flask-debugging-enabled.yaml",
+      "sha256": "b0c7bdc4d442d1b17b171d5d9aeee28972077adec38a87ab6c9bc82065d5e419",
+      "rule_ids": [
+        "yaml.kubernetes.security.env.flask-debugging-enabled.flask-debugging-enabled"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/exposing-docker-socket-hostpath.yaml",
+      "sha256": "a8e18f4366b522de99dc8490c4bc63e322177e486cc1eab543d3a409e17485b1",
+      "rule_ids": [
+        "yaml.kubernetes.security.exposing-docker-socket-hostpath.exposing-docker-socket-hostpath"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/hostipc-pod.yaml",
+      "sha256": "998a4af4173b8d6f50958f8801552360f614d04b3863033640392ad9a840b551",
+      "rule_ids": [
+        "yaml.kubernetes.security.hostipc-pod.hostipc-pod"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/hostnetwork-pod.yaml",
+      "sha256": "0bc78f1a629d525d70abd4c3eca96b5378e364e18da961dacfff69d04af1eae7",
+      "rule_ids": [
+        "yaml.kubernetes.security.hostnetwork-pod.hostnetwork-pod"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/hostpid-pod.yaml",
+      "sha256": "5b8b0a38923f7fe9a0c9e9edd158a6b4b93659309417388777b7612fe5a36308",
+      "rule_ids": [
+        "yaml.kubernetes.security.hostpid-pod.hostpid-pod"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/legacy-api-clusterrole-excessive-permissions.yaml",
+      "sha256": "fbd1957afd1f07328aec22033d2a4715d899ced005b397e6dc61c1bbbdca79f2",
+      "rule_ids": [
+        "yaml.kubernetes.security.legacy-api-clusterrole-excessive-permissions.legacy-api-clusterrole-excessive-permissions"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/privileged-container.yaml",
+      "sha256": "ba8ca9f917c2cf5555d7e162b59b968368b36924904edce78802f6262e52cfad",
+      "rule_ids": [
+        "yaml.kubernetes.security.privileged-container.privileged-container"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/run-as-non-root-container-level-missing-security-context.yaml",
+      "sha256": "6819ac1c24a0ed628d711372d91680064095ce804f8c03ea7da5077d7f0f2091",
+      "rule_ids": [
+        "yaml.kubernetes.security.run-as-non-root-container-level-missing-security-context.run-as-non-root-container-level-missing-security-context"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/run-as-non-root-container-level.yaml",
+      "sha256": "b33a3664e238f53c87005c790415860a2c97ff4093bdadf0638db0ba486875d3",
+      "rule_ids": [
+        "yaml.kubernetes.security.run-as-non-root-container-level.run-as-non-root-container-level"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/run-as-non-root-security-context-pod-level.yaml",
+      "sha256": "cf9f549d9062922dcc377cab0568be95292e79ac850adbd419bfa65de865a7ff",
+      "rule_ids": [
+        "yaml.kubernetes.security.run-as-non-root-security-context-pod-level.run-as-non-root-security-context-pod-level"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/run-as-non-root-unsafe-value.yaml",
+      "sha256": "ba8c662eb872a2f775c8554dcfe329d18628f6913ce9e50c1466451c96fe8536",
+      "rule_ids": [
+        "yaml.kubernetes.security.run-as-non-root-unsafe-value.run-as-non-root-unsafe-value"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/run-as-non-root.yaml",
+      "sha256": "82409cb350fb4505792da4016cf16193fb237efcc36418520444c302a67e4243",
+      "rule_ids": [
+        "yaml.kubernetes.security.run-as-non-root.run-as-non-root"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/seccomp-confinement-disabled.yaml",
+      "sha256": "96815af534977a540318947a0bcac11d4d98fff2a9bbc9fd3928789572385727",
+      "rule_ids": [
+        "yaml.kubernetes.security.seccomp-confinement-disabled.seccomp-confinement-disabled"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/secrets-in-config-file.yaml",
+      "sha256": "11ad906ee8fc6b07eb7055531ad7a516bdbf9668e51b24b1aba5f3bca6beb27e",
+      "rule_ids": [
+        "yaml.kubernetes.security.secrets-in-config-file.secrets-in-config-file"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/skip-tls-verify-cluster.yaml",
+      "sha256": "decd0832c918675f3ff68867ad31558d402345143ba23b1f88e3cb7e06f879b7",
+      "rule_ids": [
+        "yaml.kubernetes.security.skip-tls-verify-cluster.skip-tls-verify-cluster"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/skip-tls-verify-service.yaml",
+      "sha256": "47a8e1063b479e03871fa160033c7aa515bd0ad7d9b223cde1fda8a118f316e1",
+      "rule_ids": [
+        "yaml.kubernetes.security.skip-tls-verify-service.skip-tls-verify-service"
+      ]
+    },
+    {
+      "path": "yaml/kubernetes/security/writable-filesystem-container.yaml",
+      "sha256": "498d3510cc7cb991f6df0df095b3d43e1af16df76df4b2d027ba2dce152278d1",
+      "rule_ids": [
+        "yaml.kubernetes.security.writable-filesystem-container.writable-filesystem-container"
+      ]
+    },
+    {
+      "path": "yaml/openapi/security/api-key-in-query-parameter.yaml",
+      "sha256": "04ed208aadbad0aa5cdf510da41dca9be2b00cb5219d809f5f6f0483b4e95727",
+      "rule_ids": [
+        "yaml.openapi.security.api-key-in-query-parameter.api-key-in-query-parameter"
+      ]
+    },
+    {
+      "path": "yaml/openapi/security/openai-consequential-action-false.yaml",
+      "sha256": "a6ad4a22b6b39ad8a042371641b8292d082e05085061c58273cac6e81d6447a9",
+      "rule_ids": [
+        "yaml.openapi.security.openai-consequential-action-false.openai-consequential-action-false"
+      ]
+    },
+    {
+      "path": "yaml/openapi/security/use-of-basic-authentication.yaml",
+      "sha256": "77307ef205d9d2b3380322a48d26cb6e243a89f77393d4252892fd0c473248a0",
+      "rule_ids": [
+        "yaml.openapi.security.use-of-basic-authentication.use-of-basic-authentication"
+      ]
+    },
+    {
+      "path": "html/security/audit/eval-detected.yaml",
+      "sha256": "7207d1c2dc71dcdeadbc23a0da7b6db001cae337d0521fdd412cc8a58c53042d",
+      "rule_ids": [
+        "html.security.audit.eval-detected.eval-detected"
+      ]
+    },
+    {
+      "path": "html/security/audit/insecure-document-method.yaml",
+      "sha256": "ba2d5c34ba9fc4ad3bbb5c1cad539e88a58c9fae38f3c712a88d9cf2c97a3ac7",
+      "rule_ids": [
+        "html.security.audit.insecure-document-method.insecure-document-method"
+      ]
+    },
+    {
+      "path": "html/security/audit/missing-integrity.yaml",
+      "sha256": "10e36f21035c343b4cdb49dcae151b0de49c99367cd76d964923cf88e977aa6c",
+      "rule_ids": [
+        "html.security.audit.missing-integrity.missing-integrity"
+      ]
+    },
+    {
+      "path": "html/security/plaintext-http-link.yaml",
+      "sha256": "cfbf16d7a571d01893a806e38f426d895e26956e1b90d98e9eca31af08928f33",
+      "rule_ids": [
+        "html.security.plaintext-http-link.plaintext-http-link"
+      ]
+    },
+    {
+      "path": "json/aws/security/public-s3-bucket.yaml",
+      "sha256": "3536ab7bfc4040bcf4e6e0995756ff431080637b7b019342a8fa8ffa7519ac74",
+      "rule_ids": [
+        "json.aws.security.public-s3-bucket.public-s3-bucket"
+      ]
+    },
+    {
+      "path": "json/aws/security/public-s3-policy-statement.yaml",
+      "sha256": "bdbfa543e1ca4ca880d599c5cd7393966729d622677d149432ad1bd0e571e157",
+      "rule_ids": [
+        "json.aws.security.public-s3-policy-statement.public-s3-policy-statement"
+      ]
+    },
+    {
+      "path": "json/aws/security/wildcard-assume-role.yaml",
+      "sha256": "bfb448c909c670b57f3d6d6fc84d5d6687a66e9b573e75c3d0ff90cea0b1ce0e",
+      "rule_ids": [
+        "json.aws.security.wildcard-assume-role.wildcard-assume-role"
+      ]
+    }
+  ],
+  "license": "https://semgrep.dev/legal/rules-license"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "baseline.scanners.lock.a06.v1",
+  "input_encoding": "utf8_lf",
+  "inputs": {
+    "benchmarks/baselines-a06-v4/profile.yaml": "8debaa340865955beca3bc66777c62e7012615fbdc4d46bdc5211d34a2a36c6e",
+    "benchmarks/baselines-a06-v4/semgrep-rules.yaml": "a1d0c4640085395aa39d09389d9cff7e673184daaa713b3f49f02806f0272dc6",
+    "benchmarks/baselines-a06-v4/rules-provenance.json": "63d850e8028f6666a74911eef5105d747b0b5638b0042392c2caced3682de453",
+    "benchmarks/baselines-a06-v4/RULES-LICENSE.txt": "1a6466ae5f1c68631bbd13e3f1aa8f380d84219853c08f0456b853fccfacee1d",
+    "evaluation/zap_baseline_worker.py": "c0020f854781d9aab4c75afca2820ed8efe2445081a3493e52499c99546ca685",
+    "evaluation/baseline_adapter.py": "0ea2baea43bd369ccf7b99b7f0c5dc323218c50b626c06f71141b5010dfee04e",
+    "evaluation/semgrep_baseline_worker.py": "2b28cf70e6617f5caa2d4c921f710253ca93540d4aad0f053224aa6739206036",
+    "evaluation/scanner_baseline.py": "0de49de5e0ed412c9e686b5ae724467d9185b4b5c2b28ff7b001a11335eb20f6",
+    "schemas/baseline.py": "d237f73c690a212fcfecee38f8bf08aff34c7396e6ce40067464e1222aff7acf",
+    "app/scanner_baseline.py": "111ae68bfa43079c5b827a68fe464f3a94cd686620b7e53e30b75ef2d1d2a7d7",
+    "security/source_paths.py": "5bf1978c3ca72099cf67b2ec4124f86f2ad96c93d1e7bab07f1c40496712a022"
+  }
+}

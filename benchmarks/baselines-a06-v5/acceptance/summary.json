@@ -1,0 +1,27 @@
+{
+  "attempt_id": "a06-458adfbadd1c4f1e",
+  "status": "COMPLETED_WITH_LIMITATIONS",
+  "seconds": 262.64163990004454,
+  "observation_counts": {
+    "sast": 94,
+    "dast": 491,
+    "union": 585
+  },
+  "technical_errors": [],
+  "cleanup_complete": true,
+  "original_unchanged": true,
+  "warning_diagnostics": 56,
+  "archive": "a06-458adfbadd1c4f1e.zip",
+  "archive_sha256": "9f866d39819043b4202a9ebafb50aef87b34465cf2a7e99c1f2046686456b263",
+  "a05_contract_commit": "26ff8582601f1c92f58b476ebf726d99ca7eac30",
+  "dataset_scope": "35 original cases; patched/synthetic excluded from denominator",
+  "kind": "A06 acceptance, not A07 repeated measurement",
+  "checks": {
+    "a06_tests_passed": 43,
+    "suite_passed": 876,
+    "suite_failed": 2,
+    "suite_skipped": 20,
+    "ruff": "passed",
+    "app_main": "passed"
+  }
+}
