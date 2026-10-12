@@ -47,10 +47,15 @@ def _route(value: str) -> str:
     return re.sub(r"(?::[^/]+|\{[^/]+\})", "{}", value)
 
 
-def _candidates(dataset: BenchmarkDatasetV2, observation: BenchmarkObservationV2):
+def _candidates(
+    dataset: BenchmarkDatasetV2,
+    observation: BenchmarkObservationV2,
+    *,
+    cases: list,
+):
     observed_families = _family_candidates(observation.family, dataset.family_aliases)
     candidates = []
-    for case in dataset.cases:
+    for case in cases:
         if _canonical_family(case.family, dataset.family_aliases) not in observed_families:
             continue
         if case.sample_kind != observation.sample_kind:
@@ -70,12 +75,10 @@ def _candidates(dataset: BenchmarkDatasetV2, observation: BenchmarkObservationV2
             and _route(observation.http_endpoint) == _route(anchor.endpoint)
             and (
                 anchor.method is None
-                or observation.http_method is None
                 or anchor.method == observation.http_method
             )
             and (
                 anchor.parameter is None
-                or observation.http_parameter is None
                 or anchor.parameter == observation.http_parameter
             )
             for anchor in case.http_anchors
@@ -111,37 +114,108 @@ def score_v2(
     *,
     technically_valid: bool = True,
     technical_errors: list[str] | None = None,
+    split: str | None = None,
+    sample_kind: str | None = None,
 ) -> BenchmarkScoreV2:
     """Score reviewed anchors deterministically without execution or model judging."""
-    ordered = sorted(observations, key=lambda item: (item.id, item.model_dump_json()))
+    available_splits = {case.split for case in dataset.cases}
+    available_kinds = {case.sample_kind for case in dataset.cases}
+    if split is None:
+        if len(available_splits) != 1:
+            raise ValueError("Mixed DEV/HOLDOUT cases must be scored separately")
+        split = next(iter(available_splits))
+    if sample_kind is None:
+        if len(available_kinds) != 1:
+            raise ValueError("Mixed sample kinds must be scored separately")
+        sample_kind = next(iter(available_kinds))
+    selected_cases = [
+        case for case in dataset.cases
+        if case.split == split and case.sample_kind == sample_kind
+    ]
+    if not selected_cases:
+        raise ValueError(f"No benchmark cases for {split}/{sample_kind}")
+    ordered = sorted(
+        (item for item in observations if item.sample_kind == sample_kind),
+        key=lambda item: (
+            item.source_file or "",
+            item.line_start or 0,
+            item.line_end or item.line_start or 0,
+            item.family,
+            item.id,
+            item.model_dump_json(),
+        ),
+    )
     by_id = {item.id: item for item in ordered}
     if len(by_id) != len(ordered):
         raise ValueError("Observation IDs must be unique")
-    cases = {case.id: case for case in dataset.cases}
-    edges = {item.id: _candidates(dataset, item) for item in ordered}
-    primary: dict[str, str] = {}
+    cases = {case.id: case for case in selected_cases}
+    edges = {
+        item.id: _candidates(dataset, item, cases=selected_cases)
+        for item in ordered
+    }
+    def maximum_matching(observation_ids: list[str], blocked_case: str | None = None):
+        case_owner: dict[str, str] = {}
+
+        def assign(observation_id: str, visited: set[str]) -> bool:
+            for case_id in edges[observation_id]:
+                if case_id == blocked_case or case_id in visited:
+                    continue
+                visited.add(case_id)
+                previous = case_owner.get(case_id)
+                if previous is None or assign(previous, visited):
+                    case_owner[case_id] = observation_id
+                    return True
+            return False
+
+        for observation_id in observation_ids:
+            assign(observation_id, set())
+        return case_owner
+
+    observation_ids = [item.id for item in ordered]
+    matched_cases = maximum_matching(observation_ids)
+    matched_by_observation = {observation_id: case_id for case_id, observation_id in matched_cases.items()}
+    maximum_size = len(matched_cases)
+    possible_cases: dict[str, set[str]] = {}
+    for observation_id in observation_ids:
+        if len(edges[observation_id]) < 2 or observation_id not in matched_by_observation:
+            continue
+        alternatives = set()
+        others = [item for item in observation_ids if item != observation_id]
+        for case_id in edges[observation_id]:
+            if 1 + len(maximum_matching(others, blocked_case=case_id)) == maximum_size:
+                alternatives.add(case_id)
+        possible_cases[observation_id] = alternatives
+
+    unresolved_ids = {
+        observation_id for observation_id, alternatives in possible_cases.items()
+        if len(alternatives) > 1
+    }
+    primary = {
+        case_id: observation_id
+        for case_id, observation_id in matched_cases.items()
+        if observation_id not in unresolved_ids
+    }
     matches = []
     for observation in ordered:
         candidates = edges[observation.id]
-        if len(candidates) > 1:
-            matches.append(BenchmarkMatchV2(
-                observation_id=observation.id,
-                candidate_case_ids=candidates,
-                classification="unresolved",
-            ))
-            continue
-        if not candidates:
-            matches.append(BenchmarkMatchV2(
-                observation_id=observation.id,
-                classification="outside_ground_truth",
-            ))
-            continue
-        case_id = candidates[0]
-        if case_id in primary:
-            classification = "duplicate"
-        else:
-            primary[case_id] = observation.id
+        case_id = matched_by_observation.get(observation.id)
+        if case_id is None and not candidates:
+            classification = "outside_ground_truth"
+        elif observation.id in unresolved_ids:
+            # More than one assignment occurs in an equally large valid matching;
+            # never let case labels or verdicts resolve that ambiguity.
+            case_id = None
+            classification = "unresolved"
+        elif case_id is not None:
             classification = "tp" if cases[case_id].expected == "vulnerable" else "fp"
+        elif candidates:
+            resolved_candidates = [candidate for candidate in candidates if candidate in primary]
+            if resolved_candidates:
+                case_id = resolved_candidates[0]
+                classification = "duplicate"
+            else:
+                case_id = None
+                classification = "unresolved"
         matches.append(BenchmarkMatchV2(
             observation_id=observation.id,
             case_id=case_id,
@@ -150,8 +224,8 @@ def score_v2(
         ))
 
     counts = Counter(match.classification for match in matches)
-    positives = sum(case.expected == "vulnerable" for case in dataset.cases)
-    negatives = len(dataset.cases) - positives
+    positives = sum(case.expected == "vulnerable" for case in selected_cases)
+    negatives = len(selected_cases) - positives
     detected_positives = sum(cases[case_id].expected == "vulnerable" for case_id in primary)
     detected_negatives = sum(cases[case_id].expected == "safe" for case_id in primary)
     detection = DetectionMetricsV2(
@@ -169,12 +243,12 @@ def score_v2(
         total = detection.precision + detection.recall
         detection.f1 = 2 * detection.precision * detection.recall / total if total else 0.0
 
-    linked = {case.id: [] for case in dataset.cases}
+    linked = {case.id: [] for case in selected_cases}
     for match in matches:
         if match.case_id is not None:
             linked[match.case_id].append(by_id[match.observation_id])
     verdict_counts = Counter({
-        "labeled_cases": len(dataset.cases),
+        "labeled_cases": len(selected_cases),
         "positive_cases": positives,
         "negative_cases": negatives,
         "confirmed_cases": 0,
@@ -195,7 +269,7 @@ def score_v2(
         "not_detected", "not_run", "invalid_evidence", "conflicting_evidence",
     ), 0))
     case_results = []
-    for case in sorted(dataset.cases, key=lambda item: item.id):
+    for case in sorted(selected_cases, key=lambda item: item.id):
         observations_for_case = linked[case.id]
         verdicts = {
             item.verification for item in observations_for_case
@@ -248,8 +322,8 @@ def score_v2(
         answered_accuracy=ratio(
             verdict_counts["correct_decisions"], verdict_counts["decided_cases"]
         ),
-        decision_coverage=ratio(verdict_counts["decided_cases"], len(dataset.cases)),
-        abstention_rate=ratio(verdict_counts["abstained_cases"], len(dataset.cases)),
+        decision_coverage=ratio(verdict_counts["decided_cases"], len(selected_cases)),
+        abstention_rate=ratio(verdict_counts["abstained_cases"], len(selected_cases)),
     )
     digest = hashlib.sha256(
         json.dumps(dataset.model_dump(mode="json"), sort_keys=True, separators=(",", ":")).encode()
@@ -257,15 +331,18 @@ def score_v2(
     return BenchmarkScoreV2(
         dataset_id=dataset.id,
         dataset_digest=digest,
+        dataset_status=dataset.status,
+        split=split,
+        sample_kind=sample_kind,
         technically_valid=technically_valid,
         technical_errors=sorted(technical_errors or []),
         detection=detection if technically_valid else None,
         verification=verification if technically_valid else None,
         severity=_rubric_metrics(
-            dataset.cases, primary, by_id, "expected_severity", "severity"
+            selected_cases, primary, by_id, "expected_severity", "severity"
         ) if technically_valid else None,
         context_priority=_rubric_metrics(
-            dataset.cases, primary, by_id,
+            selected_cases, primary, by_id,
             "expected_context_priority", "context_priority",
         ) if technically_valid else None,
         matches=matches,

@@ -85,6 +85,11 @@ class BenchmarkDatasetV2(MeasurementModel):
                 raise ValueError("One independent cause may define only one case per slice")
             ids.add(case.id)
             units.add(unit)
+        split_by_group: dict[str, str] = {}
+        for case in self.cases:
+            previous = split_by_group.setdefault(case.independence_group, case.split)
+            if previous != case.split:
+                raise ValueError("All samples of one independent cause must share a split")
         return self
 
 
@@ -167,6 +172,11 @@ class BenchmarkScoreV2(MeasurementModel):
     schema_version: Literal["benchmark.score.v2"] = "benchmark.score.v2"
     dataset_id: str
     dataset_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
+    dataset_status: Literal["synthetic", "catalog_adapter_pending_a04", "frozen_a04"] = (
+        "catalog_adapter_pending_a04"
+    )
+    split: BenchmarkSplit = "development"
+    sample_kind: BenchmarkSampleKind = "original"
     technically_valid: bool
     technical_errors: list[str] = Field(default_factory=list)
     detection: DetectionMetricsV2 | None
@@ -175,6 +185,15 @@ class BenchmarkScoreV2(MeasurementModel):
     context_priority: RubricMetricsV2 | None
     matches: list[BenchmarkMatchV2]
     cases: list[BenchmarkCaseResultV2]
+
+
+class BenchmarkScoreCollectionV2(MeasurementModel):
+    schema_version: Literal["benchmark.score_collection.v2"] = "benchmark.score_collection.v2"
+    dataset_id: str
+    dataset_status: Literal["synthetic", "catalog_adapter_pending_a04", "frozen_a04"] = (
+        "catalog_adapter_pending_a04"
+    )
+    slices: list[BenchmarkScoreV2]
 
 
 class BenchmarkArtifactHistoryV2(MeasurementModel):
