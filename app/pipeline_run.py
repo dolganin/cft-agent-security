@@ -32,6 +32,7 @@ from sast.semgrep_runner import SemgrepError, run_semgrep_scan
 from schemas.errors import ErrorDetail
 from schemas.pipeline import GateResult
 from schemas.report import CIGateImpact, FinalReport, ReportFinding, VerificationSummary
+from evaluation.artifact_history import persist_agent_trace
 from schemas.runtime import RuntimeServiceMap
 from schemas.target import TargetProfile
 from tools.runtime import LocalCodeReader
@@ -340,6 +341,7 @@ def run_pipeline(
                 with ManagedAgentLab(profile, runtime_services):
                     result = graph.invoke(state)
             check_cancelled()
+            persist_agent_trace(output_dir, finding.id, result)
             report = result["final_report"]
             report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
             report_path.write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
