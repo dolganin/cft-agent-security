@@ -141,7 +141,7 @@ def publish(target=TARGET):
         file=EXPANSION/"evidence"/candidate/"report.json"
         report=json.loads(file.read_text(encoding="utf-8"))
         try:
-            runtime_proof(report,candidate)
+            runtime_proof(report,candidate,target=target)
         except ValueError as exc:
             dispositions.append({"candidate":candidate,"status":"pending","reason":str(exc)})
             continue
@@ -233,7 +233,7 @@ def validate(target=TARGET):
             patch_raw=safe_file(ROOT,c["patch_reference"]).read_bytes()
             if sha(patch_raw)!=c["patch_sha256"] or proof["patch"]["source_sha256"]!=c["source_sha256"]:
                 raise ValueError("Patch binding mismatch")
-            runtime_proof(proof,proof["candidate"])
+            runtime_proof(proof,proof["candidate"],target=target)
         elif (proof["fixture_sha256"]!=sha((EXPANSION/"synthetic/fixtures.py").read_bytes())
                 or proof["oracle_sha256"]!=sha((EXPANSION/"synthetic/tests/check_fixture.py").read_bytes())
                 or len(proof["cycles"])!=2

@@ -1,4 +1,17 @@
-# Measurement protocol v2 — A01
+# Benchmark v2 — A04 frozen corpus
+
+A04 review/freeze is documented in `../../docs/a04-benchmark-freeze.md`.
+`ground_truth.yaml` is the A05-compatible projection, `scope.yaml` records the
+mandatory independent reporting slices, `rubric.yaml` records labels and N/A,
+and `dataset.lock.json` binds exact input bytes. Use
+`python -m evaluation.benchmark_freeze validate` before consuming this corpus.
+Optional `--target <pinned-checkout>` additionally validates source and recorded
+control Evidence without executing the target. A05/A06/A07 remain separate gates.
+
+The following A01 description is historical protocol context; statements saying
+that A02/A03/A04 are pending refer to its original publication, not current status.
+
+## Historical measurement protocol v2 — A01
 
 The authoritative rules are in `protocol.yaml`, validated by
 `schemas.benchmark.BenchmarkProtocolV2`. `protocol.lock.json` binds its exact

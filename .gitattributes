@@ -10,3 +10,5 @@ schemas/benchmark_catalog.py text eol=lf
 schemas/benchmark_controls.py text eol=lf
 tests/test_a03_controls.py text eol=lf
 docs/a03-safe-controls-and-reset.md text eol=lf
+evaluation/benchmark*.py text eol=lf
+schemas/benchmark*.py text eol=lf

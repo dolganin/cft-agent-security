@@ -1,0 +1,297 @@
+schema_version: benchmark.rubric.a04.v1
+severity_definition: 'Narrow source-impact ordinal HIGH: direct database disclosure, authentication bypass,
+  unauthorized persistent update or administrative role acquisition. Not numeric CVSS4 and not official
+  Juice Shop severity.'
+severity_labels:
+- HIGH
+cvss_numeric_scores: 'N/A: explicit justified CVSS4 metrics/calculator absent'
+context_priority_definition: 'Requires independently reviewed deployment facts: exposure, asset criticality,
+  database/critical paths, auth and blast radius; do not self-grade production scorer output.'
+null_policy: N/A not safe/LOW and never in accuracy denominator; report reviewed/all and assessed/reviewed
+  coverage separately.
+cases:
+- id: JS-AUTH-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-AUTHZ-001
+  severity: HIGH
+  severity_reason: Public generated product update lacks authentication, permitting unauthorized persistent
+    changes.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-AUTHZ-002
+  severity: HIGH
+  severity_reason: Public registration accepts an administrative role, permitting privilege escalation.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-BIZ-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-BIZ-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-BOLA-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-BOLA-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-BOLA-003
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-BOLA-004
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-CAPTCHA-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-CODE-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-CRYPTO-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-DATA-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-DATA-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-FILE-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-FILE-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-NOSQL-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-NOSQL-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-PATH-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-RATE-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-REDIRECT-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-AUTH-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-AUTHZ-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-AUTHZ-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-BIZ-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-CODE-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-DATA-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-FILE-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-NOSQL-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-PATH-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-PATH-102
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-REDIRECT-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-SQL-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-XSS-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SAFE-XXE-101
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SQL-001
+  severity: HIGH
+  severity_reason: Unbound search SQL can expose application database records; read-impact rubric.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SQL-002
+  severity: HIGH
+  severity_reason: Unbound authentication query can bypass credential validation; authentication-impact
+    rubric.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-SSRF-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-XSS-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-XSS-002
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.
+- id: JS-XXE-001
+  severity: null
+  severity_reason: Insufficient independently reviewed impact/precondition metrics; no inferred CVSS or
+    scanner severity.
+  context_priority: null
+  context_priority_reason: No independent deployment/asset/authentication/blast-radius context frozen
+    for this case; local lab exposure is not production business priority.

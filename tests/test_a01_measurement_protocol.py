@@ -42,8 +42,12 @@ def test_protocol_is_valid_frozen_v2_with_real_baseline():
     assert route.provider == p.baseline.llm_transport["provider"] == "nsu"
     assert route.model == p.baseline.llm_transport["model"] == "Qwen3.8-27B"
     assert p.freeze.scanners == "A06" and p.ground_truth_status == "pending_A02_A03_A04"
-    assert not (PROTOCOL.parent / "ground_truth.yaml").exists()
-    assert not (PROTOCOL.parent / "dataset.lock.json").exists()
+    if (PROTOCOL.parent / "ground_truth.yaml").exists():
+        # A01's frozen pending status is historical; A04 adds a separate lock.
+        from evaluation.benchmark_freeze import validate
+        assert validate()["status"] == "valid_frozen_a04"
+    else:
+        assert not (PROTOCOL.parent / "dataset.lock.json").exists()
 
 
 def test_metric_definitions_have_explicit_fixed_denominators():

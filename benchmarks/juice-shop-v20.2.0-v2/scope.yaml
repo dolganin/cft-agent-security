@@ -1,0 +1,750 @@
+schema_version: benchmark.scope.a04.v1
+exhaustive: false
+source_population: 27 source-reviewed root causes, not all 116 challenges
+report_slices:
+- split
+- sample_kind
+- truth_basis
+- runtime_eligible
+pooling: Never pool original/patched/synthetic or source-only/runtime proof in primary runtime metrics.
+default_original_detection_case_ids:
+- JS-AUTH-001
+- JS-AUTHZ-001
+- JS-AUTHZ-002
+- JS-BIZ-001
+- JS-BIZ-002
+- JS-BOLA-001
+- JS-BOLA-002
+- JS-BOLA-003
+- JS-BOLA-004
+- JS-CAPTCHA-001
+- JS-CODE-001
+- JS-CRYPTO-001
+- JS-DATA-001
+- JS-DATA-002
+- JS-FILE-001
+- JS-FILE-002
+- JS-NOSQL-001
+- JS-NOSQL-002
+- JS-PATH-001
+- JS-RATE-001
+- JS-REDIRECT-001
+- JS-SAFE-AUTH-101
+- JS-SAFE-AUTHZ-001
+- JS-SAFE-AUTHZ-002
+- JS-SAFE-BIZ-101
+- JS-SAFE-DATA-001
+- JS-SAFE-FILE-101
+- JS-SAFE-PATH-101
+- JS-SAFE-SQL-001
+- JS-SQL-001
+- JS-SQL-002
+- JS-SSRF-001
+- JS-XSS-001
+- JS-XSS-002
+- JS-XXE-001
+default_original_runtime_case_ids:
+- JS-AUTH-001
+- JS-AUTHZ-001
+- JS-AUTHZ-002
+- JS-BIZ-001
+- JS-BIZ-002
+- JS-BOLA-001
+- JS-BOLA-002
+- JS-BOLA-003
+- JS-BOLA-004
+- JS-CAPTCHA-001
+- JS-CRYPTO-001
+- JS-DATA-001
+- JS-DATA-002
+- JS-FILE-001
+- JS-FILE-002
+- JS-NOSQL-001
+- JS-RATE-001
+- JS-REDIRECT-001
+- JS-SAFE-AUTHZ-001
+- JS-SAFE-AUTHZ-002
+- JS-SAFE-DATA-001
+- JS-SQL-001
+- JS-SQL-002
+- JS-XSS-001
+holdout_limit: Public target and previously inspected v1/SQL cases; frozen project labels, not unseen/generalization
+  evidence.
+technical_preflight: A07 must still validate A05 evidence/matcher and A06 scanner/environment locks before
+  any producer call.
+cases:
+- id: JS-AUTH-001
+  root_cause_key: password-change-optional-current-password
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Reauthentication only rejects when a current password is supplied; omission reaches
+    user.update for the authenticated account.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-AUTHZ-001
+  root_cause_key: product-update-missing-authentication
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The product PUT authentication middleware is commented out while the generated Finale
+    update endpoint remains registered.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-AUTHZ-002
+  root_cause_key: registration-role-mass-assignment
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The public generated User create endpoint passes a supplied role to the model setter,
+    which allows admin instead of forcing customer.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-BIZ-001
+  root_cause_key: basket-negative-quantity-price-arithmetic
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: BasketItem quantity has no minimum constraint; stock checks accept negative values
+    and order price arithmetic multiplies them into a negative total.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-BIZ-002
+  root_cause_key: coupon-encoding-without-integrity
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Coupon generation merely Z85-encodes month/year and discount; redemption decodes these
+    attacker-controlled values without a signature or server-issued coupon lookup.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support. Runtime must use the requester's
+    own basket to isolate coupon integrity from object authorization.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-BOLA-001
+  root_cause_key: basket-read-missing-owner
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Basket lookup uses the requested id; the ownership mismatch merely solves a challenge
+    and does not reject the response.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-BOLA-002
+  root_cause_key: basket-id-first-last-parser-mismatch
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Duplicate JSON BasketId fields are collected; ownership checks the first value while
+    persistence writes the last value.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-BOLA-003
+  root_cause_key: review-update-missing-owner
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Review update retrieves an authenticated user but the selector contains no author/ownership
+    constraint for a scalar review id.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-BOLA-004
+  root_cause_key: feedback-client-controlled-author
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Feedback creation accepts the caller supplied UserId; the mismatch check records a
+    challenge then calls next without enforcing identity.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-CAPTCHA-001
+  root_cause_key: captcha-disclosed-reusable-answer
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The public CAPTCHA API returns the answer; verification compares that answer without
+    consuming or binding the persisted CAPTCHA to a single request.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-CODE-001
+  root_cause_key: profile-username-expression-eval
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: Under the usernameXss challenge branch a persisted username expression is extracted
+    and passed to JavaScript eval before template rendering.
+  limitations: sstiChallenge and its source guard usernameXssChallenge are Docker-disabled; current Docker
+    takes the non-eval template branch.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-CRYPTO-001
+  root_cause_key: password-unsalted-md5-storage
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The User password setter calls a fast unsalted MD5 helper; identical passwords receive
+    identical stored hashes without a per-user salt or password KDF.
+  limitations: 'No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support. Source MD5 construction only:
+    neither hash disclosure nor successful cracking is established.'
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-DATA-001
+  root_cause_key: whoami-client-selected-secret-fields
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The whoami fields parameter selects arbitrary user.data properties instead of a response
+    allowlist, including password hashes and other internal account properties.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support. Login SELECT *, user.data cache
+    at routes/login.ts:23-25 and utils.queryResultToJson support field availability; no runtime disclosure
+    was replayed.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+  additional_provenance:
+  - file: routes/login.ts
+    start: 23
+    end: 25
+    sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+    region_sha256: cfe1a2649f3bc5cb789c6b7645a547e28ac8cab203103bdbb58ba4811c4f18eb
+  - file: routes/login.ts
+    start: 34
+    end: 36
+    sha256: cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b
+    region_sha256: 819820eb8ef7f4f441b043a578f6b0c646499f2b890a2679cb2c18ef942da676
+- id: JS-DATA-002
+  root_cause_key: metrics-route-missing-authentication
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The Prometheus metrics endpoint is directly registered without authorization and publishes
+    internal application/runtime counters.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-FILE-001
+  root_cause_key: public-sensitive-directory-mounts
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Public /ftp directory index without authentication; one concrete mount only.
+  limitations: A04 narrows A02 aggregate to FTP only. Encryption keys and logs are outside this frozen
+    case; retain them as future unreviewed discoveries, not duplicates or negatives.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-FILE-002
+  root_cause_key: file-suffix-check-before-null-canonicalization
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: servePublicFiles validates a suffix before cutting off the encoded poison-null marker,
+    then serves the resulting different filename.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-NOSQL-001
+  root_cause_key: review-selector-operator-injection
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: A JSON object in body.id becomes the _id query selector and multi:true permits an injected
+    operator to update more than one review.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-NOSQL-002
+  root_cause_key: track-order-where-expression-injection
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: When reflected-XSS challenge code is enabled, the path id is concatenated into a NeDB
+    $where JavaScript expression without escaping.
+  limitations: Docker disables reflectedXssChallenge and noSqlOrdersChallenge; the source sanitizes id
+    in that environment. Do not disable safety mode to include it.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-PATH-001
+  root_cause_key: zip-entry-write-outside-upload-directory
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: ZIP entry paths are resolved from the complaints upload folder but checked only against
+    the broad application directory before writing the original relative entry path.
+  limitations: fileWriteChallenge is Docker-disabled and handleZipFileUpload checks challenge enablement;
+    never change safety mode for current benchmark.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-RATE-001
+  root_cause_key: reset-password-trust-proxy-rate-key
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The application trusts forwarding proxies globally and chooses a forwarding header
+    or derived ip as rate-limit identity without a trusted-hop boundary.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-REDIRECT-001
+  root_cause_key: redirect-substring-allowlist
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The redirect helper accepts any URL containing an allowed URL as a substring, then
+    the route redirects to the whole attacker-controlled value.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-AUTH-101
+  root_cause_key: twofactor-disable-password-gate
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The 2FA disable function rejects a password that differs from the authenticated cache's
+    stored hash before clearing the TOTP secret.
+  limitations: source cached-password gate only; does not establish database reauthentication, cache freshness
+    or hashing strength
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-AUTH-101.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-AUTHZ-001
+  root_cause_key: address-read-owner-scope
+  truth_basis: runtime
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: An authenticated user cannot read another fixture user's address by ID; own address
+    remains accessible.
+  limitations: An authenticated user cannot read another fixture user's address by ID; own address remains
+    accessible.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/original/reset-evidence.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-AUTHZ-002
+  root_cause_key: card-read-owner-scope
+  truth_basis: runtime
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: An authenticated user cannot read another fixture user's payment method by ID; own
+    card remains accessible.
+  limitations: An authenticated user cannot read another fixture user's payment method by ID; own card
+    remains accessible.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/original/reset-evidence.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-BIZ-101
+  root_cause_key: basket-quantity-stock-upper-bound
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: For an existing stock row, the quantity check only calls next when requested quantity
+    does not exceed stock; the alternative returns 400.
+  limitations: source upper-bound branch only; negative quantities remain vulnerable and are not a twin
+    of JS-BIZ-001
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-BIZ-101.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-CODE-101
+  root_cause_key: profile-username-expression-eval
+  truth_basis: fixture_behavior
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: Profile names are treated as literal strings; expression-looking input is returned
+    as data without evaluation.
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full parser/browser behavior
+  source_origin: separate_synthetic_fixture
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids:
+  - JS-CODE-001
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-DATA-001
+  root_cause_key: card-number-response-mask
+  truth_basis: runtime
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Fixture card number is masked in owner list and item GET responses, exposing only the
+    last four digits.
+  limitations: Fixture card number is masked in owner list and item GET responses, exposing only the last
+    four digits.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/original/reset-evidence.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-FILE-101
+  root_cause_key: profile-upload-byte-signature-gate
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The upload handler obtains type from buffer bytes and returns before file write for
+    unknown or non-image detected type.
+  limitations: source acceptance gate only; no claim that every accepted image is harmless
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-FILE-101.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-NOSQL-101
+  root_cause_key: review-selector-operator-injection
+  truth_basis: runtime
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: A literal existing review ID updates one fixture review; operator-object, number and
+    null IDs are denied without changing reviews.
+  limitations: Scoped evaluator truth only; no production Agent capability or runtime REJECTED inferred
+    Source anchors address the post-patch application, not the untouched original.
+  source_origin: target_git_tree
+  patch_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/patches/nosql.patch
+  client_route: null
+  related_positive_case_ids:
+  - JS-NOSQL-001
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/nosql/report.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+  anchor_version: patched_application_source
+  source_sha256_before: 711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2
+  patch_sha256: 83c6f5e93d07b0bff6f035edef7252757b98dba9482e472f693d522de936c465
+- id: JS-SAFE-PATH-101
+  root_cause_key: profile-upload-server-selected-filename
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The upload destination expression uses cached server user ID and detected type extension
+    rather than the client filename.
+  limitations: source filename construction only; no claim about arbitrary corrupted authentication cache
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/source-JS-SAFE-PATH-101.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-PATH-102
+  root_cause_key: zip-entry-write-outside-upload-directory
+  truth_basis: fixture_behavior
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: Archive destination normalizes within the fixed approved root and rejects absolute,
+    backslash and escaping names.
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full parser/browser behavior
+  source_origin: separate_synthetic_fixture
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids:
+  - JS-PATH-001
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-REDIRECT-101
+  root_cause_key: redirect-substring-allowlist
+  truth_basis: runtime
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Exact allowlisted redirect succeeds; four unapproved URL variants return no Location
+    while the service remains available.
+  limitations: Scoped evaluator truth only; no production Agent capability or runtime REJECTED inferred
+    Source anchors address the post-patch application, not the untouched original.
+  source_origin: target_git_tree
+  patch_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/patches/redirect.patch
+  client_route: null
+  related_positive_case_ids:
+  - JS-REDIRECT-001
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/redirect/report.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+  anchor_version: patched_application_source
+  source_sha256_before: c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d
+  patch_sha256: b67e41dac259982a17f9badec0be5fb528fc80bddfe67ba4c050f1a1b8c04640
+- id: JS-SAFE-SQL-001
+  root_cause_key: address-id-orm-lookup
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: In the reviewed address item lookup, route id is a Sequelize where value rather than
+    interpolated SQL statement text.
+  limitations: Source construction uses ORM where object; does not establish safety of other queries/endpoints
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/evidence/address-orm-source.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-XSS-101
+  root_cause_key: search-query-dom-trust-bypass
+  truth_basis: fixture_behavior
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: Plain text is HTML-escaped inside a fixed paragraph; controlled script markup cannot
+    form an element.
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full parser/browser behavior
+  source_origin: separate_synthetic_fixture
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids:
+  - JS-XSS-001
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SAFE-XXE-101
+  root_cause_key: xml-external-entity-enabled-parser
+  truth_basis: fixture_behavior
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The small XML fixture rejects DTD/entity declarations before parsing and accepts ordinary
+    XML text.
+  limitations: Demonstrates fixture property only, not Juice Shop runtime or full parser/browser behavior
+  source_origin: separate_synthetic_fixture
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids:
+  - JS-XXE-001
+  evidence_reference: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/evidence/synthetic.json
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SQL-001
+  root_cause_key: search-query-sql-interpolation
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The search q value is interpolated into raw SQL LIKE clauses; truncation does not bind
+    or escape SQL syntax.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SQL-002
+  root_cause_key: login-email-sql-interpolation
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: The email field is concatenated into the authentication SQL query before password checks,
+    allowing predicate manipulation.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-SSRF-001
+  root_cause_key: profile-image-url-unrestricted-fetch
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The image URL supplied by an authenticated profile request is fetched server-side without
+    a destination or redirect scope restriction.
+  limitations: Docker code is present, but no approved bounded SSRF callback fixture is prepared in A02;
+    runtime eligibility remains false until its scope is independently reviewed.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-XSS-001
+  root_cause_key: search-query-dom-trust-bypass
+  truth_basis: source_review
+  runtime_eligible: true
+  agent_capability_support: not_assessed
+  assertion_scope: Frontend search q is explicitly trusted as HTML and rendered with innerHTML, bypassing
+    Angular sanitization for attacker-controlled URL data.
+  limitations: No Docker disabling metadata or source guard for this reviewed flow; eligibility is conditional
+    on the stated local prerequisites, not existing capability support.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: /#/search
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-XSS-002
+  root_cause_key: product-description-stored-trust-bypass
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The challenge-enabled Product setter stores unsanitized descriptions, which frontend
+    trustProductDescription promotes to trusted HTML for a rendering sink.
+  limitations: restfulXssChallenge is Docker-disabled; models/product.ts sanitizes description in the
+    normal Docker branch. Upstream exploit test is explicitly skipped.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
+- id: JS-XXE-001
+  root_cause_key: xml-external-entity-enabled-parser
+  truth_basis: source_review
+  runtime_eligible: false
+  agent_capability_support: not_assessed
+  assertion_scope: The XML parser enables entity substitution and external DTD loading and explicitly
+    registers host filesystem input providers inside the target process.
+  limitations: xxeFileDisclosureChallenge, xxeDosChallenge and the deprecatedInterface source guard are
+    Docker-disabled; default Docker does not enter the unsafe XML parser.
+  source_origin: target_git_tree
+  patch_reference: null
+  client_route: null
+  related_positive_case_ids: []
+  evidence_reference: null
+  grouping_limit: Root-cause split isolation is not statistical independence of shared endpoints or defense
+    mechanisms.
