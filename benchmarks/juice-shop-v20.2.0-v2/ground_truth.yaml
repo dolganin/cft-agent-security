@@ -1,0 +1,894 @@
+schema_version: benchmark.dataset.v2
+id: juice-shop-v20.2.0-v2
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+status: frozen_a04
+family_aliases:
+  sql-injection:
+  - sql_injection
+  sensitive-data-exposure:
+  - sensitive_data
+  open-redirect:
+  - redirect
+cases:
+- id: JS-AUTH-001
+  expected: vulnerable
+  family: authentication
+  independence_group: juice-password-change-optional-current-password
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-620
+  source_anchors:
+  - file: routes/changePassword.ts
+    line_start: 33
+    line_end: 56
+    role: sink
+  http_anchors:
+  - method: GET
+    endpoint: /rest/user/change-password
+    parameter: query.current/new/repeat
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-AUTHZ-001
+  expected: vulnerable
+  family: authorization
+  independence_group: juice-product-update-missing-authentication
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-862
+  source_anchors:
+  - file: server.ts
+    line_start: 387
+    line_end: 390
+    role: sink
+  - file: server.ts
+    line_start: 502
+    line_end: 526
+    role: caller
+  http_anchors:
+  - method: PUT
+    endpoint: /api/Products/:id
+    parameter: body.description
+  expected_severity: HIGH
+  expected_context_priority: null
+- id: JS-AUTHZ-002
+  expected: vulnerable
+  family: authorization
+  independence_group: juice-registration-role-mass-assignment
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-915
+  source_anchors:
+  - file: models/user.ts
+    line_start: 76
+    line_end: 95
+    role: sink
+  - file: server.ts
+    line_start: 500
+    line_end: 535
+    role: caller
+  http_anchors:
+  - method: POST
+    endpoint: /api/Users
+    parameter: body.role
+  expected_severity: HIGH
+  expected_context_priority: null
+- id: JS-BIZ-001
+  expected: vulnerable
+  family: business-logic
+  independence_group: juice-basket-negative-quantity-price-arithmetic
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-20
+  source_anchors:
+  - file: models/basketitem.ts
+    line_start: 25
+    line_end: 40
+    role: model
+  - file: routes/basketItems.ts
+    line_start: 85
+    line_end: 99
+    role: helper
+  - file: routes/order.ts
+    line_start: 93
+    line_end: 107
+    role: sink
+  http_anchors:
+  - method: PUT
+    endpoint: /api/BasketItems/:id
+    parameter: body.quantity
+  - method: POST
+    endpoint: /rest/basket/:id/checkout
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-BIZ-002
+  expected: vulnerable
+  family: business-logic
+  independence_group: juice-coupon-encoding-without-integrity
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-345
+  source_anchors:
+  - file: lib/insecurity.ts
+    line_start: 97
+    line_end: 118
+    role: sink
+  - file: routes/coupon.ts
+    line_start: 13
+    line_end: 26
+    role: caller
+  - file: routes/order.ts
+    line_start: 190
+    line_end: 194
+    role: caller
+  http_anchors:
+  - method: PUT
+    endpoint: /rest/basket/:id/coupon/:coupon
+    parameter: path.coupon
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-BOLA-001
+  expected: vulnerable
+  family: access-control
+  independence_group: juice-basket-read-missing-owner
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-639
+  source_anchors:
+  - file: routes/basket.ts
+    line_start: 18
+    line_end: 31
+    role: sink
+  - file: server.ts
+    line_start: 418
+    line_end: 418
+    role: registration
+  http_anchors:
+  - method: GET
+    endpoint: /rest/basket/:id
+    parameter: path.id
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-BOLA-002
+  expected: vulnerable
+  family: access-control
+  independence_group: juice-basket-id-first-last-parser-mismatch
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-20
+  source_anchors:
+  - file: routes/basketItems.ts
+    line_start: 21
+    line_end: 49
+    role: sink
+  - file: lib/utils.ts
+    line_start: 178
+    line_end: 194
+    role: helper
+  http_anchors:
+  - method: POST
+    endpoint: /api/BasketItems
+    parameter: raw JSON BasketId fields
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-BOLA-003
+  expected: vulnerable
+  family: access-control
+  independence_group: juice-review-update-missing-owner
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-862
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    line_start: 16
+    line_end: 25
+    role: sink
+  http_anchors:
+  - method: PATCH
+    endpoint: /rest/products/reviews
+    parameter: body.id scalar
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-BOLA-004
+  expected: vulnerable
+  family: access-control
+  independence_group: juice-feedback-client-controlled-author
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-639
+  source_anchors:
+  - file: routes/verify.ts
+    line_start: 30
+    line_end: 37
+    role: sink
+  - file: models/feedback.ts
+    line_start: 29
+    line_end: 33
+    role: model
+  - file: server.ts
+    line_start: 502
+    line_end: 526
+    role: caller
+  http_anchors:
+  - method: POST
+    endpoint: /api/Feedbacks
+    parameter: body.UserId
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-CAPTCHA-001
+  expected: vulnerable
+  family: anti-automation
+  independence_group: juice-captcha-disclosed-reusable-answer
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-602
+  source_anchors:
+  - file: routes/captcha.ts
+    line_start: 24
+    line_end: 41
+    role: sink
+  http_anchors:
+  - method: GET
+    endpoint: /rest/captcha
+    parameter: null
+  - method: POST
+    endpoint: /api/Feedbacks
+    parameter: body.captchaId/captcha
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-CODE-001
+  expected: vulnerable
+  family: code-evaluation
+  independence_group: juice-profile-username-expression-eval
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-95
+  source_anchors:
+  - file: routes/updateUserProfile.ts
+    line_start: 24
+    line_end: 42
+    role: source
+  - file: routes/userProfile.ts
+    line_start: 57
+    line_end: 76
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /profile
+    parameter: body.username
+  - method: GET
+    endpoint: /profile
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-CRYPTO-001
+  expected: vulnerable
+  family: weak-cryptography
+  independence_group: juice-password-unsalted-md5-storage
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-328
+  source_anchors:
+  - file: models/user.ts
+    line_start: 70
+    line_end: 75
+    role: caller
+  - file: lib/insecurity.ts
+    line_start: 41
+    line_end: 41
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /api/Users
+    parameter: body.password
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-DATA-001
+  expected: vulnerable
+  family: sensitive-data-exposure
+  independence_group: juice-whoami-client-selected-secret-fields
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-200
+  source_anchors:
+  - file: routes/currentUser.ts
+    line_start: 20
+    line_end: 44
+    role: sink
+  http_anchors:
+  - method: GET
+    endpoint: /rest/user/whoami
+    parameter: query.fields
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-DATA-002
+  expected: vulnerable
+  family: sensitive-data-exposure
+  independence_group: juice-metrics-route-missing-authentication
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-862
+  source_anchors:
+  - file: server.ts
+    line_start: 746
+    line_end: 750
+    role: sink
+  - file: routes/metrics.ts
+    line_start: 84
+    line_end: 94
+    role: helper
+  http_anchors:
+  - method: GET
+    endpoint: /metrics
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-FILE-001
+  expected: vulnerable
+  family: file-exposure
+  independence_group: juice-public-sensitive-directory-mounts
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-548
+  source_anchors:
+  - file: server.ts
+    line_start: 288
+    line_end: 289
+    role: source
+  http_anchors:
+  - method: GET
+    endpoint: /ftp
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-FILE-002
+  expected: vulnerable
+  family: file-validation
+  independence_group: juice-file-suffix-check-before-null-canonicalization
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-180
+  source_anchors:
+  - file: routes/fileServer.ts
+    line_start: 25
+    line_end: 35
+    role: sink
+  - file: lib/insecurity.ts
+    line_start: 44
+    line_end: 50
+    role: helper
+  http_anchors:
+  - method: GET
+    endpoint: /ftp(?!/quarantine)/:file
+    parameter: path.file
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-NOSQL-001
+  expected: vulnerable
+  family: nosql-injection
+  independence_group: juice-review-selector-operator-injection
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-943
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    line_start: 17
+    line_end: 25
+    role: sink
+  http_anchors:
+  - method: PATCH
+    endpoint: /rest/products/reviews
+    parameter: body.id object
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-NOSQL-002
+  expected: vulnerable
+  family: nosql-injection
+  independence_group: juice-track-order-where-expression-injection
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-943
+  source_anchors:
+  - file: routes/trackOrder.ts
+    line_start: 14
+    line_end: 24
+    role: sink
+  http_anchors:
+  - method: GET
+    endpoint: /rest/track-order/:id
+    parameter: path.id
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-PATH-001
+  expected: vulnerable
+  family: path-traversal
+  independence_group: juice-zip-entry-write-outside-upload-directory
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-22
+  source_anchors:
+  - file: routes/fileUpload.ts
+    line_start: 27
+    line_end: 51
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /file-upload
+    parameter: multipart ZIP entry path
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-RATE-001
+  expected: vulnerable
+  family: rate-limiting
+  independence_group: juice-reset-password-trust-proxy-rate-key
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-807
+  source_anchors:
+  - file: server.ts
+    line_start: 359
+    line_end: 366
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /rest/user/reset-password
+    parameter: X-Forwarded-For / request ip
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-REDIRECT-001
+  expected: vulnerable
+  family: open-redirect
+  independence_group: juice-redirect-substring-allowlist
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-601
+  source_anchors:
+  - file: routes/redirect.ts
+    line_start: 13
+    line_end: 18
+    role: caller
+  - file: lib/insecurity.ts
+    line_start: 133
+    line_end: 139
+    role: sink
+  http_anchors:
+  - method: GET
+    endpoint: /redirect
+    parameter: query.to
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-AUTH-101
+  expected: safe
+  family: authentication
+  independence_group: juice-twofactor-disable-password-gate
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/2fa.ts
+    line_start: 142
+    line_end: 170
+    role: source
+  http_anchors:
+  - method: POST
+    endpoint: /rest/2fa/disable
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-AUTHZ-001
+  expected: safe
+  family: authorization
+  independence_group: juice-address-read-owner-scope
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/address.ts
+    line_start: 16
+    line_end: 25
+    role: source
+  - file: server.ts
+    line_start: 467
+    line_end: 471
+    role: source
+  - file: lib/insecurity.ts
+    line_start: 175
+    line_end: 184
+    role: source
+  http_anchors:
+  - method: null
+    endpoint: /api/Addresss/{id}
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-AUTHZ-002
+  expected: safe
+  family: authorization
+  independence_group: juice-card-read-owner-scope
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/payment.ts
+    line_start: 43
+    line_end: 69
+    role: source
+  - file: server.ts
+    line_start: 457
+    line_end: 461
+    role: source
+  - file: lib/insecurity.ts
+    line_start: 175
+    line_end: 184
+    role: source
+  http_anchors:
+  - method: null
+    endpoint: /api/Cards/{id}
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-BIZ-101
+  expected: safe
+  family: business-logic
+  independence_group: juice-basket-quantity-stock-upper-bound
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/basketItems.ts
+    line_start: 85
+    line_end: 101
+    role: source
+  http_anchors:
+  - method: POST
+    endpoint: /api/BasketItems
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-CODE-101
+  expected: safe
+  family: code-evaluation
+  independence_group: juice-profile-username-expression-eval
+  sample_kind: synthetic
+  split: development
+  service: synthetic-fixture
+  cwe: null
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    line_start: 28
+    line_end: 31
+    role: sink
+  http_anchors: []
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-DATA-001
+  expected: safe
+  family: sensitive-data-exposure
+  independence_group: juice-card-number-response-mask
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/payment.ts
+    line_start: 20
+    line_end: 68
+    role: source
+  http_anchors: []
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-FILE-101
+  expected: safe
+  family: file-validation
+  independence_group: juice-profile-upload-byte-signature-gate
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/profileImageFileUpload.ts
+    line_start: 14
+    line_end: 58
+    role: source
+  http_anchors:
+  - method: POST
+    endpoint: /profile/image/file
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-NOSQL-101
+  expected: safe
+  family: nosql-injection
+  independence_group: juice-review-selector-operator-injection
+  sample_kind: patched
+  split: development
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/updateProductReviews.ts
+    line_start: 17
+    line_end: 25
+    role: sink
+  http_anchors:
+  - method: PATCH
+    endpoint: /rest/products/reviews
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-PATH-101
+  expected: safe
+  family: path-traversal
+  independence_group: juice-profile-upload-server-selected-filename
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/profileImageFileUpload.ts
+    line_start: 14
+    line_end: 58
+    role: source
+  http_anchors:
+  - method: POST
+    endpoint: /profile/image/file
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-PATH-102
+  expected: safe
+  family: path-traversal
+  independence_group: juice-zip-entry-write-outside-upload-directory
+  sample_kind: synthetic
+  split: development
+  service: synthetic-fixture
+  cwe: null
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    line_start: 11
+    line_end: 18
+    role: sink
+  http_anchors: []
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-REDIRECT-101
+  expected: safe
+  family: open-redirect
+  independence_group: juice-redirect-substring-allowlist
+  sample_kind: patched
+  split: development
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: lib/insecurity.ts
+    line_start: 133
+    line_end: 139
+    role: sink
+  http_anchors:
+  - method: GET
+    endpoint: /redirect
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-SQL-001
+  expected: safe
+  family: sql-injection
+  independence_group: juice-address-id-orm-lookup
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: null
+  source_anchors:
+  - file: routes/address.ts
+    line_start: 18
+    line_end: 18
+    role: source
+  - file: models/address.ts
+    line_start: 7
+    line_end: 16
+    role: source
+  http_anchors:
+  - method: null
+    endpoint: /api/Addresss/{id}
+    parameter: null
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-XSS-101
+  expected: safe
+  family: xss
+  independence_group: juice-search-query-dom-trust-bypass
+  sample_kind: synthetic
+  split: development
+  service: synthetic-fixture
+  cwe: null
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    line_start: 7
+    line_end: 8
+    role: sink
+  http_anchors: []
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SAFE-XXE-101
+  expected: safe
+  family: xml-external-entities
+  independence_group: juice-xml-external-entity-enabled-parser
+  sample_kind: synthetic
+  split: development
+  service: synthetic-fixture
+  cwe: null
+  source_anchors:
+  - file: benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+    line_start: 21
+    line_end: 25
+    role: sink
+  http_anchors: []
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-SQL-001
+  expected: vulnerable
+  family: sql-injection
+  independence_group: juice-search-query-sql-interpolation
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-89
+  source_anchors:
+  - file: routes/search.ts
+    line_start: 21
+    line_end: 23
+    role: sink
+  - file: server.ts
+    line_start: 621
+    line_end: 621
+    role: registration
+  http_anchors:
+  - method: GET
+    endpoint: /rest/products/search
+    parameter: query.q
+  expected_severity: HIGH
+  expected_context_priority: null
+- id: JS-SQL-002
+  expected: vulnerable
+  family: sql-injection
+  independence_group: juice-login-email-sql-interpolation
+  sample_kind: original
+  split: holdout
+  service: juice
+  cwe: CWE-89
+  source_anchors:
+  - file: routes/login.ts
+    line_start: 32
+    line_end: 50
+    role: sink
+  - file: server.ts
+    line_start: 615
+    line_end: 615
+    role: registration
+  http_anchors:
+  - method: POST
+    endpoint: /rest/user/login
+    parameter: body.email
+  expected_severity: HIGH
+  expected_context_priority: null
+- id: JS-SSRF-001
+  expected: vulnerable
+  family: ssrf
+  independence_group: juice-profile-image-url-unrestricted-fetch
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-918
+  source_anchors:
+  - file: routes/profileImageUrlUpload.ts
+    line_start: 18
+    line_end: 36
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /profile/image/url
+    parameter: body.imageUrl
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-XSS-001
+  expected: vulnerable
+  family: xss
+  independence_group: juice-search-query-dom-trust-bypass
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-79
+  source_anchors:
+  - file: frontend/src/app/search-result/search-result.component.ts
+    line_start: 135
+    line_end: 144
+    role: source
+  - file: frontend/src/app/search-result/search-result.component.html
+    line_start: 8
+    line_end: 11
+    role: sink
+  http_anchors: []
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-XSS-002
+  expected: vulnerable
+  family: xss
+  independence_group: juice-product-description-stored-trust-bypass
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-79
+  source_anchors:
+  - file: models/product.ts
+    line_start: 43
+    line_end: 55
+    role: source
+  - file: frontend/src/app/search-result/search-result.component.ts
+    line_start: 61
+    line_end: 78
+    role: helper
+  - file: frontend/src/app/search-result/search-result.component.ts
+    line_start: 109
+    line_end: 113
+    role: helper
+  - file: frontend/src/app/product/product.component.ts
+    line_start: 182
+    line_end: 189
+    role: caller
+  - file: frontend/src/app/product-details/product-details.component.html
+    line_start: 14
+    line_end: 16
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /api/Products
+    parameter: body.description
+  expected_severity: null
+  expected_context_priority: null
+- id: JS-XXE-001
+  expected: vulnerable
+  family: xml-external-entities
+  independence_group: juice-xml-external-entity-enabled-parser
+  sample_kind: original
+  split: development
+  service: juice
+  cwe: CWE-611
+  source_anchors:
+  - file: routes/fileUpload.ts
+    line_start: 70
+    line_end: 79
+    role: caller
+  - file: lib/xml.ts
+    line_start: 17
+    line_end: 38
+    role: sink
+  http_anchors:
+  - method: POST
+    endpoint: /file-upload
+    parameter: multipart XML document
+  expected_severity: null
+  expected_context_priority: null

@@ -1,0 +1,416 @@
+schema_version: benchmark.review.a04.v1
+review_date: '2026-10-12'
+input_commit: e3e9ec53c8bd03d53495f5b164e213560446e9d2
+review_type: automated_source_and_persisted_evidence_review
+human_independent_review: not_performed
+second_automated_review: Separate Dalton agent read-only source pass on 2026-10-12; concerns resolved
+  by FTP-only scope, narrow patched/function anchors, MD5 impact limitation and login cache provenance.
+  No human approval implied.
+new_runtime_cycles: 0
+positive_checks:
+  candidates: 116
+  selected_positives: 27
+  families:
+    access-control: 4
+    anti-automation: 1
+    authentication: 1
+    authorization: 2
+    business-logic: 2
+    code-evaluation: 1
+    file-exposure: 1
+    file-validation: 1
+    nosql-injection: 2
+    open-redirect: 1
+    path-traversal: 1
+    rate-limiting: 1
+    sensitive-data-exposure: 2
+    sql-injection: 2
+    ssrf: 1
+    weak-cryptography: 1
+    xml-external-entities: 1
+    xss: 2
+  split:
+    development: 20
+    holdout: 7
+  family_split:
+    access-control:
+      development: 4
+    anti-automation:
+      holdout: 1
+    authentication:
+      development: 1
+    authorization:
+      holdout: 2
+    business-logic:
+      development: 2
+    code-evaluation:
+      development: 1
+    file-exposure:
+      holdout: 1
+    file-validation:
+      development: 1
+    nosql-injection:
+      development: 2
+    open-redirect:
+      development: 1
+    path-traversal:
+      development: 1
+    rate-limiting:
+      development: 1
+    sensitive-data-exposure:
+      holdout: 1
+      development: 1
+    sql-injection:
+      holdout: 2
+    ssrf:
+      development: 1
+    weak-cryptography:
+      development: 1
+    xml-external-entities:
+      development: 1
+    xss:
+      development: 2
+  runtime_eligible: 21
+  detection_only: 6
+  excluded_reasons:
+    docker_disabled: 11
+    duplicate_root_cause: 11
+    not_security_vulnerability: 15
+    other: 27
+    pure_game_or_osint: 15
+    requires_external_service: 9
+    unsafe_to_execute: 1
+  reviewer_status: single_reviewer_pending_independent_review
+control_checks:
+  starting: 4
+  added: 10
+  reviewed_total: 14
+  independent_groups: 14
+  types:
+    original_safe: 8
+    patched_safe: 2
+    synthetic_safe: 4
+  split:
+    holdout: 6
+    development: 8
+  source_only: 5
+  runtime_validated: 5
+  synthetic_behavior: 4
+  direct_twins: 6
+negative_size_limit: 14 controls below approximately 20 target; no fabricated or unreviewed additions.
+cases:
+- id: JS-AUTH-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/changePassword.ts
+  no_agent_result_used_as_truth: true
+- id: JS-AUTHZ-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - server.ts
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-AUTHZ-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - models/user.ts
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-BIZ-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - models/basketitem.ts
+  - routes/basketItems.ts
+  - routes/order.ts
+  no_agent_result_used_as_truth: true
+- id: JS-BIZ-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - lib/insecurity.ts
+  - routes/coupon.ts
+  - routes/order.ts
+  no_agent_result_used_as_truth: true
+- id: JS-BOLA-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/basket.ts
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-BOLA-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/basketItems.ts
+  - lib/utils.ts
+  no_agent_result_used_as_truth: true
+- id: JS-BOLA-003
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/updateProductReviews.ts
+  no_agent_result_used_as_truth: true
+- id: JS-BOLA-004
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/verify.ts
+  - models/feedback.ts
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-CAPTCHA-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/captcha.ts
+  no_agent_result_used_as_truth: true
+- id: JS-CODE-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/updateUserProfile.ts
+  - routes/userProfile.ts
+  no_agent_result_used_as_truth: true
+- id: JS-CRYPTO-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - models/user.ts
+  - lib/insecurity.ts
+  no_agent_result_used_as_truth: true
+- id: JS-DATA-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/currentUser.ts
+  no_agent_result_used_as_truth: true
+- id: JS-DATA-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - server.ts
+  - routes/metrics.ts
+  no_agent_result_used_as_truth: true
+- id: JS-FILE-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-FILE-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/fileServer.ts
+  - lib/insecurity.ts
+  no_agent_result_used_as_truth: true
+- id: JS-NOSQL-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/updateProductReviews.ts
+  no_agent_result_used_as_truth: true
+- id: JS-NOSQL-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/trackOrder.ts
+  no_agent_result_used_as_truth: true
+- id: JS-PATH-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/fileUpload.ts
+  no_agent_result_used_as_truth: true
+- id: JS-RATE-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-REDIRECT-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/redirect.ts
+  - lib/insecurity.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-AUTH-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/2fa.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-AUTHZ-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: runtime
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/address.ts
+  - server.ts
+  - lib/insecurity.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-AUTHZ-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: runtime
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/payment.ts
+  - server.ts
+  - lib/insecurity.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-BIZ-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/basketItems.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-CODE-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: fixture_behavior
+  runtime_rerun_in_a04: false
+  source_references:
+  - benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-DATA-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: runtime
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/payment.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-FILE-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/profileImageFileUpload.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-NOSQL-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: runtime
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/updateProductReviews.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-PATH-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/profileImageFileUpload.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-PATH-102
+  decision: accepted_scoped_source_or_property_truth
+  basis: fixture_behavior
+  runtime_rerun_in_a04: false
+  source_references:
+  - benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-REDIRECT-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: runtime
+  runtime_rerun_in_a04: false
+  source_references:
+  - lib/insecurity.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-SQL-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/address.ts
+  - models/address.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-XSS-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: fixture_behavior
+  runtime_rerun_in_a04: false
+  source_references:
+  - benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+  no_agent_result_used_as_truth: true
+- id: JS-SAFE-XXE-101
+  decision: accepted_scoped_source_or_property_truth
+  basis: fixture_behavior
+  runtime_rerun_in_a04: false
+  source_references:
+  - benchmarks/juice-shop-v20.2.0-v2/controls/expansion/synthetic/fixtures.py
+  no_agent_result_used_as_truth: true
+- id: JS-SQL-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/search.ts
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SQL-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/login.ts
+  - server.ts
+  no_agent_result_used_as_truth: true
+- id: JS-SSRF-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/profileImageUrlUpload.ts
+  no_agent_result_used_as_truth: true
+- id: JS-XSS-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - frontend/src/app/search-result/search-result.component.ts
+  - frontend/src/app/search-result/search-result.component.html
+  no_agent_result_used_as_truth: true
+- id: JS-XSS-002
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - models/product.ts
+  - frontend/src/app/search-result/search-result.component.ts
+  - frontend/src/app/search-result/search-result.component.ts
+  - frontend/src/app/product/product.component.ts
+  - frontend/src/app/product-details/product-details.component.html
+  no_agent_result_used_as_truth: true
+- id: JS-XXE-001
+  decision: accepted_scoped_source_or_property_truth
+  basis: source_review
+  runtime_rerun_in_a04: false
+  source_references:
+  - routes/fileUpload.ts
+  - lib/xml.ts
+  no_agent_result_used_as_truth: true
