@@ -1,0 +1,20 @@
+schema: cft.semgrep-profile.v1
+id: juice-shop-v2
+version: 1
+semgrep_version: 1.174.0
+target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+config_files:
+  - ../../../benchmarks/baselines-a06-v5/semgrep-rules.yaml
+  - local-rules.yaml
+config_sha256:
+  ../../../benchmarks/baselines-a06-v5/semgrep-rules.yaml: a1d0c4640085395aa39d09389d9cff7e673184daaa713b3f49f02806f0272dc6
+  local-rules.yaml: ec97df6248fe1c0e687690c1598ce5a85d4b9c572e8d47f7d931d9f5a5631366
+exclude:
+  - .venv
+  - node_modules
+  - dist
+  - build
+signal_types:
+  code: implemented
+  configuration: unsupported_by_local_ruleset
+  dependency: unsupported_no_sca
