@@ -1,0 +1,247 @@
+{
+  "version": "1.174.0",
+  "results": [
+    {
+      "check_id": "sequelize-injection.presentation",
+      "path": "routes/login.ts",
+      "start": {
+        "line": 34,
+        "col": 5,
+        "offset": 1465
+      },
+      "end": {
+        "line": 34,
+        "col": 206,
+        "offset": 1666
+      },
+      "extra": {
+        "message": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "sequelize-injection.presentation",
+      "path": "routes/search.ts",
+      "start": {
+        "line": 23,
+        "col": 5,
+        "offset": 824
+      },
+      "end": {
+        "line": 23,
+        "col": 161,
+        "offset": 980
+      },
+      "extra": {
+        "message": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "directory-listing.presentation",
+      "path": "server.ts",
+      "start": {
+        "line": 268,
+        "col": 52,
+        "offset": 12111
+      },
+      "end": {
+        "line": 268,
+        "col": 162,
+        "offset": 12221
+      },
+      "extra": {
+        "message": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "directory-listing.presentation",
+      "path": "server.ts",
+      "start": {
+        "line": 288,
+        "col": 41,
+        "offset": 13340
+      },
+      "end": {
+        "line": 288,
+        "col": 75,
+        "offset": 13374
+      },
+      "extra": {
+        "message": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "directory-listing.presentation",
+      "path": "server.ts",
+      "start": {
+        "line": 292,
+        "col": 49,
+        "offset": 13717
+      },
+      "end": {
+        "line": 292,
+        "col": 108,
+        "offset": 13776
+      },
+      "extra": {
+        "message": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "directory-listing.presentation",
+      "path": "server.ts",
+      "start": {
+        "line": 296,
+        "col": 52,
+        "offset": 13930
+      },
+      "end": {
+        "line": 296,
+        "col": 114,
+        "offset": 13992
+      },
+      "extra": {
+        "message": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    },
+    {
+      "check_id": "directory-listing.presentation",
+      "path": "server.ts",
+      "start": {
+        "line": 300,
+        "col": 50,
+        "offset": 14192
+      },
+      "end": {
+        "line": 300,
+        "col": 102,
+        "offset": 14244
+      },
+      "extra": {
+        "message": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+        "metadata": {},
+        "severity": "WARNING",
+        "fingerprint": "requires login",
+        "lines": "requires login",
+        "validation_state": "NO_VALIDATOR",
+        "engine_kind": "OSS"
+      }
+    }
+  ],
+  "errors": [],
+  "paths": {
+    "scanned": [
+      "routes/login.ts",
+      "routes/search.ts",
+      "server.ts"
+    ]
+  },
+  "time": {
+    "rules": [],
+    "rules_parse_time": 0.02640390396118164,
+    "profiling_times": {
+      "config_time": 0.7715587615966797,
+      "core_time": 25.744614124298096,
+      "ignores_time": 0.0002415180206298828,
+      "total_time": 26.551769018173218
+    },
+    "parsing_time": {
+      "total_time": 0.0,
+      "per_file_time": {
+        "mean": 0.0,
+        "std_dev": 0.0
+      },
+      "very_slow_stats": {
+        "time_ratio": 0.0,
+        "count_ratio": 0.0
+      },
+      "very_slow_files": []
+    },
+    "scanning_time": {
+      "total_time": 0.37366795539855957,
+      "per_file_time": {
+        "mean": 0.1245559851328532,
+        "std_dev": 0.0011068745786183677
+      },
+      "very_slow_stats": {
+        "time_ratio": 0.0,
+        "count_ratio": 0.0
+      },
+      "very_slow_files": []
+    },
+    "matching_time": {
+      "total_time": 0.0,
+      "per_file_and_rule_time": {
+        "mean": 0.0,
+        "std_dev": 0.0
+      },
+      "very_slow_stats": {
+        "time_ratio": 0.0,
+        "count_ratio": 0.0
+      },
+      "very_slow_rules_on_files": []
+    },
+    "tainting_time": {
+      "total_time": 0.0,
+      "per_def_and_rule_time": {
+        "mean": 0.0,
+        "std_dev": 0.0
+      },
+      "very_slow_stats": {
+        "time_ratio": 0.0,
+        "count_ratio": 0.0
+      },
+      "very_slow_rules_on_defs": []
+    },
+    "fixpoint_timeouts": [],
+    "prefiltering": {
+      "project_level_time": 0.0,
+      "file_level_time": 0.0,
+      "rules_with_project_prefilters_ratio": 0.0,
+      "rules_with_file_prefilters_ratio": 1.0,
+      "rules_selected_ratio": 1.0,
+      "rules_matched_ratio": 1.0
+    },
+    "targets": [],
+    "total_bytes": 0,
+    "max_memory_bytes": 175790976
+  },
+  "engine_requested": "OSS",
+  "skipped_rules": [],
+  "profiling_results": []
+}

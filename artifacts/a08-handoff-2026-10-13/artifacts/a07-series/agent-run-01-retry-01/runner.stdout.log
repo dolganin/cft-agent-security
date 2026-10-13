@@ -1,0 +1,56 @@
+========================================================================
+CFT SECURITY PIPELINE
+========================================================================
+Target profile: juice-presentation
+Target: C:\Users\User\Documents\GitHub\cft-security-agent\artifacts\benchmark-target\juice-shop
+Agent mode: llm
+SAST: scanning with Semgrep config=C:\Users\User\Documents\GitHub\cft-security-agent\docs\demo\semgrep.yaml
+SAST findings: 7 -> C:\Users\User\Documents\GitHub\cft-security-agent\artifacts\a07-series\agent-run-01-retry-01\pipeline\sast\findings.json
+Scout: 4 source-backed candidates, 1 duplicates, stop=turn_budget
+Findings to verify: 10
+
+[1/10] file-exposure | lib/insecurity.ts:21
+  status=inconclusive capability=inspect_javascript_security context=HIGH
+
+[2/10] authentication | lib/insecurity.ts:41
+  status=inconclusive capability=inspect_javascript_security context=HIGH
+
+[3/10] open-redirect | lib/insecurity.ts:133
+  status=inconclusive capability=inspect_javascript_security context=HIGH
+
+[4/10] sequelize-injection.presentation | routes/login.ts:34
+  status=confirmed capability=verify_sql_injection context=HIGH
+
+[5/10] sequelize-injection.presentation | routes/search.ts:23
+  status=confirmed capability=verify_sql_injection context=HIGH
+
+[6/10] directory-listing.presentation | server.ts:268
+  status=inconclusive capability=inspect_javascript_security context=HIGH
+
+[7/10] directory-listing.presentation | server.ts:288
+  status=confirmed capability=verify_sensitive_directory context=HIGH
+
+[8/10] directory-listing.presentation | server.ts:292
+  status=inconclusive capability=inspect_javascript_security context=HIGH
+
+[9/10] directory-listing.presentation | server.ts:296
+  status=confirmed capability=verify_sensitive_directory context=HIGH
+
+[10/10] directory-listing.presentation | server.ts:300
+  status=inconclusive capability=inspect_javascript_security context=HIGH
+
+========================================================================
+CI/CD GATE: FAIL
+========================================================================
+reports=10 confirmed=4 rejected=0 inconclusive=6 policy_blocked=0
+- model-scout-71a2526acad2e4e5b6b5: verification is inconclusive and needs review.
+- model-scout-3cb73957be76439ca7a1: verification is inconclusive and needs review.
+- model-scout-b2a320314db979f4f269: verification is inconclusive and needs review.
+- sequelize-injection.presentation:routes/login.ts:34: confirmed with context priority HIGH.
+- sequelize-injection.presentation:routes/search.ts:23: confirmed with context priority HIGH.
+- directory-listing.presentation:server.ts:268: verification is inconclusive and needs review.
+- directory-listing.presentation:server.ts:288: confirmed with context priority HIGH.
+- directory-listing.presentation:server.ts:292: verification is inconclusive and needs review.
+- directory-listing.presentation:server.ts:296: confirmed with context priority HIGH.
+- directory-listing.presentation:server.ts:300: verification is inconclusive and needs review.
+exit_code=1

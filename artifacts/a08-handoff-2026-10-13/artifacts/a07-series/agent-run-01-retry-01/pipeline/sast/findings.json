@@ -1,0 +1,296 @@
+[
+  {
+    "id": "sequelize-injection.presentation:routes/login.ts:34",
+    "source": "semgrep",
+    "rule_id": "sequelize-injection.presentation",
+    "title": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+    "description": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+    "file": "routes/login.ts",
+    "line_start": 34,
+    "line_end": 34,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "sql-injection",
+      "fingerprint": "28daf1284680f6ee25a15cc9a4a400d4ff4540cf556f37a310290f2c895b9082",
+      "normalized_file": "routes/login.ts",
+      "anchor_sha256": "030a23d98ae141390ad5060281cfb6cefd7282cd5cf7259a4086ac01f12e73ea",
+      "file_sha256": "cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "sequelize-injection.presentation:routes/login.ts:34"
+      ],
+      "observations": [
+        {
+          "source_id": "sequelize-injection.presentation:routes/login.ts:34",
+          "source": "semgrep",
+          "rule_id": "sequelize-injection.presentation",
+          "original_file": "routes/login.ts",
+          "title": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+          "description": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+          "line_start": 34,
+          "line_end": 34,
+          "column_start": 5,
+          "column_end": 206,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "sequelize-injection.presentation:routes/search.ts:23",
+    "source": "semgrep",
+    "rule_id": "sequelize-injection.presentation",
+    "title": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+    "description": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+    "file": "routes/search.ts",
+    "line_start": 23,
+    "line_end": 23,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "sql-injection",
+      "fingerprint": "094785bef9891223b5867194460f5aa4a5ef922d0a4ce47ff3472e6abffede8d",
+      "normalized_file": "routes/search.ts",
+      "anchor_sha256": "cc189dd7e9c73f29a4b16a95d4d1256f66ddae71a605d1e661edf99e62eeed19",
+      "file_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "sequelize-injection.presentation:routes/search.ts:23"
+      ],
+      "observations": [
+        {
+          "source_id": "sequelize-injection.presentation:routes/search.ts:23",
+          "source": "semgrep",
+          "rule_id": "sequelize-injection.presentation",
+          "original_file": "routes/search.ts",
+          "title": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+          "description": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+          "line_start": 23,
+          "line_end": 23,
+          "column_start": 5,
+          "column_end": 161,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "directory-listing.presentation:server.ts:268",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "file": "server.ts",
+    "line_start": 268,
+    "line_end": 268,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "e09fb63979fa2dda6338e6e16c7fa598ab67c0162aa232ff3379b13d6e84ea82",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "1233c81d9d8ebc8d8cce47c4638e1c099d1112c90a1dbffd83f0ae4fcbcc91e8",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:268"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:268",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 268,
+          "line_end": 268,
+          "column_start": 52,
+          "column_end": 162,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "directory-listing.presentation:server.ts:288",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "file": "server.ts",
+    "line_start": 288,
+    "line_end": 288,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "b5228b98cd4122e284aed44f487c558869bd5c9f0a419fe2469b69f9cadd1548",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "6643fbf54de96a92471ca2a18bcd323bf8101d6783223b5e3369cb063a901817",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:288"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:288",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 288,
+          "line_end": 288,
+          "column_start": 41,
+          "column_end": 75,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "directory-listing.presentation:server.ts:292",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "file": "server.ts",
+    "line_start": 292,
+    "line_end": 292,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "a23e5b136302eb31d09bcb37d5f43277d20f0e3d69cd116697802904f06a1b6c",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "3955ed70428a863c97381ecd61c9eea348310354919ba566f4c2de6c85cd2660",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:292"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:292",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 292,
+          "line_end": 292,
+          "column_start": 49,
+          "column_end": 108,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "directory-listing.presentation:server.ts:296",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "file": "server.ts",
+    "line_start": 296,
+    "line_end": 296,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "18a7215fd3804b081949204289034e6b8b5c205fc9c8ae1f4e00a82cc79d35f2",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "d123ec3416e34917ea6957fd7cd3181a37cb793e5062cb578bd2055fed8ab4e7",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:296"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:296",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 296,
+          "line_end": 296,
+          "column_start": 52,
+          "column_end": 114,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "directory-listing.presentation:server.ts:300",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "file": "server.ts",
+    "line_start": 300,
+    "line_end": 300,
+    "severity": "WARNING",
+    "service": "juice",
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "5a8e70939e6f5b75c4bb2cabfd57249c34eb1e0b0220d8cbc031a00752c75a08",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "de5e650df2f0fc68ba9c129599978e239714a0e6c295fa3d9972a59b301b59b7",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:300"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:300",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 300,
+          "line_end": 300,
+          "column_start": 50,
+          "column_end": 102,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  }
+]

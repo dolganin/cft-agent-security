@@ -1,0 +1,37 @@
+{
+  "a01": "PASS",
+  "a04": "PASS with target source checked",
+  "a06": "PASS",
+  "freeze": "all tracked byte digests unchanged; 1300 target files verified",
+  "tests": {
+    "passed": 65,
+    "skipped": 1,
+    "failed": 0,
+    "skip_reason": "CFT_A05_DEMO_ARTIFACTS not supplied"
+  },
+  "ruff": {
+    "exit_code": 1,
+    "pre_existing_issue": "I001 evaluation/scanner_baseline.py:410",
+    "fixed": false
+  },
+  "git_diff_check": "PASS",
+  "docker_labeled_resources": {
+    "containers": [],
+    "networks": [],
+    "volumes": []
+  },
+  "secret_pattern_audit": {
+    "files_checked": 120,
+    "suspicious_files": [],
+    "user_env_read": false,
+    "scope": "Recognizable API-key patterns only; no comparison against unread user secrets",
+    "container_env_audit": "container-env-audit.json"
+  },
+  "logs": [
+    "final-a01.txt",
+    "final-a04.txt",
+    "final-a06.txt",
+    "final-tests.txt",
+    "final-ruff.txt"
+  ]
+}

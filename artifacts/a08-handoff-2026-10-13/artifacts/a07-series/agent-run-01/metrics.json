@@ -1,0 +1,6 @@
+{
+  "diagnostics": [
+    "CI pipeline failed or required stage incomplete"
+  ],
+  "status": "technically_invalid"
+}

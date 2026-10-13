@@ -1,0 +1,55 @@
+{
+  "action_digest": "b079d437ee2a23b119b344563dd11c1394e1a978eeb29ba24d1d85e4cdfca039",
+  "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+  "audit_ref": "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3",
+  "created_at": "2026-10-13T11:04:03.641408+00:00",
+  "duration_ms": 1515,
+  "error": null,
+  "exit_code": 0,
+  "id": "execution-6b0b5659dcec4c618e4061064cf59f43",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "run_id": "9eb5dcaa3cd145fab5c2fe43d811fcf3",
+  "session_id": "4ab40106cb014892924eb40442833ac9",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":133,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+  "target": "juice-presentation",
+  "timed_out": false,
+  "tool": "inspect_javascript_security",
+  "type": "executor_result",
+  "workspace_id": "run-run-9eb5dcaa3cd145fab5c2fe43d811fcf3-c9755bf82c4a4041ad7b31052fc5a91b"
+}

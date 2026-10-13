@@ -1,0 +1,4201 @@
+{
+  "collected_at": "2026-10-13T11:07:43.575169Z",
+  "events": [
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 405,
+        "exit_code": 0,
+        "stage": "prepare",
+        "status": "ok",
+        "stdout": "name: cft-sandbox-4ab40106cb01 services: juice: cap_drop: - ALL cpus: 1 expose: - \"3000\" healthcheck: test: - CMD - /nodejs/bin/node - -e - require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1)) timeout: 3s interval: 2s retries: 20 start_period: 20s image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b mem_limit: \"805306368\" networks: default: null pids_limit: 128 security_opt: - no-new-privileges:true networks: default: name: cft-sandbox-4ab40106cb01_default internal: true",
+        "timed_out": false
+      },
+      "id": "telemetry-d2a72fc2d4844e15b713e927ac07cf7f",
+      "kind": "start_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:51.372564Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 0,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 405,
+        "exit_code": 0,
+        "stage": "prepare",
+        "status": "ok",
+        "stdout": "name: cft-sandbox-4ab40106cb01 services: juice: cap_drop: - ALL cpus: 1 expose: - \"3000\" healthcheck: test: - CMD - /nodejs/bin/node - -e - require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1)) timeout: 3s interval: 2s retries: 20 start_period: 20s image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b mem_limit: \"805306368\" networks: default: null pids_limit: 128 security_opt: - no-new-privileges:true networks: default: name: cft-sandbox-4ab40106cb01_default internal: true",
+        "timed_out": false
+      },
+      "id": "telemetry-c6fd10c2f9534af8b60e8cc1a77269a4",
+      "kind": "start_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:51.784568Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 1,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 1062,
+        "exit_code": 0,
+        "stage": "run",
+        "status": "ok",
+        "stderr": "Network cft-sandbox-4ab40106cb01_default Creating Network cft-sandbox-4ab40106cb01_default Creating Network cft-sandbox-4ab40106cb01_default Created Network cft-sandbox-4ab40106cb01_default Created Container cft-sandbox-4ab40106cb01-juice-1 Creating Container cft-sandbox-4ab40106cb01-juice-1 Created Container cft-sandbox-4ab40106cb01-juice-1 Starting Container cft-sandbox-4ab40106cb01-juice-1 Started",
+        "timed_out": false
+      },
+      "id": "telemetry-9a89cfd1c3134b7381c54fdaf0d8ab2e",
+      "kind": "start_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:52.852440Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 2,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 514,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.licenses=MIT,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.version=5.5.0,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.revision=5658473,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.service=juice\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"1 second ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up Less than a second (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-823199bb81c04e559472f7bdc8ca698c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:53.374645Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 3,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Detected Node.js version v24.19.0 (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-33b2279fe518446f8e3b168ba0c7c8ec",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.050031Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 4,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Detected OS linux (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-25cc4c33447a4ae7900dd229a2e39f58",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.050954Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 5,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Detected CPU x64 (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-9d452ca4820445fb9c8de69f3f66d4a8",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.051152Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 6,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Configuration default validated (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-a011706aa973492193157f843ac7906d",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.108195Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 7,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Entity models 21 of 21 are initialized (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-e8e99b7a61f14b9db7001ea620a0384f",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.162665Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 8,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: All dependencies in ./package.json are satisfied (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-9adb8f578414418ca634c5effa351466",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.166972Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 9,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Required file server.js is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-241eccbe1a5649ee9f5ed8ad0203edec",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.299592Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 10,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Required file index.html is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-e80d2d8e68cd4e82b5c4907e1154aef8",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.299623Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 11,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Required file styles.css is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-c806364ff4bb4cf491d9008155a355ca",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.300048Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 12,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Required file main.js is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-7b06313edd5a4e94966b26742435f6b6",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.300438Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 13,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Required file polyfills.js is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-e503c2b809414435aef6c911af2ae176",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.300640Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 14,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Required file matching /^hacking-instructor-.+\\.js$/ is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-4d31c70f83574b5bbd064402e1d0de0d",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.300915Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 15,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Port 3000 is available (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-bb827e43abeb4ad4a00558b609a43fcc",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.306302Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 16,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: Domain https://www.alchemy.com/ is not reachable (WARNING)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-79cf4cde70264ebf834cc153cd5ae43f",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.346607Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 17,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"Mint the Honey Pot\" challenge will not work as intended without access to https://www.alchemy.com/",
+        "stream": "stdout"
+      },
+      "id": "telemetry-bbd66a4971f742788111fe7f0c417430",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.346634Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 18,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"Wallet Depletion\" challenge will not work as intended without access to https://www.alchemy.com/",
+        "stream": "stdout"
+      },
+      "id": "telemetry-f424f51561384104941cd9fd04105387",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.346828Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 19,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: Environment variable ALCHEMY_API_KEY is not present (WARNING)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-975a11529b734f5c8a1989ccb2f4191c",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.347075Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 20,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"Mint the Honey Pot\" challenge will not work as intended without a valid ALCHEMY_API_KEY",
+        "stream": "stdout"
+      },
+      "id": "telemetry-dee8989f6629404abbfaa1f5e8873e45",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.347269Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 21,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"Wallet Depletion\" challenge will not work as intended without a valid ALCHEMY_API_KEY",
+        "stream": "stdout"
+      },
+      "id": "telemetry-cd9fe9b8df6446ecb2f6877fab22ecd7",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.347282Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 22,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Check https://howto-web3.owasp-juice.shop for instructions on how to set up and configure the Alchemy API",
+        "stream": "stdout"
+      },
+      "id": "telemetry-f3dfaa003d3a44938d62b8d519c61cdd",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.347488Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 23,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: Domain http://localhost:11434/v1 is not reachable (WARNING)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-63e60590b12942af89f37e6a254c4fc7",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.350153Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 24,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"Chatbot Prompt Injection\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-7832015ca5dd4ed19b6d45bd5568b2f1",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.350163Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 25,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"Greedy Chatbot Manipulation\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-ae6e06406217450fa9fe4df47fc11825",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.350168Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 26,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"AI Debugging\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-42ab1df58c3e48c29ec776f7348b0e4a",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.350392Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 27,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "warn: \"System Prompt Extraction\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-1c30048d2a3849e78064088bfec2628f",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.350402Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 28,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Check https://howto-llm.owasp-juice.shop for instructions on how to set up and configure the LLM API",
+        "stream": "stdout"
+      },
+      "id": "telemetry-988369dff12c4aa3b778b1bfb1531c5b",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.350406Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 29,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 516,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.licenses=MIT,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.service=juice,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.version=20.2.0,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"2 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 1 second (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-c376011e77fb4ffdafe6af6ad9a01b36",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:54.381032Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 30,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 515,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.revision=5658473,org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,com.docker.compose.version=5.5.0,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"3 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 2 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-b2dc5b0464064a57b6dfae78744e2679",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:55.402066Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 31,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 530,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.container-number=1,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.depends_on=,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.service=juice,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,org.opencontainers.image.version=20.2.0\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"4 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 3 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-c29e3ce589a4496eafe6342f2edee7e8",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:56.436623Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 32,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 515,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,com.docker.compose.project=cft-sandbox-4ab40106cb01,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.revision=5658473,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.container-number=1,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.oneoff=False,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"5 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 4 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-58d767c01958451dbaf66634ee6f61b1",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:57.442222Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 33,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Server listening on port 3000",
+        "stream": "stdout"
+      },
+      "id": "telemetry-9f37a4494b094381b8199cbfef88a6e7",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:58.039109Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 34,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 484,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.version=20.2.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.service=juice,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.version=5.5.0,org.opencontainers.image.licenses=MIT,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.depends_on=,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"6 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 5 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-409c3649729f4d3fa177b94dba3cc944",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:58.438019Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 35,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 484,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.version=20.2.0,com.docker.compose.container-number=1,com.docker.compose.depends_on=,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.revision=5658473,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.licenses=MIT,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.service=juice,desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.title=OWASP Juice Shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"7 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 6 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-4af9aae1d622439da14a94653ffbddf2",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:58:59.436092Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 36,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project=cft-sandbox-4ab40106cb01,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.revision=5658473,org.opencontainers.image.version=20.2.0,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.service=juice,desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,org.opencontainers.image.documentation=https://help.owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"8 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 7 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-2059905be7c546fea8c0038e095853a7",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:00.441993Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 37,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 484,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.service=juice,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.project=cft-sandbox-4ab40106cb01,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"9 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 8 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-77a63462632147d8a9a6816a7c504015",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:01.437627Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 38,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.depends_on=,com.docker.compose.version=5.5.0,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.service=juice,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"10 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 9 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-6b25894189984dee9dc3ba28374e0482",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:02.438364Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 39,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 484,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,com.docker.compose.depends_on=,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.service=juice,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"11 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 10 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-3327c78f4ded4f08acc112b7c4d959c3",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:03.425709Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 40,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 484,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.service=juice,com.docker.compose.version=5.5.0,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.container-number=1,desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.created=”2026-08-10T21:36:22Z”\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"11 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 11 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-5e7c71cc0b6f469bbb1971f713c0ef88",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:03.909460Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 41,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.version=5.5.0,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.service=juice,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.licenses=MIT,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"12 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 11 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-aa2f439bbff44820926a9bd95b3da50c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:04.415433Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 42,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.service=juice,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.licenses=MIT,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,org.opencontainers.image.revision=5658473,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.version=20.2.0,com.docker.compose.depends_on=,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"12 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 12 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-30d50fd8f79e4d8d8f3989909d9fc911",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:59:04.908177Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 43,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Solved 2-star loginAdminChallenge (Login Admin)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-05920274c50b452993ab8a0ae08fb749",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T11:04:33.894350Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 44,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "message": "info: Cheat score for tutorial loginAdminChallenge solved in 6min (expected ~2min) with hints allowed: 0",
+        "stream": "stdout"
+      },
+      "id": "telemetry-0ca79d3a682f4890a52b3fd9238a8d07",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T11:04:33.897954Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 45,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-d1037bf2c6d44537a52f5cc3c1205659",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:19.714677Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 46,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-05871336414b4447acd618236750275a",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:21.716514Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 47,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-e8728171acd54e9191dc39103f867add",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:21.716769Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 48,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-e0eb25dc99ea4b62acacb69efd51844f",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:21.822676Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 49,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-2b952282c2e242f39a14a2b087ee87a9",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:23.824113Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 50,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-1d3488d97eeb4f99b4742f9c2f5ab389",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:23.824621Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 51,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-88ccc8a4218d4cb4b0bd1a9a0d211689",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:23.988947Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 52,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d66a4bc0708f4b91a37b838d08a5f496",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:25.988558Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 53,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-da57779425b94ea58ca088eafccd8f92",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:25.988911Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 54,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-b288ccd4473b4b8eb82c8954fc3d3bdf",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:26.125840Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 55,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-9730ef4f925640dab8cc283a8110d2a7",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:28.127457Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 56,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ed3c047248264135bfa2b8b7e99b5573",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:28.128070Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 57,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-0f251b645c444da79630c05b86e48418",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:28.293008Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 58,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-1360abf217a84cf19229021d08ae2bdf",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:30.295409Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 59,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-6906852aeb2448718a4132490e126b50",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:30.295770Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 60,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-a96453397cdb4b808339b461fc426970",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:30.429125Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 61,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-e03bcd3e967944b6b08ee578c13075bb",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:32.432043Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 62,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-cdfcfcc878284dcc93c2875cf61cd96f",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:32.432480Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 63,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-126b16585bd34148b509ed56f310db27",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:32.570356Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 64,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d31875ba3a03422990309a9558d26c20",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:34.572009Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 65,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a08b2775433a4b02bc513987c04b937c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:34.573545Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 66,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-8e9efa56648747199ae4004560362d5d",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:34.672341Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 67,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-58a6477a24d54139bceb58ebfc07449b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:36.674299Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 68,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-9ce4484f906c46479e37ea0985f8deed",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:36.674870Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 69,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-1056203b5b1243bca84f9e6eac6ca566",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:36.812980Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 70,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-941735463c0e4af8acd9bc3082b9d2fb",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:38.814464Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 71,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-10793b786e3944b9b869a421caf9738c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:38.814804Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 72,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-23f9910ad9ed4fdc921349a457962b38",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:38.964260Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 73,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-34907a889a0d4c289ef0e1ff8e5a4490",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:40.966411Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 74,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-cdcd6435555b4e54bcf398f506d9ebfe",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:40.966702Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 75,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-7134ae251967459c899847ca1e3b26ad",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:41.110653Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 76,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-75ac965d5f554f7f982e8400bf002d4f",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:43.111567Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 77,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-3c882084629d44b59a89d9b68ef79fd3",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:43.111856Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 78,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-8c88464d7bec484289d642f288ef3229",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:43.209857Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 79,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-df9d691e63be499788c1e86d095da31d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:45.211044Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 80,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-3a44015078cc48b790ec10f7fae9a103",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:45.211381Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 81,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-0c25fc7285844d51b09b03c1ed9c8509",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:45.321990Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 82,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-e95fe865e6c2425991075971ac8fa1ed",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:47.323511Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 83,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-f0a57d3d090248498fbe9b97be8e5e50",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:47.323898Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 84,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-b7e6c28b2fe14e9a9837135ebad4dccb",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:47.441821Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 85,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-029fac14670c4a4c9b8c4a47a8b240bd",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:49.442972Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 86,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-7edc6a83e9154a9e90ae379b24e96466",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:49.443374Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 87,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-d0d032137bec4f69b74a52a2b41c89cc",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:49.575298Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 88,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-863ca7d17cc745358a0f11b32fc82ebd",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:51.576890Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 89,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-9040392f6c254361aa8253146791e864",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:51.577309Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 90,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-0c133939cb3d45ba8802181a0f5fc9ad",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:51.703535Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 91,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c7571bf9103e4e47a2380897bb50b9f0",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:53.704554Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 92,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4c710e65c2e64797822a16cdab9bae73",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:53.704890Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 93,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-527cd539731e4471b5219e2e8ece8715",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:53.817019Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 94,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-5a07ebb1c50942f686b1d8a3c3d44195",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:55.816793Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 95,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-70ff20dcab284650a6d893e05f15bc26",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:55.817213Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 96,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-5e8d57ca37e345b29cbe36a40710c62e",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:55.959204Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 97,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-bc0282515fb647df8f54cd065a2abb32",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:57.960684Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 98,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4d21a5f377e34f3589b0071d1ea2c387",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:57.961592Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 99,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-f65b2e90d3514669a628c9e83e2e8d4a",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:05:58.096385Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 100,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d1c4eced47434f65a4d731814f3b7ed8",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:00.098460Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 101,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-537f937e81a6420bb9d46ecb98c71c12",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:00.098858Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 102,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-73d72a509f654ec791d4edf34019fdb3",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:00.229800Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 103,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c812e58adb724af68f9a25db2da4c56b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:02.232350Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 104,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a21af7e2f2c6443090045144288bda47",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:02.232767Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 105,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-105260b54608478dab481b372075581d",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:02.363153Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 106,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-7d457ada31684dafb45aea966755a87d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:04.364495Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 107,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-0ec6242103d14a58a5bfc6a5dae24995",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:04.364836Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 108,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-c635f32f084e48d1a40def6442f8d283",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:04.480609Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 109,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-eca9583888934018907ac93b18fba4b6",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:06.482531Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 110,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d11a2bb6e82a42c4a049a3b26dd993c2",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:06.482848Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 111,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-3f71ead018964f788995f644f5508ef9",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:06.597017Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 112,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4f473e8040844493889679961aa77a47",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:08.598271Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 113,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-5ddf2c7d844045e68e8aa813de08d774",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:08.598692Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 114,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-1fbb8b1073974a239fb458c56df1eef7",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:08.703320Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 115,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-f69d2465763b44c8b2caa3e0a2d90b5c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:10.705504Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 116,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-39f0d1a62f3042649efafcea767a67d5",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:10.705990Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 117,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-06138e37688349d7b28bb32fb8c7039b",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:10.837288Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 118,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-3f05208a5649419eb87530b203d40591",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:12.838617Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 119,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-7bfceb179e684998be6a372e030d1d50",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:12.839013Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 120,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-697854812f1b4399aecdd179aa1881dc",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:12.996354Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 121,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4581b92c600d4813ac24e7aa4dfeb52d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:14.997905Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 122,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4834d484f5d648f4886ca96dbbcfcce7",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:14.998385Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 123,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-8e6d97c3bb534c73bed195dc3e1ee8f7",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:15.136120Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 124,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8df9e7f6b24e44ff8c49bc6ccadd8b57",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:17.138480Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 125,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-6b567f0b773a47748740d0199ad83bae",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:17.138903Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 126,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-da934c5a1af648d9a01ed74ec9af9bfb",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:17.276705Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 127,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-dceddb7587b24b2aac72523abaeaa5be",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:19.278488Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 128,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ccfba76c86f14a39a4a78c15b25a1795",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:19.278830Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 129,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-db2afab562504e9e990a996aadb7a30e",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:19.381132Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 130,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-706bbdcb149745268f1a9b6f1db86cb5",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:21.382954Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 131,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-48b6b7ddf5ce4e99ab9582a244e282f8",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:21.383389Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 132,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-9596c39b1f2b4f3aa4dd25a055ef2472",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:21.513405Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 133,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-5eb581122ad2424f8ffbcdfc6e0c20fa",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:23.514747Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 134,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d3d422cee32247dbb5cd292975be134b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:23.515069Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 135,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-0bdb50cc5d1344c78f7f0213cd2032c4",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:23.618240Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 136,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-355e53ff9ebc4615865b2fe1e114786a",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:25.616809Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 137,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-6a9adc30a73b473f8d832d871d426664",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:25.617163Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 138,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-c4c21b21ac334469b0096230cf26ba3d",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:25.719214Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 139,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ebf25fdad5584cca8df5aaec263089a6",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:27.720645Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 140,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-3b2673e8e14a48f588ae20feb836b467",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:27.721030Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 141,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-f49d1df4a67145009379c83ed1556cee",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:27.826287Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 142,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8495246992be465ba3833325e430ac82",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:29.827858Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 143,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-b49a0fb9c1ec4397a5d42f9ca1e73111",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:29.828210Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 144,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-4ee1ceefc00144c48050429ec7750e02",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:29.972385Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 145,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8305960bee094fd09a96225993f78c09",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:31.974230Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 146,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-b353de01e7d44a9682f879a3ee3bd470",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:31.974514Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 147,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-e88da27b25ed488f8caa050e3f5974f3",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:32.134156Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 148,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-fa226b40fc7046ffac0c9e23b90dbff4",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:34.135401Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 149,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c0b4e811a3bc4456a4527df8c1996e6a",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:34.135788Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 150,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-ad584f8f00af41e7a85978e3fa0830b0",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:34.242064Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 151,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a02d9b2bc96a487b9a44ca2858b7a934",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:36.243965Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 152,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-53ff42e181fc469c8c69caa4f05d9041",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:36.244408Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 153,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-44c5701620d24bcfb34ba7ecb72b8e0f",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:36.377582Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 154,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-038150b893894bb3ac42ca5301832b8b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:38.379692Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 155,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-94e0d9e60bdb4cc2af09755dc32c483e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:38.380173Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 156,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-d1c1783c95254bbcbcaf1568d0fe0632",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:38.512862Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 157,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-cb3d94acf42f4f53aa6d969900dbe969",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:40.516044Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 158,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-9c1aa3994d2e4db28a907aa712ae048c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:40.516422Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 159,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-8a755f774616462a9b49d45151a39735",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:40.673275Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 160,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d2346dd452cd4729837a2f509d238228",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:42.675299Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 161,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-183cb4b9ed0e4d0aafd69131649f4363",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:42.675711Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 162,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-9fb04cfa47f9439eac8d286261eb5d83",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:42.823822Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 163,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-11212ed5be304f6eb01f6182fd4e9f06",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:44.825670Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 164,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-0e1401bc997f4ee9a756499ee2fd39ae",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:44.826064Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 165,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-3dfdb83b041b42d0988924a0ea3542ec",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:44.926416Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 166,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8a8b198bd0bf4e368d4b86cffd73bf65",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:46.928216Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 167,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c1df365670194888ac05c52d17f1c4a3",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:46.928603Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 168,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-e1d3c2b76cc74c928e17fbc30fd4e18a",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:47.055278Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 169,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-82dc68fb751643669df6ec915db6d1f3",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:49.056145Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 170,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-e214bce0a0a54783b635065ff0a93ec4",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:49.056445Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 171,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-3f0e7e4450684cb58063c669e393f1f0",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:49.199736Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 172,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-719afb2c60ff4305991dd6a45a783a72",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:51.200983Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 173,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d5db41a42bbf4158b6b257a5981e575e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:51.201328Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 174,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-3c4e346a513144469546fc9b96320202",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:51.312279Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 175,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8e61222df3de465f8e83bf745544dedd",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:53.313549Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 176,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-56dfeaec9a414ccf9e8b81ff6d5d9581",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:53.313977Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 177,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-99a3fe8c50754b4699ce15a2a9c4bb2f",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:53.413757Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 178,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-144cb5e86f8c4bccb0804362337a50e9",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:55.415219Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 179,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-6a5fb76c45c64faf9414afcb7d4417bb",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:55.415442Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 180,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-ea29f99c7830485cb46e8e40b34f97d2",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:55.515659Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 181,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-43d7daaa5286495a84d690b6d05d22f3",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:57.516927Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 182,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8a5c765a3f2f4317b349b4cd0b18115b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:57.517315Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 183,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-51e0d58ac4864882bf0a8ef890f952c9",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:57.671568Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 184,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ff00302c5f1640a6a021464b80657fd7",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:59.673212Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 185,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-b9a72fb6046f478ead26b1c2f20e57d9",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:59.673537Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 186,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-def43a4a616843298c6009631266bcbd",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:06:59.777963Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 187,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-5f887104dba1439f92fba9dd7925774e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:01.779322Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 188,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a5c8c2ae11c34dd182cf7dad73e9c78d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:01.779596Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 189,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-cc609268c5f345e5865c8986fc1b7b5e",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:01.891519Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 190,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-b3cd966ed0ca4219a9af9cb31737e77e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:03.892740Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 191,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8a94222bd5b9476789c407f967c5f313",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:03.893587Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 192,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-0ff21e7be7f54fe9a5b413c47249413b",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:04.028707Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 193,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-18731557fc674a90851345b993bb6d8b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:06.029860Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 194,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-3c30e388c4434b059d61c0a2e1c1c45d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:06.030132Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 195,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-c24c2d278a2146a8baebaa848d70fd49",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:06.147277Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 196,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-69ece23b4cda4ad0aa563fa9a8377bec",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:08.148587Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 197,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-408201aec1754ddf8d7d2651908966c2",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:08.148905Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 198,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-7fd2718709c342e8ba895d14c125df7a",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:08.357431Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 199,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-3cc9009c9f644431a6913f4ab66232a7",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:10.358801Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 200,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-714adbc1fbb24cb59eef8d761b0ccd17",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:10.359207Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 201,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-ffa34dc9d5da463e95323042c5645303",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:10.471751Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 202,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-e2cf24a05c5841e895b7338d2113a913",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:12.473282Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 203,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-70b8adb47bc64b95bfa1d4341932db89",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:12.473723Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 204,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-be5f71ceded448f2ac7ec7042b5be6dc",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:12.626270Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 205,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4baaf9b340e546de94006dc5e4d24b23",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:14.628520Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 206,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ab8cab7e2b57419daa016d5daa1940c7",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:14.629126Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 207,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-00e2d99e03234b8e85a175be8575c07f",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:14.780044Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 208,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c8c76b0d342541d48e9d7d4e5f2abebc",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:16.781647Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 209,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-43a82e1227004b8cb0b86e4b4e9f53de",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:16.781925Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 210,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-792c5ef998c5456fa3802559623ad22f",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:16.918215Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 211,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a5b6414c60074291bbcb045915341967",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:18.920138Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 212,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-4a5edf7615ba4322be1ce72aa65074de",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:18.920505Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 213,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-b69429c7bde245da9f36e5258cf2cfad",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:19.072712Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 214,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-1c924e66c95d4df295f4a1f6177d1322",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:21.075493Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 215,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-7c9500b2e8a44be8a36727c5859f776e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:21.075949Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 216,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-f59ee99ba94846f89ebb21406b5e6e16",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:21.213551Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 217,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-1077c0f22d0246f6a6210ee2526fab70",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:23.214844Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 218,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-1d991406815947ce832bb2b6d93cba3c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:23.215152Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 219,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-f2d17f60a45544ce86a60bede8439e28",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:23.313460Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 220,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-6379af8607664b59a67e7bd5f3404675",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:25.315257Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 221,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-08266a0390194950a558f7418f3008f1",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:25.315526Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 222,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-9fa69acdddae4a28b79fa2d3bfda0eaf",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:25.427526Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 223,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c5ca84afa9604240ae9d0fe666661094",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:27.427332Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 224,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-54b810097d594d02b363ccd9a10982f9",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:27.427894Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 225,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-007062c233224d9a9e6cb83fbf60513b",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:27.537923Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 226,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-fc4e1aa4e0fa4cb98e4b3a7c6fd6f34d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:29.539333Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 227,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a36217fdfe9f4df99d61d51850fcfec1",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:29.539855Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 228,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-eca2b5382dd2481bb8b0aa57e817b103",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:29.649227Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 229,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-2c5b36147aff4ff6956943348f6404b8",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:31.651343Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 230,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-a2811f2a617d48419917741cb53cac1b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:31.651775Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 231,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-1a0e24319af64879b79ef80601fa9f1b",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:31.786572Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 232,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-857f41c146b14bf1b47e62cd09a1fd91",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:33.787637Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 233,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ea883a4e013f4e56b8c716ced067a41f",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:33.788191Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 234,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-c63901e4c7844161a5285be6a8a33710",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:33.906470Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 235,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-bdb886c1890f45a7ad95a2ac7465a22f",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:35.907707Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 236,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-ac2548b35bc54957b9c074839f8ca6dc",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:35.908020Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 237,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-d32bb958dc584ee5a64ab9c07807352e",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:36.057664Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 238,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8e817aef5afd4e67a0a7b8aacab3bf46",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:38.058974Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 239,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-27016f0566c449ab83c47e49a2c96c57",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:38.059365Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 240,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-d1b395d2a9904d98a4fc541564ec8cc0",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:38.188319Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 241,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d20ac2b29323472b8bc212dc57704d66",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:40.189916Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 242,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-8a313da71e474e368fd38b05be4458f4",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:40.190272Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 243,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-0d343b749cb943d980dfb9f5262ea130",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:40.328574Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 244,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 514,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:58:52 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"772f55c252ec\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project=cft-sandbox-4ab40106cb01,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-ljqwp0np\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.oneoff=False\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Names\":\"cft-sandbox-4ab40106cb01-juice-1\",\"Networks\":\"cft-sandbox-4ab40106cb01_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-4ab40106cb01\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"8 minutes ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 8 minutes (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-4b398e13234b411980f6b0fd2f92dd6e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:42.162182Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 245,
+      "service": null,
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-d15a0951cd164c7cb941d516dc25859d",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:42.329973Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 246,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-58b81f71fd774aa299aef29d3cd3d365",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:42.330399Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 247,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "772f55c252ec",
+      "facts": {
+        "exit_code": 0,
+        "finished_at": "0001-01-01T00:00:00Z",
+        "health": "healthy",
+        "running": true,
+        "started_at": "2026-10-13T10:58:52.370146715Z",
+        "status": "running"
+      },
+      "id": "telemetry-2182a4a7b18c4b3f8a3e7455599c572a",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T11:07:42.828709Z",
+      "run_id": "4ab40106cb014892924eb40442833ac9",
+      "sequence": 248,
+      "service": "juice",
+      "session_id": "4ab40106cb014892924eb40442833ac9",
+      "source": "docker_inspect",
+      "target": "juice-presentation"
+    }
+  ],
+  "run_id": "4ab40106cb014892924eb40442833ac9",
+  "session_id": "4ab40106cb014892924eb40442833ac9",
+  "target": "juice-presentation"
+}

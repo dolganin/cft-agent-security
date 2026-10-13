@@ -1,0 +1,737 @@
+{
+  "a07_lock_sha256": "290935e260548c32e44358f2adf65b920444b9b07d6ef682b2b81629b98c6af3",
+  "a08_performed": false,
+  "agent_runs": [
+    {
+      "run_id": "agent-run-01",
+      "attempt_id": "agent-run-01-20261013T104530Z",
+      "status": "technically_invalid",
+      "started_at": "2026-10-13T10:45:30.569745+00:00",
+      "finished_at": "2026-10-13T10:45:50.520687+00:00",
+      "duration_seconds": 19.953,
+      "pipeline_exit_code": 2,
+      "technical_errors": 1,
+      "gate_errors": [
+        {
+          "code": "DEPENDENCY_UNAVAILABLE",
+          "layer": "sast",
+          "message": "SAST stage failed",
+          "retryable": true
+        }
+      ],
+      "llm_requests": 0,
+      "llm_successes": 0,
+      "llm_failures": 0,
+      "retry_count": 0,
+      "fallback_count": 0,
+      "policy_block_count": 0,
+      "fresh_target_reset": true,
+      "fresh_evaluator_session": true,
+      "original_target_integrity": true,
+      "cleanup": {
+        "containers": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "networks": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "volumes": {
+          "exit_code": 0,
+          "remaining": []
+        }
+      },
+      "seal_valid": true,
+      "manifest_sha256": "0d8fb492b6930eabf9ca4c558027874b9faa543220f1d6aa5e5c98c7377025b5",
+      "seal_file_sha256": "c1646bddb9b12190b427243a9b237783b618cfc3424959dd91db834e636d2615",
+      "score_artifacts": [
+        {
+          "file": "scorecard-v2-development-original.json",
+          "sha256": "b048fe047a362f20a85be7965f02cad79dca760a1ca4b9b6fc0fc5850131bc2c",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-development-patched.json",
+          "sha256": "fb43fba0c4c22a83d21ed4a8034b7cfdbffd67e6002af42babb1c6e555017644",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-development-synthetic.json",
+          "sha256": "b057158fec30da05afabfe19ce9a6276b60c602f8bb3dcc6db99d7e8037634e6",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-holdout-original.json",
+          "sha256": "f270c8a888de4b5b0c4675c2b6958843da25dbfa7877d58c9d6d519a8d233ff5",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2.json",
+          "sha256": "478122a5006dce401201b3b7252a8b6cf010f863f5eebc87731187c3f7eaaa20",
+          "slice_count": 4,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        }
+      ],
+      "scorecard_slice_count": 4,
+      "scorecards_technically_valid": false
+    },
+    {
+      "run_id": "agent-run-02",
+      "attempt_id": "agent-run-02-20261013T104803Z",
+      "status": "technically_invalid",
+      "started_at": "2026-10-13T10:48:03.318475+00:00",
+      "finished_at": "2026-10-13T10:48:22.937203+00:00",
+      "duration_seconds": 19.609,
+      "pipeline_exit_code": 2,
+      "technical_errors": 1,
+      "gate_errors": [
+        {
+          "code": "DEPENDENCY_UNAVAILABLE",
+          "layer": "sast",
+          "message": "SAST stage failed",
+          "retryable": true
+        }
+      ],
+      "llm_requests": 0,
+      "llm_successes": 0,
+      "llm_failures": 0,
+      "retry_count": 0,
+      "fallback_count": 0,
+      "policy_block_count": 0,
+      "fresh_target_reset": true,
+      "fresh_evaluator_session": true,
+      "original_target_integrity": true,
+      "cleanup": {
+        "containers": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "networks": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "volumes": {
+          "exit_code": 0,
+          "remaining": []
+        }
+      },
+      "seal_valid": true,
+      "manifest_sha256": "1e542cc1d2b57c1cc26376f443feef7a885e3c84f31761d25f9b7596a2770b34",
+      "seal_file_sha256": "5247671d66422e7289dc202aaf63b44a623dddea64606470709cb43a4b8ae58e",
+      "score_artifacts": [
+        {
+          "file": "scorecard-v2-development-original.json",
+          "sha256": "b048fe047a362f20a85be7965f02cad79dca760a1ca4b9b6fc0fc5850131bc2c",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-development-patched.json",
+          "sha256": "fb43fba0c4c22a83d21ed4a8034b7cfdbffd67e6002af42babb1c6e555017644",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-development-synthetic.json",
+          "sha256": "b057158fec30da05afabfe19ce9a6276b60c602f8bb3dcc6db99d7e8037634e6",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-holdout-original.json",
+          "sha256": "f270c8a888de4b5b0c4675c2b6958843da25dbfa7877d58c9d6d519a8d233ff5",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2.json",
+          "sha256": "478122a5006dce401201b3b7252a8b6cf010f863f5eebc87731187c3f7eaaa20",
+          "slice_count": 4,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        }
+      ],
+      "scorecard_slice_count": 4,
+      "scorecards_technically_valid": false
+    },
+    {
+      "run_id": "agent-run-03",
+      "attempt_id": "agent-run-03-20261013T104859Z",
+      "status": "technically_invalid",
+      "started_at": "2026-10-13T10:48:59.637022+00:00",
+      "finished_at": "2026-10-13T10:49:19.331315+00:00",
+      "duration_seconds": 19.703,
+      "pipeline_exit_code": 2,
+      "technical_errors": 1,
+      "gate_errors": [
+        {
+          "code": "DEPENDENCY_UNAVAILABLE",
+          "layer": "sast",
+          "message": "SAST stage failed",
+          "retryable": true
+        }
+      ],
+      "llm_requests": 0,
+      "llm_successes": 0,
+      "llm_failures": 0,
+      "retry_count": 0,
+      "fallback_count": 0,
+      "policy_block_count": 0,
+      "fresh_target_reset": true,
+      "fresh_evaluator_session": true,
+      "original_target_integrity": true,
+      "cleanup": {
+        "containers": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "networks": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "volumes": {
+          "exit_code": 0,
+          "remaining": []
+        }
+      },
+      "seal_valid": true,
+      "manifest_sha256": "dc044bcaa4ca31f9da941f0bcdaf0364a7d1c050fbdd2ac342413604a97becf6",
+      "seal_file_sha256": "3e62e7cf2ee0b3c52097d8cdee50ca5898347d04f4664e317eb8be5840184f4a",
+      "score_artifacts": [
+        {
+          "file": "scorecard-v2-development-original.json",
+          "sha256": "b048fe047a362f20a85be7965f02cad79dca760a1ca4b9b6fc0fc5850131bc2c",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-development-patched.json",
+          "sha256": "fb43fba0c4c22a83d21ed4a8034b7cfdbffd67e6002af42babb1c6e555017644",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-development-synthetic.json",
+          "sha256": "b057158fec30da05afabfe19ce9a6276b60c602f8bb3dcc6db99d7e8037634e6",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2-holdout-original.json",
+          "sha256": "f270c8a888de4b5b0c4675c2b6958843da25dbfa7877d58c9d6d519a8d233ff5",
+          "slice_count": 1,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        },
+        {
+          "file": "scorecard-v2.json",
+          "sha256": "478122a5006dce401201b3b7252a8b6cf010f863f5eebc87731187c3f7eaaa20",
+          "slice_count": 4,
+          "all_technically_valid": false,
+          "technical_errors": [
+            "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+            "missing required artifact: pipeline\\reports-index.json",
+            "missing required artifact: pipeline\\sast\\findings.json",
+            "missing required artifact: pipeline\\sast\\summary.json",
+            "missing required artifact: pipeline\\scout\\merged-findings.json",
+            "missing required artifact: pipeline\\scout\\summary.json"
+          ]
+        }
+      ],
+      "scorecard_slice_count": 4,
+      "scorecards_technically_valid": false
+    },
+    {
+      "run_id": "agent-run-01-retry-01",
+      "attempt_id": "agent-run-01-retry-01-20261013T105848Z",
+      "retry_of": "agent-run-01",
+      "status": "completed",
+      "configuration_digest": "d4847b45ebc0b5dec99e391823c3a0a5284aa3570d4065f00740c13483e17e5a",
+      "project_commit": "d7fb6e913e6da923314cf71d4a8e7124ea22b1aa",
+      "started_at": "2026-10-13T10:58:48.707467+00:00",
+      "finished_at": "2026-10-13T11:07:45.239286+00:00",
+      "duration_seconds": 536.531,
+      "pipeline_exit_code": 1,
+      "pipeline_status": "completed",
+      "gate_decision": "fail",
+      "technical_errors": 0,
+      "llm_requests": 46,
+      "llm_successes": 46,
+      "llm_failures": 0,
+      "retry_count": 0,
+      "timeout_count": 0,
+      "fallback_count": 0,
+      "fallback_reasons": [],
+      "policy_block_count": 0,
+      "scout_iterations": null,
+      "agent_iterations": 12,
+      "action_proposal_count": 12,
+      "validator_allowed_count": 12,
+      "validator_denied_count": 0,
+      "executor_action_count": 12,
+      "evidence_outcomes": {
+        "confirmed": 4,
+        "inconclusive": 8
+      },
+      "sast_finding_count": 7,
+      "scout_candidate_count": 4,
+      "fresh_target_reset": true,
+      "fresh_evaluator_session": true,
+      "original_target_integrity": true,
+      "cleanup": {
+        "containers": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "networks": {
+          "exit_code": 0,
+          "remaining": []
+        },
+        "volumes": {
+          "exit_code": 0,
+          "remaining": []
+        }
+      },
+      "seal_valid": true,
+      "manifest_sha256": "ab883879fa50ddf7f723b1b2cdbbc6835acc054efed0e3d806d356a1c9afbee3",
+      "seal_file_sha256": "e1b198ff0bf16346402a82a62fb2d0a703123b48e415a90bc5a924c1854e96dd",
+      "sealed_file_count": 58,
+      "scorecard_sha256": "fc92c327624457da036b0f1be85a2e675407998d4a40d4649f79f6172a1fae71",
+      "scorecard_slice_count": 4,
+      "scorecards_technically_valid": true,
+      "score_slices": [
+        {
+          "split": "development",
+          "sample_kind": "original",
+          "technically_valid": true,
+          "detection": {
+            "duplicates": 0,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 9,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          }
+        },
+        {
+          "split": "development",
+          "sample_kind": "patched",
+          "technically_valid": true,
+          "detection": {
+            "duplicates": 0,
+            "f1": null,
+            "fn": 0,
+            "fp": 0,
+            "outside_ground_truth": 0,
+            "precision": null,
+            "recall": null,
+            "tn": 2,
+            "tp": 0,
+            "unresolved": 0
+          }
+        },
+        {
+          "split": "development",
+          "sample_kind": "synthetic",
+          "technically_valid": true,
+          "detection": {
+            "duplicates": 0,
+            "f1": null,
+            "fn": 0,
+            "fp": 0,
+            "outside_ground_truth": 0,
+            "precision": null,
+            "recall": null,
+            "tn": 4,
+            "tp": 0,
+            "unresolved": 0
+          }
+        },
+        {
+          "split": "holdout",
+          "sample_kind": "original",
+          "technically_valid": true,
+          "detection": {
+            "duplicates": 0,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 7,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          }
+        }
+      ],
+      "score_artifacts": [
+        {
+          "file": "history-v2.json",
+          "sha256": "84db6db0ac1ad175cacc3cac586a5eedbae4d4671d5d192d0d98973553ceefb3",
+          "bytes": 303402
+        },
+        {
+          "file": "observations-v2.json",
+          "sha256": "5b02eb472ab61a34211c69c88092324dba92fbf582e05404e7a9eca1927a5130",
+          "bytes": 9253
+        },
+        {
+          "file": "scorecard-v2-development-original.json",
+          "sha256": "d76f1eac7fee702b0559f052f8d3aeb86b3d2d404da56ad9ef19f89774cfcb29",
+          "bytes": 12559
+        },
+        {
+          "file": "scorecard-v2-development-patched.json",
+          "sha256": "d1a15fff43e8baac3fc37cfb03c6670cb97b469ca680e6614e4bcf00b79a188d",
+          "bytes": 2676
+        },
+        {
+          "file": "scorecard-v2-development-synthetic.json",
+          "sha256": "e4129a60ea38e15a95f7fe729304f58dae10dd7a093348e31c64b83718e69544",
+          "bytes": 3422
+        },
+        {
+          "file": "scorecard-v2-holdout-original.json",
+          "sha256": "54812e136ac3e42d4745d108fbaa026c295c739ac20df77d3836b527300b4a46",
+          "bytes": 10085
+        },
+        {
+          "file": "scorecard-v2.json",
+          "sha256": "fc92c327624457da036b0f1be85a2e675407998d4a40d4649f79f6172a1fae71",
+          "bytes": 32866
+        },
+        {
+          "file": "scorecard-v2.md",
+          "sha256": "76885853390e92495cb5658ac60d4695b0d0ae51cda51c3c29997498649f81c0",
+          "bytes": 630
+        }
+      ],
+      "artifact_redactions": [
+        {
+          "count": 1,
+          "file": "pipeline/reports/000-model-scout-71a2526acad2e4e5b6b5.json",
+          "pattern": "complete PEM private-key block",
+          "reason": "target-embedded private-key fixture; preserve report structure while excluding key material"
+        }
+      ]
+    }
+  ],
+  "b_or_c_functionality_added": false,
+  "baseline": {
+    "comparable": true,
+    "comparison": {
+      "budgets": {
+        "active_seconds": 180,
+        "ajax_seconds": 60,
+        "max_alerts": 10000,
+        "max_urls": 200,
+        "passive_body_bytes": 262144,
+        "passive_seconds": 180,
+        "sast_seconds": 600,
+        "spider_seconds": 60,
+        "startup_seconds": 180
+      },
+      "dataset_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+      "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+      "profile_id": "baseline.profile.a06.v1",
+      "profile_sha256": "89baa9223001632e6a3960c13694861f2c910bc8511a98dfc3ba1c800e884c09",
+      "protocol_scanner_reference": "A06",
+      "role": "anonymous",
+      "rules_sha256": "1039d8b38468225f7462f44f14d25615aeb0e7cab81a6b919eb317228d2b8694",
+      "scanner_lock_sha256": "c6381e5e8ad071a29df9e6f7611495ea393002fdf28d56bc002ab6f8e03eb771",
+      "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+      "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b"
+    },
+    "config_id": "benchmarks/baselines-a06-v5/profile.yaml",
+    "config_sha256": "89baa9223001632e6a3960c13694861f2c910bc8511a98dfc3ba1c800e884c09",
+    "reason": "All three manifests and seals bind the frozen A04/A05 inputs, A06 v5 scanner profile/rules/images/budgets, anonymous internal-only scope, exact target commit/image and 1,300-file target snapshot. Original A06 artifacts were referenced in place.",
+    "retry_count": 0,
+    "reused_from_a06": true,
+    "run_ids": [
+      "a06-7c17446b29a04516",
+      "a06-3065852c9fcf4e5f",
+      "a06-e8400e2187274b7c"
+    ],
+    "runs": [
+      {
+        "manifest_sha256": "af965cc3f25a62bb3b03a651c397ec5505c3c4c3a87546c8ae984c502e82071c",
+        "matching_frozen_inputs": true,
+        "run_id": "a06-7c17446b29a04516",
+        "seal_file_sha256": "18d62982fcadd0bd973643fb71bbdb4eea64da8cfdd3d8bc89aab5fc5557fdf5",
+        "seal_valid": true,
+        "status": "COMPLETED_WITH_LIMITATIONS",
+        "target_file_count": 1300
+      },
+      {
+        "manifest_sha256": "6bc812c4072989da7874a84e0ea8dd02cfe3a2c49b969212941711336e66b4b7",
+        "matching_frozen_inputs": true,
+        "run_id": "a06-3065852c9fcf4e5f",
+        "seal_file_sha256": "785d90a6e8103033b7290ed3cb03c2c8e69ba41b0a9232fa7abe424c535f8e6b",
+        "seal_valid": true,
+        "status": "COMPLETED_WITH_LIMITATIONS",
+        "target_file_count": 1300
+      },
+      {
+        "manifest_sha256": "e767ceca8e1736c9a9d567ee4a049b529b52e82edbc2a2d09ca52858be9d03dd",
+        "matching_frozen_inputs": true,
+        "run_id": "a06-e8400e2187274b7c",
+        "seal_file_sha256": "89615d30af1f17e77e81c0047f2fe48d7f345e89287ddc6fe638979c4cdce1e9",
+        "seal_valid": true,
+        "status": "COMPLETED_WITH_LIMITATIONS",
+        "target_file_count": 1300
+      }
+    ],
+    "source": "reused sealed A06 series",
+    "technically_invalid_attempt_count": 0,
+    "valid_run_count": 3
+  },
+  "blocked_launch_count": 1,
+  "cleanup": {
+    "status": "PASS_ALL_ATTEMPTS",
+    "containers": [],
+    "networks": [],
+    "volumes": []
+  },
+  "config_sha256": "d4847b45ebc0b5dec99e391823c3a0a5284aa3570d4065f00740c13483e17e5a",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+  "fallback_count": 0,
+  "frozen_commit": "d7fb6e913e6da923314cf71d4a8e7124ea22b1aa",
+  "git_status_at_freeze": "M .gitattributes\n M evaluation/benchmark_protocol.py\n M schemas/benchmark.py\n M schemas/benchmark_control_expansion.py\n?? docs/a06-baseline-series.md\n?? docs/a07-baseline-series.md\n?? scripts/a07_series.py",
+  "ground_truth_sha256": "579b9a51531010e8b4d53b27cb7607f410898cb144fe1db76cef9810e82a5366",
+  "integrity": {
+    "a01_validation": "PASS",
+    "a04_validation": "PASS; exact target source checked",
+    "a05_tests": "PASS: 22 passed, 1 skipped",
+    "a06_validation_and_preflight": "PASS",
+    "dataset_lock_unchanged": true,
+    "ground_truth_unchanged": true,
+    "matcher_unchanged": true,
+    "project_frozen_inputs": "PASS on final freeze d4847b45ebc0b5dec99e391823c3a0a5284aa3570d4065f00740c13483e17e5a",
+    "target_after_run": "PASS; original_target_integrity=true; all disposable resources removed",
+    "target_before_run": "PASS",
+    "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "target_file_count": 1300,
+    "target_tree": "299c108c28cd9783ec49ffa4c076956d084ef468",
+    "run_seals": "PASS all four preserved attempt directories match their sealed file hashes after the recorded redaction",
+    "secret_pattern_audit": "PASS; generated A07 artifacts scanned; user secrets not read",
+    "a05_single_run_scoring": "PASS after artifact redaction; all four scorecard slices technically valid",
+    "a07_requested_run_count": "PASS: one requested, one valid completed Agent run",
+    "final_artifact_secret_audit": "PASS; generated artifacts scanned after redaction; no private-key blocks or credential patterns remain; user secrets not read"
+  },
+  "launch_events": [
+    {
+      "requested_run_id": "agent-run-01",
+      "attempt_id": null,
+      "process_started": false,
+      "retry_count": 0,
+      "status": "BLOCKED_BEFORE_EXECUTION_THEN_AUTHORIZED",
+      "reason": "Initial automatic approval review blocked bounded source-derived context to the frozen NSU endpoint. No process started and no source context was transmitted before the user explicitly authorized continuing with bounded source context and without ground truth, labels or secrets."
+    }
+  ],
+  "limitations": [
+    "По решению оператора текущая A07 серия сокращена с трех независимых Agent runs до одного для уменьшения времени выполнения. Поэтому межзапусковая стабильность Agent в этой итерации не измеряется.",
+    "Three technically invalid SAST attempts from the earlier three-run request were preserved; they are excluded from valid run and scoring counts.",
+    "A07 reports one run only; no between-run stability statistic or extrapolation is calculated.",
+    "One Windows-specific A06 fixture test was deselected after its WinError 5 path-resolution failure; all other selected prerequisite tests passed."
+  ],
+  "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "planned_agent_run_ids": [
+    "agent-run-01-retry-01"
+  ],
+  "policy_block_count": 0,
+  "retry_count": 0,
+  "schema_version": "a07.series.aggregate.v1",
+  "secret_pattern_audit": {
+    "status": "PASS",
+    "checked_file_count": 156,
+    "findings": [],
+    "patterns": [
+      "authorization_header",
+      "bearer_token",
+      "private_key",
+      "provider_key"
+    ],
+    "user_secrets_read": false
+  },
+  "stage": "A07",
+  "status": "COMPLETE_WITH_LIMITATIONS",
+  "technical_invalid_attempt_count": 3,
+  "tests": {
+    "a07_frozen_verify": "PASS",
+    "a07_runner_py_compile": "PASS",
+    "a07_runner_ruff": "PASS",
+    "combined_prerequisite_suites": {
+      "deselected": 1,
+      "failed": 0,
+      "passed": 117,
+      "skipped": 1
+    },
+    "deselected_test": "tests/test_a06_baseline.py::test_target_unicode_names_and_hidden_worktree_mutation",
+    "git_diff_check": "PASS",
+    "reason_deselected": "Windows pytest fixture path raises WinError 5 in Path.resolve(strict=True), also reproduced during unrestricted test invocation."
+  },
+  "timing": {
+    "completed_valid_run_durations_seconds": [
+      536.531
+    ],
+    "aggregate_agent_seconds": 536.531,
+    "technically_invalid_attempt_durations_seconds": [
+      19.953,
+      19.609,
+      19.703
+    ]
+  },
+  "total_llm_requests": 46,
+  "valid_run_count": 1,
+  "total_attempt_count": 4,
+  "score_rescore_reproducibility": {
+    "run_id": "agent-run-01",
+    "duplicate_output_dir": "score-agent-run-01-repeat",
+    "compared_file_count": 8,
+    "byte_identical": true,
+    "scope": "A05 scorer output determinism only; no Agent repeatability inference."
+  },
+  "requested_agent_runs": 1,
+  "completed_valid_agent_runs": 1,
+  "original_plan_requested_agent_runs": 3,
+  "infrastructure_retry_count": 1,
+  "timeout_count": 0,
+  "technical_error_count": 3,
+  "sast_docker_fallback": {
+    "status": "PASS",
+    "image": "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade",
+    "network": "none",
+    "target_mount": "read-only",
+    "rules_mount": "read-only",
+    "rules_sha256": "8c96c80e042e636c064813e339d65adf8d5d6edd60b4def3be214fc82786c829"
+  },
+  "single_run_limitation": "По решению оператора текущая A07 серия сокращена с трех независимых Agent runs до одного для уменьшения времени выполнения. Поэтому межзапусковая стабильность Agent в этой итерации не измеряется.",
+  "post_run_redaction": {
+    "redacted_private_key_block_count": 1,
+    "source_run": "agent-run-01-retry-01",
+    "rescore_completed_after_redaction": true,
+    "reseal_completed": true,
+    "reason": "An embedded target fixture PEM block was removed from the finding report while preserving report structure."
+  }
+}

@@ -1,0 +1,414 @@
+Found Java version 17.0.17
+Available memory: 7539 MB
+Using JVM args: -Xmx1884m
+807 [main] INFO  org.parosproxy.paros.Constant - Copying default configuration to /tmp/zap-home/config.xml
+949 [main] INFO  org.parosproxy.paros.Constant - Creating directory /tmp/zap-home/session
+995 [main] INFO  org.parosproxy.paros.Constant - Creating directory /tmp/zap-home/dirbuster
+1056 [main] INFO  org.parosproxy.paros.Constant - Creating directory /tmp/zap-home/fuzzers
+1095 [main] INFO  org.parosproxy.paros.Constant - Creating directory /tmp/zap-home/plugin
+1403 [main] INFO  org.zaproxy.zap.DaemonBootstrap - ZAP 2.16.1 started 13/10/2026, 05:24:35 with home: /tmp/zap-home/ cores: 32 maxMemory: 1 GB
+1441 [main] INFO  org.parosproxy.paros.common.AbstractParam - Setting config api.disablekey = true was null
+1443 [main] INFO  org.parosproxy.paros.common.AbstractParam - Setting config connection.timeoutInSecs = 10 was null
+1445 [main] INFO  org.parosproxy.paros.common.AbstractParam - Setting config spider.thread = 2 was null
+1446 [main] INFO  org.parosproxy.paros.common.AbstractParam - Setting config ascan.threadPerHost = 2 was null
+1447 [main] INFO  org.parosproxy.paros.common.AbstractParam - Setting config autoupdate.checkOnStart = false was null
+5215 [ZAP-daemon] INFO  org.zaproxy.zap.control.ExtensionFactory - Installed add-ons: [[id=alertFilters, version=25.0.0], [id=ascanrules, version=77.0.0], [id=authhelper, version=0.33.0], [id=automation, version=0.57.0], [id=bruteforce, version=19.0.0], [id=callhome, version=0.19.0], [id=client, version=0.19.0], [id=commonlib, version=1.38.0], [id=database, version=0.8.0], [id=diff, version=17.0.0], [id=directorylistv1, version=9.0.0], [id=domxss, version=22.0.0], [id=encoder, version=1.7.0], [id=exim, version=0.15.0], [id=formhandler, version=6.7.0], [id=fuzz, version=13.16.0], [id=gettingStarted, version=19.0.0], [id=graaljs, version=0.11.0], [id=graphql, version=0.28.0], [id=help, version=21.0.0], [id=hud, version=0.19.0], [id=invoke, version=16.0.0], [id=network, version=0.24.0], [id=oast, version=0.23.0], [id=onlineMenu, version=14.0.0], [id=openapi, version=47.0.0], [id=postman, version=0.8.0], [id=pscan, version=0.5.0], [id=pscanrules, version=69.0.0], [id=quickstart, version=52.0.0], [id=replacer, version=20.0.0], [id=reports, version=0.42.0], [id=requester, version=7.8.0], [id=retest, version=0.11.0], [id=retire, version=0.52.0], [id=reveal, version=10.0.0], [id=scanpolicies, version=0.6.0], [id=scripts, version=45.16.0], [id=selenium, version=15.42.0], [id=sequence, version=8.0.0], [id=soap, version=28.0.0], [id=spider, version=0.17.0], [id=spiderAjax, version=23.28.0], [id=tips, version=15.0.0], [id=webdriverlinux, version=168.0.0], [id=websocket, version=34.0.0], [id=zest, version=48.10.0]]
+5219 [ZAP-daemon] INFO  org.zaproxy.zap.control.ExtensionFactory - Loading extensions
+5556 [ZAP-daemon] INFO  org.zaproxy.addon.network.internal.TlsUtils - Using supported SSL/TLS protocols: [TLSv1.2, TLSv1.3]
+6407 [ZAP-daemon] INFO  org.zaproxy.zap.control.ExtensionFactory - Extensions loaded
+6828 [ZAP-daemon] INFO  org.flywaydb.core.internal.license.VersionPrinter - Flyway Community Edition 9.22.3 by Redgate
+6829 [ZAP-daemon] INFO  org.flywaydb.core.internal.license.VersionPrinter - See release notes here: https://rd.gt/416ObMi
+6830 [ZAP-daemon] INFO  org.flywaydb.core.internal.license.VersionPrinter - 
+6897 [ZAP-daemon] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:hsqldb:file:/tmp/zap-home/session/untitled1 (HSQL Database Engine 2.7)
+6903 [ZAP-daemon] WARN  org.flywaydb.core.internal.database.base.Database - Flyway upgrade recommended: HSQLDB 2.7 is newer than this version of Flyway and support has not been tested. The latest supported version of HSQLDB is 2.6.
+6932 [ZAP-daemon] INFO  org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory - Schema history table "PUBLIC"."AUTHHELPER_FLYWAY_SCHEMA_HISTORY" does not exist yet
+6937 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbValidate - Successfully validated 6 migrations (execution time 00:00.022s)
+7001 [ZAP-daemon] INFO  org.flywaydb.core.internal.schemahistory.JdbcTableSchemaHistory - Creating Schema History table "PUBLIC"."AUTHHELPER_FLYWAY_SCHEMA_HISTORY" with baseline ...
+7130 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbBaseline - Successfully baselined schema with version: 0
+7201 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Current version of schema "PUBLIC": 0
+7226 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "1 - Create tables"
+7310 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "2 - Create storage tables"
+7326 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "3 - Improve diags"
+7398 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "4 - Web element selector"
+7410 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "5 - Af plan"
+7432 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Migrating schema "PUBLIC" to version "6 - Auth report data"
+7522 [ZAP-daemon] INFO  org.flywaydb.core.internal.command.DbMigrate - Successfully applied 6 migrations to schema "PUBLIC", now at version v6 (execution time 00:00.155s)
+Oct 13, 2026 5:24:42 AM java.util.prefs.FileSystemPreferences$1 run
+INFO: Created user preferences directory.
+9926 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Auto-update Extension - Allows ZAP to check for updates
+9930 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Options Extension - Options Extension
+9931 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Edit Menu Extension - Edit Menu Extension
+9932 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing API Extension - Provides a rest based API for controlling and accessing ZAP
+9940 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing History Extension - History Extension
+9943 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionReveal - Show hidden fields and enable disabled fields
+9944 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Search Extension - Search messages for strings and regular expressions
+9946 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Breakpoint Extension - Allows you to intercept and modify requests and responses
+9995 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scan Extension - Passive scanner
+9997 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Alerts Extension - Allows you to view and manage alerts
+10001 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Active Scan Extension - Active scanner, heavily based on the original Paros active scanner, but with additional tests added
+10009 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionSequence - ExtensionSequence
+10010 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Standard Menus Extension - A set of common popup menus for miscellaneous tasks
+10011 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionBruteForce - Forced browsing of files and directories using code from the OWASP DirBuster tool
+10013 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Compare Extension - Compares 2 sessions and generates an HTML file showing the differences
+10014 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionInvoke - Invoke external applications passing context related information such as URLs and parameters
+10015 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Anti-CSRF Extension - Handles anti cross site request forgery (CSRF) tokens
+10023 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authentication Extension - Authentication Extension
+10029 [ZAP-daemon] INFO  org.zaproxy.zap.extension.authentication.ExtensionAuthentication - Loaded authentication method types: [Form-based Authentication, HTTP/NTLM Authentication, Manual Authentication, Script-based Authentication, JSON-based Authentication]
+10032 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Users Extension - Users Extension
+10033 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Parameters Extension - Summarise and analyse FORM and URL parameters as well as cookies
+10035 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Script Extension - Script integration
+10039 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionScripts - Scripting console, supports all JSR 223 scripting languages
+10056 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Forced User Extension - Forced User Extension
+10057 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Sessions Extension - Extension handling HTTP sessions
+10059 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionZest - Zest is a specialized scripting language, originally, from Mozilla specifically designed to be used in security tools
+10168 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionDiff - ExtensionDiff
+10169 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Post Table View Extension - HTTP Panel Post Table View Extension
+10170 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Encoder Addon - Adds support for scriptable encoders to ZAP.
+10195 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Session Management Extension - Session Management Extension
+10199 [ZAP-daemon] INFO  org.zaproxy.zap.extension.sessions.ExtensionSessionManagement - Loaded session management method types: [Cookie-based Session Management, HTTP Authentication Session Management, Script-based Session Management]
+10200 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Form Table View Extension - HTTP Panel Form Table View Extension
+10202 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebSockets Support - Capture messages from WebSockets with the ability to set breakpoints.
+10214 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing SOAP/WSDL Support - Allows you to import a WSDL file containing operations which ZAP will access, adding them to the Sites tree.
+10216 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Core UI Extension - Core UI related functionality.
+10217 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authorization Extension - Authorization Extension
+10218 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Requester - Allows to manually edit and send messages.
+10221 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing AJAX Spider - AJAX Spider, uses Crawljax
+10225 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebDriver Provider - Provides WebDrivers to control several browsers using Selenium and includes HtmlUnit browser.
+10239 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Refresh Sites Tree Extension - Adds menu item to refresh the Sites tree
+10240 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Help Extension - ZAP User Guide
+10241 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Call Home - Handles all of the calls to ZAP services
+10243 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Network Extension - Provides core networking capabilities.
+10305 [ZAP-daemon] INFO  org.zaproxy.addon.network.ConnectionOptions - Unsafe SSL/TLS renegotiation disabled.
+10313 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Extension Configuration Extension - Allows you to configure which extensions are loaded when ZAP starts
+10314 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Combined HTTP Panels Extension - Combined HTTP Panels Extension
+10315 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Hex View Extension - HTTP Panel Hex View Extension
+10316 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Image View Extension - HTTP Panel Image View Extension
+10317 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Query Table View Extension - HTTP Panel Query Table View Extension
+10318 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Syntax Highlighter View Extension - HTTP Panel Syntax Highlighter View Extension
+10319 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Keyboard Configuration Extension - Adds support for configurable keyboard shortcuts for all of the ZAP menus.
+10319 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Scanner Rule Configuration Extension - Active and passive rule configuration
+10322 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Statistics Extension - Statistics
+10323 [ZAP-daemon] INFO  org.zaproxy.zap.extension.stats.ExtensionStats - Start recording in memory stats
+10325 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Custom Pages Extension - Custom Pages Definition
+10326 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start panel  - Adds the Quick Start panel for scanning and exploring applications
+10406 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start Ajax Spider integration - Add the option to use the Ajax Spider in the Quick Start scan
+10432 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start HUD Integration - HUD integration for the quick start panel
+10504 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start Browser Launcher - Launch browsers preset proxying through ZAP
+10507 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start Spider Integration - Adds the option to use the traditional Spider in the Quick Start scan.
+10511 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionHUD - Heads Up Display
+11223 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionHUDlaunch - ExtensionHUDlaunch
+11225 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authentication Helper - Authentication Helper
+11297 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Client Spider Browser Based Authentication Support - Enables browser based authentication when performing an authenticated Client Spider scan.
+11299 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authentication Helper Reports - Authentication Helper Reports
+11301 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing AJAX Spider Browser Based Authentication Support - Enables browser based authentication when performing an authenticated AJAX Spider scan.
+11303 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scanner Extension - Provides core passive scanning capabilities.
+11329 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scanner Automation Framework Extension - Provides jobs and result data related to the passive scanner.
+11331 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Common Library - A library of shared functionality
+11395 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionDomXSS - DOM XSS Active Scan Rule
+11525 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionOnlineMenu - The Online menu links
+11527 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing SOAP Automation - SOAP Automation Framework Integration
+11529 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing SOAP Spider - SOAP Spider Integration
+11595 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Sequence Automation - Sequence Automation Framework Integration
+11606 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionGraphQl - Allows you to inspect and attack GraphQL endpoints.
+11612 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing GraphQL Automation - GraphQL Automation Framework Integration
+11615 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing GraphQL Spider - GraphQL Spider Integration
+11617 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Spider Extension - Spider used for automatically finding URIs on a site.
+11710 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Spider Automation - Spider Automation Integration
+11715 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Advance Fuzzer - Provides the foundation for concrete message types (for example, HTTP, WebSockets) expose fuzzer implementations.
+11717 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Fuzzer - Allows to fuzz HTTP messages.
+11718 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionGettingStarted - The ZAP Getting Started Guide
+11719 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing GraalVM JavaScript Engine Extension - Provides the GraalVM JavaScript engine for ZAP scripting.
+11802 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Active Scan Rules - Release status active scan rules
+11804 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Report Generator - Templated and themed report generation functionality
+11806 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Report Generation Automation Integration - Report Generation Automation Integration
+11811 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionAlertFilters - Context alert rules filter
+11814 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Alert Filters Automation - Alert Filters Automation Framework Integration
+11817 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionTipsAndTricks - Tips and Tricks
+11818 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scan Rules - Release status passive scan rules.
+11819 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OpenAPI Import - Allows you to spider and import OpenAPI (Swagger) definitions 
+11821 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OpenAPI Automation - OpenAPI Automation Framework Integration
+11824 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OpenAPI Spider - OpenAPI Spider Integration
+11828 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Out-of-band Application Security Testing - Adds Out-of-band Application Security Testing functionality.
+11896 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OAST Scripts - Adds OAST scripts.
+11899 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionFormHandler - This extension allows a user to change the default values used for generated content (e.g. spiders, importers).
+11905 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebSocket Fuzzer - Allows to fuzz WebSocket messages.
+11906 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebSocket Message Editor - Provides the WebSocket Message Editor dialogues.
+11907 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Retest - Facilitates the verification of presence/absence of certain alerts.
+11909 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Scripts Automation Framework Integration - Scripts Automation
+11917 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Ajax Spider Automation - Ajax Spider Automation Framework Integration
+11921 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Import/Export - Import and Export functionality supporting multiple formats.
+11923 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Import/Export Automation - Import/Export Automation Framework Integration
+11926 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Postman Import - Allows you to spider and import Postman collections
+11928 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Postman Automation - Postman Automation Framework Integration
+11930 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionClientIntegration - Client Side Integration
+11935 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Client Spider Automation - Client Spider Automation Framework Integration
+11938 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Client Zest Script Recording Support - Allows recording client events as Zest scripts.
+11940 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Automation Framework - Provides functionality to simplify using ZAP in an automated manner
+11942 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Match and Replace - Easy way to replace strings in requests and responses
+11945 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Replacer Automation - Replacer Automation Framework Integration
+11995 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Database Extension - Provides databases and persistence capabilities.
+11997 [ZAP-daemon] WARN  org.zaproxy.zap.extension.autoupdate.ExtensionAutoUpdate - This ZAP installation is over a year old - its probably very out of date
+12026 [ZAP-daemon] INFO  org.zaproxy.zap.extension.quickstart.ExtensionQuickStart - Shh! No check-for-news - silent mode enabled
+12031 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Authentication Request Identified
+12032 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Session Management Response Identified
+12033 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Verification Request Identified
+12034 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: WSDL File Detection
+12124 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Anti-clickjacking Header
+12125 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Application Error Disclosure
+12126 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Big Redirect Detected (Potential Sensitive Information Leak)
+12127 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Re-examine Cache-control Directives
+12128 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Charset Mismatch
+12129 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Content Security Policy (CSP) Header Not Set
+12130 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: CSP
+12131 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Content-Type Header Missing
+12131 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie No HttpOnly Flag
+12132 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Loosely Scoped Cookie
+12133 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie without SameSite Attribute
+12134 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie Without Secure Flag
+12135 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cross-Domain Misconfiguration
+12137 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cross-Domain JavaScript Source File Inclusion
+12137 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Absence of Anti-CSRF Tokens
+12138 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Directory Browsing
+12139 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Hash Disclosure
+12140 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Heartbleed OpenSSL Vulnerability (Indicative)
+12141 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Private IP Disclosure
+12194 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Session ID in URL Rewrite
+12195 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Debug Error Messages
+12196 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Sensitive Information in URL
+12197 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Sensitive Information in HTTP Referrer Header
+12198 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Suspicious Comments
+12199 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Weak Authentication Method
+12199 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: HTTP to HTTPS Insecure Transition in Form Post
+12200 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: HTTPS to HTTP Insecure Transition in Form Post
+12201 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Insecure JSF ViewState
+12202 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Reverse Tabnabbing
+12203 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Secure Pages Include Mixed Content
+12204 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Modern Web Application
+12204 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: PII Disclosure
+12205 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Script Served From Malicious Domain (polyfill)
+12206 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Retrieved from Cache
+12207 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: HTTP Server Response Header
+12208 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Strict-Transport-Security Header
+12208 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Timestamp Disclosure
+12209 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: User Controllable Charset
+12210 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie Poisoning
+12211 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: User Controllable HTML Element Attribute (Potential XSS)
+12211 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: User Controllable JavaScript Event (XSS)
+12212 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Off-site Redirect
+12214 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Username Hash Found
+12215 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Viewstate
+12216 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-AspNet-Version Response Header
+12218 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-Backend-Server Header Information Leak
+12218 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-ChromeLogger-Data (XCOLD) Header Information Leak
+12220 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-Content-Type-Options Header Missing
+12220 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-Debug-Token Information Leak
+12221 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s)
+12222 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: ZAP is Out of Date
+12224 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Script Passive Scan Rules
+12227 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Vulnerable JS Library (Powered by Retire.js)
+12229 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Stats Passive Scan Rule
+13095 [ZAP-daemon] INFO  org.zaproxy.addon.oast.services.callback.CallbackService - Started callback service on 0.0.0.0:40619
+13109 [ZAP-daemon] INFO  org.zaproxy.addon.network.ExtensionNetwork - Creating new root CA certificate.
+14019 [ZAP-daemon] INFO  org.zaproxy.addon.network.ExtensionNetwork - New root CA certificate created.
+14032 [ZAP-daemon] INFO  org.zaproxy.zap.extension.autoupdate.ExtensionAutoUpdate - Shh! No check-for-update - silent mode enabled
+14034 [ZAP-daemon] INFO  org.zaproxy.addon.callhome.ExtensionCallHome - Shh! Silent mode or telemetry turned off
+14102 [ZAP-daemon] INFO  org.zaproxy.addon.network.ExtensionNetwork - ZAP is now listening on 127.0.0.1:8080
+15924 [ZAP-SpiderInitThread-0] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on http://juice:3000/ at 2026-10-13T05:24:49.543+0000
+15930 [ZAP-SpiderInitThread-0] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+16003 [ZAP-SpiderInitThread-0] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+16213 [ZAP-SpiderThreadPool-0-thread-8] WARN  org.zaproxy.addon.spider.UrlCanonicalizer - Host could not be reliably evaluated from: https://pwning.owasp-juice.shop%5C (on base http://juice:3000/rest/admin/application-configuration)
+16498 [ZAP-SpiderThreadPool-0-thread-5] WARN  org.zaproxy.addon.spider.UrlCanonicalizer - Host could not be reliably evaluated from: https://pwning.owasp-juice.shop%5C (on base http://juice:3000/api/Products)
+22203 [ZAP-SpiderThreadPool-0-thread-9] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+22215 [ZAP-SpiderShutdownThread-0] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on http://juice:3000/ at 2026-10-13T05:24:55.834+0000
+22828 [ZAP-AjaxSpiderApi] INFO  org.zaproxy.zap.extension.spiderAjax.SpiderThread - Running Crawljax (with firefox-headless): API - http://juice:3000/
+23166 [ZAP-AjaxSpiderApi] INFO  com.crawljax.core.plugin.Plugins - Loaded org.zaproxy.zap.extension.spiderAjax.SpiderThread$DummyPlugin@7b63e22 as a OnBrowserCreatedPlugin
+[Fatal Error] :1:1: Content is not allowed in prolog.
+[Fatal Error] :1:1: Content is not allowed in prolog.
+[Fatal Error] :1:1: Content is not allowed in prolog.
+[Fatal Error] :1:1: Content is not allowed in prolog.
+66110 [ZAP-AjaxSpiderApi] INFO  com.crawljax.core.CrawlController - Received shutdown notice. Reason is Exausted
+[Fatal Error] :1:1: Content is not allowed in prolog.
+67809 [ZAP-AjaxSpiderApi] INFO  com.crawljax.core.CrawlController - Shutdown process complete
+67810 [ZAP-AjaxSpiderApi] INFO  org.zaproxy.zap.extension.spiderAjax.SpiderThread - Stopping proxy...
+67817 [ZAP-AjaxSpiderApi] INFO  org.zaproxy.zap.extension.spiderAjax.SpiderThread - Proxy stopped.
+67819 [ZAP-AjaxSpiderApi] INFO  org.zaproxy.zap.extension.spiderAjax.SpiderThread - Finished Crawljax: API - http://juice:3000/
+68109 [ZAP-IO-Server-1-6] INFO  org.parosproxy.paros.core.scanner.Scanner - scanner with ID 0 started
+69261 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - Scanning 163 node(s) from http://juice:3000
+69263 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | PathTraversalScanRule strength MEDIUM threshold MEDIUM
+72809 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | PathTraversalScanRule in 3.546s with 360 message(s) sent and 0 alert(s) raised.
+72810 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | RemoteFileIncludeScanRule strength MEDIUM threshold MEDIUM
+74450 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | RemoteFileIncludeScanRule in 1.64s with 240 message(s) sent and 0 alert(s) raised.
+74451 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SourceCodeDisclosureWebInfScanRule strength MEDIUM threshold MEDIUM
+74453 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | HeartBleedActiveScanRule strength MEDIUM threshold MEDIUM
+74455 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SourceCodeDisclosureCve20121823ScanRule strength MEDIUM threshold MEDIUM
+74479 [ZAP-ActiveScanner-1] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | HeartBleedActiveScanRule in 0.025s with 3 message(s) sent and 0 alert(s) raised.
+76941 [ZAP-ActiveScanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SourceCodeDisclosureWebInfScanRule in 2.49s with 78 message(s) sent and 0 alert(s) raised.
+80937 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SourceCodeDisclosureCve20121823ScanRule in 6.482s with 26 message(s) sent and 0 alert(s) raised.
+80938 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | RemoteCodeExecutionCve20121823ScanRule strength MEDIUM threshold MEDIUM
+84249 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | RemoteCodeExecutionCve20121823ScanRule in 3.311s with 326 message(s) sent and 0 alert(s) raised.
+84250 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | ExternalRedirectScanRule strength MEDIUM threshold MEDIUM
+95605 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | ExternalRedirectScanRule in 11.355s with 216 message(s) sent and 0 alert(s) raised.
+95607 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | ServerSideIncludeScanRule strength MEDIUM threshold MEDIUM
+97400 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | ServerSideIncludeScanRule in 1.793s with 96 message(s) sent and 0 alert(s) raised.
+97401 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | CrossSiteScriptingScanRule strength MEDIUM threshold MEDIUM
+98876 [ZAP-ActiveScanner-1] INFO  org.apache.hc.client5.http.impl.classic.ZapHttpRequestRetryExec - Recoverable I/O exception (org.apache.hc.core5.http.NoHttpResponseException) caught when processing request to {}->http://juice:3000
+99182 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | CrossSiteScriptingScanRule in 1.781s with 120 message(s) sent and 0 alert(s) raised.
+99184 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | PersistentXssPrimeScanRule strength MEDIUM threshold MEDIUM
+100268 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | PersistentXssPrimeScanRule in 1.084s with 24 message(s) sent and 0 alert(s) raised.
+100270 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | PersistentXssSpiderScanRule strength MEDIUM threshold MEDIUM
+106865 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | PersistentXssSpiderScanRule in 6.595s with 163 message(s) sent and 0 alert(s) raised.
+106867 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | PersistentXssScanRule strength MEDIUM threshold MEDIUM
+107591 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | PersistentXssScanRule in 0.724s with 0 message(s) sent and 0 alert(s) raised.
+107593 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionScanRule strength MEDIUM threshold MEDIUM
+110897 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionScanRule in 3.303s with 536 message(s) sent and 1 alert(s) raised.
+110898 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionMySqlTimingScanRule strength MEDIUM threshold MEDIUM
+112861 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionMySqlTimingScanRule in 1.963s with 240 message(s) sent and 0 alert(s) raised.
+112862 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionHypersonicTimingScanRule strength MEDIUM threshold MEDIUM
+114920 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionHypersonicTimingScanRule in 2.058s with 240 message(s) sent and 0 alert(s) raised.
+114922 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionOracleTimingScanRule strength MEDIUM threshold MEDIUM
+116522 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionOracleTimingScanRule in 1.6s with 120 message(s) sent and 0 alert(s) raised.
+116523 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionPostgreSqlTimingScanRule strength MEDIUM threshold MEDIUM
+118140 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionPostgreSqlTimingScanRule in 1.617s with 120 message(s) sent and 0 alert(s) raised.
+118141 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionSqLiteTimingScanRule strength MEDIUM threshold MEDIUM
+120073 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionSqLiteTimingScanRule in 1.932s with 193 message(s) sent and 0 alert(s) raised.
+120074 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | DomXssScanRule strength MEDIUM threshold MEDIUM
+[122.028s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+[122.030s][warning][os,thread] Failed to start the native thread for java.lang.Thread "External Process Output Forwarder - /tmp/zap-home/webdriver/linux/64/geckodriver"
+[122.030s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+[122.037s][warning][os,thread] Failed to start the native thread for java.lang.Thread "Driver Service Executor"
+122084 [ZAP-ActiveScanner-24] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+[122.129s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+122085 [ZAP-ActiveScanner-19] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+[122.226s][warning][os,thread] Failed to start the native thread for java.lang.Thread "JdkHttpClient-22-0"
+[122.227s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+122187 [ZAP-ActiveScanner-7] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Failed to start browser /usr/bin/firefox: IO Error: Resource temporarily unavailable (os error 11) 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFArTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122187 [ZAP-ActiveScanner-20] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+[122.230s][warning][os,thread] Failed to start the native thread for java.lang.Thread "HttpClient-31-SelectorManager"
+[122.231s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 136k, guardsize: 0k, detached.
+[122.235s][warning][os,thread] Failed to start the native thread for java.lang.Thread "process reaper"
+122194 [ZAP-ActiveScanner-23] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122285 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - skipped plugin [failed to start or connect to the browser] http://juice:3000 | DomXssScanRule in 2.211s with 0 message(s) sent and 0 alert(s) raised.
+122285 [ZAP-ActiveScanner-13] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Failed to start browser /usr/bin/firefox: IO Error: Resource temporarily unavailable (os error 11) 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122287 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - start host http://juice:3000 | SqlInjectionMsSqlTimingScanRule strength MEDIUM threshold MEDIUM
+122192 [ZAP-ActiveScanner-28] ERROR org.zaproxy.zap.ZAP.UncaughtExceptionLogger - Exception in thread "ZAP-ActiveScanner-28"
+java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached
+	at java.base/java.lang.Thread.start0(Native Method) ~[?:?]
+	at java.base/java.lang.Thread.start(Thread.java:809) ~[?:?]
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.start(HttpClientImpl.java:513) ~[java.net.http:?]
+	at java.net.http/jdk.internal.net.http.HttpClientImpl.create(HttpClientImpl.java:432) ~[java.net.http:?]
+	at java.net.http/jdk.internal.net.http.HttpClientBuilderImpl.build(HttpClientBuilderImpl.java:135) ~[java.net.http:?]
+	at org.openqa.selenium.remote.http.jdk.JdkHttpClient.<init>(JdkHttpClient.java:156) ~[?:?]
+	at org.openqa.selenium.remote.http.jdk.JdkHttpClient$Factory.createClient(JdkHttpClient.java:561) ~[?:?]
+	at org.openqa.selenium.remote.HttpCommandExecutor.<init>(HttpCommandExecutor.java:117) ~[?:?]
+	at org.openqa.selenium.remote.HttpCommandExecutor.<init>(HttpCommandExecutor.java:93) ~[?:?]
+	at org.openqa.selenium.remote.service.DriverCommandExecutor.<init>(DriverCommandExecutor.java:87) ~[?:?]
+	at org.openqa.selenium.firefox.FirefoxDriver$FirefoxDriverCommandExecutor.<init>(FirefoxDriver.java:307) ~[?:?]
+	at org.openqa.selenium.firefox.FirefoxDriver.generateExecutor(FirefoxDriver.java:128) ~[?:?]
+	at org.openqa.selenium.firefox.FirefoxDriver.<init>(FirefoxDriver.java:114) ~[?:?]
+	at org.openqa.selenium.firefox.FirefoxDriver.<init>(FirefoxDriver.java:109) ~[?:?]
+	at org.openqa.selenium.firefox.FirefoxDriver.<init>(FirefoxDriver.java:94) ~[?:?]
+	at org.zaproxy.zap.extension.selenium.ExtensionSelenium.getWebDriverImpl(ExtensionSelenium.java:1171) ~[?:?]
+	at org.zaproxy.zap.extension.selenium.ExtensionSelenium.getWebDriver(ExtensionSelenium.java:972) ~[?:?]
+	at org.zaproxy.zap.extension.domxss.DomXssScanRule.createWebDriver(DomXssScanRule.java:289) ~[?:?]
+	at org.zaproxy.zap.extension.domxss.DomXssScanRule.getWebDriver(DomXssScanRule.java:318) ~[?:?]
+	at org.zaproxy.zap.extension.domxss.DomXssScanRule.scan(DomXssScanRule.java:675) ~[?:?]
+	at org.parosproxy.paros.core.scanner.AbstractPlugin.run(AbstractPlugin.java:391) ~[zap-2.16.1.jar:2.16.1]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+122391 [ZAP-ActiveScanner-26] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+[122.530s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+[122.532s][warning][os,thread] Failed to start the native thread for java.lang.Thread "JdkHttpClient-24-0"
+[122.532s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+[122.628s][warning][os,thread] Failed to start the native thread for java.lang.Thread "JdkHttpClient-29-0"
+122586 [ZAP-ActiveScanner-2] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Process unexpectedly closed with status 11 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFArTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122586 [ZAP-ActiveScanner-22] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122688 [ZAP-ActiveScanner-25] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122690 [ZAP-ActiveScanner-30] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Possible causes are invalid address of the remote server or browser start-up failure. null 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+122793 [ZAP-ActiveScanner-16] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Failed to start browser /usr/bin/firefox: IO Error: Resource temporarily unavailable (os error 11) 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+[122.958s][warning][os,thread] Failed to start thread "Unknown thread" - pthread_create failed (EAGAIN) for attributes: stacksize: 1024k, guardsize: 0k, detached.
+[123.026s][warning][os,thread] Failed to start the native thread for java.lang.Thread "ZAP-ActiveScanner-2"
+122986 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host/plugin http://juice:3000 | SqlInjectionMsSqlTimingScanRule in 0.699s with 14 message(s) sent and 0 alert(s) raised.
+122990 [ZAP-Scanner-0] INFO  org.parosproxy.paros.core.scanner.HostProcess - completed host http://juice:3000 in 54.863s with 1 alert(s) raised.
+122991 [ZAP-Scanner-0] ERROR org.zaproxy.zap.ZAP.UncaughtExceptionLogger - Exception in thread "ZAP-Scanner-0"
+java.lang.OutOfMemoryError: unable to create native thread: possibly out of memory or process/resource limits reached
+	at java.base/java.lang.Thread.start0(Native Method) ~[?:?]
+	at java.base/java.lang.Thread.start(Thread.java:809) ~[?:?]
+	at org.parosproxy.paros.common.ThreadPool.getFreeThreadAndRun(ThreadPool.java:57) ~[zap-2.16.1.jar:2.16.1]
+	at org.parosproxy.paros.core.scanner.HostProcess.scanMessage(HostProcess.java:654) ~[zap-2.16.1.jar:2.16.1]
+	at org.parosproxy.paros.core.scanner.HostProcess.processPlugin(HostProcess.java:497) ~[zap-2.16.1.jar:2.16.1]
+	at org.parosproxy.paros.core.scanner.HostProcess.run(HostProcess.java:397) ~[zap-2.16.1.jar:2.16.1]
+	at java.base/java.lang.Thread.run(Thread.java:840) [?:?]
+122994 [Thread-13] INFO  org.parosproxy.paros.core.scanner.Scanner - scanner with ID 0 completed in 54.879s
+123094 [ZAP-ActiveScanner-12] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Process unexpectedly closed with status 2 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+123693 [ZAP-ActiveScanner-15] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Process unexpectedly closed with status 2 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFErTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]
+123711 [ZAP-ActiveScanner-3] WARN  org.zaproxy.zap.extension.domxss.DomXssScanRule - Skipping scanner, failed to start browser: Could not start a new session. Response code 500. Message: Process unexpectedly closed with status 11 
+Host info: host: '086e3355caba', ip: '172.19.0.3'
+Build info: version: '4.38.0', revision: '6b412e825c*'
+System info: os.name: 'Linux', os.arch: 'amd64', os.version: '6.18.33.2-microsoft-standard-WSL2', java.version: '17.0.17'
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Command: [null, newSession {capabilities=[Capabilities {acceptInsecureCerts: true, browserName: firefox, moz:firefoxOptions: {args: [-headless], prefs: {browser.tabs.documentchannel: false, devtools.jsonview.enabled: false, dom.serviceWorkers.enabled: true, network.captive-portal-service.enabled: false, network.proxy.allow_hijacking_localhost: true, network.proxy.http: 127.0.0.1, network.proxy.http_port: 38391, network.proxy.no_proxies_on: , network.proxy.share_proxy_settings: true, network.proxy.ssl: 127.0.0.1, network.proxy.ssl_port: 38391, network.proxy.type: 1, remote.active-protocols: 1}, profile: UEsDBBQACAgIAFArTV0AAAAAAAA...}, unhandledPromptBehavior: ignore, webSocketUrl: true}]}]

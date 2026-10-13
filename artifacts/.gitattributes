@@ -1,0 +1,4 @@
+# Only explicitly published measurement inputs/outputs: preserve sealed bytes.
+/a08-handoff-2026-10-13/artifacts/** -text -whitespace
+/a08-final-2026-10-13-v3/** -text -whitespace
+/a08-delivery-2026-10-13.zip -text

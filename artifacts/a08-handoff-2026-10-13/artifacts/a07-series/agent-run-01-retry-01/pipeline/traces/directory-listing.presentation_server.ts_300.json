@@ -1,0 +1,354 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": "/support/logs",
+        "environment": "sandbox",
+        "expected_evidence": "HTTP 200 response with HTML body containing a directory listing (file names, sizes, modification timestamps) from the logs directory, confirming that serveIndex middleware responds before the access control middleware on line 301 can execute.",
+        "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-1ba718c1eb8aa39c",
+          "check": "source_metadata",
+          "line": 300
+        },
+        "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+        "service": "juice",
+        "target": "juice-presentation",
+        "tool": "verify_sensitive_directory"
+      },
+      "evidence_ids": [
+        "evidence-6406572eea"
+      ],
+      "execution": {
+        "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9558533ee47144538fbf03038f5c1719.json"
+        ],
+        "audit_ref": "audit:09c7ab795e344efb90329d0a751de1a6",
+        "duration_ms": 1028,
+        "error": null,
+        "evidence_ref": "execution-9558533ee47144538fbf03038f5c1719",
+        "exit_code": 0,
+        "run_id": "09c7ab795e344efb90329d0a751de1a6",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"No sensitive directory metadata was established by this bounded observation.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":300,\"check\":\"source_metadata\",\"endpoint\":\"/support/logs\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[],\"file_contents_read\":false,\"truncated\":false}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-directory-listing.presentation:server.ts:300-1",
+      "recorded_at": "2026-10-13T11:07:09.712680Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    },
+    {
+      "action": {
+        "endpoint": null,
+        "environment": "sandbox",
+        "expected_evidence": "Source metadata for server.ts around line 300 showing serveIndex('logs', ...) registered at line 300 and verify.accessControlChallenges() registered at line 301, confirming serveIndex executes first in the Express middleware chain for /support/logs.",
+        "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+        "iteration": 2,
+        "parameters": {
+          "artifact_id": "source-1ba718c1eb8aa39c",
+          "check": "source_metadata",
+          "line": 300
+        },
+        "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+        "service": null,
+        "target": "juice-presentation",
+        "tool": "inspect_javascript_security"
+      },
+      "evidence_ids": [
+        "evidence-77c8f217eb"
+      ],
+      "execution": {
+        "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-52766d771d044397b11e1c41692e378d.json"
+        ],
+        "audit_ref": "audit:99659bceb1e34287a651deab23166711",
+        "duration_ms": 1424,
+        "error": null,
+        "evidence_ref": "execution-52766d771d044397b11e1c41692e378d",
+        "exit_code": 0,
+        "run_id": "99659bceb1e34287a651deab23166711",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":300,\"check\":\"source_metadata\",\"file\":\"server.ts\",\"total_lines\":813,\"source_sha256\":\"1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b\",\"runtime_verified\":false,\"values_redacted\":true}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-directory-listing.presentation:server.ts:300-2",
+      "recorded_at": "2026-10-13T11:07:40.986858Z",
+      "step": 2,
+      "validation": {
+        "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-6406572eea"
+      ],
+      "outcome": "continue",
+      "plan_id": "plan-directory-listing.presentation:server.ts:300-1",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:07:09.712680Z",
+      "step": 1,
+      "stop_reason": null
+    },
+    {
+      "evidence_ids": [
+        "evidence-77c8f217eb"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-directory-listing.presentation:server.ts:300-2",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:07:40.986858Z",
+      "step": 2,
+      "stop_reason": "insufficient_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+        "run_id": "09c7ab795e344efb90329d0a751de1a6",
+        "tool": "verify_sensitive_directory"
+      },
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9558533ee47144538fbf03038f5c1719.json",
+        "execution-9558533ee47144538fbf03038f5c1719",
+        "audit:09c7ab795e344efb90329d0a751de1a6"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9558533ee47144538fbf03038f5c1719.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-9558533ee47144538fbf03038f5c1719",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:09c7ab795e344efb90329d0a751de1a6",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:07:09.712680Z",
+      "hypothesis_id": "hypothesis-dir-listing-support-logs-001",
+      "id": "evidence-6406572eea",
+      "observation": {
+        "captured_at": "2026-10-13T11:07:09.712680Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "check": "source_metadata",
+            "directory_listing": true,
+            "endpoint": "/support/logs",
+            "file_contents_read": false,
+            "line": 300,
+            "sensitive_file_names": [],
+            "status": 200,
+            "truncated": false
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "sensitive_directory_check"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "runtime_directory_metadata",
+        "environment": "sandbox",
+        "service": "juice",
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "No sensitive directory metadata was established by this bounded observation.",
+      "type": "sensitive_directory_check",
+      "verdict": "inconclusive"
+    },
+    {
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+        "run_id": "99659bceb1e34287a651deab23166711",
+        "tool": "inspect_javascript_security"
+      },
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-52766d771d044397b11e1c41692e378d.json",
+        "execution-52766d771d044397b11e1c41692e378d",
+        "audit:99659bceb1e34287a651deab23166711"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-52766d771d044397b11e1c41692e378d.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-52766d771d044397b11e1c41692e378d",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:99659bceb1e34287a651deab23166711",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:07:40.986858Z",
+      "hypothesis_id": "hypothesis-dir-listing-support-logs-002",
+      "id": "evidence-77c8f217eb",
+      "observation": {
+        "captured_at": "2026-10-13T11:07:40.986858Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "check": "source_metadata",
+            "file": "server.ts",
+            "line": 300,
+            "runtime_verified": false,
+            "source_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+            "total_lines": 813,
+            "values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "javascript_source_metadata"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "source_metadata",
+        "environment": "sandbox",
+        "service": null,
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "type": "javascript_source_metadata",
+      "verdict": "inconclusive"
+    }
+  ],
+  "finding_id": "directory-listing.presentation:server.ts:300",
+  "iterations": 2,
+  "plans": [
+    {
+      "continuation_reason": "No evidence has been collected yet (iteration 0). The hypothesis states that the /support/logs endpoint is accessible without authentication due to middleware ordering. A single controlled HTTP request to the registered endpoint will either confirm or reject the hypothesis.",
+      "environment": "sandbox",
+      "goal": "Verify whether GET /support/logs on the juice service returns an unauthenticated HTML directory listing (HTTP 200) confirming that serveIndex responds before verify.accessControlChallenges() can execute.",
+      "hypothesis_id": "hypothesis-dir-listing-support-logs-001",
+      "id": "plan-directory-listing.presentation:server.ts:300-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": "/support/logs",
+            "environment": "sandbox",
+            "expected_evidence": "HTTP 200 response with HTML body containing a directory listing (file names, sizes, modification timestamps) from the logs directory, confirming that serveIndex middleware responds before the access control middleware on line 301 can execute.",
+            "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-1ba718c1eb8aa39c",
+              "check": "source_metadata",
+              "line": 300
+            },
+            "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+            "service": "juice",
+            "target": "juice-presentation",
+            "tool": "verify_sensitive_directory"
+          },
+          "continue_if": "If the response is HTTP 200 with directory listing content, the finding is confirmed. If the response is 401/403, the hypothesis is rejected. If the response is inconclusive (e.g., 500, timeout, or empty body), further investigation may be needed within remaining budget.",
+          "expected_observation": "HTTP 200 response with HTML body containing a directory listing (file names, sizes, modification timestamps) from the logs directory, confirming that serveIndex middleware responds before the access control middleware on line 301 can execute.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "HTTP 200 with HTML directory listing body confirms the finding",
+        "HTTP 401 or 403 response rejects the hypothesis",
+        "Sandbox session is unavailable or endpoint is not reachable"
+      ],
+      "target": "juice-presentation"
+    },
+    {
+      "continuation_reason": "Previous runtime evidence (evidence-6406572eea) confirmed HTTP 200 with directory_listing=true on /support/logs without authentication, but the sandbox logs directory was empty so sensitive_file_names was empty. Source-level confirmation of the middleware ordering will provide the definitive code evidence establishing that serveIndex executes before any access control gate.",
+      "environment": "sandbox",
+      "goal": "Confirm via bounded source inspection that serveIndex middleware for /support/logs is registered before accessControlChallenges middleware, providing definitive code-level evidence to complement the runtime observation of unauthenticated directory listing.",
+      "hypothesis_id": "hypothesis-dir-listing-support-logs-002",
+      "id": "plan-directory-listing.presentation:server.ts:300-2",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": null,
+            "environment": "sandbox",
+            "expected_evidence": "Source metadata for server.ts around line 300 showing serveIndex('logs', ...) registered at line 300 and verify.accessControlChallenges() registered at line 301, confirming serveIndex executes first in the Express middleware chain for /support/logs.",
+            "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+            "iteration": 2,
+            "parameters": {
+              "artifact_id": "source-1ba718c1eb8aa39c",
+              "check": "source_metadata",
+              "line": 300
+            },
+            "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+            "service": null,
+            "target": "juice-presentation",
+            "tool": "inspect_javascript_security"
+          },
+          "continue_if": "Source inspection returns metadata that does not clearly show the middleware ordering for /support/logs, or the observation is inconclusive.",
+          "expected_observation": "Source metadata for server.ts around line 300 showing serveIndex('logs', ...) registered at line 300 and verify.accessControlChallenges() registered at line 301, confirming serveIndex executes first in the Express middleware chain for /support/logs.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "Source confirms serveIndex registered before accessControlChallenges for /support/logs — finding confirmed",
+        "Source shows different middleware ordering than expected — finding rejected",
+        "Source inspection fails or is inconclusive — finding remains inconclusive"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "inconclusive",
+  "stop_reason": "insufficient_evidence"
+}

@@ -1,0 +1,545 @@
+info: Detected Node.js version v24.19.0 (SUCCESS)
+info: Detected OS linux (SUCCESS)
+info: Detected CPU x64 (SUCCESS)
+info: Configuration default validated (SUCCESS)
+info: Entity models 21 of 21 are initialized (SUCCESS)
+info: All dependencies in ./package.json are satisfied (SUCCESS)
+info: Required file server.js is present (SUCCESS)
+info: Required file index.html is present (SUCCESS)
+info: Required file styles.css is present (SUCCESS)
+info: Required file main.js is present (SUCCESS)
+info: Required file polyfills.js is present (SUCCESS)
+info: Required file matching /^hacking-instructor-.+\.js$/ is present (SUCCESS)
+info: Port 3000 is available (SUCCESS)
+warn: Domain https://www.alchemy.com/ is not reachable (WARNING)
+warn: "Mint the Honey Pot" challenge will not work as intended without access to https://www.alchemy.com/
+warn: "Wallet Depletion" challenge will not work as intended without access to https://www.alchemy.com/
+warn: Environment variable ALCHEMY_API_KEY is not present (WARNING)
+warn: "Mint the Honey Pot" challenge will not work as intended without a valid ALCHEMY_API_KEY
+warn: "Wallet Depletion" challenge will not work as intended without a valid ALCHEMY_API_KEY
+info: Check https://howto-web3.owasp-juice.shop for instructions on how to set up and configure the Alchemy API
+warn: Domain http://localhost:11434/v1 is not reachable (WARNING)
+warn: "Chatbot Prompt Injection" challenge will not work as intended without access to http://localhost:11434/v1
+warn: "Greedy Chatbot Manipulation" challenge will not work as intended without access to http://localhost:11434/v1
+warn: "AI Debugging" challenge will not work as intended without access to http://localhost:11434/v1
+warn: "System Prompt Extraction" challenge will not work as intended without access to http://localhost:11434/v1
+info: Check https://howto-llm.owasp-juice.shop for instructions on how to set up and configure the LLM API
+info: Server listening on port 3000
+info: Solved 1-star errorHandlingChallenge (Error Handling)
+info: Cheat score for trivial errorHandlingChallenge solved in 0min (expected ~0min) with hints allowed: 0
+Error: Unexpected path: /api
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /api/1780248236214340380
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+UnauthorizedError: No Authorization header was found
+Error: Unexpected path: /rest/7062616006682883621
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin/2261741382561035300
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products/5950322602060390996
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /api?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /api?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+UnauthorizedError: No Authorization header was found
+Error: Unexpected path: /rest?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin/application-version?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/languages?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products/search?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin/application-configuration?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin/application-configuration?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin/application-version?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/languages?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products/search?-d+allow_url_include%3d1+-d+auto_prepend_file%3dphp:/input
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: SQLITE_ERROR: near "https": syntax error
+Error: SQLITE_ERROR: near "http": syntax error
+Error: SQLITE_ERROR: near "https": syntax error
+Error
+    at Database.<anonymous> (/juice-shop/node_modules/sequelize/lib/dialects/sqlite/query.js:185:27)
+    at /juice-shop/node_modules/sequelize/lib/dialects/sqlite/query.js:183:50
+    at new Promise (<anonymous>)
+    at Query.run (/juice-shop/node_modules/sequelize/lib/dialects/sqlite/query.js:183:12)
+    at /juice-shop/node_modules/sequelize/lib/sequelize.js:315:28
+    at async SQLiteQueryInterface.select (/juice-shop/node_modules/sequelize/lib/dialects/abstract/query-interface.js:407:12)
+    at async Challenge.findAll (/juice-shop/node_modules/sequelize/lib/model.js:1140:21)
+    at async Promise.all (index 1)
+    at async Challenge.findAndCountAll (/juice-shop/node_modules/sequelize/lib/model.js:1322:27)
+Error: SQLITE_ERROR: near ""<scrIpt>alert(1);</scRipt>%' OR description LIKE '%'"": syntax error
+Error: SQLITE_ERROR: unrecognized token: """
+Error: SQLITE_ERROR: near ""<img src=x onerror=prompt()>%' OR description LIKE '%'"": syntax error
+Error: Unexpected path: /api
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/admin
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: Unexpected path: /rest/products
+    at /juice-shop/build/routes/angular.js:18:18
+    at /juice-shop/build/lib/utils.js:235:26
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/routes/verify.js:235:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+    at /juice-shop/node_modules/express/lib/router/index.js:286:9
+    at router.process_params (/juice-shop/node_modules/express/lib/router/index.js:346:12)
+    at next (/juice-shop/node_modules/express/lib/router/index.js:280:10)
+    at /juice-shop/build/lib/insecurity.js:218:5
+    at Layer.handle [as handle_request] (/juice-shop/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/juice-shop/node_modules/express/lib/router/index.js:328:13)
+Error: SQLITE_ERROR: near "(": syntax error
+Error: SQLITE_ERROR: no such function: sleep
+Error: SQLITE_ERROR: incomplete input
+Error: SQLITE_ERROR: near "where": syntax error
+Error: SQLITE_ERROR: near "SYSTEM_COLUMNS": syntax error
+Error: SQLITE_ERROR: near ";": syntax error
+Error: SQLITE_ERROR: near "SYSTEM_COLUMNS": syntax error
+Error: SQLITE_ERROR: near "SYSTEM_COLUMNS": syntax error
+Error: SQLITE_ERROR: no such function: java.lang.Thread.sleep
+Error: SQLITE_ERROR: near "SYSTEM_COLUMNS": syntax error
+Error: SQLITE_ERROR: incomplete input
+Error: SQLITE_ERROR: near "(": syntax error
+Error: SQLITE_ERROR: near "case": syntax error

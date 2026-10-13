@@ -1,0 +1,55 @@
+{
+  "action_digest": "20d2aae270abf52a989e7c95cb5bb3a4e71ce11119bfd7ed0f10106f11e87c64",
+  "action_id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+  "audit_ref": "audit:9bd8e1fbc202402fa2cd5374a6f0efb2",
+  "created_at": "2026-10-13T11:04:51.932821+00:00",
+  "duration_ms": 1236,
+  "error": null,
+  "exit_code": 0,
+  "id": "execution-ca2622b50fb4467e8ab295357890551a",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "run_id": "9bd8e1fbc202402fa2cd5374a6f0efb2",
+  "session_id": "4ab40106cb014892924eb40442833ac9",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_sql_differential\",\"verdict\":\"confirmed\",\"explanation\":\"Repeated boolean SQL probe changed structured results while repeated negative controls did not.\",\"facts\":{\"artifact_id\":\"source-d35652ee4d560380\",\"line\":23,\"check\":\"sql_interpolation\",\"mode\":\"search\",\"endpoint\":\"/rest/products/search\",\"observations\":[{\"status\":200,\"valid_json\":true,\"result_count\":0,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":56,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":0,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":56,\"authenticated\":false}],\"requests\":4,\"response_values_redacted\":true,\"control_repeated\":true,\"probe_repeated\":true}}",
+  "target": "juice-presentation",
+  "timed_out": false,
+  "tool": "verify_sql_injection",
+  "type": "executor_result",
+  "workspace_id": "0ff0f65a246f8e3e5ef57dda2da82798d8f59a2ce2447fb7c86aaeaf26f0dba6"
+}

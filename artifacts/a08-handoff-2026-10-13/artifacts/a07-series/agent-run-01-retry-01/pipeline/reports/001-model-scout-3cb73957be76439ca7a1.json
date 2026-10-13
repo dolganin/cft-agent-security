@@ -1,0 +1,263 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "model-scout-3cb73957be76439ca7a1",
+  "finding": {
+    "id": "model-scout-3cb73957be76439ca7a1",
+    "source": "model_scout",
+    "rule_id": "authentication",
+    "title": "MD5 Used for Password Hashing",
+    "description": "The hash function uses MD5, a cryptographically broken algorithm, making stored password hashes vulnerable to collision and rainbow-table attacks.\nScout rationale and verification strategy: Line 41 defines hash() using crypto.createHash('md5'). MD5 is not collision-resistant and is trivially brute-forced. If this function is used for password storage, an attacker who obtains the database can recover plaintext passwords. Verification: confirm where hash() is called in the registration/login flow to determine if it applies to user passwords.",
+    "severity": null,
+    "service": "juice",
+    "file": "lib/insecurity.ts",
+    "line_start": 41,
+    "line_end": 41,
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "authentication",
+      "fingerprint": "375de1e8a8fa20ce25c7815ab821738b5be44d6dc3ff244097bc9db463dc3930",
+      "normalized_file": "lib/insecurity.ts",
+      "anchor_sha256": "f19df6cbdadc5204e75c177c66baa24bda153ddb975abd0de2e5973033f9319f",
+      "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "model-scout-3cb73957be76439ca7a1"
+      ],
+      "observations": [
+        {
+          "source_id": "model-scout-3cb73957be76439ca7a1",
+          "source": "model_scout",
+          "rule_id": "authentication",
+          "original_file": "lib/insecurity.ts",
+          "title": "MD5 Used for Password Hashing",
+          "description": "The hash function uses MD5, a cryptographically broken algorithm, making stored password hashes vulnerable to collision and rainbow-table attacks.",
+          "line_start": 41,
+          "line_end": 41,
+          "column_start": null,
+          "column_end": null,
+          "severity": null,
+          "rationale": "Line 41 defines hash() using crypto.createHash('md5'). MD5 is not collision-resistant and is trivially brute-forced. If this function is used for password storage, an attacker who obtains the database can recover plaintext passwords. Verification: confirm where hash() is called in the registration/login flow to determine if it applies to user passwords.",
+          "provenance_paths": [
+            "lib/insecurity.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "status": "inconclusive",
+  "analysis_summary": "Line 41 of lib/insecurity.ts defines an exported hash() function using MD5 (crypto.createHash('md5')). This is a fact confirmed by the code context. However, the critical assumption—that this function is actually invoked with user-supplied passwords in the registration or login flow—remains unverified. The first verification step (source_metadata) confirmed the file and line exist but returned an inconclusive verdict, as metadata alone does not prove the function is used for password storage. The service 'juice' is publicly exposed, has high criticality, connects directly to a database, and exposes a /rest/user/login endpoint, all of which elevate the potential impact if the assumption holds. The next step should trace call sites of hash() to determine whether it is applied to password fields in user registration or authentication logic.",
+  "risk_signals": [
+    "MD5 is cryptographically broken: not collision-resistant and trivially brute-forced via rainbow tables",
+    "Function is exported, making it available to any module in the service",
+    "Service is publicly exposed (internet-facing) with high criticality",
+    "Direct database access present—compromised hashes could be exfiltrated",
+    "Login endpoint /rest/user/login exists in the same service",
+    "Authentication is 'mixed', suggesting inconsistent auth enforcement across endpoints",
+    "Context priority score is HIGH (7.0) driven by public exposure, criticality, and database access"
+  ],
+  "code_context": "   33:   idMap: Record<string, string>\n   34:   put: (token: string, user: ResponseWithUser) => void\n   35:   get: (token?: string) => ResponseWithUser | undefined\n   36:   tokenOf: (user: UserModel) => string | undefined\n   37:   from: (req: Request) => ResponseWithUser | undefined\n   38:   updateFrom: (req: Request, user: ResponseWithUser) => any\n   39: }\n   40: \n   41: export const hash = (data: string) => crypto.createHash('md5').update(data).digest('hex')\n   42: export const hmac = (data: string) => crypto.createHmac('sha256', 'pa4qacea4VK9t9nGv7yZtwmj').update(data).digest('hex')\n   43: \n   44: export const cutOffPoisonNullByte = (str: string) => {\n   45:   const nullByte = '%00'\n   46:   if (str.includes(nullByte)) {\n   47:     return str.substring(0, str.indexOf(nullByte))\n   48:   }\n   49:   return str",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": true,
+    "criticality": "high",
+    "trust_zone": "application",
+    "connected_services": [
+      "database"
+    ],
+    "databases": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "authentication": "mixed",
+    "blast_radius": "unknown"
+  },
+  "hypothesis": "The exported hash() function at line 41 of lib/insecurity.ts is invoked with user-supplied password data in the user registration or login flow of the juice service, meaning stored passwords are hashed with MD5.",
+  "hypothesis_confidence": 0.65,
+  "verification": {
+    "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+    "capability": "inspect_javascript_security",
+    "target": "juice-presentation",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 1,
+    "evidence_types": [
+      "javascript_source_metadata"
+    ],
+    "decision_basis": "workflow_state"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS."
+  },
+  "context_priority": {
+    "level": "HIGH",
+    "score": 7.0,
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evidence-9a3113e24d",
+      "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+      "type": "javascript_source_metadata",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6f72f905f18a4bf5b68c61fb16b7ba42.json",
+        "execution-6f72f905f18a4bf5b68c61fb16b7ba42",
+        "audit:1f8bfbec9b2547fb9f91efbfd71d713f"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hyp-md5-password-usage-001",
+      "action": {
+        "id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+        "tool": "inspect_javascript_security",
+        "run_id": "1f8bfbec9b2547fb9f91efbfd71d713f"
+      },
+      "observation": {
+        "kind": "javascript_source_metadata",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-4b68d0a42c1de76b",
+            "line": 41,
+            "check": "source_metadata",
+            "file": "lib/insecurity.ts",
+            "total_lines": 197,
+            "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+            "runtime_verified": false,
+            "values_redacted": true
+          }
+        },
+        "captured_at": "2026-10-13T11:03:30.809277Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": null,
+        "description": "source_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6f72f905f18a4bf5b68c61fb16b7ba42.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-6f72f905f18a4bf5b68c61fb16b7ba42",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:1f8bfbec9b2547fb9f91efbfd71d713f",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:03:30.809277Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+      "capability": "inspect_javascript_security",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1428,
+      "command": [
+        "inspect_javascript_security",
+        "--artifact-id",
+        "source-4b68d0a42c1de76b",
+        "--line",
+        "41",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":41,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6f72f905f18a4bf5b68c61fb16b7ba42.json"
+      ]
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "continue",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-9a3113e24d"
+      ],
+      "plan_id": "plan-model-scout-3cb73957be76439ca7a1-1",
+      "stop_reason": null,
+      "recorded_at": "2026-10-13T11:03:30.809277Z"
+    },
+    {
+      "step": 1,
+      "outcome": "stop",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "evidence_ids": [
+        "evidence-9a3113e24d"
+      ],
+      "plan_id": "plan-model-scout-3cb73957be76439ca7a1-1",
+      "stop_reason": "insufficient_evidence",
+      "recorded_at": "2026-10-13T11:03:42.653134Z"
+    }
+  ],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "model-scout-3cb73957be76439ca7a1: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 1,
+  "stop_reason": "insufficient_evidence"
+}

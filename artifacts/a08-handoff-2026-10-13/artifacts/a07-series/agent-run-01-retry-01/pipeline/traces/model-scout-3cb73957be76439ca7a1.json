@@ -1,0 +1,195 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": null,
+        "environment": "sandbox",
+        "expected_evidence": "Source code showing hash() being invoked with a user-supplied password field in files related to user registration, login, or password storage (e.g., route handlers for /rest/user/login, user model save hooks, or registration controllers).",
+        "id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-4b68d0a42c1de76b",
+          "check": "source_metadata",
+          "line": 41
+        },
+        "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+        "service": null,
+        "target": "juice-presentation",
+        "tool": "inspect_javascript_security"
+      },
+      "evidence_ids": [
+        "evidence-9a3113e24d"
+      ],
+      "execution": {
+        "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6f72f905f18a4bf5b68c61fb16b7ba42.json"
+        ],
+        "audit_ref": "audit:1f8bfbec9b2547fb9f91efbfd71d713f",
+        "duration_ms": 1428,
+        "error": null,
+        "evidence_ref": "execution-6f72f905f18a4bf5b68c61fb16b7ba42",
+        "exit_code": 0,
+        "run_id": "1f8bfbec9b2547fb9f91efbfd71d713f",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":41,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-model-scout-3cb73957be76439ca7a1-1",
+      "recorded_at": "2026-10-13T11:03:30.809277Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-9a3113e24d"
+      ],
+      "outcome": "continue",
+      "plan_id": "plan-model-scout-3cb73957be76439ca7a1-1",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:03:30.809277Z",
+      "step": 1,
+      "stop_reason": null
+    },
+    {
+      "evidence_ids": [
+        "evidence-9a3113e24d"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-model-scout-3cb73957be76439ca7a1-1",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "recorded_at": "2026-10-13T11:03:42.653134Z",
+      "step": 1,
+      "stop_reason": "insufficient_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+        "run_id": "1f8bfbec9b2547fb9f91efbfd71d713f",
+        "tool": "inspect_javascript_security"
+      },
+      "action_id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6f72f905f18a4bf5b68c61fb16b7ba42.json",
+        "execution-6f72f905f18a4bf5b68c61fb16b7ba42",
+        "audit:1f8bfbec9b2547fb9f91efbfd71d713f"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6f72f905f18a4bf5b68c61fb16b7ba42.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-6f72f905f18a4bf5b68c61fb16b7ba42",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:1f8bfbec9b2547fb9f91efbfd71d713f",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:03:30.809277Z",
+      "hypothesis_id": "hyp-md5-password-usage-001",
+      "id": "evidence-9a3113e24d",
+      "observation": {
+        "captured_at": "2026-10-13T11:03:30.809277Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-4b68d0a42c1de76b",
+            "check": "source_metadata",
+            "file": "lib/insecurity.ts",
+            "line": 41,
+            "runtime_verified": false,
+            "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+            "total_lines": 197,
+            "values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "javascript_source_metadata"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "source_metadata",
+        "environment": "sandbox",
+        "service": null,
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "type": "javascript_source_metadata",
+      "verdict": "inconclusive"
+    }
+  ],
+  "finding_id": "model-scout-3cb73957be76439ca7a1",
+  "iterations": 1,
+  "plans": [
+    {
+      "continuation_reason": "The code context confirms hash() uses MD5 with no salt, but does not show where it is called. We need to inspect source files related to user authentication (registration, login, password storage) to determine if hash() is applied to user-supplied passwords.",
+      "environment": "sandbox",
+      "goal": "Verify whether the exported hash() function at lib/insecurity.ts:41 is called in the user registration or login flow to hash user passwords before database storage.",
+      "hypothesis_id": "hyp-md5-password-usage-001",
+      "id": "plan-model-scout-3cb73957be76439ca7a1-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": null,
+            "environment": "sandbox",
+            "expected_evidence": "Source code showing hash() being invoked with a user-supplied password field in files related to user registration, login, or password storage (e.g., route handlers for /rest/user/login, user model save hooks, or registration controllers).",
+            "id": "action-model-scout-3cb73957be76439ca7a1-068d08a689c71098-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-4b68d0a42c1de76b",
+              "check": "source_metadata",
+              "line": 41
+            },
+            "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+            "service": null,
+            "target": "juice-presentation",
+            "tool": "inspect_javascript_security"
+          },
+          "continue_if": "If hash() is found being called with a password argument in an authentication-related code path, the finding is confirmed. If hash() is only used for non-sensitive purposes or no call sites are found in auth flows, the finding is rejected or inconclusive.",
+          "expected_observation": "Source code showing hash() being invoked with a user-supplied password field in files related to user registration, login, or password storage (e.g., route handlers for /rest/user/login, user model save hooks, or registration controllers).",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "Finding confirmed if hash() is called with a user password argument in registration or login code paths",
+        "Finding rejected if hash() is only used for non-sensitive data such as cache keys or content fingerprints",
+        "Inconclusive if call sites cannot be determined from available source"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "inconclusive",
+  "stop_reason": "insufficient_evidence"
+}

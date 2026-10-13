@@ -1,0 +1,2724 @@
+{
+  "schema_version": "benchmark.score.v2",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+  "dataset_status": "frozen_a04",
+  "split": "holdout",
+  "sample_kind": "original",
+  "technically_valid": true,
+  "technical_errors": [],
+  "detection": {
+    "tp": 1,
+    "fp": 0,
+    "fn": 6,
+    "tn": 6,
+    "precision": 1.0,
+    "recall": 0.14285714285714285,
+    "f1": 0.25,
+    "duplicates": 0,
+    "unresolved": 0,
+    "outside_ground_truth": 411
+  },
+  "verification": {
+    "schema_version": "benchmark.verification.v2",
+    "counts": {
+      "labeled_cases": 13,
+      "positive_cases": 7,
+      "negative_cases": 6,
+      "confirmed_cases": 0,
+      "rejected_cases": 0,
+      "decided_cases": 0,
+      "correct_confirmations": 0,
+      "false_confirmations": 0,
+      "correct_rejections": 0,
+      "false_rejections": 0,
+      "correct_decisions": 0,
+      "abstained_cases": 13,
+      "unresolved": 0,
+      "outside_ground_truth": 411,
+      "duplicates": 0
+    },
+    "abstention_reasons": {
+      "inconclusive": 0,
+      "unsupported": 0,
+      "timeout": 0,
+      "policy_blocked": 0,
+      "technical_error": 0,
+      "not_detected": 12,
+      "not_run": 1,
+      "invalid_evidence": 0,
+      "conflicting_evidence": 0
+    },
+    "confirmed_precision": null,
+    "supported_verified_recall": 0.0,
+    "false_confirmation_rate": 0.0,
+    "answered_accuracy": null,
+    "decision_coverage": 0.0,
+    "abstention_rate": 1.0
+  },
+  "severity": {
+    "reviewed_cases": 4,
+    "assessed_cases": 0,
+    "correct_cases": 0,
+    "accuracy": null,
+    "assessed_coverage": 0.0
+  },
+  "context_priority": {
+    "reviewed_cases": 0,
+    "assessed_cases": 0,
+    "correct_cases": 0,
+    "accuracy": null,
+    "assessed_coverage": null
+  },
+  "matches": [
+    {
+      "observation_id": "dast:242c267d194807efe3351d2a",
+      "case_id": "JS-SQL-001",
+      "candidate_case_ids": [
+        "JS-SQL-001"
+      ],
+      "classification": "tp"
+    },
+    {
+      "observation_id": "dast:109d6d2bf37e95814c68d18d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:288a611f2f0c369364771d4f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:55c213f8f30d142ae47fb95d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5f1192dd162a9c80459e5aa5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ae6e15edfde9bc56071fc4f8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b8982c8d381f90269b22add5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:064c345dc27ad972bb27cc5f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0cb3a2ef5380df7199efb184",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1c5b2fbccc8610be4e54bbf8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:501e8dfc5982263d984cc40c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5f39b1c7ede15e694fd92a06",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:666a7bceaa98fcc18974fb13",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:680a3da43cb5147389d5c379",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:699ed2c1c71b20f008e6149b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6ebb3714f3ecb456350bcd05",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:777c9fcf16faf26d80ea5c8e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:827d83da1043b1bf58087f3e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8f2c9c0115bfb9a5d6f02b52",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:94bfe78e08772c8ef132152f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9857a6ec5f649e19f2b519bd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ae58f253ca6360d303a3058d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c11d7296f3f9b2096c4c5011",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c4b545c6cef6f4d2a903f047",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ca06665b4d1efb023f27d25c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ca8a527420a97ff77f2fa0aa",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:cbe40b423a6a51013402be62",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d7322eb74c3c2d2949c52748",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dad7b5aa78c6cb206c2d3230",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dfa3d36ce93ec52e5f63f02d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e0ede1e66995a0c28c468ab1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e82c3bdd96d391253c66dce0",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:055ae22c4a31f0b9aea28833",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3b363f8f61d550e2ab828cb3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:03e85b6dc596c8ea8ea3d748",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0bb2629fd7a83d5c69455766",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0e29e6d51bf95a862dc5dca3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:12c52027cb69e2aac89739a0",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:12fa22e2bcdac5316a27520e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1513279a95e5a00619d3cf6b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:188f0552ec82e99a57fbc59f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1d9a079556237a6cf3dad53b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1f2c2b51746f903d01185f7a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:289f6d4667157b62b5117240",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2a9183bc81cc71d43d5fc7bd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2dd1685e789949fe275515cb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:33a428d83493f5a19ea9901e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:36d2cc5337e69a8d84e98bf6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3966a2a74bf6645580e3638c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3e60ed50a22134d53f45af43",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3e739490fc8fb4f7bc3ee435",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3ed2577858bc9046370cf787",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:407392682c1ecc5cc0159308",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:42ee0b0758efa5a93e8b983e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4716670bb85cab397aa19d0c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:49135bde94dd416c688ceea8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:520d807e8e2f4a41364fc39e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:55be9db3744e71c0d7c3a281",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5625746d5b51d440bdb6ba78",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:56d374046b3f91bb0f621a94",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:585c8b8179e6cfd4318a2643",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5abcb13a6e984d2a09c73577",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5eac56bfd165d72d9e8e2bea",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:63327a180a4c141fc6e86c33",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:64586aaca2612db0028dbfea",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:686cce32455b0446ac25dc4c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:699740970bed150619baaed9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6c24fdeccd35fc5334d653fa",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6cd0ce0b588100bf0ed26b7b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6cdca71df5f2147c1395a300",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7005628c297aea7375dd1e3f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:726b1b5330e25b69559a085a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:74bb0701a51bf4f10551dffb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:78916c6e5ba3c8728a578b5e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:829ef4e9e9783441e3ff7ff4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:89faaed228b950d46cab22ba",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8aa1b754330c519843d92ae4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8da38967ed69b5a178d4c228",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:984ab0ec1b49725827308a8d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9c5c5f226a38703420bb0516",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9d3c002dcd22e7c4e2f5e227",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9f0c0f6386a4c564b882f262",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9fac93fa16a20d930853a744",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:a668018bedd8305e2080d6c3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:affe3b672e32e533dd5141fe",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b8682f8d93a6c28788d772e5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bed834bbcd3d91653113e068",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bfc0c7213b61b9c1e05ce8ea",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c0cde885a49323866a5489d1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c570a42352a08dbb01ce1c3d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c6eedf1f3076de9afa5c35ee",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c6fb298ffb77f5804d16af1f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c8c69b0d95de0f38d2a8e978",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:caa36f55dfd26b387c55b0e8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d2b82990732173eb5d858b19",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d30d101f5c78353d5eec4f28",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d381385af39b08ad7c52a21a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d57a3f820786cfac3c396dea",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d9a53ef1bb598b72984f6ac6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d9be47765b57e0622e06d7e1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e1fbcda4dd5f4948feecdb90",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e5344ba0d8ada498e186da28",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e730510a838b55f5e48623d8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e78c312f54387d8e721ce8d7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ea5fe87263b5a11d25fa37ba",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f28f7903426321c8c559cd0e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f36219e29d1e600adf3539cc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f3ee4b9e33e3cd8d86f9abeb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f6533dbf6b68646125509e66",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f6c2de687a9e1569471a99d8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f6dc269f44ac3b3c7c5ab4c7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f7ea052e0572849186708682",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f90bba442d9e5d71267185bc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fa0f5140d3fb29fc54df2867",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fb6511967426a50eefd5dfd8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fe3881a27222cadc2b492622",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:00ae5fed8bc744a96aa62af4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:010c039520f90d9167f909b4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:02f7da4bf7c5f0456a205878",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:050ba39333c80db90bae5d0c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:06c63571bc2f2f1ffdee59ee",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:09ab36824c1e2a4d8c7ba267",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:16fc7f3dc5cb823f773561c0",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1bfe33c0a4dc8c445d4f025a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1e3848a5c060c8a768cbf3de",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2145010bd0d5a554cc62d1ec",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:23ad2f8076a5f818a4a3f9e5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2486dfb1793ca0d560207bbb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:26e4305286be9bac2db94547",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2fba949608994ec62d2e2791",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3029a288909af8d13555d0b6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:30fd45c49c9bf3046b3c8c24",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:334a019162ce55e452a86864",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:37a98ff6ff216698d2ca3c30",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3d88761df3afc4ba71bc5877",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:412fb2107c1f1b656906ae98",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:41c672a6e88bf50c3022cbd9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4c345a918b4089ebd054e398",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4c46c97b8d66d4680902269c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4dd022491f77188879520c76",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4eba35d3087fd2e33441d5c4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4f94d1144678c7933119dacd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5079b08b315ad681d1dd5cb9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:52fbb6d63b225cd936e2ed11",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:56803c7dc573a5314425984e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5da616803c44ff792d64f448",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:68bd6d38466bb1869c332cb7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6c8cc619c525410f642b54cf",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:729ab580436e6f841b8f3650",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:77b72e8cf1ef9b5677454d7e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:790c538c086baae5d0da7228",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:795c957ba77d0d3cb330cec2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7f9e6c214550493410a16b79",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8067d31aa0dd40f7e4670754",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:80dfcb7098dcf81479081b33",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:812003f7d055c4e6b8a0e41d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:833752d93e00702de3bc8116",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8973f40ab0395c33400e0224",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8df472fc14e828b512bdfebc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9055842380bb0b20ad9e3f0e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:97dfb12166187f780bf601b1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:98b5d86487e749be25f2e61e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9a25d7570fb119b90306c263",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9a345bb9effc87c2ac1b2f38",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9dbb55c305828d4e55adc0bf",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:a07f1b3bfcef475383f1b021",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ab37b80ec2aa7842e3238947",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:adb4358ff2d3b49e96e14261",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ae08e456d3613dedd418f8d2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:aeae45e390f72e28685e047c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b8942ddccd04850f47e25c58",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bc15a1458aecc77fc7059013",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bf80fac181e8dfebc78ad0b2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bf94a6cdeeef232d833de7ce",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ca91d417942572bec10baef4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:cd07c37d6f75fc9226045ff1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:cf526170def69678a82054bb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d3af39279720e5bfaae87360",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d57bbe530e9b1ec3ad40f315",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d78d52d35a6815e0f7d7d1cc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d89318b8f17eb0ff624978b2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dd4da2764d83d546efc3cfaf",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e7479962357fc94340d592f5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f260b99a9ad610a25d68e84d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f2d6e990ebd0c7952e79aa61",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f4e5c13c322eb87c25c7dc98",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f5aa527150e80b06fc342d5d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f6dec9206fae1c8c1a7dc0d1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f77057d780c6a0936fe0ec4c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f9cb5d8be0ae3a64283947db",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f9db70352b10157ba08bafd1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:01393d316f5be8f0f4d1c661",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0189ad8ef15569f6b633a8f9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:035adff2835093c774b8d769",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0561f3f3930f5ed3ab7d8fdb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0bbea8a970b8eeba54148ce7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0f86542ca79d5523a50c89ae",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:10c8672e008def6a24590dcd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:17d80038ab05e977fd5fa60b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:17da0c6beee44027f82ede81",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:189b5bade75993fa308b5c81",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1da4a18a1f273772b6a01291",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1eeccdb46e73e1130b86eb11",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1fa3482b80c8183a6916879c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:220cca8029c12409cba9a96b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:23f1dbe736b036590d5b419a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:26c86174bb70fb7ec5fce71f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:29307810a17019c7b6c3c3e3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2b070e01fe0616f2c3836ef2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2d010459343f6b2e00f8fad2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3009d8b5a93bcb40dee84421",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:32d7f027a983b38da78a13e1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3317d015476ca58b9ba13c3e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3456e59a4281c50a16352d46",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:36a88f16886a912cbcca37cc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:37b320e8842e542ad1c39d9f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3b5efac877cf45c61cfe2d34",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3fc8f6ae3d11c93d4c65d3b4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:41390f8a8639e7a40e5ba310",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:48de4b3805f38e8663f2b19a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4c0fe6e717a7127e6341216c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4e3b228f9b09bb3e4a256597",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:50957f031427862cc13737fd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:517c4f25fe569041207c037d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5476ac8befac89334ba23f1d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:55da4600cc13d8e0d47b8b87",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:585ff63cbfdabc557d8664c5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:58b595f4a9718ff72b647286",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5970d5120da4bdc30315e845",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5c975b6deb6fb74d615bf275",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5d580cf1bbf33f6aec3001f3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5d8a53d20e33a72f9d871655",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:63886565af6120e5453128aa",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:69a3af5e1993ea4f013eaaaa",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6abddf97b19aa119c3ac853b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6b3888d245b7d6a1711a3349",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6d8f54035d7ebd3976d9ad24",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6ecee152f58a482da18e2a4a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:75e2160cdee972c828619029",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:76bdf4eed8bac900751b2949",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7b9067f84f342e2e5cac3db6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7e8a4f31df03edef461381c2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:808bcd08627cc2186874f5e5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:81908751900bd968e92ba5f3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:82b07cca352855373b32bde0",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:83020b9fc57bc1f883f64453",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8973cf35b4b7e3f076f09c48",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:89ac1d995373da855ac700ee",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:89d6ba08b5fe951746c607e7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8ac9cec62981d7292fef1b32",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8b3b3eba1db53672f30f432a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8b6e7f5fb60d91b0630fd70f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8b939a44e5315787167eda24",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8d3f44ab5d790ddda5c8935e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8e7914e559452ebb971fbcdc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9011c3d49248dc2a4dde5f79",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:97a6a6316cd7b40dd0c5a657",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9864b30bca3d4c8c6794e804",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9893032c8a2062eda8428a39",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9f5d6b8f495b0e1118abeac2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:a2bfd4a0df896394500e4dbc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:a4ee9d1334523da0b4d9db5d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ab18bb75f58989a5f9111eae",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:abc16d5ac083a7627de3b3a1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ac8f6f83802de1ad0b14855b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ac90d38438186f701527479e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:af7aacfc7562797c85144dbd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:afd148695286d40511fd0353",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b028ce582d4baff781aa0cbb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b22121fb61115d0e0b35d0dc",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b6463cbeed289affd815db14",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bb4c4edc7a5daa9aff6c354e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bce3f29a7c947902bce4c3ad",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bd496c9aaabb7fa60de12c00",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c269c3442e0fab98489cb11b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c2c8d43876d7c31bc49c274f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c5f5b28e27b6e605137b7e74",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c912b1585d30b39f556234e4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c950060cf0380a76578ed39e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ccf4bdfe495bbc408420b2b9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d005fb2607415733f03b3861",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d459b6f8dc1a87e0202d6924",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d4b123d9b15eac82c3986016",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d5aa1540b4ae16f567349899",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dab0e6374c492e339139a87b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dc76aac330b5b6710ad0fe2d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dd6f3f3e67eca1712fe675ba",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dd7dfa5ee7815ca289af7ef5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dd81c2e8bf1f17defbcccb81",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dd860c54911405a131fbfd97",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:de25217970e2f4d40c65f298",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:deb1cc00d665a9303a27d4c1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:df0f8511a6c12cce6d2b3a1b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e47fd7c227537657b840f76c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e751e2e49d77f1f63c645cef",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ee12f9da86849cae6851e556",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f052af1ec542707044e24831",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f18facfb2914c0ece31024bd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f1ad46d20122ad4c11ae9c45",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f54d192099ac098bba8e3bce",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f7dfb9275f770c17b629eade",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f86064af5fcd3c6d73cb9040",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fa1fae6a4a359159e7b378f2",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fbb14bb1b17215e8cda3318a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fc8ec00ed2c832ad176401af",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fce6e14bcd042c51547a331c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fed4073977c0692df8941160",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ff13a0f4aabf43ae79a567d5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ff701ce90c986be1cf135448",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0249adfc17a91aa7c1d67cf6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:0303e722b213e2216e65d27c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:083c705e1d925d29914cb6b1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:13225cb16f5a59c580f15256",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:15c72c543b8e468686600f70",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:168a8f35d2c1551568682e5b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:17cbc8c1f3241e1a0967c698",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:185a3eaa793a387ae7ee048d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1a60cb01c694ef51412500d9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1b11578e9f7d5ee69cffa88d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1c79f32e93f3b0e2b9d94883",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1c9c881ce83f7c908aa5f371",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1eb4f9732ba4e5bdcd9d43f8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1f0137aafd63221bdf0e1e5e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:1f53856d7d52a0b4b0825b3c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:20124d6ea7b0de164960b34c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:23fbd1342c911e6df2a43e93",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:298c493c8c5a53a94c5e9193",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:2b8ddc7cb8a4bca72ce16a69",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:375b9f8f3ac2ed79caa88dbd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:398a54782dcdc16b88e55140",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3e5cfc0dc3c4729392f128c3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:3ef321c3590bb2fdcfd9d139",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:40efa0b1fe2603bb665b2077",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:43b3a7c7691b6ff91264b41b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4911720f4baf16f9fb97abe9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4ab880a926d868cfca1e356c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4d41f463bf01383028bbd66b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:4d824ada98a6f49a98db80f3",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:528ff10b2bb569f8221753ea",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:53f4b744af33bf27bf47d72a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:547877dc1b2a0da75f23437f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5a68ce85214801c642b8f1cd",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5f68082aaf1d58e8fbf63946",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6389413c250b81c1d710ff20",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:655cef81b57e93f66e72eb53",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6cd1465bca902769499c48e7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:702df37bc42b3cbf82572888",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:756d186bc0a9bcd4b7233963",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:76cf4d36703a4ef8fa5e42a5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7c2958defdda63f40ce9d5e8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:81bce737807091b2f9a26fca",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:87f10f2bcc0be3ce18afc6f1",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8a50ee698f158212686a2357",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8e9dd857c1c227daa0aa4009",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:924a8a7747b7364de16bc60d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:97554394e1e247101f7773ca",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9de4bcbcd462c83c994ab70d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9f31a7ef2ab345b519c20b43",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9f8f7a9450e6c6227852ee54",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b2d20ac07aa2994690c0d1d8",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b3e66db939c1651e54fd8b4d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b6010d579b3b735da8c0fed4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b7d2a4de5ebd0d02fa7a7649",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:be70d59a8fc2d63b75cf9ff6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bfda632c42d61d4d61eaf339",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c30518042dac6af03b8ccec6",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c562d6b5e4d35c2c08bcfffb",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c7bd57636fe02f3dba007efe",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c7e25ce14b95cfe8be3b2a1a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c9aa4137b9020115ad32bcac",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:cc5a69afeea4392a5a153b84",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d9b4854541fcabc86288ebe9",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:dbc34f574f517d5758d58d5e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e0b32af879dd52c3806af789",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e3f5e1e739d59e0ebcef5ee7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e69758bdff3bc9be0f1bbf75",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e784ade69f6161c4e113dcc7",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ecac3d6bc261ee9b7f94c1ae",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:ed187e156341654c62b8884c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fb800f7f245d10ebfc74b889",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:c104bbbcf396d02a5733485b",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f26c0b114dd79ec9cb169610",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7b209b350d2f2d262b2cd7c4",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:042316ef17483903a8956d93",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:134643fdd95b89259acd6bd5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:19d53d83349267e6e9fd1d29",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:32c8041995796185ae4b0790",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:367b976985c760c7b1862d8f",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:379e421a17d51f4286604a26",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:43402fa4cb28f168fa14605e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:56552f119c66fdbeae3229a5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:5c9f4c1e201b8f348985edfe",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:60b9118b7161056a86a5052e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6a3c43e36bf60f293b7dfc71",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:71c2af3e9093f8243850d3c5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7926e3c8099115957338c20c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:7e841f77ce1a05f5527ad14c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:937e823173e7792febbf0c4c",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:9d7968143084e6f6e7ea5fae",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:a5634923523782fbddf59a62",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:b50c0716998ffdd9e3e74b3d",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bb7dc60725d9c18ff9a11fba",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:d426fe39a8c4e70dc4b7c72e",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e4a45ec8cc70fcda8f39d109",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:e8eb01bf7fc07ab0e597bf2a",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f557b59802bf35d8d30bc769",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:f6c860d89954d6def23a7272",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:fbb0ff74fce82fe8c9c1c2de",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:6e19d25ce78520dd81b4d399",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:808827f0b21b35e776670356",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:8eb4ff10f0651c841b3471e5",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    },
+    {
+      "observation_id": "dast:bf0cd465c61cac119c42ed22",
+      "case_id": null,
+      "candidate_case_ids": [],
+      "classification": "outside_ground_truth"
+    }
+  ],
+  "cases": [
+    {
+      "case_id": "JS-AUTHZ-001",
+      "expected": "vulnerable",
+      "family": "authorization",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-AUTHZ-002",
+      "expected": "vulnerable",
+      "family": "authorization",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-CAPTCHA-001",
+      "expected": "vulnerable",
+      "family": "anti-automation",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-DATA-001",
+      "expected": "vulnerable",
+      "family": "sensitive-data-exposure",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-FILE-001",
+      "expected": "vulnerable",
+      "family": "file-exposure",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SAFE-AUTH-101",
+      "expected": "safe",
+      "family": "authentication",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-001",
+      "expected": "safe",
+      "family": "authorization",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SAFE-BIZ-101",
+      "expected": "safe",
+      "family": "business-logic",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SAFE-DATA-001",
+      "expected": "safe",
+      "family": "sensitive-data-exposure",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SAFE-FILE-101",
+      "expected": "safe",
+      "family": "file-validation",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SAFE-SQL-001",
+      "expected": "safe",
+      "family": "sql-injection",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SQL-001",
+      "expected": "vulnerable",
+      "family": "sql-injection",
+      "detected": true,
+      "primary_observation_id": "dast:242c267d194807efe3351d2a",
+      "matched_observation_ids": [
+        "dast:242c267d194807efe3351d2a"
+      ],
+      "verification": "not_run",
+      "confirmation_supported": false,
+      "evidence": [
+        "dast/raw.json"
+      ],
+      "severity": null,
+      "context_priority": null
+    },
+    {
+      "case_id": "JS-SQL-002",
+      "expected": "vulnerable",
+      "family": "sql-injection",
+      "detected": false,
+      "primary_observation_id": null,
+      "matched_observation_ids": [],
+      "verification": "not_detected",
+      "confirmation_supported": false,
+      "evidence": [],
+      "severity": null,
+      "context_priority": null
+    }
+  ]
+}

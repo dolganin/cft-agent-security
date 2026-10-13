@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "rule_id": "sql-injection",
+      "title": "SQL Injection in Product Search",
+      "description": "User-controlled query parameter 'q' is directly interpolated into a raw SQL query string without parameterization or escaping, allowing arbitrary SQL injection.",
+      "file": "routes/search.ts",
+      "line_start": 23,
+      "line_end": 23,
+      "severity": null,
+      "service": null,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "Line 21 reads req.query.q into 'criteria', line 22 only truncates length to 200 chars, and line 23 concatenates it directly into a sequelize.query() string. No parameterized query or escaping is applied. An attacker can inject arbitrary SQL via the 'q' parameter. Verification: send a harmless tautology like q=' OR '1'='1 to confirm the query executes injected logic.",
+      "source": "model_scout"
+    },
+    {
+      "rule_id": "open-redirect",
+      "title": "Open Redirect via Weak Allowlist Check",
+      "description": "The isRedirectAllowed function uses String.includes() to validate redirect URLs against an allowlist, which can be bypassed by appending the allowed URL as a substring of a malicious domain.",
+      "file": "lib/insecurity.ts",
+      "line_start": 133,
+      "line_end": 139,
+      "severity": null,
+      "service": null,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 136 checks url.includes(allowedUrl), so a URL like 'https://github.com/juice-shop/juice-shop.evil.com' would pass validation because it contains the allowed string as a substring. This allows redirecting users to attacker-controlled domains. Verification: call the redirect endpoint with a URL that contains an allowlisted string as a substring of a different domain.",
+      "source": "model_scout"
+    },
+    {
+      "rule_id": "file-exposure",
+      "title": "Hardcoded RSA Private Key in Source",
+      "description": "The RSA private key used for JWT signing is hardcoded as a string literal in the application source code, exposing it to anyone with repository access.",
+      "file": "lib/insecurity.ts",
+      "line_start": 21,
+      "line_end": 21,
+      "severity": null,
+      "service": null,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 21 contains the full PEM-encoded RSA private key as a string constant. This key is used to sign JWTs (line 54). Anyone with source access can forge valid authentication tokens for any user, including admin. Verification: confirm the key matches the public key at line 20 and that it is used in jwt.sign at line 54.",
+      "source": "model_scout"
+    },
+    {
+      "rule_id": "authentication",
+      "title": "MD5 Used for Password Hashing",
+      "description": "The hash function uses MD5, a cryptographically broken algorithm, making stored password hashes vulnerable to collision and rainbow-table attacks.",
+      "file": "lib/insecurity.ts",
+      "line_start": 41,
+      "line_end": 41,
+      "severity": null,
+      "service": null,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 41 defines hash() using crypto.createHash('md5'). MD5 is not collision-resistant and is trivially brute-forced. If this function is used for password storage, an attacker who obtains the database can recover plaintext passwords. Verification: confirm where hash() is called in the registration/login flow to determine if it applies to user passwords.",
+      "source": "model_scout"
+    }
+  ]
+}

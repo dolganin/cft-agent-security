@@ -1,0 +1,19 @@
+{
+  "session_id": "58c51fb8b8af443aadad05fdab761a90",
+  "status": "ready",
+  "compose_project": "cft-sandbox-58c51fb8b8af",
+  "services": [
+    {
+      "Service": "juice",
+      "Name": "cft-sandbox-58c51fb8b8af-juice-1",
+      "State": "running",
+      "Health": "healthy",
+      "Status": "Up 12 seconds (healthy)",
+      "ID": "80cf1aece1ab"
+    }
+  ],
+  "ready": true,
+  "diagnostic": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.service=juice,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.depends_on=,com.docker.compose.project=cft-sandbox-58c51fb8b8af,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.version=20.2.0\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"12 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 12 seconds (healthy)\"}\n",
+  "duration_seconds": 13.266,
+  "adapter": "docker_compose"
+}

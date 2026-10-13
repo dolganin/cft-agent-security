@@ -1,0 +1,7 @@
+{
+  "network": "a06-e8400e2187274b7c-net",
+  "containers": [
+    "a06-e8400e2187274b7c-juice",
+    "a06-e8400e2187274b7c-zap"
+  ]
+}

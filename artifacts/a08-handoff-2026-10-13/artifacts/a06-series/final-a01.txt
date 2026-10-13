@@ -1,0 +1,1 @@
+A01 protocol/lock/baseline valid: juice-shop-v20.2.0-v2; ground truth pending A04

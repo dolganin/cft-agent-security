@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "decision": "fail",
+  "exit_code": 2,
+  "decision_basis": "technical_pipeline_error",
+  "reports_total": 0,
+  "confirmed": 0,
+  "rejected": 0,
+  "inconclusive": 0,
+  "policy_blocked": 0,
+  "technical_errors": 1,
+  "reasons": [
+    "A mandatory pipeline stage did not complete successfully."
+  ],
+  "errors": [
+    {
+      "code": "DEPENDENCY_UNAVAILABLE",
+      "layer": "sast",
+      "message": "SAST stage failed",
+      "retryable": true
+    }
+  ],
+  "stage_errors": [
+    "SAST stage failed"
+  ],
+  "findings": []
+}

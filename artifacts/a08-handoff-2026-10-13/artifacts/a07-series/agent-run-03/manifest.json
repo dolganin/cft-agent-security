@@ -1,0 +1,69 @@
+{
+  "action_proposal_count": 0,
+  "agent_iterations": 0,
+  "attempt_id": "agent-run-03-20261013T104859Z",
+  "cleanup": {
+    "containers": {
+      "exit_code": 0,
+      "remaining": []
+    },
+    "networks": {
+      "exit_code": 0,
+      "remaining": []
+    },
+    "volumes": {
+      "exit_code": 0,
+      "remaining": []
+    }
+  },
+  "configuration_digest": "59efefa5c6680486a1e117c30e10061fe2245e3714b0345df31d1f28731afe3c",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+  "duration_seconds": 19.703,
+  "evidence_outcomes": {},
+  "executor_action_count": 0,
+  "fallback_count": 0,
+  "fallback_reasons": [],
+  "finished_at": "2026-10-13T10:49:19.331315+00:00",
+  "fresh_artifact_directory": true,
+  "fresh_evaluator_session": true,
+  "fresh_target_reset": true,
+  "llm_failure_count": 0,
+  "llm_request_count": 0,
+  "llm_success_count": 0,
+  "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "model_configuration": {
+    "base_url": "https://deepcode.ci.nsu.ru/api",
+    "fallback": "existing_deterministic_adapter_fallback_logged_not_a_model_response",
+    "model": "Qwen3.8-27B",
+    "protocol": "openai",
+    "provider": "nsu",
+    "request_seed": "not_sent_provider_nondeterminism_retained",
+    "response_format": "json_object",
+    "stream": false,
+    "temperature": 0.1
+  },
+  "original_target_integrity": true,
+  "pipeline_exit_code": 2,
+  "policy_block_count": 0,
+  "project_commit": "e6736eaae1d09c12368426b51de63261b0cbf4f5",
+  "retry_count": 0,
+  "retry_of": null,
+  "run_id": "agent-run-03",
+  "sandbox_session_id": "6f635b92744d4547bf8a9cf0cea336d1",
+  "schema_version": "a07.agent-run.v1",
+  "scout_iterations": null,
+  "snapshot": {
+    "dataset": {
+      "id": "juice-shop-v20.2.0-v2"
+    }
+  },
+  "started_at": "2026-10-13T10:48:59.637022+00:00",
+  "status": "technically_invalid",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+  "technical_errors": 1,
+  "timeout_count": 0,
+  "validator_allowed_count": 0,
+  "validator_denied_count": 0
+}

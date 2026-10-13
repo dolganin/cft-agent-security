@@ -1,0 +1,50 @@
+{
+  "cases": [
+    {
+      "case_id": "JS-SAFE-NOSQL-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "nosql-injection",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-REDIRECT-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "open-redirect",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    }
+  ],
+  "context_priority": null,
+  "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_status": "frozen_a04",
+  "detection": null,
+  "matches": [],
+  "sample_kind": "patched",
+  "schema_version": "benchmark.score.v2",
+  "severity": null,
+  "split": "development",
+  "technical_errors": [
+    "missing required artifact: pipeline\\audit\\llm-attempts.jsonl",
+    "missing required artifact: pipeline\\reports-index.json",
+    "missing required artifact: pipeline\\sast\\findings.json",
+    "missing required artifact: pipeline\\sast\\summary.json",
+    "missing required artifact: pipeline\\scout\\merged-findings.json",
+    "missing required artifact: pipeline\\scout\\summary.json"
+  ],
+  "technically_valid": false,
+  "verification": null
+}

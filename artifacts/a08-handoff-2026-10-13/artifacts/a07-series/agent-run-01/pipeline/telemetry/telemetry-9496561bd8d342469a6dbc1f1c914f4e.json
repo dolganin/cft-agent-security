@@ -1,0 +1,1079 @@
+{
+  "collected_at": "2026-10-13T10:45:48.881128Z",
+  "events": [
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 453,
+        "exit_code": 0,
+        "stage": "prepare",
+        "status": "ok",
+        "stdout": "name: cft-sandbox-58c51fb8b8af services: juice: cap_drop: - ALL cpus: 1 expose: - \"3000\" healthcheck: test: - CMD - /nodejs/bin/node - -e - require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1)) timeout: 3s interval: 2s retries: 20 start_period: 20s image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b mem_limit: \"805306368\" networks: default: null pids_limit: 128 security_opt: - no-new-privileges:true networks: default: name: cft-sandbox-58c51fb8b8af_default internal: true",
+        "timed_out": false
+      },
+      "id": "telemetry-7ce98258df5642c29bea600b61313b90",
+      "kind": "start_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:33.295413Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 0,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 436,
+        "exit_code": 0,
+        "stage": "prepare",
+        "status": "ok",
+        "stdout": "name: cft-sandbox-58c51fb8b8af services: juice: cap_drop: - ALL cpus: 1 expose: - \"3000\" healthcheck: test: - CMD - /nodejs/bin/node - -e - require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1)) timeout: 3s interval: 2s retries: 20 start_period: 20s image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b mem_limit: \"805306368\" networks: default: null pids_limit: 128 security_opt: - no-new-privileges:true networks: default: name: cft-sandbox-58c51fb8b8af_default internal: true",
+        "timed_out": false
+      },
+      "id": "telemetry-dec5c8f2b15c4bd98880fb865f688b4d",
+      "kind": "start_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:33.743538Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 1,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "create"
+      },
+      "id": "telemetry-d3924239e2c1488582b8e96ba41ff3de",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:34.270616Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 2,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "start"
+      },
+      "id": "telemetry-ec8ce52ff0cd4611954ea336f2a0c925",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:34.685314Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 3,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 1172,
+        "exit_code": 0,
+        "stage": "run",
+        "status": "ok",
+        "stderr": "Network cft-sandbox-58c51fb8b8af_default Creating Network cft-sandbox-58c51fb8b8af_default Creating Network cft-sandbox-58c51fb8b8af_default Created Network cft-sandbox-58c51fb8b8af_default Created Container cft-sandbox-58c51fb8b8af-juice-1 Creating Container cft-sandbox-58c51fb8b8af-juice-1 Created Container cft-sandbox-58c51fb8b8af-juice-1 Starting Container cft-sandbox-58c51fb8b8af-juice-1 Started",
+        "timed_out": false
+      },
+      "id": "telemetry-340791a7c45f443e8f9ea19dbdf5b1c4",
+      "kind": "start_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:34.913194Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 4,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 531,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.depends_on=,com.docker.compose.service=juice,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.version=5.5.0,org.opencontainers.image.documentation=https://help.owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"1 second ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up Less than a second (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-8334a54a23234cf5b03a2fbd55578a2c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:35.443679Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 5,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 562,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.version=20.2.0,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.service=juice,desktop.docker.io/ports.scheme=v2,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.depends_on=,com.docker.compose.project=cft-sandbox-58c51fb8b8af,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"2 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 1 second (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-aadc10c90d4e42439bcdb77b51774c70",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.513400Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 6,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Detected Node.js version v24.19.0 (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-0362a6fe9d9247efa89228ceb7e2e7f8",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.809331Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 7,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Detected OS linux (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-9778fd2b4d1e4da2988c63dcfc77fa4e",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.809923Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 8,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Detected CPU x64 (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-8aeedb8f193e4b87b5cb99b29a7a1240",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.810155Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 9,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Configuration default validated (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-7999f56014784de499ebb81afdf9ac5f",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.856861Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 10,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Entity models 21 of 21 are initialized (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-8b1f1aa6ecd74bf58a704efb368cc4f3",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.942504Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 11,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: All dependencies in ./package.json are satisfied (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-d417cf16147a443b94bf10c5e29fd962",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:36.948255Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 12,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Required file server.js is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-72f176733e5243eb9a8321360c239af6",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.137916Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 13,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Required file index.html is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-2aeb079fcf104f379abdaab6098c4721",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.138153Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 14,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Required file main.js is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-9fb258697eb74698aa4eb8e82e35b52d",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.138468Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 15,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Required file styles.css is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-560029fc095146d3b3ce61af0d9d8e53",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.138889Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 16,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Required file polyfills.js is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-41f6aa2ccdfa4471a6f59d1f165cc274",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.139398Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 17,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Required file matching /^hacking-instructor-.+\\.js$/ is present (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-28a5bf83102e4e01a628a3c06317e413",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.139647Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 18,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Port 3000 is available (SUCCESS)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-e21a20215d8b41e2a6064d888e4ae59c",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.144907Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 19,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: Domain https://www.alchemy.com/ is not reachable (WARNING)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-35bdf9f02b164bc79ffabab2e76cf0b3",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.218533Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 20,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"Mint the Honey Pot\" challenge will not work as intended without access to https://www.alchemy.com/",
+        "stream": "stdout"
+      },
+      "id": "telemetry-c400a4f3ba6b4b9bb8b6e8550a9089db",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.218563Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 21,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"Wallet Depletion\" challenge will not work as intended without access to https://www.alchemy.com/",
+        "stream": "stdout"
+      },
+      "id": "telemetry-ba08de358ac24b9f8f33250ad03d75a9",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.218580Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 22,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: Environment variable ALCHEMY_API_KEY is not present (WARNING)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-3bb89c0bfda4436b95e3c4de37a8d1bf",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.219135Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 23,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"Mint the Honey Pot\" challenge will not work as intended without a valid ALCHEMY_API_KEY",
+        "stream": "stdout"
+      },
+      "id": "telemetry-8ba7bfc8674d4eb9ba5da3dc82691e59",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.219149Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 24,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"Wallet Depletion\" challenge will not work as intended without a valid ALCHEMY_API_KEY",
+        "stream": "stdout"
+      },
+      "id": "telemetry-0101d77378f04fe0a0199c146c513e76",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.219155Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 25,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Check https://howto-web3.owasp-juice.shop for instructions on how to set up and configure the Alchemy API",
+        "stream": "stdout"
+      },
+      "id": "telemetry-b49615c107914b2097854e3fb6031eef",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.219176Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 26,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: Domain http://localhost:11434/v1 is not reachable (WARNING)",
+        "stream": "stdout"
+      },
+      "id": "telemetry-b7acf7e3e2764888a0a13b7335e4ecb5",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.227550Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 27,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"Chatbot Prompt Injection\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-273919ce676a4272b6f3eb080079c9b6",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.227582Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 28,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"Greedy Chatbot Manipulation\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-46b0af32ca7a45adbd1aa13704110aaf",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.228061Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 29,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"AI Debugging\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-70955ef788184a48af71539c6d7f522e",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.228074Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 30,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "warn: \"System Prompt Extraction\" challenge will not work as intended without access to http://localhost:11434/v1",
+        "stream": "stdout"
+      },
+      "id": "telemetry-ed2c1f0752044a2e8632f2255b8a469b",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.228255Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 31,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Check https://howto-llm.owasp-juice.shop for instructions on how to set up and configure the LLM API",
+        "stream": "stdout"
+      },
+      "id": "telemetry-eb516b7adcf9432a87a0275218dcae41",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.228469Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 32,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.version=20.2.0,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.version=5.5.0,org.opencontainers.image.revision=5658473,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,desktop.docker.io/ports.scheme=v2\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"3 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 2 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-9e4fa66c8bb54666b484ab9803d67484",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:37.517747Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 33,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 514,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.container-number=1,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.revision=5658473,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.version=5.5.0,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.oneoff=False,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,desktop.docker.io/ports.scheme=v2\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"4 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 3 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-961829c1d3504fdd8450eb1a241cae40",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:38.541899Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 34,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 515,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.service=juice,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.project=cft-sandbox-58c51fb8b8af,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT,org.opencontainers.image.revision=5658473,com.docker.compose.oneoff=False,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"5 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 4 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-1c39023a325f4c57938082609c908616",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:39.572659Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 35,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-c2243e4208824c5b85ca4be34edc495c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:39.687302Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 36,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-de9c6b0e40404ecaa03186501e381eb6",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:39.687666Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 37,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 1
+      },
+      "id": "telemetry-c665e7f68d0c4c30854d7095be39bb59",
+      "kind": "process_exit",
+      "level": "error",
+      "observed_at": "2026-10-13T10:45:39.828720Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 38,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 514,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.service=juice,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.licenses=MIT,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.revision=5658473,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.version=20.2.0,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-58c51fb8b8af,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"6 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 5 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-2a8b2ad5ed4c46748e42c8cd2dc16859",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:40.586319Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 39,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "message": "info: Server listening on port 3000",
+        "stream": "stdout"
+      },
+      "id": "telemetry-98c417713ed44a5bb06442b9b0042680",
+      "kind": "runtime_log",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:41.051737Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 40,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_logs",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 485,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.depends_on=,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.version=20.2.0,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.revision=5658473,com.docker.compose.service=juice,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"7 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 6 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-45a5987f281648cbb012c404a30e218c",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:41.570611Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 41,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.created=”2026-08-10T21:36:22Z”,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.version=5.5.0,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.container-number=1,com.docker.compose.oneoff=False,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.licenses=MIT,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,org.opencontainers.image.url=https://owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"8 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 7 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-e9285fe8679f41ccb4ead90b7932f404",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:42.564869Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 42,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 514,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.documentation=https://help.owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.depends_on=,desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.oneoff=False,com.docker.compose.version=5.5.0,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"9 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 8 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-c3c128e8061e4492afef1f02d4a6fdff",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:43.580123Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 43,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 500,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"starting\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.depends_on=,com.docker.compose.service=juice,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,com.docker.compose.container-number=1,org.opencontainers.image.revision=5658473,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.title=OWASP Juice Shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"10 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 9 seconds (health: starting)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-975522d7a4d348b8a16d7932860673fb",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:44.582524Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 44,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-92402bee5306486d86b1cf3cb733669f",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:44.829710Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 45,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-2ae0c532a2ca40c6970cdd95b71a096e",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:44.830117Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 46,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-5e74272406af4544b1c99705fbb4083a",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:44.998423Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 47,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "health_status: healthy"
+      },
+      "id": "telemetry-3fc7fbf3df594f609a879e8bf805ba15",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:44.999293Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 48,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 485,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.depends_on=,org.opencontainers.image.revision=5658473,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.version=5.5.0,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.version=20.2.0,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.service=juice,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.licenses=MIT,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"11 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 10 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-56c9115181cc419c84f7adcb52143f00",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:45.571889Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 49,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 468,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.version=5.5.0,org.opencontainers.image.licenses=MIT,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.version=20.2.0,desktop.docker.io/ports.scheme=v2,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.depends_on=,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.service=juice,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"11 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 11 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-dbda16a46a944f6986f8eab5d03e8028",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:46.044205Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 50,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 485,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.version=5.5.0,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-58c51fb8b8af,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.container-number=1,com.docker.compose.service=juice,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,org.opencontainers.image.version=20.2.0,com.docker.compose.depends_on=\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"12 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 11 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-019f977aba6b4e5cb3c9f7d3cb2a2896",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:46.525638Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 51,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_create: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-15c5c98a6cfe43b683b162bd7569ed21",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:47.000672Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 52,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_start: /nodejs/bin/node -e require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"
+      },
+      "id": "telemetry-38aaafe22ab64f7582f30c8e32830feb",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:47.000908Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 53,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 484,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.service=juice,org.opencontainers.image.revision=5658473,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop,org.opencontainers.image.url=https://owasp-juice.shop,com.docker.compose.container-number=1,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.title=OWASP Juice Shop,com.docker.compose.oneoff=False,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,com.docker.compose.version=5.5.0,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.depends_on=,com.docker.compose.project=cft-sandbox-58c51fb8b8af,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.version=20.2.0\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"12 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 12 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-8592f38682374b2b990fdd9789ba5c2b",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:47.007563Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 54,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "action": "exec_die",
+        "exit_code": 0
+      },
+      "id": "telemetry-c04cdff1dad941a0b788366da83b8228",
+      "kind": "process_exit",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:47.116656Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 55,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_events",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": null,
+      "facts": {
+        "adapter": "docker_compose",
+        "duration_ms": 485,
+        "exit_code": 0,
+        "stage": "state",
+        "status": "ok",
+        "stdout": "{\"Command\":\"\\\"/nodejs/bin/node /j…\\\"\",\"CreatedAt\":\"2026-10-13 17:45:34 +0700 +07\",\"Engine\":\"\",\"ExitCode\":0,\"Health\":\"healthy\",\"ID\":\"80cf1aece1ab\",\"Image\":\"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\"Labels\":\"com.docker.compose.project.working_dir=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop,maintainer=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,com.docker.compose.config-hash=9672464a7f026ce45c75d4b7ebf904519b0e6353511bd6cc6a33eaad6e76d095,com.docker.compose.version=5.5.0,org.opencontainers.image.documentation=https://help.owasp-juice.shop,org.opencontainers.image.licenses=MIT,org.opencontainers.image.revision=5658473,org.opencontainers.image.title=OWASP Juice Shop,org.opencontainers.image.vendor=Open Worldwide Application Security Project,com.docker.compose.container-number=1,com.docker.compose.project.config_files=C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\cft-security-agent\\\\artifacts\\\\benchmark-target\\\\juice-shop\\\\docker-compose.presentation.yml,C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Temp\\\\cft-sandbox-session-chbsiyhw\\\\compose.sandbox.override.yml,org.opencontainers.image.authors=Bjoern Kimminich \\u003cbjoern.kimminich@owasp.org\\u003e,org.opencontainers.image.created=”2026-08-10T21:36:22Z”,org.opencontainers.image.url=https://owasp-juice.shop,org.opencontainers.image.version=20.2.0,com.docker.compose.depends_on=,com.docker.compose.image=sha256:7f7539921b046863f2fc48b84061f957e50b3aa4652ae0a62014a2fc25654d0b,com.docker.compose.oneoff=False,com.docker.compose.project=cft-sandbox-58c51fb8b8af,com.docker.compose.service=juice,desktop.docker.io/ports.scheme=v2,org.opencontainers.image.description=Probably the most modern and sophisticated insecure web application,org.opencontainers.image.source=https://github.com/juice-shop/juice-shop\",\"LocalVolumes\":\"0\",\"Mounts\":\"\",\"Name\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Names\":\"cft-sandbox-58c51fb8b8af-juice-1\",\"Networks\":\"cft-sandbox-58c51fb8b8af_default\",\"Ports\":\"3000/tcp\",\"Project\":\"cft-sandbox-58c51fb8b8af\",\"Publishers\":[{\"URL\":\"\",\"TargetPort\":3000,\"PublishedPort\":0,\"Protocol\":\"tcp\"}],\"RunningFor\":\"13 seconds ago\",\"Service\":\"juice\",\"Size\":\"0B\",\"State\":\"running\",\"Status\":\"Up 12 seconds (healthy)\"}",
+        "timed_out": false
+      },
+      "id": "telemetry-911bb38a84ab46f8ab8e038203aa8368",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:47.527190Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 56,
+      "service": null,
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "sandbox_manager",
+      "target": "juice-presentation"
+    },
+    {
+      "container_id": "80cf1aece1ab",
+      "facts": {
+        "exit_code": 0,
+        "finished_at": "0001-01-01T00:00:00Z",
+        "health": "healthy",
+        "running": true,
+        "started_at": "2026-10-13T10:45:34.378145238Z",
+        "status": "running"
+      },
+      "id": "telemetry-175415bf16c94ffd99f20e77b2524803",
+      "kind": "container_state",
+      "level": "info",
+      "observed_at": "2026-10-13T10:45:48.212355Z",
+      "run_id": "58c51fb8b8af443aadad05fdab761a90",
+      "sequence": 57,
+      "service": "juice",
+      "session_id": "58c51fb8b8af443aadad05fdab761a90",
+      "source": "docker_inspect",
+      "target": "juice-presentation"
+    }
+  ],
+  "run_id": "58c51fb8b8af443aadad05fdab761a90",
+  "session_id": "58c51fb8b8af443aadad05fdab761a90",
+  "target": "juice-presentation"
+}

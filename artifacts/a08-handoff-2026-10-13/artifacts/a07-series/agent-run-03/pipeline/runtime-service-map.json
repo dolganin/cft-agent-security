@@ -1,0 +1,38 @@
+{
+  "session_id": "6f635b92744d4547bf8a9cf0cea336d1",
+  "network_name": "cft-sandbox-6f635b92744d_default",
+  "services": {
+    "juice": {
+      "name": "juice",
+      "type": "node",
+      "address": "http://juice:3000",
+      "ready": true,
+      "readiness_source": "compose_health",
+      "allowed_endpoints": [
+        "/",
+        "/rest/products/search",
+        "/rest/user/login",
+        "/ftp",
+        "/.well-known",
+        "/encryptionkeys",
+        "/support/logs"
+      ],
+      "request_host": null,
+      "diagnostic": "Compose healthcheck is healthy"
+    }
+  },
+  "diagnostics": [
+    {
+      "name": "frontend",
+      "diagnostic": "Profile has no internal sandbox port for service"
+    },
+    {
+      "name": "infrastructure",
+      "diagnostic": "Profile has no internal sandbox port for service"
+    },
+    {
+      "name": "smoke",
+      "diagnostic": "Profile has no internal sandbox port for service"
+    }
+  ]
+}

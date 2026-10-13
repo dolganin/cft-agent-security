@@ -1,0 +1,176 @@
+{
+  "id": "juice-presentation",
+  "name": "Juice Shop | демонстрационный проход",
+  "repository_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\benchmark-target\\juice-shop",
+  "environment": "sandbox",
+  "architecture": {
+    "file": "targets\\juice-presentation-architecture.yaml"
+  },
+  "sast": {
+    "adapter": "semgrep"
+  },
+  "runtime": {
+    "type": "docker_compose",
+    "base_url": null,
+    "compose_file": "docker-compose.presentation.yml",
+    "allowed_local_addresses": []
+  },
+  "services": {
+    "juice": {
+      "id": "juice",
+      "type": "node",
+      "root": ".",
+      "dependency_files": [
+        "package.json"
+      ],
+      "dockerfile": "Dockerfile",
+      "compose_file": null,
+      "compose_service": "juice",
+      "build": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "run": [
+        "npm",
+        "run",
+        "start"
+      ],
+      "healthcheck": {
+        "path": "/",
+        "method": "GET",
+        "expected_statuses": [
+          200
+        ]
+      },
+      "allowed_local_addresses": [],
+      "internal_port": 3000,
+      "runtime_endpoints": [
+        "/",
+        "/rest/products/search",
+        "/rest/user/login",
+        "/ftp",
+        "/.well-known",
+        "/encryptionkeys",
+        "/support/logs"
+      ],
+      "request_host": null
+    },
+    "frontend": {
+      "id": "frontend",
+      "type": "angular",
+      "root": "frontend",
+      "dependency_files": [
+        "frontend/package.json"
+      ],
+      "dockerfile": null,
+      "compose_file": null,
+      "compose_service": null,
+      "build": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "run": [
+        "npm",
+        "run",
+        "start"
+      ],
+      "healthcheck": null,
+      "allowed_local_addresses": [],
+      "internal_port": null,
+      "runtime_endpoints": [],
+      "request_host": null
+    },
+    "infrastructure": {
+      "id": "infrastructure",
+      "type": "unknown",
+      "root": "infrastructure",
+      "dependency_files": [],
+      "dockerfile": "infrastructure/Dockerfile",
+      "compose_file": null,
+      "compose_service": null,
+      "build": [],
+      "run": [],
+      "healthcheck": null,
+      "allowed_local_addresses": [],
+      "internal_port": null,
+      "runtime_endpoints": [],
+      "request_host": null
+    },
+    "smoke": {
+      "id": "smoke",
+      "type": "unknown",
+      "root": "test/smoke",
+      "dependency_files": [],
+      "dockerfile": "test/smoke/Dockerfile",
+      "compose_file": null,
+      "compose_service": null,
+      "build": [],
+      "run": [],
+      "healthcheck": null,
+      "allowed_local_addresses": [],
+      "internal_port": null,
+      "runtime_endpoints": [],
+      "request_host": null
+    }
+  },
+  "artifacts": {
+    "service-dockerfile-dockerfile": {
+      "id": "service-dockerfile-dockerfile",
+      "kind": "dockerfile",
+      "relative_path": "Dockerfile",
+      "roles": []
+    },
+    "service-dependency_manifest-package-json": {
+      "id": "service-dependency_manifest-package-json",
+      "kind": "dependency_manifest",
+      "relative_path": "package.json",
+      "roles": []
+    },
+    "frontend-dependency_manifest-package-json": {
+      "id": "frontend-dependency_manifest-package-json",
+      "kind": "dependency_manifest",
+      "relative_path": "frontend/package.json",
+      "roles": []
+    },
+    "infrastructure-dockerfile-dockerfile": {
+      "id": "infrastructure-dockerfile-dockerfile",
+      "kind": "dockerfile",
+      "relative_path": "infrastructure/Dockerfile",
+      "roles": []
+    },
+    "smoke-dockerfile-dockerfile": {
+      "id": "smoke-dockerfile-dockerfile",
+      "kind": "dockerfile",
+      "relative_path": "test/smoke/Dockerfile",
+      "roles": []
+    }
+  },
+  "constraints": {
+    "external_network": false,
+    "host_filesystem": false,
+    "docker_socket": false,
+    "ci_secrets": false
+  },
+  "metadata": {
+    "demo.scope": "Selected SQL interpolation and directory-listing rules plus bounded source exploration; not a full benchmark",
+    "demo.target_version": "20.2.0",
+    "demo.target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "verification.routes/login.ts:34.check": "sql_interpolation",
+    "verification.routes/login.ts:34.endpoint": "/rest/user/login",
+    "verification.routes/login.ts:34.mode": "authentication",
+    "verification.routes/search.ts:23.check": "sql_interpolation",
+    "verification.routes/search.ts:23.endpoint": "/rest/products/search",
+    "verification.routes/search.ts:23.mode": "search",
+    "verification.routes/search.ts:21.check": "sql_interpolation",
+    "verification.routes/search.ts:21.endpoint": "/rest/products/search",
+    "verification.routes/search.ts:21.mode": "search",
+    "verification.server.ts:288.endpoint": "/ftp",
+    "verification.server.ts:292.endpoint": "/.well-known",
+    "verification.server.ts:296.endpoint": "/encryptionkeys",
+    "verification.server.ts:300.endpoint": "/support/logs",
+    "discovery.version": "1"
+  },
+  "fix_verification": null
+}

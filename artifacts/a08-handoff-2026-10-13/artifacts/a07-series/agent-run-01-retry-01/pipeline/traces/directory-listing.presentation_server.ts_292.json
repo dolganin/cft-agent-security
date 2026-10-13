@@ -1,0 +1,354 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": "/.well-known",
+        "environment": "sandbox",
+        "expected_evidence": "HTTP GET to /.well-known on juice service returns status 200 with an HTML body containing a directory listing table (serveIndex 'details' view) showing file names, file sizes, and last-modified timestamps, with no authentication required.",
+        "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-1ba718c1eb8aa39c",
+          "check": "source_metadata",
+          "line": 292
+        },
+        "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+        "service": "juice",
+        "target": "juice-presentation",
+        "tool": "verify_sensitive_directory"
+      },
+      "evidence_ids": [
+        "evidence-52af57aec9"
+      ],
+      "execution": {
+        "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-d647f85376384bcbb3fbbe8fccd97414.json"
+        ],
+        "audit_ref": "audit:1ec0b75894f447d7a5f80ace21b15bdb",
+        "duration_ms": 1031,
+        "error": null,
+        "evidence_ref": "execution-d647f85376384bcbb3fbbe8fccd97414",
+        "exit_code": 0,
+        "run_id": "1ec0b75894f447d7a5f80ace21b15bdb",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"No sensitive directory metadata was established by this bounded observation.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":292,\"check\":\"source_metadata\",\"endpoint\":\"/.well-known\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[],\"file_contents_read\":false,\"truncated\":false}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-directory-listing.presentation:server.ts:292-1",
+      "recorded_at": "2026-10-13T11:06:05.958201Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    },
+    {
+      "action": {
+        "endpoint": null,
+        "environment": "sandbox",
+        "expected_evidence": "Source inspection reveals the file names or directory structure of the .well-known path, showing whether contents are limited to standard IANA public metadata files or include sensitive/internal files.",
+        "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+        "iteration": 2,
+        "parameters": {
+          "artifact_id": "source-1ba718c1eb8aa39c",
+          "check": "source_metadata",
+          "line": 292
+        },
+        "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+        "service": null,
+        "target": "juice-presentation",
+        "tool": "inspect_javascript_security"
+      },
+      "evidence_ids": [
+        "evidence-63b705d67e"
+      ],
+      "execution": {
+        "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-a35d11569aa04a44bddc5797e6327888.json"
+        ],
+        "audit_ref": "audit:4a84664820194765a4d19c396eab8ceb",
+        "duration_ms": 1507,
+        "error": null,
+        "evidence_ref": "execution-a35d11569aa04a44bddc5797e6327888",
+        "exit_code": 0,
+        "run_id": "4a84664820194765a4d19c396eab8ceb",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":292,\"check\":\"source_metadata\",\"file\":\"server.ts\",\"total_lines\":813,\"source_sha256\":\"1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b\",\"runtime_verified\":false,\"values_redacted\":true}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-directory-listing.presentation:server.ts:292-2",
+      "recorded_at": "2026-10-13T11:06:33.353719Z",
+      "step": 2,
+      "validation": {
+        "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-52af57aec9"
+      ],
+      "outcome": "continue",
+      "plan_id": "plan-directory-listing.presentation:server.ts:292-1",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:06:05.958201Z",
+      "step": 1,
+      "stop_reason": null
+    },
+    {
+      "evidence_ids": [
+        "evidence-63b705d67e"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-directory-listing.presentation:server.ts:292-2",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:06:33.353719Z",
+      "step": 2,
+      "stop_reason": "insufficient_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+        "run_id": "1ec0b75894f447d7a5f80ace21b15bdb",
+        "tool": "verify_sensitive_directory"
+      },
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-d647f85376384bcbb3fbbe8fccd97414.json",
+        "execution-d647f85376384bcbb3fbbe8fccd97414",
+        "audit:1ec0b75894f447d7a5f80ace21b15bdb"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-d647f85376384bcbb3fbbe8fccd97414.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-d647f85376384bcbb3fbbe8fccd97414",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:1ec0b75894f447d7a5f80ace21b15bdb",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:06:05.958201Z",
+      "hypothesis_id": "hyp-dirlist-wellknown-001",
+      "id": "evidence-52af57aec9",
+      "observation": {
+        "captured_at": "2026-10-13T11:06:05.958201Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "check": "source_metadata",
+            "directory_listing": true,
+            "endpoint": "/.well-known",
+            "file_contents_read": false,
+            "line": 292,
+            "sensitive_file_names": [],
+            "status": 200,
+            "truncated": false
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "sensitive_directory_check"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "runtime_directory_metadata",
+        "environment": "sandbox",
+        "service": "juice",
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "No sensitive directory metadata was established by this bounded observation.",
+      "type": "sensitive_directory_check",
+      "verdict": "inconclusive"
+    },
+    {
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+        "run_id": "4a84664820194765a4d19c396eab8ceb",
+        "tool": "inspect_javascript_security"
+      },
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-a35d11569aa04a44bddc5797e6327888.json",
+        "execution-a35d11569aa04a44bddc5797e6327888",
+        "audit:4a84664820194765a4d19c396eab8ceb"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-a35d11569aa04a44bddc5797e6327888.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-a35d11569aa04a44bddc5797e6327888",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:4a84664820194765a4d19c396eab8ceb",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:06:33.353719Z",
+      "hypothesis_id": "hyp-dirlist-wellknown-002",
+      "id": "evidence-63b705d67e",
+      "observation": {
+        "captured_at": "2026-10-13T11:06:33.353719Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "check": "source_metadata",
+            "file": "server.ts",
+            "line": 292,
+            "runtime_verified": false,
+            "source_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+            "total_lines": 813,
+            "values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "javascript_source_metadata"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "source_metadata",
+        "environment": "sandbox",
+        "service": null,
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "type": "javascript_source_metadata",
+      "verdict": "inconclusive"
+    }
+  ],
+  "finding_id": "directory-listing.presentation:server.ts:292",
+  "iterations": 2,
+  "plans": [
+    {
+      "continuation_reason": "First iteration: no prior evidence exists. The hypothesis (confidence 0.75) states that GET /.well-known returns a 200 with a detailed directory listing without auth. The runtime-verification candidate is purpose-built for this exact endpoint and will provide the HTTP response needed to confirm or reject the hypothesis.",
+      "environment": "sandbox",
+      "goal": "Verify whether the /.well-known endpoint on the juice service is accessible without authentication and returns a directory listing with file names, sizes, and modification timestamps.",
+      "hypothesis_id": "hyp-dirlist-wellknown-001",
+      "id": "plan-directory-listing.presentation:server.ts:292-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": "/.well-known",
+            "environment": "sandbox",
+            "expected_evidence": "HTTP GET to /.well-known on juice service returns status 200 with an HTML body containing a directory listing table (serveIndex 'details' view) showing file names, file sizes, and last-modified timestamps, with no authentication required.",
+            "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-1ba718c1eb8aa39c",
+              "check": "source_metadata",
+              "line": 292
+            },
+            "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+            "service": "juice",
+            "target": "juice-presentation",
+            "tool": "verify_sensitive_directory"
+          },
+          "continue_if": "Response is not a 200 with directory listing content, or the response body does not contain file metadata (names, sizes, timestamps), requiring further analysis of what was actually returned.",
+          "expected_observation": "HTTP GET to /.well-known on juice service returns status 200 with an HTML body containing a directory listing table (serveIndex 'details' view) showing file names, file sizes, and last-modified timestamps, with no authentication required.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "HTTP response is 200 with directory listing HTML containing file names, sizes, and timestamps — finding confirmed",
+        "HTTP response is 401/403 or does not contain directory listing content — finding rejected",
+        "HTTP response is 404 or connection error — inconclusive, no further safe step available"
+      ],
+      "target": "juice-presentation"
+    },
+    {
+      "continuation_reason": "Previous evidence confirmed directory_listing=true with HTTP 200 but sensitive_file_names was empty without enumerating actual file names. Need source-level inspection to identify what files the .well-known directory contains.",
+      "environment": "sandbox",
+      "goal": "Inspect the source to determine what file names are present in the /.well-known directory served by serveIndex at server.ts:292, to confirm or reject that only standard public metadata files are exposed.",
+      "hypothesis_id": "hyp-dirlist-wellknown-002",
+      "id": "plan-directory-listing.presentation:server.ts:292-2",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": null,
+            "environment": "sandbox",
+            "expected_evidence": "Source inspection reveals the file names or directory structure of the .well-known path, showing whether contents are limited to standard IANA public metadata files or include sensitive/internal files.",
+            "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+            "iteration": 2,
+            "parameters": {
+              "artifact_id": "source-1ba718c1eb8aa39c",
+              "check": "source_metadata",
+              "line": 292
+            },
+            "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+            "service": null,
+            "target": "juice-presentation",
+            "tool": "inspect_javascript_security"
+          },
+          "continue_if": "If file names include anything beyond standard public metadata (e.g., internal configs, credentials, debug files), the hypothesis is rejected and the finding escalates. If only standard public metadata files are present, the hypothesis is supported and the finding is low-impact.",
+          "expected_observation": "Source inspection reveals the file names or directory structure of the .well-known path, showing whether contents are limited to standard IANA public metadata files or include sensitive/internal files.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "File names in .well-known are all standard public metadata files (security.txt, apple-app-site-association, change-password, etc.)",
+        "File names include sensitive or internal files not expected in a public .well-known directory",
+        "Source inspection is inconclusive and no further safe step exists"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "inconclusive",
+  "stop_reason": "insufficient_evidence"
+}

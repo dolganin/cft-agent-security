@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0",
+  "decision": "fail",
+  "exit_code": 1,
+  "decision_basis": "confirmed_risk",
+  "reports_total": 10,
+  "confirmed": 4,
+  "rejected": 0,
+  "inconclusive": 6,
+  "policy_blocked": 0,
+  "technical_errors": 0,
+  "reasons": [
+    "model-scout-71a2526acad2e4e5b6b5: verification is inconclusive and needs review.",
+    "model-scout-3cb73957be76439ca7a1: verification is inconclusive and needs review.",
+    "model-scout-b2a320314db979f4f269: verification is inconclusive and needs review.",
+    "sequelize-injection.presentation:routes/login.ts:34: confirmed with context priority HIGH.",
+    "sequelize-injection.presentation:routes/search.ts:23: confirmed with context priority HIGH.",
+    "directory-listing.presentation:server.ts:268: verification is inconclusive and needs review.",
+    "directory-listing.presentation:server.ts:288: confirmed with context priority HIGH.",
+    "directory-listing.presentation:server.ts:292: verification is inconclusive and needs review.",
+    "directory-listing.presentation:server.ts:296: confirmed with context priority HIGH.",
+    "directory-listing.presentation:server.ts:300: verification is inconclusive and needs review."
+  ],
+  "errors": [],
+  "stage_errors": [],
+  "findings": [
+    {
+      "finding_id": "model-scout-71a2526acad2e4e5b6b5",
+      "status": "inconclusive",
+      "gate_effect": "warn",
+      "category": "inconclusive",
+      "reason": "model-scout-71a2526acad2e4e5b6b5: verification is inconclusive and needs review.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\000-model-scout-71a2526acad2e4e5b6b5.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "model-scout-3cb73957be76439ca7a1",
+      "status": "inconclusive",
+      "gate_effect": "warn",
+      "category": "inconclusive",
+      "reason": "model-scout-3cb73957be76439ca7a1: verification is inconclusive and needs review.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\001-model-scout-3cb73957be76439ca7a1.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "model-scout-b2a320314db979f4f269",
+      "status": "inconclusive",
+      "gate_effect": "warn",
+      "category": "inconclusive",
+      "reason": "model-scout-b2a320314db979f4f269: verification is inconclusive and needs review.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\002-model-scout-b2a320314db979f4f269.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "sequelize-injection.presentation:routes/login.ts:34",
+      "status": "confirmed",
+      "gate_effect": "fail",
+      "category": "confirmed_risk",
+      "reason": "sequelize-injection.presentation:routes/login.ts:34: confirmed with context priority HIGH.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\003-sequelize-injection.presentation-routes-login.ts-34.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "sequelize-injection.presentation:routes/search.ts:23",
+      "status": "confirmed",
+      "gate_effect": "fail",
+      "category": "confirmed_risk",
+      "reason": "sequelize-injection.presentation:routes/search.ts:23: confirmed with context priority HIGH.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\004-sequelize-injection.presentation-routes-search.ts-23.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "directory-listing.presentation:server.ts:268",
+      "status": "inconclusive",
+      "gate_effect": "warn",
+      "category": "inconclusive",
+      "reason": "directory-listing.presentation:server.ts:268: verification is inconclusive and needs review.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\005-directory-listing.presentation-server.ts-268.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "directory-listing.presentation:server.ts:288",
+      "status": "confirmed",
+      "gate_effect": "fail",
+      "category": "confirmed_risk",
+      "reason": "directory-listing.presentation:server.ts:288: confirmed with context priority HIGH.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\006-directory-listing.presentation-server.ts-288.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "directory-listing.presentation:server.ts:292",
+      "status": "inconclusive",
+      "gate_effect": "warn",
+      "category": "inconclusive",
+      "reason": "directory-listing.presentation:server.ts:292: verification is inconclusive and needs review.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\007-directory-listing.presentation-server.ts-292.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "directory-listing.presentation:server.ts:296",
+      "status": "confirmed",
+      "gate_effect": "fail",
+      "category": "confirmed_risk",
+      "reason": "directory-listing.presentation:server.ts:296: confirmed with context priority HIGH.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\008-directory-listing.presentation-server.ts-296.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    },
+    {
+      "finding_id": "directory-listing.presentation:server.ts:300",
+      "status": "inconclusive",
+      "gate_effect": "warn",
+      "category": "inconclusive",
+      "reason": "directory-listing.presentation:server.ts:300: verification is inconclusive and needs review.",
+      "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\009-directory-listing.presentation-server.ts-300.json",
+      "context_priority": "HIGH",
+      "cvss_severity": "UNASSESSED"
+    }
+  ]
+}

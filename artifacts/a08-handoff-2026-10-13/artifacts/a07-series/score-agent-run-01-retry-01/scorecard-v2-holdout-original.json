@@ -1,0 +1,330 @@
+{
+  "cases": [
+    {
+      "case_id": "JS-AUTHZ-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "authorization",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-AUTHZ-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "authorization",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-CAPTCHA-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "anti-automation",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-DATA-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "sensitive-data-exposure",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-FILE-001",
+      "confirmation_supported": true,
+      "context_priority": "HIGH",
+      "detected": true,
+      "evidence": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-af23537f655a4ebe96dbfb07e800e75d.json",
+        "audit:95b18c37ced540b1bf6a1b199a595b24",
+        "execution-af23537f655a4ebe96dbfb07e800e75d"
+      ],
+      "expected": "vulnerable",
+      "family": "file-exposure",
+      "matched_observation_ids": [
+        "directory-listing.presentation:server.ts:288"
+      ],
+      "primary_observation_id": "directory-listing.presentation:server.ts:288",
+      "severity": "UNASSESSED",
+      "verification": "confirmed"
+    },
+    {
+      "case_id": "JS-SAFE-AUTH-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "authentication",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "authorization",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-BIZ-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "business-logic",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-DATA-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "sensitive-data-exposure",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-FILE-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "file-validation",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-SQL-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "sql-injection",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SQL-001",
+      "confirmation_supported": true,
+      "context_priority": "HIGH",
+      "detected": true,
+      "evidence": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ca2622b50fb4467e8ab295357890551a.json",
+        "audit:9bd8e1fbc202402fa2cd5374a6f0efb2",
+        "execution-ca2622b50fb4467e8ab295357890551a"
+      ],
+      "expected": "vulnerable",
+      "family": "sql-injection",
+      "matched_observation_ids": [
+        "sequelize-injection.presentation:routes/search.ts:23"
+      ],
+      "primary_observation_id": "sequelize-injection.presentation:routes/search.ts:23",
+      "severity": "UNASSESSED",
+      "verification": "confirmed"
+    },
+    {
+      "case_id": "JS-SQL-002",
+      "confirmation_supported": true,
+      "context_priority": "HIGH",
+      "detected": true,
+      "evidence": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ea353ec5f4f74d649e7df9e4d9cce29b.json",
+        "audit:35d8653c360347ac8d71fa82d9a39f70",
+        "execution-ea353ec5f4f74d649e7df9e4d9cce29b"
+      ],
+      "expected": "vulnerable",
+      "family": "sql-injection",
+      "matched_observation_ids": [
+        "sequelize-injection.presentation:routes/login.ts:34"
+      ],
+      "primary_observation_id": "sequelize-injection.presentation:routes/login.ts:34",
+      "severity": "UNASSESSED",
+      "verification": "confirmed"
+    }
+  ],
+  "context_priority": {
+    "accuracy": null,
+    "assessed_cases": 0,
+    "assessed_coverage": null,
+    "correct_cases": 0,
+    "reviewed_cases": 0
+  },
+  "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_status": "frozen_a04",
+  "detection": {
+    "duplicates": 0,
+    "f1": 0.6,
+    "fn": 4,
+    "fp": 0,
+    "outside_ground_truth": 7,
+    "precision": 1.0,
+    "recall": 0.42857142857142855,
+    "tn": 6,
+    "tp": 3,
+    "unresolved": 0
+  },
+  "matches": [
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "model-scout-71a2526acad2e4e5b6b5"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "model-scout-3cb73957be76439ca7a1"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "model-scout-b2a320314db979f4f269"
+    },
+    {
+      "candidate_case_ids": [
+        "JS-SQL-002"
+      ],
+      "case_id": "JS-SQL-002",
+      "classification": "tp",
+      "observation_id": "sequelize-injection.presentation:routes/login.ts:34"
+    },
+    {
+      "candidate_case_ids": [
+        "JS-SQL-001"
+      ],
+      "case_id": "JS-SQL-001",
+      "classification": "tp",
+      "observation_id": "sequelize-injection.presentation:routes/search.ts:23"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:268"
+    },
+    {
+      "candidate_case_ids": [
+        "JS-FILE-001"
+      ],
+      "case_id": "JS-FILE-001",
+      "classification": "tp",
+      "observation_id": "directory-listing.presentation:server.ts:288"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:292"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:296"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:300"
+    }
+  ],
+  "sample_kind": "original",
+  "schema_version": "benchmark.score.v2",
+  "severity": {
+    "accuracy": null,
+    "assessed_cases": 0,
+    "assessed_coverage": 0.0,
+    "correct_cases": 0,
+    "reviewed_cases": 4
+  },
+  "split": "holdout",
+  "technical_errors": [],
+  "technically_valid": true,
+  "verification": {
+    "abstention_rate": 0.7692307692307693,
+    "abstention_reasons": {
+      "conflicting_evidence": 0,
+      "inconclusive": 0,
+      "invalid_evidence": 0,
+      "not_detected": 10,
+      "not_run": 0,
+      "policy_blocked": 0,
+      "technical_error": 0,
+      "timeout": 0,
+      "unsupported": 0
+    },
+    "answered_accuracy": 1.0,
+    "confirmed_precision": 1.0,
+    "counts": {
+      "abstained_cases": 10,
+      "confirmed_cases": 3,
+      "correct_confirmations": 3,
+      "correct_decisions": 3,
+      "correct_rejections": 0,
+      "decided_cases": 3,
+      "duplicates": 0,
+      "false_confirmations": 0,
+      "false_rejections": 0,
+      "labeled_cases": 13,
+      "negative_cases": 6,
+      "outside_ground_truth": 7,
+      "positive_cases": 7,
+      "rejected_cases": 0,
+      "unresolved": 0
+    },
+    "decision_coverage": 0.23076923076923078,
+    "false_confirmation_rate": 0.0,
+    "schema_version": "benchmark.verification.v2",
+    "supported_verified_recall": 0.42857142857142855
+  }
+}

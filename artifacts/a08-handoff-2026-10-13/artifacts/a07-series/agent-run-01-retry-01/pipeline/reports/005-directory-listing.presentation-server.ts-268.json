@@ -1,0 +1,262 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "directory-listing.presentation:server.ts:268",
+  "finding": {
+    "id": "directory-listing.presentation:server.ts:268",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "severity": "WARNING",
+    "service": "juice",
+    "file": "server.ts",
+    "line_start": 268,
+    "line_end": 268,
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "e09fb63979fa2dda6338e6e16c7fa598ab67c0162aa232ff3379b13d6e84ea82",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "1233c81d9d8ebc8d8cce47c4638e1c099d1112c90a1dbffd83f0ae4fcbcc91e8",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:268"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:268",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 268,
+          "line_end": 268,
+          "column_start": 52,
+          "column_end": 162,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  "status": "inconclusive",
+  "analysis_summary": "Code analysis of server.ts:268 reveals that serveIndex (directory listing with 'details' view) is registered on the /infrastructure route BEFORE verify.accessControlChallenges(). In Express, middleware executes in registration order, so if serveIndexMiddleware is a passthrough (calls next()), the directory listing responds before any access control is applied. The filter only excludes README.md, meaning all other files in the infrastructure directory (likely .tf, .yml, Dockerfile based on line 275) would be exposed with names, sizes, and timestamps. The service is publicly exposed with high criticality. However, runtime verification is blocked: /infrastructure is not in the allowed_endpoints for the juice sandbox service, and the previous source inspection only returned metadata (not the serveIndexMiddleware definition). The finding is a strong code-level risk signal but remains unconfirmed at runtime due to endpoint restrictions.",
+  "risk_signals": [
+    "serveIndex registered before access control middleware (line 268 before line 269) — if serveIndexMiddleware is passthrough, directory listing is unauthenticated",
+    "serveIndex view is 'details' exposing file names, sizes, and modification times",
+    "Filter only excludes README.md — all infrastructure files (.tf, .yml, Dockerfile) are listed",
+    "Service has public_exposure=true and criticality=high",
+    "infrastructure directory likely contains Terraform/YAML/Dockerfile with sensitive configuration",
+    "/infrastructure endpoint is NOT in sandbox allowed_endpoints, preventing runtime verification",
+    "Authentication is 'mixed' — unclear if this route requires auth",
+    "Blast radius is unknown but connected to database via critical path"
+  ],
+  "code_context": "  260:       }\n  261:       // @ts-expect-error FIXME passed argument has wrong type\n  262:       origEnd.apply(this, arguments)\n  263:     }\n  264:     next()\n  265:   }\n  266: \n  267:   /* /infrastructure directory browsing */\n  268:   app.use('/infrastructure', serveIndexMiddleware, serveIndex('infrastructure', { icons: true, view: 'details', filter: (filename) => filename !== 'README.md' }))\n  269:   app.use('/infrastructure', verify.accessControlChallenges())\n  270:   app.use('/infrastructure', (req: Request, res: Response, next: NextFunction) => {\n  271:     const filePath = path.resolve('infrastructure', path.normalize(req.path).replace(/^[\\\\/]+/, ''))\n  272:     if (!filePath.startsWith(path.resolve('infrastructure')) || filePath.endsWith('README.md')) {\n  273:       return res.status(403).end()\n  274:     }\n  275:     if (filePath.endsWith('.tf') || filePath.endsWith('.yml') || filePath.endsWith('Dockerfile')) {\n  276:       fs.readFile(filePath, 'utf8', (err, data) => {",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": true,
+    "criticality": "high",
+    "trust_zone": "application",
+    "connected_services": [
+      "database"
+    ],
+    "databases": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "authentication": "mixed",
+    "blast_radius": "unknown"
+  },
+  "hypothesis": "serveIndexMiddleware is a passthrough that calls next(), causing serveIndex to send the directory listing response before verify.accessControlChallenges() executes, making /infrastructure directory listing accessible without authentication.",
+  "hypothesis_confidence": 0.75,
+  "verification": {
+    "action_id": "action-directory-listing.presentation:server.ts:268-e90345d0fd929ff1-1",
+    "capability": "inspect_javascript_security",
+    "target": "juice-presentation",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 1,
+    "evidence_types": [
+      "javascript_source_metadata"
+    ],
+    "decision_basis": "workflow_state"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS."
+  },
+  "context_priority": {
+    "level": "HIGH",
+    "score": 7.0,
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evidence-380b75f118",
+      "action_id": "action-directory-listing.presentation:server.ts:268-e90345d0fd929ff1-1",
+      "type": "javascript_source_metadata",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-4cbd6258e05c4f3e87d1186390f0cc44.json",
+        "execution-4cbd6258e05c4f3e87d1186390f0cc44",
+        "audit:79ce4d041de241619ae79fa0c67ab7e0"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hypothesis-dir-listing-middleware-order",
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:268-e90345d0fd929ff1-1",
+        "tool": "inspect_javascript_security",
+        "run_id": "79ce4d041de241619ae79fa0c67ab7e0"
+      },
+      "observation": {
+        "kind": "javascript_source_metadata",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "line": 268,
+            "check": "source_metadata",
+            "file": "server.ts",
+            "total_lines": 813,
+            "source_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+            "runtime_verified": false,
+            "values_redacted": true
+          }
+        },
+        "captured_at": "2026-10-13T11:05:14.509005Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": null,
+        "description": "source_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-4cbd6258e05c4f3e87d1186390f0cc44.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-4cbd6258e05c4f3e87d1186390f0cc44",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:79ce4d041de241619ae79fa0c67ab7e0",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:05:14.509005Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:268-e90345d0fd929ff1-1",
+      "capability": "inspect_javascript_security",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1502,
+      "command": [
+        "inspect_javascript_security",
+        "--artifact-id",
+        "source-1ba718c1eb8aa39c",
+        "--line",
+        "268",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":268,\"check\":\"source_metadata\",\"file\":\"server.ts\",\"total_lines\":813,\"source_sha256\":\"1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b\",\"runtime_verified\":false,\"values_redacted\":true}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-4cbd6258e05c4f3e87d1186390f0cc44.json"
+      ]
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:268-e90345d0fd929ff1-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "continue",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-380b75f118"
+      ],
+      "plan_id": "plan-directory-listing.presentation:server.ts:268-1",
+      "stop_reason": null,
+      "recorded_at": "2026-10-13T11:05:14.509005Z"
+    },
+    {
+      "step": 1,
+      "outcome": "stop",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "evidence_ids": [
+        "evidence-380b75f118"
+      ],
+      "plan_id": "plan-directory-listing.presentation:server.ts:268-1",
+      "stop_reason": "insufficient_evidence",
+      "recorded_at": "2026-10-13T11:05:34.167697Z"
+    }
+  ],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "directory-listing.presentation:server.ts:268: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 1,
+  "stop_reason": "insufficient_evidence"
+}

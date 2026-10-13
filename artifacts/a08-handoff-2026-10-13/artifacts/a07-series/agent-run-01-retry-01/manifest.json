@@ -1,0 +1,80 @@
+{
+  "action_proposal_count": 12,
+  "agent_iterations": 12,
+  "artifact_redactions": [
+    {
+      "count": 1,
+      "file": "pipeline/reports/000-model-scout-71a2526acad2e4e5b6b5.json",
+      "pattern": "complete PEM private-key block",
+      "reason": "target-embedded private-key fixture; preserve report structure while excluding key material"
+    }
+  ],
+  "attempt_id": "agent-run-01-retry-01-20261013T105848Z",
+  "cleanup": {
+    "containers": {
+      "exit_code": 0,
+      "remaining": []
+    },
+    "networks": {
+      "exit_code": 0,
+      "remaining": []
+    },
+    "volumes": {
+      "exit_code": 0,
+      "remaining": []
+    }
+  },
+  "configuration_digest": "d4847b45ebc0b5dec99e391823c3a0a5284aa3570d4065f00740c13483e17e5a",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+  "duration_seconds": 536.531,
+  "evidence_outcomes": {
+    "confirmed": 4,
+    "inconclusive": 8
+  },
+  "executor_action_count": 12,
+  "fallback_count": 0,
+  "fallback_reasons": [],
+  "finished_at": "2026-10-13T11:07:45.239286+00:00",
+  "fresh_artifact_directory": true,
+  "fresh_evaluator_session": true,
+  "fresh_target_reset": true,
+  "llm_failure_count": 0,
+  "llm_request_count": 46,
+  "llm_success_count": 46,
+  "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "model_configuration": {
+    "base_url": "https://deepcode.ci.nsu.ru/api",
+    "fallback": "existing_deterministic_adapter_fallback_logged_not_a_model_response",
+    "model": "Qwen3.8-27B",
+    "protocol": "openai",
+    "provider": "nsu",
+    "request_seed": "not_sent_provider_nondeterminism_retained",
+    "response_format": "json_object",
+    "stream": false,
+    "temperature": 0.1
+  },
+  "original_target_integrity": true,
+  "pipeline_exit_code": 1,
+  "policy_block_count": 0,
+  "project_commit": "d7fb6e913e6da923314cf71d4a8e7124ea22b1aa",
+  "retry_count": 0,
+  "retry_of": "agent-run-01",
+  "run_id": "agent-run-01-retry-01",
+  "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+  "schema_version": "a07.agent-run.v1",
+  "scout_iterations": null,
+  "snapshot": {
+    "dataset": {
+      "id": "juice-shop-v20.2.0-v2"
+    }
+  },
+  "started_at": "2026-10-13T10:58:48.707467+00:00",
+  "status": "completed",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+  "technical_errors": 0,
+  "timeout_count": 0,
+  "validator_allowed_count": 12,
+  "validator_denied_count": 0
+}
