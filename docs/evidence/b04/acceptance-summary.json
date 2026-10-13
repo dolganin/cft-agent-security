@@ -1,0 +1,31 @@
+{
+  "base_commit": "b05b3e7",
+  "branch": "access-control-fixtures",
+  "fixture_id": "fixture-d2578c17bf95423aa56c3149e5112923",
+  "status": "passed",
+  "generations": [
+    "4aac3b8c54154ead",
+    "10aa79681a624f9f"
+  ],
+  "roles_per_generation": 2,
+  "owned_objects_per_generation": 5,
+  "prepare_http_exchanges": 39,
+  "full_control_http_exchanges": 25,
+  "lost_session": "inconclusive",
+  "changed_identity": "inconclusive",
+  "repeatable_baselines": true,
+  "stale_handles_blocked": true,
+  "cleanup_complete": true,
+  "original_unchanged": true,
+  "secret_material_in_artifacts": false,
+  "secret_check_scope": "Typed contracts plus forbidden-key/JWT-shape inspection, not a universal secret scanner",
+  "tests_passed": 986,
+  "tests_skipped": 21,
+  "tests_failed": 0,
+  "b04_tests_passed": 42,
+  "ruff": "passed",
+  "app_main": "passed",
+  "archive": "access-fixture-acceptance.zip",
+  "archive_sha256": "57f4c72488393b0441e3fac8e39143ddcf8b91884e4e44052fd5bbc6e0c12987",
+  "kind": "B04 operator fixture acceptance, not a vulnerability benchmark or B05 verdict"
+}
