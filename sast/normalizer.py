@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from sast.identity import deduplicate_findings, normalize_finding
 from schemas.finding import Finding, FindingObservation
@@ -23,7 +23,15 @@ def normalize_semgrep_result(
     original_path = str(raw.get("path", ""))
     path = original_path
     if scanner_root is not None and path.startswith("/"):
-        path = normalize_source_path(path, scanner_root)
+        # A Docker mount root is a POSIX namespace even when the host is Windows.
+        # Never resolve it through the host filesystem or silently strip any root.
+        mount = PurePosixPath(scanner_root)
+        if not mount.is_absolute() or ".." in mount.parts:
+            raise ValueError("Scanner root must be a trusted absolute POSIX path")
+        try:
+            path = PurePosixPath(path).relative_to(mount).as_posix()
+        except ValueError as exc:
+            raise ValueError("Source path is outside the trusted scanner root") from exc
     path = normalize_source_path(path, repository_root)
     line_start = start.get("line")
     stable_location = line_start if line_start is not None else 0

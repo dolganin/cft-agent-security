@@ -299,6 +299,13 @@ class PolicyValidator:
             line = action.parameters.get("line")
             if artifact is None or artifact.kind != "javascript" or type(line) is not int or not 1 <= line <= 100_000:
                 return "Invalid bound source artifact or line", "target_artifact_denied"
+            if profile.verification_routes or action.verification_binding is not None:
+                from security.verification_binding import validate_action_binding
+                try:
+                    validate_action_binding(profile, action)
+                except (OSError, ValueError) as exc:
+                    return str(exc), "verification_binding_denied"
+                return None
             key = f"verification.{artifact.relative_path}:{line}"
             expected_check = profile.metadata.get(key + ".check", "source_metadata") if profile else None
             if action.parameters.get("check") != expected_check:

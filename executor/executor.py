@@ -589,6 +589,21 @@ class SafeExecutor:
         except ValueError as exc:
             return self._finish(action, run_id, started, status="denied", exit_code=126, stderr=str(exc), decision_reason=str(exc), session_id=session_id)
 
+        if (action.verification_binding is not None or target.verification_routes) and action.tool in {
+            "verify_sql_injection", "verify_sensitive_directory", "inspect_javascript_security"
+        }:
+            from security.verification_binding import validate_action_binding
+            try:
+                binding = validate_action_binding(target, action)
+                runtime = self._active_runtime_services
+                if (runtime is None or runtime.source_files_sha256 != binding.source_files
+                        or session_id != runtime.session_id):
+                    raise ValueError("Verification snapshot does not match the managed runtime session")
+            except (OSError, ValueError) as exc:
+                return self._finish(action, run_id, started, status="denied", exit_code=126,
+                                    stderr=str(exc), decision_reason="Verification binding denied",
+                                    session_id=session_id)
+
         try:
             handler = self._registry.get(action.tool)
         except KeyError:
@@ -723,6 +738,14 @@ class SafeExecutor:
         finally:
             self._run_limiter.release()
 
+        if action.verification_binding is not None:
+            from security.verification_binding import validate_action_binding
+            try:
+                validate_action_binding(target, action)
+            except (OSError, ValueError) as exc:
+                return self._finish(action, run_id, started, status="failed", exit_code=2,
+                                    stderr=str(exc), decision_reason="Source changed during verification",
+                                    session_id=session_id)
         stdout = sandbox_result.stdout
         stderr = sandbox_result.stderr
         if action.tool in {"sandbox_command", "fix_target_stage"}:
@@ -847,6 +870,9 @@ class SafeExecutor:
             "tool": action.tool,
             "target": action.target,
             "action_digest": proposal_digest(action),
+            "verification_binding": (action.verification_binding.model_dump(mode="json")
+                                     if action.verification_binding else None),
+            "endpoint": action.endpoint,
             "status": status,
             "exit_code": exit_code,
             "stdout": stdout,

@@ -58,3 +58,4 @@ class RuntimeServiceMap(BaseModel):
     network_name: str | None = None
     services: dict[str, RuntimeService] = Field(default_factory=dict)
     diagnostics: list[RuntimeServiceDiagnostic] = Field(default_factory=list)
+    source_files_sha256: dict[str, str] = Field(default_factory=dict)

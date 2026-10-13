@@ -207,6 +207,14 @@ ci-summary.json
 
 ## Проверки проекта
 
+B01: [надёжная связь source/handler/endpoint и approval](docs/b01-reliable-verification-binding.md).
+Новый операторский профиль — `targets/juice-verification.yaml`; исторический
+профиль A остаётся замороженным. Реальная Docker-приёмка без LLM:
+
+```bash
+python -m app.binding_acceptance --output artifacts/b01/new-attempt
+```
+
 Сопоставимые scanner baseline для Juice Shop (A06): отдельные Semgrep community
 rules и OWASP ZAP в изолированной Docker lab, сырые результаты и экспорт для A05.
 Подготовка, бюджеты и ограничения описаны в [A06](docs/a06-scanner-baselines.md).

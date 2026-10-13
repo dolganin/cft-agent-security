@@ -9,6 +9,7 @@ from schemas.finding import FindingProvenance
 from schemas.pipeline import FindingGateEffect, GateCategory
 from schemas.pr import PRFindingContext
 from schemas.scoring import ContextPriority, CVSSResult
+from schemas.verification_binding import BindingResolution
 
 ReportStatus = Literal["confirmed", "rejected", "inconclusive", "policy_blocked"]
 DecisionBasis = Literal[
@@ -107,6 +108,7 @@ class FinalReport(BaseModel):
     next_step: str
     iterations: int = 0
     stop_reason: AgentStopReason | None = None
+    binding_resolution: BindingResolution | None = None
 
     @model_validator(mode="after")
     def require_matching_finding(self):

@@ -181,7 +181,22 @@ class DeterministicAgentModel:
         analysis: AnalysisResult,
         hypothesis: Hypothesis,
     ) -> DynamicPlan:
-        action = self.propose_action(state, analysis, hypothesis)
+        if state.get("target_profile") and state["target_profile"].verification_routes:
+            from agent.verification import verification_candidates
+            candidates = verification_candidates(state)
+            if not candidates:
+                raise ValueError("No unique available operator verification remains")
+            candidate = candidates[0]
+            action = ActionProposal(
+                id=_build_action_id(state["finding"].id, int(state.get("iteration_count", 0)) + 1),
+                target=state["target_profile"].id, environment=state["target_profile"].environment,
+                tool=candidate["tool"], parameters=candidate["parameters"],
+                purpose=candidate["purpose"], expected_evidence=hypothesis.expected_evidence,
+                service=candidate["service"], endpoint=candidate["endpoint"],
+                verification_binding=candidate["verification_binding"],
+            )
+        else:
+            action = self.propose_action(state, analysis, hypothesis)
         runtime_services = state.get("runtime_services")
         return DynamicPlan(
             id=_build_plan_id(state["finding"].id, action.iteration),

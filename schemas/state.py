@@ -16,12 +16,14 @@ from schemas.runtime import RuntimeServiceMap
 from schemas.scoring import ContextPriority, CVSSResult
 from schemas.target import TargetProfile
 from schemas.validation import ValidationResult
+from schemas.verification_binding import BindingResolution
 
 
 class AgentState(TypedDict, total=False):
     project_discovery: ProjectDiscoveryResult | None
     target_profile: TargetProfile
     runtime_services: RuntimeServiceMap
+    binding_resolution: BindingResolution
     finding: Finding
     code_context: str | None
     architecture_context: ArchitectureContext | None

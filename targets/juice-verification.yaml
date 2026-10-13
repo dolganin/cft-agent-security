@@ -1,0 +1,144 @@
+id: juice-verification
+name: Juice Shop | B01 operator verification
+repository_path: artifacts/presentation-2026-10-08/juice-shop
+environment: sandbox
+architecture:
+  file: targets/juice-presentation-architecture.yaml
+runtime:
+  type: docker_compose
+  compose_file: docker-compose.presentation.yml
+services:
+  juice:
+    type: node
+    root: .
+    dependency_files:
+    - package.json
+    compose_service: juice
+    internal_port: 3000
+    healthcheck:
+      path: /
+    runtime_endpoints:
+    - /
+    - /rest/products/search
+    - /rest/user/login
+    - /ftp
+    - /.well-known
+    - /encryptionkeys
+    - /support/logs
+metadata:
+  demo.scope: Selected SQL interpolation and directory-listing rules plus bounded
+    source exploration; not a full benchmark
+  demo.target_version: 20.2.0
+  demo.target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false
+verification_routes:
+- id: juice-search
+  handler_id: juice.searchProducts
+  family: sql-injection
+  service: juice
+  endpoint: /rest/products/search
+  method: GET
+  tool: verify_sql_injection
+  check: sql_interpolation
+  mode: search
+  registration: &id001
+    file: server.ts
+    anchor: app.get('/rest/products/search', utils.asyncHandler(searchProducts()))
+  sources:
+  - file: routes/search.ts
+    anchor: export function searchProducts () {
+    extent: function
+  - *id001
+- id: juice-login
+  handler_id: juice.login
+  family: sql-injection
+  service: juice
+  endpoint: /rest/user/login
+  method: POST
+  tool: verify_sql_injection
+  check: sql_interpolation
+  mode: authentication
+  registration: &id002
+    file: server.ts
+    anchor: app.post('/rest/user/login', login())
+  sources:
+  - file: routes/login.ts
+    anchor: export function login () {
+    extent: function
+  - *id002
+- id: juice-directory-ftp
+  handler_id: juice.directory.ftp
+  family: file-exposure
+  service: juice
+  endpoint: /ftp
+  method: GET
+  tool: verify_sensitive_directory
+  check: source_metadata
+  registration: &id003
+    file: server.ts
+    anchor: 'app.use(''/ftp'', serveIndexMiddleware, serveIndex(''ftp'', { icons:
+      true }))'
+  sources:
+  - *id003
+  - file: server.ts
+    anchor: 'const serveIndexMiddleware = (req: Request, res: Response, next: NextFunction)
+      => {'
+    extent: function
+- id: juice-directory-well-known
+  handler_id: juice.directory..well-known
+  family: file-exposure
+  service: juice
+  endpoint: /.well-known
+  method: GET
+  tool: verify_sensitive_directory
+  check: source_metadata
+  registration: &id004
+    file: server.ts
+    anchor: 'app.use(''/.well-known'', serveIndexMiddleware, serveIndex(''.well-known'',
+      { icons: true, view: ''details'' }))'
+  sources:
+  - *id004
+  - file: server.ts
+    anchor: 'const serveIndexMiddleware = (req: Request, res: Response, next: NextFunction)
+      => {'
+    extent: function
+- id: juice-directory-encryptionkeys
+  handler_id: juice.directory.encryptionkeys
+  family: file-exposure
+  service: juice
+  endpoint: /encryptionkeys
+  method: GET
+  tool: verify_sensitive_directory
+  check: source_metadata
+  registration: &id005
+    file: server.ts
+    anchor: 'app.use(''/encryptionkeys'', serveIndexMiddleware, serveIndex(''encryptionkeys'',
+      { icons: true, view: ''details'' }))'
+  sources:
+  - *id005
+  - file: server.ts
+    anchor: 'const serveIndexMiddleware = (req: Request, res: Response, next: NextFunction)
+      => {'
+    extent: function
+- id: juice-directory-support-logs
+  handler_id: juice.directory.support/logs
+  family: file-exposure
+  service: juice
+  endpoint: /support/logs
+  method: GET
+  tool: verify_sensitive_directory
+  check: source_metadata
+  registration: &id006
+    file: server.ts
+    anchor: 'app.use(''/support/logs'', serveIndexMiddleware, serveIndex(''logs'',
+      { icons: true, view: ''details'' }))'
+  sources:
+  - *id006
+  - file: server.ts
+    anchor: 'const serveIndexMiddleware = (req: Request, res: Response, next: NextFunction)
+      => {'
+    extent: function

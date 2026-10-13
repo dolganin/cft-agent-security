@@ -1,0 +1,60 @@
+{
+  "base_commit": "bc1bb6b",
+  "branch": "reliable-verification-binding",
+  "attempt_id": "b01-841ff6a8ce47",
+  "status": "passed",
+  "real_runtime_checks": [
+    {
+      "stage": "original",
+      "finding": "search",
+      "verdict": "confirmed",
+      "snapshot": "549c7f552d22e68ed7b4ce3345ae8deea8f939bdb10a8c6a935ec475b4368557"
+    },
+    {
+      "stage": "original",
+      "finding": "login",
+      "verdict": "confirmed",
+      "snapshot": "549c7f552d22e68ed7b4ce3345ae8deea8f939bdb10a8c6a935ec475b4368557"
+    },
+    {
+      "stage": "original",
+      "finding": "ftp",
+      "verdict": "confirmed",
+      "snapshot": "549c7f552d22e68ed7b4ce3345ae8deea8f939bdb10a8c6a935ec475b4368557"
+    },
+    {
+      "stage": "shifted",
+      "finding": "search",
+      "verdict": "confirmed",
+      "snapshot": "46803be8135c7838dc335ccdfb1ba7f517ec344dd458e760c790c812123c130d"
+    },
+    {
+      "stage": "shifted",
+      "finding": "login",
+      "verdict": "confirmed",
+      "snapshot": "46803be8135c7838dc335ccdfb1ba7f517ec344dd458e760c790c812123c130d"
+    },
+    {
+      "stage": "shifted",
+      "finding": "ftp",
+      "verdict": "confirmed",
+      "snapshot": "46803be8135c7838dc335ccdfb1ba7f517ec344dd458e760c790c812123c130d"
+    }
+  ],
+  "cleanup_complete": true,
+  "original_unchanged": true,
+  "approved_action_digests_verified": true,
+  "raw_source_snapshot_digests_verified": true,
+  "archive": "binding-acceptance.zip",
+  "archive_sha256": "79fe3682142728f04cc51a852af257c962e97e1510797c989f2e329b5319588a",
+  "tests_passed": 944,
+  "tests_skipped": 21,
+  "tests_failed": 0,
+  "ruff": "passed",
+  "app_main": "passed",
+  "images": {
+    "target": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+    "worker": "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7"
+  },
+  "kind": "B01 binding acceptance, not a new benchmark measurement"
+}

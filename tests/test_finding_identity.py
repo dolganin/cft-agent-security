@@ -259,8 +259,11 @@ def test_provenance_reaches_report_and_public_api_without_host_path(tmp_path):
     assert restored.finding.provenance == finding.provenance
     reader = SimpleNamespace(_require_completed=lambda _: None, store=SimpleNamespace(report_path=lambda *_: saved))
     public = RunOrchestrator.get_report(reader, "r1", finding.id)
-    assert str(tmp_path) not in public.finding.provenance.model_dump_json()
-    assert str(tmp_path) in saved.read_text()
+    assert all(str(tmp_path) not in value for value in public.finding.provenance.aliases)
+    assert all(str(tmp_path) not in item.original_file and str(tmp_path) not in item.source_id
+               for item in public.finding.provenance.observations)
+    # Compare decoded values: JSON escapes Windows backslashes in its raw text.
+    assert json.loads(saved.read_text())["finding"]["provenance"]["observations"][0]["original_file"] == str(path)
 
 
 def test_api_store_migrates_old_table_and_preserves_public_provenance(tmp_path):

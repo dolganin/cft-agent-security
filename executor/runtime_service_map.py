@@ -188,7 +188,16 @@ class RuntimeServiceMapBuilder:
                 services[service.id] = RuntimeService(name=service.id, type=service.type, address=address, request_host=service.request_host, ready=True, readiness_source="http_probe", allowed_endpoints=endpoints, diagnostic=result.diagnostic)
             else:
                 diagnostics.append(RuntimeServiceDiagnostic(name=service.id, diagnostic=result.diagnostic))
-        return RuntimeServiceMap(session_id=session.session_id, network_name=network_name, services=services, diagnostics=diagnostics)
+        source_files = {}
+        if profile.verification_routes:
+            from security.verification_binding import source_snapshot
+            try:
+                _, source_files = source_snapshot(profile)
+            except (OSError, ValueError) as exc:
+                diagnostics.append(RuntimeServiceDiagnostic(name="source_snapshot", diagnostic=str(exc)))
+        return RuntimeServiceMap(session_id=session.session_id, network_name=network_name,
+                                 services=services, diagnostics=diagnostics,
+                                 source_files_sha256=source_files)
 
     def _fallback_probe(self, network_name: str | None, address: str, request_host: str | None, endpoints: list[str]) -> ProbeResult:
         if self.probe is not None:

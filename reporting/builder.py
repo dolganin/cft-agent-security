@@ -153,6 +153,7 @@ def build_final_report(state: AgentState) -> FinalReport:
         next_step=_NEXT_STEPS[status],
         iterations=int(state.get("iteration_count", 0)),
         stop_reason=state.get("stop_reason"),
+        binding_resolution=state.get("binding_resolution"),
     )
 
 

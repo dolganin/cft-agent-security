@@ -172,6 +172,21 @@ def _structured_capability_evidence(
     if str(record.get("status")) != "completed" or int(record.get("exit_code", 1)) != 0:
         return None
 
+    if action.verification_binding is not None:
+        from executor.approvals import proposal_digest
+        if (record.get("verification_binding") != action.verification_binding.model_dump(mode="json")
+                or record.get("action_digest") != proposal_digest(action)
+                or record.get("endpoint") != action.endpoint
+                or record.get("session_id") != sandbox_session_id):
+            return _evidence(
+                action=action, execution=execution, evidence_type=evidence_type,
+                summary="Persisted snapshot/endpoint/approval binding did not match the action.",
+                facts={"verification_binding_valid": False},
+                scope_description="source snapshot binding mismatch", artifact_refs=artifact_refs,
+                reliability="low", verdict="inconclusive", hypothesis_id=hypothesis_id,
+                sandbox_session_id=sandbox_session_id,
+            )
+
     try:
         payload = result_model.model_validate_json(str(record.get("stdout", "")))
     except (ValidationError, json.JSONDecodeError, TypeError, ValueError):
@@ -208,6 +223,9 @@ def _structured_capability_evidence(
         for key, value in data.items()
         if key not in {"verdict", "explanation", "scope"}
     }
+    if action.verification_binding is not None:
+        facts["verification_binding"] = record["verification_binding"]
+        facts["approved_action_digest"] = record["action_digest"]
     return _evidence(
         action=action,
         execution=execution,

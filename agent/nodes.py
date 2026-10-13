@@ -150,6 +150,24 @@ def form_hypothesis(state: AgentState) -> dict:
 
 def propose_action(state: AgentState) -> dict:
     check_cancelled()
+    profile = state.get("target_profile")
+    if profile is not None and profile.verification_routes:
+        from security.verification_binding import resolve_binding
+        resolution = resolve_binding(profile, state["finding"])
+        from agent.verification import verification_candidates
+        if resolution.status != "bound" or not verification_candidates(state):
+            return {
+                "binding_resolution": resolution, "status": "inconclusive",
+                "stop_reason": "insufficient_evidence",
+                "decision_history": [*state.get("decision_history", []), AgentDecisionRecord(
+                    step=int(state.get("iteration_count", 0)), outcome="stop",
+                    reason=("Source/endpoint binding inconclusive: " + resolution.reason
+                            if resolution.status != "bound" else
+                            "Mapped runtime unavailable or its bound action already attempted"),
+                    evidence_ids=[item.id for item in state.get("evidence", [])],
+                    stop_reason="insufficient_evidence",
+                )],
+            }
     model = get_agent_model()
     if settings.agent_mode == "llm":
         from agent.llm_model import _allowed_plan_candidates, _has_javascript_artifact
@@ -176,11 +194,26 @@ def propose_action(state: AgentState) -> dict:
         state["analysis"],
         state["hypothesis"],
     )
+    if profile is not None and profile.verification_routes:
+        # The provider chooses a public candidate ID, never its provenance.
+        # Attach only the exact application-owned candidate selected by scope/argv.
+        candidates = verification_candidates(state)
+        for step in plan.steps:
+            action = step.action
+            matches = [c for c in candidates if (
+                action.tool == c["tool"] and action.parameters == c["parameters"]
+                and action.service == c["service"] and action.endpoint == c["endpoint"])]
+            if len(matches) != 1:
+                return {"binding_resolution": resolution, "status": "inconclusive",
+                        "stop_reason": "insufficient_evidence"}
+            step.action = action.model_copy(update={
+                "verification_binding": matches[0]["verification_binding"]})
     plan_validation = DynamicPlanValidator().validate(plan, state)
     proposal = plan.steps[0].action
 
     return {
         "dynamic_plan": plan,
+        "binding_resolution": (resolution if profile is not None and profile.verification_routes else None),
         "plan_history": [*state.get("plan_history", []), plan],
         "plan_validation": plan_validation,
         "proposed_action": proposal,

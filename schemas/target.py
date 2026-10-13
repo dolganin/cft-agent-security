@@ -8,6 +8,8 @@ from urllib.parse import urljoin, urlsplit
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from schemas.verification_binding import VerificationRoute
+
 _REQUEST_HOST = re.compile(r"^(?:[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?|\[[0-9A-Fa-f:.]+\])(?::([0-9]{1,5}))?$")
 IMMUTABLE_IMAGE_ID = re.compile(r"^sha256:[a-f0-9]{64}$")
 REPOSITORY_DIGEST = re.compile(r"^[^\s@]+@sha256:[a-f0-9]{64}$")
@@ -233,6 +235,7 @@ class TargetProfile(BaseModel):
     constraints: TargetConstraints = Field(default_factory=TargetConstraints)
     metadata: dict[str, str] = Field(default_factory=dict)
     fix_verification: TargetFixConfig | None = None
+    verification_routes: list[VerificationRoute] = Field(default_factory=list, max_length=64)
 
     @model_validator(mode="before")
     @classmethod
@@ -295,6 +298,20 @@ class TargetProfile(BaseModel):
 
     @model_validator(mode="after")
     def validate_mapping_keys(self) -> TargetProfile:
+        if len({route.id for route in self.verification_routes}) != len(self.verification_routes):
+            raise ValueError("Verification route ids must be unique")
+        for route in self.verification_routes:
+            service = self.services.get(route.service)
+            if service is None or route.endpoint not in service.runtime_endpoints:
+                raise ValueError("Verification route must use an operator-allowed endpoint")
+            if (route.tool == "verify_sql_injection" and (
+                route.check != "sql_interpolation" or route.family != "sql-injection"
+                or (route.mode, route.method) not in {("search", "GET"), ("authentication", "POST")}
+            )) or (route.tool == "verify_sensitive_directory" and (
+                route.check != "source_metadata" or route.family != "file-exposure"
+                or route.mode is not None or route.method != "GET"
+            )):
+                raise ValueError("Verification route capability/method contract mismatch")
         if any(key != service.id for key, service in self.services.items()):
             raise ValueError("Target service mapping key must match service id")
         if any(key != artifact.id for key, artifact in self.artifacts.items()):

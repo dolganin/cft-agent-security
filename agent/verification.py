@@ -6,6 +6,7 @@ from pathlib import Path
 from discovery.scout import rule_family
 from schemas.target import TargetArtifact
 from security.source_paths import normalize_source_path
+from security.verification_binding import resolve_binding
 
 
 def register_source_artifacts(profile, findings, repository):
@@ -42,12 +43,34 @@ def verification_candidates(state):
         file = normalize_source_path(finding.file, profile.repository_path)
     except ValueError:
         return []
-    artifact = next((a for a in profile.artifacts.values()
-                     if a.kind == "javascript" and a.relative_path == file), None)
-    if artifact is None:
+    artifacts = [a for a in profile.artifacts.values()
+                 if a.kind == "javascript" and a.relative_path == file]
+    if len(artifacts) != 1:
         return []
+    artifact = artifacts[0]
     candidates = []
     family = rule_family(finding.rule_id)
+    if profile.verification_routes:
+        resolution = resolve_binding(profile, finding)
+        if resolution.binding is None:
+            return []
+        binding = resolution.binding
+        runtime = state.get("runtime_services")
+        service = runtime.services.get(binding.service) if runtime else None
+        if not service or not service.ready or binding.endpoint not in service.allowed_endpoints:
+            return []
+        parameters = {"artifact_id": artifact.id, "line": binding.line_start, "check": binding.check}
+        if binding.mode is not None:
+            parameters["mode"] = binding.mode
+        candidate = {
+            "candidate_id": "runtime:" + binding.route_id, "tool": binding.tool,
+            "parameters": parameters, "service": binding.service, "endpoint": binding.endpoint,
+            "verification_binding": binding,
+            "purpose": "Verify the unique operator-mapped handler/endpoint in its source snapshot.",
+        }
+        if any(r.action.verification_binding == binding for r in state.get("action_history", [])):
+            return []
+        return [candidate]
     # These bindings belong to the operator's trusted profile, not model guesses.
     key = f"verification.{file}:{finding.line_start}"
     endpoint = profile.metadata.get(key + ".endpoint")

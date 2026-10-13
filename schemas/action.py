@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
 
+from schemas.verification_binding import VerificationBinding
+
 
 class ActionProposal(BaseModel):
     # Это запрос на проверку; право на выполнение появляется только после валидатора
@@ -13,3 +15,4 @@ class ActionProposal(BaseModel):
     expected_evidence: str
     service: str | None = None
     endpoint: str | None = None
+    verification_binding: VerificationBinding | None = None

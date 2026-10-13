@@ -1017,3 +1017,27 @@ requires repository digests. See `docs/k01-environment-passport.md`.
 `docs/r01-verification-specifications.md` and `contracts/examples/r01/` define
 future capability acceptance criteria and synthetic examples, NOT newly enabled
 tools or runtime Evidence. They cannot expand target or execution permissions.
+
+---
+
+# 26. B01 operator verification binding
+
+Stage B uses `targets/juice-verification.yaml` and its typed `verification_routes`.
+Keep historical A01–A08 profiles, settings and locks unchanged. Routes/handler IDs
+and caller/helper selectors are operator inputs, never model-generated permission.
+`security/verification_binding.py` resolves canonical paths and actual TypeScript/TSX
+AST ranges, rejects ambiguity as inconclusive and only relocates an archived finding
+through its unique exact read anchor. Never choose the first ambiguous route.
+
+`ActionProposal.verification_binding` is application-owned provenance. Validator
+and Executor recompute it; approval covers it. RuntimeServiceMap binds the source
+inventory of the managed session. Source/map mutations or a snapshot mismatch
+must not produce confirmed/rejected Evidence. Persisted Evidence binds the approved
+action digest, snapshot and endpoint; FinalReport exposes binding diagnostics.
+This is not independent binary/source attestation or permission to expand scope.
+
+`python -m app.binding_acceptance --output <new-directory>` is the fixed opt-in
+Docker acceptance: existing search/login SQL and FTP capabilities, before/after
+line insertion, immutable target, raw source snapshots, audit and cleanup checks.
+No target code runs on the host and no LLM is required. Scope, test results and
+B01 limitations are in `docs/b01-reliable-verification-binding.md`.
