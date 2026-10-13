@@ -1,8 +1,8 @@
 """Bounded A07 orchestration around the canonical CI pipeline and A05 scorer.
 
 This module does not implement detection or matching. It freezes existing inputs,
-runs one fresh CI pipeline attempt at a time, seals its outputs, and invokes the
-existing offline v2 scorer only after the raw run bundle is immutable.
+runs one fresh CI pipeline attempt at a time and seals its outputs for the
+existing offline v2 scorer. Scoring and series aggregation are separate steps.
 """
 
 from __future__ import annotations
@@ -50,8 +50,33 @@ def write_json(path: Path, value: Any) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def command(argv: list[str], *, cwd: Path = ROOT, timeout: int = 120) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(argv, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout, check=False)
+def command(argv: list[str], *, cwd: Path = ROOT, timeout: int = 120,
+            env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(argv, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout, check=False, env=env)
+
+
+def producer_environment(config: dict[str, Any]) -> dict[str, str]:
+    """Apply frozen non-secret settings; credentials remain operator-owned."""
+    env = os.environ.copy()
+    for key, value in config["agent"]["settings"].items():
+        if not re.fullmatch(r"[a-z][a-z0-9_]*", key) or not isinstance(value, (str, int, float, bool)):
+            raise ValueError("Invalid frozen producer setting")
+        env[f"CFT_{key.upper()}"] = str(value).lower() if isinstance(value, bool) else str(value)
+    env["CFT_POLICY_FILE"] = str(ROOT / config["agent"]["policy"])
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    return env
+
+
+def llm_statistics(attempts: list[dict[str, Any]]) -> dict[str, int]:
+    # ProviderFailoverClient uses request_failed/auth_or_access/schema_validation_failed,
+    # not just the generic error/failed names. Fallback is not a successful model call.
+    return {
+        "llm_request_count": sum(item.get("status") != "fallback" for item in attempts),
+        "llm_success_count": sum(item.get("status") == "ok" for item in attempts),
+        "llm_failure_count": sum(item.get("status") not in {"ok", "fallback"} for item in attempts),
+        "timeout_count": sum("timeout" in str(item.get("status", "")) for item in attempts),
+        "fallback_count": sum(item.get("status") == "fallback" for item in attempts),
+    }
 
 
 def git(*args: str) -> str:
@@ -345,8 +370,8 @@ def _jsonl(path: Path) -> list[dict[str, Any]]:
 
 def run_one(name: str) -> dict[str, Any]:
     config = verify_freeze()
-    if not re.fullmatch(r"agent-run-01(?:-retry-[0-9]{2})?", name):
-        raise ValueError("run name must be agent-run-01 or agent-run-01-retry-NN")
+    if not re.fullmatch(r"agent-run-0[123](?:-retry-[0-9]{2})?", name):
+        raise ValueError("run name must be agent-run-01..03, optionally with -retry-NN")
     run_root = ARTIFACTS / name
     if run_root.exists():
         raise FileExistsError(f"Refusing to overwrite existing A07 attempt: {run_root}")
@@ -360,7 +385,7 @@ def run_one(name: str) -> dict[str, Any]:
         "schema_version": "a07.agent-run.v1",
         "run_id": name,
         "attempt_id": attempt_id,
-        "retry_of": "agent-run-01" if "-retry-" in name else None,
+        "retry_of": name.split("-retry-")[0] if "-retry-" in name else None,
         "status": "running",
         "started_at": started.isoformat(),
         "project_commit": config["project"]["commit"],
@@ -381,16 +406,16 @@ def run_one(name: str) -> dict[str, Any]:
     argv = [
         sys.executable, "-m", "app.ci_pipeline", "--target", str(TARGET),
         "--profile", str(PROFILE), "--sast-config", str(ROOT / "docs" / "demo" / "semgrep.yaml"),
-        "--output-dir", str(pipeline), "--agent-mode", "llm", "--max-iterations", "2",
+        "--output-dir", str(pipeline), "--agent-mode", "llm", "--max-iterations", str(config["agent"]["max_iterations"]),
     ]
-    result = command(argv, timeout=7200)
+    result = command(argv, timeout=7200, env=producer_environment(config))
     (run_root / "runner.stdout.log").write_text(result.stdout, encoding="utf-8")
     (run_root / "runner.stderr.log").write_text(result.stderr, encoding="utf-8")
     duration = time.monotonic() - start_clock
     finished = datetime.now(UTC)
     attempts = _jsonl(pipeline / "audit" / "llm-attempts.jsonl")
-    successes = sum(item.get("status") == "ok" for item in attempts)
-    failures = sum(item.get("status") in {"error", "failed", "unavailable", "timeout"} for item in attempts)
+    statistics = llm_statistics(attempts)
+    successes = statistics["llm_success_count"]
     traces = list((pipeline / "traces").glob("*.json")) if (pipeline / "traces").is_dir() else []
     proposals = allowed = denied = executions = 0
     evidence_outcomes: dict[str, int] = {}
@@ -423,17 +448,23 @@ def run_one(name: str) -> dict[str, Any]:
             audit = command(argv_kind)
             cleanup[kind] = {"exit_code": audit.returncode, "remaining": [line for line in audit.stdout.splitlines() if line.strip()]}
     target_status = command(["git", "-C", str(TARGET), "status", "--porcelain=v1", "--untracked-files=all"])
+    integrity = target_status.returncode == 0 and not target_status.stdout.strip()
+    cleanup_complete = bool(cleanup) and all(
+        item["exit_code"] == 0 and not item["remaining"] for item in cleanup.values()
+    )
+    valid = (
+        ci_summary.get("status") == "completed" and result.returncode in {0, 1}
+        and successes > 0 and integrity and cleanup_complete
+        and bool(gate) and not gate.get("technical_errors")
+        and not gate.get("errors") and not gate.get("stage_errors")
+    )
     manifest.update({
         "finished_at": finished.isoformat(),
         "duration_seconds": round(duration, 3),
-        "status": "completed" if ci_summary.get("status") == "completed" and result.returncode in {0, 1} and successes > 0 else "technically_invalid",
+        "status": "completed" if valid else "technically_invalid",
         "pipeline_exit_code": result.returncode,
-        "llm_request_count": len(attempts),
-        "llm_success_count": successes,
-        "llm_failure_count": failures,
+        **statistics,
         "retry_count": 0,
-        "timeout_count": sum(item.get("status") == "timeout" for item in attempts),
-        "fallback_count": sum(item.get("status") == "fallback" for item in attempts),
         "fallback_reasons": [item.get("category") for item in attempts if item.get("status") == "fallback"],
         "scout_iterations": (read_json(pipeline / "scout" / "summary.json").get("iterations") if (pipeline / "scout" / "summary.json").is_file() else None),
         "agent_iterations": iteration_total,
@@ -446,13 +477,14 @@ def run_one(name: str) -> dict[str, Any]:
         "technical_errors": gate.get("technical_errors", []) if isinstance(gate, dict) else [],
         "sandbox_session_id": session_id,
         "cleanup": cleanup,
-        "original_target_integrity": target_status.returncode == 0 and not target_status.stdout.strip(),
+        "cleanup_complete": cleanup_complete,
+        "original_target_integrity": integrity,
     })
     write_json(run_root / "metrics.json", {"status": "completed" if manifest["status"] == "completed" else "technically_invalid", "diagnostics": [] if manifest["status"] == "completed" else ["CI pipeline failed or required stage incomplete"]})
     write_json(run_root / "manifest.json", manifest)
     write_json(run_root / "run-status.json", {"status": manifest["status"], "finished_at": manifest["finished_at"], "exit_code": result.returncode})
     write_json(run_root / "seal.json", _seal(run_root))
-    return {"run_id": name, "attempt_id": attempt_id, "status": manifest["status"], "duration_seconds": manifest["duration_seconds"], "llm_requests": len(attempts), "fallbacks": manifest["fallback_count"], "policy_blocks": manifest["policy_block_count"], "seal_valid": read_json(run_root / "seal.json") == _seal(run_root)}
+    return {"run_id": name, "attempt_id": attempt_id, "status": manifest["status"], "duration_seconds": manifest["duration_seconds"], "llm_requests": manifest["llm_request_count"], "fallbacks": manifest["fallback_count"], "policy_blocks": manifest["policy_block_count"], "seal_valid": read_json(run_root / "seal.json") == _seal(run_root)}
 
 
 def main() -> int:
