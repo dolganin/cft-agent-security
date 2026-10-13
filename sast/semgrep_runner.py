@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -18,7 +19,9 @@ class SemgrepError(RuntimeError):
     """Ошибка, когда локальный скан Semgrep не удалось запустить или завершить."""
 
 
-_DOCKER_SEMGREP_IMAGE = "semgrep/semgrep:1.174.0"
+_DOCKER_SEMGREP_IMAGE = (
+    "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade"
+)
 
 
 @dataclass(frozen=True)
@@ -47,29 +50,35 @@ def run_semgrep_scan(
         raise SemgrepError(f"SAST target directory does not exist: {target_path}")
 
     executable = shutil.which("semgrep") or _environment_semgrep()
+    scanner_root = None
     if executable is None:
-        raise SemgrepError(
-            "Semgrep CLI was not found. Activate the project venv and install "
-            'the SAST extra: python -m pip install -e ".[dev,sast]"'
-        )
-
-    command = [
-        executable,
-        "scan",
-        "--config",
-        config,
-        "--json",
-        "--no-rewrite-rule-ids",
-        "--exclude",
-        ".venv",
-        "--exclude",
-        "node_modules",
-        "--exclude",
-        "dist",
-        "--exclude",
-        "build",
-        ".",
-    ]
+        docker = shutil.which("docker") if sys.platform == "win32" else None
+        config_path = _local_config_path(config)
+        if docker is None or config_path is None:
+            raise SemgrepError(
+                "Semgrep CLI was not found. Activate the project venv and install "
+                'the SAST extra: python -m pip install -e ".[dev,sast]"'
+            )
+        command = _docker_command(target_path, config_path, docker=docker)
+        scanner_root = "/src"
+    else:
+        command = [
+            executable,
+            "scan",
+            "--config",
+            config,
+            "--json",
+            "--no-rewrite-rule-ids",
+            "--exclude",
+            ".venv",
+            "--exclude",
+            "node_modules",
+            "--exclude",
+            "dist",
+            "--exclude",
+            "build",
+            ".",
+        ]
 
     # SAST запускается только для чтения в каталоге таргета
     try:
@@ -83,13 +92,13 @@ def run_semgrep_scan(
     except OSError as exc:
         raise SemgrepError(f"Failed to start Semgrep: {exc}") from exc
 
-    scanner_root = None
     if completed.returncode != 0 and _needs_windows_docker_fallback(completed):
         scanner_root = "/src"
+        config_path = _local_config_path(config)
+        if config_path is None:
+            raise SemgrepError("Docker Semgrep fallback requires a local config file")
         completed = run_cancellable_process(
-            _docker_command(target_path, config),
-            cwd=target_path,
-            timeout=timeout_seconds,
+            _docker_command(target_path, config_path), cwd=target_path, timeout=timeout_seconds
         )
 
     if completed.returncode != 0:
@@ -138,30 +147,47 @@ def _needs_windows_docker_fallback(completed: subprocess.CompletedProcess[str]) 
     return sys.platform == "win32" and "semgrep-core" in diagnostic and shutil.which("docker")
 
 
-def _docker_command(target_path: Path, config: str) -> list[str]:
+def _local_config_path(config: str) -> Path | None:
+    if config == "auto":
+        return None
+    path = Path(os.path.abspath(Path(config).expanduser()))
+    return path if path.is_file() else None
+
+
+def _docker_command(
+    target_path: Path,
+    config_path: Path,
+    *,
+    docker: str = "docker",
+) -> list[str]:
     """Target только читаем, Semgrep получает tmpfs для своего cache и git config."""
     return [
-        "docker",
+        docker,
         "run",
+        "--pull=never",
         "--rm",
         "--read-only",
         "--cap-drop",
         "ALL",
         "--security-opt",
         "no-new-privileges",
+        "--network",
+        "none",
         "--tmpfs",
         "/tmp:rw,noexec,nosuid,size=64m",
         "--tmpfs",
         "/root:rw,noexec,nosuid,size=32m",
         "-v",
         f"{target_path}:/src:ro",
+        "-v",
+        f"{config_path}:/semgrep-config.yaml:ro",
         "-w",
         "/src",
         _DOCKER_SEMGREP_IMAGE,
         "semgrep",
         "scan",
         "--config",
-        config,
+        "/semgrep-config.yaml",
         "--json",
         "--no-rewrite-rule-ids",
         "--exclude",

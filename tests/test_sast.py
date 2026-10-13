@@ -97,6 +97,8 @@ def test_runner_falls_back_to_isolated_docker_after_windows_core_failure(
 ) -> None:
     payload = {"results": [_raw_finding()], "errors": []}
     calls: list[list[str]] = []
+    config = tmp_path / "rules.yaml"
+    config.write_text("rules: []\n", encoding="utf-8")
     monkeypatch.setattr("sast.semgrep_runner.sys.platform", "win32")
     monkeypatch.setattr(
         "sast.semgrep_runner.shutil.which",
@@ -115,8 +117,38 @@ def test_runner_falls_back_to_isolated_docker_after_windows_core_failure(
 
     monkeypatch.setattr("sast.semgrep_runner.run_cancellable_process", fake_run)
 
-    result = run_semgrep_scan(tmp_path)
+    result = run_semgrep_scan(tmp_path, config=str(config))
 
     assert result.findings
-    assert calls[1][:4] == ["docker", "run", "--rm", "--read-only"]
+    assert calls[1][:5] == ["docker", "run", "--pull=never", "--rm", "--read-only"]
     assert any("/src:ro" in item for item in calls[1])
+    assert any("/semgrep-config.yaml:ro" in item for item in calls[1])
+    assert calls[1][calls[1].index("--network") + 1] == "none"
+    assert calls[1][calls[1].index("--config") + 1] == "/semgrep-config.yaml"
+    assert any("@sha256:" in item for item in calls[1])
+
+
+def test_runner_uses_pinned_offline_docker_when_windows_cli_is_missing(
+    monkeypatch, tmp_path: Path
+) -> None:
+    payload = {"results": [_raw_finding()], "errors": []}
+    config = tmp_path / "rules.yaml"
+    config.write_text("rules: []\n", encoding="utf-8")
+    captured: dict = {}
+    monkeypatch.setattr("sast.semgrep_runner.sys.platform", "win32")
+    monkeypatch.setattr("sast.semgrep_runner.shutil.which", lambda name: "docker" if name == "docker" else None)
+    monkeypatch.setattr("sast.semgrep_runner._environment_semgrep", lambda: None)
+
+    def fake_run(command, **kwargs):
+        captured["command"] = command
+        captured["kwargs"] = kwargs
+        return SimpleNamespace(returncode=0, stdout=json.dumps(payload), stderr="")
+
+    monkeypatch.setattr("sast.semgrep_runner.run_cancellable_process", fake_run)
+
+    result = run_semgrep_scan(tmp_path, config=str(config))
+
+    assert result.findings
+    assert captured["command"][0:3] == ["docker", "run", "--pull=never"]
+    assert captured["kwargs"]["cwd"] == tmp_path.resolve()
+    assert result.findings[0].id.endswith(":backend/core/views.py:12")
