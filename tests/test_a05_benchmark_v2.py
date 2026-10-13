@@ -135,6 +135,17 @@ def test_ambiguous_candidates_use_deterministic_maximum_matching():
     assert score_v2(http_truth, [http_observation]).detection.unresolved == 1
 
 
+@pytest.mark.parametrize("method,parameter,tp", [
+    ("GET", "q", 1), ("GET", "body.q", 0), ("POST", "q", 0), ("GET", None, 0),
+])
+def test_bare_get_query_parameter_is_compatible_without_body_or_unknown_guess(method, parameter, tp):
+    truth = dataset(case("HTTP-Q", file=None,
+                         http={"method": "GET", "endpoint": "/search", "parameter": "query.q"}))
+    item = observation("zap-query", source_file=None, line_start=None, line_end=None,
+                       http_method=method, http_endpoint="/search", http_parameter=parameter)
+    assert score_v2(truth, [item]).detection.tp == tp
+
+
 def test_http_method_parameter_and_route_template_are_contextual():
     truth = dataset(case(
         "HTTP-1",
