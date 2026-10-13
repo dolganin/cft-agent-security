@@ -47,6 +47,18 @@ def _route(value: str) -> str:
     return re.sub(r"(?::[^/]+|\{[^/]+\})", "{}", value)
 
 
+def _http_parameter_matches(expected: str | None, observed: str | None, method: str | None) -> bool:
+    """Accept scanner's bare GET query name, not unknown/body/header parameters."""
+    if expected is None or expected == observed:
+        return True
+    return bool(
+        method in {"GET", "HEAD"}
+        and expected.startswith("query.")
+        and observed is not None
+        and expected.removeprefix("query.") == observed
+    )
+
+
 def _candidates(
     dataset: BenchmarkDatasetV2,
     observation: BenchmarkObservationV2,
@@ -77,10 +89,7 @@ def _candidates(
                 anchor.method is None
                 or anchor.method == observation.http_method
             )
-            and (
-                anchor.parameter is None
-                or anchor.parameter == observation.http_parameter
-            )
+            and _http_parameter_matches(anchor.parameter, observation.http_parameter, observation.http_method)
             for anchor in case.http_anchors
         )
         if source_match or http_match:
