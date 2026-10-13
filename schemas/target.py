@@ -8,6 +8,7 @@ from urllib.parse import urljoin, urlsplit
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from schemas.access_fixture import AccessFixtureProfile
 from schemas.verification_binding import VerificationRoute
 
 _REQUEST_HOST = re.compile(r"^(?:[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?|\[[0-9A-Fa-f:.]+\])(?::([0-9]{1,5}))?$")
@@ -236,6 +237,7 @@ class TargetProfile(BaseModel):
     metadata: dict[str, str] = Field(default_factory=dict)
     fix_verification: TargetFixConfig | None = None
     verification_routes: list[VerificationRoute] = Field(default_factory=list, max_length=64)
+    access_fixture: AccessFixtureProfile | None = None
 
     @model_validator(mode="before")
     @classmethod

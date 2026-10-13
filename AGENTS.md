@@ -1041,3 +1041,31 @@ Docker acceptance: existing search/login SQL and FTP capabilities, before/after
 line insertion, immutable target, raw source snapshots, audit and cleanup checks.
 No target code runs on the host and no LLM is required. Scope, test results and
 B01 limitations are in `docs/b01-reliable-verification-binding.md`.
+
+---
+
+# 27. B04 operator-owned access fixtures
+
+`targets/juice-access-fixture.yaml` defines two customer roles, five explicitly owned
+objects and owner-only read/update expectations. `AccessFixtureLab` is operator
+provisioning, not an agent tool or a replacement verification pipeline. Never store
+its live broker or session material in AgentState. The public `AccessFixtureContext`
+in `schemas/access_fixture.py` contains only registry IDs and redacted server facts.
+
+The fixed Docker-only worker proves server identity through whoami, verifies object
+ownership through independent owner reads, and brackets reads with identity checks.
+The separate negative-control object must remain owner-readable before and after
+the other role's denial. HTTP 200 without the expected identity, lost/swapped session,
+unknown ownership or failed controls must remain inconclusive, never a safe verdict.
+
+Passwords/tokens remain in non-root worker private tmpfs. No model credentials,
+URLs, preparation operations or arbitrary writes are accepted. Reset destroys and
+audits this lab's containers/anonymous volumes/network and rotates its generation.
+Stale handles are blocked; unknown cleanup prevents reset. Do not claim global JWT
+revocation outside the destroyed lab or silently change Juice Shop authentication.
+
+`python -m app.access_fixture_acceptance --output <new-directory>` runs two real
+independent generations and tests loss/swap, repeatable baselines, stale handles,
+source integrity and cleanup. B05 must still register its own approved capability,
+bind actual probes to B01 and account for every identity/control HTTP exchange.
+See `docs/b04-access-fixtures.md` for scope, budgets, evidence and test results.

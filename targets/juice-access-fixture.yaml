@@ -1,0 +1,93 @@
+id: juice-access-fixture
+name: Juice Shop | B04 operator-owned access fixture
+repository_path: artifacts/benchmark-target/juice-shop
+environment: sandbox
+architecture:
+  file: targets/juice-presentation-architecture.yaml
+runtime:
+  type: operator_access_fixture
+services:
+  juice:
+    type: node
+    root: .
+    internal_port: 3000
+    healthcheck:
+      path: /
+    runtime_endpoints:
+    - /
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false
+metadata:
+  operator.scope: B04 preparation and controls only; no model provisioning or vulnerability
+    verdicts
+access_fixture:
+  id: juice-two-user-v1
+  adapter: juice_access_v1
+  reset_adapter: destroy_and_recreate_lab
+  roles:
+  - role-a
+  - role-b
+  objects:
+  - id: basket-a
+    kind: basket
+    owner_role_id: role-a
+  - id: basket-b
+    kind: basket
+    owner_role_id: role-b
+  - id: address-a
+    kind: address
+    owner_role_id: role-a
+  - id: address-b
+    kind: address
+    owner_role_id: role-b
+  - id: negative-control-b
+    kind: address
+    owner_role_id: role-b
+  permissions:
+  - role_id: role-a
+    object_id: basket-a
+    read: true
+    update: true
+  - role_id: role-a
+    object_id: basket-b
+    read: false
+    update: false
+  - role_id: role-a
+    object_id: address-a
+    read: true
+    update: true
+  - role_id: role-a
+    object_id: address-b
+    read: false
+    update: false
+  - role_id: role-a
+    object_id: negative-control-b
+    read: false
+    update: false
+  - role_id: role-b
+    object_id: basket-a
+    read: false
+    update: false
+  - role_id: role-b
+    object_id: basket-b
+    read: true
+    update: true
+  - role_id: role-b
+    object_id: address-a
+    read: false
+    update: false
+  - role_id: role-b
+    object_id: address-b
+    read: true
+    update: true
+  - role_id: role-b
+    object_id: negative-control-b
+    read: true
+    update: true
+  prepare_http_budget: 64
+  control_http_budget: 32
+  request_timeout_seconds: 3
+  wall_time_seconds: 120

@@ -207,6 +207,14 @@ ci-summary.json
 
 ## Проверки проекта
 
+B04: [операторские роли, ownership и availability controls](docs/b04-access-fixtures.md).
+Отдельный профиль `targets/juice-access-fixture.yaml`, credentials только в Docker
+tmpfs. Реальная приёмка двух независимых generations без LLM:
+
+```bash
+python -m app.access_fixture_acceptance --output artifacts/b04/new-acceptance
+```
+
 B01: [надёжная связь source/handler/endpoint и approval](docs/b01-reliable-verification-binding.md).
 Новый операторский профиль — `targets/juice-verification.yaml`; исторический
 профиль A остаётся замороженным. Реальная Docker-приёмка без LLM:
