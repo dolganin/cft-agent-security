@@ -19,6 +19,7 @@ from architecture.service import ArchitectureService
 from discovery.express_routes import build_express_source_map, link_candidates_to_routes
 from discovery.scout import merge_scout_candidates, validate_scout_candidates
 from discovery.service import ProjectDiscovery
+from evaluation.artifact_history import persist_agent_trace
 from pipeline.cancellation import RunCancelled, check_cancelled
 from pipeline.errors import error_from_exception
 from pipeline.gate import evaluate_gate
@@ -340,6 +341,7 @@ def run_pipeline(
                 with ManagedAgentLab(profile, runtime_services):
                     result = graph.invoke(state)
             check_cancelled()
+            persist_agent_trace(output_dir, finding.id, result)
             report = result["final_report"]
             report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
             report_path.write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
