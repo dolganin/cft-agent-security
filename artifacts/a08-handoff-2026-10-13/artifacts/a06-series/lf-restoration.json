@@ -1,0 +1,34 @@
+[
+  {
+    "path": ".gitattributes",
+    "old_sha256": "d9c4607e5862579415c521adc01c2c89960e28f9f3a6376a3c349d8d8fc8a542",
+    "new_sha256": "5008ae7ff1de7bf23bbd8e97ded53ed3c0b20a16f668517635f2ef4c249f496f",
+    "expected_sha256": "5008ae7ff1de7bf23bbd8e97ded53ed3c0b20a16f668517635f2ef4c249f496f",
+    "exact_match": true,
+    "crlf_replaced": 14
+  },
+  {
+    "path": "evaluation/benchmark_protocol.py",
+    "old_sha256": "00a8de1d2ed6951d76bb0bd24fdf815bd690209d5ec3e21dd4134d3dfb4524b4",
+    "new_sha256": "622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf",
+    "expected_sha256": "622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf",
+    "exact_match": true,
+    "crlf_replaced": 89
+  },
+  {
+    "path": "schemas/benchmark.py",
+    "old_sha256": "5bb0336c2f1092a05558325d7a6b8fb7a68b1a86a90000ada40e50f5287523d6",
+    "new_sha256": "1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8",
+    "expected_sha256": "1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8",
+    "exact_match": true,
+    "crlf_replaced": 428
+  },
+  {
+    "path": "schemas/benchmark_control_expansion.py",
+    "old_sha256": "299fc332370c98f8ae5dd3a65412beaa5f5a59126fbcdabde165284f44a58f3e",
+    "new_sha256": "4cd41d0f43a8a48239f142d1281d4058cbf13c813e1e22ebe042621b8a50fb30",
+    "expected_sha256": "4cd41d0f43a8a48239f142d1281d4058cbf13c813e1e22ebe042621b8a50fb30",
+    "exact_match": true,
+    "crlf_replaced": 56
+  }
+]

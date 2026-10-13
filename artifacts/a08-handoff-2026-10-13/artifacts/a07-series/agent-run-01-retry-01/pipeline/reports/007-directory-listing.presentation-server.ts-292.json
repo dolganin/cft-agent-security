@@ -1,0 +1,376 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "directory-listing.presentation:server.ts:292",
+  "finding": {
+    "id": "directory-listing.presentation:server.ts:292",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "severity": "WARNING",
+    "service": "juice",
+    "file": "server.ts",
+    "line_start": 292,
+    "line_end": 292,
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "a23e5b136302eb31d09bcb37d5f43277d20f0e3d69cd116697802904f06a1b6c",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "3955ed70428a863c97381ecd61c9eea348310354919ba566f4c2de6c85cd2660",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:292"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:292",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 292,
+          "line_end": 292,
+          "column_start": 49,
+          "column_end": 108,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  "status": "inconclusive",
+  "analysis_summary": "The finding at server.ts:292 exposes a directory listing at /.well-known using serveIndex with view:'details'. Evidence confirms the listing is active (HTTP 200, directory_listing=true) but no sensitive file names were detected (sensitive_file_names=[]). The /.well-known path is a standard public metadata convention (security.txt, apple-app-site-association, etc.), and the view:'details' option exposes file sizes and timestamps—minor information disclosure. The practical risk is low: the directory is intended to be public, no sensitive content was identified, and the metadata exposure (sizes, timestamps) is negligible. The HIGH context priority score (7.0) reflects service-level attributes (public exposure, database access, high criticality) rather than the specific risk of this endpoint.",
+  "risk_signals": [
+    "Directory listing active at /.well-known with view:'details' exposing file names, sizes, and timestamps",
+    "Service is publicly exposed with mixed authentication",
+    "No sensitive file names detected in the listing",
+    "/.well-known is a standard public metadata path with low inherent sensitivity"
+  ],
+  "code_context": "  284:   })\n  285: \n  286:   // vuln-code-snippet start directoryListingChallenge accessLogDisclosureChallenge\n  287:   /* /ftp directory browsing and file download */ // vuln-code-snippet neutral-line directoryListingChallenge\n  288:   app.use('/ftp', serveIndexMiddleware, serveIndex('ftp', { icons: true })) // vuln-code-snippet vuln-line directoryListingChallenge\n  289:   app.use('/ftp(?!/quarantine)/:file', servePublicFiles()) // vuln-code-snippet vuln-line directoryListingChallenge\n  290:   app.use('/ftp/quarantine/:file', serveQuarantineFiles()) // vuln-code-snippet neutral-line directoryListingChallenge\n  291: \n  292:   app.use('/.well-known', serveIndexMiddleware, serveIndex('.well-known', { icons: true, view: 'details' }))\n  293:   app.use('/.well-known', express.static('.well-known'))\n  294: \n  295:   /* /encryptionkeys directory browsing */\n  296:   app.use('/encryptionkeys', serveIndexMiddleware, serveIndex('encryptionkeys', { icons: true, view: 'details' }))\n  297:   app.use('/encryptionkeys/:file', serveKeyFiles())\n  298: \n  299:   /* /logs directory browsing */ // vuln-code-snippet neutral-line accessLogDisclosureChallenge\n  300:   app.use('/support/logs', serveIndexMiddleware, serveIndex('logs', { icons: true, view: 'details' })) // vuln-code-snippet vuln-line accessLogDisclosureChallenge",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": true,
+    "criticality": "high",
+    "trust_zone": "application",
+    "connected_services": [
+      "database"
+    ],
+    "databases": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "authentication": "mixed",
+    "blast_radius": "unknown"
+  },
+  "hypothesis": "The directory listing at /.well-known is a confirmed low-impact information disclosure: it is accessible without authentication and exposes file metadata (names, sizes, timestamps) via serveIndex 'details' view, but the enumerated file names consist only of standard public metadata files (e.g., security.txt, apple-app-site-association, change-password) with no sensitive content.",
+  "hypothesis_confidence": 0.75,
+  "verification": {
+    "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+    "capability": "inspect_javascript_security",
+    "target": "juice-presentation",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 2,
+    "evidence_types": [
+      "sensitive_directory_check",
+      "javascript_source_metadata"
+    ],
+    "decision_basis": "iteration_limit"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS."
+  },
+  "context_priority": {
+    "level": "HIGH",
+    "score": 7.0,
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evidence-52af57aec9",
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+      "type": "sensitive_directory_check",
+      "summary": "No sensitive directory metadata was established by this bounded observation.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-d647f85376384bcbb3fbbe8fccd97414.json",
+        "execution-d647f85376384bcbb3fbbe8fccd97414",
+        "audit:1ec0b75894f447d7a5f80ace21b15bdb"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hyp-dirlist-wellknown-001",
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+        "tool": "verify_sensitive_directory",
+        "run_id": "1ec0b75894f447d7a5f80ace21b15bdb"
+      },
+      "observation": {
+        "kind": "sensitive_directory_check",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "line": 292,
+            "check": "source_metadata",
+            "endpoint": "/.well-known",
+            "status": 200,
+            "directory_listing": true,
+            "sensitive_file_names": [],
+            "file_contents_read": false,
+            "truncated": false
+          }
+        },
+        "captured_at": "2026-10-13T11:06:05.958201Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": "juice",
+        "description": "runtime_directory_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-d647f85376384bcbb3fbbe8fccd97414.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-d647f85376384bcbb3fbbe8fccd97414",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:1ec0b75894f447d7a5f80ace21b15bdb",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:06:05.958201Z"
+    },
+    {
+      "id": "evidence-63b705d67e",
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+      "type": "javascript_source_metadata",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-a35d11569aa04a44bddc5797e6327888.json",
+        "execution-a35d11569aa04a44bddc5797e6327888",
+        "audit:4a84664820194765a4d19c396eab8ceb"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hyp-dirlist-wellknown-002",
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+        "tool": "inspect_javascript_security",
+        "run_id": "4a84664820194765a4d19c396eab8ceb"
+      },
+      "observation": {
+        "kind": "javascript_source_metadata",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "line": 292,
+            "check": "source_metadata",
+            "file": "server.ts",
+            "total_lines": 813,
+            "source_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+            "runtime_verified": false,
+            "values_redacted": true
+          }
+        },
+        "captured_at": "2026-10-13T11:06:33.353719Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": null,
+        "description": "source_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-a35d11569aa04a44bddc5797e6327888.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-a35d11569aa04a44bddc5797e6327888",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:4a84664820194765a4d19c396eab8ceb",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:06:33.353719Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+      "capability": "verify_sensitive_directory",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1031,
+      "command": [
+        "verify_sensitive_directory",
+        "--method",
+        "GET",
+        "--metadata-only",
+        "--endpoint",
+        "/.well-known",
+        "--artifact-id",
+        "source-1ba718c1eb8aa39c",
+        "--line",
+        "292",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"No sensitive directory metadata was established by this bounded observation.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":292,\"check\":\"source_metadata\",\"endpoint\":\"/.well-known\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[],\"file_contents_read\":false,\"truncated\":false}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-d647f85376384bcbb3fbbe8fccd97414.json"
+      ]
+    },
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+      "capability": "inspect_javascript_security",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1507,
+      "command": [
+        "inspect_javascript_security",
+        "--artifact-id",
+        "source-1ba718c1eb8aa39c",
+        "--line",
+        "292",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":292,\"check\":\"source_metadata\",\"file\":\"server.ts\",\"total_lines\":813,\"source_sha256\":\"1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b\",\"runtime_verified\":false,\"values_redacted\":true}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-a35d11569aa04a44bddc5797e6327888.json"
+      ]
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:292-256541c6eeb497f9-2",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "continue",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-52af57aec9"
+      ],
+      "plan_id": "plan-directory-listing.presentation:server.ts:292-1",
+      "stop_reason": null,
+      "recorded_at": "2026-10-13T11:06:05.958201Z"
+    },
+    {
+      "step": 2,
+      "outcome": "stop",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-63b705d67e"
+      ],
+      "plan_id": "plan-directory-listing.presentation:server.ts:292-2",
+      "stop_reason": "insufficient_evidence",
+      "recorded_at": "2026-10-13T11:06:33.353719Z"
+    }
+  ],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "directory-listing.presentation:server.ts:292: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 2,
+  "stop_reason": "insufficient_evidence"
+}

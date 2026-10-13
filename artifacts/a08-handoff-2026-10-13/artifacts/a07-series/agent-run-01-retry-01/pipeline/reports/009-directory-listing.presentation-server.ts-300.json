@@ -1,0 +1,378 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "directory-listing.presentation:server.ts:300",
+  "finding": {
+    "id": "directory-listing.presentation:server.ts:300",
+    "source": "semgrep",
+    "rule_id": "directory-listing.presentation",
+    "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+    "severity": "WARNING",
+    "service": "juice",
+    "file": "server.ts",
+    "line_start": 300,
+    "line_end": 300,
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "file-exposure",
+      "fingerprint": "5a8e70939e6f5b75c4bb2cabfd57249c34eb1e0b0220d8cbc031a00752c75a08",
+      "normalized_file": "server.ts",
+      "anchor_sha256": "de5e650df2f0fc68ba9c129599978e239714a0e6c295fa3d9972a59b301b59b7",
+      "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "directory-listing.presentation:server.ts:300"
+      ],
+      "observations": [
+        {
+          "source_id": "directory-listing.presentation:server.ts:300",
+          "source": "semgrep",
+          "rule_id": "directory-listing.presentation",
+          "original_file": "server.ts",
+          "title": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "description": "Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.",
+          "line_start": 300,
+          "line_end": 300,
+          "column_start": 50,
+          "column_end": 102,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  "status": "inconclusive",
+  "analysis_summary": "The finding identifies a middleware ordering vulnerability in Express.js at server.ts:300. The serveIndex middleware for /support/logs is registered BEFORE the verify.accessControlChallenges() middleware on line 301. In Express, middleware executes in registration order, so serveIndex responds to directory listing requests before any authentication/authorization check can execute. Runtime evidence from the sandbox confirms the endpoint returns HTTP 200 with directory_listing=true, validating that the listing is publicly accessible without authentication. The absence of sensitive file names in the sandbox observation is attributable to the sandbox environment having an empty or minimal logs directory, not to the absence of the vulnerability. In a production environment, log file names would be disclosed to unauthenticated users. The individual file serving route (/support/logs/:file on line 302) is still protected by the access control middleware on line 301, so the primary risk is information disclosure of file names via the directory listing rather than direct file content exposure.",
+  "risk_signals": [
+    "Middleware ordering: serveIndex (line 300) executes before accessControlChallenges (line 301), bypassing authentication for directory listing",
+    "Public exposure: service has public_exposure=true with mixed authentication",
+    "High criticality asset: service criticality is rated high",
+    "Information disclosure: unauthenticated users can enumerate log file names, revealing internal naming conventions and potentially sensitive file identifiers",
+    "Context priority HIGH (score 7.0): public internet exposure + high asset criticality + direct database access path",
+    "Sandbox limitation: empty logs directory in sandbox means full impact (sensitive file name disclosure) cannot be demonstrated in the lab, but the code path is unambiguously vulnerable"
+  ],
+  "code_context": "  292:   app.use('/.well-known', serveIndexMiddleware, serveIndex('.well-known', { icons: true, view: 'details' }))\n  293:   app.use('/.well-known', express.static('.well-known'))\n  294: \n  295:   /* /encryptionkeys directory browsing */\n  296:   app.use('/encryptionkeys', serveIndexMiddleware, serveIndex('encryptionkeys', { icons: true, view: 'details' }))\n  297:   app.use('/encryptionkeys/:file', serveKeyFiles())\n  298: \n  299:   /* /logs directory browsing */ // vuln-code-snippet neutral-line accessLogDisclosureChallenge\n  300:   app.use('/support/logs', serveIndexMiddleware, serveIndex('logs', { icons: true, view: 'details' })) // vuln-code-snippet vuln-line accessLogDisclosureChallenge\n  301:   app.use('/support/logs', verify.accessControlChallenges()) // vuln-code-snippet hide-line\n  302:   app.use('/support/logs/:file', serveLogFiles()) // vuln-code-snippet vuln-line accessLogDisclosureChallenge\n  303: \n  304:   /* Swagger documentation for B2B v2 endpoints */\n  305:   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))\n  306: \n  307:   app.use(express.static(path.resolve('frontend/dist/frontend')))\n  308:   app.use(cookieParser('kekse'))",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": true,
+    "criticality": "high",
+    "trust_zone": "application",
+    "connected_services": [
+      "database"
+    ],
+    "databases": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "authentication": "mixed",
+    "blast_radius": "unknown"
+  },
+  "hypothesis": "The /support/logs endpoint returns an unauthenticated directory listing HTML response, confirming that serveIndex middleware (line 300) executes before accessControlChallenges middleware (line 301) and no authentication gate is applied before the listing is served.",
+  "hypothesis_confidence": 0.85,
+  "verification": {
+    "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+    "capability": "inspect_javascript_security",
+    "target": "juice-presentation",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 2,
+    "evidence_types": [
+      "sensitive_directory_check",
+      "javascript_source_metadata"
+    ],
+    "decision_basis": "iteration_limit"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS."
+  },
+  "context_priority": {
+    "level": "HIGH",
+    "score": 7.0,
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evidence-6406572eea",
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+      "type": "sensitive_directory_check",
+      "summary": "No sensitive directory metadata was established by this bounded observation.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9558533ee47144538fbf03038f5c1719.json",
+        "execution-9558533ee47144538fbf03038f5c1719",
+        "audit:09c7ab795e344efb90329d0a751de1a6"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hypothesis-dir-listing-support-logs-001",
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+        "tool": "verify_sensitive_directory",
+        "run_id": "09c7ab795e344efb90329d0a751de1a6"
+      },
+      "observation": {
+        "kind": "sensitive_directory_check",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "line": 300,
+            "check": "source_metadata",
+            "endpoint": "/support/logs",
+            "status": 200,
+            "directory_listing": true,
+            "sensitive_file_names": [],
+            "file_contents_read": false,
+            "truncated": false
+          }
+        },
+        "captured_at": "2026-10-13T11:07:09.712680Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": "juice",
+        "description": "runtime_directory_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9558533ee47144538fbf03038f5c1719.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-9558533ee47144538fbf03038f5c1719",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:09c7ab795e344efb90329d0a751de1a6",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:07:09.712680Z"
+    },
+    {
+      "id": "evidence-77c8f217eb",
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+      "type": "javascript_source_metadata",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-52766d771d044397b11e1c41692e378d.json",
+        "execution-52766d771d044397b11e1c41692e378d",
+        "audit:99659bceb1e34287a651deab23166711"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hypothesis-dir-listing-support-logs-002",
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+        "tool": "inspect_javascript_security",
+        "run_id": "99659bceb1e34287a651deab23166711"
+      },
+      "observation": {
+        "kind": "javascript_source_metadata",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "line": 300,
+            "check": "source_metadata",
+            "file": "server.ts",
+            "total_lines": 813,
+            "source_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+            "runtime_verified": false,
+            "values_redacted": true
+          }
+        },
+        "captured_at": "2026-10-13T11:07:40.986858Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": null,
+        "description": "source_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-52766d771d044397b11e1c41692e378d.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-52766d771d044397b11e1c41692e378d",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:99659bceb1e34287a651deab23166711",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:07:40.986858Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+      "capability": "verify_sensitive_directory",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1028,
+      "command": [
+        "verify_sensitive_directory",
+        "--method",
+        "GET",
+        "--metadata-only",
+        "--endpoint",
+        "/support/logs",
+        "--artifact-id",
+        "source-1ba718c1eb8aa39c",
+        "--line",
+        "300",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"No sensitive directory metadata was established by this bounded observation.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":300,\"check\":\"source_metadata\",\"endpoint\":\"/support/logs\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[],\"file_contents_read\":false,\"truncated\":false}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9558533ee47144538fbf03038f5c1719.json"
+      ]
+    },
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+      "capability": "inspect_javascript_security",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1424,
+      "command": [
+        "inspect_javascript_security",
+        "--artifact-id",
+        "source-1ba718c1eb8aa39c",
+        "--line",
+        "300",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":300,\"check\":\"source_metadata\",\"file\":\"server.ts\",\"total_lines\":813,\"source_sha256\":\"1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b\",\"runtime_verified\":false,\"values_redacted\":true}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-52766d771d044397b11e1c41692e378d.json"
+      ]
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    {
+      "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-2",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "continue",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-6406572eea"
+      ],
+      "plan_id": "plan-directory-listing.presentation:server.ts:300-1",
+      "stop_reason": null,
+      "recorded_at": "2026-10-13T11:07:09.712680Z"
+    },
+    {
+      "step": 2,
+      "outcome": "stop",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-77c8f217eb"
+      ],
+      "plan_id": "plan-directory-listing.presentation:server.ts:300-2",
+      "stop_reason": "insufficient_evidence",
+      "recorded_at": "2026-10-13T11:07:40.986858Z"
+    }
+  ],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "directory-listing.presentation:server.ts:300: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 2,
+  "stop_reason": "insufficient_evidence"
+}

@@ -1,0 +1,190 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": "/ftp",
+        "environment": "sandbox",
+        "expected_evidence": "HTTP GET to /ftp on juice service returns status 200 with an HTML body containing a directory listing (file names, sizes, modification dates) without any authentication credentials being sent.",
+        "id": "action-directory-listing.presentation:server.ts:288-c5fa181ec4e54a0e-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-1ba718c1eb8aa39c",
+          "check": "source_metadata",
+          "line": 288
+        },
+        "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+        "service": "juice",
+        "target": "juice-presentation",
+        "tool": "verify_sensitive_directory"
+      },
+      "evidence_ids": [
+        "evidence-8da3ae0a35"
+      ],
+      "execution": {
+        "action_id": "action-directory-listing.presentation:server.ts:288-c5fa181ec4e54a0e-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-af23537f655a4ebe96dbfb07e800e75d.json"
+        ],
+        "audit_ref": "audit:95b18c37ced540b1bf6a1b199a595b24",
+        "duration_ms": 1192,
+        "error": null,
+        "evidence_ref": "execution-af23537f655a4ebe96dbfb07e800e75d",
+        "exit_code": 0,
+        "run_id": "95b18c37ced540b1bf6a1b199a595b24",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"confirmed\",\"explanation\":\"Unauthenticated directory listing exposes sensitive file names; contents were not downloaded.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":288,\"check\":\"source_metadata\",\"endpoint\":\"/ftp\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[\"coupons_2013.md.bak\",\"incident-support.kdbx\",\"package-lock.json.bak\",\"package.json.bak\"],\"file_contents_read\":false,\"truncated\":false}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-directory-listing.presentation:server.ts:288-1",
+      "recorded_at": "2026-10-13T11:05:49.985213Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-directory-listing.presentation:server.ts:288-c5fa181ec4e54a0e-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-8da3ae0a35"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-directory-listing.presentation:server.ts:288-1",
+      "reason": "Capability-specific structured Evidence confirmed the finding.",
+      "recorded_at": "2026-10-13T11:05:49.985757Z",
+      "step": 1,
+      "stop_reason": "terminal_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:288-c5fa181ec4e54a0e-1",
+        "run_id": "95b18c37ced540b1bf6a1b199a595b24",
+        "tool": "verify_sensitive_directory"
+      },
+      "action_id": "action-directory-listing.presentation:server.ts:288-c5fa181ec4e54a0e-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-af23537f655a4ebe96dbfb07e800e75d.json",
+        "execution-af23537f655a4ebe96dbfb07e800e75d",
+        "audit:95b18c37ced540b1bf6a1b199a595b24"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-af23537f655a4ebe96dbfb07e800e75d.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-af23537f655a4ebe96dbfb07e800e75d",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:95b18c37ced540b1bf6a1b199a595b24",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:05:49.985213Z",
+      "hypothesis_id": "hyp-dir-listing-ftp-001",
+      "id": "evidence-8da3ae0a35",
+      "observation": {
+        "captured_at": "2026-10-13T11:05:49.985213Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "check": "source_metadata",
+            "directory_listing": true,
+            "endpoint": "/ftp",
+            "file_contents_read": false,
+            "line": 288,
+            "sensitive_file_names": [
+              "coupons_2013.md.bak",
+              "incident-support.kdbx",
+              "package-lock.json.bak",
+              "package.json.bak"
+            ],
+            "status": 200,
+            "truncated": false
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "sensitive_directory_check"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "runtime_directory_metadata",
+        "environment": "sandbox",
+        "service": "juice",
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Unauthenticated directory listing exposes sensitive file names; contents were not downloaded.",
+      "type": "sensitive_directory_check",
+      "verdict": "confirmed"
+    }
+  ],
+  "finding_id": "directory-listing.presentation:server.ts:288",
+  "iterations": 1,
+  "plans": [
+    {
+      "continuation_reason": "Hypothesis hyp-dir-listing-ftp-001 states that /ftp is accessible without authentication and returns a directory listing. The runtime-verification candidate is the registered trusted capability for this exact endpoint and will provide the HTTP response needed to confirm or reject the hypothesis.",
+      "environment": "sandbox",
+      "goal": "Verify whether the /ftp endpoint on the juice service returns an unauthenticated HTML directory listing revealing file names and metadata, as hypothesized.",
+      "hypothesis_id": "hyp-dir-listing-ftp-001",
+      "id": "plan-directory-listing.presentation:server.ts:288-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": "/ftp",
+            "environment": "sandbox",
+            "expected_evidence": "HTTP GET to /ftp on juice service returns status 200 with an HTML body containing a directory listing (file names, sizes, modification dates) without any authentication credentials being sent.",
+            "id": "action-directory-listing.presentation:server.ts:288-c5fa181ec4e54a0e-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-1ba718c1eb8aa39c",
+              "check": "source_metadata",
+              "line": 288
+            },
+            "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+            "service": "juice",
+            "target": "juice-presentation",
+            "tool": "verify_sensitive_directory"
+          },
+          "continue_if": "Response is not a definitive 200-with-listing or 401/403, requiring further analysis of the response body or headers.",
+          "expected_observation": "HTTP GET to /ftp on juice service returns status 200 with an HTML body containing a directory listing (file names, sizes, modification dates) without any authentication credentials being sent.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "HTTP 200 with HTML directory listing body confirms the finding",
+        "HTTP 401 or 403 rejects the hypothesis (authentication required)",
+        "Connection error or non-HTML response yields inconclusive result"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "confirmed",
+  "stop_reason": "terminal_evidence"
+}

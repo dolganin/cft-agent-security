@@ -1,0 +1,195 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": null,
+        "environment": "sandbox",
+        "expected_evidence": "Source code showing isRedirectAllowed being called within a route handler that performs a server-side redirect (e.g., res.redirect(url) or res.status(302).redirect(url)), confirming the function gates an actual HTTP redirect response",
+        "id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-4b68d0a42c1de76b",
+          "check": "source_metadata",
+          "line": 133
+        },
+        "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+        "service": null,
+        "target": "juice-presentation",
+        "tool": "inspect_javascript_security"
+      },
+      "evidence_ids": [
+        "evidence-3a24bb12ad"
+      ],
+      "execution": {
+        "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json"
+        ],
+        "audit_ref": "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3",
+        "duration_ms": 1515,
+        "error": null,
+        "evidence_ref": "execution-6b0b5659dcec4c618e4061064cf59f43",
+        "exit_code": 0,
+        "run_id": "9eb5dcaa3cd145fab5c2fe43d811fcf3",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":133,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-model-scout-b2a320314db979f4f269-1",
+      "recorded_at": "2026-10-13T11:04:03.654918Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-3a24bb12ad"
+      ],
+      "outcome": "continue",
+      "plan_id": "plan-model-scout-b2a320314db979f4f269-1",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:04:03.654918Z",
+      "step": 1,
+      "stop_reason": null
+    },
+    {
+      "evidence_ids": [
+        "evidence-3a24bb12ad"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-model-scout-b2a320314db979f4f269-1",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "recorded_at": "2026-10-13T11:04:17.979163Z",
+      "step": 1,
+      "stop_reason": "insufficient_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+        "run_id": "9eb5dcaa3cd145fab5c2fe43d811fcf3",
+        "tool": "inspect_javascript_security"
+      },
+      "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json",
+        "execution-6b0b5659dcec4c618e4061064cf59f43",
+        "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-6b0b5659dcec4c618e4061064cf59f43",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:04:03.654918Z",
+      "hypothesis_id": "hyp-b2a320314db979f4f269-001",
+      "id": "evidence-3a24bb12ad",
+      "observation": {
+        "captured_at": "2026-10-13T11:04:03.654918Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-4b68d0a42c1de76b",
+            "check": "source_metadata",
+            "file": "lib/insecurity.ts",
+            "line": 133,
+            "runtime_verified": false,
+            "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+            "total_lines": 197,
+            "values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "javascript_source_metadata"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "source_metadata",
+        "environment": "sandbox",
+        "service": null,
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "type": "javascript_source_metadata",
+      "verdict": "inconclusive"
+    }
+  ],
+  "finding_id": "model-scout-b2a320314db979f4f269",
+  "iterations": 1,
+  "plans": [
+    {
+      "continuation_reason": "No evidence has been collected yet; need to confirm the function is used in a redirect code path before the finding can be confirmed or rejected",
+      "environment": "sandbox",
+      "goal": "Verify that isRedirectAllowed is invoked in a server-side redirect handler by inspecting the JavaScript source for call sites of this function",
+      "hypothesis_id": "hyp-b2a320314db979f4f269-001",
+      "id": "plan-model-scout-b2a320314db979f4f269-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": null,
+            "environment": "sandbox",
+            "expected_evidence": "Source code showing isRedirectAllowed being called within a route handler that performs a server-side redirect (e.g., res.redirect(url) or res.status(302).redirect(url)), confirming the function gates an actual HTTP redirect response",
+            "id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-4b68d0a42c1de76b",
+              "check": "source_metadata",
+              "line": 133
+            },
+            "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+            "service": null,
+            "target": "juice-presentation",
+            "tool": "inspect_javascript_security"
+          },
+          "continue_if": "If the source shows isRedirectAllowed is called in a redirect handler, continue to assess exploitability; if it is not found in any redirect context, the hypothesis is rejected",
+          "expected_observation": "Source code showing isRedirectAllowed being called within a route handler that performs a server-side redirect (e.g., res.redirect(url) or res.status(302).redirect(url)), confirming the function gates an actual HTTP redirect response",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "Evidence confirms isRedirectAllowed is called in a res.redirect() or equivalent server-side redirect path",
+        "Evidence shows isRedirectAllowed is NOT called in any redirect handler, rejecting the hypothesis",
+        "Policy blocks the inspection action"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "inconclusive",
+  "stop_reason": "insufficient_evidence"
+}

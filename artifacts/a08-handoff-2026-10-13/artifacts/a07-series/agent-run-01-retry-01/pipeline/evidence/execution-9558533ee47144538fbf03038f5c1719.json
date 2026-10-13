@@ -1,0 +1,55 @@
+{
+  "action_digest": "5c9d79602b03f632219e719daec03781e44a051229931b4fdc6a0a82b7b71c9b",
+  "action_id": "action-directory-listing.presentation:server.ts:300-bba8e451554069e9-1",
+  "audit_ref": "audit:09c7ab795e344efb90329d0a751de1a6",
+  "created_at": "2026-10-13T11:07:09.697214+00:00",
+  "duration_ms": 1028,
+  "error": null,
+  "exit_code": 0,
+  "id": "execution-9558533ee47144538fbf03038f5c1719",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "run_id": "09c7ab795e344efb90329d0a751de1a6",
+  "session_id": "4ab40106cb014892924eb40442833ac9",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"No sensitive directory metadata was established by this bounded observation.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":300,\"check\":\"source_metadata\",\"endpoint\":\"/support/logs\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[],\"file_contents_read\":false,\"truncated\":false}}",
+  "target": "juice-presentation",
+  "timed_out": false,
+  "tool": "verify_sensitive_directory",
+  "type": "executor_result",
+  "workspace_id": "a8a613ce45264003f921d46d0abe1bab5157d35ffb2351263ab2d0b283c0bf98"
+}

@@ -1,0 +1,13 @@
+{
+  "total": 7,
+  "raw_total": 7,
+  "duplicates": 0,
+  "normalization_version": "s02.v1",
+  "by_severity": {
+    "WARNING": 7
+  },
+  "by_service": {
+    "juice": 7
+  },
+  "semgrep_errors": 0
+}

@@ -1,0 +1,1127 @@
+[
+  {
+    "id": "sast:02319e9a7bd2fca44637def4",
+    "source": "semgrep",
+    "family": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/fileServer.ts",
+    "line_start": 32,
+    "line_end": 32,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:031f00bfba6c3f4b007b7909",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/navbar/navbar.component.html",
+    "line_start": 17,
+    "line_end": 17,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:0337e824bdc3099e52abdf36",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/update-challenges-ebook.yml",
+    "line_start": 22,
+    "line_end": 25,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:09c9fd9ecd1597cb395677d2",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/search.ts",
+    "line_start": 23,
+    "line_end": 23,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:0c71c91cb6c1bdb7f109235a",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/login.ts",
+    "line_start": 34,
+    "line_end": 34,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:0e24717dd5c5a1d601961c65",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/search.ts",
+    "line_start": 23,
+    "line_end": 23,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:0e74bd8fcafbe9768f8663b3",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/login.ts",
+    "line_start": 34,
+    "line_end": 34,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:107ec7a332aea7a7a3acbc05",
+    "source": "semgrep",
+    "family": "javascript.lang.security.html-in-template-string.html-in-template-string",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/verify.ts",
+    "line_start": 227,
+    "line_end": 227,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:117df335288e37ae19d6e508",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/search.ts",
+    "line_start": 23,
+    "line_end": 23,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:1684d8634f5ba5d645bdafc4",
+    "source": "semgrep",
+    "family": "file-exposure",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "server.ts",
+    "line_start": 268,
+    "line_end": 268,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:195c5b2f73eefee3c04f5a5b",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+    "line_start": 6,
+    "line_end": 6,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:216abc40524a017b926c7d23",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+    "line_start": 10,
+    "line_end": 10,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:3e3d2f0b0f74ae255f8eb293",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/last-login-ip/last-login-ip.component.spec.ts",
+    "line_start": 78,
+    "line_end": 78,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:3fad029ba9d6a29d6b257185",
+    "source": "semgrep",
+    "family": "javascript.express.security.audit.remote-property-injection.remote-property-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/currentUser.ts",
+    "line_start": 31,
+    "line_end": 31,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:40ce8a0fcb19951798fa3943",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+    "line_start": 11,
+    "line_end": 11,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:45f7c6baaeed5b5c3353f193",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+    "line_start": 10,
+    "line_end": 10,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:4728741a3353627165a4f84a",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/userProfile.ts",
+    "line_start": 65,
+    "line_end": 65,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:5480da6a553f93869adf32bd",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+    "line_start": 6,
+    "line_end": 6,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:567aab39fb22d97406a2d593",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/last-login-ip/last-login-ip.component.spec.ts",
+    "line_start": 72,
+    "line_end": 72,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:58ee40e429f07129c3e5a725",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/image_actions.yml",
+    "line_start": 42,
+    "line_end": 42,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:5917997ff6eeb5cf6cba8dde",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+    "line_start": 5,
+    "line_end": 5,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:593cc5c7ca546465392ff3f7",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/codeql-analysis.yml",
+    "line_start": 23,
+    "line_end": 23,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:5b14d5ad9adb2cb058d1c689",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/login.ts",
+    "line_start": 34,
+    "line_end": 34,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:5d820d088e76bfbe26c32dbd",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "config/default.yml",
+    "line_start": 65,
+    "line_end": 65,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:5ed56aa86a66eae3ea154836",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/update-challenges-www-legacy.yml",
+    "line_start": 27,
+    "line_end": 34,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:5f77b71479a69bceab58444d",
+    "source": "semgrep",
+    "family": "open-redirect",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/redirect.ts",
+    "line_start": 18,
+    "line_end": 18,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:62272c6c975664368065863d",
+    "source": "semgrep",
+    "family": "authorization",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/hacking-instructor/helpers/helpers.ts",
+    "line_start": 49,
+    "line_end": 49,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:62597c0f3b6b83fce41394cc",
+    "source": "semgrep",
+    "family": "file-exposure",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "server.ts",
+    "line_start": 300,
+    "line_end": 300,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:63f40f31f5fb24b22edd4c13",
+    "source": "semgrep",
+    "family": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/keyServer.ts",
+    "line_start": 14,
+    "line_end": 14,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:649f762156cc488d0b846ea5",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/image_actions.yml",
+    "line_start": 33,
+    "line_end": 33,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:64a5cdd1848d4016e18c15fb",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/users.yml",
+    "line_start": 151,
+    "line_end": 151,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:671ff5e26f16437723a75cd0",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/userProfile.ts",
+    "line_start": 65,
+    "line_end": 65,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:6721b11c173ce7ce32405c03",
+    "source": "semgrep",
+    "family": "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/codingChallenges.ts",
+    "line_start": 76,
+    "line_end": 76,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:672a9b901dc748c8b3cf8b55",
+    "source": "semgrep",
+    "family": "javascript.lang.security.html-in-template-string.html-in-template-string",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/administration/administration.component.ts",
+    "line_start": 74,
+    "line_end": 74,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:6d4aab9163e0388afe8507a9",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/codeql-analysis.yml",
+    "line_start": 36,
+    "line_end": 36,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:7036bccbbbbbf81bf8153ffb",
+    "source": "semgrep",
+    "family": "javascript.lang.security.html-in-template-string.html-in-template-string",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/last-login-ip/last-login-ip.component.ts",
+    "line_start": 40,
+    "line_end": 40,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:703eb0f7c3b51f35520a5f85",
+    "source": "semgrep",
+    "family": "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/codingChallenges.ts",
+    "line_start": 78,
+    "line_end": 78,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:721cf83496aa8957d3a52c04",
+    "source": "semgrep",
+    "family": "file-exposure",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "server.ts",
+    "line_start": 292,
+    "line_end": 292,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:7276ddf6d20717edf5e9d84a",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/image_actions.yml",
+    "line_start": 30,
+    "line_end": 30,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:73cecc1c755067ffce2e97f6",
+    "source": "semgrep",
+    "family": "javascript.lang.security.html-in-template-string.html-in-template-string",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/startup/customizeApplication.ts",
+    "line_start": 85,
+    "line_end": 85,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:82762632a41947980cff31f2",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/app.guard.spec.ts",
+    "line_start": 46,
+    "line_end": 46,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:865a03b42e205ff20b47f11e",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/web3-sandbox/web3-sandbox.component.ts",
+    "line_start": 243,
+    "line_end": 246,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:8c0d636ce006b886d3d62f66",
+    "source": "semgrep",
+    "family": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "server.ts",
+    "line_start": 157,
+    "line_end": 157,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:8c9e53a5132f25ceab63311c",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/update-challenges-www-legacy.yml",
+    "line_start": 36,
+    "line_end": 44,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:8f44ad81e51e6ed2e9d6e5c8",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+    "line_start": 11,
+    "line_end": 11,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:94c820c9b860c44a453d3bc8",
+    "source": "semgrep",
+    "family": "javascript.lang.security.html-in-template-string.html-in-template-string",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/about/about.component.ts",
+    "line_start": 117,
+    "line_end": 119,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:98a8e8212140e63efd007f98",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/insecurity.ts",
+    "line_start": 54,
+    "line_end": 54,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:a11de650d93c544e34e27713",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/login/login.component.ts",
+    "line_start": 59,
+    "line_end": 59,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:aed683f75e761e33e24315d2",
+    "source": "semgrep",
+    "family": "open-redirect",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/redirect.ts",
+    "line_start": 18,
+    "line_end": 18,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:b4735334bf60fdce9963cd91",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/update-challenges-www.yml",
+    "line_start": 27,
+    "line_end": 34,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:b956c45bcadad95ee6f086ca",
+    "source": "semgrep",
+    "family": "file-exposure",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "server.ts",
+    "line_start": 288,
+    "line_end": 288,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:b9e55286c9af428bdc5c482c",
+    "source": "semgrep",
+    "family": "path-traversal",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/antiCheat.ts",
+    "line_start": 196,
+    "line_end": 196,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:be76e98a83d1c18b316a9255",
+    "source": "semgrep",
+    "family": "javascript.lang.security.html-in-template-string.html-in-template-string",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/track-result/track-result.component.ts",
+    "line_start": 49,
+    "line_end": 49,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:bfa413548b31eb1feaacaea7",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/dbSchemaChallenge_3.ts",
+    "line_start": 11,
+    "line_end": 11,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:c34467c87a1946bff16f8445",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/captcha.ts",
+    "line_start": 22,
+    "line_end": 22,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:c4cd59370588ab7f4d23ec98",
+    "source": "semgrep",
+    "family": "path-traversal",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/antiCheat.ts",
+    "line_start": 196,
+    "line_end": 196,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:c6ee27c5b4743afdc6d781cc",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/insecurity.ts",
+    "line_start": 150,
+    "line_end": 150,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:cdc1ac0c8b524996b6a0ccbc",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "views/dataErasureForm.hbs",
+    "line_start": 38,
+    "line_end": 38,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:d337b128d86298e82f2b4c60",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/update-challenges-www.yml",
+    "line_start": 36,
+    "line_end": 44,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:d4654d3edc72ef047aee8bcb",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+    "line_start": 5,
+    "line_end": 5,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:d6a8f1084bb0ffb354838fc5",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/unionSqlInjectionChallenge_1.ts",
+    "line_start": 6,
+    "line_end": 6,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:d78f89af4b20bbcd34e2fd12",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/videoHandler.ts",
+    "line_start": 71,
+    "line_end": 71,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:d8990ce2328ef822bf8a8129",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "views/promotionVideo.pug",
+    "line_start": 75,
+    "line_end": 75,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:dafc679d99a6adb2670c1d2e",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/ci.yml",
+    "line_start": 188,
+    "line_end": 188,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:dcda5498b188ad2b2e0a61ee",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/hacking-instructor/index.ts",
+    "line_start": 126,
+    "line_end": 126,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:e55b0393b25fb2812831c7fa",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/dbSchemaChallenge_1.ts",
+    "line_start": 5,
+    "line_end": 5,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:eab53e2815faf323b68a7a06",
+    "source": "semgrep",
+    "family": "file-exposure",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "server.ts",
+    "line_start": 296,
+    "line_end": 296,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:ee941ae78a6a423f9160e8ad",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/hacking-instructor/index.ts",
+    "line_start": 126,
+    "line_end": 126,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:f4627dac1063ee881309da45",
+    "source": "semgrep",
+    "family": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/logfileServer.ts",
+    "line_start": 14,
+    "line_end": 14,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:f65f8cc521190f327bbe91ab",
+    "source": "semgrep",
+    "family": "yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/codeql-analysis.yml",
+    "line_start": 34,
+    "line_end": 34,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:f71ab947ebd07f9f26a5a2b0",
+    "source": "semgrep",
+    "family": "xss",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "frontend/src/app/purchase-basket/purchase-basket.component.html",
+    "line_start": 15,
+    "line_end": 15,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:fe22bd8869eaca7c15c575a2",
+    "source": "semgrep",
+    "family": "sql-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "data/static/codefixes/unionSqlInjectionChallenge_3.ts",
+    "line_start": 10,
+    "line_end": 10,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:feb2905630bea30d71fdba6e",
+    "source": "semgrep",
+    "family": "code-injection",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": ".github/workflows/ci.yml",
+    "line_start": 359,
+    "line_end": 359,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:ff767f9dadad7e7afc8abbcc",
+    "source": "semgrep",
+    "family": "hardcoded-secret",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "lib/insecurity.ts",
+    "line_start": 42,
+    "line_end": 42,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  },
+  {
+    "id": "sast:ffd6476f096dda6e626cdfb3",
+    "source": "semgrep",
+    "family": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile",
+    "service": "juice",
+    "sample_kind": "original",
+    "source_file": "routes/quarantineServer.ts",
+    "line_start": 14,
+    "line_end": 14,
+    "verification": "not_run",
+    "evidence_backed": false,
+    "evidence": [
+      "sast/raw.json"
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "status": "technical_failure",
+  "target": "juice-presentation",
+  "adapter": "docker_compose",
+  "session_id": "6f635b92744d4547bf8a9cf0cea336d1",
+  "exit_code": 2
+}

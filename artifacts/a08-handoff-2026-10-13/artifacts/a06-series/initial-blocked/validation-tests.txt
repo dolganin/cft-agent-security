@@ -1,0 +1,200 @@
+.....................s..............FFFFFF..FF.FFFFFFF..F.F...F..F       [100%]
+================================== FAILURES ===================================
+_____________ test_operator_profile_rejects_foreign_seed[//evil/] _____________
+tests\test_a06_baseline.py:79: in test_operator_profile_rejects_foreign_seed
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+__________ test_operator_profile_rejects_foreign_seed[https://evil] ___________
+tests\test_a06_baseline.py:79: in test_operator_profile_rejects_foreign_seed
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+______________ test_operator_profile_rejects_foreign_seed[/a b] _______________
+tests\test_a06_baseline.py:79: in test_operator_profile_rejects_foreign_seed
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+______________ test_operator_profile_rejects_foreign_seed[/a\\b] ______________
+tests\test_a06_baseline.py:79: in test_operator_profile_rejects_foreign_seed
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+______________ test_operator_profile_rejects_foreign_seed[/a\n] _______________
+tests\test_a06_baseline.py:79: in test_operator_profile_rejects_foreign_seed
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+___________ test_profile_requires_pinned_scanners_and_bounded_times ___________
+tests\test_a06_baseline.py:87: in test_profile_requires_pinned_scanners_and_bounded_times
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+__________ test_scanner_container_is_networkless_and_target_readonly __________
+tests\test_a06_baseline.py:121: in test_scanner_container_is_networkless_and_target_readonly
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+___________ test_parse_error_is_technical_failure_not_empty_success ___________
+tests\test_a06_baseline.py:143: in test_parse_error_is_technical_failure_not_empty_success
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_ test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Syntax error-3-warn-True] _
+tests\test_a06_baseline.py:182: in test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_ test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[kind1-3-warn-True] _
+tests\test_a06_baseline.py:182: in test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_ test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Timeout-2-warn-True] _
+tests\test_a06_baseline.py:182: in test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_ test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Timeout-2-error-False] _
+tests\test_a06_baseline.py:182: in test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_ test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Rule parse error-4-warn-False] _
+tests\test_a06_baseline.py:182: in test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_ test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Unknown error-3-warn-False] _
+tests\test_a06_baseline.py:182: in test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_____________ test_dast_start_failure_cleans_only_owned_resources _____________
+tests\test_a06_baseline.py:203: in test_dast_start_failure_cleans_only_owned_resources
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_________________ test_snapshot_does_not_use_expected_labels __________________
+tests\test_a06_baseline.py:246: in test_snapshot_does_not_use_expected_labels
+    profile, lock = runner.load_profile()
+                    ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+___________ test_target_unicode_names_and_hidden_worktree_mutation ____________
+tests\test_a06_baseline.py:274: in test_target_unicode_names_and_hidden_worktree_mutation
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_______________________ test_empty_scan_is_not_success ________________________
+tests\test_a06_baseline.py:303: in test_empty_scan_is_not_success
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+_________________ test_ajax_initial_stopped_is_not_completion _________________
+tests\test_a06_baseline.py:341: in test_ajax_initial_stopped_is_not_completion
+    profile, _ = runner.load_profile()
+                 ^^^^^^^^^^^^^^^^^^^^^
+evaluation\scanner_baseline.py:75: in load_profile
+    validate_dataset()
+evaluation\benchmark_freeze.py:261: in validate
+    raise ValueError("Frozen input digest mismatch: " + relative)
+E   ValueError: Frozen input digest mismatch: .gitattributes
+============================== warnings summary ===============================
+..\..\..\AppData\Local\Programs\Python\Python311\Lib\site-packages\langgraph\cache\base\__init__.py:8
+  C:\Users\User\AppData\Local\Programs\Python\Python311\Lib\site-packages\langgraph\cache\base\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_a06_baseline.py::test_operator_profile_rejects_foreign_seed[//evil/]
+FAILED tests/test_a06_baseline.py::test_operator_profile_rejects_foreign_seed[https://evil]
+FAILED tests/test_a06_baseline.py::test_operator_profile_rejects_foreign_seed[/a b]
+FAILED tests/test_a06_baseline.py::test_operator_profile_rejects_foreign_seed[/a\\b]
+FAILED tests/test_a06_baseline.py::test_operator_profile_rejects_foreign_seed[/a\n]
+FAILED tests/test_a06_baseline.py::test_profile_requires_pinned_scanners_and_bounded_times
+FAILED tests/test_a06_baseline.py::test_scanner_container_is_networkless_and_target_readonly
+FAILED tests/test_a06_baseline.py::test_parse_error_is_technical_failure_not_empty_success
+FAILED tests/test_a06_baseline.py::test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Syntax error-3-warn-True]
+FAILED tests/test_a06_baseline.py::test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[kind1-3-warn-True]
+FAILED tests/test_a06_baseline.py::test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Timeout-2-warn-True]
+FAILED tests/test_a06_baseline.py::test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Timeout-2-error-False]
+FAILED tests/test_a06_baseline.py::test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Rule parse error-4-warn-False]
+FAILED tests/test_a06_baseline.py::test_warning_coverage_gaps_are_visible_but_fatal_diagnostics_fail[Unknown error-3-warn-False]
+FAILED tests/test_a06_baseline.py::test_dast_start_failure_cleans_only_owned_resources
+FAILED tests/test_a06_baseline.py::test_snapshot_does_not_use_expected_labels
+FAILED tests/test_a06_baseline.py::test_target_unicode_names_and_hidden_worktree_mutation
+FAILED tests/test_a06_baseline.py::test_empty_scan_is_not_success - ValueErro...
+FAILED tests/test_a06_baseline.py::test_ajax_initial_stopped_is_not_completion
+19 failed, 46 passed, 1 skipped, 1 warning in 9.49s

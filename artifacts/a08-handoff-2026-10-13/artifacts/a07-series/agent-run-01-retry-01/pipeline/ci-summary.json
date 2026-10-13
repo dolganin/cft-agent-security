@@ -1,0 +1,7 @@
+{
+  "status": "completed",
+  "target": "juice-presentation",
+  "adapter": "docker_compose",
+  "session_id": "4ab40106cb014892924eb40442833ac9",
+  "exit_code": 1
+}

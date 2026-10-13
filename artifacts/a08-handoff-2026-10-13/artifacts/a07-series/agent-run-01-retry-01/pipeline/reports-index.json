@@ -1,0 +1,52 @@
+[
+  {
+    "finding_id": "model-scout-71a2526acad2e4e5b6b5",
+    "status": "inconclusive",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\000-model-scout-71a2526acad2e4e5b6b5.json"
+  },
+  {
+    "finding_id": "model-scout-3cb73957be76439ca7a1",
+    "status": "inconclusive",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\001-model-scout-3cb73957be76439ca7a1.json"
+  },
+  {
+    "finding_id": "model-scout-b2a320314db979f4f269",
+    "status": "inconclusive",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\002-model-scout-b2a320314db979f4f269.json"
+  },
+  {
+    "finding_id": "sequelize-injection.presentation:routes/login.ts:34",
+    "status": "confirmed",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\003-sequelize-injection.presentation-routes-login.ts-34.json"
+  },
+  {
+    "finding_id": "sequelize-injection.presentation:routes/search.ts:23",
+    "status": "confirmed",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\004-sequelize-injection.presentation-routes-search.ts-23.json"
+  },
+  {
+    "finding_id": "directory-listing.presentation:server.ts:268",
+    "status": "inconclusive",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\005-directory-listing.presentation-server.ts-268.json"
+  },
+  {
+    "finding_id": "directory-listing.presentation:server.ts:288",
+    "status": "confirmed",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\006-directory-listing.presentation-server.ts-288.json"
+  },
+  {
+    "finding_id": "directory-listing.presentation:server.ts:292",
+    "status": "inconclusive",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\007-directory-listing.presentation-server.ts-292.json"
+  },
+  {
+    "finding_id": "directory-listing.presentation:server.ts:296",
+    "status": "confirmed",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\008-directory-listing.presentation-server.ts-296.json"
+  },
+  {
+    "finding_id": "directory-listing.presentation:server.ts:300",
+    "status": "inconclusive",
+    "report_path": "C:\\Users\\User\\Documents\\GitHub\\cft-security-agent\\artifacts\\a07-series\\agent-run-01-retry-01\\pipeline\\reports\\009-directory-listing.presentation-server.ts-300.json"
+  }
+]

@@ -1,0 +1,431 @@
+{
+  "cases": [
+    {
+      "case_id": "JS-AUTH-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "authentication",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-BIZ-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "business-logic",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-BIZ-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "business-logic",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-BOLA-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "access-control",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-BOLA-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "access-control",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-BOLA-003",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "access-control",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-BOLA-004",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "access-control",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-CODE-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "code-evaluation",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-CRYPTO-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "weak-cryptography",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-DATA-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "sensitive-data-exposure",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-FILE-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "file-validation",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-NOSQL-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "nosql-injection",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-NOSQL-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "nosql-injection",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-PATH-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "path-traversal",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-RATE-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "rate-limiting",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-REDIRECT-001",
+      "confirmation_supported": false,
+      "context_priority": "HIGH",
+      "detected": true,
+      "evidence": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json",
+        "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3",
+        "execution-6b0b5659dcec4c618e4061064cf59f43"
+      ],
+      "expected": "vulnerable",
+      "family": "open-redirect",
+      "matched_observation_ids": [
+        "model-scout-b2a320314db979f4f269"
+      ],
+      "primary_observation_id": "model-scout-b2a320314db979f4f269",
+      "severity": "UNASSESSED",
+      "verification": "inconclusive"
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "authorization",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-PATH-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "path-traversal",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SSRF-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "ssrf",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-XSS-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "xss",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-XSS-002",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "xss",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-XXE-001",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "vulnerable",
+      "family": "xml-external-entities",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    }
+  ],
+  "context_priority": {
+    "accuracy": null,
+    "assessed_cases": 0,
+    "assessed_coverage": null,
+    "correct_cases": 0,
+    "reviewed_cases": 0
+  },
+  "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_status": "frozen_a04",
+  "detection": {
+    "duplicates": 0,
+    "f1": 0.09523809523809523,
+    "fn": 19,
+    "fp": 0,
+    "outside_ground_truth": 9,
+    "precision": 1.0,
+    "recall": 0.05,
+    "tn": 2,
+    "tp": 1,
+    "unresolved": 0
+  },
+  "matches": [
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "model-scout-71a2526acad2e4e5b6b5"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "model-scout-3cb73957be76439ca7a1"
+    },
+    {
+      "candidate_case_ids": [
+        "JS-REDIRECT-001"
+      ],
+      "case_id": "JS-REDIRECT-001",
+      "classification": "tp",
+      "observation_id": "model-scout-b2a320314db979f4f269"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "sequelize-injection.presentation:routes/login.ts:34"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "sequelize-injection.presentation:routes/search.ts:23"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:268"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:288"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:292"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:296"
+    },
+    {
+      "candidate_case_ids": [],
+      "case_id": null,
+      "classification": "outside_ground_truth",
+      "observation_id": "directory-listing.presentation:server.ts:300"
+    }
+  ],
+  "sample_kind": "original",
+  "schema_version": "benchmark.score.v2",
+  "severity": {
+    "accuracy": null,
+    "assessed_cases": 0,
+    "assessed_coverage": null,
+    "correct_cases": 0,
+    "reviewed_cases": 0
+  },
+  "split": "development",
+  "technical_errors": [],
+  "technically_valid": true,
+  "verification": {
+    "abstention_rate": 1.0,
+    "abstention_reasons": {
+      "conflicting_evidence": 0,
+      "inconclusive": 1,
+      "invalid_evidence": 0,
+      "not_detected": 21,
+      "not_run": 0,
+      "policy_blocked": 0,
+      "technical_error": 0,
+      "timeout": 0,
+      "unsupported": 0
+    },
+    "answered_accuracy": null,
+    "confirmed_precision": null,
+    "counts": {
+      "abstained_cases": 22,
+      "confirmed_cases": 0,
+      "correct_confirmations": 0,
+      "correct_decisions": 0,
+      "correct_rejections": 0,
+      "decided_cases": 0,
+      "duplicates": 0,
+      "false_confirmations": 0,
+      "false_rejections": 0,
+      "labeled_cases": 22,
+      "negative_cases": 2,
+      "outside_ground_truth": 9,
+      "positive_cases": 20,
+      "rejected_cases": 0,
+      "unresolved": 0
+    },
+    "decision_coverage": 0.0,
+    "false_confirmation_rate": 0.0,
+    "schema_version": "benchmark.verification.v2",
+    "supported_verified_recall": 0.0
+  }
+}

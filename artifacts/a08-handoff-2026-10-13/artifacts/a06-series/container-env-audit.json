@@ -1,0 +1,26 @@
+[
+  {
+    "container": "a06-e8400e2187274b7c-zap",
+    "environment_names": [
+      "CFT_A06_CONTAINER",
+      "HOME",
+      "IS_CONTAINERIZED",
+      "JAVA_HOME",
+      "JAVA_OPTS",
+      "LANG",
+      "LC_ALL",
+      "PATH",
+      "ZAP_PATH",
+      "ZAP_PORT"
+    ],
+    "llm_api_secret_variables_present": false
+  },
+  {
+    "container": "a06-e8400e2187274b7c-juice",
+    "environment_names": [
+      "PATH",
+      "SSL_CERT_FILE"
+    ],
+    "llm_api_secret_variables_present": false
+  }
+]

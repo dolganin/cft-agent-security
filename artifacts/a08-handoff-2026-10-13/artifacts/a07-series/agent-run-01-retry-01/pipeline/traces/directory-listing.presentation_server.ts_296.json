@@ -1,0 +1,188 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": "/encryptionkeys",
+        "environment": "sandbox",
+        "expected_evidence": "HTTP GET to http://juice:3000/encryptionkeys returns a 200 response with an HTML directory listing containing file names, file sizes, and modification timestamps (confirming the hypothesis), or a 401/403 response indicating authentication is required (rejecting the hypothesis).",
+        "id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-1ba718c1eb8aa39c",
+          "check": "source_metadata",
+          "line": 296
+        },
+        "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+        "service": "juice",
+        "target": "juice-presentation",
+        "tool": "verify_sensitive_directory"
+      },
+      "evidence_ids": [
+        "evidence-67289ae00e"
+      ],
+      "execution": {
+        "action_id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-b23606f6923b48a390ab19f287deaf17.json"
+        ],
+        "audit_ref": "audit:471bba236fa84df7829c2d4de15c6a40",
+        "duration_ms": 1049,
+        "error": null,
+        "evidence_ref": "execution-b23606f6923b48a390ab19f287deaf17",
+        "exit_code": 0,
+        "run_id": "471bba236fa84df7829c2d4de15c6a40",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"confirmed\",\"explanation\":\"Unauthenticated directory listing exposes sensitive file names; contents were not downloaded.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":296,\"check\":\"source_metadata\",\"endpoint\":\"/encryptionkeys\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[\"premium.key\"],\"file_contents_read\":false,\"truncated\":false}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-directory-listing.presentation:server.ts:296-1",
+      "recorded_at": "2026-10-13T11:06:50.529489Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-67289ae00e"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-directory-listing.presentation:server.ts:296-1",
+      "reason": "Capability-specific structured Evidence confirmed the finding.",
+      "recorded_at": "2026-10-13T11:06:50.529489Z",
+      "step": 1,
+      "stop_reason": "terminal_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+        "run_id": "471bba236fa84df7829c2d4de15c6a40",
+        "tool": "verify_sensitive_directory"
+      },
+      "action_id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-b23606f6923b48a390ab19f287deaf17.json",
+        "execution-b23606f6923b48a390ab19f287deaf17",
+        "audit:471bba236fa84df7829c2d4de15c6a40"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-b23606f6923b48a390ab19f287deaf17.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-b23606f6923b48a390ab19f287deaf17",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:471bba236fa84df7829c2d4de15c6a40",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:06:50.529489Z",
+      "hypothesis_id": "hypothesis-encryptionkeys-dirlisting-001",
+      "id": "evidence-67289ae00e",
+      "observation": {
+        "captured_at": "2026-10-13T11:06:50.529489Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-1ba718c1eb8aa39c",
+            "check": "source_metadata",
+            "directory_listing": true,
+            "endpoint": "/encryptionkeys",
+            "file_contents_read": false,
+            "line": 296,
+            "sensitive_file_names": [
+              "premium.key"
+            ],
+            "status": 200,
+            "truncated": false
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "sensitive_directory_check"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "runtime_directory_metadata",
+        "environment": "sandbox",
+        "service": "juice",
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Unauthenticated directory listing exposes sensitive file names; contents were not downloaded.",
+      "type": "sensitive_directory_check",
+      "verdict": "confirmed"
+    }
+  ],
+  "finding_id": "directory-listing.presentation:server.ts:296",
+  "iterations": 1,
+  "plans": [
+    {
+      "continuation_reason": "No prior evidence exists; this is the first verification iteration. The hypothesis (confidence 0.7) requires a controlled HTTP observation against the sandbox runtime to confirm or reject accessibility and content disclosure.",
+      "environment": "sandbox",
+      "goal": "Verify whether the /encryptionkeys endpoint on the juice service is accessible without authentication and returns a directory listing revealing file names, sizes, and modification timestamps.",
+      "hypothesis_id": "hypothesis-encryptionkeys-dirlisting-001",
+      "id": "plan-directory-listing.presentation:server.ts:296-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": "/encryptionkeys",
+            "environment": "sandbox",
+            "expected_evidence": "HTTP GET to http://juice:3000/encryptionkeys returns a 200 response with an HTML directory listing containing file names, file sizes, and modification timestamps (confirming the hypothesis), or a 401/403 response indicating authentication is required (rejecting the hypothesis).",
+            "id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-1ba718c1eb8aa39c",
+              "check": "source_metadata",
+              "line": 296
+            },
+            "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+            "service": "juice",
+            "target": "juice-presentation",
+            "tool": "verify_sensitive_directory"
+          },
+          "continue_if": "If the response is 200 with directory listing content, the finding is confirmed. If 401/403, the finding is rejected. If 404/500 or any other unexpected status, the result is inconclusive and no further safe step exists within budget.",
+          "expected_observation": "HTTP GET to http://juice:3000/encryptionkeys returns a 200 response with an HTML directory listing containing file names, file sizes, and modification timestamps (confirming the hypothesis), or a 401/403 response indicating authentication is required (rejecting the hypothesis).",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "Endpoint returns 401 or 403, indicating route-level authentication protection (rejects hypothesis)",
+        "Endpoint returns 404 or 500, indicating the route is not functional in sandbox (inconclusive)",
+        "Policy blocks the runtime-verification action",
+        "Wall-clock budget of 120 seconds is exhausted"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "confirmed",
+  "stop_reason": "terminal_evidence"
+}

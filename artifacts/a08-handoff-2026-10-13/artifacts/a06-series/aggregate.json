@@ -1,0 +1,1673 @@
+{
+  "schema_version": "a06.series.aggregate.v1",
+  "status": "COMPLETE",
+  "project_commit": "e6736eaae1d09c12368426b51de63261b0cbf4f5",
+  "initial_blocked": {
+    "schema_version": "a06.series.status.v1",
+    "date": "2026-10-13",
+    "status": "INCOMPLETE",
+    "phase": "preflight",
+    "reason": "A04 exact-byte lock validation failed before any scan: four CRLF/LF input mismatches",
+    "project_commit": "e6736eaae1d09c12368426b51de63261b0cbf4f5",
+    "profile_directory": "benchmarks/baselines-a06-v5",
+    "configured_profile": {
+      "schema_version": "baseline.profile.a06.v1",
+      "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+      "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+      "semgrep_image": "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade",
+      "zap_image": "ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab",
+      "role": "anonymous",
+      "rules_file": "semgrep-rules.yaml",
+      "budgets": {
+        "sast_seconds": 600,
+        "startup_seconds": 180,
+        "spider_seconds": 60,
+        "ajax_seconds": 60,
+        "active_seconds": 180,
+        "passive_seconds": 180,
+        "passive_body_bytes": 262144,
+        "max_urls": 200,
+        "max_alerts": 10000
+      },
+      "seeds": [
+        "/",
+        "/robots.txt",
+        "/rest/products/search?q=apple",
+        "/api/Products",
+        "/rest/admin/application-configuration"
+      ]
+    },
+    "configured_versions": {
+      "semgrep": "1.174.0",
+      "zap": "2.16.1",
+      "juice_shop": "20.2.0"
+    },
+    "runtime_versions_verified": false,
+    "images_provisioned": false,
+    "configuration_sha256": "89baa9223001632e6a3960c13694861f2c910bc8511a98dfc3ba1c800e884c09",
+    "rules_sha256": "1039d8b38468225f7462f44f14d25615aeb0e7cab81a6b919eb317228d2b8694",
+    "rules_commit": "9bbf021d0acffa3095fcffd17b2bc7787eb4796d",
+    "rule_count": 310,
+    "a04_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+    "a04_bound_inputs": 114,
+    "a04_mismatches": [
+      {
+        "path": ".gitattributes",
+        "expected_sha256": "5008ae7ff1de7bf23bbd8e97ded53ed3c0b20a16f668517635f2ef4c249f496f",
+        "actual_sha256": "d9c4607e5862579415c521adc01c2c89960e28f9f3a6376a3c349d8d8fc8a542",
+        "lf_sha256": "5008ae7ff1de7bf23bbd8e97ded53ed3c0b20a16f668517635f2ef4c249f496f",
+        "lf_matches_expected": true
+      },
+      {
+        "path": "evaluation/benchmark_protocol.py",
+        "expected_sha256": "622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf",
+        "actual_sha256": "00a8de1d2ed6951d76bb0bd24fdf815bd690209d5ec3e21dd4134d3dfb4524b4",
+        "lf_sha256": "622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf",
+        "lf_matches_expected": true
+      },
+      {
+        "path": "schemas/benchmark.py",
+        "expected_sha256": "1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8",
+        "actual_sha256": "5bb0336c2f1092a05558325d7a6b8fb7a68b1a86a90000ada40e50f5287523d6",
+        "lf_sha256": "1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8",
+        "lf_matches_expected": true
+      },
+      {
+        "path": "schemas/benchmark_control_expansion.py",
+        "expected_sha256": "4cd41d0f43a8a48239f142d1281d4058cbf13c813e1e22ebe042621b8a50fb30",
+        "actual_sha256": "299fc332370c98f8ae5dd3a65412beaa5f5a59126fbcdabde165284f44a58f3e",
+        "lf_sha256": "4cd41d0f43a8a48239f142d1281d4058cbf13c813e1e22ebe042621b8a50fb30",
+        "lf_matches_expected": true
+      }
+    ],
+    "a01_validation": "PASS",
+    "a04_validation": "FAIL",
+    "a06_validation": "FAIL",
+    "preflight": "FAIL before Docker image inspection",
+    "scans_started": 0,
+    "completed_runs": 0,
+    "attempts": [],
+    "retries": [],
+    "observations": null,
+    "matched_cases": null,
+    "case_stability": null,
+    "timing": null,
+    "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "target_git_status": "",
+    "target_byte_preflight_completed": false,
+    "checks": {
+      "pytest": {
+        "passed": 46,
+        "failed": 19,
+        "skipped": 1,
+        "cause": "All 19 failures raise the existing A04 .gitattributes digest mismatch",
+        "log": "validation-tests.txt"
+      },
+      "ruff": {
+        "passed": false,
+        "code": "I001",
+        "location": "evaluation/scanner_baseline.py:410",
+        "log": "ruff.txt"
+      },
+      "git_diff_check": "PASS",
+      "docker_a06_labeled_resources": {
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0
+      }
+    },
+    "changes": {
+      "code": false,
+      "ground_truth": false,
+      "matcher": false,
+      "scanner_configuration": false,
+      "target": false,
+      "environment_file": false
+    },
+    "secrets": "No user .env was read/copied; no scanner containers or LLM calls were started. Only lock/config metadata and test diagnostics were saved.",
+    "offline_scoring_command": "PYTHONPATH=. python scripts/rescore_a06_slices.py --artifacts <sealed-run> --output <fresh-score-directory>",
+    "offline_scoring_executed": false,
+    "note": "No run-01/run-02/run-03 or score directories were fabricated. Stop requested on configuration problems; no frozen inputs were repaired."
+  },
+  "lf_restoration": [
+    {
+      "path": ".gitattributes",
+      "old_sha256": "d9c4607e5862579415c521adc01c2c89960e28f9f3a6376a3c349d8d8fc8a542",
+      "new_sha256": "5008ae7ff1de7bf23bbd8e97ded53ed3c0b20a16f668517635f2ef4c249f496f",
+      "expected_sha256": "5008ae7ff1de7bf23bbd8e97ded53ed3c0b20a16f668517635f2ef4c249f496f",
+      "exact_match": true,
+      "crlf_replaced": 14
+    },
+    {
+      "path": "evaluation/benchmark_protocol.py",
+      "old_sha256": "00a8de1d2ed6951d76bb0bd24fdf815bd690209d5ec3e21dd4134d3dfb4524b4",
+      "new_sha256": "622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf",
+      "expected_sha256": "622ce7ff7985c108f430f17e90ab084fd6c96ed660187999ef81f75e001e59cf",
+      "exact_match": true,
+      "crlf_replaced": 89
+    },
+    {
+      "path": "schemas/benchmark.py",
+      "old_sha256": "5bb0336c2f1092a05558325d7a6b8fb7a68b1a86a90000ada40e50f5287523d6",
+      "new_sha256": "1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8",
+      "expected_sha256": "1532c28112eb27ea8f3b7c0682fb93aaabd2b3453b5cb77ff1005558238624c8",
+      "exact_match": true,
+      "crlf_replaced": 428
+    },
+    {
+      "path": "schemas/benchmark_control_expansion.py",
+      "old_sha256": "299fc332370c98f8ae5dd3a65412beaa5f5a59126fbcdabde165284f44a58f3e",
+      "new_sha256": "4cd41d0f43a8a48239f142d1281d4058cbf13c813e1e22ebe042621b8a50fb30",
+      "expected_sha256": "4cd41d0f43a8a48239f142d1281d4058cbf13c813e1e22ebe042621b8a50fb30",
+      "exact_match": true,
+      "crlf_replaced": 56
+    }
+  ],
+  "preflight": {
+    "passed": true,
+    "missing_image_before_provision": "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade",
+    "provision_exact_digests": true,
+    "log": "resumed-preflight.txt"
+  },
+  "profile": {
+    "schema_version": "baseline.profile.a06.v1",
+    "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+    "semgrep_image": "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade",
+    "zap_image": "ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab",
+    "role": "anonymous",
+    "rules_file": "semgrep-rules.yaml",
+    "budgets": {
+      "sast_seconds": 600,
+      "startup_seconds": 180,
+      "spider_seconds": 60,
+      "ajax_seconds": 60,
+      "active_seconds": 180,
+      "passive_seconds": 180,
+      "passive_body_bytes": 262144,
+      "max_urls": 200,
+      "max_alerts": 10000
+    },
+    "seeds": [
+      "/",
+      "/robots.txt",
+      "/rest/products/search?q=apple",
+      "/api/Products",
+      "/rest/admin/application-configuration"
+    ]
+  },
+  "images": {
+    "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade": {
+      "id": "sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade",
+      "repository_digests": [
+        "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade"
+      ],
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    "ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab": {
+      "id": "sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab",
+      "repository_digests": [
+        "ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab"
+      ],
+      "architecture": "amd64",
+      "os": "linux"
+    },
+    "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b": {
+      "id": "sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+      "repository_digests": [
+        "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b"
+      ],
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  },
+  "configuration_sha256": "89baa9223001632e6a3960c13694861f2c910bc8511a98dfc3ba1c800e884c09",
+  "rules_sha256": "1039d8b38468225f7462f44f14d25615aeb0e7cab81a6b919eb317228d2b8694",
+  "rules_commit": "9bbf021d0acffa3095fcffd17b2bc7787eb4796d",
+  "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "dataset_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+  "runs": [
+    {
+      "run": "run-01",
+      "attempt_id": "a06-7c17446b29a04516",
+      "status": "COMPLETED_WITH_LIMITATIONS",
+      "started_at": "2026-10-13T05:18:30.658006+00:00",
+      "retry_of": null,
+      "seconds": {
+        "total": 229.84399999999914,
+        "sast": 95.84399999999914,
+        "dast": 114.25
+      },
+      "technical_errors": [],
+      "cleanup_complete": true,
+      "original_unchanged": true,
+      "sealed_files": 23,
+      "views": {
+        "sast": {
+          "raw_observations": 94,
+          "normalized_observations": 94,
+          "matched_positive_cases": [
+            "JS-FILE-001",
+            "JS-REDIRECT-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "outside_ground_truth": 85,
+            "tp": 4,
+            "duplicate": 5
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 19,
+                "tn": 2,
+                "precision": 1.0,
+                "recall": 0.05,
+                "f1": 0.09523809523809523,
+                "duplicates": 1,
+                "unresolved": 0,
+                "outside_ground_truth": 92
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 4,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.42857142857142855,
+                "f1": 0.6,
+                "duplicates": 4,
+                "unresolved": 0,
+                "outside_ground_truth": 87
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        },
+        "dast": {
+          "raw_observations": 494,
+          "normalized_observations": 409,
+          "matched_positive_cases": [
+            "JS-SQL-001"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "tp": 1,
+            "outside_ground_truth": 408
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 20,
+                "tn": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": null,
+                "duplicates": 0,
+                "unresolved": 0,
+                "outside_ground_truth": 409
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 6,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.14285714285714285,
+                "f1": 0.25,
+                "duplicates": 0,
+                "unresolved": 0,
+                "outside_ground_truth": 408
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        },
+        "union": {
+          "raw_observations": null,
+          "normalized_observations": 503,
+          "matched_positive_cases": [
+            "JS-FILE-001",
+            "JS-REDIRECT-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "tp": 4,
+            "outside_ground_truth": 493,
+            "duplicate": 6
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 19,
+                "tn": 2,
+                "precision": 1.0,
+                "recall": 0.05,
+                "f1": 0.09523809523809523,
+                "duplicates": 1,
+                "unresolved": 0,
+                "outside_ground_truth": 501
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 4,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.42857142857142855,
+                "f1": 0.6,
+                "duplicates": 5,
+                "unresolved": 0,
+                "outside_ground_truth": 495
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        }
+      },
+      "contribution": {
+        "sast_only": [
+          "JS-FILE-001",
+          "JS-REDIRECT-001",
+          "JS-SQL-002"
+        ],
+        "dast_only": [],
+        "overlap": [
+          "JS-SQL-001"
+        ]
+      },
+      "diagnostics": {
+        "semgrep": {
+          "Syntax error": 20,
+          "Timeout": 1,
+          "PartialParsing": 35
+        },
+        "semgrep_total": 56,
+        "warnings": 56,
+        "zap_errors": []
+      },
+      "dast_coverage": {
+        "role": "anonymous",
+        "target": "http://juice:3000",
+        "stages": {
+          "spider": {
+            "complete": true,
+            "budget_seconds": 60
+          },
+          "ajax": {
+            "complete": true,
+            "budget_seconds": 60,
+            "results": 235
+          },
+          "active": {
+            "complete": true,
+            "budget_seconds": 180
+          },
+          "passive": {
+            "complete": true
+          }
+        },
+        "errors": [],
+        "limitations": [
+          "No authenticated roles or cross-user workflows",
+          "No OAST: scanner has no external network access",
+          "No business-logic oracle or exhaustive route coverage",
+          "Passive body analysis skips oversized responses"
+        ],
+        "seeds": [
+          {
+            "path": "/",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/robots.txt",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/rest/products/search?q=apple",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/api/Products",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/rest/admin/application-configuration",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          }
+        ],
+        "urls": [
+          "http://juice:3000",
+          "http://juice:3000/",
+          "http://juice:3000/api",
+          "http://juice:3000/api/Challenges",
+          "http://juice:3000/api/Challenges/?name=Score%20Board",
+          "http://juice:3000/api/Products",
+          "http://juice:3000/api/Quantitys",
+          "http://juice:3000/api/Quantitys/",
+          "http://juice:3000/assets",
+          "http://juice:3000/assets/i18n",
+          "http://juice:3000/assets/i18n/en.json",
+          "http://juice:3000/assets/public",
+          "http://juice:3000/assets/public/favicon_js.ico",
+          "http://juice:3000/assets/public/images",
+          "http://juice:3000/assets/public/images/JuiceShop_Logo.png",
+          "http://juice:3000/assets/public/images/hackingInstructor.png",
+          "http://juice:3000/assets/public/images/products",
+          "http://juice:3000/assets/public/images/products/apple_juice.jpg",
+          "http://juice:3000/assets/public/images/products/apple_pressings.jpg",
+          "http://juice:3000/assets/public/images/products/artwork2.jpg",
+          "http://juice:3000/assets/public/images/products/banana_juice.jpg",
+          "http://juice:3000/assets/public/images/products/basil_smoothie.png",
+          "http://juice:3000/assets/public/images/products/berry_juice.png",
+          "http://juice:3000/assets/public/images/products/braga.jpg",
+          "http://juice:3000/assets/public/images/products/carrot_juice.jpeg",
+          "http://juice:3000/assets/public/images/products/dragonfruit_juice.png",
+          "http://juice:3000/assets/public/images/products/eggfruit_juice.jpg",
+          "http://juice:3000/assets/public/images/products/elderflower_cordial.jpg",
+          "http://juice:3000/assets/public/images/products/fruit_press.jpg",
+          "http://juice:3000/assets/public/images/products/grape_juice.png",
+          "http://juice:3000/assets/public/images/products/green_smoothie.jpg",
+          "http://juice:3000/assets/public/images/products/lemon_juice.jpg",
+          "http://juice:3000/assets/public/images/products/permafrost.jpg",
+          "http://juice:3000/chunk-DAJ4olp_.js",
+          "http://juice:3000/chunk-DBPdFzgj.js",
+          "http://juice:3000/chunk-eYAgyLdn.js",
+          "http://juice:3000/confetti-DoPrSMNP.js",
+          "http://juice:3000/ftp",
+          "http://juice:3000/hacking-instructor-BXwB7EFQ.js",
+          "http://juice:3000/juice-shop",
+          "http://juice:3000/juice-shop/build",
+          "http://juice:3000/juice-shop/build/lib",
+          "http://juice:3000/juice-shop/build/lib/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/insecurity.js:218:5",
+          "http://juice:3000/juice-shop/build/lib/main.js",
+          "http://juice:3000/juice-shop/build/lib/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/styles.css",
+          "http://juice:3000/juice-shop/build/lib/utils.js:235:26",
+          "http://juice:3000/juice-shop/build/routes",
+          "http://juice:3000/juice-shop/build/routes/angular.js:18:18",
+          "http://juice:3000/juice-shop/build/routes/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/main.js",
+          "http://juice:3000/juice-shop/build/routes/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/styles.css",
+          "http://juice:3000/juice-shop/build/routes/verify.js:235:5",
+          "http://juice:3000/juice-shop/node_modules",
+          "http://juice:3000/juice-shop/node_modules/express",
+          "http://juice:3000/juice-shop/node_modules/express/lib",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:280:10",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:286:9",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:328:13",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:346:12",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/layer.js:95:5",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/styles.css",
+          "http://juice:3000/main.js",
+          "http://juice:3000/media",
+          "http://juice:3000/media/font-mfizz-4UOGIENA.woff",
+          "http://juice:3000/media/material-icons-LEZCGFVT.woff2",
+          "http://juice:3000/polyfills.js",
+          "http://juice:3000/rest",
+          "http://juice:3000/rest/admin",
+          "http://juice:3000/rest/admin/application-configuration",
+          "http://juice:3000/rest/admin/application-version",
+          "http://juice:3000/rest/languages",
+          "http://juice:3000/rest/products",
+          "http://juice:3000/rest/products/search?q=",
+          "http://juice:3000/robots.txt",
+          "http://juice:3000/rolldown-runtime-BoHGiXSq.js",
+          "http://juice:3000/scripts.js",
+          "http://juice:3000/sitemap.xml",
+          "http://juice:3000/socket.io",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pjDiK&sid=hTTEqh1Dul8u4QC8AAAA",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pjL5e",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pjL85&sid=uDQ8IgzBtlyVBwUMAAAI",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pjL9k&sid=uDQ8IgzBtlyVBwUMAAAI",
+          "http://juice:3000/socket.io/?EIO=4&transport=websocket&sid=uDQ8IgzBtlyVBwUMAAAI",
+          "http://juice:3000/styles.css"
+        ],
+        "truncated": false,
+        "passive_body_limit_bytes": 262144,
+        "passive_remaining": 0,
+        "url_count": 163
+      },
+      "runtime_versions": {
+        "semgrep": "1.174.0",
+        "zap": "2.16.1"
+      }
+    },
+    {
+      "run": "run-02",
+      "attempt_id": "a06-3065852c9fcf4e5f",
+      "status": "COMPLETED_WITH_LIMITATIONS",
+      "started_at": "2026-10-13T05:22:47.214606+00:00",
+      "retry_of": null,
+      "seconds": {
+        "total": 238.01600000000144,
+        "sast": 91.96899999999914,
+        "dast": 127.45299999999952
+      },
+      "technical_errors": [],
+      "cleanup_complete": true,
+      "original_unchanged": true,
+      "sealed_files": 23,
+      "views": {
+        "sast": {
+          "raw_observations": 94,
+          "normalized_observations": 94,
+          "matched_positive_cases": [
+            "JS-FILE-001",
+            "JS-REDIRECT-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "outside_ground_truth": 85,
+            "tp": 4,
+            "duplicate": 5
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 19,
+                "tn": 2,
+                "precision": 1.0,
+                "recall": 0.05,
+                "f1": 0.09523809523809523,
+                "duplicates": 1,
+                "unresolved": 0,
+                "outside_ground_truth": 92
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 4,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.42857142857142855,
+                "f1": 0.6,
+                "duplicates": 4,
+                "unresolved": 0,
+                "outside_ground_truth": 87
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        },
+        "dast": {
+          "raw_observations": 490,
+          "normalized_observations": 405,
+          "matched_positive_cases": [
+            "JS-SQL-001"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "tp": 1,
+            "outside_ground_truth": 404
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 20,
+                "tn": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": null,
+                "duplicates": 0,
+                "unresolved": 0,
+                "outside_ground_truth": 405
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 6,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.14285714285714285,
+                "f1": 0.25,
+                "duplicates": 0,
+                "unresolved": 0,
+                "outside_ground_truth": 404
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        },
+        "union": {
+          "raw_observations": null,
+          "normalized_observations": 499,
+          "matched_positive_cases": [
+            "JS-FILE-001",
+            "JS-REDIRECT-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "tp": 4,
+            "outside_ground_truth": 489,
+            "duplicate": 6
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 19,
+                "tn": 2,
+                "precision": 1.0,
+                "recall": 0.05,
+                "f1": 0.09523809523809523,
+                "duplicates": 1,
+                "unresolved": 0,
+                "outside_ground_truth": 497
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 4,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.42857142857142855,
+                "f1": 0.6,
+                "duplicates": 5,
+                "unresolved": 0,
+                "outside_ground_truth": 491
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        }
+      },
+      "contribution": {
+        "sast_only": [
+          "JS-FILE-001",
+          "JS-REDIRECT-001",
+          "JS-SQL-002"
+        ],
+        "dast_only": [],
+        "overlap": [
+          "JS-SQL-001"
+        ]
+      },
+      "diagnostics": {
+        "semgrep": {
+          "Syntax error": 20,
+          "Timeout": 2,
+          "PartialParsing": 35
+        },
+        "semgrep_total": 57,
+        "warnings": 57,
+        "zap_errors": []
+      },
+      "dast_coverage": {
+        "role": "anonymous",
+        "target": "http://juice:3000",
+        "stages": {
+          "spider": {
+            "complete": true,
+            "budget_seconds": 60
+          },
+          "ajax": {
+            "complete": true,
+            "budget_seconds": 60,
+            "results": 233
+          },
+          "active": {
+            "complete": true,
+            "budget_seconds": 180
+          },
+          "passive": {
+            "complete": true
+          }
+        },
+        "errors": [],
+        "limitations": [
+          "No authenticated roles or cross-user workflows",
+          "No OAST: scanner has no external network access",
+          "No business-logic oracle or exhaustive route coverage",
+          "Passive body analysis skips oversized responses"
+        ],
+        "seeds": [
+          {
+            "path": "/",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/robots.txt",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/rest/products/search?q=apple",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/api/Products",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/rest/admin/application-configuration",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          }
+        ],
+        "urls": [
+          "http://juice:3000",
+          "http://juice:3000/",
+          "http://juice:3000/api",
+          "http://juice:3000/api/Challenges",
+          "http://juice:3000/api/Challenges/?name=Score%20Board",
+          "http://juice:3000/api/Products",
+          "http://juice:3000/api/Quantitys",
+          "http://juice:3000/api/Quantitys/",
+          "http://juice:3000/assets",
+          "http://juice:3000/assets/i18n",
+          "http://juice:3000/assets/i18n/en.json",
+          "http://juice:3000/assets/public",
+          "http://juice:3000/assets/public/favicon_js.ico",
+          "http://juice:3000/assets/public/images",
+          "http://juice:3000/assets/public/images/JuiceShop_Logo.png",
+          "http://juice:3000/assets/public/images/hackingInstructor.png",
+          "http://juice:3000/assets/public/images/products",
+          "http://juice:3000/assets/public/images/products/apple_juice.jpg",
+          "http://juice:3000/assets/public/images/products/apple_pressings.jpg",
+          "http://juice:3000/assets/public/images/products/artwork2.jpg",
+          "http://juice:3000/assets/public/images/products/banana_juice.jpg",
+          "http://juice:3000/assets/public/images/products/basil_smoothie.png",
+          "http://juice:3000/assets/public/images/products/berry_juice.png",
+          "http://juice:3000/assets/public/images/products/braga.jpg",
+          "http://juice:3000/assets/public/images/products/carrot_juice.jpeg",
+          "http://juice:3000/assets/public/images/products/dragonfruit_juice.png",
+          "http://juice:3000/assets/public/images/products/eggfruit_juice.jpg",
+          "http://juice:3000/assets/public/images/products/elderflower_cordial.jpg",
+          "http://juice:3000/assets/public/images/products/fruit_press.jpg",
+          "http://juice:3000/assets/public/images/products/grape_juice.png",
+          "http://juice:3000/assets/public/images/products/green_smoothie.jpg",
+          "http://juice:3000/assets/public/images/products/lemon_juice.jpg",
+          "http://juice:3000/assets/public/images/products/permafrost.jpg",
+          "http://juice:3000/chunk-DAJ4olp_.js",
+          "http://juice:3000/chunk-DBPdFzgj.js",
+          "http://juice:3000/chunk-eYAgyLdn.js",
+          "http://juice:3000/confetti-DoPrSMNP.js",
+          "http://juice:3000/ftp",
+          "http://juice:3000/hacking-instructor-BXwB7EFQ.js",
+          "http://juice:3000/juice-shop",
+          "http://juice:3000/juice-shop/build",
+          "http://juice:3000/juice-shop/build/lib",
+          "http://juice:3000/juice-shop/build/lib/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/insecurity.js:218:5",
+          "http://juice:3000/juice-shop/build/lib/main.js",
+          "http://juice:3000/juice-shop/build/lib/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/styles.css",
+          "http://juice:3000/juice-shop/build/lib/utils.js:235:26",
+          "http://juice:3000/juice-shop/build/routes",
+          "http://juice:3000/juice-shop/build/routes/angular.js:18:18",
+          "http://juice:3000/juice-shop/build/routes/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/main.js",
+          "http://juice:3000/juice-shop/build/routes/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/styles.css",
+          "http://juice:3000/juice-shop/build/routes/verify.js:235:5",
+          "http://juice:3000/juice-shop/node_modules",
+          "http://juice:3000/juice-shop/node_modules/express",
+          "http://juice:3000/juice-shop/node_modules/express/lib",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:280:10",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:286:9",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:328:13",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:346:12",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/layer.js:95:5",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/styles.css",
+          "http://juice:3000/main.js",
+          "http://juice:3000/media",
+          "http://juice:3000/media/font-mfizz-4UOGIENA.woff",
+          "http://juice:3000/media/material-icons-LEZCGFVT.woff2",
+          "http://juice:3000/polyfills.js",
+          "http://juice:3000/rest",
+          "http://juice:3000/rest/admin",
+          "http://juice:3000/rest/admin/application-configuration",
+          "http://juice:3000/rest/admin/application-version",
+          "http://juice:3000/rest/languages",
+          "http://juice:3000/rest/products",
+          "http://juice:3000/rest/products/search?q=",
+          "http://juice:3000/robots.txt",
+          "http://juice:3000/rolldown-runtime-BoHGiXSq.js",
+          "http://juice:3000/scripts.js",
+          "http://juice:3000/sitemap.xml",
+          "http://juice:3000/socket.io",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pkBB1&sid=-hfgUNOOR3QUPjNLAAAA",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pkBgD&sid=-hfgUNOOR3QUPjNLAAAA",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pkJLk",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pkJON&sid=CIEU1jdbHXEdIzXLAAAI",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4pkJQp&sid=CIEU1jdbHXEdIzXLAAAI",
+          "http://juice:3000/socket.io/?EIO=4&transport=websocket&sid=CIEU1jdbHXEdIzXLAAAI",
+          "http://juice:3000/styles.css"
+        ],
+        "truncated": false,
+        "passive_body_limit_bytes": 262144,
+        "passive_remaining": 0,
+        "url_count": 164
+      },
+      "runtime_versions": {
+        "semgrep": "1.174.0",
+        "zap": "2.16.1"
+      }
+    },
+    {
+      "run": "run-03",
+      "attempt_id": "a06-e8400e2187274b7c",
+      "status": "COMPLETED_WITH_LIMITATIONS",
+      "started_at": "2026-10-13T05:28:17.501347+00:00",
+      "retry_of": null,
+      "seconds": {
+        "total": 265.2029999999995,
+        "sast": 98.28099999999904,
+        "dast": 147.20299999999952
+      },
+      "technical_errors": [],
+      "cleanup_complete": true,
+      "original_unchanged": true,
+      "sealed_files": 23,
+      "views": {
+        "sast": {
+          "raw_observations": 75,
+          "normalized_observations": 75,
+          "matched_positive_cases": [
+            "JS-FILE-001",
+            "JS-REDIRECT-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "outside_ground_truth": 66,
+            "tp": 4,
+            "duplicate": 5
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 19,
+                "tn": 2,
+                "precision": 1.0,
+                "recall": 0.05,
+                "f1": 0.09523809523809523,
+                "duplicates": 1,
+                "unresolved": 0,
+                "outside_ground_truth": 73
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 4,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.42857142857142855,
+                "f1": 0.6,
+                "duplicates": 4,
+                "unresolved": 0,
+                "outside_ground_truth": 68
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        },
+        "dast": {
+          "raw_observations": 497,
+          "normalized_observations": 412,
+          "matched_positive_cases": [
+            "JS-SQL-001"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "tp": 1,
+            "outside_ground_truth": 411
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 0,
+                "fp": 0,
+                "fn": 20,
+                "tn": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": null,
+                "duplicates": 0,
+                "unresolved": 0,
+                "outside_ground_truth": 412
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 6,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.14285714285714285,
+                "f1": 0.25,
+                "duplicates": 0,
+                "unresolved": 0,
+                "outside_ground_truth": 411
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        },
+        "union": {
+          "raw_observations": null,
+          "normalized_observations": 487,
+          "matched_positive_cases": [
+            "JS-FILE-001",
+            "JS-REDIRECT-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "matched_safe_cases": [],
+          "inventory_classifications": {
+            "tp": 4,
+            "outside_ground_truth": 477,
+            "duplicate": 6
+          },
+          "splits": {
+            "development": {
+              "detection": {
+                "tp": 1,
+                "fp": 0,
+                "fn": 19,
+                "tn": 2,
+                "precision": 1.0,
+                "recall": 0.05,
+                "f1": 0.09523809523809523,
+                "duplicates": 1,
+                "unresolved": 0,
+                "outside_ground_truth": 485
+              },
+              "positive_denominator": 20,
+              "safe_denominator": 2
+            },
+            "holdout": {
+              "detection": {
+                "tp": 3,
+                "fp": 0,
+                "fn": 4,
+                "tn": 6,
+                "precision": 1.0,
+                "recall": 0.42857142857142855,
+                "f1": 0.6,
+                "duplicates": 5,
+                "unresolved": 0,
+                "outside_ground_truth": 479
+              },
+              "positive_denominator": 7,
+              "safe_denominator": 6
+            }
+          }
+        }
+      },
+      "contribution": {
+        "sast_only": [
+          "JS-FILE-001",
+          "JS-REDIRECT-001",
+          "JS-SQL-002"
+        ],
+        "dast_only": [],
+        "overlap": [
+          "JS-SQL-001"
+        ]
+      },
+      "diagnostics": {
+        "semgrep": {
+          "Syntax error": 20,
+          "Timeout": 3,
+          "PartialParsing": 35
+        },
+        "semgrep_total": 58,
+        "warnings": 58,
+        "zap_errors": []
+      },
+      "dast_coverage": {
+        "role": "anonymous",
+        "target": "http://juice:3000",
+        "stages": {
+          "spider": {
+            "complete": true,
+            "budget_seconds": 60
+          },
+          "ajax": {
+            "complete": true,
+            "budget_seconds": 60,
+            "results": 236
+          },
+          "active": {
+            "complete": true,
+            "budget_seconds": 180
+          },
+          "passive": {
+            "complete": true
+          }
+        },
+        "errors": [],
+        "limitations": [
+          "No authenticated roles or cross-user workflows",
+          "No OAST: scanner has no external network access",
+          "No business-logic oracle or exhaustive route coverage",
+          "Passive body analysis skips oversized responses"
+        ],
+        "seeds": [
+          {
+            "path": "/",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/robots.txt",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/rest/products/search?q=apple",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/api/Products",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          },
+          {
+            "path": "/rest/admin/application-configuration",
+            "responses": [
+              {
+                "status": "HTTP/1.1 200 OK"
+              }
+            ]
+          }
+        ],
+        "urls": [
+          "http://juice:3000",
+          "http://juice:3000/",
+          "http://juice:3000/api",
+          "http://juice:3000/api/Challenges",
+          "http://juice:3000/api/Challenges/?name=Score%20Board",
+          "http://juice:3000/api/Products",
+          "http://juice:3000/api/Quantitys",
+          "http://juice:3000/api/Quantitys/",
+          "http://juice:3000/assets",
+          "http://juice:3000/assets/i18n",
+          "http://juice:3000/assets/i18n/en.json",
+          "http://juice:3000/assets/public",
+          "http://juice:3000/assets/public/favicon_js.ico",
+          "http://juice:3000/assets/public/images",
+          "http://juice:3000/assets/public/images/JuiceShop_Logo.png",
+          "http://juice:3000/assets/public/images/hackingInstructor.png",
+          "http://juice:3000/assets/public/images/products",
+          "http://juice:3000/assets/public/images/products/apple_juice.jpg",
+          "http://juice:3000/assets/public/images/products/apple_pressings.jpg",
+          "http://juice:3000/assets/public/images/products/artwork2.jpg",
+          "http://juice:3000/assets/public/images/products/banana_juice.jpg",
+          "http://juice:3000/assets/public/images/products/basil_smoothie.png",
+          "http://juice:3000/assets/public/images/products/berry_juice.png",
+          "http://juice:3000/assets/public/images/products/braga.jpg",
+          "http://juice:3000/assets/public/images/products/carrot_juice.jpeg",
+          "http://juice:3000/assets/public/images/products/dragonfruit_juice.png",
+          "http://juice:3000/assets/public/images/products/eggfruit_juice.jpg",
+          "http://juice:3000/assets/public/images/products/elderflower_cordial.jpg",
+          "http://juice:3000/assets/public/images/products/fruit_press.jpg",
+          "http://juice:3000/assets/public/images/products/grape_juice.png",
+          "http://juice:3000/assets/public/images/products/green_smoothie.jpg",
+          "http://juice:3000/assets/public/images/products/lemon_juice.jpg",
+          "http://juice:3000/assets/public/images/products/permafrost.jpg",
+          "http://juice:3000/chunk-DAJ4olp_.js",
+          "http://juice:3000/chunk-DBPdFzgj.js",
+          "http://juice:3000/chunk-eYAgyLdn.js",
+          "http://juice:3000/confetti-DoPrSMNP.js",
+          "http://juice:3000/ftp",
+          "http://juice:3000/hacking-instructor-BXwB7EFQ.js",
+          "http://juice:3000/juice-shop",
+          "http://juice:3000/juice-shop/build",
+          "http://juice:3000/juice-shop/build/lib",
+          "http://juice:3000/juice-shop/build/lib/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/lib/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/lib/insecurity.js:218:5",
+          "http://juice:3000/juice-shop/build/lib/main.js",
+          "http://juice:3000/juice-shop/build/lib/polyfills.js",
+          "http://juice:3000/juice-shop/build/lib/scripts.js",
+          "http://juice:3000/juice-shop/build/lib/styles.css",
+          "http://juice:3000/juice-shop/build/lib/utils.js:235:26",
+          "http://juice:3000/juice-shop/build/routes",
+          "http://juice:3000/juice-shop/build/routes/angular.js:18:18",
+          "http://juice:3000/juice-shop/build/routes/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/build/routes/assets/public/main.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/assets/public/styles.css",
+          "http://juice:3000/juice-shop/build/routes/main.js",
+          "http://juice:3000/juice-shop/build/routes/polyfills.js",
+          "http://juice:3000/juice-shop/build/routes/scripts.js",
+          "http://juice:3000/juice-shop/build/routes/styles.css",
+          "http://juice:3000/juice-shop/build/routes/verify.js:235:5",
+          "http://juice:3000/juice-shop/node_modules",
+          "http://juice:3000/juice-shop/node_modules/express",
+          "http://juice:3000/juice-shop/node_modules/express/lib",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets/public",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/favicon_js.ico",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/assets/public/styles.css",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:280:10",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:286:9",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:328:13",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/index.js:346:12",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/layer.js:95:5",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/main.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/polyfills.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/scripts.js",
+          "http://juice:3000/juice-shop/node_modules/express/lib/router/styles.css",
+          "http://juice:3000/main.js",
+          "http://juice:3000/media",
+          "http://juice:3000/media/font-mfizz-4UOGIENA.woff",
+          "http://juice:3000/media/material-icons-LEZCGFVT.woff2",
+          "http://juice:3000/polyfills.js",
+          "http://juice:3000/rest",
+          "http://juice:3000/rest/admin",
+          "http://juice:3000/rest/admin/application-configuration",
+          "http://juice:3000/rest/admin/application-version",
+          "http://juice:3000/rest/languages",
+          "http://juice:3000/rest/products",
+          "http://juice:3000/rest/products/search?q=",
+          "http://juice:3000/robots.txt",
+          "http://juice:3000/rolldown-runtime-BoHGiXSq.js",
+          "http://juice:3000/scripts.js",
+          "http://juice:3000/sitemap.xml",
+          "http://juice:3000/socket.io",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4plX4A&sid=z7imOWS6C7Qb7vaiAAAA",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4plYF0",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4plgDy",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4plgH6&sid=wuarXaunmy8l1kVrAAAI",
+          "http://juice:3000/socket.io/?EIO=4&transport=polling&t=Q4plgL2&sid=wuarXaunmy8l1kVrAAAI",
+          "http://juice:3000/socket.io/?EIO=4&transport=websocket&sid=wuarXaunmy8l1kVrAAAI",
+          "http://juice:3000/styles.css"
+        ],
+        "truncated": false,
+        "passive_body_limit_bytes": 262144,
+        "passive_remaining": 0,
+        "url_count": 164
+      },
+      "runtime_versions": {
+        "semgrep": "1.174.0",
+        "zap": "2.16.1"
+      }
+    }
+  ],
+  "stability": {
+    "sast": {
+      "found_3_of_3": [
+        "JS-FILE-001",
+        "JS-REDIRECT-001",
+        "JS-SQL-001",
+        "JS-SQL-002"
+      ],
+      "found_2_of_3": [],
+      "found_1_of_3": [],
+      "jaccard": {
+        "run-01/run-02": 1.0,
+        "run-01/run-03": 1.0,
+        "run-02/run-03": 1.0
+      }
+    },
+    "dast": {
+      "found_3_of_3": [
+        "JS-SQL-001"
+      ],
+      "found_2_of_3": [],
+      "found_1_of_3": [],
+      "jaccard": {
+        "run-01/run-02": 1.0,
+        "run-01/run-03": 1.0,
+        "run-02/run-03": 1.0
+      }
+    },
+    "union": {
+      "found_3_of_3": [
+        "JS-FILE-001",
+        "JS-REDIRECT-001",
+        "JS-SQL-001",
+        "JS-SQL-002"
+      ],
+      "found_2_of_3": [],
+      "found_1_of_3": [],
+      "jaccard": {
+        "run-01/run-02": 1.0,
+        "run-01/run-03": 1.0,
+        "run-02/run-03": 1.0
+      }
+    }
+  },
+  "timing_statistics_seconds": {
+    "total": {
+      "mean": 244.35433333333336,
+      "min": 229.84399999999914,
+      "max": 265.2029999999995
+    },
+    "sast": {
+      "mean": 95.36466666666577,
+      "min": 91.96899999999914,
+      "max": 98.28099999999904
+    },
+    "dast": {
+      "mean": 129.63533333333302,
+      "min": 114.25,
+      "max": 147.20299999999952
+    }
+  },
+  "stage_timing": null,
+  "stage_timing_reason": "Frozen worker records stage budgets/completion, not elapsed stage timings.",
+  "attempt_count": 3,
+  "technical_invalid_attempts": [],
+  "retries": [],
+  "preservation": {
+    "all_539_tracked_byte_digests_unchanged_since_restoration": true,
+    "all_run_profiles_images_locks_target_bytes_equal": true,
+    "env_untouched": true,
+    "secret_forwarding": "Existing minimal subprocess environment excludes LLM/API secrets; Docker receives no env-file. User .env was not read."
+  },
+  "scope": "Scanner detection inventory; A05 metrics remain separate DEV/HOLDOUT original samples. No Agent verification metrics.",
+  "final_validation": {
+    "a01": "PASS",
+    "a04": "PASS with target source checked",
+    "a06": "PASS",
+    "freeze": "all tracked byte digests unchanged; 1300 target files verified",
+    "tests": {
+      "passed": 65,
+      "skipped": 1,
+      "failed": 0,
+      "skip_reason": "CFT_A05_DEMO_ARTIFACTS not supplied"
+    },
+    "ruff": {
+      "exit_code": 1,
+      "pre_existing_issue": "I001 evaluation/scanner_baseline.py:410",
+      "fixed": false
+    },
+    "git_diff_check": "PASS",
+    "docker_labeled_resources": {
+      "containers": [],
+      "networks": [],
+      "volumes": []
+    },
+    "secret_pattern_audit": {
+      "files_checked": 120,
+      "suspicious_files": [],
+      "user_env_read": false,
+      "scope": "Recognizable API-key patterns only; no comparison against unread user secrets",
+      "container_env_audit": "container-env-audit.json"
+    },
+    "logs": [
+      "final-a01.txt",
+      "final-a04.txt",
+      "final-a06.txt",
+      "final-tests.txt",
+      "final-ruff.txt"
+    ]
+  },
+  "sequential_runs_verified": true,
+  "scanner_lock_sha256": "c6381e5e8ad071a29df9e6f7611495ea393002fdf28d56bc002ab6f8e03eb771",
+  "protocol_lock_sha256": "8f9ef9b2ddd11f3ec36f8c0794cd535480ddb5ff22804fb9e2838a854c116f1a",
+  "ground_truth_sha256": "579b9a51531010e8b4d53b27cb7607f410898cb144fe1db76cef9810e82a5366",
+  "pre_series_events": [
+    {
+      "kind": "validation_failure",
+      "reason": "CRLF exact-byte mismatch",
+      "history": "initial-blocked/"
+    },
+    {
+      "kind": "preflight_failure",
+      "reason": "Pinned Semgrep image missing",
+      "resolved": "Existing exact-digest provisioning followed by successful preflight"
+    }
+  ],
+  "container_environment_audit": [
+    {
+      "container": "a06-e8400e2187274b7c-zap",
+      "environment_names": [
+        "CFT_A06_CONTAINER",
+        "HOME",
+        "IS_CONTAINERIZED",
+        "JAVA_HOME",
+        "JAVA_OPTS",
+        "LANG",
+        "LC_ALL",
+        "PATH",
+        "ZAP_PATH",
+        "ZAP_PORT"
+      ],
+      "llm_api_secret_variables_present": false
+    },
+    {
+      "container": "a06-e8400e2187274b7c-juice",
+      "environment_names": [
+        "PATH",
+        "SSL_CERT_FILE"
+      ],
+      "llm_api_secret_variables_present": false
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "model-scout-b2a320314db979f4f269",
+  "finding": {
+    "id": "model-scout-b2a320314db979f4f269",
+    "source": "model_scout",
+    "rule_id": "open-redirect",
+    "title": "Open Redirect via Weak Allowlist Check",
+    "description": "The isRedirectAllowed function uses String.includes() to validate redirect URLs against an allowlist, which can be bypassed by appending the allowed URL as a substring of a malicious domain.\nScout rationale and verification strategy: Line 136 checks url.includes(allowedUrl), so a URL like 'https://github.com/juice-shop/juice-shop.evil.com' would pass validation because it contains the allowed string as a substring. This allows redirecting users to attacker-controlled domains. Verification: call the redirect endpoint with a URL that contains an allowlisted string as a substring of a different domain.",
+    "severity": null,
+    "service": "juice",
+    "file": "lib/insecurity.ts",
+    "line_start": 133,
+    "line_end": 139,
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "open-redirect",
+      "fingerprint": "48b365b1607a8c4ed4b2c0fb9c33e494912ce67fa8d06b5802109030734234be",
+      "normalized_file": "lib/insecurity.ts",
+      "anchor_sha256": "9658f58605d3769283052245c943ac80a7ac9150e2f888fa8f0f8f609fc88304",
+      "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "model-scout-b2a320314db979f4f269"
+      ],
+      "observations": [
+        {
+          "source_id": "model-scout-b2a320314db979f4f269",
+          "source": "model_scout",
+          "rule_id": "open-redirect",
+          "original_file": "lib/insecurity.ts",
+          "title": "Open Redirect via Weak Allowlist Check",
+          "description": "The isRedirectAllowed function uses String.includes() to validate redirect URLs against an allowlist, which can be bypassed by appending the allowed URL as a substring of a malicious domain.",
+          "line_start": 133,
+          "line_end": 139,
+          "column_start": null,
+          "column_end": null,
+          "severity": null,
+          "rationale": "Line 136 checks url.includes(allowedUrl), so a URL like 'https://github.com/juice-shop/juice-shop.evil.com' would pass validation because it contains the allowed string as a substring. This allows redirecting users to attacker-controlled domains. Verification: call the redirect endpoint with a URL that contains an allowlisted string as a substring of a different domain.",
+          "provenance_paths": [
+            "lib/insecurity.ts"
+          ]
+        }
+      ]
+    }
+  },
+  "status": "inconclusive",
+  "analysis_summary": "The finding identifies a classic open-redirect vulnerability pattern in lib/insecurity.ts (lines 133-139). The isRedirectAllowed function uses String.includes() to validate user-supplied URLs against an allowlist, which is a well-known anti-pattern. A URL like 'https://github.com/juice-shop/juice-shop.evil.com' would pass validation because it contains the allowlisted string 'https://github.com/juice-shop/juice-shop' as a substring. FACTS: (1) The code at line 136 uses url.includes(allowedUrl) — confirmed by source metadata with matching SHA256. (2) The function is exported, indicating it is consumed by other modules. (3) The service is publicly exposed on the internet with high criticality and direct database access. (4) Authentication is mixed, meaning some endpoints may be accessible without full authentication. ASSUMPTIONS (not yet verified): (1) isRedirectAllowed is called within a route handler that performs an actual HTTP redirect (e.g., res.redirect(url)). (2) The redirect endpoint is reachable with the crafted URL. (3) No additional downstream validation prevents the bypass. The source metadata evidence from step 1 confirmed the file and line exist but was inconclusive on exploitability. The next verification step should locate the call site of isRedirectAllowed to confirm it gates a server-side redirect response.",
+  "risk_signals": [
+    "String.includes() used for URL allowlist validation — well-known substring bypass pattern",
+    "Service is publicly exposed on the internet (public_exposure: true)",
+    "High asset criticality with direct database access",
+    "Mixed authentication model — redirect endpoint may be accessible with low or no privileges",
+    "Context priority score of 7.0 (HIGH) driven by public exposure, criticality, and database access",
+    "Function is exported, confirming it is used by other modules (call site not yet identified)",
+    "Allowlist contains specific domain strings that can be trivially embedded as substrings in attacker-controlled domains"
+  ],
+  "code_context": "  125:   'https://explorer.dash.org/address/Xr556RzuwX6hg5EGpkybbv5RanJoZN17kW', // vuln-code-snippet vuln-line redirectCryptoCurrencyChallenge\n  126:   'https://etherscan.io/address/0x0f933ab9fcaaa782d0279c300d73750e1311eae6', // vuln-code-snippet vuln-line redirectCryptoCurrencyChallenge\n  127:   'http://shop.spreadshirt.com/juiceshop',\n  128:   'http://shop.spreadshirt.de/juiceshop',\n  129:   'https://www.stickeryou.com/products/owasp-juice-shop/794',\n  130:   'http://leanpub.com/juice-shop'\n  131: ])\n  132: \n  133: export const isRedirectAllowed = (url: string) => {\n  134:   let allowed = false\n  135:   for (const allowedUrl of redirectAllowlist) {\n  136:     allowed = allowed || url.includes(allowedUrl) // vuln-code-snippet vuln-line redirectChallenge\n  137:   }\n  138:   return allowed\n  139: }\n  140: // vuln-code-snippet end redirectCryptoCurrencyChallenge redirectChallenge\n  141: \n  142: export const roles = {\n  143:   customer: 'customer',\n  144:   deluxe: 'deluxe',\n  145:   accounting: 'accounting',\n  146:   admin: 'admin'\n  147: }",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": true,
+    "criticality": "high",
+    "trust_zone": "application",
+    "connected_services": [
+      "database"
+    ],
+    "databases": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "authentication": "mixed",
+    "blast_radius": "unknown"
+  },
+  "hypothesis": "The isRedirectAllowed function is called within a route handler that performs a server-side HTTP redirect (e.g., res.redirect(url) or res.status(302).location(url)), so a crafted URL containing an allowlisted string as a substring of a malicious domain (e.g., 'https://github.com/juice-shop/juice-shop.evil.com') will pass validation and cause the server to redirect the user to the attacker-controlled domain.",
+  "hypothesis_confidence": 0.75,
+  "verification": {
+    "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+    "capability": "inspect_javascript_security",
+    "target": "juice-presentation",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 1,
+    "evidence_types": [
+      "javascript_source_metadata"
+    ],
+    "decision_basis": "workflow_state"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS."
+  },
+  "context_priority": {
+    "level": "HIGH",
+    "score": 7.0,
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evidence-3a24bb12ad",
+      "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+      "type": "javascript_source_metadata",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json",
+        "execution-6b0b5659dcec4c618e4061064cf59f43",
+        "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hyp-b2a320314db979f4f269-001",
+      "action": {
+        "id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+        "tool": "inspect_javascript_security",
+        "run_id": "9eb5dcaa3cd145fab5c2fe43d811fcf3"
+      },
+      "observation": {
+        "kind": "javascript_source_metadata",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-4b68d0a42c1de76b",
+            "line": 133,
+            "check": "source_metadata",
+            "file": "lib/insecurity.ts",
+            "total_lines": 197,
+            "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+            "runtime_verified": false,
+            "values_redacted": true
+          }
+        },
+        "captured_at": "2026-10-13T11:04:03.654918Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": null,
+        "description": "source_metadata"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-6b0b5659dcec4c618e4061064cf59f43",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:04:03.654918Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+      "capability": "inspect_javascript_security",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1515,
+      "command": [
+        "inspect_javascript_security",
+        "--artifact-id",
+        "source-4b68d0a42c1de76b",
+        "--line",
+        "133",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":133,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json"
+      ]
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "action-model-scout-b2a320314db979f4f269-39f7de9ce840528d-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "continue",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "evidence_ids": [
+        "evidence-3a24bb12ad"
+      ],
+      "plan_id": "plan-model-scout-b2a320314db979f4f269-1",
+      "stop_reason": null,
+      "recorded_at": "2026-10-13T11:04:03.654918Z"
+    },
+    {
+      "step": 1,
+      "outcome": "stop",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "evidence_ids": [
+        "evidence-3a24bb12ad"
+      ],
+      "plan_id": "plan-model-scout-b2a320314db979f4f269-1",
+      "stop_reason": "insufficient_evidence",
+      "recorded_at": "2026-10-13T11:04:17.979163Z"
+    }
+  ],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "model-scout-b2a320314db979f4f269: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 1,
+  "stop_reason": "insufficient_evidence"
+}

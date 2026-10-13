@@ -1,0 +1,29 @@
+{"ts":"2026-10-13T10:58:50.956222+00:00","kind":"stage","stage":"discovery","status":"done","detail":"4 components: node, express, angular"}
+{"ts":"2026-10-13T10:58:50.960544+00:00","kind":"stage","stage":"sandbox","status":"running"}
+{"ts":"2026-10-13T10:59:04.910118+00:00","kind":"stage","stage":"sandbox","status":"done","detail":"1 services ready"}
+{"ts":"2026-10-13T11:02:00.785433+00:00","kind":"stage","stage":"sast","status":"done","detail":"7 findings"}
+{"ts":"2026-10-13T11:02:00.785433+00:00","kind":"stage","stage":"scout","status":"running","detail":"turn 0/2; reviewed files 0; candidates 0"}
+{"ts":"2026-10-13T11:02:31.081268+00:00","kind":"stage","stage":"scout","status":"running","detail":"turn 1/2; reviewed files 3; candidates 0"}
+{"ts":"2026-10-13T11:02:44.293413+00:00","kind":"stage","stage":"scout","status":"running","detail":"turn 2/2; reviewed files 5; candidates 4"}
+{"ts":"2026-10-13T11:02:44.345741+00:00","kind":"stage","stage":"scout","status":"done","detail":"4 candidates; reviewed files 5; stop turn_budget"}
+{"ts":"2026-10-13T11:02:44.412735+00:00","kind":"stage","stage":"verification","status":"running"}
+{"ts":"2026-10-13T11:02:44.413196+00:00","kind":"finding_started","index":1,"total":10,"finding_id":"model-scout-71a2526acad2e4e5b6b5","title":"Hardcoded RSA Private Key in Source","severity":null,"rule_id":"file-exposure","file":"lib/insecurity.ts"}
+{"ts":"2026-10-13T11:03:14.888516+00:00","kind":"finding_finished","finding_id":"model-scout-71a2526acad2e4e5b6b5","status":"inconclusive"}
+{"ts":"2026-10-13T11:03:14.890743+00:00","kind":"finding_started","index":2,"total":10,"finding_id":"model-scout-3cb73957be76439ca7a1","title":"MD5 Used for Password Hashing","severity":null,"rule_id":"authentication","file":"lib/insecurity.ts"}
+{"ts":"2026-10-13T11:03:42.662160+00:00","kind":"finding_finished","finding_id":"model-scout-3cb73957be76439ca7a1","status":"inconclusive"}
+{"ts":"2026-10-13T11:03:42.662160+00:00","kind":"finding_started","index":3,"total":10,"finding_id":"model-scout-b2a320314db979f4f269","title":"Open Redirect via Weak Allowlist Check","severity":null,"rule_id":"open-redirect","file":"lib/insecurity.ts"}
+{"ts":"2026-10-13T11:04:17.986646+00:00","kind":"finding_finished","finding_id":"model-scout-b2a320314db979f4f269","status":"inconclusive"}
+{"ts":"2026-10-13T11:04:17.988667+00:00","kind":"finding_started","index":4,"total":10,"finding_id":"sequelize-injection.presentation:routes/login.ts:34","title":"SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.","severity":"WARNING","rule_id":"sequelize-injection.presentation","file":"routes/login.ts"}
+{"ts":"2026-10-13T11:04:34.564504+00:00","kind":"finding_finished","finding_id":"sequelize-injection.presentation:routes/login.ts:34","status":"confirmed"}
+{"ts":"2026-10-13T11:04:34.565033+00:00","kind":"finding_started","index":5,"total":10,"finding_id":"sequelize-injection.presentation:routes/search.ts:23","title":"SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.","severity":"WARNING","rule_id":"sequelize-injection.presentation","file":"routes/search.ts"}
+{"ts":"2026-10-13T11:04:52.418268+00:00","kind":"finding_finished","finding_id":"sequelize-injection.presentation:routes/search.ts:23","status":"confirmed"}
+{"ts":"2026-10-13T11:04:52.418268+00:00","kind":"finding_started","index":6,"total":10,"finding_id":"directory-listing.presentation:server.ts:268","title":"Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.","severity":"WARNING","rule_id":"directory-listing.presentation","file":"server.ts"}
+{"ts":"2026-10-13T11:05:34.176358+00:00","kind":"finding_finished","finding_id":"directory-listing.presentation:server.ts:268","status":"inconclusive"}
+{"ts":"2026-10-13T11:05:34.176358+00:00","kind":"finding_started","index":7,"total":10,"finding_id":"directory-listing.presentation:server.ts:288","title":"Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.","severity":"WARNING","rule_id":"directory-listing.presentation","file":"server.ts"}
+{"ts":"2026-10-13T11:05:50.411171+00:00","kind":"finding_finished","finding_id":"directory-listing.presentation:server.ts:288","status":"confirmed"}
+{"ts":"2026-10-13T11:05:50.412283+00:00","kind":"finding_started","index":8,"total":10,"finding_id":"directory-listing.presentation:server.ts:292","title":"Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.","severity":"WARNING","rule_id":"directory-listing.presentation","file":"server.ts"}
+{"ts":"2026-10-13T11:06:33.786121+00:00","kind":"finding_finished","finding_id":"directory-listing.presentation:server.ts:292","status":"inconclusive"}
+{"ts":"2026-10-13T11:06:33.786121+00:00","kind":"finding_started","index":9,"total":10,"finding_id":"directory-listing.presentation:server.ts:296","title":"Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.","severity":"WARNING","rule_id":"directory-listing.presentation","file":"server.ts"}
+{"ts":"2026-10-13T11:06:50.940406+00:00","kind":"finding_finished","finding_id":"directory-listing.presentation:server.ts:296","status":"confirmed"}
+{"ts":"2026-10-13T11:06:50.940406+00:00","kind":"finding_started","index":10,"total":10,"finding_id":"directory-listing.presentation:server.ts:300","title":"Публикация списка файлов. Требуется проверить доступность и типы раскрываемых имен.","severity":"WARNING","rule_id":"directory-listing.presentation","file":"server.ts"}
+{"ts":"2026-10-13T11:07:41.645801+00:00","kind":"finding_finished","finding_id":"directory-listing.presentation:server.ts:300","status":"inconclusive"}

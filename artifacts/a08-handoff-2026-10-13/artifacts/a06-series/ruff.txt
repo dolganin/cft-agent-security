@@ -1,0 +1,24 @@
+I001 [*] Import block is un-sorted or un-formatted
+   --> evaluation\scanner_baseline.py:410:5
+    |
+408 |   def score_exports(artifacts, output):
+409 |       """Optional A05 hand-off after its branch is merged; never overwrite raw runs."""
+410 | /     from schemas.benchmark_v2 import BenchmarkDatasetV2, BenchmarkObservationV2
+411 | |
+412 | |     from evaluation.benchmark_v2 import score_v2
+    | |________________________________________________^
+413 |
+414 |       artifacts, output = Path(artifacts).resolve(), Path(output).resolve()
+    |
+help: Organize imports
+    |
+409 |     """Optional A05 hand-off after its branch is merged; never overwrite raw runs."""
+    -     from schemas.benchmark_v2 import BenchmarkDatasetV2, BenchmarkObservationV2
+    -
+410 |     from evaluation.benchmark_v2 import score_v2
+411 +     from schemas.benchmark_v2 import BenchmarkDatasetV2, BenchmarkObservationV2
+412 |
+    |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

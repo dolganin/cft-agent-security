@@ -1,0 +1,152 @@
+C:\Users\User\AppData\Local\Programs\Python\Python311\Lib\site-packages\langgraph\cache\base\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+{
+  "attempt_id": "a06-e8400e2187274b7c",
+  "status": "COMPLETED_WITH_LIMITATIONS",
+  "seconds": 265.2029999999995,
+  "observations": {
+    "sast": 75,
+    "dast": 412,
+    "union": 487
+  },
+  "scope": "Original detection only; separate DEV/HOLDOUT, not agent verification",
+  "rows": [
+    {
+      "view": "sast",
+      "split": "development",
+      "positives": 20,
+      "negatives": 2,
+      "detection": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 19,
+        "tn": 2,
+        "precision": 1.0,
+        "recall": 0.05,
+        "f1": 0.09523809523809523,
+        "duplicates": 1,
+        "unresolved": 0,
+        "outside_ground_truth": 73
+      },
+      "matched_ids": [
+        "JS-REDIRECT-001"
+      ]
+    },
+    {
+      "view": "sast",
+      "split": "holdout",
+      "positives": 7,
+      "negatives": 6,
+      "detection": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "tn": 6,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "duplicates": 4,
+        "unresolved": 0,
+        "outside_ground_truth": 68
+      },
+      "matched_ids": [
+        "JS-FILE-001",
+        "JS-SQL-001",
+        "JS-SQL-002"
+      ]
+    },
+    {
+      "view": "dast",
+      "split": "development",
+      "positives": 20,
+      "negatives": 2,
+      "detection": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 20,
+        "tn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null,
+        "duplicates": 0,
+        "unresolved": 0,
+        "outside_ground_truth": 412
+      },
+      "matched_ids": []
+    },
+    {
+      "view": "dast",
+      "split": "holdout",
+      "positives": 7,
+      "negatives": 6,
+      "detection": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 6,
+        "tn": 6,
+        "precision": 1.0,
+        "recall": 0.14285714285714285,
+        "f1": 0.25,
+        "duplicates": 0,
+        "unresolved": 0,
+        "outside_ground_truth": 411
+      },
+      "matched_ids": [
+        "JS-SQL-001"
+      ]
+    },
+    {
+      "view": "union",
+      "split": "development",
+      "positives": 20,
+      "negatives": 2,
+      "detection": {
+        "tp": 1,
+        "fp": 0,
+        "fn": 19,
+        "tn": 2,
+        "precision": 1.0,
+        "recall": 0.05,
+        "f1": 0.09523809523809523,
+        "duplicates": 1,
+        "unresolved": 0,
+        "outside_ground_truth": 485
+      },
+      "matched_ids": [
+        "JS-REDIRECT-001"
+      ]
+    },
+    {
+      "view": "union",
+      "split": "holdout",
+      "positives": 7,
+      "negatives": 6,
+      "detection": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "tn": 6,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "duplicates": 5,
+        "unresolved": 0,
+        "outside_ground_truth": 479
+      },
+      "matched_ids": [
+        "JS-FILE-001",
+        "JS-SQL-001",
+        "JS-SQL-002"
+      ]
+    }
+  ],
+  "offline_repeat_equal": true,
+  "sealed_files_checked": 23,
+  "scorer_commit": "e6736eaae1d09c12368426b51de63261b0cbf4f5",
+  "scorer_source_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "agent_confirmation_metrics": null,
+  "mttr": null,
+  "warnings": 58,
+  "source_unchanged": true,
+  "cleanup_complete": true
+}

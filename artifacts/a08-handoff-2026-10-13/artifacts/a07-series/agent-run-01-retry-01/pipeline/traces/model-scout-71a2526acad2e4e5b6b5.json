@@ -1,0 +1,195 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": null,
+        "environment": "sandbox",
+        "expected_evidence": "Source code from lib/insecurity.ts showing the privateKey variable (defined at line 21) being passed as the key/secret argument to jwt.sign() or a similar JWT signing function, confirming the key is actively used for token generation.",
+        "id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-4b68d0a42c1de76b",
+          "check": "source_metadata",
+          "line": 21
+        },
+        "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+        "service": null,
+        "target": "juice-presentation",
+        "tool": "inspect_javascript_security"
+      },
+      "evidence_ids": [
+        "evidence-b8c6e51762"
+      ],
+      "execution": {
+        "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9dbac9f581e44e9f822e4882fa75faf5.json"
+        ],
+        "audit_ref": "audit:d9cde3418bb94833b8de799c9321a43e",
+        "duration_ms": 1552,
+        "error": null,
+        "evidence_ref": "execution-9dbac9f581e44e9f822e4882fa75faf5",
+        "exit_code": 0,
+        "run_id": "d9cde3418bb94833b8de799c9321a43e",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":21,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-model-scout-71a2526acad2e4e5b6b5-1",
+      "recorded_at": "2026-10-13T11:03:02.181189Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-b8c6e51762"
+      ],
+      "outcome": "continue",
+      "plan_id": "plan-model-scout-71a2526acad2e4e5b6b5-1",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:03:02.181189Z",
+      "step": 1,
+      "stop_reason": null
+    },
+    {
+      "evidence_ids": [
+        "evidence-b8c6e51762"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-model-scout-71a2526acad2e4e5b6b5-1",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "recorded_at": "2026-10-13T11:03:14.878363Z",
+      "step": 1,
+      "stop_reason": "insufficient_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+        "run_id": "d9cde3418bb94833b8de799c9321a43e",
+        "tool": "inspect_javascript_security"
+      },
+      "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9dbac9f581e44e9f822e4882fa75faf5.json",
+        "execution-9dbac9f581e44e9f822e4882fa75faf5",
+        "audit:d9cde3418bb94833b8de799c9321a43e"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9dbac9f581e44e9f822e4882fa75faf5.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-9dbac9f581e44e9f822e4882fa75faf5",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:d9cde3418bb94833b8de799c9321a43e",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:03:02.181189Z",
+      "hypothesis_id": "hyp-71a2526a-001",
+      "id": "evidence-b8c6e51762",
+      "observation": {
+        "captured_at": "2026-10-13T11:03:02.181189Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-4b68d0a42c1de76b",
+            "check": "source_metadata",
+            "file": "lib/insecurity.ts",
+            "line": 21,
+            "runtime_verified": false,
+            "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+            "total_lines": 197,
+            "values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "javascript_source_metadata"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "source_metadata",
+        "environment": "sandbox",
+        "service": null,
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "type": "javascript_source_metadata",
+      "verdict": "inconclusive"
+    }
+  ],
+  "finding_id": "model-scout-71a2526acad2e4e5b6b5",
+  "iterations": 1,
+  "plans": [
+    {
+      "continuation_reason": "Code context only shows lines 13-29; the claimed jwt.sign usage at line 54 is not visible. Need to inspect the full source to confirm the privateKey variable is used in a signing operation.",
+      "environment": "sandbox",
+      "goal": "Verify that the hardcoded RSA private key variable (line 21) is passed to jwt.sign() or an equivalent JWT signing function in lib/insecurity.ts, confirming active use for token generation.",
+      "hypothesis_id": "hyp-71a2526a-001",
+      "id": "plan-model-scout-71a2526acad2e4e5b6b5-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": null,
+            "environment": "sandbox",
+            "expected_evidence": "Source code from lib/insecurity.ts showing the privateKey variable (defined at line 21) being passed as the key/secret argument to jwt.sign() or a similar JWT signing function, confirming the key is actively used for token generation.",
+            "id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-4b68d0a42c1de76b",
+              "check": "source_metadata",
+              "line": 21
+            },
+            "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+            "service": null,
+            "target": "juice-presentation",
+            "tool": "inspect_javascript_security"
+          },
+          "continue_if": "The inspection result shows privateKey referenced in a jwt.sign() call or equivalent signing operation, OR the result is insufficient to determine usage (e.g., file truncated, variable not found in visible scope).",
+          "expected_observation": "Source code from lib/insecurity.ts showing the privateKey variable (defined at line 21) being passed as the key/secret argument to jwt.sign() or a similar JWT signing function, confirming the key is actively used for token generation.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "privateKey variable is found being passed to jwt.sign() or equivalent signing function — finding confirmed",
+        "privateKey variable is not referenced in any signing call — hypothesis rejected",
+        "Source inspection is unavailable or returns insufficient data — inconclusive"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "inconclusive",
+  "stop_reason": "insufficient_evidence"
+}

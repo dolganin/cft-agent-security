@@ -1,0 +1,220 @@
+{
+  "indexed_files": 256,
+  "skipped_files": {
+    "outside_application_source": 1011,
+    "large_or_binary": 1,
+    "index_budget": 33
+  },
+  "reviewed_ranges": [
+    {
+      "file": "server.ts",
+      "line_start": 1,
+      "line_end": 160
+    },
+    {
+      "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+      "line_start": 1,
+      "line_end": 145
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_start": 1,
+      "line_end": 160
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_start": 1,
+      "line_end": 160
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_start": 161,
+      "line_end": 197
+    },
+    {
+      "file": "routes/search.ts",
+      "line_start": 1,
+      "line_end": 74
+    },
+    {
+      "file": "server.ts",
+      "line_start": 175,
+      "line_end": 334
+    },
+    {
+      "file": "server.ts",
+      "line_start": 335,
+      "line_end": 340
+    },
+    {
+      "file": "server.ts",
+      "line_start": 360,
+      "line_end": 415
+    }
+  ],
+  "submitted_ranges": [
+    {
+      "file": "server.ts",
+      "line_start": 1,
+      "line_end": 160
+    },
+    {
+      "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+      "line_start": 1,
+      "line_end": 145
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_start": 1,
+      "line_end": 160
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_start": 1,
+      "line_end": 160
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_start": 161,
+      "line_end": 197
+    },
+    {
+      "file": "routes/search.ts",
+      "line_start": 1,
+      "line_end": 74
+    },
+    {
+      "file": "server.ts",
+      "line_start": 175,
+      "line_end": 334
+    },
+    {
+      "file": "server.ts",
+      "line_start": 335,
+      "line_end": 340
+    },
+    {
+      "file": "server.ts",
+      "line_start": 360,
+      "line_end": 415
+    }
+  ],
+  "turns": [
+    {
+      "turn": 1,
+      "ranges": [
+        {
+          "file": "server.ts",
+          "line_start": 1,
+          "line_end": 160
+        },
+        {
+          "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+          "line_start": 1,
+          "line_end": 145
+        },
+        {
+          "file": "routes/verify.ts",
+          "line_start": 1,
+          "line_end": 160
+        }
+      ],
+      "status": "ok",
+      "proposed": 2,
+      "read_requests": [
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 1,
+          "line_end": 200
+        },
+        {
+          "file": "routes/search.ts",
+          "line_start": 1,
+          "line_end": 100
+        },
+        {
+          "file": "server.ts",
+          "line_start": 175,
+          "line_end": 340
+        }
+      ],
+      "search_queries": [
+        "isAuthorized",
+        "denyAll"
+      ],
+      "model_route": "nsu/Qwen3.8-27B"
+    },
+    {
+      "turn": 2,
+      "ranges": [
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 1,
+          "line_end": 160
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 161,
+          "line_end": 197
+        },
+        {
+          "file": "routes/search.ts",
+          "line_start": 1,
+          "line_end": 74
+        },
+        {
+          "file": "server.ts",
+          "line_start": 175,
+          "line_end": 334
+        },
+        {
+          "file": "server.ts",
+          "line_start": 335,
+          "line_end": 340
+        },
+        {
+          "file": "server.ts",
+          "line_start": 360,
+          "line_end": 415
+        }
+      ],
+      "status": "ok",
+      "proposed": 4,
+      "read_requests": [],
+      "search_queries": [],
+      "model_route": "nsu/Qwen3.8-27B"
+    }
+  ],
+  "rejected_candidates": 2,
+  "rejected_read_requests": 0,
+  "stop_reason": "turn_budget",
+  "source_chars": 46027,
+  "reviewed_chars": 46027,
+  "accepted_candidates": 4,
+  "dropped_candidates": 0,
+  "max_candidates": 4,
+  "search_chars": 883,
+  "reviewed_source_lines": 958,
+  "indexed_source_lines": 22529,
+  "indexed_line_coverage": 0.0425,
+  "elapsed_seconds": 41.031,
+  "merged_candidates": 3,
+  "duplicates": 1,
+  "queue_before": 7,
+  "queue_after": 10,
+  "route_candidate_links": {
+    "candidates": 4,
+    "mapped": 4,
+    "ambiguous": 3,
+    "authorization_assessed": false
+  },
+  "express_source_map": {
+    "analyzed_files": 256,
+    "routes": 113,
+    "middleware_mounts": 65,
+    "dynamic_routes": 1,
+    "omitted_routes": 0,
+    "omitted_middleware_mounts": 0,
+    "unsupported_files": []
+  }
+}

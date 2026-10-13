@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "sequelize-injection.presentation:routes/login.ts:34",
+  "finding": {
+    "id": "sequelize-injection.presentation:routes/login.ts:34",
+    "source": "semgrep",
+    "rule_id": "sequelize-injection.presentation",
+    "title": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+    "description": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+    "severity": "WARNING",
+    "service": "juice",
+    "file": "routes/login.ts",
+    "line_start": 34,
+    "line_end": 34,
+    "pr_context": null,
+    "provenance": {
+      "schema_version": "1.0",
+      "family": "sql-injection",
+      "fingerprint": "28daf1284680f6ee25a15cc9a4a400d4ff4540cf556f37a310290f2c895b9082",
+      "normalized_file": "routes/login.ts",
+      "anchor_sha256": "030a23d98ae141390ad5060281cfb6cefd7282cd5cf7259a4086ac01f12e73ea",
+      "file_sha256": "cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b",
+      "anchor_status": "source_bound",
+      "aliases": [
+        "sequelize-injection.presentation:routes/login.ts:34"
+      ],
+      "observations": [
+        {
+          "source_id": "sequelize-injection.presentation:routes/login.ts:34",
+          "source": "semgrep",
+          "rule_id": "sequelize-injection.presentation",
+          "original_file": "routes/login.ts",
+          "title": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+          "description": "SQL-запрос строится интерполяцией. Требуется проверка влияния входных данных.",
+          "line_start": 34,
+          "line_end": 34,
+          "column_start": 5,
+          "column_end": 206,
+          "severity": "WARNING",
+          "rationale": null,
+          "provenance_paths": []
+        }
+      ]
+    }
+  },
+  "status": "confirmed",
+  "analysis_summary": "Line 34 of routes/login.ts constructs a raw SQL query using a JavaScript template literal with direct interpolation of req.body.email (user-controlled) into the WHERE clause. The query is executed via models.sequelize.query(), which does not parameterize inputs. The email field is not sanitized, escaped, or bound as a parameter before being embedded in the SQL string. While the password is passed through security.hash(), the email field alone is sufficient for SQL injection. The service 'juice' is publicly exposed with a /rest/user/login endpoint and has direct database access, making this a high-impact vulnerability. Facts: (1) template literal with ${req.body.email} is present in the source; (2) sequelize.query() is used (raw query, no parameterization); (3) the service is internet-facing with high criticality. Assumptions: (1) no upstream middleware sanitizes req.body.email before this handler; (2) the database user has sufficient privileges for exploitation; (3) the /rest/user/login endpoint maps to this handler. Verification is needed to confirm the input reaches this code path unsanitized and to demonstrate exploitability in the sandbox.",
+  "risk_signals": [
+    "Direct interpolation of req.body.email into raw SQL via template literal",
+    "Use of sequelize.query() (raw query) without parameterized binding",
+    "Publicly exposed service with /rest/user/login endpoint",
+    "High asset criticality with direct database access",
+    "No visible input sanitization or escaping on the email field before query construction"
+  ],
+  "code_context": "   26:         res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n   27:       }).catch((error: Error) => {\n   28:         next(error)\n   29:       })\n   30:   }\n   31: \n   32:   return (req: Request, res: Response, next: NextFunction) => {\n   33:     verifyPreLoginChallenges(req) // vuln-code-snippet hide-line\n   34:     models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) // vuln-code-snippet vuln-line loginAdminChallenge loginBenderChallenge loginJimChallenge\n   35:       .then((authenticatedUser) => { // vuln-code-snippet neutral-line loginAdminChallenge loginBenderChallenge loginJimChallenge\n   36:         const user = utils.queryResultToJson(authenticatedUser)\n   37:         if (user.data?.id && user.data.totpSecret !== '') {\n   38:           res.status(401).json({\n   39:             status: 'totp_token_required',\n   40:             data: {\n   41:               tmpToken: security.authorize({\n   42:                 userId: user.data.id,",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": true,
+    "criticality": "high",
+    "trust_zone": "application",
+    "connected_services": [
+      "database"
+    ],
+    "databases": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "authentication": "mixed",
+    "blast_radius": "unknown"
+  },
+  "hypothesis": "The /rest/user/login endpoint on the juice service accepts user-controlled input in the email field that is directly interpolated into a raw SQL query via template literal without parameterization, making it exploitable for SQL injection.",
+  "hypothesis_confidence": 0.85,
+  "verification": {
+    "action_id": "action-sequelize-injection.presentation:routes-login.ts:34-4918c9fa209d3603-1",
+    "capability": "verify_sql_injection",
+    "target": "juice-presentation",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 1,
+    "evidence_types": [
+      "sql_differential_check"
+    ],
+    "decision_basis": "capability_specific_evidence"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS."
+  },
+  "context_priority": {
+    "level": "HIGH",
+    "score": 7.0,
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "evidence-74a126c189",
+      "action_id": "action-sequelize-injection.presentation:routes-login.ts:34-4918c9fa209d3603-1",
+      "type": "sql_differential_check",
+      "summary": "Repeated boolean SQL probe changed structured results while repeated negative controls did not.",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ea353ec5f4f74d649e7df9e4d9cce29b.json",
+        "execution-ea353ec5f4f74d649e7df9e4d9cce29b",
+        "audit:35d8653c360347ac8d71fa82d9a39f70"
+      ],
+      "reliability": "high",
+      "verdict": "confirmed",
+      "source": "runtime",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "hypothesis_id": "hyp-sequelize-injection-login-001",
+      "action": {
+        "id": "action-sequelize-injection.presentation:routes-login.ts:34-4918c9fa209d3603-1",
+        "tool": "verify_sql_injection",
+        "run_id": "35d8653c360347ac8d71fa82d9a39f70"
+      },
+      "observation": {
+        "kind": "sql_differential_check",
+        "facts": {
+          "schema": "cft.bounded_verification.v1",
+          "facts": {
+            "artifact_id": "source-72a6577578e24be0",
+            "line": 34,
+            "check": "sql_interpolation",
+            "mode": "authentication",
+            "endpoint": "/rest/user/login",
+            "observations": [
+              {
+                "status": 401,
+                "valid_json": false,
+                "result_count": null,
+                "authenticated": false
+              },
+              {
+                "status": 200,
+                "valid_json": true,
+                "result_count": null,
+                "authenticated": true
+              },
+              {
+                "status": 401,
+                "valid_json": false,
+                "result_count": null,
+                "authenticated": false
+              },
+              {
+                "status": 200,
+                "valid_json": true,
+                "result_count": null,
+                "authenticated": true
+              }
+            ],
+            "requests": 4,
+            "response_values_redacted": true,
+            "control_repeated": true,
+            "probe_repeated": true
+          }
+        },
+        "captured_at": "2026-10-13T11:04:34.141494Z"
+      },
+      "scope": {
+        "target": "juice-presentation",
+        "environment": "sandbox",
+        "service": "juice",
+        "description": "runtime_sql_differential"
+      },
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ea353ec5f4f74d649e7df9e4d9cce29b.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-ea353ec5f4f74d649e7df9e4d9cce29b",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:35d8653c360347ac8d71fa82d9a39f70",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:04:34.141494Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-sequelize-injection.presentation:routes-login.ts:34-4918c9fa209d3603-1",
+      "capability": "verify_sql_injection",
+      "target": "juice-presentation",
+      "environment": "sandbox",
+      "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line",
+        "mode"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 1297,
+      "command": [
+        "verify_sql_injection",
+        "--method",
+        "POST",
+        "--endpoint",
+        "/rest/user/login",
+        "--artifact-id",
+        "source-72a6577578e24be0",
+        "--line",
+        "34",
+        "--mode",
+        "authentication",
+        "--check",
+        "sql_interpolation"
+      ],
+      "cwd": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_sql_differential\",\"verdict\":\"confirmed\",\"explanation\":\"Repeated boolean SQL probe changed structured results while repeated negative controls did not.\",\"facts\":{\"artifact_id\":\"source-72a6577578e24be0\",\"line\":34,\"check\":\"sql_interpolation\",\"mode\":\"authentication\",\"endpoint\":\"/rest/user/login\",\"observations\":[{\"status\":401,\"valid_json\":false,\"result_count\":null,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":null,\"authenticated\":true},{\"status\":401,\"valid_json\":false,\"result_count\":null,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":null,\"authenticated\":true}],\"requests\":4,\"response_values_redacted\":true,\"control_repeated\":true,\"probe_repeated\":true}}",
+      "stderr": null,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ea353ec5f4f74d649e7df9e4d9cce29b.json"
+      ]
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "action-sequelize-injection.presentation:routes-login.ts:34-4918c9fa209d3603-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "stop",
+      "reason": "Capability-specific structured Evidence confirmed the finding.",
+      "evidence_ids": [
+        "evidence-74a126c189"
+      ],
+      "plan_id": "plan-sequelize-injection.presentation:routes-login.ts:34-1",
+      "stop_reason": "terminal_evidence",
+      "recorded_at": "2026-10-13T11:04:34.141494Z"
+    }
+  ],
+  "ci_gate_impact": {
+    "effect": "fail",
+    "category": "confirmed_risk",
+    "reason": "sequelize-injection.presentation:routes/login.ts:34: confirmed with context priority HIGH."
+  },
+  "explanation": "Capability-specific Evidence confirmed the reported security condition within the recorded evidence scope.",
+  "limitations": [],
+  "next_step": "Remediate the verified condition, then rerun SAST and the same bounded verification capability.",
+  "iterations": 1,
+  "stop_reason": "terminal_evidence"
+}

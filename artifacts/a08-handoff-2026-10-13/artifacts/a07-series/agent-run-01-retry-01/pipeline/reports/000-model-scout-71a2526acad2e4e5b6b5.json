@@ -1,0 +1,262 @@
+{
+  "agent_decisions": [
+    {
+      "evidence_ids": [
+        "evidence-b8c6e51762"
+      ],
+      "outcome": "continue",
+      "plan_id": "plan-model-scout-71a2526acad2e4e5b6b5-1",
+      "reason": "Execution completed, but capability-specific Evidence is insufficient for a terminal verdict.",
+      "recorded_at": "2026-10-13T11:03:02.181189Z",
+      "step": 1,
+      "stop_reason": null
+    },
+    {
+      "evidence_ids": [
+        "evidence-b8c6e51762"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-model-scout-71a2526acad2e4e5b6b5-1",
+      "reason": "No unused registered verification action remains for the accumulated Evidence.",
+      "recorded_at": "2026-10-13T11:03:14.878363Z",
+      "step": 1,
+      "stop_reason": "insufficient_evidence"
+    }
+  ],
+  "analysis_summary": "The code context confirms a full PEM-encoded RSA private key is hardcoded as a string literal at line 21 of lib/insecurity.ts. The variable is named 'privateKey' and sits alongside a 'publicKey' read from 'encryptionkeys/jwt.pub' at line 20. However, the provided code context only covers lines 13-29 and does not include line 54 where jwt.sign is reportedly called. The step-1 evidence (source_metadata) confirmed file existence and SHA match but was explicitly inconclusive because metadata alone does not prove the key is actively used for token signing. The finding is highly likely valid given the variable naming, PEM format, and co-location with the public key, but the critical link—privateKey being passed to jwt.sign—remains unverified by current evidence.",
+  "architecture_context": {
+    "authentication": "mixed",
+    "blast_radius": "unknown",
+    "connected_services": [
+      "database"
+    ],
+    "critical_paths": [
+      "juice -> database"
+    ],
+    "criticality": "high",
+    "databases": [
+      "database"
+    ],
+    "public_exposure": true,
+    "service": "juice",
+    "trust_zone": "application"
+  },
+  "ci_gate_impact": {
+    "category": "inconclusive",
+    "effect": "warn",
+    "reason": "model-scout-71a2526acad2e4e5b6b5: verification is inconclusive and needs review."
+  },
+  "code_context": "   13: import sanitizeHtmlLib from 'sanitize-html'\n   14: import sanitizeFilenameLib from 'sanitize-filename'\n   15: import * as utils from './utils'\n   16: \n   17: // @ts-expect-error FIXME no typescript definitions for z85 :(\n   18: import * as z85 from 'z85'\n   19: \n   20: export const publicKey = fs ? fs.readFileSync('encryptionkeys/jwt.pub', 'utf8') : 'placeholder-public-key'\n   21: const privateKey = '[REDACTED PEM PRIVATE KEY BLOCK]'\n   22: \n   23: interface ResponseWithUser {\n   24:   status?: string\n   25:   data: UserModel\n   26:   iat?: number\n   27:   exp?: number\n   28:   bid?: number\n   29: }",
+  "context_priority": {
+    "level": "HIGH",
+    "reasons": [
+      "public_exposure:internet:+2",
+      "asset_criticality:high:+2",
+      "database_access:direct:+2",
+      "critical_path:direct:+1",
+      "authentication:mixed:+0",
+      "blast_radius:unknown:+0"
+    ],
+    "score": 7.0
+  },
+  "cvss": {
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS.",
+    "score": null,
+    "severity": "UNASSESSED",
+    "vector": "UNASSESSED"
+  },
+  "evidence": [
+    {
+      "action": {
+        "id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+        "run_id": "d9cde3418bb94833b8de799c9321a43e",
+        "tool": "inspect_javascript_security"
+      },
+      "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9dbac9f581e44e9f822e4882fa75faf5.json",
+        "execution-9dbac9f581e44e9f822e4882fa75faf5",
+        "audit:d9cde3418bb94833b8de799c9321a43e"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9dbac9f581e44e9f822e4882fa75faf5.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-9dbac9f581e44e9f822e4882fa75faf5",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:d9cde3418bb94833b8de799c9321a43e",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:03:02.181189Z",
+      "hypothesis_id": "hyp-71a2526a-001",
+      "id": "evidence-b8c6e51762",
+      "observation": {
+        "captured_at": "2026-10-13T11:03:02.181189Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-4b68d0a42c1de76b",
+            "check": "source_metadata",
+            "file": "lib/insecurity.ts",
+            "line": 21,
+            "runtime_verified": false,
+            "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+            "total_lines": 197,
+            "values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "javascript_source_metadata"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "source_metadata",
+        "environment": "sandbox",
+        "service": null,
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Trusted source artifact read. Metadata alone does not prove exploitability.",
+      "type": "javascript_source_metadata",
+      "verdict": "inconclusive"
+    }
+  ],
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "finding": {
+    "description": "The RSA private key used for JWT signing is hardcoded as a string literal in the application source code, exposing it to anyone with repository access.\nScout rationale and verification strategy: Line 21 contains the full PEM-encoded RSA private key as a string constant. This key is used to sign JWTs (line 54). Anyone with source access can forge valid authentication tokens for any user, including admin. Verification: confirm the key matches the public key at line 20 and that it is used in jwt.sign at line 54.",
+    "file": "lib/insecurity.ts",
+    "id": "model-scout-71a2526acad2e4e5b6b5",
+    "line_end": 21,
+    "line_start": 21,
+    "pr_context": null,
+    "provenance": {
+      "aliases": [
+        "model-scout-71a2526acad2e4e5b6b5"
+      ],
+      "anchor_sha256": "fb90db49b1b2eeb3e2cc0096f46f492efc2e4470c1d8d9b52231886e9835850f",
+      "anchor_status": "source_bound",
+      "family": "file-exposure",
+      "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+      "fingerprint": "c42294900f41566da01eef2002ebe75f2a2343d6a78cc32a038639dc48c25745",
+      "normalized_file": "lib/insecurity.ts",
+      "observations": [
+        {
+          "column_end": null,
+          "column_start": null,
+          "description": "The RSA private key used for JWT signing is hardcoded as a string literal in the application source code, exposing it to anyone with repository access.",
+          "line_end": 21,
+          "line_start": 21,
+          "original_file": "lib/insecurity.ts",
+          "provenance_paths": [
+            "lib/insecurity.ts"
+          ],
+          "rationale": "Line 21 contains the full PEM-encoded RSA private key as a string constant. This key is used to sign JWTs (line 54). Anyone with source access can forge valid authentication tokens for any user, including admin. Verification: confirm the key matches the public key at line 20 and that it is used in jwt.sign at line 54.",
+          "rule_id": "file-exposure",
+          "severity": null,
+          "source": "model_scout",
+          "source_id": "model-scout-71a2526acad2e4e5b6b5",
+          "title": "Hardcoded RSA Private Key in Source"
+        }
+      ],
+      "schema_version": "1.0"
+    },
+    "rule_id": "file-exposure",
+    "service": "juice",
+    "severity": null,
+    "source": "model_scout",
+    "title": "Hardcoded RSA Private Key in Source"
+  },
+  "finding_id": "model-scout-71a2526acad2e4e5b6b5",
+  "hypothesis": "The hardcoded RSA private key variable 'privateKey' defined at line 21 of lib/insecurity.ts is passed as the signing key argument to jwt.sign() at or near line 54, confirming active use for JWT token generation in the juice service.",
+  "hypothesis_confidence": 0.85,
+  "iterations": 1,
+  "limitations": [
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "policy_decisions": [
+    {
+      "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "risk_signals": [
+    "Full PEM-encoded RSA private key hardcoded as a string literal in source (line 21)",
+    "Service 'juice' is publicly exposed (internet-facing)",
+    "High asset criticality with direct database access",
+    "Mixed authentication model increases impact of token forgery",
+    "Key is a module-level constant, not loaded from environment or secret store",
+    "Context priority score 7.0 (HIGH) driven by public exposure, criticality, and database access"
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+      "artifact_refs": [
+        "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-9dbac9f581e44e9f822e4882fa75faf5.json"
+      ],
+      "capability": "inspect_javascript_security",
+      "command": [
+        "inspect_javascript_security",
+        "--artifact-id",
+        "source-4b68d0a42c1de76b",
+        "--line",
+        "21",
+        "--check",
+        "source_metadata"
+      ],
+      "cwd": null,
+      "duration_ms": 1552,
+      "environment": "sandbox",
+      "execution_status": "completed",
+      "exit_code": 0,
+      "parameter_names": [
+        "artifact_id",
+        "check",
+        "line"
+      ],
+      "purpose": "Read bounded source metadata without executing JavaScript or disclosing secrets; this alone is not exploit proof.",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "stderr": null,
+      "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"source_metadata\",\"verdict\":\"inconclusive\",\"explanation\":\"Trusted source artifact read. Metadata alone does not prove exploitability.\",\"facts\":{\"artifact_id\":\"source-4b68d0a42c1de76b\",\"line\":21,\"check\":\"source_metadata\",\"file\":\"lib/insecurity.ts\",\"total_lines\":197,\"source_sha256\":\"c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d\",\"runtime_verified\":false,\"values_redacted\":true}}",
+      "target": "juice-presentation",
+      "timed_out": false
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "inconclusive",
+  "stop_reason": "insufficient_evidence",
+  "verification": {
+    "action_id": "action-model-scout-71a2526acad2e4e5b6b5-5ee07883c8dd9430-1",
+    "capability": "inspect_javascript_security",
+    "decision_basis": "workflow_state",
+    "environment": "sandbox",
+    "evidence_count": 1,
+    "evidence_types": [
+      "javascript_source_metadata"
+    ],
+    "target": "juice-presentation",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1"
+  }
+}

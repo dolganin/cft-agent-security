@@ -1,0 +1,1146 @@
+[
+  {
+    "candidate": {
+      "rule_id": "file-exposure",
+      "file": "lib/insecurity.ts",
+      "line_start": 21,
+      "line_end": 21
+    },
+    "binding_status": "ambiguous",
+    "truncated": true,
+    "authorization_assessment": "unknown",
+    "routes": [
+      {
+        "route_id": "express-4f0f42b23434b72015db",
+        "match_basis": "imported_handler_file",
+        "file": "routes/dataErasure.ts",
+        "line_start": 24,
+        "method": "get",
+        "path": "/",
+        "path_is_static": true,
+        "receiver": "router",
+        "registered_arguments": [
+          "(req: Request, res: Response, next: NextFunction) => {\n  void (async () => {\n    const loggedInUser = security.authentic"
+        ],
+        "middleware_before": []
+      },
+      {
+        "route_id": "express-7c71a1940a0996a00e7a",
+        "match_basis": "imported_handler_file",
+        "file": "routes/dataErasure.ts",
+        "line_start": 74,
+        "method": "post",
+        "path": "/",
+        "path_is_static": true,
+        "receiver": "router",
+        "registered_arguments": [
+          "(req: Request<Record<string, unknown>, Record<string, unknown>, DataErasureRequestParams>, res: Response, next: NextFunc"
+        ],
+        "middleware_before": []
+      },
+      {
+        "route_id": "express-b31cc41066ee487a1c5f",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 331,
+        "method": "post",
+        "path": "/rest/memories",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "uploadToDisk.single('image')",
+          "ensureFileIsPassed",
+          "security.appendUserId()",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(addMemory())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ]
+      },
+      {
+        "route_id": "express-994c999a3bda3fb788b5",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 382,
+        "method": "get",
+        "path": "/api/Users",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-631cd7bb38d07de191c5",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 388,
+        "method": "post",
+        "path": "/api/Products",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-0f4e37f74d5dd4894812",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 390,
+        "method": "delete",
+        "path": "/api/Products/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-1e54822cf99373cc97fa",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 392,
+        "method": "post",
+        "path": "/api/Challenges",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-692a1de029b86a63c48f",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 395,
+        "method": "post",
+        "path": "/api/Hints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-97948d35db9ebc921528",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 400,
+        "method": "get",
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-45b1c3ddd4cdaf4e0b5c",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 401,
+        "method": "post",
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-2d27cc5dcb73b55f4cd9",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 405,
+        "method": "post",
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-e43c9a1b79b6c5d8a4a6",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 408,
+        "method": "put",
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-1d5f15499c4ced24cf74",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 409,
+        "method": "delete",
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-06189c65741198f4fed1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 411,
+        "method": "post",
+        "path": "/api/SecurityQuestions",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-dc964331860293a97cc1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 414,
+        "method": "get",
+        "path": "/api/SecurityAnswers",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-26d8a227544b2a7131fc",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 445,
+        "method": "put",
+        "path": "/api/BasketItems/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.appendUserId()",
+          "utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemUpdate())"
+        ],
+        "middleware_before": [
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()",
+          "server.ts:377 /api/BasketItems security.isAuthorized()"
+        ]
+      }
+    ],
+    "note": "Registration names and order are source hints only; the adapter does not determine whether authentication or authorization is enforced."
+  },
+  {
+    "candidate": {
+      "rule_id": "authentication",
+      "file": "lib/insecurity.ts",
+      "line_start": 41,
+      "line_end": 41
+    },
+    "binding_status": "ambiguous",
+    "truncated": true,
+    "authorization_assessment": "unknown",
+    "routes": [
+      {
+        "route_id": "express-4f0f42b23434b72015db",
+        "match_basis": "imported_handler_file",
+        "file": "routes/dataErasure.ts",
+        "line_start": 24,
+        "method": "get",
+        "path": "/",
+        "path_is_static": true,
+        "receiver": "router",
+        "registered_arguments": [
+          "(req: Request, res: Response, next: NextFunction) => {\n  void (async () => {\n    const loggedInUser = security.authentic"
+        ],
+        "middleware_before": []
+      },
+      {
+        "route_id": "express-7c71a1940a0996a00e7a",
+        "match_basis": "imported_handler_file",
+        "file": "routes/dataErasure.ts",
+        "line_start": 74,
+        "method": "post",
+        "path": "/",
+        "path_is_static": true,
+        "receiver": "router",
+        "registered_arguments": [
+          "(req: Request<Record<string, unknown>, Record<string, unknown>, DataErasureRequestParams>, res: Response, next: NextFunc"
+        ],
+        "middleware_before": []
+      },
+      {
+        "route_id": "express-b31cc41066ee487a1c5f",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 331,
+        "method": "post",
+        "path": "/rest/memories",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "uploadToDisk.single('image')",
+          "ensureFileIsPassed",
+          "security.appendUserId()",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(addMemory())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ]
+      },
+      {
+        "route_id": "express-994c999a3bda3fb788b5",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 382,
+        "method": "get",
+        "path": "/api/Users",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-631cd7bb38d07de191c5",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 388,
+        "method": "post",
+        "path": "/api/Products",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-0f4e37f74d5dd4894812",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 390,
+        "method": "delete",
+        "path": "/api/Products/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-1e54822cf99373cc97fa",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 392,
+        "method": "post",
+        "path": "/api/Challenges",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-692a1de029b86a63c48f",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 395,
+        "method": "post",
+        "path": "/api/Hints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-97948d35db9ebc921528",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 400,
+        "method": "get",
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-45b1c3ddd4cdaf4e0b5c",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 401,
+        "method": "post",
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-2d27cc5dcb73b55f4cd9",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 405,
+        "method": "post",
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-e43c9a1b79b6c5d8a4a6",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 408,
+        "method": "put",
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-1d5f15499c4ced24cf74",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 409,
+        "method": "delete",
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-06189c65741198f4fed1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 411,
+        "method": "post",
+        "path": "/api/SecurityQuestions",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-dc964331860293a97cc1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 414,
+        "method": "get",
+        "path": "/api/SecurityAnswers",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-26d8a227544b2a7131fc",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 445,
+        "method": "put",
+        "path": "/api/BasketItems/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.appendUserId()",
+          "utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemUpdate())"
+        ],
+        "middleware_before": [
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()",
+          "server.ts:377 /api/BasketItems security.isAuthorized()"
+        ]
+      }
+    ],
+    "note": "Registration names and order are source hints only; the adapter does not determine whether authentication or authorization is enforced."
+  },
+  {
+    "candidate": {
+      "rule_id": "open-redirect",
+      "file": "lib/insecurity.ts",
+      "line_start": 133,
+      "line_end": 139
+    },
+    "binding_status": "ambiguous",
+    "truncated": true,
+    "authorization_assessment": "unknown",
+    "routes": [
+      {
+        "route_id": "express-4f0f42b23434b72015db",
+        "match_basis": "imported_handler_file",
+        "file": "routes/dataErasure.ts",
+        "line_start": 24,
+        "method": "get",
+        "path": "/",
+        "path_is_static": true,
+        "receiver": "router",
+        "registered_arguments": [
+          "(req: Request, res: Response, next: NextFunction) => {\n  void (async () => {\n    const loggedInUser = security.authentic"
+        ],
+        "middleware_before": []
+      },
+      {
+        "route_id": "express-7c71a1940a0996a00e7a",
+        "match_basis": "imported_handler_file",
+        "file": "routes/dataErasure.ts",
+        "line_start": 74,
+        "method": "post",
+        "path": "/",
+        "path_is_static": true,
+        "receiver": "router",
+        "registered_arguments": [
+          "(req: Request<Record<string, unknown>, Record<string, unknown>, DataErasureRequestParams>, res: Response, next: NextFunc"
+        ],
+        "middleware_before": []
+      },
+      {
+        "route_id": "express-b31cc41066ee487a1c5f",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 331,
+        "method": "post",
+        "path": "/rest/memories",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "uploadToDisk.single('image')",
+          "ensureFileIsPassed",
+          "security.appendUserId()",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(addMemory())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ]
+      },
+      {
+        "route_id": "express-994c999a3bda3fb788b5",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 382,
+        "method": "get",
+        "path": "/api/Users",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-631cd7bb38d07de191c5",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 388,
+        "method": "post",
+        "path": "/api/Products",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-0f4e37f74d5dd4894812",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 390,
+        "method": "delete",
+        "path": "/api/Products/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-1e54822cf99373cc97fa",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 392,
+        "method": "post",
+        "path": "/api/Challenges",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-692a1de029b86a63c48f",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 395,
+        "method": "post",
+        "path": "/api/Hints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-97948d35db9ebc921528",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 400,
+        "method": "get",
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-45b1c3ddd4cdaf4e0b5c",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 401,
+        "method": "post",
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-2d27cc5dcb73b55f4cd9",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 405,
+        "method": "post",
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-e43c9a1b79b6c5d8a4a6",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 408,
+        "method": "put",
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-1d5f15499c4ced24cf74",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 409,
+        "method": "delete",
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-06189c65741198f4fed1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 411,
+        "method": "post",
+        "path": "/api/SecurityQuestions",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-dc964331860293a97cc1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 414,
+        "method": "get",
+        "path": "/api/SecurityAnswers",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ]
+      },
+      {
+        "route_id": "express-26d8a227544b2a7131fc",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 445,
+        "method": "put",
+        "path": "/api/BasketItems/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "security.appendUserId()",
+          "utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemUpdate())"
+        ],
+        "middleware_before": [
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()",
+          "server.ts:377 /api/BasketItems security.isAuthorized()"
+        ]
+      }
+    ],
+    "note": "Registration names and order are source hints only; the adapter does not determine whether authentication or authorization is enforced."
+  },
+  {
+    "candidate": {
+      "rule_id": "sql-injection",
+      "file": "routes/search.ts",
+      "line_start": 23,
+      "line_end": 23
+    },
+    "binding_status": "unique",
+    "truncated": false,
+    "authorization_assessment": "unknown",
+    "routes": [
+      {
+        "route_id": "express-914bfbd66cf51aada7f1",
+        "match_basis": "imported_handler_file",
+        "file": "server.ts",
+        "line_start": 621,
+        "method": "get",
+        "path": "/rest/products/search",
+        "path_is_static": true,
+        "receiver": "app",
+        "registered_arguments": [
+          "utils.asyncHandler(searchProducts())"
+        ],
+        "middleware_before": [
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()",
+          "server.ts:496 / verify.databaseRelatedChallenges()"
+        ]
+      }
+    ],
+    "note": "Registration names and order are source hints only; the adapter does not determine whether authentication or authorization is enforced."
+  }
+]

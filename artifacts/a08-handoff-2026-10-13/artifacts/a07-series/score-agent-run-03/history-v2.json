@@ -1,0 +1,117 @@
+{
+  "action_proposals": [],
+  "agent_decisions": [],
+  "artifact_sha256": {
+    "configuration.json": "9faaaa301e416831d3edb39c68a2dd54e99e58e429fdaf5c62c076f65663db63",
+    "manifest.json": "dc044bcaa4ca31f9da941f0bcdaf0364a7d1c050fbdd2ac342413604a97becf6",
+    "metrics.json": "24bd65e683660d2d27a9354c760ebc9bf46f444a806fa830e901ca2504233745",
+    "pipeline/ci-summary.json": "06e4c93ba74f04bb4118fa0a4b7ce1bbe626458b8e78edd37de5b850dd698f68",
+    "pipeline/discovery.json": "20689bb842ea0e4776c07075e08b0ffbdc64ccb43990d5e08f2fa381437a7c78",
+    "pipeline/gate.json": "2ff20a9020553f58cbd94f68305ed77c1766afa01dc0149fc5ffb7c556831deb",
+    "pipeline/progress.jsonl": "5a07d31d2cd8f745418a72dadfaafec945b355094ce117fe03884e1a9d817302",
+    "pipeline/runtime-service-map.json": "cc951778b61469f3c89cdd259d4cad0b822e2ef25fa204752ff25ba10154b4c3",
+    "pipeline/sandbox-state.json": "cc1665a7777315cd205d2855e89833575746beaabaa6b650749023510cccd3a9",
+    "pipeline/target-profile.json": "2d8027f9e69d8a59f841a381f3cc5682d1c9016439b635ff9e77be508127e9b0",
+    "pipeline/telemetry-index.json": "416e008acc34affadb44c1740e2e0ad8a405a88abd8e87633990148d68b06ef1",
+    "pipeline/telemetry/telemetry-ee378d0d6b1b4e3dbb14b2011e8c5aa4.json": "ae5c3e3d1805a58133eb45c0c4b63c13a4f99f269e83c6c3a6f6e77a40ce3d90",
+    "run-status.json": "06072df461c049dcb11555b644b03f3ec118b17d17896e30206ca9c5b391850c",
+    "runner.stderr.log": "1d26bf2ca7e73639b6e9ee108b7d779d205c75eb0ac6ef1b5327bb5a0b408182",
+    "runner.stdout.log": "915e3475560419ca4a66548b5dc7e3966638d2305d45005c3057b7df132af6ee",
+    "seal.json": "3e62e7cf2ee0b3c52097d8cdee50ca5898347d04f4664e317eb8be5840184f4a"
+  },
+  "attempt_id": "agent-run-03-20261013T104859Z",
+  "configurations": {
+    "configuration.json": {
+      "configuration_digest": "59efefa5c6680486a1e117c30e10061fe2245e3714b0345df31d1f28731afe3c"
+    }
+  },
+  "errors": [
+    {
+      "code": "DEPENDENCY_UNAVAILABLE",
+      "layer": "sast",
+      "message": "SAST stage failed",
+      "retryable": true
+    },
+    {
+      "message": "SAST stage failed"
+    }
+  ],
+  "evidence": [],
+  "executions": [],
+  "plans": [],
+  "reports": [],
+  "retries": [],
+  "retry_of": null,
+  "run_id": "agent-run-03",
+  "schema_version": "benchmark.artifact_history.v2",
+  "validator_decisions": [],
+  "versions": {
+    "action_proposal_count": 0,
+    "agent_iterations": 0,
+    "attempt_id": "agent-run-03-20261013T104859Z",
+    "cleanup": {
+      "containers": {
+        "exit_code": 0,
+        "remaining": []
+      },
+      "networks": {
+        "exit_code": 0,
+        "remaining": []
+      },
+      "volumes": {
+        "exit_code": 0,
+        "remaining": []
+      }
+    },
+    "configuration_digest": "59efefa5c6680486a1e117c30e10061fe2245e3714b0345df31d1f28731afe3c",
+    "dataset_id": "juice-shop-v20.2.0-v2",
+    "dataset_lock_sha256": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+    "duration_seconds": 19.703,
+    "evidence_outcomes": {},
+    "executor_action_count": 0,
+    "fallback_count": 0,
+    "fallback_reasons": [],
+    "finished_at": "2026-10-13T10:49:19.331315+00:00",
+    "fresh_artifact_directory": true,
+    "fresh_evaluator_session": true,
+    "fresh_target_reset": true,
+    "llm_failure_count": 0,
+    "llm_request_count": 0,
+    "llm_success_count": 0,
+    "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+    "model_configuration": {
+      "base_url": "https://deepcode.ci.nsu.ru/api",
+      "fallback": "existing_deterministic_adapter_fallback_logged_not_a_model_response",
+      "model": "Qwen3.8-27B",
+      "protocol": "openai",
+      "provider": "nsu",
+      "request_seed": "not_sent_provider_nondeterminism_retained",
+      "response_format": "json_object",
+      "stream": false,
+      "temperature": 0.1
+    },
+    "original_target_integrity": true,
+    "pipeline_exit_code": 2,
+    "policy_block_count": 0,
+    "project_commit": "e6736eaae1d09c12368426b51de63261b0cbf4f5",
+    "retry_count": 0,
+    "retry_of": null,
+    "run_id": "agent-run-03",
+    "sandbox_session_id": "6f635b92744d4547bf8a9cf0cea336d1",
+    "schema_version": "a07.agent-run.v1",
+    "scout_iterations": null,
+    "snapshot": {
+      "dataset": {
+        "id": "juice-shop-v20.2.0-v2"
+      }
+    },
+    "started_at": "2026-10-13T10:48:59.637022+00:00",
+    "status": "technically_invalid",
+    "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+    "technical_errors": 1,
+    "timeout_count": 0,
+    "validator_allowed_count": 0,
+    "validator_denied_count": 0
+  }
+}

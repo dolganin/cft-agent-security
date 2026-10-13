@@ -1,0 +1,214 @@
+{
+  "actions": [
+    {
+      "action": {
+        "endpoint": "/rest/products/search",
+        "environment": "sandbox",
+        "expected_evidence": "HTTP response from /rest/products/search with a tautology payload in the q parameter returns all products (or a significantly larger result set than a benign search term), confirming that the injected SQL logic was executed by the database engine and user input is directly interpolated without parameterization.",
+        "id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+        "iteration": 1,
+        "parameters": {
+          "artifact_id": "source-d35652ee4d560380",
+          "check": "sql_interpolation",
+          "line": 23,
+          "mode": "search"
+        },
+        "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+        "service": "juice",
+        "target": "juice-presentation",
+        "tool": "verify_sql_injection"
+      },
+      "evidence_ids": [
+        "evidence-e08419d444"
+      ],
+      "execution": {
+        "action_id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+        "artifacts": [
+          "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ca2622b50fb4467e8ab295357890551a.json"
+        ],
+        "audit_ref": "audit:9bd8e1fbc202402fa2cd5374a6f0efb2",
+        "duration_ms": 1236,
+        "error": null,
+        "evidence_ref": "execution-ca2622b50fb4467e8ab295357890551a",
+        "exit_code": 0,
+        "run_id": "9bd8e1fbc202402fa2cd5374a6f0efb2",
+        "status": "completed",
+        "stderr": "",
+        "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_sql_differential\",\"verdict\":\"confirmed\",\"explanation\":\"Repeated boolean SQL probe changed structured results while repeated negative controls did not.\",\"facts\":{\"artifact_id\":\"source-d35652ee4d560380\",\"line\":23,\"check\":\"sql_interpolation\",\"mode\":\"search\",\"endpoint\":\"/rest/products/search\",\"observations\":[{\"status\":200,\"valid_json\":true,\"result_count\":0,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":56,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":0,\"authenticated\":false},{\"status\":200,\"valid_json\":true,\"result_count\":56,\"authenticated\":false}],\"requests\":4,\"response_values_redacted\":true,\"control_repeated\":true,\"probe_repeated\":true}}",
+        "timed_out": false
+      },
+      "plan_id": "plan-sequelize-injection.presentation:routes-search.ts:23-1",
+      "recorded_at": "2026-10-13T11:04:51.938911Z",
+      "step": 1,
+      "validation": {
+        "action_id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+        "approved": true,
+        "policy_rules": [
+          "policy_version_supported",
+          "action_id_valid",
+          "target_allowed",
+          "environment_allowed",
+          "target_environment_match",
+          "tool_allowed",
+          "iteration_within_limit",
+          "purpose_present",
+          "expected_evidence_present",
+          "parameters_allowed",
+          "parameter_values_valid",
+          "registered_artifacts_valid",
+          "logging_required"
+        ],
+        "reason": "Allowed by deterministic Validator policy v0.1"
+      }
+    }
+  ],
+  "decisions": [
+    {
+      "evidence_ids": [
+        "evidence-e08419d444"
+      ],
+      "outcome": "stop",
+      "plan_id": "plan-sequelize-injection.presentation:routes-search.ts:23-1",
+      "reason": "Capability-specific structured Evidence confirmed the finding.",
+      "recorded_at": "2026-10-13T11:04:51.947846Z",
+      "step": 1,
+      "stop_reason": "terminal_evidence"
+    }
+  ],
+  "evidence": [
+    {
+      "action": {
+        "id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+        "run_id": "9bd8e1fbc202402fa2cd5374a6f0efb2",
+        "tool": "verify_sql_injection"
+      },
+      "action_id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+      "artifact_refs": [
+        "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ca2622b50fb4467e8ab295357890551a.json",
+        "execution-ca2622b50fb4467e8ab295357890551a",
+        "audit:9bd8e1fbc202402fa2cd5374a6f0efb2"
+      ],
+      "artifacts": [
+        {
+          "ref": "C:<home>/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ca2622b50fb4467e8ab295357890551a.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-ca2622b50fb4467e8ab295357890551a",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:9bd8e1fbc202402fa2cd5374a6f0efb2",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-13T11:04:51.938911Z",
+      "hypothesis_id": "hyp-sqli-search-tautology-001",
+      "id": "evidence-e08419d444",
+      "observation": {
+        "captured_at": "2026-10-13T11:04:51.938911Z",
+        "facts": {
+          "facts": {
+            "artifact_id": "source-d35652ee4d560380",
+            "check": "sql_interpolation",
+            "control_repeated": true,
+            "endpoint": "/rest/products/search",
+            "line": 23,
+            "mode": "search",
+            "observations": [
+              {
+                "authenticated": false,
+                "result_count": 0,
+                "status": 200,
+                "valid_json": true
+              },
+              {
+                "authenticated": false,
+                "result_count": 56,
+                "status": 200,
+                "valid_json": true
+              },
+              {
+                "authenticated": false,
+                "result_count": 0,
+                "status": 200,
+                "valid_json": true
+              },
+              {
+                "authenticated": false,
+                "result_count": 56,
+                "status": 200,
+                "valid_json": true
+              }
+            ],
+            "probe_repeated": true,
+            "requests": 4,
+            "response_values_redacted": true
+          },
+          "schema": "cft.bounded_verification.v1"
+        },
+        "kind": "sql_differential_check"
+      },
+      "reliability": "high",
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "scope": {
+        "description": "runtime_sql_differential",
+        "environment": "sandbox",
+        "service": "juice",
+        "target": "juice-presentation"
+      },
+      "source": "runtime",
+      "summary": "Repeated boolean SQL probe changed structured results while repeated negative controls did not.",
+      "type": "sql_differential_check",
+      "verdict": "confirmed"
+    }
+  ],
+  "finding_id": "sequelize-injection.presentation:routes/search.ts:23",
+  "iterations": 1,
+  "plans": [
+    {
+      "continuation_reason": "Code analysis confirms unparameterized template-literal interpolation of req.query.q into sequelize.query() at line 23. Runtime verification is needed to confirm the injection is exploitable through the live endpoint and that the injected SQL logic actually alters query results.",
+      "environment": "sandbox",
+      "goal": "Verify that user-controlled input from the q query parameter is directly interpolated into the raw SQL query at /rest/products/search by sending a SQL tautology and observing whether the response returns all products instead of a filtered subset.",
+      "hypothesis_id": "hyp-sqli-search-tautology-001",
+      "id": "plan-sequelize-injection.presentation:routes-search.ts:23-1",
+      "max_steps": 1,
+      "sandbox_session_id": "4ab40106cb014892924eb40442833ac9",
+      "schema_version": "cft.dynamic_plan.v1",
+      "steps": [
+        {
+          "action": {
+            "endpoint": "/rest/products/search",
+            "environment": "sandbox",
+            "expected_evidence": "HTTP response from /rest/products/search with a tautology payload in the q parameter returns all products (or a significantly larger result set than a benign search term), confirming that the injected SQL logic was executed by the database engine and user input is directly interpolated without parameterization.",
+            "id": "action-sequelize-injection.presentation:routes-search.ts:23-ff78e2e4b9d5671e-1",
+            "iteration": 1,
+            "parameters": {
+              "artifact_id": "source-d35652ee4d560380",
+              "check": "sql_interpolation",
+              "line": 23,
+              "mode": "search"
+            },
+            "purpose": "Bounded controlled verification of this finding's trusted endpoint.",
+            "service": "juice",
+            "target": "juice-presentation",
+            "tool": "verify_sql_injection"
+          },
+          "continue_if": "If the response returns all products or a clearly larger result set than a normal search term, the finding is confirmed. If the response returns the same filtered results as a normal search or an error, the finding is rejected or inconclusive.",
+          "expected_observation": "HTTP response from /rest/products/search with a tautology payload in the q parameter returns all products (or a significantly larger result set than a benign search term), confirming that the injected SQL logic was executed by the database engine and user input is directly interpolated without parameterization.",
+          "index": 1
+        }
+      ],
+      "stop_conditions": [
+        "Finding confirmed: response to tautology input returns all products or a clearly larger result set than a normal search term",
+        "Finding rejected: response to tautology input returns the same filtered results as a normal search, indicating upstream sanitization or parameterization",
+        "Policy blocks the runtime-verification action",
+        "Wall-clock budget of 120 seconds is exhausted"
+      ],
+      "target": "juice-presentation"
+    }
+  ],
+  "schema_version": "benchmark.agent_trace.v2",
+  "status": "confirmed",
+  "stop_reason": "terminal_evidence"
+}

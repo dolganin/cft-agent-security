@@ -1,0 +1,47 @@
+{
+  "configuration_digest": "d4847b45ebc0b5dec99e391823c3a0a5284aa3570d4065f00740c13483e17e5a",
+  "created_at": "2026-10-13T10:58:08.124997+00:00",
+  "input_files": {
+    "benchmarks/baselines-a06-v5/profile.yaml": "89baa9223001632e6a3960c13694861f2c910bc8511a98dfc3ba1c800e884c09",
+    "benchmarks/baselines-a06-v5/scanners.lock.json": "c6381e5e8ad071a29df9e6f7611495ea393002fdf28d56bc002ab6f8e03eb771",
+    "benchmarks/baselines-a06-v5/semgrep-rules.yaml": "1039d8b38468225f7462f44f14d25615aeb0e7cab81a6b919eb317228d2b8694",
+    "benchmarks/juice-shop-v20.2.0-v2/dataset.lock.json": "1a5a42f1b8917472bbe6dbcacd22597c2695d70e524c5f783fd88b82db4da947",
+    "benchmarks/juice-shop-v20.2.0-v2/ground_truth.yaml": "579b9a51531010e8b4d53b27cb7607f410898cb144fe1db76cef9810e82a5366",
+    "benchmarks/juice-shop-v20.2.0-v2/protocol.lock.json": "8f9ef9b2ddd11f3ec36f8c0794cd535480ddb5ff22804fb9e2838a854c116f1a",
+    "benchmarks/juice-shop-v20.2.0-v2/protocol.yaml": "565d4ebe6ff2f3c57b4892b653542873d07cc2f5521846d79e78394401795031",
+    "benchmarks/juice-shop-v20.2.0/benchmark.yaml": "fdd5182aa12aa245d10381f81c760888c2a693214357430afe53f77ff42642a4",
+    "docs/demo/semgrep.yaml": "8c96c80e042e636c064813e339d65adf8d5d6edd60b4def3be214fc82786c829",
+    "evaluation/benchmark.py": "95bf8bceeed7f0b9f27b21a2b0bbac5eb6f224084ca4cb4426bfe46111a4e0a9",
+    "evaluation/benchmark_v2.py": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+    "evaluation/offline_rescore.py": "4947c886c858e269bceadbb953e6e4722d34915ca213ce37e82eb722cf55a9fe",
+    "policies/default.yaml": "62764d1d7c5476dcd1c40fae16578ac28badbb52e2095796885e1233794493c4",
+    "scripts/a07_series.py": "40a36573a263630bdc2f23f272351490e02ff1fb7feed14555331c082dcd56ff",
+    "targets/juice-presentation.yaml": "4ba98a5f8794611e0030e846ec0328a43b152b313d305b7e103208ad334ec9fb"
+  },
+  "prerequisites": {
+    "a01": {
+      "error": "",
+      "exit_code": 0,
+      "output": "A01 protocol/lock/baseline valid: juice-shop-v20.2.0-v2; ground truth pending A04"
+    },
+    "a04": {
+      "error": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\langgraph\\cache\\base\\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.\n  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer\n",
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"valid_frozen_a04\",\n  \"case_count\": 41,\n  \"positive_count\": 27,\n  \"negative_count\": 14,\n  \"split\": {\n    \"development\": 28,\n    \"holdout\": 13\n  },\n  \"inputs_bound\": 114,\n  \"target_source_checked\": true,\n  \"new_runtime_cycles\": 0\n}"
+    },
+    "a06": {
+      "error": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\langgraph\\cache\\base\\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.\n  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer\n",
+      "exit_code": 0,
+      "output": "A04 and A06 locks valid; no scanner or target executed"
+    },
+    "a06_preflight": {
+      "error": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\langgraph\\cache\\base\\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.\n  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer\n",
+      "exit_code": 0,
+      "output": "{\n  \"target_commit\": \"5658473cf8814459bf89000ce373b20ed0b4eb37\",\n  \"target_files\": 1300,\n  \"images\": {\n    \"semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade\": {\n      \"id\": \"sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade\",\n      \"repository_digests\": [\n        \"semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade\"\n      ],\n      \"architecture\": \"amd64\",\n      \"os\": \"linux\"\n    },\n    \"ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab\": {\n      \"id\": \"sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab\",\n      \"repository_digests\": [\n        \"ghcr.io/zaproxy/zaproxy@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab\"\n      ],\n      \"architecture\": \"amd64\",\n      \"os\": \"linux\"\n    },\n    \"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\": {\n      \"id\": \"sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\",\n      \"repository_digests\": [\n        \"bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b\"\n      ],\n      \"architecture\": \"amd64\",\n      \"os\": \"linux\"\n    }\n  }\n}"
+    }
+  },
+  "schema_version": "a07.lock.v1",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+  "target_tree": "299c108c28cd9783ec49ffa4c076956d084ef468"
+}

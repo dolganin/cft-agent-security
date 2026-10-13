@@ -1,0 +1,15 @@
+========================================================================
+CFT SECURITY PIPELINE
+========================================================================
+Target profile: juice-presentation
+Target: C:\Users\User\Documents\GitHub\cft-security-agent\artifacts\benchmark-target\juice-shop
+Agent mode: llm
+SAST: scanning with Semgrep config=C:\Users\User\Documents\GitHub\cft-security-agent\docs\demo\semgrep.yaml
+
+========================================================================
+CI/CD GATE: FAIL
+========================================================================
+reports=0 confirmed=0 rejected=0 inconclusive=0 policy_blocked=0
+- A mandatory pipeline stage did not complete successfully.
+- stage error [DEPENDENCY_UNAVAILABLE/sast]: SAST stage failed
+exit_code=2

@@ -1,0 +1,55 @@
+{
+  "action_digest": "c58df3d1a1437aa4f49c258e690aeabaf8f0c1f114d590de336e4f62b570ae97",
+  "action_id": "action-directory-listing.presentation:server.ts:296-459027fbd3defc5c-1",
+  "audit_ref": "audit:471bba236fa84df7829c2d4de15c6a40",
+  "created_at": "2026-10-13T11:06:50.514123+00:00",
+  "duration_ms": 1049,
+  "error": null,
+  "exit_code": 0,
+  "id": "execution-b23606f6923b48a390ab19f287deaf17",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "run_id": "471bba236fa84df7829c2d4de15c6a40",
+  "session_id": "4ab40106cb014892924eb40442833ac9",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"schema\":\"cft.bounded_verification.v1\",\"scope\":\"runtime_directory_metadata\",\"verdict\":\"confirmed\",\"explanation\":\"Unauthenticated directory listing exposes sensitive file names; contents were not downloaded.\",\"facts\":{\"artifact_id\":\"source-1ba718c1eb8aa39c\",\"line\":296,\"check\":\"source_metadata\",\"endpoint\":\"/encryptionkeys\",\"status\":200,\"directory_listing\":true,\"sensitive_file_names\":[\"premium.key\"],\"file_contents_read\":false,\"truncated\":false}}",
+  "target": "juice-presentation",
+  "timed_out": false,
+  "tool": "verify_sensitive_directory",
+  "type": "executor_result",
+  "workspace_id": "71b14d921152802966953cd9c46e89e5bfde572ab8e8e883787fdca6603bcfd4"
+}
