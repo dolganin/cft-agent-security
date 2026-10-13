@@ -2,6 +2,7 @@ from collections.abc import Callable
 from pathlib import Path, PurePosixPath
 
 from sast.identity import deduplicate_findings, normalize_finding
+from sast.profiles import classify_signal_type
 from schemas.finding import Finding, FindingObservation
 from security.source_paths import normalize_source_path
 
@@ -36,6 +37,14 @@ def normalize_semgrep_result(
     line_start = start.get("line")
     stable_location = line_start if line_start is not None else 0
     message = str(extra.get("message", ""))
+    metadata = extra.get("metadata", {})
+    if not isinstance(metadata, dict):
+        metadata = {}
+    cwe_value = metadata.get("cwe", [])
+    if isinstance(cwe_value, str):
+        cwe_value = [cwe_value]
+    if not isinstance(cwe_value, list):
+        cwe_value = []
 
     # Semgrep не знает архитектуру проекта, service приходит из TargetProfile
     service = service_resolver(path) if service_resolver is not None else None
@@ -59,6 +68,8 @@ def normalize_semgrep_result(
             rule_id=check_id, original_file=original_path, title=finding.title,
             description=message, line_start=line_start, line_end=end.get("line"),
             column_start=start.get("col"), column_end=end.get("col"), severity=finding.severity,
+            signal_type=classify_signal_type(check_id, original_path, metadata),
+            cwe=[str(value) for value in cwe_value],
         ),
     )
 

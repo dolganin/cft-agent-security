@@ -27,7 +27,7 @@ _DOCKER_SEMGREP_IMAGE = (
 @dataclass(frozen=True)
 class SemgrepScanResult:
     target: Path
-    config: str
+    config: str | list[str]
     raw: dict[str, Any]
     findings: list[Finding]
     stderr: str
@@ -36,7 +36,7 @@ class SemgrepScanResult:
 def run_semgrep_scan(
     target: str | Path,
     *,
-    config: str = "auto",
+    config: str | list[str] = "auto",
     timeout_seconds: int = 600,
     service_resolver: Callable[[str], str | None] | None = None,
 ) -> SemgrepScanResult:
@@ -50,23 +50,27 @@ def run_semgrep_scan(
         raise SemgrepError(f"SAST target directory does not exist: {target_path}")
 
     executable = shutil.which("semgrep") or _environment_semgrep()
+    configs = [config] if isinstance(config, str) else list(config)
+    if not configs:
+        raise SemgrepError("At least one Semgrep config is required")
     scanner_root = None
     if executable is None:
         docker = shutil.which("docker") if sys.platform == "win32" else None
-        config_path = _local_config_path(config)
-        if docker is None or config_path is None:
+        config_paths = [_local_config_path(item) for item in configs]
+        if docker is None or any(item is None for item in config_paths):
             raise SemgrepError(
                 "Semgrep CLI was not found. Activate the project venv and install "
                 'the SAST extra: python -m pip install -e ".[dev,sast]"'
             )
-        command = _docker_command(target_path, config_path, docker=docker)
+        command = _docker_command(target_path, config_paths, docker=docker)
         scanner_root = "/src"
     else:
         command = [
             executable,
             "scan",
-            "--config",
-            config,
+            *[argument for item in configs for argument in ("--config", item)],
+            "--metrics=off",
+            "--disable-version-check",
             "--json",
             "--no-rewrite-rule-ids",
             "--exclude",
@@ -94,11 +98,11 @@ def run_semgrep_scan(
 
     if completed.returncode != 0 and _needs_windows_docker_fallback(completed):
         scanner_root = "/src"
-        config_path = _local_config_path(config)
-        if config_path is None:
+        config_paths = [_local_config_path(item) for item in configs]
+        if any(item is None for item in config_paths):
             raise SemgrepError("Docker Semgrep fallback requires a local config file")
         completed = run_cancellable_process(
-            _docker_command(target_path, config_path), cwd=target_path, timeout=timeout_seconds
+            _docker_command(target_path, config_paths), cwd=target_path, timeout=timeout_seconds
         )
 
     if completed.returncode != 0:
@@ -156,11 +160,22 @@ def _local_config_path(config: str) -> Path | None:
 
 def _docker_command(
     target_path: Path,
-    config_path: Path,
+    config_path: Path | list[Path | None],
     *,
     docker: str = "docker",
 ) -> list[str]:
     """Target только читаем, Semgrep получает tmpfs для своего cache и git config."""
+    config_paths = [config_path] if isinstance(config_path, Path) else config_path
+    mounts = []
+    config_arguments = []
+    for index, item in enumerate(config_paths):
+        if item is None:
+            raise SemgrepError("Docker config path cannot be empty")
+        container_path = "/semgrep-config.yaml" if index == 0 else f"/semgrep-config-{index}.yaml"
+        mounts.extend(["-v", f"{item}:/semgrep-config-{index}.yaml:ro"])
+        if index == 0:
+            mounts[-1] = f"{item}:/semgrep-config.yaml:ro"
+        config_arguments.extend(["--config", container_path])
     return [
         docker,
         "run",
@@ -179,15 +194,15 @@ def _docker_command(
         "/root:rw,noexec,nosuid,size=32m",
         "-v",
         f"{target_path}:/src:ro",
-        "-v",
-        f"{config_path}:/semgrep-config.yaml:ro",
+        *mounts,
         "-w",
         "/src",
         _DOCKER_SEMGREP_IMAGE,
         "semgrep",
         "scan",
-        "--config",
-        "/semgrep-config.yaml",
+        *config_arguments,
+        "--metrics=off",
+        "--disable-version-check",
         "--json",
         "--no-rewrite-rule-ids",
         "--exclude",

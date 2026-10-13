@@ -112,6 +112,8 @@ class BenchmarkObservationV2(MeasurementModel):
     capability: str | None = None
     severity: str | None = None
     context_priority: str | None = None
+    signal_type: Literal["code", "configuration", "dependency"] | None = None
+    cwe: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def coherent_anchors(self):
