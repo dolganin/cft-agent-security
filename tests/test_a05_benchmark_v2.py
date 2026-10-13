@@ -11,7 +11,7 @@ import yaml
 from evaluation.artifact_history import persist_agent_trace
 from evaluation.benchmark_v2 import score_v2
 from evaluation.catalog_adapter import load_catalog_dataset
-from evaluation.offline_rescore import observations_from_artifacts, rescore
+from evaluation.offline_rescore import _report_path, observations_from_artifacts, rescore
 from executor.sandbox_audit import calculate_sha256_digest
 from schemas.benchmark_v2 import (
     BenchmarkDatasetV2,
@@ -371,6 +371,35 @@ def test_offline_rescore_rebuilds_evidence_instead_of_trusting_normalized_flag(t
     rebuilt = observations_from_artifacts(artifacts / "pipeline")
     assert rebuilt[0].verification == "unsupported"
     assert rebuilt[0].evidence_backed is False
+
+
+@pytest.mark.parametrize("report_path,valid", [
+    ("reports\\finding-1.json", True),
+    ("..\\outside.json", False),
+    ("C:\\reports\\finding-1.json", False),
+])
+def test_offline_rescore_reads_portable_relative_report_paths(tmp_path, report_path, valid):
+    artifacts = make_valid_artifacts(tmp_path, include_finding=True)
+    index_path = artifacts / "pipeline/reports-index.json"
+    rows = json.loads(index_path.read_text())
+    rows[0]["report_path"] = report_path
+    index_path.write_text(json.dumps(rows))
+    reseal(artifacts)
+    score = rescore(dataset(case("ONE")), artifacts, tmp_path / "score")
+    assert score.technically_valid is valid
+    if not valid:
+        assert "reports-index references a missing report" in score.technical_errors
+
+
+def test_relocated_absolute_report_paths_require_explicit_matching_root(tmp_path):
+    pipeline = tmp_path / "pipeline"
+    original = "C:\\old\\run\\pipeline"
+    value = original + "\\reports\\finding.json"
+    assert _report_path(pipeline, value) is None
+    assert _report_path(pipeline, value, original) == pipeline / "reports/finding.json"
+    assert _report_path(pipeline, "C:\\another-run\\pipeline\\reports\\finding.json", original) is None
+    assert _report_path(pipeline, original + "\\..\\outside.json", original) is None
+    assert _report_path(pipeline, "D:\\old\\run\\pipeline\\reports\\finding.json", original) is None
 
 
 def test_supported_evidence_requires_report_trace_execution_and_audit_binding(tmp_path):

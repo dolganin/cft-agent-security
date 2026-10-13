@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 
 import yaml
 
@@ -155,7 +155,32 @@ def _run_root(artifacts: Path) -> Path:
     return artifacts.parent if artifacts.name == "pipeline" else artifacts
 
 
-def _artifact_errors(run_root: Path, pipeline: Path, dataset: BenchmarkDatasetV2) -> list[str]:
+def _report_path(pipeline: Path, value, original_pipeline_root: str | None = None):
+    if not isinstance(value, str):
+        return None
+    windows = PureWindowsPath(value)
+    path = windows if windows.drive else PurePosixPath(value.replace("\\", "/"))
+    if ".." in path.parts:
+        return None
+    if path.is_absolute():
+        if original_pipeline_root is None:
+            # Preserve support for an unchanged local absolute index.
+            local = Path(value)
+            return local if local.resolve().is_relative_to(pipeline.resolve()) else None
+        original = type(path)(original_pipeline_root)
+        if not original.is_absolute():
+            return None
+        try:
+            path = path.relative_to(original)
+        except ValueError:
+            return None
+    elif windows.drive:
+        return None
+    return pipeline.joinpath(*path.parts)
+
+
+def _artifact_errors(run_root: Path, pipeline: Path, dataset: BenchmarkDatasetV2,
+                     original_pipeline_root: str | None = None) -> list[str]:
     """Fail closed unless this is a complete, internally sealed benchmark attempt."""
     required = [
         pipeline / "gate.json",
@@ -257,7 +282,9 @@ def _artifact_errors(run_root: Path, pipeline: Path, dataset: BenchmarkDatasetV2
             errors.append("saved action traces do not cover every Scout finding")
         for row in report_index:
             report_path = row.get("report_path")
-            resolved_report_path = pipeline / report_path if isinstance(report_path, str) else None
+            # Remapping is opt-in and prefix-bound, never basename guessing.
+            # Read original bytes without rewriting the index or its seal.
+            resolved_report_path = _report_path(pipeline, report_path, original_pipeline_root)
             if (
                 resolved_report_path is None
                 or not resolved_report_path.resolve().is_relative_to(pipeline.resolve())
@@ -362,12 +389,13 @@ def rescore(
     run_id: str = "offline",
     attempt_id: str | None = None,
     retry_of: str | None = None,
+    original_pipeline_root: str | None = None,
 ):
     run_root = _run_root(artifacts.resolve())
     if output.resolve() == run_root or output.resolve().is_relative_to(run_root):
         raise ValueError("Offline score output must be outside the immutable artifact directory")
     pipeline = artifacts / "pipeline" if (artifacts / "pipeline").is_dir() else artifacts
-    errors = _artifact_errors(run_root, pipeline.resolve(), dataset)
+    errors = _artifact_errors(run_root, pipeline.resolve(), dataset, original_pipeline_root)
     observations = observations_from_artifacts(pipeline)
     partitions = sorted({(case.split, case.sample_kind) for case in dataset.cases})
     scores = [
@@ -424,6 +452,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--run-id", default="offline")
     parser.add_argument("--attempt-id")
     parser.add_argument("--retry-of")
+    parser.add_argument("--original-pipeline-root", help="Explicit original root for a relocated sealed absolute report index")
     args = parser.parse_args(argv)
     if args.dataset:
         dataset = _load_dataset(args.dataset)
@@ -442,6 +471,7 @@ def main(argv: list[str] | None = None) -> int:
         run_id=args.run_id,
         attempt_id=args.attempt_id,
         retry_of=args.retry_of,
+        original_pipeline_root=args.original_pipeline_root,
     )
     return 0
 
