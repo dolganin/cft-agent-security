@@ -141,6 +141,20 @@ function stopReason(reason: string): string {
     policy_blocked: "заблокировано политикой",
     plan_rejected: "план отклонен",
     iteration_limit: "достигнут предел итераций",
+    step_budget_exhausted: "достигнут предел шагов",
+    wall_clock_budget_exhausted: "исчерпан бюджет времени",
+    execution_timeout: "проверка превысила время ожидания",
+    execution_failed: "ошибка выполнения проверки",
+    build_failure: "не удалось собрать тестовое приложение",
+    unsupported_runtime: "окружение не поддерживает эту проверку",
+    isolation_or_policy_blocked: "проверка остановлена границей изоляции или политикой",
+    model_failure: "ошибка модели при выборе следующего шага",
+    workflow_failure: "техническая ошибка процесса проверки",
+    repeated_action: "остановлен повтор уже выполненного действия",
+    missing_capability: "нужный инструмент проверки недоступен",
+    candidates_exhausted: "доступные проверки уже выполнены",
+    binding_unavailable: "не удалось однозначно связать исходник и проверку",
+    insufficient_evidence: "недостаточно доказательств",
   };
   return labels[reason] ?? reason.replaceAll("_", " ");
 }

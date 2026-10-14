@@ -9,6 +9,7 @@ from agent.model import DeterministicAgentModel
 from agent.prompts import SYSTEM_PROMPT
 from agent.verification import verification_candidates
 from schemas.action import ActionProposal
+from schemas.agent_loop import AgentReasoningEvent
 from schemas.agent_outputs import AnalysisResult, ReevaluationResult
 from schemas.hypothesis import Hypothesis
 from schemas.llm import (
@@ -28,6 +29,7 @@ class FallbackLLMAgentModel:
 
     def __init__(self, client: ProviderFailoverClient) -> None:
         self.client = client
+        self.reasoning_events: list[AgentReasoningEvent] = []
 
     @classmethod
     def from_settings(cls, settings) -> FallbackLLMAgentModel:
@@ -328,6 +330,8 @@ class FallbackLLMAgentModel:
         )
 
     def _record_application_event(self, operation, status, category):
+        self.reasoning_events.append(AgentReasoningEvent(operation=operation, status=status,
+                                                        category=category))
         recorder = getattr(self.client, "record_event", None)
         if callable(recorder):
             recorder(operation=operation, status=status, category=category)
@@ -449,6 +453,8 @@ def _reasoning_context(state: AgentState) -> dict[str, Any]:
         "wall_clock_budget_seconds": float(state.get("wall_clock_budget_seconds", 120.0)),
         "started_at": _dump_model(state.get("started_at")),
         "stop_reason": state.get("stop_reason"),
+        "workflow_errors": [_dump_model(item) for item in state.get("workflow_errors", [])],
+        "reasoning_events": [_dump_model(item) for item in state.get("reasoning_events", [])],
     }
 
 

@@ -45,6 +45,8 @@ def persist_agent_trace(root: Path, finding_id: str, state: dict) -> Path:
         "status": state.get("status"),
         "stop_reason": state.get("stop_reason"),
         "iterations": state.get("iteration_count", 0),
+        "workflow_errors": state.get("workflow_errors", []),
+        "reasoning_events": state.get("reasoning_events", []),
     })
     destination = root / "traces" / (re.sub(r"[^A-Za-z0-9_.-]", "_", finding_id) + ".json")
     destination.parent.mkdir(parents=True, exist_ok=True)

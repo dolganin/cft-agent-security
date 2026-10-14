@@ -1,10 +1,31 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from datetime import UTC, datetime
 
 from schemas.agent_loop import AgentDecisionRecord, AgentStopReason
 from schemas.agent_outputs import ReevaluationResult
 from schemas.state import AgentState
+
+
+def action_fingerprint(action) -> str:
+    """An ID, purpose or fresh fixture generation cannot disguise the same operation."""
+    binding = action.verification_binding
+    payload = {
+        "target": action.target, "environment": action.environment, "tool": action.tool,
+        "parameters": action.parameters, "service": action.service, "endpoint": action.endpoint,
+        "binding": ({"route": binding.route_id, "snapshot": binding.source_snapshot,
+                     "map": binding.map_sha256} if binding is not None else None),
+    }
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":"),
+                                    allow_nan=False).encode()).hexdigest()
+
+
+def action_was_attempted(state, action) -> bool:
+    fingerprint = action_fingerprint(action)
+    return any(item.action.id == action.id or action_fingerprint(item.action) == fingerprint
+               for item in state.get("action_history", []))
 
 
 def current_step_limit(state: AgentState) -> int:

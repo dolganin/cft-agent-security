@@ -1,0 +1,39 @@
+{
+  "schema_version": "b07.validation.v1",
+  "date": "2026-10-14",
+  "branch": "codex/b05-main-integration",
+  "integration_base": "f2067834d76cf29c6050543e0c053d74511d6900",
+  "main_base": "9f1242768eccc5736d6976af605d15b67af9dbab",
+  "b05_input": "fbfa6815b590b8c56b5106170eea58a7c1a305a2",
+  "environment": {
+    "python": "3.11",
+    "node": "22.22.3",
+    "dependencies": "pyproject.toml dev dependencies in isolated venv; frontend npm ci from lockfile",
+    "source_fixture": "Juice Shop v20.2.0, clean local checkout at 5658473cf8814459bf89000ce373b20ed0b4eb37"
+  },
+  "checks": {
+    "python -m pytest -q -ra": {"passed": 1164, "skipped": 18, "failed": 0},
+    "python -m pytest -q tests/test_b07_recovery.py": {"passed": 28, "failed": 0},
+    "ruff check .": {"status": "passed"},
+    "npm test": {"passed": 30, "files": 9, "failed": 0},
+    "npm run build": {"status": "passed"},
+    "python -m app.main": {"status": "passed", "workflow_status": "confirmed", "finding": "demo-001", "scope": "synthetic safe_noop graph stub"}
+  },
+  "skips": [
+    {"count": 1, "reason": "A05 saved demo artifacts opt-in not configured"},
+    {"count": 6, "reason": "Docker boundary tests require daemon and digest-pinned CFT_SANDBOX_IMAGE"},
+    {"count": 1, "reason": "Multi-run Docker lifecycle requires SBERLAB_TARGET_PATH"},
+    {"count": 2, "reason": "Sandbox manager target integrations require SBERLAB_TARGET_PATH/AUTODEALER_TARGET_PATH"},
+    {"count": 2, "reason": "Sandbox manager tests require pinned CFT_SANDBOX_IMAGE"},
+    {"count": 1, "reason": "Sandbox runner integration requires pinned CFT_SANDBOX_IMAGE"},
+    {"count": 3, "reason": "Sandbox session integrations require SBERLAB_TARGET_PATH"},
+    {"count": 1, "reason": "Stage1 E2E opt-in is disabled"},
+    {"count": 1, "reason": "Stage2 benchmark integration requires its separate operator-provisioned pinned checkout"}
+  ],
+  "warnings": ["LangGraph serializer pending deprecation", "Starlette anyio BlockingPortal deprecation"],
+  "runtime_acceptance_run": false,
+  "llm_requests": 0,
+  "benchmark_metrics_claimed": false,
+  "historical_benchmark_modified": false,
+  "b05_canonical_acceptance": "pending"
+}

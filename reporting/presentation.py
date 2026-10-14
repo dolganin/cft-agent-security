@@ -101,6 +101,12 @@ def render_final_report(report: FinalReport) -> str:
     )
     if verification.validator_reason:
         lines.append(f"  Validator reason: {verification.validator_reason}")
+    if report.stop_reason:
+        lines.append(f"  Stop reason: {report.stop_reason}")
+    for error in report.workflow_errors:
+        lines.append(f"  Workflow error [{error.layer}/{error.code}]: {error.message}")
+    for event in report.reasoning_events:
+        lines.append(f"  Reasoning diagnostic: {event.operation}: {event.status} ({event.category})")
 
     lines.extend(["", f"Sandbox actions ({len(report.sandbox_actions)})"])
     if not report.sandbox_actions:

@@ -178,6 +178,7 @@ export interface ReportFinding {
 }
 
 export interface SandboxActionSummary {
+  error?: ErrorDetail | null;
   action_id: string;
   capability: string;
   target?: string | null;
@@ -209,6 +210,16 @@ export interface AgentDecisionRecord {
     | "step_budget_exhausted"
     | "wall_clock_budget_exhausted"
     | "execution_failed"
+    | "execution_timeout"
+    | "build_failure"
+    | "unsupported_runtime"
+    | "isolation_or_policy_blocked"
+    | "model_failure"
+    | "workflow_failure"
+    | "repeated_action"
+    | "missing_capability"
+    | "candidates_exhausted"
+    | "binding_unavailable"
     | "insufficient_evidence"
     | null;
   recorded_at: string;
@@ -247,6 +258,8 @@ export interface ContextPriority {
 }
 
 export interface FinalReport {
+  workflow_errors?: ErrorDetail[];
+  reasoning_events?: { operation: string; status: string; category: string }[];
   technical_severity?: { level: string; scheme: string; assessment_status: string; reasoning: string } | null;
   scoring_review_resolution?: { status: string; diagnostics: string[] } | null;
   schema_version: string;

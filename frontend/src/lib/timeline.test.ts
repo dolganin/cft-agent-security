@@ -48,6 +48,16 @@ describe("buildConversationTimeline", () => {
     expect(tools[0].kind === "tool" && tools[0].tool.command).toEqual(["rg", "USER", "/target/Dockerfile"]);
   });
 
+  it("shows a recorded action failure instead of stale progress success", () => {
+    const failed = structuredClone(snapshot);
+    const action = failed.runs[0].reports[0].sandbox_actions[0];
+    action.execution_status = null;
+    action.error = { code: "TIMEOUT", layer: "executor", message: "Bounded timeout", retryable: true };
+    const item = buildConversationTimeline(failed).find((entry) => entry.kind === "tool");
+    expect(item?.kind === "tool" && item.tool.status).toBe("failed");
+    expect(item?.kind === "tool" && item.tool.stderr).toBe("Bounded timeout");
+  });
+
   it("places the final assistant summary after the Gate and detailed results", () => {
     const completed = structuredClone(snapshot);
     completed.messages.push({

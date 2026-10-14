@@ -24,6 +24,8 @@ def evaluate_evidence(state: AgentState) -> EvidenceGuardDecision | None:
     execution = state.get("execution")
     if action is None or execution is None:
         return None
+    if execution.action_id != action.id:
+        return _continue_or_stop(state, "insufficient_evidence")
 
     if execution.status != "completed" or execution.exit_code != 0:
         reason = _execution_reason(execution)
@@ -43,6 +45,10 @@ def evaluate_evidence(state: AgentState) -> EvidenceGuardDecision | None:
         item.verdict
         for item in state.get("evidence", [])
         if item.action_id == action.id
+        and item.action.tool == action.tool
+        and item.scope.target == action.target
+        and item.scope.environment == action.environment
+        and (item.action.run_id is None or item.action.run_id == execution.run_id)
         and item.verdict in {"confirmed", "rejected"}
         and item.reliability in {"high", "medium"}
     }

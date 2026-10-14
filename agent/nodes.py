@@ -2,8 +2,10 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from agent.budget import reasoning_budget
 from agent.lab import active_executor
 from agent.loop import (
+    action_was_attempted,
     apply_budget_to_reevaluation,
     budget_stop_reason,
     decision_record,
@@ -11,6 +13,7 @@ from agent.loop import (
 )
 from agent.model import get_agent_model
 from agent.planning import DynamicPlanValidator
+from agent.recovery import stop_update
 from app.config import settings
 from evidence.guard import evaluate_evidence
 from evidence.interpreter import build_evidence
@@ -23,6 +26,7 @@ from reporting.builder import build_final_report
 from schemas.agent_loop import AgentActionRecord, AgentDecisionRecord
 from schemas.agent_outputs import ReevaluationResult
 from schemas.architecture import ArchitectureContext
+from schemas.errors import ErrorDetail
 from schemas.state import AgentState
 from schemas.target import TargetProfile
 from schemas.validation import ValidationResult
@@ -62,6 +66,8 @@ def load_context(state: AgentState) -> dict:
         "action_history": list(state.get("action_history", [])),
         "decision_history": list(state.get("decision_history", [])),
         "plan_history": list(state.get("plan_history", [])),
+        "workflow_errors": list(state.get("workflow_errors", [])),
+        "reasoning_events": list(state.get("reasoning_events", [])),
         "iteration_count": int(state.get("iteration_count", 0)),
         "max_iterations": max_iterations,
         "max_steps": max_steps,
@@ -116,28 +122,34 @@ def guard_agent_budget(state: AgentState) -> dict:
     }
 
 
+def _reasoning_call(state, operation, *args):
+    model = get_agent_model()
+    offset = len(getattr(model, "reasoning_events", []))
+    with reasoning_budget(state):
+        result = getattr(model, operation)(state, *args)
+    return result, {"reasoning_events": [*state.get("reasoning_events", []),
+                                       *getattr(model, "reasoning_events", [])[offset:]]}
+
+
 def analyse(state: AgentState) -> dict:
     check_cancelled()
-    model = get_agent_model()
-    analysis = model.analyse(state)
+    analysis, diagnostics = _reasoning_call(state, "analyse")
 
     return {
         "analysis": analysis,
         "status": "analysed",
+        **diagnostics,
     }
 
 
 def form_hypothesis(state: AgentState) -> dict:
     check_cancelled()
-    model = get_agent_model()
-    hypothesis = model.form_hypothesis(
-        state,
-        state["analysis"],
-    )
+    hypothesis, diagnostics = _reasoning_call(state, "form_hypothesis", state["analysis"])
 
     return {
         "hypothesis": hypothesis,
         "status": "hypothesis_ready",
+        **diagnostics,
     }
 
 
@@ -149,19 +161,19 @@ def propose_action(state: AgentState) -> dict:
         resolution = resolve_binding(profile, state["finding"])
         from agent.verification import verification_candidates
         if resolution.status != "bound" or not verification_candidates(state):
-            return {
-                "binding_resolution": resolution, "status": "inconclusive",
-                "stop_reason": "insufficient_evidence",
-                "decision_history": [*state.get("decision_history", []), AgentDecisionRecord(
-                    step=int(state.get("iteration_count", 0)), outcome="stop",
-                    reason=("Source/endpoint binding inconclusive: " + resolution.reason
-                            if resolution.status != "bound" else
-                            "Mapped runtime unavailable or its bound action already attempted"),
-                    evidence_ids=[item.id for item in state.get("evidence", [])],
-                    stop_reason="insufficient_evidence",
-                )],
-            }
-    model = get_agent_model()
+            reason = "binding_unavailable"
+            explanation = "Source/endpoint binding inconclusive: " + resolution.reason
+            if resolution.binding is not None:
+                from security.access_verification import ACCESS_CHECKS, is_access_check_supported
+                checks = [c for c in ACCESS_CHECKS.values() if c.route_id == resolution.binding.route_id]
+                if checks and not all(is_access_check_supported(c.check_id) for c in checks):
+                    reason, explanation = "missing_capability", "This operator check is not enabled for agent use."
+                elif any(r.action.verification_binding == resolution.binding
+                         for r in state.get("action_history", [])):
+                    reason, explanation = "candidates_exhausted", "The bound action has already been attempted."
+                else:
+                    reason, explanation = "unsupported_runtime", "The mapped runtime or required fixture is unavailable."
+            return {**stop_update(state, reason, explanation), "binding_resolution": resolution}
     if settings.agent_mode == "llm":
         from agent.llm_model import _allowed_plan_candidates, _has_javascript_artifact
 
@@ -169,7 +181,7 @@ def propose_action(state: AgentState) -> dict:
             reason = "No unused registered verification action remains for the accumulated Evidence."
             return {
                 "status": "inconclusive",
-                "stop_reason": "insufficient_evidence",
+                "stop_reason": "candidates_exhausted",
                 "decision_history": [
                     *state.get("decision_history", []),
                     AgentDecisionRecord(
@@ -177,16 +189,12 @@ def propose_action(state: AgentState) -> dict:
                         reason=reason,
                         evidence_ids=[item.id for item in state.get("evidence", [])],
                         plan_id=state["dynamic_plan"].id if state.get("dynamic_plan") else None,
-                        stop_reason="insufficient_evidence",
+                        stop_reason="candidates_exhausted",
                     ),
                 ],
             }
 
-    plan = model.build_plan(
-        state,
-        state["analysis"],
-        state["hypothesis"],
-    )
+    plan, diagnostics = _reasoning_call(state, "build_plan", state["analysis"], state["hypothesis"])
     if profile is not None and profile.verification_routes:
         # The provider chooses a public candidate ID, never its provenance.
         # Attach only the exact application-owned candidate selected by scope/argv.
@@ -197,13 +205,19 @@ def propose_action(state: AgentState) -> dict:
                 action.tool == c["tool"] and action.parameters == c["parameters"]
                 and action.service == c["service"] and action.endpoint == c["endpoint"])]
             if len(matches) != 1:
-                return {"binding_resolution": resolution, "status": "inconclusive",
-                        "stop_reason": "insufficient_evidence"}
+                return {**stop_update(state, "binding_unavailable", "Plan did not select an exact trusted candidate."),
+                        "binding_resolution": resolution,
+                        "plan_history": [*state.get("plan_history", []), plan], **diagnostics}
             step.action = action.model_copy(update={
                 "verification_binding": matches[0]["verification_binding"],
                 "fixture_binding": matches[0].get("fixture_binding")})
     plan_validation = DynamicPlanValidator().validate(plan, state)
     proposal = plan.steps[0].action
+    if plan_validation.approved and action_was_attempted(state, proposal):
+        attempted = {**state, "dynamic_plan": plan}
+        return {**stop_update(attempted, "repeated_action", "The same operation was already attempted; a new ID is not progress."),
+                "dynamic_plan": plan, "plan_history": [*state.get("plan_history", []), plan],
+                **diagnostics}
 
     return {
         "dynamic_plan": plan,
@@ -213,6 +227,9 @@ def propose_action(state: AgentState) -> dict:
         "proposed_action": proposal,
         "iteration_count": proposal.iteration,
         "status": "action_proposed",
+        "validation": None,
+        "execution": None,
+        **diagnostics,
     }
 
 
@@ -233,6 +250,7 @@ def validate_action(state: AgentState) -> dict:
             validation=validation,
         )
         return {
+            **stop_update(state, "plan_rejected", validation.reason),
             "validation": validation,
             "action_history": [*state.get("action_history", []), record],
             "stop_reason": "plan_rejected",
@@ -265,6 +283,7 @@ def validate_action(state: AgentState) -> dict:
             validation=validation,
         )
         return {
+            **stop_update(state, "policy_blocked", validation.reason),
             "validation": validation,
             "action_history": [*state.get("action_history", []), record],
             "stop_reason": "policy_blocked",
@@ -274,6 +293,11 @@ def validate_action(state: AgentState) -> dict:
     return {
         "validation": validation,
         "status": "approved",
+        "action_history": [*state.get("action_history", []), AgentActionRecord(
+            step=state["proposed_action"].iteration,
+            plan_id=state["dynamic_plan"].id if state.get("dynamic_plan") else None,
+            action=state["proposed_action"], validation=validation,
+        )],
     }
 
 
@@ -384,12 +408,14 @@ def collect_evidence(state: AgentState) -> dict:
     except (OSError, ValueError, json.JSONDecodeError):
         evidence_loaded = False
 
+    read_error = (None if evidence_loaded else ErrorDetail(
+        code="PERSISTENCE_ERROR", layer="storage",
+        message="Persisted execution evidence is unavailable or does not match the action/run.",
+    ))
+
     sandbox_session_id = record.get("session_id") if evidence_loaded else None
     if not isinstance(sandbox_session_id, str) or not sandbox_session_id:
         sandbox_session_id = None
-    if action.tool == "sandbox_command" and sandbox_session_id is None:
-        sandbox_session_id = execution.workspace_id or None
-
     if action.tool == "observe_http_surface" and evidence_loaded:
         runtime_evidence = build_http_surface_evidence(
             action=action,
@@ -448,19 +474,30 @@ def collect_evidence(state: AgentState) -> dict:
                 validation=state["validation"],
                 execution=execution,
                 evidence_ids=matching_evidence_ids,
+                sandbox_session_id=sandbox_session_id,
+                error=execution.error or read_error,
             )
         )
+    else:
+        action_history = [item.model_copy(update={
+            "execution": execution, "evidence_ids": matching_evidence_ids,
+            "sandbox_session_id": sandbox_session_id, "error": execution.error or read_error,
+        }) if item.action.id == action.id else item for item in action_history]
 
     return {
         "evidence": evidence,
         "action_history": action_history,
         "sandbox_session_id": sandbox_session_id or state.get("sandbox_session_id"),
         "status": "evidence_collected",
+        "workflow_errors": [*state.get("workflow_errors", []),
+                            *([execution.error] if execution.error is not None else []),
+                            *([read_error] if read_error is not None else [])],
     }
 
 
 def reevaluate(state: AgentState) -> dict:
     check_cancelled()
+    diagnostics = {}
     action = state.get("proposed_action")
     guard = (
         evaluate_evidence(state)
@@ -480,8 +517,10 @@ def reevaluate(state: AgentState) -> dict:
         )
         stop_reason = "wall_clock_budget_exhausted"
     else:
-        model = get_agent_model()
-        result = model.reevaluate(state)
+        result, diagnostics = _reasoning_call(state, "reevaluate")
+        if (action is None or action.tool != "safe_noop") and result.status in {"confirmed", "rejected"}:
+            result = ReevaluationResult(status="inconclusive",
+                                        explanation="Model conclusion has no sufficient capability Evidence.")
         result, stop_reason = apply_budget_to_reevaluation(state, result)
 
     decision = decision_record(state, result, stop_reason)
@@ -489,6 +528,7 @@ def reevaluate(state: AgentState) -> dict:
         "decision_history": [*state.get("decision_history", []), decision],
         "stop_reason": stop_reason,
         "status": result.status,
+        **diagnostics,
     }
 
 

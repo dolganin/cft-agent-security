@@ -2,8 +2,9 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-from schemas.agent_loop import AgentDecisionRecord, AgentStopReason
+from schemas.agent_loop import AgentDecisionRecord, AgentReasoningEvent, AgentStopReason
 from schemas.architecture import ArchitectureContext
+from schemas.errors import ErrorDetail
 from schemas.evidence import Evidence
 from schemas.finding import FindingProvenance
 from schemas.pipeline import FindingGateEffect, GateCategory
@@ -71,6 +72,7 @@ class SandboxActionSummary(BaseModel):
     stderr: str | None = Field(default=None, max_length=8192)
     sandbox_session_id: str | None = Field(default=None, max_length=256)
     artifact_refs: list[str] = Field(default_factory=list)
+    error: ErrorDetail | None = None
 
 
 class PolicyDecisionSummary(BaseModel):
@@ -108,6 +110,8 @@ class FinalReport(BaseModel):
     sandbox_actions: list[SandboxActionSummary] = Field(default_factory=list)
     policy_decisions: list[PolicyDecisionSummary] = Field(default_factory=list)
     agent_decisions: list[AgentDecisionRecord] = Field(default_factory=list)
+    workflow_errors: list[ErrorDetail] = Field(default_factory=list)
+    reasoning_events: list[AgentReasoningEvent] = Field(default_factory=list)
     ci_gate_impact: CIGateImpact | None = None
 
     explanation: str

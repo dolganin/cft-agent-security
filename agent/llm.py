@@ -13,6 +13,7 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
+from agent.budget import bounded_timeout
 from security.error_redaction import redact_error_message
 
 TModel = TypeVar("TModel", bound=BaseModel)
@@ -347,7 +348,7 @@ class ProviderFailoverClient:
             if effort in {"high", "max"}:
                 effort = "xhigh"
             payload["reasoning_effort"] = effort
-        result = _post_json(url, payload, headers=headers, timeout=self.timeout_seconds)
+        result = _post_json(url, payload, headers=headers, timeout=bounded_timeout(self.timeout_seconds))
         usage = result.get("usage")
         self.last_usage = (
             {k: v for k, v in usage.items()
@@ -383,7 +384,7 @@ class ProviderFailoverClient:
             url,
             payload,
             headers={"x-goog-api-key": key},
-            timeout=self.timeout_seconds,
+            timeout=bounded_timeout(self.timeout_seconds),
         )
         candidates = result.get("candidates") or []
         if not candidates:
@@ -423,7 +424,7 @@ class ProviderFailoverClient:
             url,
             payload,
             headers={"Authorization": f"Bearer {key}"},
-            timeout=self.timeout_seconds,
+            timeout=bounded_timeout(self.timeout_seconds),
         )
         choices = result.get("choices") or []
         if not choices:

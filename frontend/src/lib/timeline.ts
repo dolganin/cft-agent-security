@@ -321,7 +321,7 @@ function toolView(
     purpose: summary?.purpose ?? null,
     target: summary?.target ?? activity?.target ?? null,
     environment: summary?.environment ?? null,
-    status: summary?.execution_status ?? activity?.status ?? null,
+    status: summary?.execution_status ?? (summary?.error ? "failed" : activity?.status ?? null),
     exitCode: summary?.exit_code ?? activity?.exit_code ?? null,
     durationMs: summary?.duration_ms ?? activity?.duration_ms ?? null,
     timedOut: summary?.timed_out ?? false,
@@ -329,7 +329,7 @@ function toolView(
     command: summary?.command ?? [],
     cwd: summary?.cwd ?? null,
     stdout: summary?.stdout ?? null,
-    stderr: summary?.stderr ?? null,
+    stderr: summary?.stderr ?? summary?.error?.message ?? null,
     sandboxSessionId: summary?.sandbox_session_id ?? null,
   };
 }

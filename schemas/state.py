@@ -2,10 +2,16 @@ from datetime import datetime
 from typing import TypedDict
 
 from schemas.action import ActionProposal
-from schemas.agent_loop import AgentActionRecord, AgentDecisionRecord, AgentStopReason
+from schemas.agent_loop import (
+    AgentActionRecord,
+    AgentDecisionRecord,
+    AgentReasoningEvent,
+    AgentStopReason,
+)
 from schemas.agent_outputs import AnalysisResult
 from schemas.architecture import ArchitectureContext
 from schemas.discovery import ProjectDiscoveryResult
+from schemas.errors import ErrorDetail
 from schemas.evidence import Evidence
 from schemas.execution import ExecutionResult
 from schemas.finding import Finding
@@ -52,6 +58,8 @@ class AgentState(TypedDict, total=False):
     evidence: list[Evidence]
     action_history: list[AgentActionRecord]
     decision_history: list[AgentDecisionRecord]
+    workflow_errors: list[ErrorDetail]
+    reasoning_events: list[AgentReasoningEvent]
 
     status: str
     stop_reason: AgentStopReason | None

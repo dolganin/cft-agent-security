@@ -78,6 +78,12 @@ def build_final_report(state: AgentState) -> FinalReport:
     validation = state.get("validation")
     analysis = state.get("analysis")
     hypothesis = state.get("hypothesis")
+    if status in {"confirmed", "rejected"} and (action is None or action.tool != "safe_noop"):
+        from evidence.guard import evaluate_evidence
+        guard = evaluate_evidence(state)
+        if guard is None or guard.status != status:
+            status = "inconclusive"
+            state = {**state, "stop_reason": "insufficient_evidence"}
 
     if validation is None:
         validator_decision = "not_run"
@@ -150,6 +156,8 @@ def build_final_report(state: AgentState) -> FinalReport:
         sandbox_actions=_sandbox_actions(state),
         policy_decisions=_policy_decisions(state),
         agent_decisions=list(state.get("decision_history", [])),
+        workflow_errors=list(state.get("workflow_errors", [])),
+        reasoning_events=list(state.get("reasoning_events", [])),
         ci_gate_impact=CIGateImpact(
             effect=gate.effect,
             category=gate.category,
@@ -189,9 +197,12 @@ def _sandbox_actions(state: AgentState) -> list[SandboxActionSummary]:
                 stderr=_display_output(
                     item.execution.stderr if item.execution is not None else ""
                 ),
-                sandbox_session_id=state.get("sandbox_session_id"),
+                sandbox_session_id=item.sandbox_session_id,
+                error=item.error,
                 artifact_refs=(
-                    list(item.execution.artifacts) if item.execution is not None else []
+                    list(dict.fromkeys([*item.execution.artifacts,
+                                        item.execution.evidence_ref, item.execution.audit_ref]))
+                    if item.execution is not None else []
                 ),
             )
             for item in history
@@ -352,6 +363,9 @@ def _decision_basis(state: AgentState, status: str) -> str:
 
 def _limitations(state: AgentState, status: str) -> list[str]:
     limitations: list[str] = []
+    limitations.extend(error.message for error in state.get("workflow_errors", []))
+    if any(item.status == "fallback" for item in state.get("reasoning_events", [])):
+        limitations.append("Provider reasoning degraded; a deterministic fallback was used.")
     priority = state.get("context_priority")
     if priority is not None and priority.assessment_status != "assessed":
         limitations.append("Context Priority is provisional; unknown inputs: "

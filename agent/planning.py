@@ -42,6 +42,8 @@ class DynamicPlanValidator:
         if plan.max_steps > remaining or len(plan.steps) > remaining:
             return self._deny(plan, "DynamicPlan exceeds remaining iteration budget", rules)
         rules.append("within_iteration_budget")
+        if len(plan.steps) != 1 or plan.max_steps != 1:
+            return self._deny(plan, "Replan after exactly one action and its Evidence", rules)
 
         runtime_services = state.get("runtime_services")
         runtime_scoped = any(

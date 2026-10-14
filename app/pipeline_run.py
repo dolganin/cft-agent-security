@@ -27,6 +27,7 @@ from pipeline.policy import classify_finding_gate
 from pipeline.progress import PipelineProgressRecorder
 from pr_analysis.git_diff import read_git_diff
 from pr_analysis.service import PRAnalysisService
+from reporting.builder import build_final_report
 from reporting.presentation import render_final_report
 from sast.profiles import (
     classify_diagnostics,
@@ -273,6 +274,8 @@ def run_pipeline(
         progress.verification_started()
 
     for index, finding in enumerate(findings):
+        state = None
+        result = None
         check_cancelled()
         print()
         location = f"{finding.file}:{finding.line_start or '?'}"
@@ -300,6 +303,7 @@ def run_pipeline(
                         "runtime service, so no sandbox action was selected."
                     ),
                 )
+                report.stop_reason = "missing_capability"
                 report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
                 report_path.write_text(
                     report.model_dump_json(indent=2) + "\n",
@@ -322,6 +326,8 @@ def run_pipeline(
                     scoring_review=scoring_reviews.get(finding.id),
                     reason=unsupported_reason,
                 )
+                report.stop_reason = ("unsupported_runtime" if "unsupported in the pinned Docker" in unsupported_reason
+                                      else "missing_capability")
                 report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
                 report_path.write_text(
                     report.model_dump_json(indent=2) + "\n",
@@ -373,6 +379,7 @@ def run_pipeline(
             check_cancelled()
             persist_agent_trace(output_dir, finding.id, result)
             report = result["final_report"]
+            pipeline_errors.extend(report.workflow_errors)
             report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
             report_path.write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
             reports.append(report)
@@ -399,6 +406,24 @@ def run_pipeline(
                 public_message=f"Finding workflow failed: {finding.id}",
             )
             pipeline_errors.append(error)
+            # Bootstrap/context cleanup failures must also retain a row in the
+            # result set. A failed cleanup invalidates a previous terminal claim.
+            from agent.recovery import stop_update
+            failed_state = dict(result or state or {"finding": finding})
+            failed_state.update(stop_update(failed_state, "workflow_failure", error.message))
+            failed_state["scoring_review"] = None
+            failed_state["workflow_errors"] = [*failed_state.get("workflow_errors", []), error]
+            try:
+                report = build_final_report(failed_state)
+                persist_agent_trace(output_dir, finding.id, failed_state)
+                report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
+                report_path.write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
+                reports = [item for item in reports if item.finding_id != finding.id]
+                reports.append(report)
+                report_paths[finding.id] = str(report_path)
+            except (OSError, ValueError, TypeError) as storage_exc:
+                pipeline_errors.append(error_from_exception(
+                    storage_exc, layer="storage", public_message="Failed to persist finding failure report"))
             progress.finding_finished(finding_id=finding.id, status="error")
             print(f"  ERROR [{error.code}/{error.layer}]: {error.message}")
 

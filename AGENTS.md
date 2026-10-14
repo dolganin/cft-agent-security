@@ -1122,3 +1122,31 @@ reviewed mappings. Report coverage separately from assessed accuracy. A04 has no
 independent CP labels; CP accuracy remains N/A. `app.b08_acceptance` run/replay/
 package is synthetic scoring acceptance, NOT new Juice Shop benchmark metrics.
 See `docs/b08-scoring-progress.md` for trust boundaries, usage and acceptance.
+
+# 30. B07 finding workflow recovery
+
+LangGraph nodes use `agent.recovery.protected_node` to preserve finding-local
+failures as `inconclusive` reports with typed `workflow_errors`. Operator
+cancellation still propagates. Approved proposals enter action history before
+Executor; collect_evidence updates the same record with its execution, evidence,
+error and per-action session. Never fabricate execution/Evidence after a failure.
+The pipeline retains a report row and trace for escaped bootstrap/cleanup errors;
+failed cleanup cannot preserve a confirmed/rejected claim. Technical workflow
+errors feed the existing CI Gate exit 2, independently of security verdicts.
+
+Each iteration proposes one action, then replans from accumulated Evidence.
+Operation fingerprints exclude proposal IDs/descriptions and fixture generations;
+used IDs or exact operations cannot be replayed. B05/B06 approved candidate and
+runtime permissions remain unchanged. Distinguish missing capability, unsupported
+runtime, binding failure, candidate exhaustion, model failure and policy denial.
+
+Wall-clock checks precede new reasoning, validation and execution. LLM attempts,
+route fallbacks and correction retries share a runtime-only remaining deadline;
+it is not stored in AgentState. In-flight protocols retain bounded timeouts and
+mandatory cleanup; do not describe the cooperative deadline as a hard process kill.
+Model fallback diagnostics are serialized separately from terminal Evidence.
+FinalReport rechecks sufficient Evidence against action/tool/target/environment/run.
+Historical `safe_noop` stays a synthetic graph stub, never benchmark proof.
+
+See `docs/b07-workflow-recovery.md` and `docs/b07-validation-2026-10-14.json`.
+B07 regression tests do not constitute new B05/B06 Docker acceptance or B09 metrics.

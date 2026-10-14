@@ -6,6 +6,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from schemas.action import ActionProposal
+from schemas.errors import ErrorDetail
 from schemas.execution import ExecutionResult
 from schemas.validation import ValidationResult
 
@@ -21,7 +22,22 @@ AgentStopReason = Literal[
     "isolation_or_policy_blocked",
     "execution_failed",
     "insufficient_evidence",
+    "model_failure",
+    "workflow_failure",
+    "repeated_action",
+    "missing_capability",
+    "candidates_exhausted",
+    "binding_unavailable",
 ]
+
+
+class AgentReasoningEvent(BaseModel):
+    """Provider degradation diagnostics; never a security verdict."""
+
+    model_config = ConfigDict(extra="forbid")
+    operation: str
+    status: str
+    category: str
 
 
 class AgentActionRecord(BaseModel):
@@ -35,6 +51,8 @@ class AgentActionRecord(BaseModel):
     validation: ValidationResult
     execution: ExecutionResult | None = None
     evidence_ids: list[str] = Field(default_factory=list)
+    sandbox_session_id: str | None = None
+    error: ErrorDetail | None = None
     recorded_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
