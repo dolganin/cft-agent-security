@@ -165,6 +165,7 @@ class ProviderFailoverClient:
         operation: str,
         schema_retries: int = 0,
         network_retries: int = 0,
+        validation_context: dict[str, Any] | None = None,
     ) -> TModel:
         if schema_retries not in {0, 1}:
             raise ValueError("At most one structured-response correction is allowed")
@@ -218,7 +219,7 @@ class ProviderFailoverClient:
             try:
                 raw = request(user_prompt)
                 try:
-                    result = output_model.model_validate(_extract_json_object(raw))
+                    result = output_model.model_validate(_extract_json_object(raw), context=validation_context)
                 except (TypeError, ValueError) as invalid:
                     details = (
                         [{k: e[k] for k in ("loc", "type", "msg")}
@@ -250,7 +251,7 @@ class ProviderFailoverClient:
                         self.last_usage = {k: first_usage[k] + second_usage[k] for k in first_usage}
                     else:
                         self.last_usage = None
-                    result = output_model.model_validate(_extract_json_object(raw))
+                    result = output_model.model_validate(_extract_json_object(raw), context=validation_context)
                 if lost_response:
                     # The lost response may still have consumed provider tokens.
                     self.last_usage = None

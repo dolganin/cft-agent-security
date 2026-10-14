@@ -93,6 +93,7 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
                "status": report.status, "stop_reason": state.get("stop_reason"),
                "actions": runtime.actions, "http_requests": runtime.requests,
                "model_calls": model.progress.model_calls,
+               "model_diagnostic": model.progress.model_diagnostic,
                "cleanup_verified": runtime.closed,
                "independent_verification": "pending R06"}
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")

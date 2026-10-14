@@ -132,6 +132,7 @@ class ResearchAgentModel:
         return payload
 
     def analyse(self, state):
+        self.progress.model_diagnostic = "context_validation"
         payload = self.context(state)
         # Include the schema/prompt and reserve UTF-8 output bytes before any API call.
         reservation = (len(encoded(payload)) + len(encoded(ResearchTurn.model_json_schema()))
@@ -145,23 +146,28 @@ class ResearchAgentModel:
             raise ResearchBudgetExhausted("Model call/IO reservation budget exhausted")
         self.progress.model_call_reservations += reserved_attempts
         self.progress.model_io_bytes += reservation
+        self.progress.model_diagnostic = "provider_response_validation"
         # One request per turn: don't hide provider failover/retries inside the budget.
         if hasattr(self.client, "routes") and len(self.client.routes) != 1:
             raise ValueError("R04 requires exactly one explicitly selected provider route")
         try:
             turn = self.client.complete_model(output_model=ResearchTurn, system_prompt=PROMPT + DISCOVERY_PROMPT,
                                               user_payload=payload, operation="research_turn",
-                                              schema_retries=self.limits.max_schema_corrections, network_retries=0)
+                                              schema_retries=self.limits.max_schema_corrections, network_retries=0,
+                                              validation_context={"observation_refs": [x.action_id for x in self.progress.ledger]})
         finally:
             self.progress.model_calls += max(1, len(getattr(self.client, "last_attempts", [])))
             self.progress.provider_usage.append(getattr(self.client, "last_usage", None))
         turn = ResearchTurn.model_validate(turn)
+        self.progress.model_diagnostic = "output_byte_limit"
         if len(encoded(turn.model_dump())) > int(getattr(self.client, "max_output_tokens", 4096)) * 4:
             raise ResearchBudgetExhausted("Model output exceeded reserved byte budget")
         refs = {item.action_id for item in self.progress.ledger}
+        self.progress.model_diagnostic = "observation_reference_validation"
         if not set(turn.observation_refs) <= refs:
             raise ValueError("Model referenced an observation that was never persisted")
         self.turn = turn
+        self.progress.model_diagnostic = None
         self.progress.turns.append(turn)
         for candidate in turn.candidates:
             if self.read_anchor(candidate.file, candidate.line_start, candidate.line_end or candidate.line_start,

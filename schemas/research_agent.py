@@ -1,7 +1,7 @@
 """Serializable R04 choices, observation ledger and operator budgets."""
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, model_validator
 
 from schemas.research import RESEARCH_REQUESTS
 from schemas.scout import CandidateFinding
@@ -73,11 +73,14 @@ class ResearchTurn(BaseModel):
     http_claims: list[HttpProofClaim] = Field(default_factory=list, max_length=8)
 
     @model_validator(mode="after")
-    def one_choice(self):
+    def one_choice(self, info: ValidationInfo):
         if self.finish == (self.action is not None):
             raise ValueError("Choose exactly one next action or finish")
         if any(len(value) > 1000 for value in self.uncertainties):
             raise ValueError("Uncertainty description is too long")
+        if info.context is not None and "observation_refs" in info.context:
+            if not set(self.observation_refs) <= set(info.context["observation_refs"]):
+                raise ValueError("Use only persisted action IDs from observation_index, never future actions")
         return self
 
 
@@ -102,6 +105,7 @@ class ResearchProgress(BaseModel):
     model_calls: int = 0
     model_call_reservations: int = 0
     provider_usage: list[dict[str, int] | None] = Field(default_factory=list)
+    model_diagnostic: str | None = None
     model_io_bytes: int = 0
     observation_bytes: int = 0
     write_bytes: int = 0

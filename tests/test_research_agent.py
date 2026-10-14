@@ -70,6 +70,40 @@ def test_fabricated_observation_refs_rejected():
         adapter.analyse({"finding": finding()})
 
 
+def test_provider_validation_context_checks_observation_provenance():
+    raw = finish(observation_refs=["future-action"]).model_dump()
+    with pytest.raises(ValueError, match="persisted action IDs"):
+        ResearchTurn.model_validate(raw, context={"observation_refs": ["read-1"]})
+    raw["observation_refs"] = ["read-1"]
+    assert ResearchTurn.model_validate(raw, context={"observation_refs": ["read-1"]}).finish
+
+
+def test_provider_receives_only_real_observation_ids_for_correction():
+    class RecordingClient(Client):
+        def complete_model(self, **kwargs):
+            assert kwargs["validation_context"] == {"observation_refs": []}
+            return super().complete_model(**kwargs)
+
+    adapter = ResearchAgentModel(client=RecordingClient(finish()), scope=scope(), validator=None)
+    adapter.analyse({"finding": finding()})
+    assert adapter.progress.model_diagnostic is None
+
+
+def test_provider_repairs_future_refs_without_relaxing_provenance(monkeypatch):
+    from agent.llm import ProviderFailoverClient, parse_route_specs
+
+    replies = iter([finish(observation_refs=["future-action"]).model_dump_json(),
+                    finish(observation_refs=["read-1"]).model_dump_json()])
+    client = ProviderFailoverClient(routes=parse_route_specs("nsu:qwen3.8-flash-next"),
+                                   credentials={"NSU_OPENWEBUI_KEY": "synthetic"})
+    monkeypatch.setattr(client, "_request_route", lambda *_args: next(replies))
+    result = client.complete_model(output_model=ResearchTurn, system_prompt="test", user_payload={},
+        operation="test", schema_retries=1, validation_context={"observation_refs": ["read-1"]})
+    assert result.observation_refs == ["read-1"]
+    assert len(client.last_attempts) == 2
+    assert client.last_schema_errors
+
+
 def test_structured_redaction_preserves_json_and_failure_reason():
     value = {"observation": {"stderr": "Traceback (most recent call last):\n/private/error\nValueError: trial failed\n",
             "content": "line1\nline2\n", "body": 'Authorization: Bearer secret-value',
