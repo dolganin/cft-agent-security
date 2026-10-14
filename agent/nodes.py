@@ -26,7 +26,7 @@ from schemas.architecture import ArchitectureContext
 from schemas.state import AgentState
 from schemas.target import TargetProfile
 from schemas.validation import ValidationResult
-from scoring.service import ScoringService
+from scoring.review import score_state
 from validator.validator import PolicyValidator
 
 
@@ -81,15 +81,7 @@ def load_context(state: AgentState) -> dict:
 
 def score_finding(state: AgentState) -> dict:
     check_cancelled()
-    cvss, context_priority = ScoringService().score(
-        state["finding"],
-        state["architecture_context"],
-    )
-    return {
-        "cvss": cvss,
-        "context_priority": context_priority,
-        "status": "scored",
-    }
+    return {**score_state(state), "status": "scored"}
 
 
 def guard_agent_budget(state: AgentState) -> dict:

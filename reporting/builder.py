@@ -62,6 +62,11 @@ _VERIFICATION_LIMITATIONS = {
 
 
 def build_final_report(state: AgentState) -> FinalReport:
+    # Re-resolve source reviews at report time: a source mutation during a
+    # workflow must invalidate the initial assessment, not survive in a report.
+    if state.get("scoring_review") is not None:
+        from scoring.review import score_state
+        state = {**state, **score_state(state)}
     # В отчет попадает только терминальный статус, промежуточное состояние не должно выглядеть вердиктом
     status = str(state.get("status", "inconclusive"))
     if status not in _ALLOWED_STATUSES:
@@ -139,6 +144,8 @@ def build_final_report(state: AgentState) -> FinalReport:
         verification=verification,
         cvss=state.get("cvss"),
         context_priority=state.get("context_priority"),
+        technical_severity=state.get("technical_severity"),
+        scoring_review_resolution=state.get("scoring_review_resolution"),
         evidence=evidence,
         sandbox_actions=_sandbox_actions(state),
         policy_decisions=_policy_decisions(state),
@@ -345,6 +352,13 @@ def _decision_basis(state: AgentState, status: str) -> str:
 
 def _limitations(state: AgentState, status: str) -> list[str]:
     limitations: list[str] = []
+    priority = state.get("context_priority")
+    if priority is not None and priority.assessment_status != "assessed":
+        limitations.append("Context Priority is provisional; unknown inputs: "
+                           + ", ".join(priority.unknown_inputs))
+    review = state.get("scoring_review_resolution")
+    if review is not None:
+        limitations.extend(review.diagnostics)
 
     for item in state.get("evidence", []):
         for key, message in _VERIFICATION_LIMITATIONS.items():

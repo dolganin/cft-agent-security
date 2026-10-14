@@ -13,7 +13,13 @@ from schemas.hypothesis import Hypothesis
 from schemas.plan import DynamicPlan, PlanValidationResult
 from schemas.report import FinalReport
 from schemas.runtime import RuntimeServiceMap
-from schemas.scoring import ContextPriority, CVSSResult
+from schemas.scoring import (
+    ContextPriority,
+    CVSSResult,
+    ScoringReview,
+    ScoringReviewResolution,
+    TechnicalSeverity,
+)
 from schemas.target import TargetProfile
 from schemas.validation import ValidationResult
 from schemas.verification_binding import BindingResolution
@@ -30,6 +36,9 @@ class AgentState(TypedDict, total=False):
 
     cvss: CVSSResult | None
     context_priority: ContextPriority | None
+    scoring_review: ScoringReview | None
+    scoring_review_resolution: ScoringReviewResolution
+    technical_severity: TechnicalSeverity
 
     analysis: AnalysisResult | None
     hypothesis: Hypothesis | None

@@ -152,6 +152,9 @@ def render_final_report(report: FinalReport) -> str:
                 lines.append(f"      {scope}")
 
     lines.extend(["", "Risk"])
+    if report.technical_severity is not None:
+        item = report.technical_severity
+        lines.append(f"  Source-impact severity: {item.level} ({item.scheme}, {item.assessment_status})")
     if report.cvss is None:
         lines.append("  CVSS: missing")
     else:
@@ -171,6 +174,9 @@ def render_final_report(report: FinalReport) -> str:
         lines.append(
             f"  Context priority: {report.context_priority.level} (score={score})"
         )
+        lines.append(f"    Assessment: {report.context_priority.assessment_status}")
+        if report.context_priority.unknown_inputs:
+            lines.append("    Unknown inputs: " + ", ".join(report.context_priority.unknown_inputs))
         for reason in report.context_priority.reasons:
             lines.append(f"    - {reason}")
 

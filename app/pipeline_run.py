@@ -112,6 +112,7 @@ def _parse_args() -> argparse.Namespace:
         "--base-architecture",
         help="Optional base-revision architecture YAML for context comparison",
     )
+    parser.add_argument("--scoring-reviews", help="Operator-reviewed, source-bound B08 JSON list")
     return parser.parse_args()
 
 
@@ -143,6 +144,9 @@ def run_pipeline(
         raise SystemExit("TargetProfile.architecture.file or --architecture is required")
 
     target = profile.repository_path
+    from scoring.review import load_reviews
+    scoring_path = getattr(args, "scoring_reviews", None)
+    scoring_reviews = load_reviews(scoring_path) if scoring_path else {}
     architecture = Path(architecture_value).expanduser().resolve()
     architecture_overrides = (
         Path(args.architecture_overrides).expanduser().resolve()
@@ -152,6 +156,12 @@ def run_pipeline(
     output_dir = Path(args.output_dir).expanduser()
     reports_dir = output_dir / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
+    if scoring_path:
+        # Freeze the parsed operator input rather than a mutable external path.
+        (output_dir / "scoring-reviews.json").write_text(
+            json.dumps([item.model_dump(mode="json") for item in scoring_reviews.values()],
+                       indent=2) + "\n", encoding="utf-8",
+        )
     progress = PipelineProgressRecorder(output_dir)
 
     if args.agent_mode:
@@ -284,6 +294,7 @@ def run_pipeline(
                 report = _build_static_finding_report(
                     finding,
                     target,
+                    scoring_review=scoring_reviews.get(finding.id),
                     reason=(
                         "The finding belongs to the repository rather than a discovered "
                         "runtime service, so no sandbox action was selected."
@@ -308,6 +319,7 @@ def run_pipeline(
                 report = _build_static_finding_report(
                     finding,
                     target,
+                    scoring_review=scoring_reviews.get(finding.id),
                     reason=unsupported_reason,
                 )
                 report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
@@ -339,6 +351,7 @@ def run_pipeline(
                 state["runtime_services"] = runtime_services
             # PR metadata добавляем поверх source artifact, не переписывая его
             state["finding"] = finding
+            state["scoring_review"] = scoring_reviews.get(finding.id)
             if profile.b06_verification is not None:
                 from agent.b06_lab import B06GraphLab
                 from security.verification_binding import resolve_binding
@@ -510,6 +523,7 @@ def _build_static_finding_report(
     target: Path,
     *,
     reason: str,
+    scoring_review=None,
 ) -> FinalReport:
     """Собираем auditable report когда trusted active verification недоступен"""
 
@@ -528,6 +542,14 @@ def _build_static_finding_report(
             if finding.pr_context is not None
             else None
         ),
+    )
+    from schemas.architecture import ArchitectureContext
+    from scoring.review import resolve_review
+    from scoring.service import ScoringService
+    assessment, refs, severity, resolution = resolve_review(finding, target, scoring_review)
+    context = ArchitectureContext(service=finding.service or "unknown")
+    cvss, priority = ScoringService().score(
+        finding, context, assessment=assessment, trusted_evidence_refs=refs,
     )
     return FinalReport(
         finding_id=finding.id,
@@ -551,6 +573,11 @@ def _build_static_finding_report(
             "and was not converted into an unsupported runtime claim."
         ),
         code_context=code.content,
+        architecture_context=context,
+        cvss=cvss,
+        context_priority=priority,
+        technical_severity=severity,
+        scoring_review_resolution=resolution,
         verification=VerificationSummary(
             validator_decision="not_run",
             evidence_count=0,
@@ -563,7 +590,9 @@ def _build_static_finding_report(
         ),
         explanation=reason,
         limitations=[
-            "The static SAST observation was not confirmed by a runtime capability."
+            "The static SAST observation was not confirmed by a runtime capability.",
+            "Context Priority is provisional; deployment context was not resolved.",
+            *resolution.diagnostics,
         ],
         next_step=(
             "Add the required trusted artifact mapping or review the source finding, "

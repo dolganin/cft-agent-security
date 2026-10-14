@@ -1101,3 +1101,24 @@ not independent binary attestation.
 original/safe Docker acceptance. `app.b06_replay` verifies sealed persisted data
 without Docker or LLM; `app.b06_handoff` creates the portable evidence ZIP.
 Scope and results: `docs/b06-runtime-report-2026-10-14.md`.
+
+# 29. B08 evidence-grounded scoring
+
+`app.pipeline_run --scoring-reviews` accepts an operator-owned JSON list of
+`ScoringReview` inputs, never model-generated permissions or benchmark labels.
+Each review binds the finding observation, source file SHA256/ranges and explicit
+metric/impact references. Recheck binding before FinalReport; stale source means
+UNASSESSED. The semantic review remains operator responsibility, not proof that
+a hash validates CVSS assumptions. Runtime Evidence inputs are not enabled here.
+
+CVSS 4.0/B uses pinned `cvss==3.6` only for complete explicit justified base
+metrics. Keep numeric CVSS, `source-impact.a04.v1` ordinal severity, scanner
+severity and Context Priority separate. None creates a confirmed verdict.
+Architecture unknown_inputs survive serialization; partial CP is provisional.
+Do not stop research for missing scores or change historical A04 labels/locks.
+
+`evaluation.scoring_b08` is evaluator-only and compares compatible schemes using
+reviewed mappings. Report coverage separately from assessed accuracy. A04 has no
+independent CP labels; CP accuracy remains N/A. `app.b08_acceptance` run/replay/
+package is synthetic scoring acceptance, NOT new Juice Shop benchmark metrics.
+See `docs/b08-scoring-progress.md` for trust boundaries, usage and acceptance.
