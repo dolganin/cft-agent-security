@@ -59,6 +59,26 @@ def build_evidence(
     sandbox_session_id: str | None = None,
 ) -> Evidence:
     """Преобразует сохраненный результат Executor в Evidence"""
+    if action.research_binding is not None:
+        from executor.approvals import proposal_digest
+        valid = (evidence_loaded and record.get("action_digest") == proposal_digest(action)
+                 and record.get("research_binding") == action.research_binding.model_dump(mode="json")
+                 and record.get("session_id") == action.research_binding.session_id)
+        facts = {"record_loaded": evidence_loaded, "binding_valid": valid,
+                 "executor_status": execution.status}
+        if valid:
+            try:
+                facts["observation"] = json.loads(str(record.get("stdout", "")))["observation"]
+            except (ValueError, KeyError, TypeError):
+                facts["malformed_observation"] = True
+        return _evidence(
+            action=action, execution=execution, evidence_type="research_observation",
+            summary="Bounded research observation; independent claim review is required.",
+            facts=facts, scope_description="operator-scoped research; no vulnerability oracle",
+            artifact_refs=artifact_refs, reliability="high" if valid else "low",
+            verdict="inconclusive", hypothesis_id=hypothesis_id,
+            sandbox_session_id=action.research_binding.session_id,
+        )
     if action.tool == SANDBOX_COMMAND_TOOL:
         return _sandbox_command_evidence(
             action=action,

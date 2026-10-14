@@ -1,0 +1,15 @@
+version: 1
+targets:
+  allowed: [registered]
+environments:
+  allowed: [sandbox]
+tools:
+  allowed: [list_source_files, read_source, search_source, write_workspace_file, read_workspace_file, sandbox_command, target_http]
+limits:
+  max_iterations: 64
+  executor:
+    wall_time_seconds: 10
+    max_runs_per_action: 1
+    max_concurrent_runs: 1
+logging:
+  required: true

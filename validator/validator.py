@@ -159,6 +159,15 @@ class PolicyValidator:
             )
         rules.append("tool_allowed")
 
+        from schemas.research import RESEARCH_TOOLS
+        if action.research_binding is not None or action.tool in RESEARCH_TOOLS:
+            from security.research_scope import validate_research_action
+            try:
+                validate_research_action(getattr(self, "research_scopes", {}).get(action.target), action)
+            except (ValueError, TypeError) as exc:
+                return self._deny(action, str(exc), rules, "research_scope_denied")
+            rules.append("research_scope_bound")
+
         from schemas.b06_verification import B06_TOOLS, profile_digest
         if action.tool in B06_TOOLS:
             profile = self.target_profiles.get(action.target)
@@ -248,6 +257,14 @@ class PolicyValidator:
         self,
         action: ActionProposal,
     ) -> tuple[str, str] | None:
+        from schemas.research import RESEARCH_TOOLS
+        if action.research_binding is not None or action.tool in RESEARCH_TOOLS:
+            from security.research_scope import validate_research_action
+            try:
+                validate_research_action(getattr(self, "research_scopes", {}).get(action.target), action)
+            except (ValueError, TypeError) as exc:
+                return str(exc), "research_parameters_denied"
+            return None
         contracts = self.policy.get("tools", {}).get("parameter_contracts", {})
         contract = contracts.get(action.tool)
         if not isinstance(contract, dict):
@@ -328,6 +345,14 @@ class PolicyValidator:
                 )
 
         return None
+
+    def bind_research_scope(self, scope) -> None:
+        from schemas.research import ResearchScope
+        if not isinstance(scope, ResearchScope) or scope.target_id not in self.target_environments:
+            raise ValueError("Only a registered operator research scope is accepted")
+        if not hasattr(self, "research_scopes"):
+            self.research_scopes = {}
+        self.research_scopes[scope.target_id] = scope.model_copy(deep=True)
 
     def _validate_registered_artifacts(
         self,

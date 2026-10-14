@@ -186,6 +186,7 @@ class SafeExecutor:
         self._registry.register("verify_redirect_destination", self._b06_parameters)
         self._registry.register("verify_auth_reauthentication", self._b06_parameters)
         self._access_verifier = None
+        self._research_runtime = None
         self._registry.register("inspect_javascript_security", self._javascript_parameters)
         self._registry.register("verify_sql_injection", self._sql_parameters)
         self._registry.register("verify_sensitive_directory", self._javascript_parameters)
@@ -448,6 +449,9 @@ class SafeExecutor:
         )
 
     def execute(self, action: ActionProposal) -> ExecutionResult:
+        from schemas.research import RESEARCH_TOOLS
+        if action.research_binding is not None or action.tool in RESEARCH_TOOLS:
+            return self._execute_one(action, uuid4().hex)
         if action.tool == "observe_http_surface":
             return self.execute_runtime_observation(action)
         result = self.execute_sequence([action])
@@ -638,6 +642,10 @@ class SafeExecutor:
             self._policy.validate_target_environment(target.environment)
         except ValueError as exc:
             return self._finish(action, run_id, started, status="denied", exit_code=126, stderr=str(exc), decision_reason=str(exc), session_id=session_id)
+
+        from schemas.research import RESEARCH_TOOLS
+        if action.research_binding is not None or action.tool in RESEARCH_TOOLS:
+            return self._execute_research(action, run_id, started, target)
 
         if action.tool == "verify_access_control":
             try:
@@ -939,6 +947,58 @@ class SafeExecutor:
 
         return value
 
+    def bind_research_runtime(self, runtime) -> None:
+        from executor.research_runtime import ResearchRuntime
+        if not isinstance(runtime, ResearchRuntime) or not runtime.ready:
+            raise ValueError("Only an active operator-owned Docker research runtime is accepted")
+        self._targets.get(runtime.scope.target_id)
+        self._research_runtime = runtime
+        from schemas.research import RESEARCH_TOOLS
+        for tool in sorted(RESEARCH_TOOLS):
+            if tool not in self._registry.names():
+                self._registry.register(tool, lambda parameters: dict(parameters))
+
+    def _execute_research(self, action, run_id, started, target):
+        from security.research_scope import validate_research_action
+        runtime = self._research_runtime
+        session_id = runtime.scope.session_id if runtime else None
+        try:
+            if runtime is None or target.repository_path != runtime.root:
+                raise ValueError("Research runtime does not match the registered target")
+            self._registry.get(action.tool)
+            validate_research_action(runtime.scope, action)
+            runtime.validate_live_scope()
+        except (ValueError, KeyError) as exc:
+            return self._finish(action, run_id, started, status="denied", exit_code=126,
+                                stderr=str(exc), decision_reason="Research scope denied",
+                                session_id=session_id, runtime_backend="docker")
+        acquired, reason = self._run_limiter.acquire(action.id)
+        if not acquired:
+            return self._finish(action, run_id, started, status="denied", exit_code=75,
+                                stderr=reason, decision_reason=reason, session_id=session_id)
+        try:
+            result = runtime.execute(action, run_id)
+            return self._finish(action, run_id, started,
+                                status="completed" if result.exit_code == 0 else "failed",
+                                exit_code=result.exit_code, stdout=result.stdout, stderr=result.stderr,
+                                timed_out=result.timed_out, workspace_id=result.workspace_id,
+                                decision_reason="Research observation recorded", session_id=session_id,
+                                runtime_backend="docker",
+                                network_mode="target" if action.tool == "target_http" else "none")
+        except RunCancelled:
+            self._finish(action, run_id, started, status="failed", exit_code=130,
+                         stderr="Research action cancelled by operator",
+                         decision_reason="Operator cancellation", session_id=session_id,
+                         runtime_backend="docker")
+            raise
+        except (ValueError, RuntimeError, OSError) as exc:
+            return self._finish(action, run_id, started, status="failed", exit_code=2,
+                                stderr=redact_error_message(str(exc), max_length=240),
+                                decision_reason="Research observation failed", session_id=session_id,
+                                runtime_backend="docker")
+        finally:
+            self._run_limiter.release()
+
     def _finish(
         self,
         action: ActionProposal,
@@ -985,6 +1045,8 @@ class SafeExecutor:
                                      if action.verification_binding else None),
             "fixture_binding": (action.fixture_binding.model_dump(mode="json")
                                 if action.fixture_binding else None),
+            "research_binding": (action.research_binding.model_dump(mode="json")
+                                 if action.research_binding else None),
             "endpoint": action.endpoint,
             "status": status,
             "exit_code": exit_code,

@@ -1123,6 +1123,35 @@ independent CP labels; CP accuracy remains N/A. `app.b08_acceptance` run/replay/
 package is synthetic scoring acceptance, NOT new Juice Shop benchmark metrics.
 See `docs/b08-scoring-progress.md` for trust boundaries, usage and acceptance.
 
+# 30. R00–R03 opt-in research tools
+
+`policies/research.yaml`, `schemas/research.py`, `tools/research.py` and the
+operator-owned `ResearchRuntime` provide bounded source/workspace/script/HTTP
+observations through canonical ActionProposal → Validator → SafeExecutor → Evidence.
+The runtime must be bound explicitly; historical policies do not enable these tools.
+ActionProposal.research_binding is application-owned. Absent bindings preserve the
+historical wire shape and approval digest. State never contains the live broker.
+
+The model sees only a redacted source projection with original/visible hashes.
+Networkless Python/Node scripts run in a persistent per-run Docker tmpfs workspace,
+never on the host. Locally built research images may use a verified full immutable
+image ID; historical SandboxPolicy image requirements are unchanged.
+Approval covers the script digest and full operator scope. Detached child processes,
+timeouts, cancellation, source/script mutation and cleanup are enforced.
+
+`target_http` uses a separate fixed worker on a registered internal network.
+Requests bind a container/image generation, local service, path/method and optional
+opaque role handle. Credentials stay private to the operator broker; model scripts
+cannot access the transport or arbitrary network. Writes need exact operator grants.
+Research observations always remain inconclusive until independent R06 review.
+
+`app.research_plan` is the operator CLI. `app.research_acceptance` runs real Docker
+transport tests; `app.research_juice_smoke` observes ordinary pinned Juice Shop search.
+Neither is a benchmark or an LLM quality measurement. R04 autonomous tool selection
+and the private B04 fixture bridge remain future integration. R00 replay and R01
+static source audit do not change historical A04/B09 results. See
+`docs/research-foundation-report-2026-10-15.md` for artifacts and reproduction.
+
 # 30. B07 finding workflow recovery
 
 LangGraph nodes use `agent.recovery.protected_node` to preserve finding-local
