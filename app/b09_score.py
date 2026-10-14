@@ -97,6 +97,7 @@ def score(root, dataset_path):
     scores = {}
     family_metrics = {}
     case_losses = []
+    all_matches = {}
     for split in ("development", "holdout"):
         agent = score_v2(dataset, observations, split=split, sample_kind="original",
                          technically_valid=not errors, technical_errors=errors)
@@ -104,6 +105,9 @@ def score(root, dataset_path):
                         technically_valid=not errors, technical_errors=errors)
         write_json(destination / f"{split}-agent.json", agent.model_dump(mode="json"))
         write_json(destination / f"{split}-sast.json", sast.model_dump(mode="json"))
+        for match in agent.matches:
+            if match.classification != "outside_ground_truth":
+                all_matches.setdefault(match.observation_id, []).append(match.model_dump(mode="json"))
         scores[split] = {"detection": agent.detection.model_dump() if agent.detection else None,
                         "verification": agent.verification.model_dump() if agent.verification else None,
                         "sast_detection": sast.detection.model_dump() if sast.detection else None}
@@ -142,6 +146,19 @@ def score(root, dataset_path):
                         "No new DAST baseline or repair measurement.",
                         "B05 write-v3 is not accepted; no claim of full Stage B completion."]}
     write_json(destination / "normalization.json", normalization)
+    review = []
+    by_observation = {item.id: item for item in observations}
+    for report in reports:
+        if report.status != "confirmed":
+            continue
+        observation = by_observation[report.finding_id]
+        review.append({"finding_id": report.finding_id, "file": report.finding.file,
+            "line": report.finding.line_start, "capability": report.verification.capability,
+            "persisted_execution_audit_and_approval_trace_match": observation.evidence_backed,
+            "matches": all_matches.get(report.finding_id, []),
+            "outside_frozen_truth": report.finding_id not in all_matches,
+            "scope": [e.summary for e in report.evidence], "evidence_refs": observation.evidence})
+    write_json(destination / "confirmed-review.json", review)
     write_json(destination / "family-metrics.json", family_metrics)
     write_json(destination / "case-losses.json", case_losses)
     write_json(destination / "summary.json", summary)
