@@ -103,7 +103,7 @@ def run(target, output, model, max_turns=8):
     command = _docker_command(target, RULES.resolve())
     command[2:2] = ["--cpus=2", "--memory=2g", "--pids-limit=128"]
     started = time.monotonic()
-    scanned = run_cancellable_process(command, timeout=600)
+    scanned = run_cancellable_process(command, cwd=target, timeout=600)
     if scanned.returncode:
         write(output / "scanner-failure.json", {"exit_code": scanned.returncode})
         raise ValueError("SAST failed; no successful comparison claimed")
