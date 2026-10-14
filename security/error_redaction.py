@@ -92,4 +92,6 @@ def redact_observation(value: object, *, field: str = "") -> object:
     value = _JSON_SECRET_RE.sub(rf"\g<prefix>\g<quote>{REDACTION_MARKER}\g<quote>", value)
     value = _KEY_VALUE_SECRET_RE.sub(rf"\g<prefix>{REDACTION_MARKER}", value)
     value = re.sub(r"\bsk-[a-zA-Z0-9_-]{16,}|\beyJ[\w-]+\.[\w-]+\.[\w-]+", REDACTION_MARKER, value)
+    value = re.sub(r"-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----.*?-----END (?:[A-Z0-9]+ )*PRIVATE KEY-----",
+                   REDACTION_MARKER, value, flags=re.DOTALL)
     return _WINDOWS_HOME_RE.sub("<home>", _POSIX_HOME_RE.sub("<home>", value))

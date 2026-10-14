@@ -55,6 +55,7 @@ _NEXT_STEPS = {
 }
 
 _VERIFICATION_LIMITATIONS = {
+    "runtime_exploit_verified": "Runtime exploitability and impact were not verified.",
     "runtime_user_verified": "Runtime container user identity was not verified.",
     "runtime_auth_verified": "Runtime authentication behavior was not verified.",
     "browser_execution_verified": "Browser-side execution was not verified.",

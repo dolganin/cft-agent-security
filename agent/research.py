@@ -27,6 +27,20 @@ Do not repeat an unchanged operation. Compute script SHA256 from the exact UTF-8
 content, or read its write observation's sha256; never invent a digest.
 Return a ResearchTurn matching the provided schema, not a security verdict."""
 
+DISCOVERY_PROMPT = """
+You may report additional candidates independently of the current finding. Every
+candidate must cite existing read_source observation IDs, a real read line range,
+and an exact anchor from those lines. Do not infer safety from absent findings.
+Candidates are unverified; do not assign numeric severity. Source proof protocol
+weak_digest_call.v1 checks an actual crypto/hashlib weak-digest call at read lines;
+it proves ONLY that source condition, not exploitable cryptographic impact. You may
+request it via source_claims; an unsupported interpretation remains review_pending.
+confidential_marker.v1 is available only for operator-published http_proof_specs;
+it independently checks a confidential owned marker with owner and negative controls.
+Review source inventories and surface_context to explore unexamined handlers.
+Never use benchmark solutions, scoreboards or challenge-answer endpoints.
+"""
+
 
 class ResearchBudgetExhausted(RuntimeError):
     pass
@@ -66,11 +80,12 @@ def compact(value, size):
 
 
 class ResearchAgentModel:
-    def __init__(self, *, client, scope, validator, limits=None):
+    def __init__(self, *, client, scope, validator, limits=None, surface_context=None):
         self.client, self.scope, self.validator = client, scope, validator
         self.limits = limits or ResearchLimits()
         self.progress = ResearchProgress()
         self.turn = None
+        self.surface_context = surface_context or {}
 
     def context(self, state):
         services = {name: {"read_prefixes": item.read_prefixes, "write_paths": item.write_paths,
@@ -82,13 +97,15 @@ class ResearchAgentModel:
                    "tools": research_tool_contracts(), "services": services,
                    "source_count": len(self.scope.source_files),
                    "limits": self.limits.model_dump(),
-                   "usage": self.progress.model_dump(exclude={"ledger", "turns"}),
+                   "usage": self.progress.model_dump(exclude={"ledger", "turns", "candidates", "candidate_rejections", "source_claims", "http_claims", "provider_usage"}),
+                   "surface_context": self.surface_context,
+                   "candidate_rejections": self.progress.candidate_rejections[-8:],
                    "observation_index": [{"action_id": x.action_id, "tool": x.tool,
                                           "category": x.category} for x in self.progress.ledger],
                    "observations": [], "previous_interpretation": None}
         if self.progress.turns:
             last = self.progress.turns[-1]
-            payload["previous_interpretation"] = last.model_dump(exclude={"action"})
+            payload["previous_interpretation"] = last.model_dump(exclude={"action", "candidates", "source_claims", "http_claims"})
         if len(encoded(payload)) > self.limits.max_context_bytes:
             raise ResearchBudgetExhausted("Context metadata exceeds byte budget")
         for observation in reversed(self.progress.ledger):
@@ -116,19 +133,26 @@ class ResearchAgentModel:
         payload = self.context(state)
         # Include the schema/prompt and reserve UTF-8 output bytes before any API call.
         reservation = (len(encoded(payload)) + len(encoded(ResearchTurn.model_json_schema()))
-                       + len(PROMPT.encode()) + 512
+                       + len((PROMPT + DISCOVERY_PROMPT).encode()) + 512
                        + int(getattr(self.client, "max_output_tokens", 4096)) * 4)
-        if (self.progress.model_calls >= self.limits.max_model_calls
+        reserved_attempts = 1 + self.limits.max_schema_corrections
+        reservation = reservation * reserved_attempts + self.limits.max_schema_corrections * (
+            int(getattr(self.client, "max_output_tokens", 4096)) * 4 + 1024)
+        if (self.progress.model_call_reservations + reserved_attempts > self.limits.max_model_calls
                 or self.progress.model_io_bytes + reservation > self.limits.max_model_io_bytes):
             raise ResearchBudgetExhausted("Model call/IO reservation budget exhausted")
-        self.progress.model_calls += 1
+        self.progress.model_call_reservations += reserved_attempts
         self.progress.model_io_bytes += reservation
         # One request per turn: don't hide provider failover/retries inside the budget.
         if hasattr(self.client, "routes") and len(self.client.routes) != 1:
             raise ValueError("R04 requires exactly one explicitly selected provider route")
-        turn = self.client.complete_model(output_model=ResearchTurn, system_prompt=PROMPT,
-                                          user_payload=payload, operation="research_turn",
-                                          schema_retries=0, network_retries=0)
+        try:
+            turn = self.client.complete_model(output_model=ResearchTurn, system_prompt=PROMPT + DISCOVERY_PROMPT,
+                                              user_payload=payload, operation="research_turn",
+                                              schema_retries=self.limits.max_schema_corrections, network_retries=0)
+        finally:
+            self.progress.model_calls += max(1, len(getattr(self.client, "last_attempts", [])))
+            self.progress.provider_usage.append(getattr(self.client, "last_usage", None))
         turn = ResearchTurn.model_validate(turn)
         if len(encoded(turn.model_dump())) > int(getattr(self.client, "max_output_tokens", 4096)) * 4:
             raise ResearchBudgetExhausted("Model output exceeded reserved byte budget")
@@ -137,8 +161,49 @@ class ResearchAgentModel:
             raise ValueError("Model referenced an observation that was never persisted")
         self.turn = turn
         self.progress.turns.append(turn)
+        for candidate in turn.candidates:
+            if self.read_anchor(candidate.file, candidate.line_start, candidate.line_end or candidate.line_start,
+                                candidate.observation_refs, candidate.anchor):
+                if candidate.model_dump() not in [x.model_dump() for x in self.progress.candidates]:
+                    self.progress.candidates.append(candidate)
+            else:
+                self.progress.candidate_rejections.append("Candidate lacks an exact persisted read anchor: " + candidate.file[:240])
+        for claim in turn.source_claims:
+            if self.read_anchor(claim.file, claim.line_start, claim.line_end, claim.observation_refs):
+                if claim.model_dump() not in [x.model_dump() for x in self.progress.source_claims]:
+                    self.progress.source_claims.append(claim)
+            else:
+                self.progress.candidate_rejections.append("Claim lacks a persisted source read: " + claim.file[:240])
+        published = {x["id"] for x in self.surface_context.get("http_proof_specs", [])}
+        for claim in turn.http_claims:
+            observations = {x.action_id: x for x in self.progress.ledger}
+            if (claim.spec_id in published and set(claim.observation_refs) <= set(observations)
+                    and all(observations[ref].tool == "target_http" for ref in claim.observation_refs)):
+                self.progress.http_claims.append(claim)
+            else:
+                self.progress.candidate_rejections.append("HTTP claim lacks an operator protocol or HTTP observations")
         return AnalysisResult(summary=turn.summary, risk_signals=turn.uncertainties,
                               needs_verification=not turn.finish)
+
+    def read_anchor(self, file, start, end, refs, anchor=None):
+        if (file not in self.scope.source_files or start is None or end is None
+                or end < start or end - start >= 160 or not refs):
+            return False
+        by_id = {x.action_id: x for x in self.progress.ledger}
+        if not set(refs) <= set(by_id):
+            return False
+        lines = {}
+        for ref in refs:
+            item = by_id[ref]
+            if item.tool != "read_source" or item.category != "observation" or item.observation.get("path") != file:
+                return False
+            for line in item.observation.get("content", "").splitlines():
+                number, separator, text = line.partition(": ")
+                if separator and number.isdigit():
+                    lines[int(number)] = text
+        if not all(number in lines for number in range(start, end + 1)):
+            return False
+        return anchor is None or anchor in "\n".join(lines[n] for n in range(start, end + 1))
 
     def form_hypothesis(self, state, analysis):
         return Hypothesis(id=f"research-hypothesis-{state.get('iteration_count', 0) + 1}",

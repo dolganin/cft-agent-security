@@ -30,7 +30,7 @@ from schemas.target import TargetProfile
 from validator.validator import PolicyValidator
 
 
-def run_research(*, profile, configuration, finding, output, client, limits=None):
+def run_research(*, profile, configuration, finding, output, client, limits=None, surface_context=None):
     limits = limits or ResearchLimits()
     output = Path(output).resolve()
     if output.exists():
@@ -68,7 +68,8 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
             audit_log=JsonlAuditLog(output / "audit.jsonl"), sandbox=DockerSandbox(policy),
             run_limiter=RunLimiter(), policy=policy)
         executor.bind_research_runtime(runtime)
-        model = ResearchAgentModel(client=client, scope=runtime.scope, validator=validator, limits=limits)
+        model = ResearchAgentModel(client=client, scope=runtime.scope, validator=validator, limits=limits,
+                                   surface_context=surface_context)
         stack.enter_context(research_context(model))
         stack.enter_context(executor_context(executor))
         state["research_scope"] = runtime.scope
