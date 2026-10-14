@@ -40,7 +40,8 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
     if not files:
         raise ValueError("No approved application source")
     configuration = {**configuration, "source_files": files}
-    queue = ResearchQueue(profile=profile, source_map=source_map, source_files=files)
+    queue = ResearchQueue(profile=profile, source_map=source_map, source_files=files,
+                          preferred_families=limits.dev_preferred_families)
     http_review_registry = http_review_registry or {}
     queue.import_findings(sast, "sast")
     queue.import_findings(dast, "dast")
@@ -74,7 +75,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         related["source_priority_index"] = [p for p in files if p.startswith(("routes/", "lib/", "models/"))][:48]
         related["http_proof_specs"] = [spec.public() for spec, _ in http_review_registry.values()]
         if acceptance_require_script:
-            related["dev_acceptance_objective"] = "Demonstrate at least one self-authored Python/Node source-inspection script; its stdout is not a verdict. Use read/write/run tools, not host execution."
+            related["dev_acceptance_objective"] = "Demonstrate a self-authored Python/Node source-inspection script and an ordinary non-mutating allowed target_http observation before finishing. Script stdout and a successful HTTP response are NOT security verdicts. Use read/write/run tools, not host execution."
         scoped_limits = research_limits.model_copy(update={
             "max_steps": min(research_limits.max_steps, remaining_actions),
             "max_model_calls": min(research_limits.max_model_calls, remaining_calls),

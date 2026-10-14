@@ -8,7 +8,7 @@ from schemas.research_campaign import ResearchQuestion, RuntimeScannerObservatio
 
 
 class ResearchQueue:
-    def __init__(self, *, profile, source_map, source_files):
+    def __init__(self, *, profile, source_map, source_files, preferred_families=()):
         self.profile, self.source_map = profile, source_map
         self.source_files = set(source_files)
         self.raw = []
@@ -19,6 +19,7 @@ class ResearchQueue:
         self.cursor = 0
         self.origins = {}
         self.runtime_signals = {}
+        self.preferred_families = set(preferred_families)
 
     def import_findings(self, findings, origin):
         if origin not in {"sast", "dast"}:
@@ -109,7 +110,8 @@ class ResearchQueue:
             options = [x for x in self.questions if x.status == "pending" and x.origin == channel]
             if options:
                 self.cursor = (self.cursor + offset + 1) % 4
-                return options[0]
+                return min(options, key=lambda q: (q.finding.provenance is None or
+                    q.finding.provenance.family not in self.preferred_families, q.finding.file, q.id))
         return None
 
     def complete(self, question, *, failed=False):

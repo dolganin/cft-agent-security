@@ -10,6 +10,22 @@ def binding_for(scope: ResearchScope) -> ResearchBinding:
                            source_snapshot=scope.source_snapshot)
 
 
+def expand_search_paths(scope, paths):
+    expanded = set()
+    for path in paths:
+        if path in scope.source_files:
+            expanded.add(path)
+            continue
+        prefix = path.rstrip("/") + "/"
+        matches = {name for name in scope.source_files if name.startswith(prefix)}
+        if not matches:
+            raise ValueError("Search selector is outside the approved source inventory")
+        expanded.update(matches)
+    if len(expanded) > 256:
+        raise ValueError("Select a narrower source directory or search the full bounded inventory with paths=[]")
+    return sorted(expanded)
+
+
 def validate_research_action(scope: ResearchScope | None, action: ActionProposal):
     if (scope is None or action.research_binding != binding_for(scope)
             or action.target != scope.target_id or action.environment != scope.environment
@@ -37,6 +53,6 @@ def validate_research_action(scope: ResearchScope | None, action: ActionProposal
         raise ValueError("Source/workspace actions cannot request runtime network scope")
     if action.tool == "read_source" and request.path not in scope.source_files:
         raise ValueError("Source file is not in the trusted projected inventory")
-    if action.tool == "search_source" and any(p not in scope.source_files for p in request.paths):
-        raise ValueError("Search files are outside the trusted inventory")
+    if action.tool == "search_source":
+        expand_search_paths(scope, request.paths)
     return request

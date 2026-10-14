@@ -40,3 +40,4 @@ class CampaignLimits(BaseModel):
     max_model_io_bytes: int = Field(default=8388608, ge=4096, le=67108864)
     max_observation_bytes: int = Field(default=4194304, ge=1024, le=16777216)
     max_write_bytes: int = Field(default=1048576, ge=0, le=4194304)
+    dev_preferred_families: list[str] = Field(default_factory=list, max_length=8)

@@ -21,6 +21,7 @@ from schemas.research_campaign import RuntimeScannerObservation
 from schemas.research_review import HttpMarkerSpec
 from schemas.source_map import ExpressRouteRegistration, ExpressSourceMap
 from schemas.target import TargetProfile
+from security.research_scope import expand_search_paths
 
 
 @pytest.mark.parametrize("source,file,status", [
@@ -168,3 +169,15 @@ def test_source_choice_network_fields_are_corrected_before_action_generation():
                        purpose="Invalid script runner", expected_evidence="No execution")
     assert ResearchChoice(tool="read_source", parameters={"path": "app.ts"},
                           purpose="Read source", expected_evidence="Numbered source").service is None
+
+
+def test_directory_search_never_expands_beyond_projected_files(tmp_path):
+    _, scope, _ = fixture_source(tmp_path)
+    files = {"routes/a.ts": next(iter(scope.source_files.values())), "models/b.ts": next(iter(scope.source_files.values()))}
+    scope = scope.model_copy(update={"source_files": files})
+    assert expand_search_paths(scope, ["routes/", "models/"]) == ["models/b.ts", "routes/a.ts"]
+    with pytest.raises(ValueError):
+        expand_search_paths(scope, ["outside/"])
+    with pytest.raises(ValueError):
+        ResearchChoice(tool="search_source", parameters={"literal": "x", "paths": ["../"]},
+                       purpose="Invalid directory", expected_evidence="No execution")

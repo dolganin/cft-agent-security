@@ -17,7 +17,7 @@ from pipeline.cancellation import RunCancelled, current_token, suspend_cancellat
 from schemas.research import HttpServiceScope, ResearchFile, ResearchScope, content_digest
 from schemas.runtime import RuntimeServiceMap
 from security.error_redaction import redact_error_message, redact_observation
-from security.research_scope import binding_for, validate_research_action
+from security.research_scope import binding_for, expand_search_paths, validate_research_action
 from security.source_paths import normalize_source_path
 from tools.repository_source import _safe_lines, _source_path
 
@@ -230,6 +230,8 @@ class ResearchRuntime:
                        "visible_hashes": {p: f.visible_sha256 for p, f in self.scope.source_files.items()},
                        "timeout": min(self.timeout, self.scope.wall_seconds -
                                       (time.monotonic() - self.started))}
+            if action.tool == "search_source" and request.paths:
+                payload["request"]["paths"] = expand_search_paths(self.scope, request.paths)
             container = self.container
             ephemeral = False
             http_start = None

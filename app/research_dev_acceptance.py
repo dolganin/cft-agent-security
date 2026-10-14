@@ -79,7 +79,8 @@ def run(checkout, image, output):
             "http_grants": config["http_grants"], "benchmark_measurement": False,
             "purpose": "Live DEV read/write/run/candidate/independent-source-proof acceptance"})
         summary = campaign(profile=profile, configuration=config, client=client, output=output / "campaign",
-            sast=selected, limits=CampaignLimits(max_questions=4, max_actions=32, max_model_calls=36, wall_seconds=480),
+            sast=selected, limits=CampaignLimits(max_questions=4, max_actions=32, max_model_calls=36, wall_seconds=480,
+                                               dev_preferred_families=["weak-cryptography"]),
             research_limits=ResearchLimits(max_steps=8, max_model_calls=20, max_schema_corrections=1, max_model_io_bytes=2097152,
                                           wall_seconds=180), acceptance_require_script=True)
         write_json(output / "campaign-result.json", summary)
@@ -93,6 +94,7 @@ def run(checkout, image, output):
     checks = {"live_model": summary["model_calls"] > 0 and summary["stop_reason"] != "model_failure",
         "source_read": "read_source" in tools, "script_written": "write_workspace_file" in tools,
         "script_executed": "sandbox_command" in tools, "source_unchanged": snapshot == after,
+        "http_observed": "target_http" in tools,
         "cleanup_verified": summary["cleanup_verified"], "independent_review_attempted": bool(summary["review_counts"]["confirmed"]
             + summary["review_counts"]["rejected"] + summary["review_counts"]["review_pending"])}
     result = {"checks": checks, "passed": all(checks.values()), "repetitions": 1,

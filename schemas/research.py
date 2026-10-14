@@ -160,8 +160,16 @@ class ReadSourceRequest(StrictResearchModel):
 
 class SearchSourceRequest(StrictResearchModel):
     literal: str = Field(min_length=1, max_length=200)
-    paths: list[str] = Field(default_factory=list, max_length=64)
+    paths: list[str] = Field(default_factory=list, max_length=256,
+        description="Registered source files or canonical directory prefixes; empty means the approved source inventory")
     max_matches: int = Field(default=50, ge=1, le=100)
+
+    @field_validator("paths")
+    @classmethod
+    def source_selectors(cls, paths):
+        for path in paths:
+            relative_file(path.removesuffix("/"))
+        return paths
 
 
 class WriteWorkspaceRequest(StrictResearchModel):
