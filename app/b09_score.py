@@ -95,6 +95,8 @@ def score(root, dataset_path):
     baseline = [BenchmarkObservationV2.model_validate(item) for item in observations_semgrep_b02(raw)]
     write_json(destination / "observations.json", [item.model_dump(mode="json") for item in observations])
     scores = {}
+    family_metrics = {}
+    case_losses = []
     for split in ("development", "holdout"):
         agent = score_v2(dataset, observations, split=split, sample_kind="original",
                          technically_valid=not errors, technical_errors=errors)
@@ -105,6 +107,16 @@ def score(root, dataset_path):
         scores[split] = {"detection": agent.detection.model_dump() if agent.detection else None,
                         "verification": agent.verification.model_dump() if agent.verification else None,
                         "sast_detection": sast.detection.model_dump() if sast.detection else None}
+        families = {}
+        for case in agent.cases:
+            group = families.setdefault(case.family, Counter())
+            group["positive_cases" if case.expected == "vulnerable" else "negative_cases"] += 1
+            group["detected_cases"] += int(case.detected)
+            group["confirmed_vulnerabilities"] += int(case.expected == "vulnerable" and case.confirmation_supported)
+            if case.expected == "vulnerable" and not case.confirmation_supported:
+                case_losses.append({"split": split, "case_id": case.case_id, "family": case.family,
+                                    "detected": case.detected, "reason": case.verification})
+        family_metrics[split] = {family: dict(counts) for family, counts in sorted(families.items())}
         selected = dataset.model_copy(update={"cases": [c for c in dataset.cases
                            if c.split == split and c.sample_kind == "original"]})
         mapping = {}
@@ -130,8 +142,42 @@ def score(root, dataset_path):
                         "No new DAST baseline or repair measurement.",
                         "B05 write-v3 is not accepted; no claim of full Stage B completion."]}
     write_json(destination / "normalization.json", normalization)
+    write_json(destination / "family-metrics.json", family_metrics)
+    write_json(destination / "case-losses.json", case_losses)
     write_json(destination / "summary.json", summary)
     return summary
+
+
+def compare_previous(root, previous):
+    seal = read(previous / "seal.json")
+    for name, expected in seal.items():
+        path = (previous / name).resolve(strict=True)
+        if not path.is_relative_to(previous.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            raise ValueError("Previous A08 output seal mismatch")
+    destination = root / "comparison"
+    destination.mkdir(exist_ok=True)
+    comparisons = {}
+    for split in ("development", "holdout"):
+        name = f"scorecard-v2-{split}-original.json"
+        old = read(previous / "agent-rescore" / name)
+        current = read(root / "evaluation" / f"{split}-agent.json")
+        if old["dataset_digest"] != current["dataset_digest"]:
+            raise ValueError("Cannot compare different frozen benchmark datasets")
+        shutil.copyfile(previous / "agent-rescore" / name, destination / name)
+        historical_baseline = {}
+        for scanner in ("sast", "dast", "union"):
+            baseline_name = f"run-01-{scanner}-{split}.json"
+            historical = read(previous / "baseline" / baseline_name)
+            shutil.copyfile(previous / "baseline" / baseline_name, destination / baseline_name)
+            historical_baseline[scanner] = historical.get("detection")
+        comparisons[split] = {"previous_detection": old["detection"],
+            "previous_verification": old["verification"], "current_detection": current["detection"],
+            "current_verification": current["verification"], "historical_a06_baseline": historical_baseline}
+    shutil.copyfile(previous / "seal.json", destination / "previous-output-seal.json")
+    write_json(destination / "before-after.json", {"previous_output_seal_verified_files": len(seal),
+        "comparison": comparisons, "limitations": ["One historical valid run versus one current valid run.",
+            "Model, scanner and workflow changed together; this is not a controlled component ablation.",
+            "A06 DAST/union are historical sealed reference scores, not fresh B09 scans."]})
 
 
 def main():
@@ -139,8 +185,11 @@ def main():
     parser.add_argument("--artifacts", type=Path, required=True)
     parser.add_argument("--dataset", type=Path,
                         default=Path("benchmarks/juice-shop-v20.2.0-v2/ground_truth.yaml"))
+    parser.add_argument("--previous", type=Path)
     args = parser.parse_args()
     print(json.dumps(score(args.artifacts.resolve(), args.dataset.resolve()), indent=2))
+    if args.previous:
+        compare_previous(args.artifacts.resolve(), args.previous.resolve())
 
 
 if __name__ == "__main__":

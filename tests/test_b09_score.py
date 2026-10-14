@@ -1,6 +1,6 @@
 import pytest
 
-from app.b09_score import normalize_fixture_evidence
+from app.b09_score import compare_previous, normalize_fixture_evidence
 
 
 def test_fixture_normalization_preserves_bytes_and_is_idempotent(tmp_path):
@@ -24,3 +24,12 @@ def test_fixture_reference_collision_is_rejected(tmp_path):
     (tmp_path / "evidence/execution-example.json").write_text("different")
     with pytest.raises(ValueError, match="collision"):
         normalize_fixture_evidence(tmp_path)
+
+
+def test_previous_metrics_require_verified_seal(tmp_path):
+    previous = tmp_path / "previous"
+    previous.mkdir()
+    (previous / "seal.json").write_text('{"score.json":"bad"}')
+    (previous / "score.json").write_text("changed")
+    with pytest.raises(ValueError, match="seal mismatch"):
+        compare_previous(tmp_path / "run", previous)
