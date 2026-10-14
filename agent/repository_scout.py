@@ -8,6 +8,7 @@ from collections.abc import Callable
 
 from agent.llm import LLMUnavailableError, ProviderFailoverClient
 from agent.prompts import SYSTEM_PROMPT
+from agent.scout_schedule import source_schedule, unread_coverage
 from schemas.discovery import ProjectDiscoveryResult
 from schemas.scout import CandidateFinding, CandidateFindingBatch, ScoutTurn
 from schemas.source_map import ExpressSourceMap
@@ -20,6 +21,7 @@ class RepositoryScout:
         self, client: ProviderFailoverClient, *, max_turns: int = 8,
         max_source_chars: int = 160_000, max_candidates: int = 32,
         wall_clock_seconds: float = 240,
+        schedule_mode: str = "round_robin",
         check_cancelled: Callable[[], None] | None = None,
         on_progress: Callable[[dict], None] | None = None,
     ) -> None:
@@ -28,6 +30,7 @@ class RepositoryScout:
             or max_source_chars < 1
             or not 1 <= max_candidates <= 256
             or wall_clock_seconds <= 0
+            or schedule_mode not in {"round_robin", "handlers"}
         ):
             raise ValueError("Invalid repository scout budget")
         self.client = client
@@ -35,6 +38,7 @@ class RepositoryScout:
         self.max_source_chars = max_source_chars
         self.max_candidates = max_candidates
         self.wall_clock_seconds = wall_clock_seconds
+        self.schedule_mode = schedule_mode
         self.check_cancelled = check_cancelled or (lambda: None)
         self.on_progress = on_progress or (lambda _event: None)
         self.audit: dict = {}
@@ -55,6 +59,13 @@ class RepositoryScout:
             "stop_reason": "turn_budget", "source_chars": 0, "reviewed_chars": 0,
             "accepted_candidates": 0, "dropped_candidates": 0,
             "max_candidates": self.max_candidates, "search_chars": 0,
+            "schedule_mode": self.schedule_mode, "model_calls": 0,
+            "budgets": {"max_turns": self.max_turns,
+                        "max_source_chars": self.max_source_chars,
+                        "wall_clock_seconds": self.wall_clock_seconds},
+            "dependency_followups": [],
+            "cost": {"currency_cost": None, "token_usage": None,
+                     "reason": "provider_adapter_does_not_expose_usage_or_pricing"},
         }
         reviewed: dict[str, list[tuple[int, int]]] = {}
         sent: set[tuple[str, int, int]] = set()
@@ -62,15 +73,14 @@ class RepositoryScout:
         identities: set[tuple] = set()
         # Walk bounded windows, rather than truncating every file to its first lines.
         # Round-robin windows prevent a large early file consuming the whole run.
-        seeds = deque(
-            (file, start, start + 159)
-            for start in range(1, max((len(v) for v in source.lines.values()), default=0) + 1, 160)
-            for file in source.files if start <= len(source.lines[file])
-        )
+        seeds = source_schedule(source, source_map, self.schedule_mode)
+        followed: set[str] = set()
+        prefer_request = True
         requests: deque[tuple[str, int, int]] = deque()
         previous: list[dict] = []
         search_results: list[dict] = []
         if not seeds:
+            self.audit.update(unread_coverage(source, reviewed))
             self.audit["stop_reason"] = "no_application_source"
             self.audit["reviewed_source_lines"] = 0
             self.audit["indexed_source_lines"] = sum(
@@ -88,7 +98,11 @@ class RepositoryScout:
             turn_ranges = []
             batch_chars = 0
             while requests or seeds:
-                queue = requests if requests else seeds
+                if self.schedule_mode == "handlers" and requests and seeds:
+                    queue = requests if prefer_request else seeds
+                    prefer_request = not prefer_request
+                else:
+                    queue = requests if requests else seeds
                 file, start, end = queue.popleft()
                 try:
                     snippet = source.read(file, start, end)
@@ -126,6 +140,8 @@ class RepositoryScout:
             }
             self.audit["submitted_ranges"].extend(turn_ranges)
             self.audit["turns"].append(event)
+            call_started = time.monotonic()
+            self.audit["model_calls"] += 1
             try:
                 result = self.client.complete_model(
                     output_model=ScoutTurn, system_prompt=SYSTEM_PROMPT,
@@ -143,7 +159,9 @@ class RepositoryScout:
                             "related files or missing line windows and search_queries for literal "
                             "symbol/route searches. These tools only read trusted source. Use stable "
                             "rule families such as sql-injection, xss, access-control, "
-                            "authentication, open-redirect, path-traversal and file-exposure. "
+                            "authentication, weak-cryptography, open-redirect, path-traversal "
+                            "and file-exposure. Weak hashing is distinct from an authentication "
+                            "decision; trace its actual use before assigning a family. "
                             "Use one candidate per concrete sink or authorization decision, with "
                             "a narrow anchor range. Distinguish raw input from hashed, escaped or "
                             "parameterized values. Public endpoints, permissive CORS or a missing "
@@ -182,9 +200,11 @@ class RepositoryScout:
                 )
             except (LLMUnavailableError, ValueError) as exc:
                 event.update(status="model_unavailable", error_category=type(exc).__name__)
+                event["latency_ms"] = round((time.monotonic() - call_started) * 1000)
                 self.audit["stop_reason"] = "model_unavailable"
                 break
             event.update(
+                latency_ms=round((time.monotonic() - call_started) * 1000),
                 status="ok", proposed=len(result.candidates),
                 read_requests=[r.model_dump(mode="json") for r in result.read_requests],
                 search_queries=[q[:120] for q in result.search_queries],
@@ -198,6 +218,17 @@ class RepositoryScout:
                 reviewed.setdefault(item["file"], []).append(
                     (item["line_start"], item["line_end"])
                 )
+            if self.schedule_mode == "handlers":
+                for snippet in snippets:
+                    for dependency in source.related_files(snippet["file"]):
+                        if dependency in followed or dependency in reviewed or len(followed) >= 16:
+                            continue
+                        followed.add(dependency)
+                        requests.append(source.focused_windows(dependency)[0])
+                        self.audit["dependency_followups"].append({
+                            "file": dependency, "from_file": snippet["file"],
+                            "reason": "relative_import_in_indexed_source",
+                        })
             # Keep recent source even when the model is still investigating and
             # has not emitted candidates. Do not silently read extra anchor lines.
             turn_context = snippets
@@ -278,6 +309,7 @@ class RepositoryScout:
                 self.audit["stop_reason"] = "completed"
                 break
         self.audit["accepted_candidates"] = len(candidates)
+        self.audit.update(unread_coverage(source, reviewed))
         reviewed_lines = _unique_line_count(reviewed)
         indexed_lines = sum(len(lines) for lines in source.lines.values())
         self.audit["reviewed_source_lines"] = reviewed_lines
