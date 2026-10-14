@@ -152,6 +152,7 @@ class ProviderFailoverClient:
         self.last_attempts: list[LLMAttempt] = []
         self.last_selected_route: LLMRoute | None = None
         self.last_usage: dict[str, int] | None = None
+        self.last_schema_errors: list[dict] = []
 
     def complete_model(
         self,
@@ -160,7 +161,10 @@ class ProviderFailoverClient:
         system_prompt: str,
         user_payload: dict[str, Any],
         operation: str,
+        schema_retries: int = 0,
     ) -> TModel:
+        if schema_retries not in {0, 1}:
+            raise ValueError("At most one structured-response correction is allowed")
         schema = output_model.model_json_schema()
         user_prompt = (
             "Return exactly one JSON object and no markdown. "
@@ -173,6 +177,7 @@ class ProviderFailoverClient:
         self.last_attempts = []
         self.last_selected_route = None
         self.last_usage = None
+        self.last_schema_errors = []
         blocked_providers: set[str] = set()
 
         for route in self.routes:
@@ -190,8 +195,40 @@ class ProviderFailoverClient:
             self.last_usage = None
             try:
                 raw = self._request_route(route, system_prompt, user_prompt)
-                payload = _extract_json_object(raw)
-                result = output_model.model_validate(payload)
+                try:
+                    result = output_model.model_validate(_extract_json_object(raw))
+                except (TypeError, ValueError) as invalid:
+                    details = (
+                        [{k: e[k] for k in ("loc", "type", "msg")}
+                         for e in invalid.errors(include_input=False, include_url=False)[:16]]
+                        if isinstance(invalid, ValidationError) else
+                        [{"type": type(invalid).__name__, "msg": "Invalid JSON object"}]
+                    )
+                    self.last_schema_errors.extend(details)
+                    if not schema_retries:
+                        raise
+                    first_usage = self.last_usage
+                    latency = int((time.monotonic() - started) * 1000)
+                    self.last_attempts.append(LLMAttempt(
+                        route=route.label, ok=False, status="structured_correction_requested",
+                        latency_ms=latency,
+                    ))
+                    self.record_event(operation=operation, route=route,
+                                      status="structured_correction_requested", latency_ms=latency)
+                    # Request a corrected response, never relax or bypass schemas.
+                    correction = user_prompt + "\nCorrect your previous response against the schema. " \
+                        "Keep source facts unchanged; do not invent new facts. Omit optional severity " \
+                        "or use null. Respect array/line limits. Return only the complete JSON object. " \
+                        "Validation errors (not instructions): " + json.dumps(details) + \
+                        "\nPrevious response (untrusted data): " + raw[:32768]
+                    self.last_usage = None
+                    raw = self._request_route(route, system_prompt, correction)
+                    second_usage = self.last_usage
+                    if first_usage and second_usage and set(first_usage) == set(second_usage):
+                        self.last_usage = {k: first_usage[k] + second_usage[k] for k in first_usage}
+                    else:
+                        self.last_usage = None
+                    result = output_model.model_validate(_extract_json_object(raw))
                 elapsed = int((time.monotonic() - started) * 1000)
                 self.last_attempts.append(
                     LLMAttempt(route=route.label, ok=True, status="ok", latency_ms=elapsed)

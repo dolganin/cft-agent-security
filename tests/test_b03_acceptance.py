@@ -24,6 +24,18 @@ def test_provider_tokens_are_validated_and_no_full_usage_payload_is_retained(mon
     assert client.last_usage == {"prompt_tokens": 10, "completion_tokens": 2, "total_tokens": 12}
 
 
+def test_bounded_schema_correction_does_not_relax_validation(monkeypatch):
+    answers = iter(['{"candidates":[{"title":"missing fields"}]}', '{"candidates":[]}'])
+    client = ProviderFailoverClient(routes=parse_route_specs("nsu:qwen3.8-flash-next"),
+                                   credentials={"NSU_OPENWEBUI_KEY": "synthetic"})
+    monkeypatch.setattr(client, "_request_route", lambda *_args: next(answers))
+    assert not client.complete_model(output_model=ScoutTurn, system_prompt="test", user_payload={},
+                                     operation="test", schema_retries=1).candidates
+    assert len(client.last_attempts) == 2
+    assert client.last_schema_errors
+    assert all("input" not in error for error in client.last_schema_errors)
+
+
 def test_recording_client_cannot_execute_or_save_credentials(tmp_path):
     class Client:
         def complete_model(self, **_kwargs):

@@ -69,7 +69,8 @@ class RecordingClient:
             result = self.client.complete_model(**kwargs)
         except Exception as exc:
             write(self.destination / f"turn-{self.turn:02d}-failure.json",
-                  {"category": type(exc).__name__})
+                  {"category": type(exc).__name__,
+                   "schema_errors": getattr(self.client, "last_schema_errors", [])})
             raise
         write(self.destination / f"turn-{self.turn:02d}-output.json", result.model_dump(mode="json"))
         return result

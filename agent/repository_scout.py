@@ -196,7 +196,7 @@ class RepositoryScout:
                         "remaining_turns": self.max_turns - turn,
                         "remaining_candidate_budget": self.max_candidates - len(candidates),
                         "components": [c.model_dump(mode="json") for c in inventory.components],
-                    }, operation="repository_scout",
+                    }, operation="repository_scout", schema_retries=1,
                 )
             except (LLMUnavailableError, ValueError) as exc:
                 event.update(status="model_unavailable", error_category=type(exc).__name__)
@@ -209,6 +209,10 @@ class RepositoryScout:
                 status="ok", proposed=len(result.candidates),
                 read_requests=[r.model_dump(mode="json") for r in result.read_requests],
                 search_queries=[q[:120] for q in result.search_queries],
+                schema_errors=getattr(self.client, "last_schema_errors", []),
+                provider_attempts=[{"route": a.route, "status": a.status,
+                                    "latency_ms": a.latency_ms}
+                                   for a in getattr(self.client, "last_attempts", [])],
             )
             selected_route = getattr(self.client, "last_selected_route", None)
             if selected_route is not None:
