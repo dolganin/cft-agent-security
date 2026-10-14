@@ -18,7 +18,8 @@ class AccessVerificationRuntime:
     """Operator-owned broker. The model never receives a fixture session or object ID."""
 
     def __init__(self, *, profile: TargetProfile, target_repository: str | Path,
-                 output_directory: str | Path, active_check_id: str):
+                 output_directory: str | Path, active_check_id: str, max_readiness_attempts=None,
+                 wall_time_budget_seconds=None):
         self.profile = profile
         self.target_repository = Path(target_repository).resolve()
         self.run_session_id = "b05-" + uuid4().hex
@@ -27,8 +28,13 @@ class AccessVerificationRuntime:
             Path(output_directory).resolve() / "fixture-lifecycle",
             profile_file=Path(__file__).resolve().parents[1] / "targets/juice-b05-access-fixture.yaml",
             active_check_id=active_check_id,
+            max_readiness_attempts=max_readiness_attempts,
+            wall_time_budget_seconds=wall_time_budget_seconds,
         )
-        if self.lab.profile.id != profile.id or self.lab.profile.repository_path != profile.repository_path:
+        supplied = profile.model_dump(mode="json", exclude={"repository_path", "artifacts"})
+        registered = self.lab.profile.model_dump(mode="json", exclude={"repository_path", "artifacts"})
+        if (self.lab.profile.id != profile.id or self.lab.profile.repository_path != profile.repository_path
+                or supplied != registered):
             raise ValueError("B05 runtime target profile mismatch")
         self.initial_snapshot: dict[str, str] | None = None
 

@@ -44,6 +44,25 @@ def inspect_docker(args):
     return subprocess.run(["docker", *args], check=True, capture_output=True, text=True, timeout=15)
 
 
+def read_protocol_execution(store, audit, action, execution, session_id):
+    """Readback requires an independent matching audit, not live worker stdout."""
+    record = store.get_execution(execution.evidence_ref)
+    matching = [a for a in audit.records() if a.get("run_id") == execution.run_id and a.get("action_id") == action.id]
+    payload = {k: v for k, v in record.items() if k not in {"id", "type", "created_at"}}
+    if (len(matching) != 1 or matching[0]["proposal_digest"] != calculate_sha256_digest(action.model_dump())
+            or matching[0]["evidence_digest"] != calculate_sha256_digest(payload)
+            or matching[0]["runtime_backend"] != "docker"
+            or matching[0].get("session_id") != session_id
+            or matching[0].get("evidence_ref") != execution.evidence_ref
+            or record.get("action_id") != action.id or record.get("run_id") != execution.run_id
+            or (action.verification_binding is not None and
+                record.get("verification_binding") != action.verification_binding.model_dump(mode="json"))
+            or (action.fixture_binding is not None and
+                record.get("fixture_binding") != action.fixture_binding.model_dump(mode="json"))):
+        raise ValueError("Canonical protocol audit does not match persisted execution")
+    return record
+
+
 def verification_handoff(findings, profiles, repository):
     """Keep candidate identity/source binding; do not substitute benchmark cases.
 
@@ -73,8 +92,9 @@ def verification_handoff(findings, profiles, repository):
             "is_evidence": False}
 
 
-def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_http_requests, worker_image):
-    """Optional fixed B01 bridge; B05/B06 fixture protocols remain unavailable here.
+def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_http_requests, worker_image,
+                           fixture_grants=(), remaining_wall_seconds=3600):
+    """Optional fixed canonical verification bridge for B01, B05 and B06.
 
     Operator profiles select a protocol but cannot enlarge the research HTTP grant.
     This function never uses model argv, HTTP bodies, credentials or target URLs.
@@ -88,7 +108,10 @@ def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_
     binding = resolve_binding(profile, routed).binding
     cost = REQUEST_RESERVATIONS.get(binding.tool)
     if cost is None:
-        return {**pending, "reason": "Protocol requires its separate private fixture runtime"}
+        from pipeline.research_fixture_verification import verify_fixture_candidate
+        return verify_fixture_candidate(finding=finding, routed=routed, profile=profile, binding=binding,
+            scope=scope, repository=repository, output=output, pending=pending,
+            grants=fixture_grants, max_http_requests=max_http_requests, remaining_wall_seconds=remaining_wall_seconds)
     if cost > max_http_requests:
         return {**pending, "reason": "Insufficient remaining network reservation"}
     # Reuse deterministic request scope validation without actually executing it.
@@ -135,17 +158,7 @@ def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_
     try:
         sequence = executor.execute_sequence([action], runtime_services=runtime)
         execution = sequence.results[0].execution
-        record = store.get_execution(execution.evidence_ref)
-        matching = [a for a in audit.records() if a.get("run_id") == execution.run_id and a.get("action_id") == action.id]
-        payload = {k: v for k, v in record.items() if k not in {"id", "type", "created_at"}}
-        if (len(matching) != 1 or matching[0]["proposal_digest"] != calculate_sha256_digest(action.model_dump())
-                or matching[0]["evidence_digest"] != calculate_sha256_digest(payload)
-                or matching[0]["runtime_backend"] != "docker"
-                or matching[0].get("session_id") != runtime.session_id
-                or matching[0].get("evidence_ref") != execution.evidence_ref
-                or record.get("action_id") != action.id or record.get("run_id") != execution.run_id
-                or record.get("verification_binding") != action.verification_binding.model_dump(mode="json")):
-            raise ValueError("Canonical protocol audit does not match persisted execution")
+        record = read_protocol_execution(store, audit, action, execution, runtime.session_id)
         resolve_research_endpoint(scope, service, inspect_docker)
         current = resolve_binding(profile, routed)
         if current.binding != binding:

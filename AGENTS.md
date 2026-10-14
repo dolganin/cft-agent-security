@@ -1271,6 +1271,12 @@ merely because a verification route exists. Shared target identity checks bracke
 execution; matching audit, source integrity and cleanup precede final reporting.
 Original research reports remain preserved beside independent final reports.
 Fixed protocol network reservations are separate from observed research requests
-but consume the same campaign quota. B05/B06 private role/fixture bridges are NOT
-enabled by this integration. Do not claim new Recall or live-model improvement
-from scripted Docker regressions. See `docs/research-r09-diagnostic-repairs.md`.
+but consume the same campaign quota. Explicit typed operator grants now enable
+only B05 own-read and the two registered B06 redirect/re-authentication protocols
+through their existing canonical Validator/Executor/Audit/Evidence paths. B05
+writes and other B05/B06 checks remain unavailable. Readiness, complete lifecycle
+HTTP reservation, protocol wall budget, source/fixture binding and cleanup are
+enforced. `tests/test_research_fixture_campaign.py` is the real-Docker acceptance;
+its scripted research step does not measure model quality or benchmark metrics.
+See `docs/research-private-fixture-campaign-2026-10-15.md` and
+`docs/research-r09-diagnostic-repairs.md`.

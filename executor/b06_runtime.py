@@ -29,7 +29,8 @@ from security.verification_binding import digest, source_snapshot, validate_acti
 
 
 class B06Runtime:
-    def __init__(self, profile, tool, output, *, safe_control=False):
+    def __init__(self, profile, tool, output, *, safe_control=False, max_readiness_attempts=None,
+                 wall_time_budget_seconds=None):
         if (tool not in B06_TOOLS or profile.id != "juice-b06-verification"
                 or profile.b06_verification is None or profile.environment != "sandbox"
                 or profile.runtime.type != "operator_b06_fixture"
@@ -40,6 +41,18 @@ class B06Runtime:
                 or set(profile.services["juice"].runtime_endpoints) != {"/", "/redirect", "/rest/user/change-password"}
                 or profile.metadata.get("verification.target_commit") != COMMIT):
             raise ValueError("B06 requires the fixed operator target and protocol")
+        if max_readiness_attempts is not None and not 1 <= max_readiness_attempts <= 90:
+            raise ValueError("B06 readiness attempt cap must be between 1 and 90")
+        self.max_readiness_attempts = max_readiness_attempts
+        if wall_time_budget_seconds is not None and not 10 <= wall_time_budget_seconds <= 600:
+            raise ValueError("B06 wall budget must be between 10 and 600 seconds")
+        self.deadline = time.monotonic() + wall_time_budget_seconds if wall_time_budget_seconds else None
+        registered_profile = TargetProfile.from_yaml(
+            ROOT / "targets/juice-b06-verification.yaml",
+            repository_path_override=profile.repository_path,
+        )
+        if profile_digest(profile) != profile_digest(registered_profile):
+            raise ValueError("B06 target profile differs from the operator registry")
         self.original_profile = profile
         self.original = validate_target(profile.repository_path, SimpleNamespace(target_commit=COMMIT))
         self.output = Path(output).resolve()
@@ -77,6 +90,11 @@ class B06Runtime:
             "PATH", "HOME", "DOCKER_HOST", "DOCKER_CONTEXT", "DOCKER_CONFIG",
             "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP",
         }}
+        if self.deadline is not None:
+            remaining = self.deadline - time.monotonic()
+            if remaining <= 0:
+                raise RuntimeError("B06 wall-time budget exhausted")
+            timeout = min(timeout, remaining)
         result = subprocess.run(["docker", *args], input=input, capture_output=True,
                                 text=True, timeout=timeout, env=env, check=False)
         if check and result.returncode:
@@ -142,6 +160,8 @@ class B06Runtime:
                 deadline, attempts = time.monotonic() + 90, 0
                 while True:
                     attempts += 1
+                    if self.max_readiness_attempts is not None and attempts > self.max_readiness_attempts:
+                        raise RuntimeError("B06 readiness attempt budget exhausted")
                     ready = self.docker(["exec", r["target"], "/nodejs/bin/node", "-e",
                         "require('http').get('http://127.0.0.1:3000/',r=>{r.resume();if(r.statusCode===200)console.log('ready')}).on('error',()=>process.exit(1))"],
                         check=False, timeout=5)
@@ -219,6 +239,8 @@ class B06Runtime:
 
     def _close_generation(self, generation):
         r = self.resources[generation]
+        deadline = self.deadline
+        self.deadline = None  # Best-effort teardown must still run after the protocol budget expires.
         try:
             for key in ("worker", "target"):
                 self.docker(["rm", "-f", "-v", r[key]], check=False)
@@ -229,6 +251,8 @@ class B06Runtime:
             complete = not remaining and not networks
         except (OSError, RuntimeError, subprocess.SubprocessError):
             complete = False
+        finally:
+            self.deadline = deadline
         self.persist({"phase": "destroy", "generation": generation, "cleanup_complete": complete})
         return complete
 

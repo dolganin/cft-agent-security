@@ -43,7 +43,8 @@ class AccessFixtureLab:
     absent from model tools. Reset destroys the whole lab, never a model write.
     """
     def __init__(self, repository, output, profile_file=ROOT / "targets/juice-access-fixture.yaml",
-                 active_check_id="juice-basket-own-read-v1"):
+                 active_check_id="juice-basket-own-read-v1", max_readiness_attempts=None,
+                 wall_time_budget_seconds=None):
         self.repository = Path(repository).resolve()
         self.output = Path(output).resolve()
         if (self.output.exists() or self.output.is_relative_to(self.repository)
@@ -57,6 +58,12 @@ class AccessFixtureLab:
         }:
             raise ValueError("B05 active check is not registered")
         self.active_check_id = active_check_id
+        if max_readiness_attempts is not None and not 1 <= max_readiness_attempts <= 90:
+            raise ValueError("Readiness attempt cap must be between 1 and 90")
+        self.max_readiness_attempts = max_readiness_attempts
+        if wall_time_budget_seconds is not None and not 10 <= wall_time_budget_seconds <= 600:
+            raise ValueError("Fixture wall budget must be between 10 and 600 seconds")
+        self.deadline = time.monotonic() + wall_time_budget_seconds if wall_time_budget_seconds else None
         expected_endpoints = ["/"]
         if self.profile.access_fixture:
             if (self.profile.access_fixture.b05_write_candidate
@@ -90,6 +97,11 @@ class AccessFixtureLab:
             "DOCKER_HOST", "DOCKER_CONTEXT", "DOCKER_CONFIG", "APPDATA", "LOCALAPPDATA",
             "DOCKER_TLS_VERIFY", "DOCKER_CERT_PATH",
         }}
+        if self.deadline is not None:
+            remaining = self.deadline - time.monotonic()
+            if remaining <= 0:
+                raise RuntimeError("Fixture wall-time budget exhausted")
+            timeout = min(timeout, remaining)
         result = subprocess.run(["docker", *args], capture_output=True, text=True,
                                 encoding="utf-8", timeout=timeout, check=False, env=env)
         if check and result.returncode:
@@ -162,6 +174,8 @@ class AccessFixtureLab:
                 if remaining <= 0:
                     raise RuntimeError("Fixture target readiness timed out")
                 readiness_attempts += 1
+                if self.max_readiness_attempts is not None and readiness_attempts > self.max_readiness_attempts:
+                    raise RuntimeError("Fixture readiness attempt budget exhausted")
                 result = self._docker(["exec", self.resources["target"], "/nodejs/bin/node", "-e",
                                        "require('http').get('http://127.0.0.1:3000/',r=>{r.resume();if(r.statusCode===200)console.log('ready')}).on('error',()=>process.exit(1))"], check=False, timeout=min(5, remaining))
                 if result.stdout.strip() == "ready":
@@ -360,6 +374,8 @@ class AccessFixtureLab:
             return True
         resources = self.resources
         complete = False
+        deadline = self.deadline
+        self.deadline = None  # Cleanup remains mandatory after an execution timeout.
         try:
             for key in ["worker", "target"]:
                 self._docker(["rm", "-f", "-v", resources[key]], check=False)
@@ -369,6 +385,8 @@ class AccessFixtureLab:
             complete = not remaining and not networks
         except (OSError, RuntimeError, subprocess.SubprocessError):
             complete = False
+        finally:
+            self.deadline = deadline
         try:
             unchanged = self._snapshot() == self.source_files if self.source_files else None
         except (OSError, ValueError):

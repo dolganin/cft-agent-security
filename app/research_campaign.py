@@ -33,8 +33,13 @@ def write_json(path, value):
 
 def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits=None, research_limits=None,
              http_review_registry=None, acceptance_require_script=False, verification_profiles=(),
-             verification_worker_image=None):
+             verification_worker_image=None, fixture_grants=()):
+    from schemas.research_fixtures import ResearchFixtureGrant
+
     limits, research_limits = limits or CampaignLimits(), research_limits or ResearchLimits(max_steps=8)
+    fixture_grants = tuple(ResearchFixtureGrant.model_validate(grant) for grant in fixture_grants)
+    if len({grant.protocol for grant in fixture_grants}) != len(fixture_grants):
+        raise ValueError("Duplicate private fixture protocol grant")
     output = Path(output).resolve()
     verification_handoff([], verification_profiles, profile.repository_path)
     if output.exists():
@@ -50,7 +55,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         raise ValueError("No approved application source")
     configuration = {**configuration, "source_files": files}
     verification_paths = set()
-    if verification_worker_image:
+    if verification_worker_image or fixture_grants:
         grants = configuration.get("http_grants", configuration.get("services", {}))
         for operator_profile in verification_profiles:
             for route in operator_profile.verification_routes:
@@ -74,12 +79,14 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         "source_review_scope": "source condition only; not runtime exploitability",
         "canonical_verification_profiles": [p.model_dump(mode="json") for p in verification_profiles],
         "canonical_verification_worker_image": verification_worker_image,
+        "canonical_fixture_grants": [grant.model_dump(mode="json") for grant in fixture_grants],
         "http_review_protocols": [spec.public() for spec, _ in http_review_registry.values()],
         "http_review_status": "enabled" if http_review_registry else "requires private operator-owned marker registry/factory",
         "benchmark_measurement": False, "repetitions": 1, "reproducibility": "not_measured"})
     calls = actions = http_requests = 0
     unknown_action_reservations = 0
     verification_http_reserved = 0
+    verification_http_observed = 0
     runtime_reviews = []
     model_io = observation_bytes = write_bytes = 0
     ledgers, reports, reviews, runs = [], [], [], []
@@ -121,7 +128,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
             "source_protocols": ["weak_digest_call.v1"],
             "http_protocols": [spec.public() for spec, _ in http_review_registry.values()],
             "legacy_b_verifiers_connected": bool(verification_profiles and verification_worker_image),
-            "private_fixture_protocols_connected": False,
+            "private_fixture_protocols_connected": [grant.protocol for grant in fixture_grants],
             "unsupported_claims": "retain as pending; never infer rejected from missing verification"}
         if acceptance_require_script:
             related["dev_acceptance_objective"] = "Demonstrate a self-authored Python/Node source-inspection script and an ordinary non-mutating allowed target_http observation before finishing. Script stdout and a successful HTTP response are NOT security verdicts. Use read/write/run tools, not host execution."
@@ -166,7 +173,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         report = build_final_report(state)
         reports.append({"question_id": question.id, "is_candidate": question.is_candidate,
                         "report": report.model_dump(mode="json")})
-        if (verification_profiles and verification_worker_image and summary["cleanup_verified"]
+        if (verification_profiles and (verification_worker_image or fixture_grants) and summary["cleanup_verified"]
                 and actions + unknown_action_reservations < limits.max_actions
                 and time.monotonic() - started + 30 < limits.wall_seconds):
             try:
@@ -174,14 +181,18 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
                     profiles=verification_profiles, scope=scope, repository=profile.repository_path,
                     output=output / "canonical-verification" / str(ordinal),
                     max_http_requests=max(0, limits.max_http_requests - http_requests - verification_http_reserved),
-                    worker_image=verification_worker_image)
+                    worker_image=verification_worker_image or "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7",
+                    fixture_grants=fixture_grants,
+                    remaining_wall_seconds=max(0, limits.wall_seconds - int(time.monotonic() - started)))
             except RunCancelled:
                 raise
-            except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
+            except (OSError, ValueError, RuntimeError, TypeError, KeyError, IndexError,
+                    AssertionError, subprocess.SubprocessError) as exc:
                 # Unknown transport/cleanup must never leave a terminal security
                 # verdict. Conservatively reserve the maximal fixed protocol cost.
+                max_reserved = max((int(g.max_http_requests) for g in fixture_grants), default=4)
                 runtime_review = {"finding_id": question.finding.id, "status": "inconclusive",
-                    "executed": None, "actions": 1, "requests_reserved": min(4,
+                    "executed": None, "actions": 1, "requests_reserved": min(max_reserved,
                         max(0, limits.max_http_requests - http_requests - verification_http_reserved)),
                     "worker_cleanup_verified": False, "reason": redact_error_message(exc)}
             runtime_reviews.append(runtime_review)
@@ -190,6 +201,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
             else:
                 actions += runtime_review.get("actions", 0)
             verification_http_reserved += runtime_review.get("requests_reserved", 0)
+            verification_http_observed += runtime_review.get("requests_observed", 0)
             # Preserve research history while publishing the independently guarded
             # terminal report for this exact finding, never an unrelated candidate.
             reports[-1]["canonical_runtime_review"] = runtime_review
@@ -267,6 +279,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         "action_budget_used": actions + unknown_action_reservations,
         "http_requests": http_requests,
         "canonical_verification_http_requests_reserved": verification_http_reserved,
+        "canonical_verification_http_requests_observed": verification_http_observed,
         "http_request_budget_used": http_requests + verification_http_reserved,
         "canonical_runtime_reviews": [{"finding_id": r["finding_id"], "status": r["status"],
                                        "executed": r["executed"]} for r in runtime_reviews],
@@ -310,6 +323,8 @@ def main():
     parser.add_argument("--verification-profile", type=Path, action="append", default=[],
                         help="Operator profile for a source-bound handoff; does not execute new checks")
     parser.add_argument("--verification-worker-image", help="Enable fixed SQL/directory review using this immutable Docker image")
+    parser.add_argument("--fixture-grant", choices=("b05.own-read.v1", "b06.redirect.v1", "b06.password-reauth.v1"),
+                        action="append", default=[], help="Explicit operator permission for one closed private fixture protocol")
     args = parser.parse_args()
     client = FallbackLLMAgentModel.from_settings(settings).client
     if len(client.routes) != 1:
@@ -319,11 +334,15 @@ def main():
     dast = [(RuntimeScannerObservation if "endpoint" in x else Finding).model_validate(x)
             for x in json.loads(args.dast.read_text())] if args.dast else []
     limits = CampaignLimits.model_validate(json.loads(args.limits.read_text())) if args.limits else CampaignLimits()
+    from schemas.research_fixtures import ResearchFixtureGrant
     print(json.dumps(campaign(profile=profile, configuration=json.loads(args.operator_config.read_text()),
         client=client, output=args.output, sast=sast, dast=dast, limits=limits,
         verification_profiles=tuple(TargetProfile.from_yaml(p, repository_path_override=args.checkout)
                                     for p in args.verification_profile),
-        verification_worker_image=args.verification_worker_image), indent=2))
+        verification_worker_image=args.verification_worker_image,
+        fixture_grants=tuple(ResearchFixtureGrant(protocol=item, max_http_requests={
+            "b05.own-read.v1": 238, "b06.redirect.v1": 38, "b06.password-reauth.v1": 194}[item])
+            for item in args.fixture_grant)), indent=2))
 
 
 if __name__ == "__main__":
