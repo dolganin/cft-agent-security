@@ -1,9 +1,11 @@
 import json
+from pathlib import Path
 from uuid import uuid4
 
 from pydantic import BaseModel, ValidationError
 
 from schemas.action import ActionProposal
+from schemas.b06_verification import B06VerificationResult
 from schemas.evidence import (
     Evidence,
     EvidenceAction,
@@ -27,6 +29,8 @@ SANDBOX_COMMAND_TOOL = "sandbox_command"
 
 
 _SPECIALIZED_RESULTS: dict[str, tuple[type[BaseModel], str]] = {
+    "verify_redirect_destination": (B06VerificationResult, "redirect_destination_check"),
+    "verify_auth_reauthentication": (B06VerificationResult, "password_reauthentication_check"),
     "inspect_javascript_security": (BoundedVerificationResult, "javascript_source_metadata"),
     "verify_sql_injection": (BoundedVerificationResult, "sql_differential_check"),
     "verify_sensitive_directory": (BoundedVerificationResult, "sensitive_directory_check"),
@@ -214,6 +218,24 @@ def _structured_capability_evidence(
             hypothesis_id=hypothesis_id, sandbox_session_id=sandbox_session_id,
         )
 
+    if isinstance(payload, B06VerificationResult):
+        from executor.approvals import proposal_digest
+        from executor.b06_verdicts import evaluate
+        verdict, explanation = evaluate(payload)
+        matches = (
+            payload.binding == action.fixture_binding
+            and payload.binding.tool == action.tool
+            and payload.action_digest == proposal_digest(action)
+            and record.get("fixture_binding") == payload.binding.model_dump(mode="json")
+            and payload.binding.session_id == sandbox_session_id
+            and action.verification_binding is not None
+            and payload.binding.source_snapshot == action.verification_binding.source_snapshot
+            and _b06_audit_matches(action, execution, record)
+        )
+        payload = payload.model_copy(update={
+            "verdict": verdict if matches else "inconclusive",
+            "explanation": explanation if matches else "B06 fixture/action provenance mismatch.",
+        })
     data = payload.model_dump(by_alias=True)
     verdict = data.get("verdict")
     explanation = str(data.get("explanation", "Capability verification completed."))
@@ -239,6 +261,34 @@ def _structured_capability_evidence(
         hypothesis_id=hypothesis_id,
         sandbox_session_id=sandbox_session_id,
     )
+
+
+def _b06_audit_matches(action, execution, record):
+    from executor.sandbox_audit import calculate_sha256_digest
+    stored = {key: value for key, value in record.items() if key not in {"id", "type", "created_at"}}
+    candidates = []
+    try:
+        for reference in execution.artifacts:
+            path = Path(reference)
+            if path.name != "audit.jsonl" or path.is_symlink() or path.stat().st_size > 16 * 1024 * 1024:
+                continue
+            with path.open(encoding="utf-8") as stream:
+                for line in stream:
+                    item = json.loads(line)
+                    if item.get("run_id") == execution.run_id and item.get("action_id") == action.id:
+                        candidates.append(item)
+    except (OSError, ValueError, TypeError):
+        return False
+    if len(candidates) != 1:
+        return False
+    item = candidates[0]
+    return (item.get("proposal_digest") == calculate_sha256_digest(action.model_dump(mode="json"))
+            and item.get("evidence_digest") == calculate_sha256_digest(stored)
+            and item.get("policy_digest") == calculate_sha256_digest(record.get("policy"))
+            and item.get("evidence_ref") == execution.evidence_ref
+            and item.get("session_id") == action.fixture_binding.session_id
+            and item.get("runtime_backend") == "docker"
+            and item.get("status") == "completed" and item.get("exit_code") == 0)
 
 
 def _bounded_result_matches_action(payload: BoundedVerificationResult, action: ActionProposal) -> bool:

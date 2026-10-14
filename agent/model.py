@@ -194,6 +194,7 @@ class DeterministicAgentModel:
                 purpose=candidate["purpose"], expected_evidence=hypothesis.expected_evidence,
                 service=candidate["service"], endpoint=candidate["endpoint"],
                 verification_binding=candidate["verification_binding"],
+                fixture_binding=candidate.get("fixture_binding"),
             )
         else:
             action = self.propose_action(state, analysis, hypothesis)

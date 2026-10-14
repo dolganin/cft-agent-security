@@ -6,6 +6,7 @@ from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from schemas.b06_verification import FixtureExecutionBinding
 from schemas.target import validate_request_host
 
 
@@ -59,3 +60,4 @@ class RuntimeServiceMap(BaseModel):
     services: dict[str, RuntimeService] = Field(default_factory=dict)
     diagnostics: list[RuntimeServiceDiagnostic] = Field(default_factory=list)
     source_files_sha256: dict[str, str] = Field(default_factory=dict)
+    verification_fixtures: dict[str, FixtureExecutionBinding] = Field(default_factory=dict)

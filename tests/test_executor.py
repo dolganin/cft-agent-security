@@ -601,6 +601,8 @@ def test_executor_exposes_only_predefined_tools(tmp_path) -> None:
         "observe_http_surface",
         "safe_noop",
         "sandbox_command",
+        "verify_auth_reauthentication",
+        "verify_redirect_destination",
         "verify_sensitive_directory",
         "verify_sql_injection",
     )

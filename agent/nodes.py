@@ -1,5 +1,6 @@
 import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 from agent.lab import active_executor
 from agent.loop import (
@@ -207,7 +208,8 @@ def propose_action(state: AgentState) -> dict:
                 return {"binding_resolution": resolution, "status": "inconclusive",
                         "stop_reason": "insufficient_evidence"}
             step.action = action.model_copy(update={
-                "verification_binding": matches[0]["verification_binding"]})
+                "verification_binding": matches[0]["verification_binding"],
+                "fixture_binding": matches[0].get("fixture_binding")})
     plan_validation = DynamicPlanValidator().validate(plan, state)
     proposal = plan.steps[0].action
 
@@ -246,9 +248,15 @@ def validate_action(state: AgentState) -> dict:
         }
 
     validator = PolicyValidator.from_yaml(
-        settings.policy_file,
+        (Path(__file__).resolve().parents[1] / "policies/b06.yaml"
+         if state["target_profile"].b06_verification is not None else settings.policy_file),
         target_profile=state["target_profile"],
     )
+    executor = active_executor()
+    if executor is not None:
+        fixture = executor.verification_fixture(state["target_profile"].id)
+        if fixture is not None:
+            validator.fixture_bindings[state["target_profile"].id] = fixture
     validation = validator.validate(state["proposed_action"])
 
     if not validation.approved:
@@ -295,7 +303,8 @@ def execute_action(state: AgentState) -> dict:
     else:
         # Approval все еще привязан к конкретному proposal, lab не дает обход policy.
         executor.record_approval(action, validation)
-        if CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target" and runtime_services is not None:
+        if (CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target" and runtime_services is not None
+                and action.tool not in {"verify_redirect_destination", "verify_auth_reauthentication"}):
             executor.open_managed_lab(runtime_services, state["target_profile"])
 
     if runtime_services is None:
@@ -337,9 +346,11 @@ def collect_evidence(state: AgentState) -> dict:
     evidence_loaded = False
     record: dict = {}
     try:
-        record = JsonExecutionEvidenceStore(settings.evidence_dir).get_execution(
-            execution.evidence_ref
-        )
+        active = active_executor()
+        if action.fixture_binding is not None and active is not None:
+            record = active.read_execution(execution.evidence_ref)
+        else:
+            record = JsonExecutionEvidenceStore(settings.evidence_dir).get_execution(execution.evidence_ref)
         evidence_loaded = (
             record.get("run_id") == execution.run_id
             and record.get("action_id") == action.id

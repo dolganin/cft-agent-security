@@ -1,0 +1,61 @@
+id: juice-b06-verification
+name: Juice Shop | B06 runtime verification
+repository_path: artifacts/benchmark-target/juice-shop
+environment: sandbox
+architecture:
+  file: targets/juice-presentation-architecture.yaml
+runtime:
+  type: operator_b06_fixture
+services:
+  juice:
+    type: node
+    root: .
+    internal_port: 3000
+    healthcheck: {path: /}
+    runtime_endpoints: [/, /redirect, /rest/user/change-password]
+b06_verification: {protocol: juice_b06_v1}
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false
+metadata:
+  verification.scope: B06 auth reauthentication and header-only redirect; code runtime requires availability gate
+  verification.target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+verification_routes:
+- id: b06-redirect
+  handler_id: juice.performRedirect
+  family: open-redirect
+  service: juice
+  endpoint: /redirect
+  method: GET
+  tool: verify_redirect_destination
+  check: redirect_destination
+  registration: &redirect
+    file: server.ts
+    anchor: app.get('/redirect', performRedirect())
+  sources:
+  - *redirect
+  - {file: routes/redirect.ts, anchor: 'export function performRedirect () {', extent: function}
+  - {file: lib/insecurity.ts, anchor: 'export const isRedirectAllowed = (url: string) => {', extent: function}
+- id: b06-reauthentication
+  handler_id: juice.changePassword
+  family: authentication
+  service: juice
+  endpoint: /rest/user/change-password
+  method: GET
+  tool: verify_auth_reauthentication
+  check: password_reauthentication
+  registration: &reauth
+    file: server.ts
+    anchor: app.get('/rest/user/change-password', utils.asyncHandler(changePassword()))
+  sources:
+  - *reauth
+  - {file: routes/changePassword.ts, anchor: 'export function changePassword () {', extent: function}
+  - {file: routes/login.ts, anchor: 'export function login () {', extent: function}
+  - {file: routes/currentUser.ts, anchor: 'export function retrieveLoggedInUser () {', extent: function}
+  - {file: routes/address.ts, anchor: 'export function getAddressById () {', extent: function}
+  - {file: routes/basket.ts, anchor: 'export function retrieveBasket () {', extent: function}
+  - {file: models/user.ts, anchor: 'class User extends Model<'}
+  - {file: models/basket.ts, anchor: 'class Basket extends Model<'}
+  - {file: models/address.ts, anchor: 'class Address extends Model<'}

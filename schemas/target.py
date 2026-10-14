@@ -9,6 +9,7 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from schemas.access_fixture import AccessFixtureProfile
+from schemas.b06_verification import B06Profile
 from schemas.verification_binding import VerificationRoute
 
 _REQUEST_HOST = re.compile(r"^(?:[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?|\[[0-9A-Fa-f:.]+\])(?::([0-9]{1,5}))?$")
@@ -238,6 +239,7 @@ class TargetProfile(BaseModel):
     fix_verification: TargetFixConfig | None = None
     verification_routes: list[VerificationRoute] = Field(default_factory=list, max_length=64)
     access_fixture: AccessFixtureProfile | None = None
+    b06_verification: B06Profile | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -314,6 +316,11 @@ class TargetProfile(BaseModel):
                 or route.mode is not None or route.method != "GET"
             )):
                 raise ValueError("Verification route capability/method contract mismatch")
+            b06 = {"verify_redirect_destination": ("redirect_destination", "open-redirect", "/redirect"),
+                   "verify_auth_reauthentication": ("password_reauthentication", "authentication", "/rest/user/change-password")}
+            if route.tool in b06 and (self.b06_verification is None or route.mode is not None
+                    or route.method != "GET" or (route.check, route.family, route.endpoint) != b06[route.tool]):
+                raise ValueError("B06 capability requires its exact operator protocol and endpoint")
         if any(key != service.id for key, service in self.services.items()):
             raise ValueError("Target service mapping key must match service id")
         if any(key != artifact.id for key, artifact in self.artifacts.items()):

@@ -22,9 +22,11 @@ class PolicyValidator:
         target_environments: dict[str, str] | None = None,
         target_artifacts: dict[str, set[str]] | None = None,
         target_profiles: dict[str, TargetProfile] | None = None,
+        fixture_bindings: dict | None = None,
     ) -> None:
         self.policy = policy
         self.target_profiles = dict(target_profiles or {})
+        self.fixture_bindings = dict(fixture_bindings or {})
         self.target_environments = dict(target_environments or {})
         self.target_artifacts = {
             target_id: set(artifact_ids)
@@ -131,6 +133,19 @@ class PolicyValidator:
                 "tool_denied",
             )
         rules.append("tool_allowed")
+
+        from schemas.b06_verification import B06_TOOLS, profile_digest
+        if action.tool in B06_TOOLS:
+            profile = self.target_profiles.get(action.target)
+            binding = action.fixture_binding
+            if (profile is None or profile.b06_verification is None or binding is None
+                    or self.fixture_bindings.get(action.target) != binding
+                    or binding.tool != action.tool or binding.target != action.target
+                    or binding.profile_sha256 != profile_digest(profile)
+                    or action.verification_binding is None
+                    or binding.source_snapshot != action.verification_binding.source_snapshot):
+                return self._deny(action, "B06 requires a current operator-owned fixture binding",
+                                  rules, "fixture_binding_denied")
 
         if action.tool == "fix_target_stage":
             profile = self.target_profiles.get(action.target)
@@ -293,7 +308,8 @@ class PolicyValidator:
         self,
         action: ActionProposal,
     ) -> tuple[str, str] | None:
-        if action.tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory"}:
+        if action.tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory",
+                           "verify_redirect_destination", "verify_auth_reauthentication"}:
             profile = self.target_profiles.get(action.target)
             artifact = profile.artifacts.get(action.parameters.get("artifact_id")) if profile else None
             line = action.parameters.get("line")

@@ -1069,3 +1069,35 @@ independent generations and tests loss/swap, repeatable baselines, stale handles
 source integrity and cleanup. B05 must still register its own approved capability,
 bind actual probes to B01 and account for every identity/control HTTP exchange.
 See `docs/b04-access-fixtures.md` for scope, budgets, evidence and test results.
+
+---
+
+# 28. B06 controlled runtime verification
+
+`targets/juice-b06-verification.yaml` and `policies/b06.yaml` enable the fixed
+redirect and own-password reauthentication protocols. Never modify historical
+default policy or A01-A08 locks to enable these actions. The ordinary pipeline
+uses B06GraphLab only for this explicit profile; model/state never holds a live broker.
+
+Two independent Docker generations are prepared before approval. The complete
+ordered pair, source/profile digests and session are bound by ActionProposal's
+application-owned fixture_binding. Validator requires the current operator registry;
+Executor rechecks it and source/runtime identity. The fixed worker uses B04 setup
+and public controls while credentials remain private in tmpfs. No setup/reset or
+arbitrary URLs/credentials are model capabilities.
+
+Evidence recomputes the verdict from typed controls, two trials, server identities,
+credential readback, owner-object integrity, ledger and verified cleanup. It also
+requires the matching persisted audit. Redirect follows no destination and its
+local sink must observe zero requests. Auth proves only omitted reauthentication
+for changing the authenticated user's own password.
+
+The pinned Juice Shop image disables usernameXssChallenge in Docker with auto
+safety mode. Code evaluation is unsupported_runtime, not rejected. Do not enable
+the disabled branch merely to pass B06. Source/image provenance is operator binding,
+not independent binary attestation.
+
+`python -m app.b06_acceptance --output artifacts/<fresh-directory>` performs the
+original/safe Docker acceptance. `app.b06_replay` verifies sealed persisted data
+without Docker or LLM; `app.b06_handoff` creates the portable evidence ZIP.
+Scope and results: `docs/b06-runtime-report-2026-10-14.md`.

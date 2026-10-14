@@ -68,6 +68,14 @@ def verification_candidates(state):
             "verification_binding": binding,
             "purpose": "Verify the unique operator-mapped handler/endpoint in its source snapshot.",
         }
+        from schemas.b06_verification import B06_TOOLS
+        if binding.tool in B06_TOOLS:
+            fixture = runtime.verification_fixtures.get(binding.tool)
+            if (fixture is None or fixture.source_snapshot != binding.source_snapshot
+                    or fixture.target != profile.id or fixture.tool != binding.tool
+                    or fixture.session_id != runtime.session_id):
+                return []
+            candidate["fixture_binding"] = fixture
         if any(r.action.verification_binding == binding for r in state.get("action_history", [])):
             return []
         return [candidate]

@@ -1,0 +1,135 @@
+version: 1
+targets:
+  allowed:
+  - registered
+environments:
+  allowed:
+  - local
+  - sandbox
+  - staging
+
+runtime:
+  backend: process # или docker
+  sandbox_image: "example.invalid/cft-sandbox@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  network_mode: none
+  internal_network: cft_internal_security_net
+
+limits:
+  max_iterations: 5
+  executor:
+    wall_time_seconds: 60
+    cpu_time_seconds: 2
+    memory_mb: 256
+    max_file_bytes: 1048576
+    max_processes: 8
+    max_output_bytes: 65536
+    max_runs_per_action: 1
+    max_concurrent_runs: 1
+tools:
+  allowed:
+  - fix_target_stage
+  - inspect_javascript_security
+  - verify_sql_injection
+  - verify_sensitive_directory
+  - verify_redirect_destination
+  - verify_auth_reauthentication
+  - safe_noop
+  - observe_http_surface
+  - sandbox_command
+  - inspect_dockerfile_user
+  - inspect_python_password_assignment
+  - inspect_react_dangerous_html_flow
+  parameter_contracts:
+    verify_redirect_destination:
+      allowed_keys: [artifact_id, line, check]
+      required_keys: [artifact_id, line, check]
+      enum_values: {check: [redirect_destination]}
+    verify_auth_reauthentication:
+      allowed_keys: [artifact_id, line, check]
+      required_keys: [artifact_id, line, check]
+      enum_values: {check: [password_reauthentication]}
+    fix_target_stage:
+      allowed_keys: [adapter, stage]
+      required_keys: [adapter, stage]
+      enum_values:
+        adapter: [juice_node_v1]
+        stage: [prepare, build, tests, start, smoke]
+    inspect_javascript_security:
+      allowed_keys: [artifact_id, line, check]
+      required_keys: [artifact_id, line, check]
+      max_string_lengths: {artifact_id: 64}
+      enum_values: {check: [source_metadata, sql_interpolation]}
+    verify_sql_injection:
+      allowed_keys: [mode, artifact_id, line, check]
+      required_keys: [mode, artifact_id, line, check]
+      enum_values: {mode: [authentication, search]}
+    verify_sensitive_directory:
+      allowed_keys: [artifact_id, line, check]
+      required_keys: [artifact_id, line, check]
+    safe_noop:
+      allowed_keys:
+      - message
+      - test_outcome
+      required_keys: []
+      enum_values:
+        test_outcome:
+        - confirmed
+        - rejected
+        - inconclusive
+      max_string_lengths:
+        message: 256
+    observe_http_surface:
+      allowed_keys: []
+      required_keys: []
+    sandbox_command:
+      allowed_keys:
+      - argv
+      - cwd
+      required_keys:
+      - argv
+      - cwd
+      enum_values:
+        cwd:
+        - /target
+        - /workspace
+      string_list_parameters:
+      - argv
+      max_list_lengths:
+        argv: 32
+      max_list_item_lengths:
+        argv: 1024
+    inspect_dockerfile_user:
+      allowed_keys:
+      - artifact_id
+      required_keys:
+      - artifact_id
+      max_string_lengths:
+        artifact_id: 64
+    inspect_python_password_assignment:
+      allowed_keys:
+      - artifact_id
+      required_keys:
+      - artifact_id
+      max_string_lengths:
+        artifact_id: 64
+    inspect_react_dangerous_html_flow:
+      allowed_keys:
+      - frontend_artifact_id
+      - model_artifact_id
+      - serializer_artifact_id
+      - view_artifact_id
+      - field
+      required_keys:
+      - frontend_artifact_id
+      - model_artifact_id
+      - serializer_artifact_id
+      - view_artifact_id
+      - field
+      max_string_lengths:
+        frontend_artifact_id: 64
+        model_artifact_id: 64
+        serializer_artifact_id: 64
+        view_artifact_id: 64
+        field: 64
+logging:
+  required: true

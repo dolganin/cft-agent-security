@@ -26,8 +26,9 @@ class VerificationRoute(BaseModel):
     service: str
     endpoint: str
     method: Literal["GET", "POST"]
-    tool: Literal["verify_sql_injection", "verify_sensitive_directory"]
-    check: Literal["sql_interpolation", "source_metadata"]
+    tool: Literal["verify_sql_injection", "verify_sensitive_directory",
+                  "verify_redirect_destination", "verify_auth_reauthentication"]
+    check: Literal["sql_interpolation", "source_metadata", "redirect_destination", "password_reauthentication"]
     mode: Literal["search", "authentication"] | None = None
     registration: SourceSelector
     sources: list[SourceSelector] = Field(min_length=1, max_length=16)

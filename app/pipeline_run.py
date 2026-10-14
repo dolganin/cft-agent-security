@@ -339,7 +339,19 @@ def run_pipeline(
                 state["runtime_services"] = runtime_services
             # PR metadata добавляем поверх source artifact, не переписывая его
             state["finding"] = finding
-            if runtime_services is None or settings.agent_mode != "llm":
+            if profile.b06_verification is not None:
+                from agent.b06_lab import B06GraphLab
+                from security.verification_binding import resolve_binding
+                bound = resolve_binding(profile, finding)
+                if bound.binding is not None:
+                    with B06GraphLab(profile, finding, output_dir / "b06-runtime" / str(index)) as executor:
+                        runtime = executor._verification_runtime
+                        state["target_profile"] = runtime.profile
+                        state["runtime_services"] = runtime.runtime_map()
+                        result = graph.invoke(state)
+                else:
+                    result = graph.invoke(state)
+            elif runtime_services is None or settings.agent_mode != "llm":
                 result = graph.invoke(state)
             else:
                 # Один finding может пройти несколько итерации, workspace должен пережить их все.
@@ -565,6 +577,12 @@ def _unsupported_verification_reason(profile: TargetProfile, finding) -> str | N
     """Объясняем почему capability нельзя привязать к trusted данным профиля"""
 
     rule_id = finding.rule_id.lower()
+    if profile.b06_verification is not None:
+        from sast.identity import rule_family
+        if (rule_family(finding.rule_id) == "code-injection"
+                and finding.file in {"routes/userProfile.ts", "routes/updateUserProfile.ts"}):
+            return ("B06 code evaluation is unsupported in the pinned Docker configuration: "
+                    "usernameXssChallenge is disabled under auto safety mode. No runtime marker was executed.")
     required_paths: list[tuple[str, str | None]] = []
     required_roles: list[str] = []
     required_metadata: list[str] = []

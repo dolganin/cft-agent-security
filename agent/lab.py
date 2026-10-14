@@ -20,12 +20,12 @@ _active_executor: ContextVar[SafeExecutor | None] = ContextVar(
 class ManagedAgentLab(AbstractContextManager[SafeExecutor]):
     """Один Docker container на всю цепочку action внутри investigation."""
 
-    def __init__(self, target: TargetProfile, runtime_services: RuntimeServiceMap) -> None:
+    def __init__(self, target: TargetProfile, runtime_services: RuntimeServiceMap, *, policy_file=None) -> None:
         self.executor_target = target
         self.runtime_services = runtime_services
         self.executor = SafeExecutor.from_config(
             approvals=InMemoryApprovalStore(),
-            policy_file=settings.policy_file,
+            policy_file=policy_file or settings.policy_file,
             target_profile=target,
             evidence_directory=settings.evidence_dir,
             audit_log_path=settings.executor_audit_log,

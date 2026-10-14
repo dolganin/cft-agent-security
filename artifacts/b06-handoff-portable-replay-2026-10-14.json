@@ -1,0 +1,36 @@
+{
+  "schema_version": "cft.b06.offline_replay.v1",
+  "status": "passed",
+  "checks": [
+    {
+      "tool": "verify_redirect_destination",
+      "variant": "original",
+      "expected": "confirmed",
+      "observed": "confirmed",
+      "consistent": true
+    },
+    {
+      "tool": "verify_redirect_destination",
+      "variant": "safe",
+      "expected": "rejected",
+      "observed": "rejected",
+      "consistent": true
+    },
+    {
+      "tool": "verify_auth_reauthentication",
+      "variant": "original",
+      "expected": "confirmed",
+      "observed": "confirmed",
+      "consistent": true
+    },
+    {
+      "tool": "verify_auth_reauthentication",
+      "variant": "safe",
+      "expected": "rejected",
+      "observed": "rejected",
+      "consistent": true
+    }
+  ],
+  "code_support": "unsupported_runtime",
+  "docker_or_llm_executed": false
+}

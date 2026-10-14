@@ -125,6 +125,8 @@ def _sandbox_result_error(result) -> ErrorDetail | None:
     return None
 
 CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
+    "verify_redirect_destination": False,
+    "verify_auth_reauthentication": False,
     "fix_target_stage": False,
     "inspect_javascript_security": True,
     "verify_sql_injection": False,
@@ -139,6 +141,8 @@ CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
 
 # Определяет, какой сетевой доступ разрешен для каждой capability
 CAPABILITY_NETWORK_ACCESS: dict[str, str] = {
+    "verify_redirect_destination": "target",
+    "verify_auth_reauthentication": "target",
     "fix_target_stage": "none",
     "inspect_javascript_security": "none",
     "verify_sql_injection": "target",
@@ -176,6 +180,9 @@ class SafeExecutor:
         self._registry.register("safe_noop", self._safe_noop)
         self._registry.register("fix_target_stage", self._fix_stage_parameters)
         self._fix_runtime = None
+        self._verification_runtime = None
+        self._registry.register("verify_redirect_destination", self._b06_parameters)
+        self._registry.register("verify_auth_reauthentication", self._b06_parameters)
         self._registry.register("inspect_javascript_security", self._javascript_parameters)
         self._registry.register("verify_sql_injection", self._sql_parameters)
         self._registry.register("verify_sensitive_directory", self._javascript_parameters)
@@ -196,6 +203,30 @@ class SafeExecutor:
 
     def registered_tools(self) -> tuple[str, ...]:
         return self._registry.names()
+
+    @staticmethod
+    def _b06_parameters(parameters):
+        if (set(parameters) != {"artifact_id", "line", "check"}
+                or not isinstance(parameters["artifact_id"], str)
+                or type(parameters["line"]) is not int or not 1 <= parameters["line"] <= 100000
+                or parameters["check"] not in {"redirect_destination", "password_reauthentication"}):
+            raise CapabilityInputError("B06 requires exact registered source parameters")
+        return dict(parameters)
+
+    def bind_verification_runtime(self, runtime):
+        from executor.b06_runtime import B06Runtime
+        if not isinstance(runtime, B06Runtime):
+            raise TypeError("Only the operator-owned B06 Docker runtime is accepted")
+        self._verification_runtime = runtime
+
+    def verification_fixture(self, target):
+        runtime = self._verification_runtime
+        if runtime is not None and runtime.ready and not runtime.consumed and runtime.profile.id == target:
+            return runtime.binding
+        return None
+
+    def read_execution(self, evidence_ref):
+        return self._evidence_store.get_execution(evidence_ref)
 
     def bind_fix_runtime(self, runtime) -> None:
         from executor.fix_runtime import DockerFixRuntime
@@ -472,6 +503,15 @@ class SafeExecutor:
         *,
         runtime_services: RuntimeServiceMap | None = None,
     ):
+        from schemas.b06_verification import B06_TOOLS
+        if any(action.tool in B06_TOOLS for action in actions):
+            if len(actions) != 1 or runtime_services is None:
+                return self._deny_sequence(actions[0], "B06 requires one bound protocol action")
+            self._active_runtime_services = runtime_services
+            try:
+                return self._runner.run(actions, runtime_services=runtime_services)
+            finally:
+                self._active_runtime_services = None
         requires_target_network = any(
             CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target" for action in actions
         )
@@ -590,7 +630,8 @@ class SafeExecutor:
             return self._finish(action, run_id, started, status="denied", exit_code=126, stderr=str(exc), decision_reason=str(exc), session_id=session_id)
 
         if (action.verification_binding is not None or target.verification_routes) and action.tool in {
-            "verify_sql_injection", "verify_sensitive_directory", "inspect_javascript_security"
+            "verify_sql_injection", "verify_sensitive_directory", "inspect_javascript_security",
+            "verify_redirect_destination", "verify_auth_reauthentication"
         }:
             from security.verification_binding import validate_action_binding
             try:
@@ -599,6 +640,12 @@ class SafeExecutor:
                 if (runtime is None or runtime.source_files_sha256 != binding.source_files
                         or session_id != runtime.session_id):
                     raise ValueError("Verification snapshot does not match the managed runtime session")
+                if action.tool in {"verify_redirect_destination", "verify_auth_reauthentication"}:
+                    lab = self._verification_runtime
+                    if (lab is None or lab.profile != target or lab.id != session_id
+                            or runtime.verification_fixtures.get(action.tool) != lab.binding):
+                        raise ValueError("B06 runtime registry does not match the approved fixture")
+                    lab.authorize_action(action)
             except (OSError, ValueError) as exc:
                 return self._finish(action, run_id, started, status="denied", exit_code=126,
                                     stderr=str(exc), decision_reason="Verification binding denied",
@@ -686,6 +733,13 @@ class SafeExecutor:
                 else:
                     request_host = None
                 runner = self._sandbox
+                if action.tool in {"verify_redirect_destination", "verify_auth_reauthentication"}:
+                    runtime = self._verification_runtime
+                    if (runtime is None or runtime.profile != target or runtime.id != session_id
+                            or self._active_runtime_services.verification_fixtures.get(action.tool) != runtime.binding):
+                        raise ValueError("B06 requires its operator-owned live runtime")
+                    runtime.authorize_action(action)
+                    runner = runtime
                 if action.tool == "fix_target_stage":
                     if (self._fix_runtime is None
                             or self._fix_runtime.profile != target
@@ -872,6 +926,8 @@ class SafeExecutor:
             "action_digest": proposal_digest(action),
             "verification_binding": (action.verification_binding.model_dump(mode="json")
                                      if action.verification_binding else None),
+            "fixture_binding": (action.fixture_binding.model_dump(mode="json")
+                                if action.fixture_binding else None),
             "endpoint": action.endpoint,
             "status": status,
             "exit_code": exit_code,
@@ -942,6 +998,8 @@ class SafeExecutor:
         )
         try:
             audit_ref = self._audit_log.append(audit_record.to_dict())
+            if action.tool in {"verify_redirect_destination", "verify_auth_reauthentication"}:
+                artifacts.append(str(self._audit_log.path))
         except Exception:
             logger.exception("Failed to persist executor audit for action %s", action.id)
             status = "failed"

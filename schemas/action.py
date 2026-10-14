@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+from schemas.b06_verification import FixtureExecutionBinding
 from schemas.verification_binding import VerificationBinding
 
 
@@ -16,3 +17,4 @@ class ActionProposal(BaseModel):
     service: str | None = None
     endpoint: str | None = None
     verification_binding: VerificationBinding | None = None
+    fixture_binding: FixtureExecutionBinding | None = None
