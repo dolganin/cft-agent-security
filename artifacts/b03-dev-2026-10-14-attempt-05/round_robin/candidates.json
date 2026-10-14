@@ -1,0 +1,299 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied query parameter `q` is interpolated directly into a raw SQL string passed to `sequelize.query`, allowing arbitrary SQL execution.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 21,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "Line 21 reads `req.query.q` into `criteria`; line 23 interpolates it into a template literal SQL string without parameterization. The only mitigation is a 200-char truncation which does not prevent injection. Verification: send a payload like `' UNION SELECT * FROM Users--` and observe whether user data appears in the JSON response.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in product search"
+    },
+    {
+      "description": "The `imageUrl` request body field is passed directly to `fetch()` with no URL scheme, host, or allowlist validation, allowing the server to make arbitrary HTTP requests.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts"
+      ],
+      "rationale": "Line 19 reads `req.body.imageUrl` into `url`; line 24 calls `fetch(url)` with no validation of protocol, host, or port. The code even acknowledges SSRF via a challenge flag on line 20. Verification: set imageUrl to `http://169.254.169.254/latest/meta-data/` or an internal service and observe whether the response body is written to the uploads directory.",
+      "rule_id": "ssrf",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-side request forgery via unvalidated imageUrl in profile upload"
+    },
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) instead of url.startsWith(allowedUrl), allowing an attacker to embed an allowed URL as a substring within a malicious URL to bypass the allowlist check.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 uses includes() for allowlist matching. routes/redirect.ts line 15 gates res.redirect(toUrl) on this check. A URL like https://evil.com/?x=https://github.com/juice-shop/juice-shop passes includes() but redirects to evil.com. Verification: request /redirect?to=https://evil.com/?x=https://github.com/juice-shop/juice-shop and observe 302 to evil.com.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect via substring matching in isRedirectAllowed"
+    },
+    {
+      "description": "The b2bOrder handler passes user-supplied orderLinesData into vm.runInContext with safeEval. While notevil restricts some operations, the vm module is known to be escapable.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts"
+      ],
+      "rationale": "Line 19 reads body.orderLinesData from the request. Line 23 evaluates it via vm.runInContext('safeEval(orderLinesData)', sandbox). The route is mounted at /b2b/v2 with isAuthorized() middleware. Verification: POST to /b2b/v2 with a payload that triggers a vm escape primitive and observe whether it executes outside the sandbox.",
+      "rule_id": "code-execution",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User-controlled input evaluated in vm.runInContext via safeEval"
+    },
+    {
+      "description": "handleYamlUpload passes user-controlled file content to yaml.load within a vm.runInContext call. YAML deserialization can trigger prototype pollution or resource exhaustion even inside a VM sandbox.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 109,
+      "line_start": 109,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "Line 105 reads file.buffer.toString() from the uploaded file. Line 109 calls vm.runInContext('JSON.stringify(yaml.load(data))', sandbox). The route is POST /file-upload. Verification: upload a .yml file with a crafted YAML payload (e.g., deep nesting or alias bomb) and observe whether it causes DoS or escapes the sandbox.",
+      "rule_id": "code-execution",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User-uploaded YAML parsed with yaml.load inside vm.runInContext"
+    },
+    {
+      "description": "In changePassword, the current-password check is guarded by `if (currentPassword && ...)`. An empty or missing currentPassword makes the guard falsy, skipping verification entirely and allowing password change with only a valid auth token.",
+      "file": "routes/changePassword.ts",
+      "line_end": 42,
+      "line_start": 39,
+      "provenance_paths": [
+        "routes/changePassword.ts"
+      ],
+      "rationale": "Line 39: `if (currentPassword && security.hash(currentPassword) !== loggedInUser.data.password)` — when currentPassword is '' or undefined the short-circuit skips the check. Lines 44-51 then update the password unconditionally. Verification: send a valid Bearer token with query params current= (empty) and new=attackerpass; expect 200 and subsequent login with attackerpass.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password change bypasses current-password verification when currentPassword is empty"
+    },
+    {
+      "description": "getWalletBalance and addWalletBalance query WalletModel with req.body.UserId without confirming it matches the authenticated user. If appendUserId middleware is not applied to these routes, any authenticated user can read or inflate another user's wallet.",
+      "file": "routes/wallet.ts",
+      "line_end": 27,
+      "line_start": 12,
+      "provenance_paths": [
+        "routes/wallet.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 12: `WalletModel.findOne({ where: { UserId: req.body.UserId } })` and line 27: `WalletModel.increment({ balance: req.body.balance }, { where: { UserId: req.body.UserId } })` both trust the client-supplied UserId. lib/insecurity.ts:178 shows appendUserId overwrites req.body.UserId, but it must be confirmed that this middleware is mounted on the wallet routes. Verification: register two users, authenticate as user A, POST to wallet endpoint with UserId of user B; expect balance of B returned or modified.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Wallet balance read and top-up use unvalidated req.body.UserId enabling IDOR"
+    },
+    {
+      "description": "retrieveBasket fetches any basket by req.params.id with no comparison to the authenticated user's basket ID. The challenge-detection code at lines 21-23 confirms this is an intended vulnerability surface.",
+      "file": "routes/basket.ts",
+      "line_end": 23,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19: `BasketModel.findOne({ where: { id } })` uses the URL param directly. The route is mounted with security.isAuthorized() (server.ts:418) which only checks authentication, not ownership. Lines 21-23 explicitly detect cross-user basket access as a challenge. Verification: authenticate as user A, GET /rest/basket/<B's basket id>; expect 200 with B's basket contents.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Basket retrieval by ID lacks ownership check allowing horizontal privilege escalation"
+    },
+    {
+      "description": "dataExport verifies the caller is authenticated but then queries MemoryModel with req.body.UserId rather than the token-derived user ID, allowing any authenticated user to export another user's memories.",
+      "file": "routes/dataExport.ts",
+      "line_end": 26,
+      "line_start": 26,
+      "provenance_paths": [
+        "routes/dataExport.ts"
+      ],
+      "rationale": "Line 18 authenticates via token, but line 26: `MemoryModel.findAll({ where: { UserId: req.body.UserId } })` uses the body-supplied UserId. If appendUserId is not applied to this route, the attacker controls which user's memories are exported. Verification: authenticate as user A, POST /rest/data-export with body UserId=B; expect B's memories in response.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Data export uses req.body.UserId independent of authenticated identity enabling memory exfiltration"
+    },
+    {
+      "description": "Both changePassword (line 51) and resetPassword (line 44) call user.update({ password: newPassword }) without applying security.hash(), storing the new password in plaintext while the original was hashed.",
+      "file": "routes/changePassword.ts",
+      "line_end": 51,
+      "line_start": 51,
+      "provenance_paths": [
+        "routes/changePassword.ts",
+        "routes/resetPassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 51: `await user.update({ password: newPasswordInString })` — newPasswordInString is just newPassword?.toString() with no hash call. Compare with line 39 which uses security.hash() for comparison, confirming the stored format should be hashed. resetPassword.ts:44 has the same pattern. Verification: change password via API, then query the DB or attempt login with the raw new password; expect success confirming plaintext storage.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "New password stored without hashing in changePassword and resetPassword"
+    },
+    {
+      "description": "The addWalletBalance handler passes req.body.balance directly to WalletModel.increment without validating the amount is positive or bounded, allowing an authenticated user to inflate their wallet by any arbitrary value.",
+      "file": "routes/wallet.ts",
+      "line_end": 27,
+      "line_start": 27,
+      "provenance_paths": [
+        "routes/wallet.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 27 calls WalletModel.increment({ balance: req.body.balance }) with no numeric validation or upper bound. The appendUserId middleware (server.ts:646) correctly binds UserId from the token, but the balance value itself is fully user-controlled, enabling arbitrary wallet inflation.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Unvalidated wallet balance increment allows arbitrary credit"
+    },
+    {
+      "description": "The order handler reads req.body.UserId at line 146 to look up and decrement/increment wallet balances. If appendUserId middleware is not applied to this route, an attacker can specify any UserId to manipulate another user's wallet balance.",
+      "file": "routes/order.ts",
+      "line_end": 162,
+      "line_start": 146,
+      "provenance_paths": [
+        "routes/order.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 146-162 use req.body.UserId to find the wallet and call decrement/increment. The appendUserId middleware overwrites req.body.UserId from the JWT token, but the order route registration in server.ts has not been confirmed to include it. If absent, UserId is fully attacker-controlled.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Order route may use attacker-controlled UserId for wallet operations"
+    },
+    {
+      "description": "When paymentMode is neither 'wallet' nor 'card', both payment checks are skipped and the user is upgraded to deluxe without any payment verification.",
+      "file": "routes/deluxe.ts",
+      "line_end": 43,
+      "line_start": 43,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Route at server.ts:648 applies appendUserId() so UserId is authenticated, but the handler only validates payment when paymentMode equals 'wallet' or 'card'. Any other value (empty string, 'free', etc.) skips both branches and reaches the unconditional user.update at line 43, granting deluxe role without payment. Verification: POST /rest/deluxe-membership with paymentMode set to an unrecognized value and observe role change.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing payment validation allows free deluxe upgrade"
+    },
+    {
+      "description": "Negative totalPrice is detected via challengeUtils but processing continues; WalletModel.decrement with a negative value effectively adds to the wallet balance.",
+      "file": "routes/order.ts",
+      "line_end": 150,
+      "line_start": 144,
+      "provenance_paths": [
+        "routes/order.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 144 detects totalPrice<0 but does not return or throw. Execution reaches line 150 where WalletModel.decrement({balance: totalPrice}) with negative totalPrice increments the balance. The route at server.ts:623 lacks appendUserId so UserId is also attacker-controlled (separate finding). Verification: place an order with negative quantity items and observe wallet balance increase.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Negative order total not blocked enables wallet manipulation"
+    },
+    {
+      "description": "The zip extraction path check at line 33 only verifies the resolved path stays within CWD, not within uploads/complaints/. Entries like ../../ftp/legal.md resolve to a valid CWD-relative path and are written outside the intended directory.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 34,
+      "line_start": 31,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "entry.path is attacker-controlled; path.resolve('uploads/complaints/' + fileName) with fileName='../../ftp/legal.md' yields a path still containing path.resolve('.') so the guard passes, writing to ftp/legal.md. The challenge check on line 32 confirms this is the intended attack surface.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Zip slip allows file write outside intended upload directory"
+    },
+    {
+      "description": "serveKeyFiles blocks '/' in the file parameter but does not block backslash or other OS-specific separators, potentially allowing traversal to encryptionkeys parent directories.",
+      "file": "routes/keyServer.ts",
+      "line_end": 14,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/keyServer.ts"
+      ],
+      "rationale": "The guard `!file.includes('/')` is the sole traversal check before path.resolve('encryptionkeys/', file) and res.sendFile. On Windows or with certain Node.js path normalization behaviors, backslash-separated traversal sequences could bypass this check. Exploitability depends on the deployment OS.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "keyServer path traversal check only blocks forward slashes"
+    },
+    {
+      "description": "resetPassword compares an HMAC of the user-supplied answer to a stored value and, on match, sets a new password with no additional token, rate limit, or email verification step visible in this handler.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 41,
+      "provenance_paths": [
+        "routes/resetPassword.ts"
+      ],
+      "rationale": "The only gate is `security.hmac(answer) === data.answer` (line 41); on success the password is updated (line 44) and the user object is returned. No reset token, expiry, or attempt counter is present in this code path, making the flow vulnerable to brute-force or guessable-answer account takeover.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password reset authorized solely by security question answer"
+    },
+    {
+      "description": "checkFileType in routes/fileUpload.ts always calls next() regardless of file extension, making the type restriction advisory only and allowing arbitrary file types through.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 68,
+      "line_start": 63,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "The middleware computes fileType and calls challengeUtils.solveIf but unconditionally invokes next() at line 67. No res.status or return prevents the request from continuing. Any file extension passes through to subsequent handlers.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "File type validation middleware never blocks uploads"
+    },
+    {
+      "description": "resetPassword stores the new password directly via user.update without hashing, persisting credentials in cleartext.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 44,
+      "provenance_paths": [
+        "routes/resetPassword.ts"
+      ],
+      "rationale": "Line 44 calls user.update({ password: newPassword }) with the raw body value. No bcrypt, argon2, or any hash function is applied before persistence, unlike the login flow which uses security.hashPassword.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password stored in plaintext during reset"
+    }
+  ]
+}

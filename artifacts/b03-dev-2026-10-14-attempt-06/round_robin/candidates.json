@@ -1,0 +1,178 @@
+{
+  "candidates": [
+    {
+      "description": "The retrieveBasket handler fetches any basket by `req.params.id` without verifying the authenticated user owns it; `security.isAuthorized()` only proves a valid JWT exists.",
+      "file": "routes/basket.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 performs `BasketModel.findOne({ where: { id } })` using the raw URL parameter. The route middleware `security.isAuthorized()` (confirmed in route_inventory for /rest/basket/:id) validates JWT signature but does not bind the request to the basket owner. The challenge-detection block (lines 21-24) compares `user.bid` to the requested id but only to solve a challenge—it does not reject the response. Verification: authenticate as user A, request /rest/basket/<B's bid>, confirm basket contents are returned.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR on basket retrieval – no ownership check on /rest/basket/:id"
+    },
+    {
+      "description": "serveKeyFiles blocks forward slashes but not backslashes or bare `..`; on Windows `path.resolve` interprets `\\` as a separator, enabling reads outside encryptionkeys/.",
+      "file": "routes/keyServer.ts",
+      "line_end": 14,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/keyServer.ts"
+      ],
+      "rationale": "Line 13 checks `!file.includes('/')` which does not reject `..\\` sequences. Line 14 passes the value to `path.resolve('encryptionkeys/', file)` and `res.sendFile`. On a Windows host (or any environment where the OS treats `\\` as a path separator) a payload like `..\\server.ts` passes the guard and resolves outside the intended directory. Verification: on a Windows lab, request `/rest/keyServer/..\\package.json` and check for file content in the response.",
+      "rule_id": "path-traversal",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Insufficient path sanitization in keyServer allows directory escape on Windows"
+    },
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) instead of url.startsWith(allowedUrl), allowing attacker-crafted URLs that embed an allowed domain as a substring to bypass the allowlist and trigger res.redirect to an arbitrary destination.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 uses includes() so a URL like https://evil.com/?x=https://github.com/juice-shop/juice-shop passes the check. routes/redirect.ts line 18 then calls res.redirect(toUrl) with the full attacker URL. The isUnintendedRedirect helper on line 29 correctly uses startsWith but only gates challenge scoring, not the redirect itself.",
+      "rule_id": "open-redirect",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect via substring matching in isRedirectAllowed"
+    },
+    {
+      "description": "The upgradeToDeluxe handler reads UserId from req.body and upgrades that user's role without verifying the authenticated caller owns that UserId, unless appendUserId middleware overwrites it.",
+      "file": "routes/deluxe.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 queries UserModel by req.body.UserId with no ownership check against the JWT subject. If the route is registered without security.appendUserId() middleware, any authenticated user can set UserId to another customer's id and receive a deluxe token for that account. Need to confirm route registration in server.ts.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in deluxe upgrade allows role escalation of arbitrary users"
+    },
+    {
+      "description": "In upgradeToDeluxe, if req.body.paymentMode is neither 'wallet' nor 'card', both payment validation blocks are skipped and the user is upgraded to deluxe without any payment check.",
+      "file": "routes/deluxe.ts",
+      "line_end": 43,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 24 and 34 gate payment checks on exact string equality with 'wallet'/'card'. Any other value (or absence) skips both blocks, falling through to the unconditional user.update on line 43. The challenge detection on line 44-46 confirms this is a known bypass path. Verification: authenticate as a customer, POST /rest/deluxe-membership with paymentMode set to an arbitrary string and observe role change to deluxe.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Deluxe upgrade bypasses payment when paymentMode is omitted or invalid"
+    },
+    {
+      "description": "The searchProducts handler interpolates req.query.q directly into a raw SQL SELECT statement using template literals, allowing SQL injection through the q parameter.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 23 builds a SQL query with `criteria` (from req.query.q, only length-limited to 200 chars) interpolated into a template literal passed to sequelize.query(). No parameterization or escaping is applied. The route GET /rest/products/search is registered without auth middleware. Verification: send a crafted q parameter with SQL metacharacters and observe whether the response reflects injected logic or errors.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via string interpolation in product search query"
+    },
+    {
+      "description": "The trackOrder handler passes user-supplied id into a MongoDB $where clause that evaluates JavaScript, enabling NoSQL injection and potential RCE when the XSS challenge is enabled.",
+      "file": "routes/trackOrder.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/trackOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 uses `db.ordersCollection.find({ $where: \\`this.orderId === '${id}'\\` })` where id comes from req.params.id. When the reflectedXssChallenge is enabled (line 15), id is only truncated to 60 chars with no character filtering, allowing JavaScript injection into the $where expression. The route GET /rest/track-order/:id has no auth middleware. Verification: send a crafted id containing JavaScript expressions and observe whether the server evaluates them.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator with user-controlled JavaScript in trackOrder"
+    },
+    {
+      "description": "The zip extraction in fileUpload.ts validates that the resolved path is under CWD but not under the intended uploads/complaints directory, allowing writes to sibling directories via ../ in zip entry names.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 34,
+      "line_start": 31,
+      "provenance_paths": [
+        "routes/fileUpload.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 33 checks absolutePath.includes(path.resolve('.')) which only ensures the path is under CWD, not under uploads/complaints/. A zip entry named '../config/evil.js' resolves to a path still under CWD, passing the check, while the write on line 34 uses the raw relative path escaping the intended directory.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Zip slip allows file write outside intended directory"
+    },
+    {
+      "description": "The login route constructs a raw SQL query using template literal interpolation of req.body.email directly into the SELECT statement passed to sequelize.query().",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts"
+      ],
+      "rationale": "req.body.email is user-controlled and interpolated into a SQL string without parameterization or escaping. The query `SELECT * FROM Users WHERE email = '${req.body.email || ''}'` allows an attacker to inject arbitrary SQL via the email field. Verification: send a crafted email value like `' OR '1'='1' --` and observe whether authentication bypass occurs or SQL error is returned.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via email parameter in login query"
+    },
+    {
+      "description": "When the noSqlCommandChallenge is enabled, the product id is only truncated (not sanitized) before being concatenated into a MongoDB $where JavaScript expression.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts"
+      ],
+      "rationale": "Line 31 uses utils.trunc(req.params.id, 40) when the challenge is active, which limits length but does not prevent JavaScript injection into the $where clause on line 36. A payload like `1;sleep(2000)` within 40 chars would execute server-side JS. Verification: send a GET to /rest/products/reviews?id=1;sleep(2000) with the challenge enabled and measure response time exceeding 2s.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where in showProductReviews when challenge enabled"
+    },
+    {
+      "description": "The productId parameter is concatenated directly into a MongoDB $where JavaScript expression, allowing arbitrary code execution on the database server.",
+      "file": "routes/chat.ts",
+      "line_end": 149,
+      "line_start": 149,
+      "provenance_paths": [
+        "routes/chat.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 149 uses `$where: 'this.product == ' + productId` where productId originates from user-controlled request input. The $where operator evaluates a JavaScript expression server-side, so injecting a payload like `1; sleep(5000)` or `1; this.constructor.constructor('return process')()` achieves code execution. Verification: send a synthetic productId with a timing payload and observe response delay.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in chat route"
+    }
+  ]
+}

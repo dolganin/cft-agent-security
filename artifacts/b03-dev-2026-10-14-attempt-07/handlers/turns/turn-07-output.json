@@ -1,0 +1,58 @@
+{
+  "candidates": [
+    {
+      "description": "The `id` parameter from `req.params.id` is concatenated into a MongoDB `$where` JavaScript expression. When the challenge is enabled, `utils.trunc` only limits length to 40 chars without sanitizing, allowing JavaScript injection into the `$where` clause.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 31 shows `id` is either `Number(req.params.id)` (safe) or `utils.trunc(req.params.id, 40)` (only truncates). Line 36 concatenates `id` into `'this.product == ' + id` inside `$where`, which executes arbitrary JS in MongoDB. A 40-char payload like `1;sleep(3000)` or `1;this.constructor` can execute. Verification: send a crafted `id` param and observe query execution time or error response.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in product review query"
+    },
+    {
+      "description": "The Hashids instance uses a hardcoded salt string 'this is my salt', making the continue code deterministic and reversible by anyone who reads the source. An attacker can forge a continue code claiming arbitrary challenges as solved.",
+      "file": "routes/continueCode.ts",
+      "line_end": 13,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/continueCode.ts"
+      ],
+      "rationale": "Line 13 instantiates `new Hashids('this is my salt', 60, ...)` with a literal salt. Since the salt is public in source, any user can decode a continue code to enumerate solved challenges or encode arbitrary IDs to forge progress. Verification: decode a known continue code with the same salt and confirm it yields challenge IDs; encode a different set and submit via restoreProgress endpoint.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Hardcoded Hashids salt enables continue-code forgery"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "models/user.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 200,
+      "line_start": 170
+    },
+    {
+      "file": "routes/restoreProgress.ts",
+      "line_end": 50,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "$where",
+    "Hashids",
+    "beforeUpdate.*password"
+  ],
+  "stop": false
+}

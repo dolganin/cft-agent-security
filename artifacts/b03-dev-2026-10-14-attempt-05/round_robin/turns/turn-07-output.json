@@ -1,0 +1,67 @@
+{
+  "candidates": [
+    {
+      "description": "The zip extraction path check at line 33 only verifies the resolved path stays within CWD, not within uploads/complaints/. Entries like ../../ftp/legal.md resolve to a valid CWD-relative path and are written outside the intended directory.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 34,
+      "line_start": 31,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "entry.path is attacker-controlled; path.resolve('uploads/complaints/' + fileName) with fileName='../../ftp/legal.md' yields a path still containing path.resolve('.') so the guard passes, writing to ftp/legal.md. The challenge check on line 32 confirms this is the intended attack surface.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Zip slip allows file write outside intended upload directory"
+    },
+    {
+      "description": "serveKeyFiles blocks '/' in the file parameter but does not block backslash or other OS-specific separators, potentially allowing traversal to encryptionkeys parent directories.",
+      "file": "routes/keyServer.ts",
+      "line_end": 14,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/keyServer.ts"
+      ],
+      "rationale": "The guard `!file.includes('/')` is the sole traversal check before path.resolve('encryptionkeys/', file) and res.sendFile. On Windows or with certain Node.js path normalization behaviors, backslash-separated traversal sequences could bypass this check. Exploitability depends on the deployment OS.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "keyServer path traversal check only blocks forward slashes"
+    },
+    {
+      "description": "resetPassword compares an HMAC of the user-supplied answer to a stored value and, on match, sets a new password with no additional token, rate limit, or email verification step visible in this handler.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 41,
+      "provenance_paths": [
+        "routes/resetPassword.ts"
+      ],
+      "rationale": "The only gate is `security.hmac(answer) === data.answer` (line 41); on success the password is updated (line 44) and the user object is returned. No reset token, expiry, or attempt counter is present in this code path, making the flow vulnerable to brute-force or guessable-answer account takeover.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password reset authorized solely by security question answer"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "models/user.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 340,
+      "line_start": 320
+    }
+  ],
+  "search_queries": [
+    "keyServer",
+    "serveKeyFiles",
+    "resetPassword"
+  ],
+  "stop": false
+}

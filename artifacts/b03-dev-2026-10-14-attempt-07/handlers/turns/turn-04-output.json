@@ -1,0 +1,105 @@
+{
+  "candidates": [
+    {
+      "description": "getWalletBalance queries WalletModel using req.body.UserId directly without verifying it matches the authenticated user, allowing any caller to read any user's wallet balance.",
+      "file": "routes/wallet.ts",
+      "line_end": 12,
+      "line_start": 12,
+      "provenance_paths": [
+        "routes/wallet.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 12 uses req.body.UserId as the sole filter with no comparison to the authenticated identity. The route registration in server.ts does not show security.isAuthorized() or appendUserId() middleware for /rest/wallet/balance. Verification: authenticate as user A, request balance with user B's UserId, confirm B's balance is returned.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR on wallet balance read via unvalidated UserId"
+    },
+    {
+      "description": "addWalletBalance increments balance for req.body.UserId without verifying the caller owns that account, enabling arbitrary balance manipulation on any user.",
+      "file": "routes/wallet.ts",
+      "line_end": 27,
+      "line_start": 27,
+      "provenance_paths": [
+        "routes/wallet.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 27 calls WalletModel.increment with req.body.UserId as the where clause. No middleware or handler logic ties the operation to the authenticated session. Verification: authenticate as user A, POST to /rest/wallet/add with user B's UserId and a balance value, confirm B's balance changes.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR on wallet balance modification via unvalidated UserId"
+    },
+    {
+      "description": "verifyImageCaptcha calls next() when captchas[0] is falsy, so an attacker who never requests a captcha or waits for expiry can bypass the check entirely.",
+      "file": "routes/imageCaptcha.ts",
+      "line_end": 52,
+      "line_start": 52,
+      "provenance_paths": [
+        "routes/imageCaptcha.ts"
+      ],
+      "rationale": "Line 52 condition `!captchas[0] || req.body.answer === captchas[0].answer` passes when no captcha row is found for the user within 5 minutes. Verification: authenticate, skip requesting a captcha, submit a feedback POST with an arbitrary answer value, confirm the request proceeds past captcha verification.",
+      "rule_id": "authentication",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Captcha verification bypassed when no captcha record exists"
+    },
+    {
+      "description": "profileImageUrlUpload fetches req.body.imageUrl with no host or protocol validation, allowing the server to be coerced into requesting internal or attacker-controlled endpoints.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 24 calls fetch(url) where url originates from req.body.imageUrl (line 19). No allowlist, protocol check, or private-IP block is present. The route is registered at server.ts:330 with only uploadToMemory middleware. Verification: POST /profile/image/url with imageUrl pointing to an internal metadata endpoint, observe server-side request in logs or response timing.",
+      "rule_id": "ssrf",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-side request forgery via user-controlled imageUrl in profile upload"
+    },
+    {
+      "description": "changePassword only validates the current password when query.current is truthy; an empty or missing current parameter bypasses the check and allows password change with only a valid token.",
+      "file": "routes/changePassword.ts",
+      "line_end": 39,
+      "line_start": 39,
+      "provenance_paths": [
+        "routes/changePassword.ts"
+      ],
+      "rationale": "Line 39: `if (currentPassword && security.hash(currentPassword) !== loggedInUser.data.password)` short-circuits when currentPassword is '' or undefined, skipping the comparison. Verification: obtain a valid token, call GET /rest/user/change-password?new=X&repeat=X (omit current), confirm password is updated without knowing the old one.",
+      "rule_id": "authentication",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Current-password check skipped when query parameter is falsy"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 680,
+      "line_start": 640
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 500,
+      "line_start": 460
+    }
+  ],
+  "search_queries": [
+    "/rest/wallet",
+    "change-password",
+    "verifyImageCaptcha"
+  ],
+  "stop": false
+}

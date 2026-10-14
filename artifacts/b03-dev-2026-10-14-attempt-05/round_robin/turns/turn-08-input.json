@@ -1,0 +1,97 @@
+{
+  "previous_context": [
+    {
+      "content": "9: \n10: export function getWalletBalance () {\n11:   return async (req: Request, res: Response, next: NextFunction) => {\n12:     const wallet = await WalletModel.findOne({ where: { UserId: req.body.UserId } })\n13:     if (wallet != null) {\n14:       res.status(200).json({ status: 'success', data: wallet.balance })\n15:     } else {\n16:       res.status(404).json({ status: 'error' })\n17:     }\n18:   }\n19: }\n20: \n21: export function addWalletBalance () {\n22:   return async (req: Request, res: Response, next: NextFunction) => {\n23:     const cardId = req.body.paymentId\n24:     const card = cardId ? await CardModel.findOne({ where: { id: cardId, UserId: req.body.UserId } }) : null\n25:     if (card != null) {\n26:       try {\n27:         await WalletModel.increment({ balance: req.body.balance }, { where: { UserId: req.body.UserId } })\n28:         res.status(200).json({ status: 'success', data: req.body.balance })\n29:       } catch {\n30:         res.status(404).json({ status: 'error' })\n31:       }\n32:     } else {\n33:       res.status(402).json({ status: 'error', message: 'Payment not accepted.' })\n34:     }\n35:   }\n36: }",
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 9
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import path from 'node:path'\n7: import { type Request, type Response, type NextFunction } from 'express'\n8: \n9: export function serveKeyFiles () {\n10:   return ({ params }: Request, res: Response, next: NextFunction) => {\n11:     const file = params.file\n12: \n13:     if (!file.includes('/')) {\n14:       res.sendFile(path.resolve('encryptionkeys/', file))\n15:     } else {\n16:       res.status(403)\n17:       next(new Error('File names cannot contain forward slashes!'))\n18:     }\n19:   }\n20: }",
+      "file": "routes/keyServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import config from 'config'\n7: import { type Request, type Response, type NextFunction } from 'express'\n8: \n9: import type { Memory as MemoryConfig } from '../lib/config.schema'\n10: import { SecurityAnswerModel } from '../models/securityAnswer'\n11: import * as challengeUtils from '../lib/challengeUtils'\n12: import { challenges, users } from '../data/datacache'\n13: import * as security from '../lib/insecurity'\n14: import { UserModel } from '../models/user'\n15: \n16: export function resetPassword () {\n17:   return async ({ body, connection }: Request, res: Response, next: NextFunction) => {\n18:     const email = body.email\n19:     const answer = body.answer\n20:     const newPassword = body.new\n21:     const repeatPassword = body.repeat\n22:     if (!email || !answer) {\n23:       next(new Error('Blocked illegal activity by ' + connection.remoteAddress))\n24:       return\n25:     }\n26:     if (!newPassword || newPassword === 'undefined') {\n27:       res.status(401).send(res.__('Password cannot be empty.'))\n28:       return\n29:     }\n30:     if (newPassword !== repeatPassword) {\n31:       res.status(401).send(res.__('New and repeated password do not match.'))\n32:       return\n33:     }\n34:     try {\n35:       const data = await SecurityAnswerModel.findOne({\n36:         include: [{\n37:           model: UserModel,\n38:           where: { email }\n39:         }]\n40:       })\n41:       if ((data != null) && security.hmac(answer) === data.answer) {\n42:         const user = await UserModel.findByPk(data.UserId)\n43:         if (user) {\n44:           const updatedUser = await user.update({ password: newPassword })\n45:           verifySecurityAnswerChallenges(updatedUser, answer)\n46:           res.json({ user: updatedUser })\n47:         }\n48:       } else {\n49:         res.status(401).send(res.__('Wrong answer to security question.'))\n50:       }\n51:     } catch (error) {\n52:       next(error)\n53:     }\n54:   }\n55: }\n56: \n57: function verifySecurityAnswerChallenges (user: UserModel, answer: string) {\n58:   challengeUtils.solveIf(challenges.resetPasswordJimChallenge, () => { return user.id === users.jim.id && answer === 'Samuel' })\n59:   challengeUtils.solveIf(challenges.resetPasswordBenderChallenge, () => { return user.id === users.bender.id && answer === 'Stop\\'n\\'Drop' })\n60:   challengeUtils.solveIf(challenges.resetPasswordBjoernChallenge, () => { return user.id === users.bjoern.id && answer === 'West-2082' })",
+      "file": "routes/resetPassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import fs from 'node:fs'\n7: import vm from 'node:vm'\n8: import path from 'node:path'\n9: import { pipeline } from 'node:stream/promises'\n10: import yaml from 'js-yaml'\n11: import unzipper from 'unzipper'\n12: import { type NextFunction, type Request, type Response } from 'express'\n13: \n14: import * as challengeUtils from '../lib/challengeUtils'\n15: import { challenges } from '../data/datacache'\n16: import * as utils from '../lib/utils'\n17: import { parseXmlString } from '../lib/xml'\n18: \n19: function ensureFileIsPassed ({ file }: Request, res: Response, next: NextFunction) {\n20:   if (file != null) {\n21:     next()\n22:   } else {\n23:     return res.status(400).json({ error: 'File is not passed' })\n24:   }\n25: }\n26: \n27: async function extractZipBuffer (buffer: Buffer) {\n28:   const directory = await unzipper.Open.buffer(buffer)\n29:   for (const entry of directory.files) {\n30:     const fileName = entry.path\n31:     const absolutePath = path.resolve('uploads/complaints/' + fileName)\n32:     challengeUtils.solveIf(challenges.fileWriteChallenge, () => { return absolutePath === path.resolve('ftp/legal.md') })\n33:     if (absolutePath.includes(path.resolve('.'))) {\n34:       await pipeline(entry.stream(), fs.createWriteStream('uploads/complaints/' + fileName))\n35:     }\n36:   }\n37: }\n38: \n39: async function handleZipFileUpload ({ file }: Request, res: Response, next: NextFunction) {\n40:   if (!(file?.originalname?.toLowerCase().endsWith('.zip') ?? false)) {\n41:     next()\n42:     return\n43:   }\n44:   if (((file?.buffer) != null) && utils.isChallengeEnabled(challenges.fileWriteChallenge)) {\n45:     try {\n46:       await extractZipBuffer(file.buffer)\n47:     } catch (err) {\n48:       next(err)\n49:       return\n50:     }\n51:   }\n52:   res.status(204).end()\n53: }\n54: \n55: function checkUploadSize ({ file }: Request, res: Response, next: NextFunction) {\n56:   if (file != null) {\n57:     challengeUtils.solveIf(challenges.uploadSizeChallenge, () => { return file?.size > 100000 })\n58:   }\n59:   next()\n60: }\n61: \n62: function checkFileType ({ file }: Request, res: Response, next: NextFunction) {\n63:   const fileType = file?.originalname.substr(file.originalname.lastIndexOf('.') + 1).toLowerCase()\n64:   challengeUtils.solveIf(challenges.uploadTypeChallenge, () => {\n65:     return !(fileType === 'pdf' || fileType === 'xml' || fileType === 'zip' || fileType === 'yml' || fileType === 'yaml')\n66:   })\n67:   next()\n68: }\n69: \n70: async function handleXmlUpload ({ file }: Request, res: Response, next: NextFunction) {\n71:   if (file?.originalname?.toLowerCase().endsWith('.xml') ?? false) {\n72:     challengeUtils.solveIf(challenges.deprecatedInterfaceChallenge, () => { return true })\n73:     if (((file?.buffer) != null) && utils.isChallengeEnabled(challenges.deprecatedInterfaceChallenge)) { // XXE attacks in Docker/Heroku containers regularly cause \"segfault\" crashes\n74:       const data = file.buffer.toString()\n75:       try {\n76:         const xmlString = await parseXmlString(data)\n77:         challengeUtils.solveIf(challenges.xxeFileDisclosureChallenge, () => { return (utils.matchesEtcPasswdFile(xmlString) || utils.matchesSystemIniFile(xmlString)) })\n78:         res.status(410)\n79:         next(new Error('B2B customer complaints via file upload have been deprecated for security reasons: ' + utils.trunc(xmlString, 400) + ' (' + file.originalname + ')'))\n80:       } catch (err: unknown) {\n81:         const errorMessage = err instanceof Error ? err.message : String(err)\n82:         if (errorMessage.includes('Script execution timed out')) {\n83:           if (challengeUtils.notSolved(challenges.xxeDosChallenge)) {\n84:             challengeUtils.solve(challenges.xxeDosChallenge)\n85:           }\n86:           res.status(503)\n87:           next(new Error('Sorry, we are temporarily not available! Please try again later.'))\n88:         } else {\n89:           res.status(410)\n90:           next(new Error('B2B customer complaints via file upload have been deprecated for security reasons: ' + errorMessage + ' (' + file.originalname + ')'))\n91:         }\n92:       }\n93:     } else {\n94:       res.status(410)\n95:       next(new Error('B2B customer complaints via file upload have been deprecated for security reasons (' + file?.originalname + ')'))\n96:     }\n97:   }\n98:   next()\n99: }\n100: \n101: function handleYamlUpload ({ file }: Request, res: Response, next: NextFunction) {\n102:   if ((file?.originalname?.toLowerCase().endsWith('.yml') ?? false) || (file?.originalname?.toLowerCase().endsWith('.yaml') ?? false)) {\n103:     challengeUtils.solveIf(challenges.deprecatedInterfaceChallenge, () => { return true })\n104:     if (((file?.buffer) != null) && utils.isChallengeEnabled(challenges.deprecatedInterfaceChallenge)) {\n105:       const data = file.buffer.toString()\n106:       try {\n107:         const sandbox = { yaml, data }\n108:         vm.createContext(sandbox)\n109:         const yamlString = vm.runInContext('JSON.stringify(yaml.load(data))', sandbox, { timeout: 2000 })\n110:         res.status(410)\n111:         next(new Error('B2B customer complaints via file upload have been deprecated for security reasons: ' + utils.trunc(yamlString, 400) + ' (' + file.originalname + ')'))\n112:       } catch (err: unknown) {\n113:         const errorMessage = err instanceof Error ? err.message : String(err)\n114:         if (errorMessage.includes('Invalid string length') || errorMessage.includes('Script execution timed out')) {\n115:           if (challengeUtils.notSolved(challenges.yamlBombChallenge)) {\n116:             challengeUtils.solve(challenges.yamlBombChallenge)\n117:           }\n118:           res.status(503)\n119:           next(new Error('Sorry, we are temporarily not available! Please try again later.'))\n120:         } else {\n121:           res.status(410)\n122:           next(new Error('B2B customer complaints via file upload have been deprecated for security reasons: ' + errorMessage + ' (' + file.originalname + ')'))\n123:         }\n124:       }\n125:     } else {\n126:       res.status(410)\n127:       next(new Error('B2B customer complaints via file upload have been deprecated for security reasons (' + file?.originalname + ')'))\n128:     }\n129:   }\n130:   res.status(204).end()",
+      "file": "routes/fileUpload.ts",
+      "line_end": 130,
+      "line_start": 1
+    },
+    {
+      "content": "124:       }\n125:     } else {\n126:       res.status(410)\n127:       next(new Error('B2B customer complaints via file upload have been deprecated for security reasons (' + file?.originalname + ')'))\n128:     }\n129:   }\n130:   res.status(204).end()\n131: }\n132: \n133: export {\n134:   ensureFileIsPassed,\n135:   handleZipFileUpload,\n136:   checkUploadSize,\n137:   checkFileType,\n138:   handleXmlUpload,\n139:   handleYamlUpload\n140: }",
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 124
+    }
+  ],
+  "related_files": [],
+  "remaining_candidate_budget": 15,
+  "remaining_turns": 0,
+  "route_inventory": {
+    "dynamic_routes": 1,
+    "middleware_mounts": [],
+    "omitted_routes": 0,
+    "routes": [],
+    "schema_version": "cft.express_source_map.v1"
+  },
+  "search_results": [
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 86,
+          "text": "import { serveKeyFiles } from './routes/keyServer'"
+        }
+      ],
+      "query": "keyServer"
+    },
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 86,
+          "text": "import { serveKeyFiles } from './routes/keyServer'"
+        },
+        {
+          "file": "server.ts",
+          "line": 297,
+          "text": "  app.use('/encryptionkeys/:file', serveKeyFiles())"
+        },
+        {
+          "file": "routes/keyServer.ts",
+          "line": 9,
+          "text": "export function serveKeyFiles () {"
+        }
+      ],
+      "query": "serveKeyFiles"
+    },
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 93,
+          "text": "import { resetPassword } from './routes/resetPassword'"
+        },
+        {
+          "file": "server.ts",
+          "line": 617,
+          "text": "  app.post('/rest/user/reset-password', utils.asyncHandler(resetPassword()))"
+        },
+        {
+          "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+          "line": 79,
+          "text": " "
+        }
+      ],
+      "query": "resetPassword"
+    }
+  ],
+  "source_snippets": []
+}

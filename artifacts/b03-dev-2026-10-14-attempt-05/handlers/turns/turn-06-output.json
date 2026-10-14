@@ -1,0 +1,70 @@
+{
+  "candidates": [
+    {
+      "description": "req.body.id is passed directly as a MongoDB query filter in updateProductReviews without type validation or ownership check, and multi:true allows mass updates.",
+      "file": "routes/updateProductReviews.ts",
+      "line_end": 20,
+      "line_start": 17,
+      "provenance_paths": [
+        "routes/updateProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 uses req.body.id as the _id filter in db.reviewsCollection.update with multi:true. No ObjectId validation or user-ownership check exists. A crafted JSON body like {\"id\":{\"$ne\":null},\"message\":\"x\"} would update all reviews. Verification: send a POST with a NoSQL operator payload as id and observe multi-document modification.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection in review update via unsanitized req.body.id"
+    },
+    {
+      "description": "req.body.key is concatenated into a file path for fs.readFileSync without sanitization, allowing directory traversal to read arbitrary YAML files.",
+      "file": "routes/vulnCodeFixes.ts",
+      "line_end": 81,
+      "line_start": 80,
+      "provenance_paths": [
+        "routes/vulnCodeFixes.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 80-81 builds a path as './data/static/codefixes/' + key + '.info.yml' where key comes from req.body.key (line 71). No path normalization or allowlist check is applied. A key like '../../../package.json' would read outside the intended directory. Verification: POST a key containing ../ sequences and check if file content is reflected in the response.",
+      "rule_id": "path-traversal",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Path traversal in vulnCodeFixes via req.body.key in file read"
+    },
+    {
+      "description": "retrieveBasket fetches any basket by req.params.id without verifying the authenticated user owns it; the challenge detection code proves the gap but does not block access.",
+      "file": "routes/basket.ts",
+      "line_end": 23,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 queries BasketModel.findOne by id from req.params with no ownership filter. Lines 21-23 only detect the IDOR for challenge scoring via challengeUtils.solveIf but do not return 403 or filter results. Any authenticated user can read another user's basket. Verification: authenticate as user A, request /rest/basket/{B_id}, confirm basket contents are returned.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in basket retrieval without ownership enforcement"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/vulnCodeFixes.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 660,
+      "line_start": 630
+    }
+  ],
+  "search_queries": [
+    "allOrders",
+    "authenticatedUsers",
+    "/rest/user/authentication-details"
+  ],
+  "stop": false
+}

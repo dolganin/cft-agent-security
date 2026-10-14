@@ -1,0 +1,51 @@
+{
+  "candidates": [
+    {
+      "description": "The productId parameter is concatenated directly into a MongoDB $where JavaScript expression, allowing arbitrary JavaScript execution in the database query context.",
+      "file": "routes/chat.ts",
+      "line_end": 149,
+      "line_start": 149,
+      "provenance_paths": [
+        "routes/chat.ts"
+      ],
+      "rationale": "Line 149 builds a $where clause by concatenating productId into a JavaScript string expression. An attacker supplying a crafted productId can inject arbitrary JavaScript executed by the MongoDB query engine. Verification: send a productId containing a JavaScript expression that triggers a detectable side-effect (e.g., a timing delay) and observe response latency.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where string concatenation in chat route"
+    },
+    {
+      "description": "The id parameter from the request is concatenated into a MongoDB $where JavaScript expression without sanitization, enabling server-side JavaScript injection.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts"
+      ],
+      "rationale": "Line 36 constructs a $where query by concatenating the id parameter directly into a JavaScript string. This allows an attacker to inject arbitrary JavaScript into the MongoDB query context. Verification: supply an id value containing a JavaScript expression that causes a measurable timing difference and confirm the injection executes.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where string concatenation in showProductReviews route"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/chat.ts",
+      "line_end": 160,
+      "line_start": 140
+    },
+    {
+      "file": "routes/showProductReviews.ts",
+      "line_end": 50,
+      "line_start": 25
+    }
+  ],
+  "search_queries": [
+    "$where.*concat",
+    "callback.*jsonp"
+  ],
+  "stop": false
+}

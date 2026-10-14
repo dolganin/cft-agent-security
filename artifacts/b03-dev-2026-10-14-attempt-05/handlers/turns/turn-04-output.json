@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "description": "The profileImageUrlUpload handler calls fetch() with a URL taken directly from req.body.imageUrl without validating the target host or scheme, allowing requests to internal network services.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 assigns req.body.imageUrl to url; line 24 passes it to fetch() with no host allowlist or private-IP block. The SSRF challenge flag on line 20 only records the attempt but does not prevent the request. Verification: submit a synthetic internal URL (e.g. http://127.0.0.1:PORT/rest/admin/application-version) as imageUrl and observe whether the response body is written to the uploads directory.",
+      "rule_id": "ssrf",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-Side Request Forgery via user-controlled URL in profile image fetch"
+    },
+    {
+      "description": "verifyImageCaptcha calls next() when captchas[0] is undefined, meaning a user who never requested a captcha or whose captcha expired can skip verification entirely on the data-export endpoint.",
+      "file": "routes/imageCaptcha.ts",
+      "line_end": 52,
+      "line_start": 52,
+      "provenance_paths": [
+        "routes/imageCaptcha.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 52 condition is `!captchas[0] || req.body.answer === captchas[0].answer`; when no captcha row is found the first disjunct is true and next() is called. The data-export route (server.ts:639) uses this as middleware. Verification: authenticate as a synthetic user, skip the GET /rest/image-captcha step, and POST /rest/user/data-export with an arbitrary answer to confirm the export proceeds.",
+      "rule_id": "authentication",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "CAPTCHA verification bypassed when no captcha record exists for user"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 120,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 32,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "redirectAllowlist",
+    "isRedirectAllowed",
+    "appendUserId"
+  ],
+  "stop": false
+}

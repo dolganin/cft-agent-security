@@ -1,0 +1,75 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied query parameter `q` is directly interpolated into a raw SQL SELECT statement without parameterization or escaping, allowing arbitrary SQL execution.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "`criteria` is assigned from `req.query.q` (line 21-22) then interpolated into a template literal passed to `sequelize.query()` (line 23). No parameterized binding or escaping is applied. Verification: send a crafted `q` value like `' UNION SELECT ...` and observe whether the response reflects injected data or causes a SQL error.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in searchProducts"
+    },
+    {
+      "description": "User-supplied `orderLinesData` from the request body is evaluated inside a Node.js VM context via `safeEval`, which is a known-bypass sandbox for `notevil`.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "`body.orderLinesData` (line 19) is placed into a VM sandbox and executed via `vm.runInContext('safeEval(orderLinesData)', sandbox)` (line 23). The `notevil` library has documented escape vectors. The route is protected by `security.isAuthorized()` so any authenticated user can reach this sink. Verification: submit a payload that triggers a detectable side-effect (e.g., a timing delay or error message difference) without destructive operations.",
+      "rule_id": "code-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-side code injection via vm.runInContext with user-controlled input"
+    },
+    {
+      "description": "The placeOrder handler uses `req.body.UserId` to decrement and increment wallet balances without verifying the authenticated user owns that wallet.",
+      "file": "routes/order.ts",
+      "line_end": 162,
+      "line_start": 146,
+      "provenance_paths": [
+        "routes/order.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 146-162 read `req.body.UserId` and perform `WalletModel.decrement` and `WalletModel.increment` on that user's wallet. The authenticated user identity is only used for the email in the PDF (line 38-39), never compared to `req.body.UserId`. An attacker can specify another user's ID to drain or inflate their wallet. Verification: authenticate as user A, submit an order with `UserId` set to user B's ID, and check if user B's wallet balance changes.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing ownership check allows wallet manipulation via arbitrary UserId in placeOrder"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 450,
+      "line_start": 370
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 160,
+      "line_start": 80
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 200,
+      "line_start": 173
+    }
+  ],
+  "search_queries": [
+    "/rest/search",
+    "isDeluxe",
+    "appendUserId"
+  ],
+  "stop": false
+}

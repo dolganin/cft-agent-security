@@ -1,0 +1,92 @@
+{
+  "previous_context": [
+    {
+      "content": "72:         set (clearTextPassword: string) {\n73:           this.setDataValue('password', security.hash(clearTextPassword)) \n74:         }\n75:       }, \n76:       role: {\n77:         type: DataTypes.STRING,\n78:         defaultValue: 'customer',\n79:         validate: {\n80:           isIn: [['customer', 'deluxe', 'accounting', 'admin']]\n81:         },\n82:         set (role: string) {\n83:           const profileImage = this.getDataValue('profileImage')\n84:           if (\n85:             role === security.roles.admin &&\n86:           (!profileImage ||\n87:             profileImage === '/assets/public/images/uploads/default.svg')\n88:           ) {\n89:             this.setDataValue(\n90:               'profileImage',\n91:               '/assets/public/images/uploads/defaultAdmin.png'\n92:             )\n93:           }\n94:           this.setDataValue('role', role)\n95:         }\n96:       },\n97:       deluxeToken: {\n98:         type: DataTypes.STRING,\n99:         defaultValue: ''\n100:       },\n101:       lastLoginIp: {\n102:         type: DataTypes.STRING,\n103:         defaultValue: '0.0.0.0'\n104:       },\n105:       profileImage: {\n106:         type: DataTypes.STRING,\n107:         defaultValue: '/assets/public/images/uploads/default.svg'\n108:       },\n109:       totpSecret: {\n110:         type: DataTypes.STRING,\n111:         defaultValue: ''\n112:       },\n113:       isActive: {\n114:         type: DataTypes.BOOLEAN,\n115:         defaultValue: true\n116:       }\n117:     },\n118:     {\n119:       tableName: 'Users',\n120:       paranoid: true,\n121:       sequelize\n122:     }\n123:   )\n124: \n125:   User.addHook('afterValidate', async (user: User) => {\n126:     if (\n127:       user.email &&",
+      "file": "models/user.ts",
+      "line_end": 127,
+      "line_start": 72
+    },
+    {
+      "content": "71:         type: DataTypes.STRING,\n72:         set (clearTextPassword: string) {\n73:           this.setDataValue('password', security.hash(clearTextPassword)) \n74:         }\n75:       }, \n76:       role: {\n77:         type: DataTypes.STRING,\n78:         defaultValue: 'customer',\n79:         validate: {\n80:           isIn: [['customer', 'deluxe', 'accounting', 'admin']]\n81:         },\n82:         set (role: string) {\n83:           const profileImage = this.getDataValue('profileImage')\n84:           if (\n85:             role === security.roles.admin &&\n86:           (!profileImage ||\n87:             profileImage === '/assets/public/images/uploads/default.svg')\n88:           ) {\n89:             this.setDataValue(\n90:               'profileImage',\n91:               '/assets/public/images/uploads/defaultAdmin.png'\n92:             )\n93:           }\n94:           this.setDataValue('role', role)\n95:         }\n96:       },\n97:       deluxeToken: {\n98:         type: DataTypes.STRING,\n99:         defaultValue: ''\n100:       },\n101:       lastLoginIp: {\n102:         type: DataTypes.STRING,\n103:         defaultValue: '0.0.0.0'\n104:       },\n105:       profileImage: {\n106:         type: DataTypes.STRING,\n107:         defaultValue: '/assets/public/images/uploads/default.svg'\n108:       },\n109:       totpSecret: {\n110:         type: DataTypes.STRING,\n111:         defaultValue: ''\n112:       },\n113:       isActive: {\n114:         type: DataTypes.BOOLEAN,\n115:         defaultValue: true\n116:       }\n117:     },\n118:     {\n119:       tableName: 'Users',\n120:       paranoid: true,\n121:       sequelize\n122:     }\n123:   )\n124: \n125:   User.addHook('afterValidate', async (user: User) => {\n126:     if (",
+      "file": "models/user.ts",
+      "line_end": 126,
+      "line_start": 71
+    },
+    {
+      "content": "16: import * as utils from '../lib/utils'\n17: import { challenges } from '../data/datacache'\n18: import * as security from '../lib/insecurity'\n19: \n20: class User extends Model<\n21: InferAttributes<User>,\n22: InferCreationAttributes<User>\n23: > {\n24:   declare id: CreationOptional<number>\n25:   declare username: string | undefined\n26:   declare email: CreationOptional<string>\n27:   declare password: CreationOptional<string>\n28:   declare role: CreationOptional<string>\n29:   declare deluxeToken: CreationOptional<string>\n30:   declare lastLoginIp: CreationOptional<string>\n31:   declare profileImage: CreationOptional<string>\n32:   declare totpSecret: CreationOptional<string>\n33:   declare isActive: CreationOptional<boolean>\n34: }\n35: \n36: const UserModelInit = (sequelize: Sequelize) => { \n37:   User.init(\n38:     { \n39:       id: {\n40:         type: DataTypes.INTEGER,\n41:         primaryKey: true,\n42:         autoIncrement: true\n43:       },\n44:       username: {\n45:         type: DataTypes.STRING,\n46:         defaultValue: '',\n47:         set (username: string) {\n48:           if (utils.isChallengeEnabled(challenges.persistedXssUserChallenge)) {\n49:             username = security.sanitizeLegacy(username)\n50:           } else {\n51:             username = security.sanitizeSecure(username)\n52:           }\n53:           this.setDataValue('username', username)\n54:         }\n55:       },\n56:       email: {\n57:         type: DataTypes.STRING,\n58:         unique: true,\n59:         set (email: string) {\n60:           if (utils.isChallengeEnabled(challenges.persistedXssUserChallenge)) {\n61:             challengeUtils.solveIf(challenges.persistedXssUserChallenge, () => {\n62:               return email?.includes('<iframe src=\"javascript:alert(`xss`)\">') ?? false\n63:             })\n64:           } else {\n65:             email = security.sanitizeSecure(email)\n66:           }\n67:           this.setDataValue('email', email)\n68:         }\n69:       }, \n70:       password: {\n71:         type: DataTypes.STRING,",
+      "file": "models/user.ts",
+      "line_end": 71,
+      "line_start": 16
+    },
+    {
+      "content": "25:         let baseUser: any = {}\n26: \n27:         if (requestedFields.length > 0) {\n28:           // When fields are specified, return only those fields\n29:           for (const field of requestedFields) {\n30:             if (user?.data[field as keyof typeof user.data] !== undefined) {\n31:               baseUser[field] = user?.data[field as keyof typeof user.data]\n32:             }\n33:           }\n34:         } else {\n35:           // If no fields parameter, return standard fields (not password field)\n36:           baseUser = {\n37:             id: user?.data?.id,\n38:             email: user?.data?.email,\n39:             lastLoginIp: user?.data?.lastLoginIp,\n40:             profileImage: user?.data?.profileImage\n41:           }\n42:         }\n43: \n44:         response = { user: baseUser }\n45:       } else {\n46:         response = { user: emptyUser }\n47:       }\n48:     } catch (err) {\n49:       response = { user: emptyUser }\n50:     }\n51:     // Solve passwordHashLeakChallenge when password field is included in response\n52:     challengeUtils.solveIf(challenges.passwordHashLeakChallenge, () => response?.user?.password)\n53: \n54:     if (req.query.callback === undefined) {\n55:       res.json(response)\n56:     } else {\n57:       challengeUtils.solveIf(challenges.emailLeakChallenge, () => { return true })\n58:       res.jsonp(response)\n59:     }\n60:   }\n61: }",
+      "file": "routes/currentUser.ts",
+      "line_end": 61,
+      "line_start": 25
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import * as challengeUtils from '../lib/challengeUtils'\n7: import { type Request, type Response } from 'express'\n8: import { challenges } from '../data/datacache'\n9: import * as security from '../lib/insecurity'\n10: \n11: export function retrieveLoggedInUser () {\n12:   return (req: Request, res: Response) => {\n13:     let user\n14:     let response: any\n15:     const emptyUser = { id: undefined, email: undefined, lastLoginIp: undefined, profileImage: undefined }\n16:     try {\n17:       if (security.verify(req.cookies.token)) {\n18:         user = security.authenticatedUsers.get(req.cookies.token)\n19: \n20:         // Parse the fields parameter into an array, splitting by comma.\n21:         // If not provided, both these variables will be undefined.\n22:         const fieldsParam = req.query?.fields as string | undefined\n23:         const requestedFields = fieldsParam ? fieldsParam.split(',').map(f => f.trim()) : []\n24: \n25:         let baseUser: any = {}\n26: \n27:         if (requestedFields.length > 0) {\n28:           // When fields are specified, return only those fields\n29:           for (const field of requestedFields) {\n30:             if (user?.data[field as keyof typeof user.data] !== undefined) {\n31:               baseUser[field] = user?.data[field as keyof typeof user.data]\n32:             }\n33:           }\n34:         } else {\n35:           // If no fields parameter, return standard fields (not password field)\n36:           baseUser = {\n37:             id: user?.data?.id,\n38:             email: user?.data?.email,\n39:             lastLoginIp: user?.data?.lastLoginIp,\n40:             profileImage: user?.data?.profileImage\n41:           }\n42:         }\n43: \n44:         response = { user: baseUser }\n45:       } else {\n46:         response = { user: emptyUser }\n47:       }\n48:     } catch (err) {\n49:       response = { user: emptyUser }\n50:     }\n51:     // Solve passwordHashLeakChallenge when password field is included in response\n52:     challengeUtils.solveIf(challenges.passwordHashLeakChallenge, () => response?.user?.password)\n53: \n54:     if (req.query.callback === undefined) {\n55:       res.json(response)",
+      "file": "routes/currentUser.ts",
+      "line_end": 55,
+      "line_start": 1
+    },
+    {
+      "content": "315: \n316:   /* Configure and enable backend-side i18n */\n317:   i18n.configure({\n318:     locales: locales.map((locale: { key: string }) => locale.key),\n319:     directory: path.resolve('i18n'),\n320:     cookie: 'language',\n321:     defaultLocale: 'en',\n322:     autoReload: process.env.NODE_ENV !== 'test'\n323:   })\n324:   app.use(i18n.init)\n325: \n326:   app.use(bodyParser.urlencoded({ extended: true }))\n327:   /* File Upload */\n328:   app.post('/file-upload', uploadToMemory.single('file'), ensureFileIsPassed, metrics.observeFileUploadMetricsMiddleware(), checkUploadSize, checkFileType, handleZipFileUpload, handleXmlUpload, handleYamlUpload)\n329:   app.post('/profile/image/file', uploadToMemory.single('file'), ensureFileIsPassed, metrics.observeFileUploadMetricsMiddleware(), utils.asyncHandler(profileImageFileUpload()))\n330:   app.post('/profile/image/url', uploadToMemory.single('file'), utils.asyncHandler(profileImageUrlUpload()))\n331:   app.post('/rest/memories', uploadToDisk.single('image'), ensureFileIsPassed, security.appendUserId(), metrics.observeFileUploadMetricsMiddleware(), utils.asyncHandler(addMemory()))\n332: \n333:   app.use(bodyParser.text({ type: '*/*' }))\n334:   app.use(function jsonParser (req: Request, res: Response, next: NextFunction) {\n335:     // @ts-expect-error FIXME intentionally saving original request in this property\n336:     req.rawBody = req.body\n337:     if (req.headers['content-type']?.includes('application/json')) {\n338:       if (!req.body) {\n339:         req.body = {}\n340:       }\n341:       if (req.body !== Object(req.body)) { // Expensive workaround for 500 errors during Frisby test run (see #640)\n342:         req.body = JSON.parse(req.body)\n343:       }\n344:     }\n345:     next()\n346:   })\n347: \n348:   /* HTTP request logging */\n349:   const accessLogStream = getStream({\n350:     filename: path.resolve('logs/access.log.%DATE%'),\n351:     date_format: 'YYYY-MM-DD',\n352:     audit_file: 'logs/audit.json',\n353:     frequency: 'daily',\n354:     verbose: false,\n355:     max_logs: '2d'\n356:   })\n357:   app.use(morgan('combined', { stream: accessLogStream }))\n358: \n359:   \n360:   /* Rate limiting */\n361:   app.enable('trust proxy')\n362:   app.use('/rest/user/reset-password', rateLimit({\n363:     windowMs: 5 * 60 * 1000,\n364:     max: 100,\n365:     keyGenerator ({ headers, ip }: { headers: any, ip: any }) { return headers['X-Forwarded-For'] ?? ip } \n366:   }))\n367:   \n368: \n369:   \n370:   /** Authorization **/",
+      "file": "server.ts",
+      "line_end": 370,
+      "line_start": 315
+    }
+  ],
+  "related_files": [],
+  "remaining_candidate_budget": 20,
+  "remaining_turns": 0,
+  "route_inventory": {
+    "dynamic_routes": 1,
+    "middleware_mounts": [],
+    "omitted_routes": 0,
+    "routes": [],
+    "schema_version": "cft.express_source_map.v1"
+  },
+  "search_results": [
+    {
+      "matches": [
+        {
+          "file": "routes/chat.ts",
+          "line": 149,
+          "text": "          return await db.reviewsCollection.find({ $where: 'this.product == ' + productId }) as Review[]"
+        },
+        {
+          "file": "routes/showProductReviews.ts",
+          "line": 36,
+          "text": "    db.reviewsCollection.find({ $where: 'this.product == ' + id }).then((reviews: Review[]) => {"
+        },
+        {
+          "file": "routes/trackOrder.ts",
+          "line": 18,
+          "text": "    db.ordersCollection.find({ $where: `this.orderId === '${id}'` }).then((order: any) => {"
+        }
+      ],
+      "query": "$where"
+    },
+    {
+      "matches": [],
+      "query": "fields.*split"
+    },
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 334,
+          "text": "  app.use(function jsonParser (req: Request, res: Response, next: NextFunction) {"
+        },
+        {
+          "file": "routes/currentUser.ts",
+          "line": 58,
+          "text": "      res.jsonp(response)"
+        }
+      ],
+      "query": "jsonp"
+    }
+  ],
+  "source_snippets": []
+}

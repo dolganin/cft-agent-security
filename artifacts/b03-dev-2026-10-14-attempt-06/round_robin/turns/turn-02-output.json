@@ -1,0 +1,76 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied `req.query.q` is interpolated directly into a raw SQL string via template literal at line 23 of routes/search.ts, enabling UNION-based or boolean-based injection.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts",
+        "lib/insecurity.ts",
+        "models/index.ts"
+      ],
+      "rationale": "`criteria` is assigned from `req.query.q` (line 21), truncated to 200 chars (line 22), then embedded in a `sequelize.query()` template literal without parameterization. The only guard is length truncation which does not prevent injection. Verification: send a crafted `q` parameter with a UNION SELECT payload and observe whether additional rows appear in the JSON response.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in searchProducts"
+    },
+    {
+      "description": "The retrieveBasket handler fetches any basket by `req.params.id` without verifying the authenticated user owns it; `security.isAuthorized()` only proves a valid JWT exists.",
+      "file": "routes/basket.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 performs `BasketModel.findOne({ where: { id } })` using the raw URL parameter. The route middleware `security.isAuthorized()` (confirmed in route_inventory for /rest/basket/:id) validates JWT signature but does not bind the request to the basket owner. The challenge-detection block (lines 21-24) compares `user.bid` to the requested id but only to solve a challenge—it does not reject the response. Verification: authenticate as user A, request /rest/basket/<B's bid>, confirm basket contents are returned.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR on basket retrieval – no ownership check on /rest/basket/:id"
+    },
+    {
+      "description": "serveKeyFiles blocks forward slashes but not backslashes or bare `..`; on Windows `path.resolve` interprets `\\` as a separator, enabling reads outside encryptionkeys/.",
+      "file": "routes/keyServer.ts",
+      "line_end": 14,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/keyServer.ts"
+      ],
+      "rationale": "Line 13 checks `!file.includes('/')` which does not reject `..\\` sequences. Line 14 passes the value to `path.resolve('encryptionkeys/', file)` and `res.sendFile`. On a Windows host (or any environment where the OS treats `\\` as a path separator) a payload like `..\\server.ts` passes the guard and resolves outside the intended directory. Verification: on a Windows lab, request `/rest/keyServer/..\\package.json` and check for file content in the response.",
+      "rule_id": "path-traversal",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Insufficient path sanitization in keyServer allows directory escape on Windows"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 174,
+      "line_start": 120
+    },
+    {
+      "file": "routes/basket.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 32,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "isRedirectAllowed",
+    "redirectAllowlist",
+    "security.roles",
+    "isAccounting"
+  ],
+  "stop": false
+}

@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) instead of url.startsWith(allowedUrl), allowing attacker-crafted URLs that embed an allowed domain as a substring to bypass the allowlist and trigger res.redirect to an arbitrary destination.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 uses includes() so a URL like https://evil.com/?x=https://github.com/juice-shop/juice-shop passes the check. routes/redirect.ts line 18 then calls res.redirect(toUrl) with the full attacker URL. The isUnintendedRedirect helper on line 29 correctly uses startsWith but only gates challenge scoring, not the redirect itself.",
+      "rule_id": "open-redirect",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect via substring matching in isRedirectAllowed"
+    },
+    {
+      "description": "The upgradeToDeluxe handler reads UserId from req.body and upgrades that user's role without verifying the authenticated caller owns that UserId, unless appendUserId middleware overwrites it.",
+      "file": "routes/deluxe.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 queries UserModel by req.body.UserId with no ownership check against the JWT subject. If the route is registered without security.appendUserId() middleware, any authenticated user can set UserId to another customer's id and receive a deluxe token for that account. Need to confirm route registration in server.ts.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in deluxe upgrade allows role escalation of arbitrary users"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 470,
+      "line_start": 430
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 35,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "upgradeToDeluxe",
+    "appendUserId",
+    "/rest/deluxe-membership"
+  ],
+  "stop": false
+}

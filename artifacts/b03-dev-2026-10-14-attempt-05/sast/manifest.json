@@ -1,0 +1,2581 @@
+{
+  "diagnostics": [
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/registerAdminChallenge_2.ts:1:\n `/* Generated API endpoints */\n  finale.initialize({ app, sequelize: seq })\n\n  const autoModels = [\n    { name: 'Product', exclude: [], model: ProductModel },\n    { name: 'Feedback', exclude: [], model: FeedbackModel },\n    { name: 'BasketItem', exclude: [], model: BasketItemModel },\n    { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n    { name: 'Complaint', exclude: [], model: ComplaintModel },\n    { name: 'Recycle', exclude: [], model: RecycleModel },\n    { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },\n    { name: 'SecurityAnswer', exclude: [], model: SecurityAnswerModel },\n    { name: 'Address', exclude: [], model: AddressModel },\n    { name: 'PrivacyRequest', exclude: [], model: PrivacyRequestModel },\n    { name: 'Card', exclude: [], model: CardModel },\n    { name: 'Quantity', exclude: [], model: QuantityModel },\n    { name: 'Hint', exclude: [], model: HintModel }\n  ]\n\n  for (const { name, exclude, model, include } of autoModels) {\n    const resource = finale.resource({\n      model,\n      endpoints: [`/api/${name}s`, `/api/${name}s/:id`],\n      excludeAttributes: exclude,\n      pagination: false,\n      include\n    })` was unexpected",
+      "path": "data/static/codefixes/registerAdminChallenge_2.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/registerAdminChallenge_4.ts:1:\n `/* Generated API endpoints */\n  finale.initialize({ app, sequelize: seq })\n\n  const autoModels = [\n    { name: 'User', exclude: ['password', 'totpSecret', 'role'], model: UserModel },\n    { name: 'Product', exclude: [], model: ProductModel },\n    { name: 'Feedback', exclude: [], model: FeedbackModel },\n    { name: 'BasketItem', exclude: [], model: BasketItemModel },\n    { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n    { name: 'Complaint', exclude: [], model: ComplaintModel },\n    { name: 'Recycle', exclude: [], model: RecycleModel },\n    { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },\n    { name: 'SecurityAnswer', exclude: [], model: SecurityAnswerModel },\n    { name: 'Address', exclude: [], model: AddressModel },\n    { name: 'PrivacyRequest', exclude: [], model: PrivacyRequestModel },\n    { name: 'Card', exclude: [], model: CardModel },\n    { name: 'Quantity', exclude: [], model: QuantityModel },\n    { name: 'Hint', exclude: [], model: HintModel }\n  ]\n\n  for (const { name, exclude, model, include } of autoModels) {\n    const resource = finale.resource({\n      model,\n      endpoints: [`/api/${name}s`, `/api/${name}s/:id`],\n      excludeAttributes: exclude,\n      pagination: false,\n      include\n    })\n\n    // create a wallet when a new user is registered using API\n    if (name === 'User') {\n      resource.create.send.before((req: Request, res: Response, context: { instance: { id: any }, continue: any }) => {\n        WalletModel.create({ UserId: context.instance.id }).catch((err: unknown) => {\n          console.log(err)\n        })\n        return context.continue\n      })\n    }` was unexpected",
+      "path": "data/static/codefixes/registerAdminChallenge_4.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/registerAdminChallenge_3_correct.ts:1:\n `/* Generated API endpoints */\n  finale.initialize({ app, sequelize: seq })\n\n  const autoModels = [\n    { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n    { name: 'Product', exclude: [], model: ProductModel },\n    { name: 'Feedback', exclude: [], model: FeedbackModel },\n    { name: 'BasketItem', exclude: [], model: BasketItemModel },\n    { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n    { name: 'Complaint', exclude: [], model: ComplaintModel },\n    { name: 'Recycle', exclude: [], model: RecycleModel },\n    { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },\n    { name: 'SecurityAnswer', exclude: [], model: SecurityAnswerModel },\n    { name: 'Address', exclude: [], model: AddressModel },\n    { name: 'PrivacyRequest', exclude: [], model: PrivacyRequestModel },\n    { name: 'Card', exclude: [], model: CardModel },\n    { name: 'Quantity', exclude: [], model: QuantityModel },\n    { name: 'Hint', exclude: [], model: HintModel }\n  ]\n\n  for (const { name, exclude, model, include } of autoModels) {\n    const resource = finale.resource({\n      model,\n      endpoints: [`/api/${name}s`, `/api/${name}s/:id`],\n      excludeAttributes: exclude,\n      pagination: false,\n      include\n    })\n\n    // create a wallet when a new user is registered using API\n    if (name === 'User') {\n      resource.create.send.before((req: Request, res: Response, context: { instance: { id: any }, continue: any }) => {\n        WalletModel.create({ UserId: context.instance.id }).catch((err: unknown) => {\n          console.log(err)\n        })\n        context.instance.role = 'customer'\n        return context.continue\n      })\n    }` was unexpected",
+      "path": "data/static/codefixes/registerAdminChallenge_3_correct.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/registerAdminChallenge_1.ts:1:\n `/* Generated API endpoints */\n  finale.initialize({ app, sequelize: seq })\n\n  const autoModels = [\n    { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n    { name: 'Product', exclude: [], model: ProductModel },\n    { name: 'Feedback', exclude: [], model: FeedbackModel },\n    { name: 'BasketItem', exclude: [], model: BasketItemModel },\n    { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n    { name: 'Complaint', exclude: [], model: ComplaintModel },\n    { name: 'Recycle', exclude: [], model: RecycleModel },\n    { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },\n    { name: 'SecurityAnswer', exclude: [], model: SecurityAnswerModel },\n    { name: 'Address', exclude: [], model: AddressModel },\n    { name: 'PrivacyRequest', exclude: [], model: PrivacyRequestModel },\n    { name: 'Card', exclude: [], model: CardModel },\n    { name: 'Quantity', exclude: [], model: QuantityModel },\n    { name: 'Hint', exclude: [], model: HintModel }\n  ]\n\n  for (const { name, exclude, model, include } of autoModels) {\n    const resource = finale.resource({\n      model,\n      endpoints: [`/api/${name}s`, `/api/${name}s/:id`],\n      excludeAttributes: exclude,\n      pagination: false,\n      include\n    })\n\n    // create a wallet when a new user is registered using API\n    if (name === 'User') {\n      resource.create.send.before((req: Request, res: Response, context: { instance: { id: any }, continue: any }) => {\n        WalletModel.create({ UserId: context.instance.id }).catch((err: unknown) => {\n          console.log(err)\n        })\n        context.instance.role = context.instance.role ? context.instance.role : 'customer'\n        return context.continue\n      })\n    }` was unexpected",
+      "path": "data/static/codefixes/registerAdminChallenge_1.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/weakPasswordChallenge_3.ts:1:\n `User.init(\n      password: {\n        type: DataTypes.STRING,\n        set (clearTextPassword: string) {\n          validatePasswordHasAtLeastOneNumber(clearTextPassword)\n          validatePasswordHasAtLeastOneSpecialChar(clearTextPassword)\n          validatePasswordHasAtLeastOneUpperCaseChar(clearTextPassword)\n          validatePasswordHasAtLeastOneLowerCaseChar(clearTextPassword)\n          validatePasswordHasAtLeastTenChar(clearTextPassword)\n          this.setDataValue('password', security.hash(clearTextPassword))\n        }\n      },` was unexpected",
+      "path": "data/static/codefixes/weakPasswordChallenge_3.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/weakPasswordChallenge_2.ts:1:\n `User.init(\n      password: {\n        type: DataTypes.STRING,\n        set (clearTextPassword: string) {\n          validatePasswordHasAtLeastOneNumber(clearTextPassword)\n          validatePasswordHasAtLeastOneSpecialChar(clearTextPassword)\n          validatePasswordHasAtLeastOneUpperCaseChar(clearTextPassword)\n          validatePasswordHasAtLeastOneLowerCaseChar(clearTextPassword)\n          validatePasswordHasAtLeastTenChar(clearTextPassword)\n          validatePasswordIsNotInTopOneMillionCommonPasswordsList(clearTextPassword)\n          this.setDataValue('password', security.hash(clearTextPassword))\n        }\n      },` was unexpected",
+      "path": "data/static/codefixes/weakPasswordChallenge_2.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/weakPasswordChallenge_1_correct.ts:1:\n `User.init(\n      password: {\n        type: DataTypes.STRING,\n        set (clearTextPassword: string) {\n          validatePasswordHasAtLeastTenChar(clearTextPassword)\n          validatePasswordIsNotInTopOneMillionCommonPasswordsList(clearTextPassword)\n          this.setDataValue('password', security.hash(clearTextPassword))\n        }\n      },` was unexpected",
+      "path": "data/static/codefixes/weakPasswordChallenge_1_correct.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/weakPasswordChallenge_4.ts:1:\n `User.init(\n      password: {\n        type: DataTypes.STRING,\n        set (clearTextPassword: string) {\n          validatePasswordIsNotInTopOneMillionCommonPasswordsList(clearTextPassword)\n          this.setDataValue('password', security.hash(clearTextPassword))\n        }\n      },` was unexpected",
+      "path": "data/static/codefixes/weakPasswordChallenge_4.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginAdminChallenge_1.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    if (req.body.email.match(/.*['-;].*/) || req.body.password.match(/.*['-;].*/)) {\n      res.status(451).send(res.__('SQL Injection detected.'))\n    }\n    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginAdminChallenge_1.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginBenderChallenge_1.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    if (req.body.email.match(/.*['-;].*/) || req.body.password.match(/.*['-;].*/)) {\n      res.status(451).send(res.__('SQL Injection detected.'))\n    }\n    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginBenderChallenge_1.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginJimChallenge_4.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    if (req.body.email.match(/.*['-;].*/) || req.body.password.match(/.*['-;].*/)) {\n      res.status(451).send(res.__('SQL Injection detected.'))\n    }\n    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginJimChallenge_4.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginAdminChallenge_3.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = $1 AND password = $2 AND deletedAt IS NULL`,\n      { bind: [ req.body.email, req.body.password ], model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginAdminChallenge_3.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginAdminChallenge_4_correct.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = $1 AND password = $2 AND deletedAt IS NULL`,\n      { bind: [ req.body.email, security.hash(req.body.password) ], model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginAdminChallenge_4_correct.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginJimChallenge_1_correct.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = $1 AND password = $2 AND deletedAt IS NULL`,\n      { bind: [ req.body.email, security.hash(req.body.password) ], model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginJimChallenge_1_correct.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginAdminChallenge_2.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = $1 AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`,\n      { bind: [ req.body.email ], model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginAdminChallenge_2.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginBenderChallenge_2_correct.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = $mail AND password = $pass AND deletedAt IS NULL`,\n      { bind: { mail: req.body.email, pass: security.hash(req.body.password) }, model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginBenderChallenge_2_correct.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginBenderChallenge_4.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: false })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginBenderChallenge_4.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginJimChallenge_2.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`, { model: models.User, plain: false })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginJimChallenge_2.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginBenderChallenge_3.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = :mail AND password = '${security.hash(req.body.password || '')}' AND deletedAt IS NULL`,\n      { replacements: { mail: req.body.email }, model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginBenderChallenge_3.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/loginJimChallenge_3.ts:1:\n `export function login () {\n  function afterLogin (user: User, res: Response, next: NextFunction) {\n    BasketModel.findOrCreate({ where: { UserId: user.id } })\n      .then(([basket]: [BasketModel, boolean]) => {\n        const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n        const token = security.authorize(authenticatedUser)\n        security.authenticatedUsers.put(token, authenticatedUser)\n        res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }\n\n  return (req: Request, res: Response, next: NextFunction) => {\n    models.sequelize.query(`SELECT * FROM Users WHERE email = ? AND password = ? AND deletedAt IS NULL`,\n      { replacements: [ req.body.email, req.body.password ], model: models.User, plain: true })\n      .then((authenticatedUser) => {\n        const user = utils.queryResultToJson(authenticatedUser)\n        if (user.data?.id && user.data.totpSecret !== '') {\n          res.status(401).json({\n            status: 'totp_token_required',\n            data: {\n              tmpToken: security.authorize({\n                userId: user.data.id,\n                type: 'password_valid_needs_second_factor_token'\n              })\n            }\n          })\n        } else if (user.data?.id) {\n          afterLogin(user.data, res, next)\n        } else {\n          res.status(401).send(res.__('Invalid email or password.'))\n        }\n      }).catch((error: Error) => {\n        next(error)\n      })\n  }` was unexpected",
+      "path": "data/static/codefixes/loginJimChallenge_3.ts",
+      "type": "Syntax error"
+    },
+    {
+      "code": 2,
+      "level": "warn",
+      "message": "Timeout when running javascript.lang.security.audit.detect-non-literal-require.detect-non-literal-require on frontend/src/assets/private/three.js:\n ",
+      "path": "frontend/src/assets/private/three.js",
+      "rule_id": "javascript.lang.security.audit.detect-non-literal-require.detect-non-literal-require",
+      "type": "Timeout"
+    },
+    {
+      "code": 2,
+      "level": "warn",
+      "message": "Timeout when running javascript.lang.security.insecure-object-assign.insecure-object-assign on frontend/src/assets/private/three.js:\n ",
+      "path": "frontend/src/assets/private/three.js",
+      "rule_id": "javascript.lang.security.insecure-object-assign.insecure-object-assign",
+      "type": "Timeout"
+    },
+    {
+      "code": 2,
+      "level": "warn",
+      "message": "Timeout when running typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property on frontend/src/assets/private/three.js:\n ",
+      "path": "frontend/src/assets/private/three.js",
+      "rule_id": "typescript.react.security.audit.react-unsanitized-property.react-unsanitized-property",
+      "type": "Timeout"
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/ci.yml:281:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.curl-eval.curl-eval', `${{` was unexpected",
+      "path": ".github/workflows/ci.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 44,
+            "line": 281,
+            "offset": 13292
+          },
+          "file": ".github/workflows/ci.yml",
+          "start": {
+            "col": 41,
+            "line": 281,
+            "offset": 13289
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 44,
+              "line": 281,
+              "offset": 13292
+            },
+            "path": ".github/workflows/ci.yml",
+            "start": {
+              "col": 41,
+              "line": 281,
+              "offset": 13289
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/ci.yml:281:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell', `${{` was unexpected",
+      "path": ".github/workflows/ci.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 44,
+            "line": 281,
+            "offset": 13292
+          },
+          "file": ".github/workflows/ci.yml",
+          "start": {
+            "col": 41,
+            "line": 281,
+            "offset": 13289
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 44,
+              "line": 281,
+              "offset": 13292
+            },
+            "path": ".github/workflows/ci.yml",
+            "start": {
+              "col": 41,
+              "line": 281,
+              "offset": 13289
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/frontend-bundle-analysis.yml:49:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.curl-eval.curl-eval', `{ github.workspace` was unexpected",
+      "path": ".github/workflows/frontend-bundle-analysis.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 50,
+            "line": 49,
+            "offset": 1100
+          },
+          "file": ".github/workflows/frontend-bundle-analysis.yml",
+          "start": {
+            "col": 32,
+            "line": 49,
+            "offset": 1082
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 50,
+              "line": 49,
+              "offset": 1100
+            },
+            "path": ".github/workflows/frontend-bundle-analysis.yml",
+            "start": {
+              "col": 32,
+              "line": 49,
+              "offset": 1082
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/frontend-bundle-analysis.yml:49:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell', `{ github.workspace` was unexpected",
+      "path": ".github/workflows/frontend-bundle-analysis.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 50,
+            "line": 49,
+            "offset": 1100
+          },
+          "file": ".github/workflows/frontend-bundle-analysis.yml",
+          "start": {
+            "col": 32,
+            "line": 49,
+            "offset": 1082
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 50,
+              "line": 49,
+              "offset": 1100
+            },
+            "path": ".github/workflows/frontend-bundle-analysis.yml",
+            "start": {
+              "col": 32,
+              "line": 49,
+              "offset": 1082
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/frontend-bundle-analysis.yml:64:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.curl-eval.curl-eval', `\"R`Ty Update bundle analysis screenshot\" -s\ngit push origin master\n` was unexpected",
+      "path": ".github/workflows/frontend-bundle-analysis.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 24,
+            "line": 65,
+            "offset": 1938
+          },
+          "file": ".github/workflows/frontend-bundle-analysis.yml",
+          "start": {
+            "col": 64,
+            "line": 64,
+            "offset": 1871
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 24,
+              "line": 65,
+              "offset": 1938
+            },
+            "path": ".github/workflows/frontend-bundle-analysis.yml",
+            "start": {
+              "col": 64,
+              "line": 64,
+              "offset": 1871
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/frontend-bundle-analysis.yml:64:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell', `\"R`Ty Update bundle analysis screenshot\" -s\ngit push origin master\n` was unexpected",
+      "path": ".github/workflows/frontend-bundle-analysis.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 24,
+            "line": 65,
+            "offset": 1938
+          },
+          "file": ".github/workflows/frontend-bundle-analysis.yml",
+          "start": {
+            "col": 64,
+            "line": 64,
+            "offset": 1871
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 24,
+              "line": 65,
+              "offset": 1938
+            },
+            "path": ".github/workflows/frontend-bundle-analysis.yml",
+            "start": {
+              "col": 64,
+              "line": 64,
+              "offset": 1871
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/release.yml:53:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.curl-eval.curl-eval', `${{` was unexpected",
+      "path": ".github/workflows/release.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 44,
+            "line": 53,
+            "offset": 1668
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 41,
+            "line": 53,
+            "offset": 1665
+          }
+        },
+        {
+          "end": {
+            "col": 44,
+            "line": 54,
+            "offset": 1668
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 41,
+            "line": 54,
+            "offset": 1665
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 44,
+              "line": 53,
+              "offset": 1668
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 41,
+              "line": 53,
+              "offset": 1665
+            }
+          },
+          {
+            "end": {
+              "col": 44,
+              "line": 54,
+              "offset": 1668
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 41,
+              "line": 54,
+              "offset": 1665
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/release.yml:53:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell', `${{` was unexpected",
+      "path": ".github/workflows/release.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 44,
+            "line": 53,
+            "offset": 1668
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 41,
+            "line": 53,
+            "offset": 1665
+          }
+        },
+        {
+          "end": {
+            "col": 44,
+            "line": 54,
+            "offset": 1668
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 41,
+            "line": 54,
+            "offset": 1665
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 44,
+              "line": 53,
+              "offset": 1668
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 41,
+              "line": 53,
+              "offset": 1665
+            }
+          },
+          {
+            "end": {
+              "col": 44,
+              "line": 54,
+              "offset": 1668
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 41,
+              "line": 54,
+              "offset": 1665
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/release.yml:58:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.curl-eval.curl-eval', `{ matrix.os.pckg-os` was unexpected",
+      "path": ".github/workflows/release.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 55,
+            "line": 58,
+            "offset": 1920
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 36,
+            "line": 58,
+            "offset": 1901
+          }
+        },
+        {
+          "end": {
+            "col": 43,
+            "line": 59,
+            "offset": 1921
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 23,
+            "line": 59,
+            "offset": 1901
+          }
+        },
+        {
+          "end": {
+            "col": 44,
+            "line": 60,
+            "offset": 1924
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 21,
+            "line": 60,
+            "offset": 1901
+          }
+        },
+        {
+          "end": {
+            "col": 48,
+            "line": 61,
+            "offset": 1922
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 27,
+            "line": 61,
+            "offset": 1901
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 55,
+              "line": 58,
+              "offset": 1920
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 36,
+              "line": 58,
+              "offset": 1901
+            }
+          },
+          {
+            "end": {
+              "col": 43,
+              "line": 59,
+              "offset": 1921
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 23,
+              "line": 59,
+              "offset": 1901
+            }
+          },
+          {
+            "end": {
+              "col": 44,
+              "line": 60,
+              "offset": 1924
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 21,
+              "line": 60,
+              "offset": 1901
+            }
+          },
+          {
+            "end": {
+              "col": 48,
+              "line": 61,
+              "offset": 1922
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 27,
+              "line": 61,
+              "offset": 1901
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/release.yml:58:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell', `{ matrix.os.pckg-os` was unexpected",
+      "path": ".github/workflows/release.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 55,
+            "line": 58,
+            "offset": 1920
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 36,
+            "line": 58,
+            "offset": 1901
+          }
+        },
+        {
+          "end": {
+            "col": 43,
+            "line": 59,
+            "offset": 1921
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 23,
+            "line": 59,
+            "offset": 1901
+          }
+        },
+        {
+          "end": {
+            "col": 44,
+            "line": 60,
+            "offset": 1924
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 21,
+            "line": 60,
+            "offset": 1901
+          }
+        },
+        {
+          "end": {
+            "col": 48,
+            "line": 61,
+            "offset": 1922
+          },
+          "file": ".github/workflows/release.yml",
+          "start": {
+            "col": 27,
+            "line": 61,
+            "offset": 1901
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 55,
+              "line": 58,
+              "offset": 1920
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 36,
+              "line": 58,
+              "offset": 1901
+            }
+          },
+          {
+            "end": {
+              "col": 43,
+              "line": 59,
+              "offset": 1921
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 23,
+              "line": 59,
+              "offset": 1901
+            }
+          },
+          {
+            "end": {
+              "col": 44,
+              "line": 60,
+              "offset": 1924
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 21,
+              "line": 60,
+              "offset": 1901
+            }
+          },
+          {
+            "end": {
+              "col": 48,
+              "line": 61,
+              "offset": 1922
+            },
+            "path": ".github/workflows/release.yml",
+            "start": {
+              "col": 27,
+              "line": 61,
+              "offset": 1901
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/update-challenges-ebook.yml:24:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.curl-eval.curl-eval', `${{` was unexpected",
+      "path": ".github/workflows/update-challenges-ebook.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 65,
+            "line": 24,
+            "offset": 589
+          },
+          "file": ".github/workflows/update-challenges-ebook.yml",
+          "start": {
+            "col": 62,
+            "line": 24,
+            "offset": 586
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 65,
+              "line": 24,
+              "offset": 589
+            },
+            "path": ".github/workflows/update-challenges-ebook.yml",
+            "start": {
+              "col": 62,
+              "line": 24,
+              "offset": 586
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line .github/workflows/update-challenges-ebook.yml:24:\n When parsing a snippet as Bash for metavariable-pattern in rule 'yaml.github-actions.security.gha-curl-pipe-shell.gha-curl-pipe-shell', `${{` was unexpected",
+      "path": ".github/workflows/update-challenges-ebook.yml",
+      "spans": [
+        {
+          "end": {
+            "col": 65,
+            "line": 24,
+            "offset": 589
+          },
+          "file": ".github/workflows/update-challenges-ebook.yml",
+          "start": {
+            "col": 62,
+            "line": 24,
+            "offset": 586
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 65,
+              "line": 24,
+              "offset": 589
+            },
+            "path": ".github/workflows/update-challenges-ebook.yml",
+            "start": {
+              "col": 62,
+              "line": 24,
+              "offset": 586
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/chatbotPromptInjectionChallenge_1.ts:11:\n `}` was unexpected",
+      "path": "data/static/codefixes/chatbotPromptInjectionChallenge_1.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 6,
+            "line": 11,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_1.ts",
+          "start": {
+            "col": 5,
+            "line": 11,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 6,
+              "line": 11,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/chatbotPromptInjectionChallenge_1.ts",
+            "start": {
+              "col": 5,
+              "line": 11,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts:15:\n `: tool` was unexpected",
+      "path": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 25,
+            "line": 15,
+            "offset": 6
+          },
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+          "start": {
+            "col": 19,
+            "line": 15,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 6,
+            "line": 35,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+          "start": {
+            "col": 5,
+            "line": 35,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 25,
+              "line": 15,
+              "offset": 6
+            },
+            "path": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+            "start": {
+              "col": 19,
+              "line": 15,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 6,
+              "line": 35,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/chatbotPromptInjectionChallenge_2_correct.ts",
+            "start": {
+              "col": 5,
+              "line": 35,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/chatbotPromptInjectionChallenge_3.ts:15:\n `}` was unexpected",
+      "path": "data/static/codefixes/chatbotPromptInjectionChallenge_3.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 6,
+            "line": 15,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_3.ts",
+          "start": {
+            "col": 5,
+            "line": 15,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 6,
+              "line": 15,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/chatbotPromptInjectionChallenge_3.ts",
+            "start": {
+              "col": 5,
+              "line": 15,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/chatbotPromptInjectionChallenge_4.ts:16:\n `}` was unexpected",
+      "path": "data/static/codefixes/chatbotPromptInjectionChallenge_4.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 6,
+            "line": 16,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/chatbotPromptInjectionChallenge_4.ts",
+          "start": {
+            "col": 5,
+            "line": 16,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 6,
+              "line": 16,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/chatbotPromptInjectionChallenge_4.ts",
+            "start": {
+              "col": 5,
+              "line": 16,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/restfulXssChallenge_2.ts:44:\n `: any[]` was unexpected",
+      "path": "data/static/codefixes/restfulXssChallenge_2.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 45,
+            "line": 44,
+            "offset": 7
+          },
+          "file": "data/static/codefixes/restfulXssChallenge_2.ts",
+          "start": {
+            "col": 38,
+            "line": 44,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 45,
+              "line": 44,
+              "offset": 7
+            },
+            "path": "data/static/codefixes/restfulXssChallenge_2.ts",
+            "start": {
+              "col": 38,
+              "line": 44,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/restfulXssChallenge_3.ts:44:\n `: any[]` was unexpected",
+      "path": "data/static/codefixes/restfulXssChallenge_3.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 44,
+            "line": 44,
+            "offset": 7
+          },
+          "file": "data/static/codefixes/restfulXssChallenge_3.ts",
+          "start": {
+            "col": 37,
+            "line": 44,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 44,
+              "line": 44,
+              "offset": 7
+            },
+            "path": "data/static/codefixes/restfulXssChallenge_3.ts",
+            "start": {
+              "col": 37,
+              "line": 44,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/restfulXssChallenge_4.ts:44:\n `: any[]` was unexpected",
+      "path": "data/static/codefixes/restfulXssChallenge_4.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 44,
+            "line": 44,
+            "offset": 7
+          },
+          "file": "data/static/codefixes/restfulXssChallenge_4.ts",
+          "start": {
+            "col": 37,
+            "line": 44,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 44,
+              "line": 44,
+              "offset": 7
+            },
+            "path": "data/static/codefixes/restfulXssChallenge_4.ts",
+            "start": {
+              "col": 37,
+              "line": 44,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/tokenSaleChallenge_1.ts:22:\n `]` was unexpected",
+      "path": "data/static/codefixes/tokenSaleChallenge_1.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 2,
+            "line": 22,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/tokenSaleChallenge_1.ts",
+          "start": {
+            "col": 1,
+            "line": 22,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 2,
+              "line": 22,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/tokenSaleChallenge_1.ts",
+            "start": {
+              "col": 1,
+              "line": 22,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/tokenSaleChallenge_2.ts:23:\n `]` was unexpected",
+      "path": "data/static/codefixes/tokenSaleChallenge_2.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 2,
+            "line": 23,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/tokenSaleChallenge_2.ts",
+          "start": {
+            "col": 1,
+            "line": 23,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 2,
+              "line": 23,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/tokenSaleChallenge_2.ts",
+            "start": {
+              "col": 1,
+              "line": 23,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line data/static/codefixes/tokenSaleChallenge_3_correct.ts:18:\n `]` was unexpected",
+      "path": "data/static/codefixes/tokenSaleChallenge_3_correct.ts",
+      "spans": [
+        {
+          "end": {
+            "col": 2,
+            "line": 18,
+            "offset": 1
+          },
+          "file": "data/static/codefixes/tokenSaleChallenge_3_correct.ts",
+          "start": {
+            "col": 1,
+            "line": 18,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 2,
+              "line": 18,
+              "offset": 1
+            },
+            "path": "data/static/codefixes/tokenSaleChallenge_3_correct.ts",
+            "start": {
+              "col": 1,
+              "line": 18,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/coding-challenge-page/coding-challenge-page.component.html:16:\n `&& snippet !== null) {` was unexpected",
+      "path": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 39,
+            "line": 16,
+            "offset": 22
+          },
+          "file": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+          "start": {
+            "col": 17,
+            "line": 16,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 41,
+            "line": 29,
+            "offset": 20
+          },
+          "file": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+          "start": {
+            "col": 21,
+            "line": 29,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 63,
+            "line": 39,
+            "offset": 34
+          },
+          "file": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+          "start": {
+            "col": 29,
+            "line": 39,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 39,
+              "line": 16,
+              "offset": 22
+            },
+            "path": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+            "start": {
+              "col": 17,
+              "line": 16,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 41,
+              "line": 29,
+              "offset": 20
+            },
+            "path": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+            "start": {
+              "col": 21,
+              "line": 29,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 63,
+              "line": 39,
+              "offset": 34
+            },
+            "path": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.html",
+            "start": {
+              "col": 29,
+              "line": 39,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/deluxe-user/deluxe-user.component.html:6:\n `@if (error) {` was unexpected",
+      "path": "frontend/src/app/deluxe-user/deluxe-user.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 14,
+            "line": 6,
+            "offset": 13
+          },
+          "file": "frontend/src/app/deluxe-user/deluxe-user.component.html",
+          "start": {
+            "col": 1,
+            "line": 6,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 2,
+            "line": 10,
+            "offset": 1
+          },
+          "file": "frontend/src/app/deluxe-user/deluxe-user.component.html",
+          "start": {
+            "col": 1,
+            "line": 10,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 14,
+              "line": 6,
+              "offset": 13
+            },
+            "path": "frontend/src/app/deluxe-user/deluxe-user.component.html",
+            "start": {
+              "col": 1,
+              "line": 6,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 2,
+              "line": 10,
+              "offset": 1
+            },
+            "path": "frontend/src/app/deluxe-user/deluxe-user.component.html",
+            "start": {
+              "col": 1,
+              "line": 10,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/forgot-password/forgot-password.component.html:31:\n `&& emailControl.errors.required) {` was unexpected",
+      "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 73,
+            "line": 31,
+            "offset": 34
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 39,
+            "line": 31,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 70,
+            "line": 34,
+            "offset": 31
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 39,
+            "line": 34,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 97,
+            "line": 51,
+            "offset": 45
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 52,
+            "line": 51,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 83,
+            "line": 67,
+            "offset": 37
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 46,
+            "line": 67,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 97,
+            "line": 79,
+            "offset": 43
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 54,
+            "line": 79,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 96,
+            "line": 84,
+            "offset": 42
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 54,
+            "line": 84,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 144,
+            "line": 89,
+            "offset": 90
+          },
+          "file": "frontend/src/app/forgot-password/forgot-password.component.html",
+          "start": {
+            "col": 54,
+            "line": 89,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 73,
+              "line": 31,
+              "offset": 34
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 39,
+              "line": 31,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 70,
+              "line": 34,
+              "offset": 31
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 39,
+              "line": 34,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 97,
+              "line": 51,
+              "offset": 45
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 52,
+              "line": 51,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 83,
+              "line": 67,
+              "offset": 37
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 46,
+              "line": 67,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 97,
+              "line": 79,
+              "offset": 43
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 54,
+              "line": 79,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 96,
+              "line": 84,
+              "offset": 42
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 54,
+              "line": 84,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 144,
+              "line": 89,
+              "offset": 90
+            },
+            "path": "frontend/src/app/forgot-password/forgot-password.component.html",
+            "start": {
+              "col": 54,
+              "line": 89,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/order-completion/order-completion.component.html:15:\n `&& orderDetails.eta !== undefined) {` was unexpected",
+      "path": "frontend/src/app/order-completion/order-completion.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 77,
+            "line": 15,
+            "offset": 36
+          },
+          "file": "frontend/src/app/order-completion/order-completion.component.html",
+          "start": {
+            "col": 41,
+            "line": 15,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 77,
+              "line": 15,
+              "offset": 36
+            },
+            "path": "frontend/src/app/order-completion/order-completion.component.html",
+            "start": {
+              "col": 41,
+              "line": 15,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/payment-method/payment-method.component.html:54:\n `&& nameControl.errors.required) {` was unexpected",
+      "path": "frontend/src/app/payment-method/payment-method.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 69,
+            "line": 54,
+            "offset": 33
+          },
+          "file": "frontend/src/app/payment-method/payment-method.component.html",
+          "start": {
+            "col": 36,
+            "line": 54,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 73,
+            "line": 64,
+            "offset": 35
+          },
+          "file": "frontend/src/app/payment-method/payment-method.component.html",
+          "start": {
+            "col": 38,
+            "line": 64,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 98,
+            "line": 69,
+            "offset": 60
+          },
+          "file": "frontend/src/app/payment-method/payment-method.component.html",
+          "start": {
+            "col": 38,
+            "line": 69,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 71,
+            "line": 82,
+            "offset": 34
+          },
+          "file": "frontend/src/app/payment-method/payment-method.component.html",
+          "start": {
+            "col": 37,
+            "line": 82,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 69,
+            "line": 95,
+            "offset": 33
+          },
+          "file": "frontend/src/app/payment-method/payment-method.component.html",
+          "start": {
+            "col": 36,
+            "line": 95,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 69,
+              "line": 54,
+              "offset": 33
+            },
+            "path": "frontend/src/app/payment-method/payment-method.component.html",
+            "start": {
+              "col": 36,
+              "line": 54,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 73,
+              "line": 64,
+              "offset": 35
+            },
+            "path": "frontend/src/app/payment-method/payment-method.component.html",
+            "start": {
+              "col": 38,
+              "line": 64,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 98,
+              "line": 69,
+              "offset": 60
+            },
+            "path": "frontend/src/app/payment-method/payment-method.component.html",
+            "start": {
+              "col": 38,
+              "line": 69,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 71,
+              "line": 82,
+              "offset": 34
+            },
+            "path": "frontend/src/app/payment-method/payment-method.component.html",
+            "start": {
+              "col": 37,
+              "line": 82,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 69,
+              "line": 95,
+              "offset": 33
+            },
+            "path": "frontend/src/app/payment-method/payment-method.component.html",
+            "start": {
+              "col": 36,
+              "line": 95,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/payment/payment.component.html:42:\n `&& !couponControl.dirty) {` was unexpected",
+      "path": "frontend/src/app/payment/payment.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 57,
+            "line": 42,
+            "offset": 26
+          },
+          "file": "frontend/src/app/payment/payment.component.html",
+          "start": {
+            "col": 31,
+            "line": 42,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 50,
+            "line": 47,
+            "offset": 26
+          },
+          "file": "frontend/src/app/payment/payment.component.html",
+          "start": {
+            "col": 24,
+            "line": 47,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 108,
+            "line": 58,
+            "offset": 72
+          },
+          "file": "frontend/src/app/payment/payment.component.html",
+          "start": {
+            "col": 36,
+            "line": 58,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 55,
+            "line": 160,
+            "offset": 23
+          },
+          "file": "frontend/src/app/payment/payment.component.html",
+          "start": {
+            "col": 32,
+            "line": 160,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 57,
+              "line": 42,
+              "offset": 26
+            },
+            "path": "frontend/src/app/payment/payment.component.html",
+            "start": {
+              "col": 31,
+              "line": 42,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 50,
+              "line": 47,
+              "offset": 26
+            },
+            "path": "frontend/src/app/payment/payment.component.html",
+            "start": {
+              "col": 24,
+              "line": 47,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 108,
+              "line": 58,
+              "offset": 72
+            },
+            "path": "frontend/src/app/payment/payment.component.html",
+            "start": {
+              "col": 36,
+              "line": 58,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 55,
+              "line": 160,
+              "offset": 23
+            },
+            "path": "frontend/src/app/payment/payment.component.html",
+            "start": {
+              "col": 32,
+              "line": 160,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/photo-wall/photo-wall.component.html:82:\n `&& imagePreview && form.get('image').valid) {` was unexpected",
+      "path": "frontend/src/app/photo-wall/photo-wall.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 85,
+            "line": 82,
+            "offset": 45
+          },
+          "file": "frontend/src/app/photo-wall/photo-wall.component.html",
+          "start": {
+            "col": 40,
+            "line": 82,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 85,
+              "line": 82,
+              "offset": 45
+            },
+            "path": "frontend/src/app/photo-wall/photo-wall.component.html",
+            "start": {
+              "col": 40,
+              "line": 82,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/privacy-policy/privacy-policy.component.html:58:\n `& Cookies Data` was unexpected",
+      "path": "frontend/src/app/privacy-policy/privacy-policy.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 39,
+            "line": 58,
+            "offset": 14
+          },
+          "file": "frontend/src/app/privacy-policy/privacy-policy.component.html",
+          "start": {
+            "col": 25,
+            "line": 58,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 39,
+              "line": 58,
+              "offset": 14
+            },
+            "path": "frontend/src/app/privacy-policy/privacy-policy.component.html",
+            "start": {
+              "col": 25,
+              "line": 58,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/product-details/product-details.component.html:20:\n `> 0) {` was unexpected",
+      "path": "frontend/src/app/product-details/product-details.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 46,
+            "line": 20,
+            "offset": 6
+          },
+          "file": "frontend/src/app/product-details/product-details.component.html",
+          "start": {
+            "col": 40,
+            "line": 20,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 45,
+            "line": 46,
+            "offset": 7
+          },
+          "file": "frontend/src/app/product-details/product-details.component.html",
+          "start": {
+            "col": 38,
+            "line": 46,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 46,
+              "line": 20,
+              "offset": 6
+            },
+            "path": "frontend/src/app/product-details/product-details.component.html",
+            "start": {
+              "col": 40,
+              "line": 20,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 45,
+              "line": 46,
+              "offset": 7
+            },
+            "path": "frontend/src/app/product-details/product-details.component.html",
+            "start": {
+              "col": 38,
+              "line": 46,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/register/register.component.html:20:\n `&& emailControl.errors.required) {` was unexpected",
+      "path": "frontend/src/app/register/register.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 73,
+            "line": 20,
+            "offset": 34
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 39,
+            "line": 20,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 70,
+            "line": 23,
+            "offset": 31
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 39,
+            "line": 23,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 81,
+            "line": 37,
+            "offset": 37
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 44,
+            "line": 37,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 120,
+            "line": 41,
+            "offset": 76
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 44,
+            "line": 41,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 95,
+            "line": 53,
+            "offset": 43
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 52,
+            "line": 53,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 94,
+            "line": 58,
+            "offset": 42
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 52,
+            "line": 58,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 101,
+            "line": 96,
+            "offset": 45
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 56,
+            "line": 96,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 99,
+            "line": 108,
+            "offset": 43
+          },
+          "file": "frontend/src/app/register/register.component.html",
+          "start": {
+            "col": 56,
+            "line": 108,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 73,
+              "line": 20,
+              "offset": 34
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 39,
+              "line": 20,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 70,
+              "line": 23,
+              "offset": 31
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 39,
+              "line": 23,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 81,
+              "line": 37,
+              "offset": 37
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 44,
+              "line": 37,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 120,
+              "line": 41,
+              "offset": 76
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 44,
+              "line": 41,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 95,
+              "line": 53,
+              "offset": 43
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 52,
+              "line": 53,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 94,
+              "line": 58,
+              "offset": 42
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 52,
+              "line": 58,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 101,
+              "line": 96,
+              "offset": 45
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 56,
+              "line": 96,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 99,
+              "line": 108,
+              "offset": 43
+            },
+            "path": "frontend/src/app/register/register.component.html",
+            "start": {
+              "col": 56,
+              "line": 108,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/score-board/components/challenge-card/challenge-card.component.html:26:\n `&& challenge().disabledEnv !== 'safetyMode') {` was unexpected",
+      "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 89,
+            "line": 26,
+            "offset": 46
+          },
+          "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+          "start": {
+            "col": 43,
+            "line": 26,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 120,
+            "line": 37,
+            "offset": 36
+          },
+          "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+          "start": {
+            "col": 84,
+            "line": 37,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 60,
+            "line": 53,
+            "offset": 24
+          },
+          "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+          "start": {
+            "col": 36,
+            "line": 53,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 90,
+            "line": 60,
+            "offset": 61
+          },
+          "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+          "start": {
+            "col": 29,
+            "line": 60,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 104,
+            "line": 68,
+            "offset": 39
+          },
+          "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+          "start": {
+            "col": 65,
+            "line": 68,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 43,
+            "line": 75,
+            "offset": 6
+          },
+          "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+          "start": {
+            "col": 37,
+            "line": 75,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 89,
+              "line": 26,
+              "offset": 46
+            },
+            "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+            "start": {
+              "col": 43,
+              "line": 26,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 120,
+              "line": 37,
+              "offset": 36
+            },
+            "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+            "start": {
+              "col": 84,
+              "line": 37,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 60,
+              "line": 53,
+              "offset": 24
+            },
+            "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+            "start": {
+              "col": 36,
+              "line": 53,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 90,
+              "line": 60,
+              "offset": 61
+            },
+            "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+            "start": {
+              "col": 29,
+              "line": 60,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 104,
+              "line": 68,
+              "offset": 39
+            },
+            "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+            "start": {
+              "col": 65,
+              "line": 68,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 43,
+              "line": 75,
+              "offset": 6
+            },
+            "path": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.html",
+            "start": {
+              "col": 37,
+              "line": 75,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/sidenav/sidenav.component.html:42:\n `&& isAccounting()) {` was unexpected",
+      "path": "frontend/src/app/sidenav/sidenav.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 43,
+            "line": 42,
+            "offset": 20
+          },
+          "file": "frontend/src/app/sidenav/sidenav.component.html",
+          "start": {
+            "col": 23,
+            "line": 42,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 56,
+            "line": 278,
+            "offset": 29
+          },
+          "file": "frontend/src/app/sidenav/sidenav.component.html",
+          "start": {
+            "col": 27,
+            "line": 278,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 43,
+              "line": 42,
+              "offset": 20
+            },
+            "path": "frontend/src/app/sidenav/sidenav.component.html",
+            "start": {
+              "col": 23,
+              "line": 42,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 56,
+              "line": 278,
+              "offset": 29
+            },
+            "path": "frontend/src/app/sidenav/sidenav.component.html",
+            "start": {
+              "col": 27,
+              "line": 278,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "code": 3,
+      "level": "warn",
+      "message": "Syntax error at line frontend/src/app/wallet/wallet.component.html:24:\n `&& balanceControl.errors.required) {` was unexpected",
+      "path": "frontend/src/app/wallet/wallet.component.html",
+      "spans": [
+        {
+          "end": {
+            "col": 71,
+            "line": 24,
+            "offset": 36
+          },
+          "file": "frontend/src/app/wallet/wallet.component.html",
+          "start": {
+            "col": 35,
+            "line": 24,
+            "offset": 0
+          }
+        },
+        {
+          "end": {
+            "col": 97,
+            "line": 29,
+            "offset": 62
+          },
+          "file": "frontend/src/app/wallet/wallet.component.html",
+          "start": {
+            "col": 35,
+            "line": 29,
+            "offset": 0
+          }
+        }
+      ],
+      "type": [
+        "PartialParsing",
+        [
+          {
+            "end": {
+              "col": 71,
+              "line": 24,
+              "offset": 36
+            },
+            "path": "frontend/src/app/wallet/wallet.component.html",
+            "start": {
+              "col": 35,
+              "line": 24,
+              "offset": 0
+            }
+          },
+          {
+            "end": {
+              "col": 97,
+              "line": 29,
+              "offset": 62
+            },
+            "path": "frontend/src/app/wallet/wallet.component.html",
+            "start": {
+              "col": 35,
+              "line": 29,
+              "offset": 0
+            }
+          }
+        ]
+      ]
+    }
+  ],
+  "exit_code": 0,
+  "image": "semgrep/semgrep@sha256:f1f7b71861c7b28b6e0f661225a2c4f58a484f5d0f182465c6d6b3b22f972ade",
+  "original_stdout_sha256": "1e6a3e4dd2a5ae5ff6b6c52469c256e0def9f676ccaf4cf66dc7cf84d543988f",
+  "redaction": "extra.lines only",
+  "reuse_raw_sha256": "b0c68813ccd91f0b0d7235ac1c8ca9d5acf7ca4d7ac375fbe0f4554bf80aa2cf",
+  "reused_from": "b03-dev-2026-10-14-attempt-02",
+  "rules_sha256": "a1d0c4640085395aa39d09389d9cff7e673184daaa713b3f49f02806f0272dc6",
+  "seconds": 283.341
+}

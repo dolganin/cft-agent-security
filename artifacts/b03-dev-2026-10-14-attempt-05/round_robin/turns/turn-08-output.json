@@ -1,0 +1,83 @@
+{
+  "candidates": [
+    {
+      "description": "checkFileType in routes/fileUpload.ts always calls next() regardless of file extension, making the type restriction advisory only and allowing arbitrary file types through.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 68,
+      "line_start": 63,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "The middleware computes fileType and calls challengeUtils.solveIf but unconditionally invokes next() at line 67. No res.status or return prevents the request from continuing. Any file extension passes through to subsequent handlers.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "File type validation middleware never blocks uploads"
+    },
+    {
+      "description": "resetPassword stores the new password directly via user.update without hashing, persisting credentials in cleartext.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 44,
+      "provenance_paths": [
+        "routes/resetPassword.ts"
+      ],
+      "rationale": "Line 44 calls user.update({ password: newPassword }) with the raw body value. No bcrypt, argon2, or any hash function is applied before persistence, unlike the login flow which uses security.hashPassword.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password stored in plaintext during reset"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/basketItems.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/updateUserProfile.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/authenticatedUsers.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "routes/trackOrder.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/changePassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "hashPassword",
+    "bcrypt",
+    "sanitize",
+    "helmet"
+  ],
+  "stop": false
+}

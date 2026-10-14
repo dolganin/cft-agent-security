@@ -1,0 +1,52 @@
+{
+  "candidates": [
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) instead of exact or prefix matching, allowing attacker-controlled URLs that contain an allowed URL as a substring to pass validation.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 136 uses includes() so a URL like https://github.com/juice-shop/juice-shop.attacker.com passes the check. Unknown precondition: must confirm routes/redirect.ts consumes this function without additional validation. Verification: request redirect to a crafted URL containing an allowlisted prefix and observe 302 to attacker domain.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Substring-based allowlist bypass in isRedirectAllowed"
+    },
+    {
+      "description": "The addMemory handler concatenates req.file.filename directly into the stored imagePath without applying sanitizeFilename, which is available in the same codebase.",
+      "file": "routes/memory.ts",
+      "line_end": 14,
+      "line_start": 14,
+      "provenance_paths": [
+        "routes/memory.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 14 builds imagePath as 'assets/public/images/uploads/' + req.file?.filename with no sanitization call. The codebase exports sanitizeFilename (lib/insecurity.ts:60) but it is not invoked here. Unknown precondition: multer diskStorage config may already strip path separators; must inspect uploadToDisk definition. Verification: upload a file with a crafted filename containing ../ and check if the stored imagePath escapes the uploads directory.",
+      "rule_id": "path-traversal",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Unsanitized multer filename concatenated into memory imagePath"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 40,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "uploadToDisk",
+    "isRedirectAllowed"
+  ],
+  "stop": false
+}

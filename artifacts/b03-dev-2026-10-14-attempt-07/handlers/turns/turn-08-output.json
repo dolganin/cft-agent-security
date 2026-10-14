@@ -1,0 +1,72 @@
+{
+  "candidates": [
+    {
+      "description": "The chat route constructs a MongoDB $where query by concatenating user-supplied productId directly into a JavaScript expression string, allowing arbitrary code execution within the MongoDB query context.",
+      "file": "routes/chat.ts",
+      "line_end": 149,
+      "line_start": 149,
+      "provenance_paths": [
+        "routes/chat.ts"
+      ],
+      "rationale": "Line 149 builds `$where: 'this.product == ' + productId` where productId originates from user input. The $where operator evaluates a JavaScript expression server-side, so injecting a payload like `1; sleep(5000)` or `1; this.constructor.constructor('return process')()` achieves code execution. Verification: send a crafted productId with a timing payload and observe response delay.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in chat route"
+    },
+    {
+      "description": "The trackOrder route interpolates user-supplied id into a MongoDB $where JavaScript expression using a template literal, enabling injection of arbitrary JavaScript evaluated by the database.",
+      "file": "routes/trackOrder.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/trackOrder.ts"
+      ],
+      "rationale": "Line 18 uses `$where: \\`this.orderId === '${id}'\\`` where id comes from req.params or req.query. An attacker can break out of the string literal with a single quote and inject JavaScript. Verification: send id=`x' || '1'=='1` and observe if all orders are returned instead of none.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in trackOrder route"
+    },
+    {
+      "description": "The /dataerasure route is registered with no preceding authentication or authorization middleware, potentially allowing unauthenticated users to trigger data deletion.",
+      "file": "routes/dataErasure.ts",
+      "line_end": 74,
+      "line_start": 74,
+      "provenance_paths": [
+        "routes/dataErasure.ts"
+      ],
+      "rationale": "Route inventory shows /dataerasure has empty middleware_before list, meaning no JWT or session check precedes the handler. The handler likely performs destructive operations (data deletion). Verification: send a POST to /dataerasure without an Authorization header and check if the operation succeeds or returns 401.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Data erasure endpoint mounted without authentication middleware"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/chat.ts",
+      "line_end": 160,
+      "line_start": 140
+    },
+    {
+      "file": "routes/trackOrder.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 80,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "$where.*find",
+    "dataErasure.*router",
+    "productId.*req"
+  ],
+  "stop": false
+}

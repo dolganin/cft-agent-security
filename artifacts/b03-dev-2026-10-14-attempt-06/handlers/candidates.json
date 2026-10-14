@@ -1,0 +1,305 @@
+{
+  "candidates": [
+    {
+      "description": "The login handler builds a raw SQL query using template-literal interpolation of req.body.email directly into the WHERE clause, allowing an attacker to inject arbitrary SQL.",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts"
+      ],
+      "rationale": "Line 34 uses sequelize.query with a template literal embedding req.body.email without parameterization. The email value flows from POST body directly into the SQL string. Verification: send a crafted email payload like \"' OR '1'='1\" and observe whether the query returns unintended rows or causes a SQL error.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized email interpolation in login query"
+    },
+    {
+      "description": "User-supplied query parameter `q` is directly interpolated into a raw SQL SELECT statement without parameterization or escaping, allowing arbitrary SQL execution.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "`criteria` is assigned from `req.query.q` (line 21-22) then interpolated into a template literal passed to `sequelize.query()` (line 23). No parameterized binding or escaping is applied. Verification: send a crafted `q` value like `' UNION SELECT ...` and observe whether the response reflects injected data or causes a SQL error.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in searchProducts"
+    },
+    {
+      "description": "User-supplied `orderLinesData` from the request body is evaluated inside a Node.js VM context via `safeEval`, which is a known-bypass sandbox for `notevil`.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "`body.orderLinesData` (line 19) is placed into a VM sandbox and executed via `vm.runInContext('safeEval(orderLinesData)', sandbox)` (line 23). The `notevil` library has documented escape vectors. The route is protected by `security.isAuthorized()` so any authenticated user can reach this sink. Verification: submit a payload that triggers a detectable side-effect (e.g., a timing delay or error message difference) without destructive operations.",
+      "rule_id": "code-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-side code injection via vm.runInContext with user-controlled input"
+    },
+    {
+      "description": "The placeOrder handler uses `req.body.UserId` to decrement and increment wallet balances without verifying the authenticated user owns that wallet.",
+      "file": "routes/order.ts",
+      "line_end": 162,
+      "line_start": 146,
+      "provenance_paths": [
+        "routes/order.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 146-162 read `req.body.UserId` and perform `WalletModel.decrement` and `WalletModel.increment` on that user's wallet. The authenticated user identity is only used for the email in the PDF (line 38-39), never compared to `req.body.UserId`. An attacker can specify another user's ID to drain or inflate their wallet. Verification: authenticate as user A, submit an order with `UserId` set to user B's ID, and check if user B's wallet balance changes.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing ownership check allows wallet manipulation via arbitrary UserId in placeOrder"
+    },
+    {
+      "description": "The changePassword handler stores the new password as a raw string without applying security.hash(), while the current-password check at line 39 expects a hashed value. After a successful change the password is persisted in plaintext.",
+      "file": "routes/changePassword.ts",
+      "line_end": 51,
+      "line_start": 51,
+      "provenance_paths": [
+        "routes/changePassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 39 compares security.hash(currentPassword) against the stored value, proving the schema expects a hash. Line 51 writes newPasswordInString (raw toString of query param) directly via user.update(). Verification: register a user, change password, then query the DB or use the fields parameter on /rest/user/login to confirm the stored value equals the plaintext input.",
+      "rule_id": "authentication",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password stored without hashing on change"
+    },
+    {
+      "description": "The retrieveLoggedInUser handler iterates over user-supplied comma-separated field names and copies any matching key from the authenticated user's data object into the response, including the password hash.",
+      "file": "routes/currentUser.ts",
+      "line_end": 33,
+      "line_start": 28,
+      "provenance_paths": [
+        "routes/currentUser.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 29-33 loop over requestedFields and assign user.data[field] without an allowlist. Line 52 explicitly checks for password leakage, confirming the password field is reachable. Verification: authenticate, then GET /rest/user/authentication-details?fields=password and confirm the hash appears in the JSON body.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Arbitrary user-object field disclosure via fields query parameter"
+    },
+    {
+      "description": "upgradeToDeluxe looks up the user by req.body.UserId without verifying it matches the token's user, allowing any authenticated customer to upgrade another user's account to deluxe.",
+      "file": "routes/deluxe.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "lib/insecurity.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 queries UserModel by req.body.UserId with no comparison to the JWT subject. The route is protected only by security.isAuthorized() (server.ts:443 for /b2b/v2 or equivalent), which checks authentication but not authorization to the target resource. Verification: authenticate as user A, POST the deluxe upgrade with UserId of user B, and confirm user B's role changes to deluxe.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in deluxe upgrade – no binding between authenticated user and target UserId"
+    },
+    {
+      "description": "The profileImageUrlUpload handler passes req.body.imageUrl directly to fetch() without validating the target host, protocol, or IP range. Any authenticated user can cause the server to issue HTTP requests to arbitrary internal or external addresses.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 reads url from req.body.imageUrl. Line 24 calls fetch(url) with no allowlist, protocol restriction, or private-IP block. The only guard is a regex on line 20 that merely flags a challenge pattern but does not prevent the request. Route registration at server.ts:330 confirms no network-level egress filter middleware. Verification: submit imageUrl pointing to a local marker endpoint and confirm the server fetches it.",
+      "rule_id": "ssrf",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-Side Request Forgery via user-controlled imageUrl in profile image upload"
+    },
+    {
+      "description": "The verifyImageCaptcha middleware calls next() when no captcha is found for the user, effectively skipping CAPTCHA enforcement if the captcha expired or was never created.",
+      "file": "routes/imageCaptcha.ts",
+      "line_end": 52,
+      "line_start": 52,
+      "provenance_paths": [
+        "routes/imageCaptcha.ts"
+      ],
+      "rationale": "Line 52 condition is `!captchas[0] || req.body.answer === captchas[0].answer`. When the query returns no rows (expired or absent captcha), `!captchas[0]` is true and next() is called without any answer check. An attacker can wait for the 5-minute TTL to expire or simply never request a captcha, then submit the protected action without solving one. Verification: call a captcha-protected endpoint without first requesting a captcha and confirm the request succeeds.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "CAPTCHA verification bypassed when no captcha record exists"
+    },
+    {
+      "description": "createProductReviews stores req.body.author verbatim without verifying it matches the authenticated user's email, allowing any authenticated user to post reviews attributed to other users.",
+      "file": "routes/createProductReviews.ts",
+      "line_end": 26,
+      "line_start": 26,
+      "provenance_paths": [
+        "routes/createProductReviews.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 16 retrieves the authenticated user but line 26 writes req.body.author directly into the database. The challenge check on line 19 only detects the mismatch for scoring purposes and does not reject the request. Verification: authenticate as user A, submit a review with author set to user B's email, and confirm the review is stored with user B's name.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Review author field not bound to authenticated user identity"
+    },
+    {
+      "description": "req.body.id is passed directly as the _id filter in a MongoDB update with multi:true. An attacker can supply an object like {\"$ne\":null} to match and modify all reviews.",
+      "file": "routes/updateProductReviews.ts",
+      "line_end": 20,
+      "line_start": 17,
+      "provenance_paths": [
+        "routes/updateProductReviews.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 18 uses req.body.id as the _id query filter without type validation. MongoDB interprets objects as operators, so {\"$ne\":null} matches all documents. Combined with multi:true on line 20, a single request can overwrite every review message. The authenticatedUsers.from() call on line 16 is only used for challenge detection, not authorization.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via MongoDB operator injection in review update"
+    },
+    {
+      "description": "isRedirectAllowed uses url.includes(allowedUrl) which permits any URL that contains an allowed domain as a substring, enabling redirect to attacker-controlled hosts.",
+      "file": "lib/insecurity.ts",
+      "line_end": 139,
+      "line_start": 133,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 136 checks url.includes(allowedUrl) instead of parsing and comparing hostnames. A URL like http://evil.com/?x=http://localhost:3000 passes the check because it contains the allowed string. This function is used to validate redirect targets, so any consumer of it is vulnerable to open redirect.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect allowlist bypass via substring matching"
+    },
+    {
+      "description": "retrieveBasket queries BasketModel by req.params.id without verifying the basket belongs to the authenticated user, enabling horizontal privilege escalation.",
+      "file": "routes/basket.ts",
+      "line_end": 19,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 fetches the basket using only the URL parameter id with no ownership check. The challenge detection on lines 21-24 identifies cross-user access but does not block the response. Any authenticated user can enumerate basket IDs to read other users' cart contents including product names and quantities.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR on basket retrieval allows reading any user's basket"
+    },
+    {
+      "description": "req.body.id is passed directly to MongoDB findOne and update queries without type validation, allowing operator injection (e.g. {\"$ne\":\"\"}) to match or modify arbitrary reviews.",
+      "file": "routes/likeProductReviews.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/likeProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 reads id from req.body with no type check. Lines 25, 35, 50 pass it directly as the _id filter to db.reviewsCollection.findOne/update. An attacker sending {\"id\":{\"$ne\":\"\"}} as JSON body would match any review document, bypassing the intended single-review targeting. Route is behind security.isAuthorized() so only authenticated users can exploit, but they can still manipulate arbitrary reviews.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via unvalidated req.body.id in likeProductReviews"
+    },
+    {
+      "description": "The `id` parameter from `req.params.id` is concatenated into a MongoDB `$where` JavaScript expression. Even when truncated to 40 characters, arbitrary JavaScript can be injected into the `$where` clause, enabling data exfiltration or DoS.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 36 builds `$where: 'this.product == ' + id` where `id` is either `Number(req.params.id)` or `utils.trunc(req.params.id, 40)`. The `$where` operator evaluates arbitrary JavaScript server-side. Truncation to 40 chars still permits payloads like `1;sleep(2000)` or `1;this.admin==true`. Verification: send a truncated payload that causes a measurable delay or altered result set.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL JavaScript injection via $where in showProductReviews"
+    },
+    {
+      "description": "The resetPassword handler stores the new password directly via `user.update({ password: newPassword })` without applying `security.hash()`, while the login flow uses `security.hash()` for comparison. This may result in plaintext storage or broken authentication.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 44,
+      "provenance_paths": [
+        "routes/resetPassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 44 calls `user.update({ password: newPassword })` with the raw body value. `lib/insecurity.ts:41` defines `hash()` used by login for comparison. If no Sequelize hook hashes on save, the password is stored in plaintext. Verification: check UserModel for a `beforeSave`/`beforeUpdate` hook; if absent, confirm plaintext storage by resetting a synthetic user's password and inspecting the DB row.",
+      "rule_id": "authentication",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password stored in plaintext during reset without hashing"
+    },
+    {
+      "description": "The `addMemory` handler reads `UserId` directly from `req.body.UserId`. Although `security.appendUserId()` middleware is registered, the handler does not verify the authenticated user matches the submitted UserId, enabling memory creation for other users if the middleware is bypassed or the body value is not overwritten.",
+      "file": "routes/memory.ts",
+      "line_end": 15,
+      "line_start": 15,
+      "provenance_paths": [
+        "routes/memory.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 15 uses `req.body.UserId` from the request body. The route at server.ts:331 includes `security.appendUserId()` middleware, but the handler does not independently validate that the UserId matches the authenticated session. If `appendUserId` only sets the field when absent (rather than overwriting), a crafted body could target another user. Verification: inspect `appendUserId` implementation at insecurity.ts:175 to confirm overwrite semantics; if it only appends, send a request with a foreign UserId and check if the memory is created for that user.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in addMemory allows creating memories for arbitrary users"
+    },
+    {
+      "description": "The continueCode endpoint uses Hashids with a hardcoded salt 'this is my salt' to encode solved challenge IDs. An attacker who knows this salt can encode arbitrary challenge IDs to forge a continue code claiming unsolved challenges as solved.",
+      "file": "routes/continueCode.ts",
+      "line_end": 13,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/continueCode.ts"
+      ],
+      "rationale": "Line 13 instantiates Hashids with the literal salt 'this is my salt'. The same salt pattern appears at lines 25 and 38 for findIt/fixIt variants. Since the salt is a static string in source, any attacker can compute valid continue codes for arbitrary challenge ID sets. The restoreProgress consumer likely decodes with the same salt, accepting forged codes. Verification: encode a known challenge ID with the same salt and submit to the restore endpoint.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Hardcoded Hashids salt enables continue code forgery"
+    },
+    {
+      "description": "The addMemory handler stores req.body.caption directly into the database without sanitization. If the frontend renders this field without escaping, an attacker can inject script tags that execute in other users' browsers.",
+      "file": "routes/memory.ts",
+      "line_end": 13,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/memory.ts"
+      ],
+      "rationale": "Line 13 assigns req.body.caption to the record without any sanitization or encoding. The getMemories endpoint at line 24 returns all memories including captions to any caller. The frontend photo-wall or memory display component likely binds this value to the DOM. Verification: submit a memory with a script-tag caption and observe if it renders as HTML in the photo-wall view.",
+      "rule_id": "xss",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Stored XSS via unsanitized memory caption"
+    }
+  ]
+}

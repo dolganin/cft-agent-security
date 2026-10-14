@@ -1,0 +1,57 @@
+{
+  "candidates": [
+    {
+      "description": "The login route constructs a raw SQL query using template literal interpolation of req.body.email directly into the SELECT statement passed to sequelize.query().",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts"
+      ],
+      "rationale": "req.body.email is user-controlled and interpolated into a SQL string without parameterization or escaping. The query `SELECT * FROM Users WHERE email = '${req.body.email || ''}'` allows an attacker to inject arbitrary SQL via the email field. Verification: send a crafted email value like `' OR '1'='1' --` and observe whether authentication bypass occurs or SQL error is returned.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via email parameter in login query"
+    },
+    {
+      "description": "When the noSqlCommandChallenge is enabled, the product id is only truncated (not sanitized) before being concatenated into a MongoDB $where JavaScript expression.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts"
+      ],
+      "rationale": "Line 31 uses utils.trunc(req.params.id, 40) when the challenge is active, which limits length but does not prevent JavaScript injection into the $where clause on line 36. A payload like `1;sleep(2000)` within 40 chars would execute server-side JS. Verification: send a GET to /rest/products/reviews?id=1;sleep(2000) with the challenge enabled and measure response time exceeding 2s.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where in showProductReviews when challenge enabled"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 140,
+      "line_start": 120
+    },
+    {
+      "file": "routes/login.ts",
+      "line_end": 80,
+      "line_start": 60
+    }
+  ],
+  "search_queries": [
+    "$where",
+    "sequelize.query",
+    "utils.trunc"
+  ],
+  "stop": false
+}

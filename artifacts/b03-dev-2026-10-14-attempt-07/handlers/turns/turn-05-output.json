@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "description": "req.body.id is passed directly as the MongoDB _id query in reviewsCollection.update with multi:true, allowing operator injection (e.g. $ne) to match and modify arbitrary reviews.",
+      "file": "routes/updateProductReviews.ts",
+      "line_end": 20,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/updateProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 passes req.body.id as the query filter to MongoDB update with multi:true. An attacker sending {\"id\":{\"$ne\":\"x\"}} matches all reviews. The route uses security.isAuthorized() (any logged-in user) with no ownership check on the target review.",
+      "rule_id": "nosql-injection",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via _id query with multi:true in updateProductReviews"
+    },
+    {
+      "description": "User-controlled body.orderLinesData is evaluated inside vm.runInContext through notevil's safeEval, which has known sandbox escape vulnerabilities enabling arbitrary code execution.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 23 calls vm.runInContext('safeEval(orderLinesData)', sandbox) where orderLinesData comes from req.body. notevil is a JS sandbox with documented escape vectors. The route POST /b2b/v2/orders is behind security.isAuthorized() (any authenticated user), making this reachable by any logged-in user.",
+      "rule_id": "rce",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Sandbox escape via vm.runInContext with notevil safeEval on user input"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 340,
+      "line_start": 300
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 50,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "logfileServer",
+    "serveLogFiles",
+    "/ftp"
+  ],
+  "stop": false
+}

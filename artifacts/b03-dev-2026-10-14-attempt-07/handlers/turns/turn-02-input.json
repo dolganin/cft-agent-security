@@ -1,0 +1,833 @@
+{
+  "previous_context": [
+    {
+      "content": "3:  * SPDX-License-Identifier: MIT\n4:  */\n5: import { type Request, type Response, type NextFunction } from 'express'\n6: import config from 'config'\n7: \n8: import * as challengeUtils from '../lib/challengeUtils'\n9: import { challenges, users } from '../data/datacache'\n10: import { BasketModel } from '../models/basket'\n11: import * as security from '../lib/insecurity'\n12: import { UserModel } from '../models/user'\n13: import * as models from '../models/index'\n14: import { type User } from '../data/types'\n15: import * as utils from '../lib/utils'\n16: \n17: \n18: export function login () {\n19:   function afterLogin (user: User, res: Response, next: NextFunction) {\n20:     verifyPostLoginChallenges(user) \n21:     BasketModel.findOrCreate({ where: { UserId: user.id } })\n22:       .then(([basket]: [BasketModel, boolean]) => {\n23:         const authenticatedUser = { data: user, bid: basket.id } // keep track of original basket\n24:         const token = security.authorize(authenticatedUser)\n25:         security.authenticatedUsers.put(token, authenticatedUser)\n26:         res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n27:       }).catch((error: Error) => {\n28:         next(error)\n29:       })\n30:   }\n31: \n32:   return (req: Request, res: Response, next: NextFunction) => {\n33:     verifyPreLoginChallenges(req) \n34:     models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '<redacted>'')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) \n35:       .then((authenticatedUser) => { \n36:         const user = utils.queryResultToJson(authenticatedUser)\n37:         if (user.data?.id && user.data.totpSecret !== '') {\n38:           res.status(401).json({\n39:             status: 'totp_token_required',\n40:             data: {\n41:               tmpToken: security.authorize({\n42:                 userId: user.data.id,\n43:                 type: 'password_valid_needs_second_factor_token'\n44:               })\n45:             }\n46:           })\n47:         } else if (user.data?.id) {\n48:           afterLogin(user.data, res, next)\n49:         } else {\n50:           res.status(401).send(res.__('Invalid email or password.'))\n51:         }\n52:       }).catch((error: Error) => {\n53:         next(error)\n54:       })\n55:   }\n56:   \n57: \n58:   function verifyPreLoginChallenges (req: Request) {\n59:     challengeUtils.solveIf(challenges.weakPasswordChallenge, () => { return req.body.email === 'admin@' + config.get<string>('application.domain') && req.body.password === 'admin123' })\n60:     challengeUtils.solveIf(challenges.loginSupportChallenge, () => { return req.body.email === 'support@' + config.get<string>('application.domain') && req.body.password === 'J6aVjTgOpRs@?5l!Zkq2AYnCE@RF$P' })\n61:     challengeUtils.solveIf(challenges.loginRapperChallenge, () => { return req.body.email === 'mc.safesearch@' + config.get<string>('application.domain') && req.body.password === 'Mr. N00dles' })\n62:     challengeUtils.solveIf(challenges.loginAmyChallenge, () => { return req.body.email === 'amy@' + config.get<string>('application.domain') && req.body.password === 'K1f.....................' })\n63:     challengeUtils.solveIf(challenges.dlpPasswordSprayingChallenge, () => { return req.body.email === 'J12934@' + config.get<string>('application.domain') && req.body.password === '0Y8rMnww$*9VFYE§59-!Fg1L6t&6lB' })\n64:     challengeUtils.solveIf(challenges.oauthUserPasswordChallenge, () => { return req.body.email === 'bjoern.kimminich@gmail.com' && req.body.password === 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI=' })\n65:     challengeUtils.solveIf(challenges.exposedCredentialsChallenge, () => { return req.body.email === 'testing@' + config.get<string>('application.domain') && req.body.password === 'IamUsedForTesting' })\n66:   }\n67: \n68:   function verifyPostLoginChallenges (user: User) {\n69:     challengeUtils.solveIf(challenges.loginAdminChallenge, () => { return user.id === users.admin.id })\n70:     challengeUtils.solveIf(challenges.loginJimChallenge, () => { return user.id === users.jim.id })\n71:     challengeUtils.solveIf(challenges.loginBenderChallenge, () => { return user.id === users.bender.id })\n72:     challengeUtils.solveIf(challenges.ghostLoginChallenge, () => { return user.id === users.chris.id })\n73:     if (challengeUtils.notSolved(challenges.ephemeralAccountantChallenge) && user.email === 'acc0unt4nt@' + config.get<string>('application.domain') && user.role === 'accounting') {\n74:       UserModel.count({ where: { email: 'acc0unt4nt@' + config.get<string>('application.domain') } }).then((count: number) => {\n75:         if (count === 0) {\n76:           challengeUtils.solve(challenges.ephemeralAccountantChallenge)\n77:         }\n78:       }).catch(() => {\n79:         throw new Error('Unable to verify challenges! Try again')\n80:       })\n81:     }\n82:   }\n83: }",
+      "file": "routes/login.ts",
+      "line_end": 83,
+      "line_start": 3
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import config from 'config'\n7: import { type Request, type Response } from 'express'\n8: import { BasketModel } from '../models/basket'\n9: import { UserModel } from '../models/user'\n10: import * as challengeUtils from '../lib/challengeUtils'\n11: import * as utils from '../lib/utils'\n12: import { challenges } from '../data/datacache'\n13: import { generateSecret, verifySync } from 'otplib'\n14: import * as security from '../lib/insecurity'\n15: \n16: export async function verify (req: Request, res: Response) {\n17:   const { tmpToken, totpToken } = req.body\n18: \n19:   try {\n20:     const { userId, type } = security.verify(tmpToken) && security.decode(tmpToken)\n21: \n22:     if (type !== 'password_valid_needs_second_factor_token') {\n23:       throw new Error('Invalid token type')\n24:     }\n25: \n26:     const user = await UserModel.findByPk(userId)\n27:     if (user == null) {\n28:       throw new Error('No such user found!')\n29:     }\n30: \n31:     const isValid = verifySync({ secret: user.totpSecret, token: totpToken, epochTolerance: 30 }).valid\n32: \n33:     const plainUser = utils.queryResultToJson(user)\n34: \n35:     if (!isValid) {\n36:       return res.status(401).send()\n37:     }\n38:     challengeUtils.solveIf(challenges.twoFactorAuthUnsafeSecretStorageChallenge, () => { return user.email === 'wurstbrot@' + config.get<string>('application.domain') })\n39: \n40:     const [basket] = await BasketModel.findOrCreate({ where: { UserId: userId } })\n41: \n42:     const token = security.authorize(plainUser)\n43:     // @ts-expect-error FIXME set new property for original basket\n44:     plainUser.bid = basket.id // keep track of original basket for challenge solution check\n45:     security.authenticatedUsers.put(token, plainUser)\n46: \n47:     res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n48:   } catch (error) {\n49:     res.status(401).send()\n50:   }\n51: }\n52: \n53: /**\n54:  * Check the 2FA status of the currently signed-in user.\n55:  *\n56:  * When 2FA is not set up, the result will include data required to start the setup.\n57:  */\n58: export async function status (req: Request, res: Response) {\n59:   try {\n60:     const data = security.authenticatedUsers.from(req)\n61:     if (!data) {\n62:       throw new Error('You need to be logged in to see this')\n63:     }\n64:     const { data: user } = data\n65: \n66:     if (user.totpSecret === '') {\n67:       const secret = generateSecret()\n68: \n69:       res.json({\n70:         setup: false,\n71:         secret,\n72:         email: user.email,\n73:         setupToken: security.authorize({\n74:           secret,\n75:           type: 'totp_setup_secret'\n76:         })\n77:       })\n78:     } else {\n79:       res.json({\n80:         setup: true\n81:       })\n82:     }\n83:   } catch (error) {\n84:     res.status(401).send()\n85:   }\n86: }\n87: \n88: /**\n89:  * Sets Up 2FA for a User\n90:  * Requires 3 params:\n91:  * 1. The Users Password as a confirmation.\n92:  * 2. A Setup token. This is returned by the status endpoint.\n93:  *    This contains a signed TOTP secret to ensure that the secret\n94:  *    was generated by the server and wasn't tampered with by the client\n95:  * 3. The first TOTP Token, generated by the TOTP App. (e.g. Google Authenticator)\n96:  */\n97: export async function setup (req: Request, res: Response) {\n98:   try {\n99:     const data = security.authenticatedUsers.from(req)\n100:     if (!data) {\n101:       throw new Error('Need to login before setting up 2FA')\n102:     }\n103:     const { data: user } = data\n104: \n105:     const { password, setupToken, initialToken } = req.body\n106: \n107:     if (user.password !== security.hash(password)) {\n108:       throw new Error('Password doesnt match stored password')\n109:     }\n110: \n111:     if (user.totpSecret !== '') {\n112:       throw new Error('User has 2fa already setup')\n113:     }\n114: \n115:     const { secret, type } = security.verify(setupToken) && security.decode(setupToken)\n116:     if (type !== 'totp_setup_secret') {\n117:       throw new Error('SetupToken is of wrong type')\n118:     }\n119:     if (!verifySync({ secret, token: initialToken, epochTolerance: 30 }).valid) {\n120:       throw new Error('Initial token doesnt match the secret from the setupToken')\n121:     }\n122: \n123:     // Update db model and cached object\n124:     const userModel = await UserModel.findByPk(user.id)\n125:     if (userModel == null) {\n126:       throw new Error('No such user found!')\n127:     }\n128: \n129:     userModel.totpSecret = secret\n130:     await userModel.save()\n131:     security.authenticatedUsers.updateFrom(req, utils.queryResultToJson(userModel))\n132: \n133:     res.status(200).send()\n134:   } catch (error) {\n135:     res.status(401).send()\n136:   }\n137: }\n138: \n139: /**\n140:  * Disables 2fa for the current user\n141:  */\n142: export async function disable (req: Request, res: Response) {\n143:   try {\n144:     const data = security.authenticatedUsers.from(req)\n145:     if (!data) {\n146:       throw new Error('Need to login before setting up 2FA')\n147:     }\n148:     const { data: user } = data\n149: \n150:     const { password } = req.body\n151: \n152:     if (user.password !== security.hash(password)) {\n153:       throw new Error('Password doesnt match stored password')\n154:     }\n155: \n156:     // Update db model and cached object\n157:     const userModel = await UserModel.findByPk(user.id)\n158:     if (userModel == null) {\n159:       throw new Error('No such user found!')\n160:     }",
+      "file": "routes/2fa.ts",
+      "line_end": 160,
+      "line_start": 1
+    }
+  ],
+  "related_files": [
+    "data/datacache.ts",
+    "lib/challengeUtils.ts",
+    "lib/insecurity.ts",
+    "lib/utils.ts",
+    "models/basket.ts",
+    "models/basketitem.ts",
+    "models/card.ts",
+    "models/delivery.ts",
+    "models/index.ts",
+    "models/product.ts",
+    "models/quantity.ts",
+    "models/user.ts",
+    "models/wallet.ts"
+  ],
+  "remaining_candidate_budget": 31,
+  "remaining_turns": 6,
+  "route_inventory": {
+    "dynamic_routes": 1,
+    "middleware_mounts": [
+      {
+        "file": "server.ts",
+        "id": "express-9cfccd097af2794fa222",
+        "line_start": 402,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/Complaints/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 62
+      },
+      {
+        "file": "server.ts",
+        "id": "express-96447feebba7acb8d799",
+        "line_start": 412,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/SecurityQuestions/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 69
+      },
+      {
+        "file": "server.ts",
+        "id": "express-3b23f1ae788e2f5dc026",
+        "line_start": 415,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/SecurityAnswers/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 71
+      },
+      {
+        "file": "server.ts",
+        "id": "express-67f29676b3638afd5cbb",
+        "line_start": 417,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/user/authentication-details",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 72
+      },
+      {
+        "file": "server.ts",
+        "id": "express-15d34b6c2754447ea72d",
+        "line_start": 418,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/basket/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 73
+      },
+      {
+        "file": "server.ts",
+        "id": "express-fbf51ffc0820c12a52ea",
+        "line_start": 419,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/basket/:id/order",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 74
+      },
+      {
+        "file": "server.ts",
+        "id": "express-f26f477ad7de8643c12c",
+        "line_start": 443,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/b2b/v2",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 82
+      },
+      {
+        "file": "server.ts",
+        "id": "express-076939fa4962d6772363",
+        "line_start": 450,
+        "middleware": [
+          "security.isAccounting()",
+          "IpFilter(['123.456.789'], { mode: 'allow' })"
+        ],
+        "mount_path": "/api/Quantitys/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 87
+      },
+      {
+        "file": "server.ts",
+        "id": "express-214bbeacffa19df0c56f",
+        "line_start": 454,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/api/PrivacyRequests",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 89
+      },
+      {
+        "file": "server.ts",
+        "id": "express-bc9ffacd2dfecfa07a6e",
+        "line_start": 455,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/api/PrivacyRequests/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 90
+      },
+      {
+        "file": "server.ts",
+        "id": "express-df2249f873bcdede085b",
+        "line_start": 465,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/PrivacyRequests/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 98
+      },
+      {
+        "file": "server.ts",
+        "id": "express-287c0371a4566dcdd9d1",
+        "line_start": 496,
+        "middleware": [
+          "verify.databaseRelatedChallenges()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 110
+      },
+      {
+        "file": "server.ts",
+        "id": "express-38df971c8f63bb429b05",
+        "line_start": 675,
+        "middleware": [
+          "dataErasure"
+        ],
+        "mount_path": "/dataerasure",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 160
+      },
+      {
+        "file": "server.ts",
+        "id": "express-6b2a040980de88a938f5",
+        "line_start": 697,
+        "middleware": [
+          "utils.asyncHandler(serveAngularClient())"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 171
+      },
+      {
+        "file": "server.ts",
+        "id": "express-21716998d5c736ac01e5",
+        "line_start": 700,
+        "middleware": [
+          "verify.errorHandlingChallenge()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 172
+      },
+      {
+        "file": "server.ts",
+        "id": "express-41e8e2ca2563b892b27a",
+        "line_start": 701,
+        "middleware": [
+          "errorhandler()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 173
+      }
+    ],
+    "omitted_routes": 0,
+    "routes": [
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/fileUpload.ts",
+          "routes/metrics.ts",
+          "routes/profileImageFileUpload.ts"
+        ],
+        "id": "express-04c26bf25870e8fd54ad",
+        "line_end": 330,
+        "line_start": 329,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "ensureFileIsPassed",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(profileImageFileUpload())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/profile/image/file",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 41,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/profileImageUrlUpload.ts"
+        ],
+        "id": "express-a53bc90527fb384dd1d8",
+        "line_end": 331,
+        "line_start": 330,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "utils.asyncHandler(profileImageUrlUpload())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/profile/image/url",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 42,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts",
+          "lib/utils.ts",
+          "routes/fileUpload.ts",
+          "routes/memory.ts",
+          "routes/metrics.ts"
+        ],
+        "id": "express-b31cc41066ee487a1c5f",
+        "line_end": 332,
+        "line_start": 331,
+        "method": "post",
+        "middleware": [
+          "uploadToDisk.single('image')",
+          "ensureFileIsPassed",
+          "security.appendUserId()",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(addMemory())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/rest/memories",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 43,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-994c999a3bda3fb788b5",
+        "line_end": 383,
+        "line_start": 382,
+        "method": "get",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Users",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 54,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-631cd7bb38d07de191c5",
+        "line_end": 388,
+        "line_start": 388,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Products",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 55,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-0f4e37f74d5dd4894812",
+        "line_end": 391,
+        "line_start": 390,
+        "method": "delete",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Products/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 56,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-1e54822cf99373cc97fa",
+        "line_end": 393,
+        "line_start": 392,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Challenges",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 57,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-692a1de029b86a63c48f",
+        "line_end": 396,
+        "line_start": 395,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Hints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 59,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-97948d35db9ebc921528",
+        "line_end": 401,
+        "line_start": 400,
+        "method": "get",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 60,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-45b1c3ddd4cdaf4e0b5c",
+        "line_end": 402,
+        "line_start": 401,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 61,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-2d27cc5dcb73b55f4cd9",
+        "line_end": 406,
+        "line_start": 405,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 64,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-e43c9a1b79b6c5d8a4a6",
+        "line_end": 409,
+        "line_start": 408,
+        "method": "put",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 66,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-1d5f15499c4ced24cf74",
+        "line_end": 410,
+        "line_start": 409,
+        "method": "delete",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 67,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-06189c65741198f4fed1",
+        "line_end": 412,
+        "line_start": 411,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/SecurityQuestions",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 68,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-dc964331860293a97cc1",
+        "line_end": 415,
+        "line_start": 414,
+        "method": "get",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/SecurityAnswers",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 70,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/captcha.ts"
+        ],
+        "id": "express-4050ffc13736ce1ad6bf",
+        "line_end": 424,
+        "line_start": 423,
+        "method": "post",
+        "middleware": [
+          "utils.asyncHandler(verifyCaptcha())"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Feedbacks",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 76,
+        "service_id": "service"
+      }
+    ],
+    "schema_version": "cft.express_source_map.v1"
+  },
+  "search_results": [
+    {
+      "matches": [
+        {
+          "file": "routes/login.ts",
+          "line": 34,
+          "text": "    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '<redacted>'')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) "
+        },
+        {
+          "file": "routes/search.ts",
+          "line": 23,
+          "text": "    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) "
+        },
+        {
+          "file": "routes/search.ts",
+          "line": 47,
+          "text": "          void models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]: any) => {"
+        }
+      ],
+      "query": "sequelize.query"
+    },
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 428,
+          "text": "    if (req.body.email !== undefined && req.body.password !== undefined && req.body.passwordRepeat !== undefined) {"
+        },
+        {
+          "file": "server.ts",
+          "line": 429,
+          "text": "      if (req.body.email.length !== 0 && req.body.password.length !== 0) {"
+        },
+        {
+          "file": "server.ts",
+          "line": 430,
+          "text": "        req.body.email = req.body.email.trim()"
+        },
+        {
+          "file": "routes/verify.ts",
+          "line": 25,
+          "text": "    return req.body && req.body.email === '' && req.body.password === ''"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 34,
+          "text": "    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '<redacted>'')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) "
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 59,
+          "text": "    challengeUtils.solveIf(challenges.weakPasswordChallenge, () => { return req.body.email === 'admin@' + config.get<string>('application.domain') && req.body.password === 'admin123' })"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 60,
+          "text": "    challengeUtils.solveIf(challenges.loginSupportChallenge, () => { return req.body.email === 'support@' + config.get<string>('application.domain') && req.body.password === 'J6aVjTgOpRs@?5l!Zkq2AYnCE@RF$P' })"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 61,
+          "text": "    challengeUtils.solveIf(challenges.loginRapperChallenge, () => { return req.body.email === 'mc.safesearch@' + config.get<string>('application.domain') && req.body.password === 'Mr. N00dles' })"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 62,
+          "text": "    challengeUtils.solveIf(challenges.loginAmyChallenge, () => { return req.body.email === 'amy@' + config.get<string>('application.domain') && req.body.password === 'K1f.....................' })"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 63,
+          "text": "    challengeUtils.solveIf(challenges.dlpPasswordSprayingChallenge, () => { return req.body.email === 'J12934@' + config.get<string>('application.domain') && req.body.password === '0Y8rMnww$*9VFYE§59-!Fg1L6t&6lB' })"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 64,
+          "text": "    challengeUtils.solveIf(challenges.oauthUserPasswordChallenge, () => { return req.body.email === 'bjoern.kimminich@gmail.com' && req.body.password === 'bW9jLmxpYW1nQGhjaW5pbW1pay5ucmVvamI=' })"
+        },
+        {
+          "file": "routes/login.ts",
+          "line": 65,
+          "text": "    challengeUtils.solveIf(challenges.exposedCredentialsChallenge, () => { return req.body.email === 'testing@' + config.get<string>('application.domain') && req.body.password === 'IamUsedForTesting' })"
+        }
+      ],
+      "query": "req.body.email"
+    },
+    {
+      "matches": [
+        {
+          "file": "routes/verify.ts",
+          "line": 100,
+          "text": "  if (req.query.key === 'tRy_H4rd3r_n0thIng_iS_Imp0ssibl3') {"
+        }
+      ],
+      "query": "req.query"
+    },
+    {
+      "matches": [],
+      "query": "req.params"
+    }
+  ],
+  "source_snippets": [
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import fs from 'node:fs'\n7: import crypto from 'node:crypto'\n8: import { type Request, type Response, type NextFunction } from 'express'\n9: import { type UserModel } from '@juice-shop/models/user'\n10: import expressJwt from 'express-jwt'\n11: import jwt from 'jsonwebtoken'\n12: import jws from 'jws'\n13: import sanitizeHtmlLib from 'sanitize-html'\n14: import sanitizeFilenameLib from 'sanitize-filename'\n15: import * as utils from './utils'\n16: \n17: // @ts-expect-error FIXME no typescript definitions for z85 :(\n18: import * as z85 from 'z85'\n19: \n20: export const publicKey = fs ? fs.readFileSync('encryptionkeys/jwt.pub', 'utf8') : 'placeholder-public-key'\n21: <redacted-private-key>\n22: \n23: interface ResponseWithUser {\n24:   status?: string\n25:   data: UserModel\n26:   iat?: number\n27:   exp?: number\n28:   bid?: number\n29: }\n30: \n31: interface IAuthenticatedUsers {\n32:   tokenMap: Record<string, ResponseWithUser>\n33:   idMap: Record<string, string>\n34:   put: (token: string, user: ResponseWithUser) => void\n35:   get: (token?: string) => ResponseWithUser | undefined\n36:   tokenOf: (user: UserModel) => string | undefined\n37:   from: (req: Request) => ResponseWithUser | undefined\n38:   updateFrom: (req: Request, user: ResponseWithUser) => any\n39: }\n40: \n41: export const hash = (data: string) => crypto.createHash('md5').update(data).digest('hex')\n42: export const hmac = (data: string) => crypto.createHmac('sha256', 'pa4qacea4VK9t9nGv7yZtwmj').update(data).digest('hex')\n43: \n44: export const cutOffPoisonNullByte = (str: string) => {\n45:   const nullByte = '%00'\n46:   if (str.includes(nullByte)) {\n47:     return str.substring(0, str.indexOf(nullByte))\n48:   }\n49:   return str\n50: }\n51: \n52: export const isAuthorized = () => expressJwt(({ secret: publicKey }) as any)\n53: export const denyAll = () => expressJwt({ secret: '<redacted>' + Math.random() } as any)\n54: export const authorize = (user = {}) => jwt.sign(user, privateKey, { expiresIn: '6h', algorithm: 'RS256' })\n55: export const verify = (token: string) => token ? (jws.verify as ((token: string, secret: string) => boolean))(token, publicKey) : false\n56: export const decode = (token: string) => { return jws.decode(token)?.payload }\n57: \n58: export const sanitizeHtml = (html: string) => sanitizeHtmlLib(html)\n59: export const sanitizeLegacy = (input = '') => input.replace(/<(?:\\w+)\\W+?[\\w]/gi, '')\n60: export const sanitizeFilename = (filename: string) => sanitizeFilenameLib(filename)\n61: export const sanitizeSecure = (html: string): string => {\n62:   const sanitized = sanitizeHtml(html)\n63:   if (sanitized === html) {\n64:     return html\n65:   } else {\n66:     return sanitizeSecure(sanitized)\n67:   }\n68: }\n69: \n70: export const authenticatedUsers: IAuthenticatedUsers = {\n71:   tokenMap: {},\n72:   idMap: {},\n73:   put: function (token: string, user: ResponseWithUser) {\n74:     this.tokenMap[token] = user\n75:     this.idMap[user.data.id] = token\n76:   },\n77:   get: function (token?: string) {\n78:     return token ? this.tokenMap[utils.unquote(token)] : undefined\n79:   },\n80:   tokenOf: function (user: UserModel) {\n81:     return user ? this.idMap[user.id] : undefined\n82:   },\n83:   from: function (req: Request) {\n84:     const token = utils.jwtFrom(req)\n85:     return token ? this.get(token) : undefined\n86:   },\n87:   updateFrom: function (req: Request, user: ResponseWithUser) {\n88:     const token = utils.jwtFrom(req)\n89:     this.put(token, user)\n90:   }\n91: }\n92: \n93: export const userEmailFrom = ({ headers }: any) => {\n94:   return headers ? headers['x-user-email'] : undefined\n95: }\n96: \n97: export const generateCoupon = (discount: number, date = new Date()) => {\n98:   const coupon = utils.toMMMYY(date) + '-' + discount\n99:   return z85.encode(coupon)\n100: }",
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "content": "14: import { DeliveryModel } from '../models/delivery'\n15: import { QuantityModel } from '../models/quantity'\n16: import { ProductModel } from '../models/product'\n17: import { BasketModel } from '../models/basket'\n18: import { WalletModel } from '../models/wallet'\n19: import * as security from '../lib/insecurity'\n20: import * as utils from '../lib/utils'\n21: import * as db from '../data/mongodb'\n22: \n23: interface Product {\n24:   quantity: number\n25:   id?: number\n26:   name: string\n27:   price: number\n28:   total: number\n29:   bonus: number\n30: }\n31: \n32: export function placeOrder () {\n33:   return (req: Request, res: Response, next: NextFunction) => {\n34:     const id = req.params.id\n35:     BasketModel.findOne({ where: { id }, include: [{ model: ProductModel, paranoid: false, as: 'Products' }] })\n36:       .then(async (basket: BasketModel | null) => {\n37:         if (basket != null) {\n38:           const customer = security.authenticatedUsers.from(req)\n39:           const email = customer ? customer.data ? customer.data.email : '' : ''\n40:           const orderId = security.hash(email).slice(0, 4) + '-' + utils.randomHexString(16)\n41:           const pdfFile = `order_${orderId}.pdf`\n42:           const { default: PDFDocument } = await import('pdfkit')\n43:           const doc = new PDFDocument()\n44:           const date = new Date().toJSON().slice(0, 10)\n45:           const fileWriter = doc.pipe(fs.createWriteStream(path.join('ftp/', pdfFile)))\n46: \n47:           fileWriter.on('finish', () => {\n48:             void (async () => {\n49:               try {\n50:                 void basket.update({ coupon: null })\n51:                 await BasketItemModel.destroy({ where: { BasketId: id } })\n52:                 res.json({ orderConfirmation: orderId })\n53:               } catch (error: unknown) {\n54:                 next(error)\n55:               }\n56:             })()\n57:           })\n58: \n59:           doc.font('Times-Roman').fontSize(40).text(config.get<string>('application.name'), { align: 'center' })\n60:           doc.moveTo(70, 115).lineTo(540, 115).stroke()\n61:           doc.moveTo(70, 120).lineTo(540, 120).stroke()\n62:           doc.fontSize(20).moveDown()\n63:           doc.font('Times-Roman').fontSize(20).text(req.__('Order Confirmation'), { align: 'center' })\n64:           doc.fontSize(20).moveDown()\n65:           doc.font('Times-Roman').fontSize(15).text(`${req.__('Customer')}: ${email}`, { align: 'left' })\n66:           doc.font('Times-Roman').fontSize(15).text(`${req.__('Order')} #: ${orderId}`, { align: 'left' })\n67:           doc.moveDown()\n68:           doc.font('Times-Roman').fontSize(15).text(`${req.__('Date')}: ${date}`, { align: 'left' })\n69:           doc.moveDown()\n70:           doc.moveDown()\n71:           let totalPrice = 0\n72:           const basketProducts: Product[] = []\n73:           let totalPoints = 0\n74:           for (const { BasketItem, price, deluxePrice, name, id } of basket.Products ?? []) {\n75:             if (BasketItem != null) {\n76:               challengeUtils.solveIf(challenges.christmasSpecialChallenge, () => { return BasketItem.ProductId === products.christmasSpecial.id })\n77:               try {\n78:                 const quantityRow = await QuantityModel.findOne({ where: { ProductId: BasketItem.ProductId } })\n79:                 if (quantityRow) {\n80:                   const newQuantity = quantityRow.quantity - BasketItem.quantity\n81:                   await QuantityModel.update({ quantity: newQuantity }, { where: { ProductId: BasketItem.ProductId } })\n82:                 }\n83:               } catch (error: unknown) {\n84:                 next(error)\n85:                 return\n86:               }\n87:               let itemPrice: number\n88:               if (security.isDeluxe(req)) {\n89:                 itemPrice = deluxePrice\n90:               } else {\n91:                 itemPrice = price\n92:               }\n93:               const itemTotal = itemPrice * BasketItem.quantity\n94:               const itemBonus = Math.round(itemPrice / 10) * BasketItem.quantity\n95:               const product = {\n96:                 quantity: BasketItem.quantity,\n97:                 id,\n98:                 name: req.__(name),\n99:                 price: itemPrice,\n100:                 total: itemTotal,\n101:                 bonus: itemBonus\n102:               }\n103:               basketProducts.push(product)\n104:               doc.text(`${BasketItem.quantity}x ${req.__(name)} ${req.__('ea.')} ${itemPrice} = ${itemTotal}¤`)\n105:               doc.moveDown()\n106:               totalPrice += itemTotal\n107:               totalPoints += itemBonus\n108:             }\n109:           }\n110:           doc.moveDown()\n111:           const discount = calculateApplicableDiscount(basket, req) ?? 0\n112:           let discountAmount = '0'\n113:           if (discount > 0) {\n114:             discountAmount = (totalPrice * (discount / 100)).toFixed(2)\n115:             doc.text(discount + '% discount from coupon: -' + discountAmount + '¤')\n116:             doc.moveDown()\n117:             totalPrice -= parseFloat(discountAmount)\n118:           }\n119:           const deliveryMethod = {\n120:             deluxePrice: 0,\n121:             price: 0,\n122:             eta: 5\n123:           }\n124:           if (req.body.orderDetails?.deliveryMethodId) {\n125:             const deliveryMethodFromModel = await DeliveryModel.findOne({ where: { id: req.body.orderDetails.deliveryMethodId } })\n126:             if (deliveryMethodFromModel != null) {\n127:               deliveryMethod.deluxePrice = deliveryMethodFromModel.deluxePrice\n128:               deliveryMethod.price = deliveryMethodFromModel.price\n129:               deliveryMethod.eta = deliveryMethodFromModel.eta\n130:             }\n131:           }\n132:           const deliveryAmount = security.isDeluxe(req) ? deliveryMethod.deluxePrice : deliveryMethod.price\n133:           totalPrice += deliveryAmount\n134:           doc.text(`${req.__('Delivery Price')}: ${deliveryAmount.toFixed(2)}¤`)\n135:           doc.moveDown()\n136:           doc.font('Helvetica-Bold').fontSize(20).text(`${req.__('Total Price')}: ${totalPrice.toFixed(2)}¤`)\n137:           doc.moveDown()\n138:           doc.font('Helvetica-Bold').fontSize(15).text(`${req.__('Bonus Points Earned')}: ${totalPoints}`)\n139:           doc.font('Times-Roman').fontSize(15).text(`(${req.__('The bonus points from this order will be added 1:1 to your wallet ¤-fund for future purchases!')}`)\n140:           doc.moveDown()\n141:           doc.moveDown()\n142:           doc.font('Times-Roman').fontSize(15).text(req.__('Thank you for your order!'))\n143: \n144:           challengeUtils.solveIf(challenges.negativeOrderChallenge, () => { return totalPrice < 0 })\n145: \n146:           if (req.body.UserId) {\n147:             if (req.body.orderDetails && req.body.orderDetails.paymentId === 'wallet') {\n148:               const wallet = await WalletModel.findOne({ where: { UserId: req.body.UserId } })\n149:               if ((wallet != null) && wallet.balance >= totalPrice) {\n150:                 await WalletModel.decrement({ balance: totalPrice }, { where: { UserId: req.body.UserId } })\n151:               } else {\n152:                 next(new Error('Insufficient wallet balance.'))\n153:                 return\n154:               }\n155:             }\n156:             try {\n157:               await WalletModel.increment({ balance: totalPoints }, { where: { UserId: req.body.UserId } })\n158:             } catch (error: unknown) {\n159:               next(error)\n160:               return\n161:             }\n162:           }\n163: \n164:           db.ordersCollection.insert({\n165:             promotionalAmount: discountAmount,\n166:             paymentId: req.body.orderDetails ? req.body.orderDetails.paymentId : null,\n167:             addressId: req.body.orderDetails ? req.body.orderDetails.addressId : null,\n168:             orderId,\n169:             delivered: false,\n170:             email: (email ? email.replace(/[aeiou]/gi, '*') : undefined),\n171:             totalPrice,\n172:             products: basketProducts,\n173:             bonus: totalPoints,",
+      "file": "routes/order.ts",
+      "line_end": 173,
+      "line_start": 14
+    },
+    {
+      "content": "100: }\n101: \n102: export const discountFromCoupon = (coupon?: string) => {\n103:   if (!coupon) {\n104:     return undefined\n105:   }\n106:   const decoded = z85.decode(coupon)\n107:   if (decoded && (hasValidFormat(decoded.toString()) != null)) {\n108:     const parts = decoded.toString().split('-')\n109:     const validity = parts[0]\n110:     if (utils.toMMMYY(new Date()) === validity) {\n111:       const discount = parts[1]\n112:       return parseInt(discount)\n113:     }\n114:   }\n115: }\n116: \n117: function hasValidFormat (coupon: string) {\n118:   return coupon.match(/(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[0-9]{2}-[0-9]{2}/)\n119: }\n120: \n121: \n122: export const redirectAllowlist = new Set([\n123:   'https://github.com/juice-shop/juice-shop',\n124:   'https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm', \n125:   'https://explorer.dash.org/address/Xr556RzuwX6hg5EGpkybbv5RanJoZN17kW', \n126:   'https://etherscan.io/address/0x0f933ab9fcaaa782d0279c300d73750e1311eae6', \n127:   'http://shop.spreadshirt.com/juiceshop',\n128:   'http://shop.spreadshirt.de/juiceshop',\n129:   'https://www.stickeryou.com/products/owasp-juice-shop/794',\n130:   'http://leanpub.com/juice-shop'\n131: ])\n132: \n133: export const isRedirectAllowed = (url: string) => {\n134:   let allowed = false\n135:   for (const allowedUrl of redirectAllowlist) {\n136:     allowed = allowed || url.includes(allowedUrl) \n137:   }\n138:   return allowed\n139: }\n140: \n141: \n142: export const roles = {\n143:   customer: 'customer',\n144:   deluxe: 'deluxe',\n145:   accounting: 'accounting',\n146:   admin: 'admin'\n147: }\n148: \n149: export const deluxeToken = (email: string) => {\n150:   const hmac = crypto.createHmac('sha256', privateKey)\n151:   return hmac.update(email + roles.deluxe).digest('hex')\n152: }\n153: \n154: export const isAccounting = () => {\n155:   return (req: Request, res: Response, next: NextFunction) => {\n156:     const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))\n157:     if (decodedToken?.data?.role === roles.accounting) {\n158:       next()\n159:     } else {\n160:       res.status(403).json({ error: 'Malicious activity detected' })\n161:     }\n162:   }\n163: }\n164: \n165: export const isDeluxe = (req: Request) => {\n166:   const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))\n167:   return decodedToken?.data?.role === roles.deluxe && decodedToken?.data?.deluxeToken && decodedToken?.data?.deluxeToken === deluxeToken(decodedToken?.data?.email)\n168: }\n169: \n170: export const isCustomer = (req: Request) => {\n171:   const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))\n172:   return decodedToken?.data?.role === roles.customer\n173: }\n174: \n175: export const appendUserId = () => {\n176:   return (req: Request, res: Response, next: NextFunction) => {\n177:     try {\n178:       req.body.UserId = authenticatedUsers.tokenMap[utils.jwtFrom(req)].data.id\n179:       next()\n180:     } catch (error: unknown) {\n181:       res.status(401).json({ status: 'error', message: utils.getErrorMessage(error) })\n182:     }\n183:   }\n184: }\n185: \n186: export const updateAuthenticatedUsers = () => (req: Request, res: Response, next: NextFunction) => {\n187:   const token = req.cookies.token || utils.jwtFrom(req)\n188:   if (token && authenticatedUsers.get(token) === undefined) {\n189:     jwt.verify(token, publicKey, (err: Error | null, decoded: any) => {\n190:       if (err === null && decoded?.data !== undefined) {\n191:         authenticatedUsers.put(token, decoded)\n192:         res.cookie('token', token)\n193:       }\n194:     })\n195:   }\n196:   next()\n197: }",
+      "file": "lib/insecurity.ts",
+      "line_end": 197,
+      "line_start": 100
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response, type NextFunction } from 'express'\n7: \n8: import * as challengeUtils from '../lib/challengeUtils'\n9: import { WalletModel } from '../models/wallet'\n10: import { challenges } from '../data/datacache'\n11: import * as security from '../lib/insecurity'\n12: import { UserModel } from '../models/user'\n13: import { CardModel } from '../models/card'\n14: import * as utils from '../lib/utils'\n15: \n16: export function upgradeToDeluxe () {\n17:   return async (req: Request, res: Response, next: NextFunction) => {\n18:     try {\n19:       const user = await UserModel.findOne({ where: { id: req.body.UserId, role: security.roles.customer } })\n20:       if (user == null) {\n21:         res.status(400).json({ status: 'error', error: 'Something went wrong. Please try again!' })\n22:         return\n23:       }\n24:       if (req.body.paymentMode === 'wallet') {\n25:         const wallet = await WalletModel.findOne({ where: { UserId: req.body.UserId } })\n26:         if ((wallet != null) && wallet.balance < 49) {\n27:           res.status(400).json({ status: 'error', error: 'Insuffienct funds in Wallet' })\n28:           return\n29:         } else {\n30:           await WalletModel.decrement({ balance: 49 }, { where: { UserId: req.body.UserId } })\n31:         }\n32:       }\n33: \n34:       if (req.body.paymentMode === 'card') {\n35:         const card = await CardModel.findOne({ where: { id: req.body.paymentId, UserId: req.body.UserId } })\n36:         if ((card == null) || card.expYear < new Date().getFullYear() || (card.expYear === new Date().getFullYear() && card.expMonth - 1 < new Date().getMonth())) {\n37:           res.status(400).json({ status: 'error', error: 'Invalid Card' })\n38:           return\n39:         }\n40:       }\n41: \n42:       try {\n43:         const updatedUser = await user.update({ role: security.roles.deluxe, deluxeToken: security.deluxeToken(user.email) })\n44:         challengeUtils.solveIf(challenges.freeDeluxeChallenge, () => {\n45:           return security.verify(utils.jwtFrom(req)) && req.body.paymentMode !== 'wallet' && req.body.paymentMode !== 'card'\n46:         })\n47:         const userWithStatus = utils.queryResultToJson(updatedUser)\n48:         const updatedToken = security.authorize(userWithStatus)\n49:         security.authenticatedUsers.put(updatedToken, userWithStatus)\n50:         res.status(200).json({ status: 'success', data: { confirmation: 'Congratulations! You are now a deluxe member!', token: updatedToken } })\n51:       } catch (error) {\n52:         res.status(400).json({ status: 'error', error: 'Something went wrong. Please try again!' })\n53:       }\n54:     } catch (err: unknown) {\n55:       res.status(400).json({ status: 'error', error: 'Something went wrong: ' + utils.getErrorMessage(err) })\n56:     }\n57:   }\n58: }\n59: \n60: export function deluxeMembershipStatus () {\n61:   return (req: Request, res: Response, next: NextFunction) => {\n62:     if (security.isCustomer(req)) {\n63:       res.status(200).json({ status: 'success', data: { membershipCost: 49 } })\n64:     } else if (security.isDeluxe(req)) {\n65:       res.status(400).json({ status: 'error', error: 'You are already a deluxe member!' })\n66:     } else {\n67:       res.status(400).json({ status: 'error', error: 'You are not eligible for deluxe membership!' })\n68:     }\n69:   }\n70: }",
+      "file": "routes/deluxe.ts",
+      "line_end": 70,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response, type NextFunction } from 'express'\n7: \n8: import * as utils from '../lib/utils'\n9: import * as models from '../models/index'\n10: import { UserModel } from '../models/user'\n11: import { challenges } from '../data/datacache'\n12: import * as challengeUtils from '../lib/challengeUtils'\n13: \n14: class ErrorWithParent extends Error {\n15:   parent: Error | undefined\n16: }\n17: \n18: \n19: export function searchProducts () {\n20:   return (req: Request, res: Response, next: NextFunction) => {\n21:     let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''\n22:     criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)\n23:     models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) \n24:       .then(([products]: any) => {\n25:         const dataString = JSON.stringify(products)\n26:         if (challengeUtils.notSolved(challenges.unionSqlInjectionChallenge)) { \n27:           let solved = true\n28:           UserModel.findAll().then(data => {\n29:             const users = utils.queryResultToJson(data)\n30:             if (users.data?.length) {\n31:               for (let i = 0; i < users.data.length; i++) {\n32:                 solved = solved && utils.containsOrEscaped(dataString, users.data[i].email) && dataString.includes(users.data[i].password)\n33:                 if (!solved) {\n34:                   break\n35:                 }\n36:               }\n37:               if (solved) {\n38:                 challengeUtils.solve(challenges.unionSqlInjectionChallenge)\n39:               }\n40:             }\n41:           }).catch((error: Error) => {\n42:             next(error)\n43:           })\n44:         }\n45:         if (challengeUtils.notSolved(challenges.dbSchemaChallenge)) {\n46:           let solved = true\n47:           void models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]: any) => {\n48:             const tableDefinitions = utils.queryResultToJson(data)\n49:             if (tableDefinitions.data?.length) {\n50:               for (let i = 0; i < tableDefinitions.data.length; i++) {",
+      "file": "routes/search.ts",
+      "line_end": 50,
+      "line_start": 1
+    }
+  ]
+}

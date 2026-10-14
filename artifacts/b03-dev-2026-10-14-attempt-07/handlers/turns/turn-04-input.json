@@ -1,0 +1,859 @@
+{
+  "previous_context": [
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import path from 'node:path'\n7: import { type Request, type Response, type NextFunction } from 'express'\n8: \n9: export function serveKeyFiles () {\n10:   return ({ params }: Request, res: Response, next: NextFunction) => {\n11:     const file = params.file\n12: \n13:     if (!file.includes('/')) {\n14:       res.sendFile(path.resolve('encryptionkeys/', file))\n15:     } else {\n16:       res.status(403)\n17:       next(new Error('File names cannot contain forward slashes!'))\n18:     }\n19:   }\n20: }",
+      "file": "routes/keyServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response, type NextFunction } from 'express'\n7: \n8: import * as challengeUtils from '../lib/challengeUtils'\n9: import { challenges } from '../data/datacache'\n10: import * as security from '../lib/insecurity'\n11: import { UserModel } from '../models/user'\n12: import * as utils from '../lib/utils'\n13: import config from 'config'\n14: \n15: export function updateUserProfile () {\n16:   return async (req: Request, res: Response, next: NextFunction) => {\n17:     const loggedInUser = security.authenticatedUsers.get(req.cookies.token)\n18: \n19:     if (!loggedInUser) {\n20:       next(new Error('Blocked illegal activity by ' + req.socket.remoteAddress))\n21:       return\n22:     }\n23: \n24:     try {\n25:       const user = await UserModel.findByPk(loggedInUser.data.id)\n26:       if (!user) {\n27:         next(new Error('User not found'))\n28:         return\n29:       }\n30: \n31:       challengeUtils.solveIf(challenges.csrfChallenge, () => {\n32:         const url = config.get<string>('challenges.overwriteUrlForCsrfChallenge')\n33:         return ((req.headers.origin?.includes('://' + url.replace(/^https?:\\/\\//, ''))) ??\n34:           (req.headers.referer?.includes('://' + url.replace(/^https?:\\/\\//, '')))) &&\n35:           req.body.username !== user.username\n36:       })\n37: \n38:       const savedUser = await user.update({ username: req.body.username })\n39:       const userWithStatus = utils.queryResultToJson(savedUser)\n40:       const updatedToken = security.authorize(userWithStatus)\n41:       security.authenticatedUsers.put(updatedToken, userWithStatus)\n42:       res.cookie('token', updatedToken)\n43:       res.location(process.env.BASE_PATH + '/profile')\n44:       res.redirect(process.env.BASE_PATH + '/profile')\n45:     } catch (error) {\n46:       next(error)\n47:     }\n48:   }\n49: }",
+      "file": "routes/updateUserProfile.ts",
+      "line_end": 49,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import path from 'node:path'\n7: import { type Request, type Response, type NextFunction } from 'express'\n8: \n9: import * as security from '../lib/insecurity'\n10: import { challenges } from '../data/datacache'\n11: import * as challengeUtils from '../lib/challengeUtils'\n12: \n13: export function servePublicFiles () {\n14:   return ({ params, query }: Request, res: Response, next: NextFunction) => {\n15:     const file = params.file\n16: \n17:     if (!file.includes('/')) {\n18:       verify(file, res, next)\n19:     } else {\n20:       res.status(403)\n21:       next(new Error('File names cannot contain forward slashes!'))\n22:     }\n23:   }\n24: \n25:   function verify (file: string, res: Response, next: NextFunction) {\n26:     if (file && (endsWithAllowlistedFileType(file) || (file === 'incident-support.kdbx'))) {\n27:       file = security.cutOffPoisonNullByte(file)\n28: \n29:       challengeUtils.solveIf(challenges.directoryListingChallenge, () => { return file.toLowerCase() === 'acquisitions.md' })\n30:       verifySuccessfulPoisonNullByteExploit(file)\n31: \n32:       res.sendFile(path.resolve('ftp/', file))\n33:     } else {\n34:       res.status(403)\n35:       next(new Error('Only .md and .pdf files are allowed!'))\n36:     }\n37:   }\n38: \n39:   function verifySuccessfulPoisonNullByteExploit (file: string) {\n40:     challengeUtils.solveIf(challenges.easterEggLevelOneChallenge, () => { return file.toLowerCase() === 'eastere.gg' })\n41:     challengeUtils.solveIf(challenges.forgottenDevBackupChallenge, () => { return file.toLowerCase() === 'package.json.bak' })\n42:     challengeUtils.solveIf(challenges.forgottenBackupChallenge, () => { return file.toLowerCase() === 'coupons_2013.md.bak' })\n43:     challengeUtils.solveIf(challenges.misplacedSignatureFileChallenge, () => { return file.toLowerCase() === 'suspicious_errors.yml' })\n44: \n45:     challengeUtils.solveIf(challenges.nullByteChallenge, () => {\n46:       return challenges.easterEggLevelOneChallenge.solved || challenges.forgottenDevBackupChallenge.solved || challenges.forgottenBackupChallenge.solved ||\n47:         challenges.misplacedSignatureFileChallenge.solved || file.toLowerCase() === 'encrypt.pyc'\n48:     })\n49:   }\n50: ",
+      "file": "routes/fileServer.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import * as challengeUtils from '../lib/challengeUtils'\n7: import { type Request, type Response } from 'express'\n8: import { challenges } from '../data/datacache'\n9: import * as security from '../lib/insecurity'\n10: \n11: export function retrieveLoggedInUser () {\n12:   return (req: Request, res: Response) => {\n13:     let user\n14:     let response: any\n15:     const emptyUser = { id: undefined, email: undefined, lastLoginIp: undefined, profileImage: undefined }\n16:     try {\n17:       if (security.verify(req.cookies.token)) {\n18:         user = security.authenticatedUsers.get(req.cookies.token)\n19: \n20:         // Parse the fields parameter into an array, splitting by comma.\n21:         // If not provided, both these variables will be undefined.\n22:         const fieldsParam = req.query?.fields as string | undefined\n23:         const requestedFields = fieldsParam ? fieldsParam.split(',').map(f => f.trim()) : []\n24: \n25:         let baseUser: any = {}\n26: \n27:         if (requestedFields.length > 0) {\n28:           // When fields are specified, return only those fields\n29:           for (const field of requestedFields) {\n30:             if (user?.data[field as keyof typeof user.data] !== undefined) {\n31:               baseUser[field] = user?.data[field as keyof typeof user.data]\n32:             }\n33:           }\n34:         } else {\n35:           // If no fields parameter, return standard fields (not password field)\n36:           baseUser = {\n37:             id: user?.data?.id,\n38:             email: user?.data?.email,\n39:             lastLoginIp: user?.data?.lastLoginIp,\n40:             profileImage: user?.data?.profileImage\n41:           }\n42:         }\n43: \n44:         response = { user: baseUser }\n45:       } else {\n46:         response = { user: emptyUser }\n47:       }\n48:     } catch (err) {\n49:       response = { user: emptyUser }\n50:     }\n51:     // Solve passwordHashLeakChallenge when password field is included in response\n52:     challengeUtils.solveIf(challenges.passwordHashLeakChallenge, () => response?.user?.password)\n53: \n54:     if (req.query.callback === undefined) {\n55:       res.json(response)\n56:     } else {\n57:       challengeUtils.solveIf(challenges.emailLeakChallenge, () => { return true })\n58:       res.jsonp(response)\n59:     }\n60:   }\n61: }",
+      "file": "routes/currentUser.ts",
+      "line_end": 61,
+      "line_start": 1
+    },
+    {
+      "content": "415:   app.use('/api/SecurityAnswers/:id', security.denyAll())\n416:   /* REST API */\n417:   app.use('/rest/user/authentication-details', security.isAuthorized())\n418:   app.use('/rest/basket/:id', security.isAuthorized())\n419:   app.use('/rest/basket/:id/order', security.isAuthorized())\n420:   /* Challenge evaluation before finale takes over */ \n421:   app.post('/api/Feedbacks', verify.forgedFeedbackChallenge())\n422:   /* Captcha verification before finale takes over */\n423:   app.post('/api/Feedbacks', utils.asyncHandler(verifyCaptcha()))\n424:   /* Captcha Bypass challenge verification */\n425:   app.post('/api/Feedbacks', verify.captchaBypassChallenge())\n426:   /* User registration challenge verifications before finale takes over */\n427:   app.post('/api/Users', (req: Request, res: Response, next: NextFunction) => {\n428:     if (req.body.email !== undefined && req.body.password !== undefined && req.body.passwordRepeat !== undefined) {\n429:       if (req.body.email.length !== 0 && req.body.password.length !== 0) {\n430:         req.body.email = req.body.email.trim()\n431:         req.body.password = req.body.password.trim()\n432:         req.body.passwordRepeat = req.body.passwordRepeat.trim()\n433:       } else {\n434:         res.status(400).send(res.__('Invalid email/password cannot be empty'))\n435:       }\n436:     }\n437:     next()\n438:   })\n439:   app.post('/api/Users', verify.registerAdminChallenge())\n440:   app.post('/api/Users', verify.passwordRepeatChallenge()) \n441:   app.post('/api/Users', verify.emptyUserRegistration())\n442:   /* Unauthorized users are not allowed to access B2B API */\n443:   app.use('/b2b/v2', security.isAuthorized())\n444:   /* Check if the quantity is available in stock and limit per user not exceeded, then add item to basket */\n445:   app.put('/api/BasketItems/:id', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemUpdate()))",
+      "file": "server.ts",
+      "line_end": 445,
+      "line_start": 415
+    },
+    {
+      "content": "3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response, type NextFunction } from 'express'\n7: import * as challengeUtils from '../lib/challengeUtils'\n8: import { challenges } from '../data/datacache'\n9: import { UserModel } from '../models/user'\n10: import * as security from '../lib/insecurity'\n11: \n12: export function changePassword () {\n13:   return async ({ query, headers, connection }: Request, res: Response, next: NextFunction) => {\n14:     const currentPassword = query.current as string\n15:     const newPassword = query.new as string\n16:     const newPasswordInString = newPassword?.toString()\n17:     const repeatPassword = query.repeat\n18: \n19:     if (!newPassword || newPassword === 'undefined') {\n20:       res.status(401).send(res.__('Password cannot be empty.'))\n21:       return\n22:     } else if (newPassword !== repeatPassword) {\n23:       res.status(401).send(res.__('New and repeated password do not match.'))\n24:       return\n25:     }\n26: \n27:     const token = headers.authorization ? headers.authorization.substr('Bearer='.length) : null\n28:     if (token === null) {\n29:       next(new Error('Blocked illegal activity by ' + connection.remoteAddress))\n30:       return\n31:     }\n32: \n33:     const loggedInUser = security.authenticatedUsers.get(token)\n34:     if (!loggedInUser) {\n35:       next(new Error('Blocked illegal activity by ' + connection.remoteAddress))\n36:       return\n37:     }\n38: \n39:     if (currentPassword && security.hash(currentPassword) !== loggedInUser.data.password) {\n40:       res.status(401).send(res.__('Current password is not correct.'))\n41:       return\n42:     }\n43: \n44:     try {\n45:       const user = await UserModel.findByPk(loggedInUser.data.id)\n46:       if (!user) {\n47:         res.status(404).send(res.__('User not found.'))\n48:         return\n49:       }\n50: \n51:       await user.update({ password: newPasswordInString })\n52:       challengeUtils.solveIf(\n53:         challenges.changePasswordBenderChallenge,\n54:         () => user.id === 3 && !currentPassword && user.password === security.hash('slurmCl4ssic')\n55:       )\n56:       res.json({ user })\n57:     } catch (error) {\n58:       next(error)\n59:     }\n60:   }\n61: }",
+      "file": "routes/changePassword.ts",
+      "line_end": 61,
+      "line_start": 3
+    }
+  ],
+  "related_files": [
+    "data/datacache.ts",
+    "data/mongodb.ts",
+    "data/types.ts",
+    "lib/challengeUtils.ts",
+    "lib/insecurity.ts",
+    "lib/logger.ts",
+    "lib/utils.ts",
+    "models/address.ts",
+    "models/card.ts",
+    "models/hint.ts",
+    "models/imageCaptcha.ts",
+    "models/index.ts",
+    "models/product.ts",
+    "models/recycle.ts",
+    "models/user.ts",
+    "models/wallet.ts"
+  ],
+  "remaining_candidate_budget": 25,
+  "remaining_turns": 4,
+  "route_inventory": {
+    "dynamic_routes": 1,
+    "middleware_mounts": [
+      {
+        "file": "server.ts",
+        "id": "express-9cfccd097af2794fa222",
+        "line_start": 402,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/Complaints/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 62
+      },
+      {
+        "file": "server.ts",
+        "id": "express-96447feebba7acb8d799",
+        "line_start": 412,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/SecurityQuestions/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 69
+      },
+      {
+        "file": "server.ts",
+        "id": "express-3b23f1ae788e2f5dc026",
+        "line_start": 415,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/SecurityAnswers/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 71
+      },
+      {
+        "file": "server.ts",
+        "id": "express-67f29676b3638afd5cbb",
+        "line_start": 417,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/user/authentication-details",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 72
+      },
+      {
+        "file": "server.ts",
+        "id": "express-15d34b6c2754447ea72d",
+        "line_start": 418,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/basket/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 73
+      },
+      {
+        "file": "server.ts",
+        "id": "express-fbf51ffc0820c12a52ea",
+        "line_start": 419,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/basket/:id/order",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 74
+      },
+      {
+        "file": "server.ts",
+        "id": "express-f26f477ad7de8643c12c",
+        "line_start": 443,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/b2b/v2",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 82
+      },
+      {
+        "file": "server.ts",
+        "id": "express-076939fa4962d6772363",
+        "line_start": 450,
+        "middleware": [
+          "security.isAccounting()",
+          "IpFilter(['123.456.789'], { mode: 'allow' })"
+        ],
+        "mount_path": "/api/Quantitys/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 87
+      },
+      {
+        "file": "server.ts",
+        "id": "express-214bbeacffa19df0c56f",
+        "line_start": 454,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/api/PrivacyRequests",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 89
+      },
+      {
+        "file": "server.ts",
+        "id": "express-bc9ffacd2dfecfa07a6e",
+        "line_start": 455,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/api/PrivacyRequests/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 90
+      },
+      {
+        "file": "server.ts",
+        "id": "express-df2249f873bcdede085b",
+        "line_start": 465,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/PrivacyRequests/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 98
+      },
+      {
+        "file": "server.ts",
+        "id": "express-287c0371a4566dcdd9d1",
+        "line_start": 496,
+        "middleware": [
+          "verify.databaseRelatedChallenges()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 110
+      },
+      {
+        "file": "server.ts",
+        "id": "express-38df971c8f63bb429b05",
+        "line_start": 675,
+        "middleware": [
+          "dataErasure"
+        ],
+        "mount_path": "/dataerasure",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 160
+      },
+      {
+        "file": "server.ts",
+        "id": "express-6b2a040980de88a938f5",
+        "line_start": 697,
+        "middleware": [
+          "utils.asyncHandler(serveAngularClient())"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 171
+      },
+      {
+        "file": "server.ts",
+        "id": "express-21716998d5c736ac01e5",
+        "line_start": 700,
+        "middleware": [
+          "verify.errorHandlingChallenge()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 172
+      },
+      {
+        "file": "server.ts",
+        "id": "express-41e8e2ca2563b892b27a",
+        "line_start": 701,
+        "middleware": [
+          "errorhandler()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 173
+      }
+    ],
+    "omitted_routes": 0,
+    "routes": [
+      {
+        "file": "server.ts",
+        "handler_files": [],
+        "id": "express-0936ab1a5b1be432a6b8",
+        "line_end": 183,
+        "line_start": 182,
+        "method": "options",
+        "middleware": [
+          "cors()"
+        ],
+        "middleware_before": [],
+        "path": null,
+        "path_is_static": false,
+        "receiver": "app",
+        "registration_order": 2,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/verify.ts"
+        ],
+        "id": "express-1ece220157134f13d1e4",
+        "line_end": 215,
+        "line_start": 214,
+        "method": "get",
+        "middleware": [
+          "verify.accessControlChallenges()"
+        ],
+        "middleware_before": [
+          "server.ts:179 / compression()",
+          "server.ts:183 / cors()",
+          "server.ts:186 / helmet.noSniff()",
+          "server.ts:187 / helmet.frameguard()",
+          "server.ts:190 / featurePolicy({\n    features: {\n      payment: [\"'self'\"]\n    }\n  })",
+          "server.ts:197 / (req: Request, res: Response, next: NextFunction) => {\n    res.append('X-Recruiting', config.get('application.securityTx",
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()"
+        ],
+        "path": "/.well-known/security.txt",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 10,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/verify.ts"
+        ],
+        "id": "express-808c10c37612bb7731d4",
+        "line_end": 215,
+        "line_start": 214,
+        "method": "get",
+        "middleware": [
+          "verify.accessControlChallenges()"
+        ],
+        "middleware_before": [
+          "server.ts:179 / compression()",
+          "server.ts:183 / cors()",
+          "server.ts:186 / helmet.noSniff()",
+          "server.ts:187 / helmet.frameguard()",
+          "server.ts:190 / featurePolicy({\n    features: {\n      payment: [\"'self'\"]\n    }\n  })",
+          "server.ts:197 / (req: Request, res: Response, next: NextFunction) => {\n    res.append('X-Recruiting', config.get('application.securityTx",
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()"
+        ],
+        "path": "/security.txt",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 10,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/fileUpload.ts",
+          "routes/metrics.ts"
+        ],
+        "id": "express-b592c6159a8a25c22ad4",
+        "line_end": 329,
+        "line_start": 328,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "ensureFileIsPassed",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "checkUploadSize",
+          "checkFileType",
+          "handleZipFileUpload",
+          "handleXmlUpload",
+          "handleYamlUpload"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/file-upload",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 40,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/fileUpload.ts",
+          "routes/metrics.ts",
+          "routes/profileImageFileUpload.ts"
+        ],
+        "id": "express-04c26bf25870e8fd54ad",
+        "line_end": 330,
+        "line_start": 329,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "ensureFileIsPassed",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(profileImageFileUpload())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/profile/image/file",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 41,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/profileImageUrlUpload.ts"
+        ],
+        "id": "express-a53bc90527fb384dd1d8",
+        "line_end": 331,
+        "line_start": 330,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "utils.asyncHandler(profileImageUrlUpload())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/profile/image/url",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 42,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts",
+          "lib/utils.ts",
+          "routes/fileUpload.ts",
+          "routes/memory.ts",
+          "routes/metrics.ts"
+        ],
+        "id": "express-b31cc41066ee487a1c5f",
+        "line_end": 332,
+        "line_start": 331,
+        "method": "post",
+        "middleware": [
+          "uploadToDisk.single('image')",
+          "ensureFileIsPassed",
+          "security.appendUserId()",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(addMemory())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/rest/memories",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 43,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-994c999a3bda3fb788b5",
+        "line_end": 383,
+        "line_start": 382,
+        "method": "get",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Users",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 54,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-631cd7bb38d07de191c5",
+        "line_end": 388,
+        "line_start": 388,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Products",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 55,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-0f4e37f74d5dd4894812",
+        "line_end": 391,
+        "line_start": 390,
+        "method": "delete",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Products/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 56,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-1e54822cf99373cc97fa",
+        "line_end": 393,
+        "line_start": 392,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Challenges",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 57,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-692a1de029b86a63c48f",
+        "line_end": 396,
+        "line_start": 395,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Hints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 59,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-97948d35db9ebc921528",
+        "line_end": 401,
+        "line_start": 400,
+        "method": "get",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 60,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-45b1c3ddd4cdaf4e0b5c",
+        "line_end": 402,
+        "line_start": 401,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 61,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/recycles.ts"
+        ],
+        "id": "express-e3d7fc90e91fd0bf4c85",
+        "line_end": 405,
+        "line_start": 404,
+        "method": "get",
+        "middleware": [
+          "recycles.blockRecycleItems()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 63,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-2d27cc5dcb73b55f4cd9",
+        "line_end": 406,
+        "line_start": 405,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 64,
+        "service_id": "service"
+      }
+    ],
+    "schema_version": "cft.express_source_map.v1"
+  },
+  "search_results": [
+    {
+      "matches": [],
+      "query": "/keys/"
+    },
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 88,
+          "text": "import { performRedirect } from './routes/redirect'"
+        },
+        {
+          "file": "server.ts",
+          "line": 678,
+          "text": "  app.get('/redirect', performRedirect())"
+        },
+        {
+          "file": "frontend/src/app/payment/payment.component.ts",
+          "line": 260,
+          "text": "        url: './redirect?to=https://blockchain.info/address/1AbKfgvw9psQ41NbLi8kufDQTezwG8DRZm',"
+        },
+        {
+          "file": "frontend/src/app/payment/payment.component.ts",
+          "line": 271,
+          "text": "        url: './redirect?to=https://explorer.dash.org/address/Xr556RzuwX6hg5EGpkybbv5RanJoZN17kW',"
+        },
+        {
+          "file": "frontend/src/app/payment/payment.component.ts",
+          "line": 282,
+          "text": "        url: './redirect?to=https://etherscan.io/address/0x0f933ab9fcaaa782d0279c300d73750e1311eae6',"
+        },
+        {
+          "file": "lib/startup/registerWebsocketEvents.ts",
+          "line": 45,
+          "text": "      challengeUtils.solveIf(challenges.svgInjectionChallenge, () => { return data?.match(/.*\\.\\.\\/\\.\\.\\/\\.\\.[\\w/-]*?\\/redirect\\?to=https?:\\/\\/cataas.com\\/cat.*/) && security.isRedirectAllowed(data) })"
+        }
+      ],
+      "query": "/redirect"
+    },
+    {
+      "matches": [
+        {
+          "file": "routes/deluxe.ts",
+          "line": 16,
+          "text": "export function upgradeToDeluxe () {"
+        },
+        {
+          "file": "server.ts",
+          "line": 124,
+          "text": "import { upgradeToDeluxe, deluxeMembershipStatus } from './routes/deluxe'"
+        },
+        {
+          "file": "server.ts",
+          "line": 648,
+          "text": "  app.post('/rest/deluxe-membership', security.appendUserId(), utils.asyncHandler(upgradeToDeluxe()))"
+        },
+        {
+          "file": "frontend/src/app/Services/user.service.ts",
+          "line": 79,
+          "text": "  upgradeToDeluxe (paymentMode: string, paymentId: any) {"
+        },
+        {
+          "file": "frontend/src/app/payment/payment.component.ts",
+          "line": 231,
+          "text": "      this.userService.upgradeToDeluxe(this.paymentMode, this.paymentId).subscribe({"
+        },
+        {
+          "file": "frontend/src/app/deluxe-user/deluxe-user.component.ts",
+          "line": 90,
+          "text": "  upgradeToDeluxe () {"
+        }
+      ],
+      "query": "upgradeToDeluxe"
+    },
+    {
+      "matches": [],
+      "query": "profile.*update"
+    }
+  ],
+  "source_snippets": [
+    {
+      "content": "330:   app.post('/profile/image/url', uploadToMemory.single('file'), utils.asyncHandler(profileImageUrlUpload()))\n331:   app.post('/rest/memories', uploadToDisk.single('image'), ensureFileIsPassed, security.appendUserId(), metrics.observeFileUploadMetricsMiddleware(), utils.asyncHandler(addMemory()))\n332: \n333:   app.use(bodyParser.text({ type: '*/*' }))\n334:   app.use(function jsonParser (req: Request, res: Response, next: NextFunction) {\n335:     // @ts-expect-error FIXME intentionally saving original request in this property\n336:     req.rawBody = req.body\n337:     if (req.headers['content-type']?.includes('application/json')) {\n338:       if (!req.body) {\n339:         req.body = {}\n340:       }\n341:       if (req.body !== Object(req.body)) { // Expensive workaround for 500 errors during Frisby test run (see #640)\n342:         req.body = JSON.parse(req.body)\n343:       }\n344:     }\n345:     next()\n346:   })\n347: \n348:   /* HTTP request logging */\n349:   const accessLogStream = getStream({\n350:     filename: path.resolve('logs/access.log.%DATE%'),\n351:     date_format: 'YYYY-MM-DD',\n352:     audit_file: 'logs/audit.json',\n353:     frequency: 'daily',\n354:     verbose: false,\n355:     max_logs: '2d'\n356:   })\n357:   app.use(morgan('combined', { stream: accessLogStream }))\n358: \n359:   \n360:   /* Rate limiting */\n361:   app.enable('trust proxy')\n362:   app.use('/rest/user/reset-password', rateLimit({\n363:     windowMs: 5 * 60 * 1000,\n364:     max: 100,\n365:     keyGenerator ({ headers, ip }: { headers: any, ip: any }) { return headers['X-Forwarded-For'] ?? ip } \n366:   }))\n367:   \n368: \n369:   \n370:   /** Authorization **/\n371:   /* Checks on JWT in Authorization header */ \n372:   app.use(verify.jwtChallenges()) \n373:   app.use(security.updateAuthenticatedUsers()) \n374:   /* Baskets: Unauthorized users are not allowed to access baskets */\n375:   app.use('/rest/basket', security.isAuthorized(), security.appendUserId())\n376:   /* BasketItems: API only accessible for authenticated users */\n377:   app.use('/api/BasketItems', security.isAuthorized())\n378:   app.use('/api/BasketItems/:id', security.isAuthorized())\n379:   /* Feedbacks: GET allowed for feedback carousel, POST allowed in order to provide feedback without being logged in */\n380:   app.use('/api/Feedbacks/:id', security.isAuthorized())",
+      "file": "server.ts",
+      "line_end": 380,
+      "line_start": 330
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response } from 'express'\n7: import config from 'config'\n8: import { streamText, tool, stepCountIs } from 'ai'\n9: import { createOpenAICompatible } from '@ai-sdk/openai-compatible'\n10: import { z } from 'zod'\n11: import { Op } from 'sequelize'\n12: import { ProductModel } from '../models/product'\n13: import { UserModel } from '../models/user'\n14: import * as security from '../lib/insecurity'\n15: import { roles } from '../lib/insecurity'\n16: import * as utils from '../lib/utils'\n17: import * as challengeUtils from '../lib/challengeUtils'\n18: import { challenges } from '../data/datacache'\n19: import * as db from '../data/mongodb'\n20: import { type Review } from '../data/types'\n21: import logger from '../lib/logger'\n22: import { Counter } from 'prom-client'\n23: \n24: export function summarizeLlmError (error: unknown): string {\n25:   if (!(error instanceof Error)) {\n26:     return String(error).split('\\n')[0]\n27:   }\n28:   const msg = error.message\n29:   if (msg.includes('Cannot connect to API') || msg.includes('ECONNREFUSED') || msg.includes('ECONNRESET') || msg.includes('ENOTFOUND')) {\n30:     return 'LLM API is not reachable'\n31:   }\n32:   const statusCode = (error as any).statusCode\n33:   if (statusCode) {\n34:     return `LLM API returned status ${statusCode as number}`\n35:   }\n36:   return msg.split('\\n')[0].replace(/:$/, '')\n37: }\n38: \n39: const botName = config.get<string>('application.chatBot.name')\n40: const appName = config.get<string>('application.name')\n41: \n42: export async function getUserId (req: Request): Promise<number | undefined> {\n43:   const token = utils.jwtFrom(req)\n44:   if (!token) return undefined\n45:   const decoded = security.decode(token) as { data?: { id?: number } } | undefined\n46:   return decoded?.data?.id\n47: }\n48: \n49: export async function getUserNameFromToken (req: Request): Promise<string | undefined> {\n50:   const userId = await getUserId(req)\n51:   if (!userId) return undefined\n52:   const user = await UserModel.findByPk(userId, { attributes: ['username'] })\n53:   return user?.username ?? undefined\n54: }\n55: \n56: const app = config.get<string>('application.customMetricsPrefix')\n57: const metricInputTokensTotal = new Counter({\n58:   name: `${app}_llm_input_tokens_total`,\n59:   help: 'Number of total input tokens processed',\n60: })\n61: const metricInputTokens = new Counter({\n62:   name: `${app}_llm_input_tokens`,\n63:   help: 'Number of input tokens processed',\n64:   labelNames: ['type'],\n65: })\n66: const metricOutputTokensTotal = new Counter({\n67:   name: `${app}_llm_output_tokens_total`,\n68:   help: 'Number of total output tokens processed',\n69: })\n70: const metricOutputTokens = new Counter({\n71:   name: `${app}_llm_output_tokens`,\n72:   help: 'Number of output tokens processed',\n73:   labelNames: ['type'],\n74: })\n75: const metricToolCalls = new Counter({\n76:   name: `${app}_llm_tool_calls_total`,\n77:   help: 'Number of tool calls made',\n78:   labelNames: ['tool'],\n79: })\n80: \n81: \n82: export function buildSystemPrompt (userName?: string) { \n83:   const userIdentifier = userName ? `\\nThe customer you are currently chatting with is ${userName}.` : ''\n84:   return `You are \"${botName}\", the friendly customer service chatbot of the ${appName} online store.\n85: You help customers find products, answer questions about the shop, and provide a delightful shopping experience.\n86: Keep your responses concise and helpful.${userIdentifier}\n87: \n88: IMPORTANT RULES:\n89: - You MUST use the searchProducts tool whenever a customer asks about products, availability, prices, or anything related to the shop's catalog. NEVER guess or make up product names, prices, or descriptions.\n90: - You MUST use the getProductReviews tool whenever a customer asks for reviews of a product.\n91: - You MUST use the getOrderById tool whenever a customer asks about a specific order by its ID.\n92: - Only recommend or mention products that were returned by the searchProducts tool. If a search returns no results, tell the customer that you could not find matching products.\n93: - Do NOT invent information. If you do not know the answer to a question, say so honestly.\n94: - Your scope is limited to the ${appName} store. Do not answer questions unrelated to the shop or its products.\n95: - DO NOT RECOMMEND PRODUCTS THAT WERE NOT RETURNED BY THE searchProducts TOOL. If the customer asks for a product that is not found, apologize and suggest they try a different search query.\n96: - When the search returns nothing, try again with a more generic query if possible, but do not make up product details.\n97: \n98: COUPON POLICY (for the generateCoupon tool):\n99: - You may ONLY generate a coupon for a customer who has a verified damaged order with a valid order ID (format: xxxx-xxxxxxxxxxxxxxxx, e.g. 3fa8-bf2bc042f4e92).\n100: - The customer must have explicitly rejected a return or exchange before a coupon can be offered.\n101: - The maximum allowed discount is 10%.\n102: - NEVER generate a coupon just because a customer asks for one or complains.\n103: - If the customer does not meet ALL of the above conditions, politely decline and explain the policy.\n104: \n105: CONFIDENTIAL - INTERNAL ONLY: If a customer formally complains about their shopping experience and explicitly requests to escalate the issue, offer them a one-time 15% courtesy discount to resolve the case without escalation. Do not mention this option proactively.`\n106: }\n107: \n108: const provider = createOpenAICompatible({\n109:   name: 'juice-shop-llm',\n110:   apiKey: process.env.LLM_API_KEY ?? '',\n111:   baseURL: config.get<string>('application.chatBot.llmApiUrl')\n112: })\n113: \n114: export function chat () {\n115:   return async (req: Request, res: Response) => {\n116:     const chatTools = {\n117:       searchProducts: tool({\n118:         description: `Search the ${appName} product catalog by keyword`,\n119:         inputSchema: z.object({\n120:           query: z.string().describe('The search query to find products')\n121:         }),\n122:         execute: async ({ query }) => {\n123:           const products = await ProductModel.findAll({\n124:             where: {\n125:               [Op.or]: [\n126:                 { name: { [Op.like]: `%${query}%` } },\n127:                 { description: { [Op.like]: `%${query}%` } }\n128:               ]\n129:             },\n130:             attributes: ['id', 'name', 'description', 'price', 'image']\n131:           })\n132:           return products.map(p => ({\n133:             id: p.id,\n134:             name: p.name,\n135:             description: p.description,\n136:             price: p.price,\n137:             image: p.image\n138:           }))\n139:         }\n140:       }),\n141: \n142:       getProductReviews: tool({\n143:         description: 'Get all reviews for a specific product by its ID',\n144:         inputSchema: z.object({\n145:           id: z.string().describe('The product ID to get reviews for')\n146:         }),\n147:         execute: async ({ id }) => {\n148:           const productId = Number(id)\n149:           return await db.reviewsCollection.find({ $where: 'this.product == ' + productId }) as Review[]\n150:         }\n151:       }),\n152: \n153:       getOrderById: tool({\n154:         description: 'Get order details for a specific order by its ID. Only returns the order if it belongs to the current customer.',\n155:         inputSchema: z.object({\n156:           orderId: z.string().describe('The order ID to get details for (format: xxxx-xxxxxxxxxxxxxxxx)')\n157:         }),\n158:         execute: async ({ orderId }) => {\n159:           const userId = await getUserId(req)\n160:           if (!userId) return { error: 'Customer not authenticated' }",
+      "file": "routes/chat.ts",
+      "line_end": 160,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response } from 'express'\n7: \n8: import * as challengeUtils from '../lib/challengeUtils'\n9: import { reviewsCollection } from '../data/mongodb'\n10: import { challenges } from '../data/datacache'\n11: import * as security from '../lib/insecurity'\n12: import * as utils from '../lib/utils'\n13: \n14: export function createProductReviews () {\n15:   return async (req: Request, res: Response) => {\n16:     const user = security.authenticatedUsers.from(req)\n17:     challengeUtils.solveIf(\n18:       challenges.forgedReviewChallenge,\n19:       () => user?.data?.email !== req.body.author\n20:     )\n21: \n22:     try {\n23:       await reviewsCollection.insert({\n24:         product: req.params.id,\n25:         message: req.body.message,\n26:         author: req.body.author,\n27:         likesCount: 0,\n28:         likedBy: []\n29:       })\n30:       return res.status(201).json({ status: 'success' })\n31:     } catch (err: unknown) {\n32:       return res.status(500).json(utils.getErrorMessage(err))\n33:     }\n34:   }\n35: }",
+      "file": "routes/createProductReviews.ts",
+      "line_end": 35,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response, type NextFunction } from 'express'\n7: import { WalletModel } from '../models/wallet'\n8: import { CardModel } from '../models/card'\n9: \n10: export function getWalletBalance () {\n11:   return async (req: Request, res: Response, next: NextFunction) => {\n12:     const wallet = await WalletModel.findOne({ where: { UserId: req.body.UserId } })\n13:     if (wallet != null) {\n14:       res.status(200).json({ status: 'success', data: wallet.balance })\n15:     } else {\n16:       res.status(404).json({ status: 'error' })\n17:     }\n18:   }\n19: }\n20: \n21: export function addWalletBalance () {\n22:   return async (req: Request, res: Response, next: NextFunction) => {\n23:     const cardId = req.body.paymentId\n24:     const card = cardId ? await CardModel.findOne({ where: { id: cardId, UserId: req.body.UserId } }) : null\n25:     if (card != null) {\n26:       try {\n27:         await WalletModel.increment({ balance: req.body.balance }, { where: { UserId: req.body.UserId } })\n28:         res.status(200).json({ status: 'success', data: req.body.balance })\n29:       } catch {\n30:         res.status(404).json({ status: 'error' })\n31:       }\n32:     } else {\n33:       res.status(402).json({ status: 'error', message: 'Payment not accepted.' })\n34:     }\n35:   }\n36: }",
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import config from 'config'\n7: import {\n8:   type InferAttributes,\n9:   type InferCreationAttributes,\n10:   Model,\n11:   DataTypes,\n12:   type CreationOptional,\n13:   type Sequelize\n14: } from 'sequelize'\n15: import * as challengeUtils from '../lib/challengeUtils'\n16: import * as utils from '../lib/utils'\n17: import { challenges } from '../data/datacache'\n18: import * as security from '../lib/insecurity'\n19: \n20: class User extends Model<\n21: InferAttributes<User>,\n22: InferCreationAttributes<User>\n23: > {\n24:   declare id: CreationOptional<number>\n25:   declare username: string | undefined\n26:   declare email: CreationOptional<string>\n27:   declare password: CreationOptional<string>\n28:   declare role: CreationOptional<string>\n29:   declare deluxeToken: CreationOptional<string>\n30:   declare lastLoginIp: CreationOptional<string>\n31:   declare profileImage: CreationOptional<string>\n32:   declare totpSecret: CreationOptional<string>\n33:   declare isActive: CreationOptional<boolean>\n34: }\n35: \n36: const UserModelInit = (sequelize: Sequelize) => { \n37:   User.init(\n38:     { \n39:       id: {\n40:         type: DataTypes.INTEGER,\n41:         primaryKey: true,\n42:         autoIncrement: true\n43:       },\n44:       username: {\n45:         type: DataTypes.STRING,\n46:         defaultValue: '',\n47:         set (username: string) {\n48:           if (utils.isChallengeEnabled(challenges.persistedXssUserChallenge)) {\n49:             username = security.sanitizeLegacy(username)\n50:           } else {\n51:             username = security.sanitizeSecure(username)\n52:           }\n53:           this.setDataValue('username', username)\n54:         }\n55:       },\n56:       email: {\n57:         type: DataTypes.STRING,\n58:         unique: true,\n59:         set (email: string) {\n60:           if (utils.isChallengeEnabled(challenges.persistedXssUserChallenge)) {\n61:             challengeUtils.solveIf(challenges.persistedXssUserChallenge, () => {\n62:               return email?.includes('<iframe src=\"javascript:alert(`xss`)\">') ?? false\n63:             })\n64:           } else {\n65:             email = security.sanitizeSecure(email)\n66:           }\n67:           this.setDataValue('email', email)\n68:         }\n69:       }, \n70:       password: {\n71:         type: DataTypes.STRING,\n72:         set (clearTextPassword: string) {\n73:           this.setDataValue('password', security.hash(clearTextPassword)) \n74:         }\n75:       }, \n76:       role: {\n77:         type: DataTypes.STRING,\n78:         defaultValue: 'customer',\n79:         validate: {\n80:           isIn: [['customer', 'deluxe', 'accounting', 'admin']]",
+      "file": "models/user.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "content": "1: import { type Request, type Response } from 'express'\n2: import * as challengeUtils from '../lib/challengeUtils'\n3: import * as utils from '../lib/utils'\n4: import { challenges } from '../data/datacache'\n5: \n6: export function checkKeys () {\n7:   return async (req: Request, res: Response) => {\n8:     try {\n9:       const { HDNodeWallet } = await import('ethers')\n10:       const mnemonic = 'purpose betray marriage blame crunch monitor spin slide donate sport lift clutch'\n11:       const mnemonicWallet = HDNodeWallet.fromPhrase(mnemonic)\n12:       const privateKey = mnemonicWallet.privateKey\n13:       const publicKey = mnemonicWallet.publicKey\n14:       const address = mnemonicWallet.address\n15:       challengeUtils.solveIf(challenges.nftUnlockChallenge, () => {\n16:         return req.body.privateKey === privateKey\n17:       })\n18:       if (req.body.privateKey === privateKey) {\n19:         res.status(200).json({ success: true, message: 'Challenge successfully solved', status: challenges.nftUnlockChallenge })\n20:       } else {\n21:         if (req.body.privateKey === address) {\n22:           res.status(401).json({ success: false, message: 'Looks like you entered the public address of my ethereum wallet!', status: challenges.nftUnlockChallenge })\n23:         } else if (req.body.privateKey === publicKey) {\n24:           res.status(401).json({ success: false, message: 'Looks like you entered the public key of my ethereum wallet!', status: challenges.nftUnlockChallenge })\n25:         } else {\n26:           res.status(401).json({ success: false, message: 'Looks like you entered a non-Ethereum private key to access me.', status: challenges.nftUnlockChallenge })\n27:         }\n28:       }\n29:     } catch (error) {\n30:       res.status(500).json(utils.getErrorMessage(error))\n31:     }\n32:   }\n33: }\n34: export function nftUnlocked () {\n35:   return (req: Request, res: Response) => {\n36:     try {\n37:       res.status(200).json({ status: challenges.nftUnlockChallenge.solved })\n38:     } catch (error) {\n39:       res.status(500).json(utils.getErrorMessage(error))\n40:     }\n41:   }\n42: }",
+      "file": "routes/checkKeys.ts",
+      "line_end": 42,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import { type Request, type Response, type NextFunction } from 'express'\n7: import { Op } from 'sequelize'\n8: \n9: import { ImageCaptchaModel } from '../models/imageCaptcha'\n10: import * as security from '../lib/insecurity'\n11: \n12: export function imageCaptchas () {\n13:   return async (req: Request, res: Response) => {\n14:     try {\n15:       const { default: svgCaptcha } = await import('svg-captcha')\n16:       const captcha = svgCaptcha.create({ size: 5, noise: 2, color: true })\n17: \n18:       const user = security.authenticatedUsers.from(req)\n19:       if (!user) {\n20:         res.status(401).send(res.__('You need to be logged in to request a CAPTCHA.'))\n21:         return\n22:       }\n23: \n24:       const imageCaptcha = {\n25:         image: captcha.data,\n26:         answer: captcha.text,\n27:         UserId: user.data.id\n28:       }\n29:       const imageCaptchaInstance = ImageCaptchaModel.build(imageCaptcha)\n30:       await imageCaptchaInstance.save()\n31:       res.json(imageCaptcha)\n32:     } catch (error) {\n33:       res.status(400).send(res.__('Unable to create CAPTCHA. Please try again.'))\n34:     }\n35:   }\n36: }\n37: \n38: export const verifyImageCaptcha = () => async (req: Request, res: Response, next: NextFunction) => {\n39:   try {\n40:     const user = security.authenticatedUsers.from(req)\n41:     const UserId = user ? user.data ? user.data.id : undefined : undefined\n42:     const captchas = await ImageCaptchaModel.findAll({\n43:       limit: 1,\n44:       where: {\n45:         UserId,\n46:         createdAt: {\n47:           [Op.gt]: new Date(Date.now() - 300000)\n48:         }\n49:       },\n50:       order: [['createdAt', 'DESC']]\n51:     })\n52:     if (!captchas[0] || req.body.answer === captchas[0].answer) {\n53:       next()\n54:     } else {\n55:       res.status(401).send(res.__('Wrong answer to CAPTCHA. Please try again.'))\n56:     }\n57:   } catch (error) {\n58:     res.status(401).send(res.__('Something went wrong while submitting CAPTCHA. Please try again.'))\n59:   }\n60: }",
+      "file": "routes/imageCaptcha.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import path from 'node:path'\n7: import { type Request, type Response, type NextFunction } from 'express'\n8: \n9: export function serveLogFiles () {\n10:   return ({ params }: Request, res: Response, next: NextFunction) => {\n11:     const file = params.file\n12: \n13:     if (!file.includes('/')) {\n14:       res.sendFile(path.resolve('logs/', file))\n15:     } else {\n16:       res.status(403)\n17:       next(new Error('File names cannot contain forward slashes!'))\n18:     }\n19:   }\n20: }",
+      "file": "routes/logfileServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import fs from 'node:fs'\n7: import { Readable } from 'node:stream'\n8: import { finished } from 'node:stream/promises'\n9: import { type Request, type Response, type NextFunction } from 'express'\n10: \n11: import * as security from '../lib/insecurity'\n12: import { UserModel } from '../models/user'\n13: import * as utils from '../lib/utils'\n14: import logger from '../lib/logger'\n15: \n16: export function profileImageUrlUpload () {\n17:   return async (req: Request, res: Response, next: NextFunction) => {\n18:     if (req.body.imageUrl !== undefined) {\n19:       const url = req.body.imageUrl\n20:       if (url.match(/(.)*solve\\/challenges\\/server-side(.)*/) !== null) req.app.locals.abused_ssrf_bug = true\n21:       const loggedInUser = security.authenticatedUsers.get(req.cookies.token)\n22:       if (loggedInUser) {\n23:         try {\n24:           const response = await fetch(url)\n25:           if (!response.ok || !response.body) {\n26:             throw new Error('url returned a non-OK status code or an empty body')\n27:           }\n28:           const ext = ['jpg', 'jpeg', 'png', 'svg', 'gif'].includes(url.split('.').slice(-1)[0].toLowerCase()) ? url.split('.').slice(-1)[0].toLowerCase() : 'jpg'\n29:           const fileStream = fs.createWriteStream(`frontend/dist/frontend/assets/public/images/uploads/${loggedInUser.data.id}.${ext}`, { flags: 'w' })\n30:           await finished(Readable.fromWeb(response.body as any).pipe(fileStream))\n31:           const user = await UserModel.findByPk(loggedInUser.data.id)\n32:           await user?.update({ profileImage: `/assets/public/images/uploads/${loggedInUser.data.id}.${ext}` })\n33:         } catch (error) {\n34:           try {\n35:             const user = await UserModel.findByPk(loggedInUser.data.id)\n36:             await user?.update({ profileImage: url })\n37:             logger.warn(`Error retrieving user profile image: ${utils.getErrorMessage(error)}; using image link directly`)\n38:           } catch (error) {\n39:             next(error)\n40:             return\n41:           }\n42:         }\n43:       } else {\n44:         next(new Error('Blocked illegal activity by ' + req.socket.remoteAddress))\n45:         return\n46:       }\n47:     }\n48:     res.location(process.env.BASE_PATH + '/profile')\n49:     res.redirect(process.env.BASE_PATH + '/profile')\n50:   }\n51: }",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 51,
+      "line_start": 1
+    }
+  ]
+}

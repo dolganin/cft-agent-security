@@ -1,0 +1,2846 @@
+{
+  "accepted_candidates": 19,
+  "budgets": {
+    "max_source_chars": 160000,
+    "max_turns": 8,
+    "wall_clock_seconds": 600
+  },
+  "combined_queue": 94,
+  "cost": {
+    "currency_cost": null,
+    "reason": "provider_reported_tokens_no_verified_pricing",
+    "token_usage": {
+      "completion_tokens": 18260,
+      "prompt_tokens": 190248,
+      "total_tokens": 208508
+    }
+  },
+  "dependency_followups": [],
+  "dropped_candidates": 0,
+  "duplicates": 0,
+  "elapsed_seconds": 74.118,
+  "fully_reviewed_files": 10,
+  "indexed_files": 256,
+  "indexed_line_coverage": 0.0908,
+  "indexed_source_lines": 22529,
+  "max_candidates": 32,
+  "model_calls": 8,
+  "rejected_candidates": 1,
+  "rejected_read_requests": 1,
+  "reviewed_chars": 152443,
+  "reviewed_ranges": [
+    {
+      "file": "server.ts",
+      "line_end": 160,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+      "line_end": 145,
+      "line_start": 1
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_end": 160,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 74,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageFileUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 32,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 47,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/faucet/faucet.component.ts",
+      "line_end": 276,
+      "line_start": 221
+    },
+    {
+      "file": "routes/login.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 180,
+      "line_start": 100
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 100
+    },
+    {
+      "file": "frontend/src/app/wallet-web3/wallet-web3.component.ts",
+      "line_end": 126,
+      "line_start": 71
+    },
+    {
+      "file": "routes/login.ts",
+      "line_end": 74,
+      "line_start": 19
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 63,
+      "line_start": 8
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 74,
+      "line_start": 32
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 173,
+      "line_start": 118
+    },
+    {
+      "file": "lib/startup/registerWebsocketEvents.ts",
+      "line_end": 54,
+      "line_start": 30
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 162,
+      "line_start": 107
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/changePassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/basket.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "routes/authenticatedUsers.ts",
+      "line_end": 37,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataExport.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 175,
+      "line_start": 120
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 32,
+      "line_start": 13
+    },
+    {
+      "file": "server.ts",
+      "line_end": 470,
+      "line_start": 420
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 197,
+      "line_start": 175
+    },
+    {
+      "file": "server.ts",
+      "line_end": 168,
+      "line_start": 113
+    },
+    {
+      "file": "server.ts",
+      "line_end": 368,
+      "line_start": 313
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 86
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 124
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_end": 74,
+      "line_start": 19
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 197,
+      "line_start": 163
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 186,
+      "line_start": 131
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 188,
+      "line_start": 133
+    },
+    {
+      "file": "server.ts",
+      "line_end": 680,
+      "line_start": 620
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 190,
+      "line_start": 135
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 197,
+      "line_start": 142
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 59,
+      "line_start": 4
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 65,
+      "line_start": 10
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 70,
+      "line_start": 15
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 70,
+      "line_start": 20
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 130,
+      "line_start": 1
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 9
+    }
+  ],
+  "reviewed_source_lines": 2045,
+  "sast_queue": 75,
+  "schedule_mode": "round_robin",
+  "search_chars": 7557,
+  "skipped_files": {
+    "index_budget": 33,
+    "large_or_binary": 1,
+    "outside_application_source": 1010
+  },
+  "source_chars": 152443,
+  "stop_reason": "source_budget",
+  "submitted_ranges": [
+    {
+      "file": "server.ts",
+      "line_end": 160,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+      "line_end": 145,
+      "line_start": 1
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_end": 160,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 74,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageFileUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 32,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 47,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/faucet/faucet.component.ts",
+      "line_end": 276,
+      "line_start": 221
+    },
+    {
+      "file": "routes/login.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 180,
+      "line_start": 100
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 100
+    },
+    {
+      "file": "frontend/src/app/wallet-web3/wallet-web3.component.ts",
+      "line_end": 126,
+      "line_start": 71
+    },
+    {
+      "file": "routes/login.ts",
+      "line_end": 74,
+      "line_start": 19
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 63,
+      "line_start": 8
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 74,
+      "line_start": 32
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 173,
+      "line_start": 118
+    },
+    {
+      "file": "lib/startup/registerWebsocketEvents.ts",
+      "line_end": 54,
+      "line_start": 30
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 162,
+      "line_start": 107
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/changePassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/basket.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "routes/authenticatedUsers.ts",
+      "line_end": 37,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataExport.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 175,
+      "line_start": 120
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 32,
+      "line_start": 13
+    },
+    {
+      "file": "server.ts",
+      "line_end": 470,
+      "line_start": 420
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 197,
+      "line_start": 175
+    },
+    {
+      "file": "server.ts",
+      "line_end": 168,
+      "line_start": 113
+    },
+    {
+      "file": "server.ts",
+      "line_end": 368,
+      "line_start": 313
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 86
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 140,
+      "line_start": 124
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_end": 74,
+      "line_start": 19
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 197,
+      "line_start": 163
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 186,
+      "line_start": 131
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 188,
+      "line_start": 133
+    },
+    {
+      "file": "server.ts",
+      "line_end": 680,
+      "line_start": 620
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 190,
+      "line_start": 135
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 197,
+      "line_start": 142
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 59,
+      "line_start": 4
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 65,
+      "line_start": 10
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 70,
+      "line_start": 15
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 70,
+      "line_start": 20
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 130,
+      "line_start": 1
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 9
+    }
+  ],
+  "turns": [
+    {
+      "latency_ms": 4861,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 0,
+      "provider_attempts": [
+        {
+          "latency_ms": 3874,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "structured_correction_requested"
+        },
+        {
+          "latency_ms": 4856,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "server.ts",
+          "line_end": 160,
+          "line_start": 1
+        },
+        {
+          "file": "frontend/src/app/forgot-password/forgot-password.component.ts",
+          "line_end": 145,
+          "line_start": 1
+        },
+        {
+          "file": "routes/verify.ts",
+          "line_end": 160,
+          "line_start": 1
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 100,
+          "line_start": 1
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 100,
+          "line_start": 1
+        },
+        {
+          "file": "routes/search.ts",
+          "line_end": 80,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataErasure.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/profileImageFileUpload.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/profileImageUrlUpload.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/redirect.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/b2bOrder.ts",
+          "line_end": 80,
+          "line_start": 1
+        }
+      ],
+      "schema_errors": [
+        {
+          "loc": [
+            "search_queries"
+          ],
+          "msg": "List should have at most 4 items after validation, not 5",
+          "type": "too_long"
+        }
+      ],
+      "search_queries": [
+        "raw(",
+        "sequelize.query",
+        "exec(",
+        "child_process"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 1178,
+        "prompt_tokens": 36139,
+        "total_tokens": 37317
+      },
+      "turn": 1
+    },
+    {
+      "latency_ms": 7034,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 3,
+      "provider_attempts": [
+        {
+          "latency_ms": 7029,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 100,
+          "line_start": 1
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 100,
+          "line_start": 1
+        },
+        {
+          "file": "routes/search.ts",
+          "line_end": 74,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataErasure.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/profileImageFileUpload.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/profileImageUrlUpload.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/redirect.ts",
+          "line_end": 32,
+          "line_start": 1
+        },
+        {
+          "file": "routes/b2bOrder.ts",
+          "line_end": 47,
+          "line_start": 1
+        },
+        {
+          "file": "frontend/src/app/faucet/faucet.component.ts",
+          "line_end": 276,
+          "line_start": 221
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "routes/login.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 180,
+          "line_start": 100
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 160,
+          "line_start": 100
+        }
+      ],
+      "schema_errors": [],
+      "search_queries": [
+        "isRedirectAllowed",
+        "redirectAllowlist",
+        "handleYamlUpload"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 1600,
+        "prompt_tokens": 21624,
+        "total_tokens": 23224
+      },
+      "turn": 2
+    },
+    {
+      "latency_ms": 9654,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 3,
+      "provider_attempts": [
+        {
+          "latency_ms": 9649,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "routes/login.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 180,
+          "line_start": 100
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 140,
+          "line_start": 100
+        },
+        {
+          "file": "frontend/src/app/wallet-web3/wallet-web3.component.ts",
+          "line_end": 126,
+          "line_start": 71
+        },
+        {
+          "file": "routes/login.ts",
+          "line_end": 74,
+          "line_start": 19
+        },
+        {
+          "file": "routes/search.ts",
+          "line_end": 63,
+          "line_start": 8
+        },
+        {
+          "file": "routes/search.ts",
+          "line_end": 74,
+          "line_start": 32
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 173,
+          "line_start": 118
+        },
+        {
+          "file": "lib/startup/registerWebsocketEvents.ts",
+          "line_end": 54,
+          "line_start": 30
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 162,
+          "line_start": 107
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "routes/resetPassword.ts",
+          "line_end": 80,
+          "line_start": 1
+        },
+        {
+          "file": "routes/changePassword.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataErasure.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/wallet.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 80,
+          "line_start": 1
+        },
+        {
+          "file": "routes/basket.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/authenticatedUsers.ts",
+          "line_end": 40,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataExport.ts",
+          "line_end": 60,
+          "line_start": 1
+        }
+      ],
+      "schema_errors": [],
+      "search_queries": [
+        "sequelize.query",
+        "req.body.UserId",
+        "findByPk",
+        "res.redirect"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 2556,
+        "prompt_tokens": 23110,
+        "total_tokens": 25666
+      },
+      "turn": 3
+    },
+    {
+      "latency_ms": 10555,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 5,
+      "provider_attempts": [
+        {
+          "latency_ms": 10549,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "routes/resetPassword.ts",
+          "line_end": 80,
+          "line_start": 1
+        },
+        {
+          "file": "routes/changePassword.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataErasure.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/wallet.ts",
+          "line_end": 36,
+          "line_start": 1
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 80,
+          "line_start": 1
+        },
+        {
+          "file": "routes/basket.ts",
+          "line_end": 36,
+          "line_start": 1
+        },
+        {
+          "file": "routes/authenticatedUsers.ts",
+          "line_end": 37,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataExport.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 175,
+          "line_start": 120
+        },
+        {
+          "file": "routes/redirect.ts",
+          "line_end": 32,
+          "line_start": 13
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "server.ts",
+          "line_end": 470,
+          "line_start": 420
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 200,
+          "line_start": 175
+        },
+        {
+          "file": "routes/wallet.ts",
+          "line_end": 36,
+          "line_start": 1
+        }
+      ],
+      "schema_errors": [],
+      "search_queries": [
+        "/rest/wallet",
+        "appendUserId",
+        "data-export"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 2894,
+        "prompt_tokens": 23340,
+        "total_tokens": 26234
+      },
+      "turn": 4
+    },
+    {
+      "latency_ms": 7281,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 2,
+      "provider_attempts": [
+        {
+          "latency_ms": 7276,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "server.ts",
+          "line_end": 470,
+          "line_start": 420
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 197,
+          "line_start": 175
+        },
+        {
+          "file": "server.ts",
+          "line_end": 168,
+          "line_start": 113
+        },
+        {
+          "file": "server.ts",
+          "line_end": 368,
+          "line_start": 313
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 140,
+          "line_start": 86
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 140,
+          "line_start": 124
+        },
+        {
+          "file": "routes/verify.ts",
+          "line_end": 74,
+          "line_start": 19
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_end": 197,
+          "line_start": 163
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 186,
+          "line_start": 131
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 188,
+          "line_start": 133
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "server.ts",
+          "line_end": 680,
+          "line_start": 620
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/authenticatedUsers.ts",
+          "line_end": 37,
+          "line_start": 1
+        }
+      ],
+      "schema_errors": [],
+      "search_queries": [
+        "rest/order",
+        "authenticatedUsers",
+        "data-export"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 1857,
+        "prompt_tokens": 23636,
+        "total_tokens": 25493
+      },
+      "turn": 5
+    },
+    {
+      "latency_ms": 10121,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 2,
+      "provider_attempts": [
+        {
+          "latency_ms": 10115,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "server.ts",
+          "line_end": 680,
+          "line_start": 620
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 190,
+          "line_start": 135
+        },
+        {
+          "file": "routes/order.ts",
+          "line_end": 197,
+          "line_start": 142
+        },
+        {
+          "file": "routes/deluxe.ts",
+          "line_end": 59,
+          "line_start": 4
+        },
+        {
+          "file": "routes/deluxe.ts",
+          "line_end": 65,
+          "line_start": 10
+        },
+        {
+          "file": "routes/deluxe.ts",
+          "line_end": 70,
+          "line_start": 15
+        },
+        {
+          "file": "routes/deluxe.ts",
+          "line_end": 70,
+          "line_start": 20
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "routes/search.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/profileImageUrlUpload.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/redirect.ts",
+          "line_end": 40,
+          "line_start": 1
+        },
+        {
+          "file": "routes/b2bOrder.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 130,
+          "line_start": 1
+        },
+        {
+          "file": "routes/resetPassword.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataErasure.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/keyServer.ts",
+          "line_end": 50,
+          "line_start": 1
+        }
+      ],
+      "schema_errors": [],
+      "search_queries": [
+        "WalletModel.decrement",
+        "WalletModel.increment",
+        "req.body.UserId",
+        "appendUserId"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 2621,
+        "prompt_tokens": 22858,
+        "total_tokens": 25479
+      },
+      "turn": 6
+    },
+    {
+      "latency_ms": 11630,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 3,
+      "provider_attempts": [
+        {
+          "latency_ms": 11624,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [
+        {
+          "file": "routes/search.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line_end": 130,
+          "line_start": 1
+        },
+        {
+          "file": "routes/resetPassword.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/keyServer.ts",
+          "line_end": 20,
+          "line_start": 1
+        },
+        {
+          "file": "routes/wallet.ts",
+          "line_end": 36,
+          "line_start": 9
+        }
+      ],
+      "read_requests": [
+        {
+          "file": "models/user.ts",
+          "line_end": 80,
+          "line_start": 1
+        },
+        {
+          "file": "server.ts",
+          "line_end": 340,
+          "line_start": 320
+        }
+      ],
+      "schema_errors": [],
+      "search_queries": [
+        "keyServer",
+        "serveKeyFiles",
+        "resetPassword"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 2871,
+        "prompt_tokens": 20140,
+        "total_tokens": 23011
+      },
+      "turn": 7
+    },
+    {
+      "latency_ms": 12505,
+      "model_route": "nsu/qwen3.8-flash-next",
+      "proposed": 2,
+      "provider_attempts": [
+        {
+          "latency_ms": 8302,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "structured_correction_requested"
+        },
+        {
+          "latency_ms": 12501,
+          "route": "nsu/qwen3.8-flash-next",
+          "status": "ok"
+        }
+      ],
+      "ranges": [],
+      "read_requests": [
+        {
+          "file": "routes/basketItems.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/updateUserProfile.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/authenticatedUsers.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/redirect.ts",
+          "line_end": 40,
+          "line_start": 1
+        },
+        {
+          "file": "routes/trackOrder.ts",
+          "line_end": 40,
+          "line_start": 1
+        },
+        {
+          "file": "routes/dataErasure.ts",
+          "line_end": 60,
+          "line_start": 1
+        },
+        {
+          "file": "routes/b2bOrder.ts",
+          "line_end": 50,
+          "line_start": 1
+        },
+        {
+          "file": "routes/changePassword.ts",
+          "line_end": 60,
+          "line_start": 1
+        }
+      ],
+      "schema_errors": [
+        {
+          "loc": [
+            "search_queries"
+          ],
+          "msg": "List should have at most 4 items after validation, not 7",
+          "type": "too_long"
+        }
+      ],
+      "search_queries": [
+        "hashPassword",
+        "bcrypt",
+        "sanitize",
+        "helmet"
+      ],
+      "status": "ok",
+      "token_usage": {
+        "completion_tokens": 2683,
+        "prompt_tokens": 19401,
+        "total_tokens": 22084
+      },
+      "turn": 8
+    }
+  ],
+  "unread_files": [
+    "routes/2fa.ts",
+    "frontend/src/app/change-password/change-password.component.ts",
+    "frontend/src/app/password-strength/password-strength.component.ts",
+    "frontend/src/assets/private/dat.gui.min.js",
+    "frontend/src/app/register/register.component.ts",
+    "frontend/src/app/login/login.component.ts",
+    "routes/basketItems.ts",
+    "routes/currentUser.ts",
+    "routes/updateUserProfile.ts",
+    "models/index.ts",
+    "frontend/src/app/oauth/oauth.component.ts",
+    "frontend/src/app/password-strength-info/password-strength-info.component.ts",
+    "frontend/src/app/two-factor-auth/two-factor-auth.component.ts",
+    "routes/chat.ts",
+    "routes/createProductReviews.ts",
+    "routes/checkKeys.ts",
+    "routes/imageCaptcha.ts",
+    "routes/vulnCodeSnippet.ts",
+    "data/datacreator.ts",
+    "frontend/src/app/Services/two-factor-auth-service.ts",
+    "frontend/src/app/Services/user.service.ts",
+    "frontend/src/app/app.routing.ts",
+    "lib/noUpdate.ts",
+    "routes/address.ts",
+    "routes/orderHistory.ts",
+    "routes/payment.ts",
+    "routes/updateProductReviews.ts",
+    "routes/vulnCodeFixes.ts",
+    "frontend/src/app/app.guard.ts",
+    "frontend/src/app/navbar/navbar.component.ts",
+    "frontend/src/app/payment/payment.component.ts",
+    "routes/captcha.ts",
+    "routes/likeProductReviews.ts",
+    "routes/memory.ts",
+    "routes/showProductReviews.ts",
+    "frontend/src/app/basket/basket.component.ts",
+    "frontend/src/app/chatbot/chat-welcome-page/chat-welcome-page.component.ts",
+    "frontend/src/app/last-login-ip/last-login-ip.component.ts",
+    "frontend/src/app/score-board/score-board.component.ts",
+    "frontend/src/assets/private/EffectComposer.js",
+    "frontend/src/assets/private/MaskPass.js",
+    "frontend/src/assets/private/ShaderPass.js",
+    "frontend/src/assets/private/stats.min.js",
+    "routes/angular.ts",
+    "routes/continueCode.ts",
+    "routes/delivery.ts",
+    "routes/easterEgg.ts",
+    "routes/fileServer.ts",
+    "routes/logfileServer.ts",
+    "routes/metrics.ts",
+    "routes/nftMint.ts",
+    "routes/premiumReward.ts",
+    "routes/privacyPolicyProof.ts",
+    "routes/quarantineServer.ts",
+    "routes/recycles.ts",
+    "routes/saveLoginIp.ts",
+    "routes/trackOrder.ts",
+    "routes/userProfile.ts",
+    "routes/web3Wallet.ts",
+    "frontend/src/main.ts",
+    "data/staticData.ts",
+    "frontend/src/app/Services/configuration.service.ts",
+    "frontend/src/app/address/address.component.ts",
+    "frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts",
+    "frontend/src/app/chatbot/chat-conversation/chat-conversation.component.ts",
+    "frontend/src/app/delivery-method/delivery-method.component.ts",
+    "frontend/src/app/deluxe-user/deluxe-user.component.ts",
+    "frontend/src/app/order-history/order-history.component.ts",
+    "frontend/src/app/order-summary/order-summary.component.ts",
+    "frontend/src/app/search-result/search-result.component.ts",
+    "frontend/src/app/sidenav/sidenav.component.ts",
+    "frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts",
+    "frontend/src/app/wallet/wallet.component.ts",
+    "frontend/src/assets/private/RenderPass.js",
+    "lib/challengeUtils.ts",
+    "lib/config.schema.ts",
+    "routes/appConfiguration.ts",
+    "routes/appVersion.ts",
+    "routes/countryMapping.ts",
+    "routes/coupon.ts",
+    "routes/languages.ts",
+    "routes/repeatNotification.ts",
+    "routes/restoreProgress.ts",
+    "routes/securityQuestion.ts",
+    "routes/videoHandler.ts",
+    "app.ts",
+    "frontend/src/confetti/index.ts",
+    "cypress.config.ts",
+    "data/datacache.ts",
+    "data/mongodb.ts",
+    "data/static/contractABIs.ts",
+    "data/types.ts",
+    "eslint.config.mjs",
+    "frontend/eslint.config.mjs",
+    "frontend/src/app/Models/backup.model.ts",
+    "frontend/src/app/Models/challenge.model.ts",
+    "frontend/src/app/Models/deliveryMethod.model.ts",
+    "frontend/src/app/Models/hint.model.ts",
+    "frontend/src/app/Models/product.model.ts",
+    "frontend/src/app/Models/review.model.ts",
+    "frontend/src/app/Models/securityQuestion.model.ts",
+    "frontend/src/app/Services/address.service.ts",
+    "frontend/src/app/Services/administration.service.ts",
+    "frontend/src/app/Services/basket.service.ts",
+    "frontend/src/app/Services/captcha.service.ts",
+    "frontend/src/app/Services/challenge.service.ts",
+    "frontend/src/app/Services/chat.service.ts",
+    "frontend/src/app/Services/code-fixes.service.ts",
+    "frontend/src/app/Services/code-snippet.service.ts",
+    "frontend/src/app/Services/complaint.service.ts",
+    "frontend/src/app/Services/conversation-storage.service.ts",
+    "frontend/src/app/Services/country-mapping.service.ts",
+    "frontend/src/app/Services/ctf-system-wide-notification.service.ts",
+    "frontend/src/app/Services/data-subject.service.ts",
+    "frontend/src/app/Services/delivery.service.ts",
+    "frontend/src/app/Services/feedback.service.ts",
+    "frontend/src/app/Services/hint.service.ts",
+    "frontend/src/app/Services/image-captcha.service.ts",
+    "frontend/src/app/Services/keys.service.ts",
+    "frontend/src/app/Services/languages.service.ts",
+    "frontend/src/app/Services/local-backup.service.ts",
+    "frontend/src/app/Services/order-history.service.ts",
+    "frontend/src/app/Services/payment.service.ts",
+    "frontend/src/app/Services/photo-wall.service.ts",
+    "frontend/src/app/Services/product-review.service.ts",
+    "frontend/src/app/Services/product.service.ts",
+    "frontend/src/app/Services/quantity.service.ts",
+    "frontend/src/app/Services/recycle.service.ts",
+    "frontend/src/app/Services/request.interceptor.ts",
+    "frontend/src/app/Services/security-answer.service.ts",
+    "frontend/src/app/Services/security-question.service.ts",
+    "frontend/src/app/Services/snack-bar-helper.service.ts",
+    "frontend/src/app/Services/socket-io.service.ts",
+    "frontend/src/app/Services/track-order.service.ts",
+    "frontend/src/app/Services/vuln-lines.service.ts",
+    "frontend/src/app/Services/wallet.service.ts",
+    "frontend/src/app/Services/window-ref.service.ts",
+    "frontend/src/app/about/about.component.ts",
+    "frontend/src/app/accounting/accounting.component.ts",
+    "frontend/src/app/address-create/address-create.component.ts",
+    "frontend/src/app/address-select/address-select.component.ts",
+    "frontend/src/app/administration/administration.component.ts",
+    "frontend/src/app/app.component.ts",
+    "frontend/src/app/challenge-status-badge/challenge-status-badge.component.ts",
+    "frontend/src/app/chatbot/chat-input-box/chat-input-box.component.ts",
+    "frontend/src/app/chatbot/chat-welcome-screen/chat-welcome-screen.component.ts",
+    "frontend/src/app/chatbot/chat.model.ts",
+    "frontend/src/app/chatbot/chatbot.component.ts",
+    "frontend/src/app/coding-challenge-page/coding-challenge-page.component.ts",
+    "frontend/src/app/coding-challenge-page/coding-challenge.types.ts",
+    "frontend/src/app/coding-challenge-page/components/coding-challenge-find-it/coding-challenge-find-it.component.ts",
+    "frontend/src/app/coding-challenge-page/components/coding-challenge-find-it/format-selected-lines.ts",
+    "frontend/src/app/coding-challenge-page/components/coding-challenge-fix-it/coding-challenge-fix-it.component.ts",
+    "frontend/src/app/coding-challenge-page/components/coding-challenge-section/coding-challenge-section.component.ts",
+    "frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts",
+    "frontend/src/app/complaint/complaint.component.ts",
+    "frontend/src/app/contact/contact.component.ts",
+    "frontend/src/app/ctf-system-wide-notification/ctf-system-wide-notification.component.ts",
+    "frontend/src/app/data-export/data-export.component.ts",
+    "frontend/src/app/error-page/error-page.component.ts",
+    "frontend/src/app/faucet/faucet.module.ts",
+    "frontend/src/app/feedback-details/feedback-details.component.ts",
+    "frontend/src/app/mat-search-bar/abstract-value-accessor.ts",
+    "frontend/src/app/mat-search-bar/mat-search-bar.component.ts",
+    "frontend/src/app/nft-unlock/nft-unlock.component.ts",
+    "frontend/src/app/order-completion/order-completion.component.ts",
+    "frontend/src/app/payment-method/payment-method.component.ts",
+    "frontend/src/app/photo-wall/mime-type.validator.ts",
+    "frontend/src/app/photo-wall/photo-wall.component.ts",
+    "frontend/src/app/privacy-policy/privacy-policy.component.ts",
+    "frontend/src/app/privacy-security/privacy-security.component.ts",
+    "frontend/src/app/product-details/product-details.component.ts",
+    "frontend/src/app/product-review-edit/product-review-edit.component.ts",
+    "frontend/src/app/product/product.component.ts",
+    "frontend/src/app/purchase-basket/purchase-basket.component.ts",
+    "frontend/src/app/qr-code/qr-code.component.ts",
+    "frontend/src/app/recycle/recycle.component.ts",
+    "frontend/src/app/roles.ts",
+    "frontend/src/app/saved-address/saved-address.component.ts",
+    "frontend/src/app/saved-payment-methods/saved-payment-methods.component.ts",
+    "frontend/src/app/score-board/components/challenge-card/challenge-card.component.ts",
+    "frontend/src/app/score-board/components/challenges-unavailable-warning/challenges-unavailable-warning.component.ts",
+    "frontend/src/app/score-board/components/coding-challenge-progress-score-card/coding-challenge-progress-score-card.component.ts",
+    "frontend/src/app/score-board/components/difficulty-overview-score-card/difficulty-overview-score-card.component.ts",
+    "frontend/src/app/score-board/components/difficulty-stars/difficulty-stars.component.ts",
+    "frontend/src/app/score-board/components/filter-settings/components/category-filter/category-filter.component.ts",
+    "frontend/src/app/score-board/components/filter-settings/components/score-board-additional-settings-dialog/score-board-additional-settings-dialog.component.ts",
+    "frontend/src/app/score-board/components/filter-settings/filter-settings.component.ts",
+    "frontend/src/app/score-board/components/filter-settings/pipes/difficulty-selection-summary.pipe.ts",
+    "frontend/src/app/score-board/components/hacking-challenge-progress-score-card/hacking-challenge-progress-score-card.component.ts",
+    "frontend/src/app/score-board/components/score-card/score-card.component.ts",
+    "frontend/src/app/score-board/components/tutorial-mode-warning/tutorial-mode-warning.component.ts",
+    "frontend/src/app/score-board/components/warning-card/warning-card.component.ts",
+    "frontend/src/app/score-board/filter-settings/FilterSetting.ts",
+    "frontend/src/app/score-board/filter-settings/query-params-converters.ts",
+    "frontend/src/app/score-board/helpers/challenge-filtering.ts",
+    "frontend/src/app/score-board/helpers/challenge-sorting.ts",
+    "frontend/src/app/score-board/types/EnrichedChallenge.ts",
+    "frontend/src/app/server-started-notification/server-started-notification.component.ts",
+    "frontend/src/app/shared/codemirror-extensions.ts",
+    "frontend/src/app/shared/codemirror-theme.ts",
+    "frontend/src/app/token-sale/token-sale.component.ts",
+    "frontend/src/app/track-result/track-result.component.ts",
+    "frontend/src/app/user-details/user-details.component.ts",
+    "frontend/src/app/wallet-web3/wallet-web3.module.ts",
+    "frontend/src/app/web3-sandbox/web3-sandbox.component.ts",
+    "frontend/src/app/web3-sandbox/web3-sandbox.module.ts",
+    "frontend/src/app/welcome-banner/welcome-banner.component.ts",
+    "frontend/src/app/welcome/welcome.component.ts",
+    "frontend/src/assets/private/CopyShader.js",
+    "frontend/src/assets/private/OrbitControls.js",
+    "frontend/src/assets/public/ContractABIs.ts",
+    "frontend/src/environments/environment.prod.ts",
+    "frontend/src/environments/environment.ts",
+    "frontend/src/mocks/ng-gallery.ts",
+    "frontend/src/test-setup.ts",
+    "frontend/stylelint-plugin-spacing-fixer.mjs",
+    "frontend/stylelint.config.mjs",
+    "lib/accuracy.ts",
+    "lib/antiCheat.ts",
+    "lib/codingChallenges.ts",
+    "lib/is-docker.ts",
+    "lib/is-heroku.ts",
+    "lib/is-windows.ts",
+    "lib/logger.ts",
+    "lib/scripts/lintConfig.ts",
+    "lib/startup/cleanupFtpFolder.ts",
+    "lib/startup/customizeApplication.ts",
+    "lib/startup/customizeEasterEgg.ts",
+    "lib/startup/restoreOverwrittenFilesWithOriginals.ts",
+    "lib/startup/validateConfig.ts",
+    "lib/startup/validateDependencies.ts"
+  ],
+  "unread_ranges": [
+    {
+      "file": "routes/2fa.ts",
+      "line_end": 170,
+      "line_start": 1
+    },
+    {
+      "file": "routes/address.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "routes/angular.ts",
+      "line_end": 17,
+      "line_start": 1
+    },
+    {
+      "file": "routes/appConfiguration.ts",
+      "line_end": 17,
+      "line_start": 1
+    },
+    {
+      "file": "routes/appVersion.ts",
+      "line_end": 17,
+      "line_start": 1
+    },
+    {
+      "file": "routes/basketItems.ts",
+      "line_end": 101,
+      "line_start": 1
+    },
+    {
+      "file": "routes/captcha.ts",
+      "line_end": 46,
+      "line_start": 1
+    },
+    {
+      "file": "routes/changePassword.ts",
+      "line_end": 61,
+      "line_start": 61
+    },
+    {
+      "file": "routes/chat.ts",
+      "line_end": 273,
+      "line_start": 1
+    },
+    {
+      "file": "routes/checkKeys.ts",
+      "line_end": 42,
+      "line_start": 1
+    },
+    {
+      "file": "routes/continueCode.ts",
+      "line_end": 48,
+      "line_start": 1
+    },
+    {
+      "file": "routes/countryMapping.ts",
+      "line_end": 24,
+      "line_start": 1
+    },
+    {
+      "file": "routes/coupon.ts",
+      "line_end": 34,
+      "line_start": 1
+    },
+    {
+      "file": "routes/createProductReviews.ts",
+      "line_end": 35,
+      "line_start": 1
+    },
+    {
+      "file": "routes/currentUser.ts",
+      "line_end": 61,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 134,
+      "line_start": 61
+    },
+    {
+      "file": "routes/dataExport.ts",
+      "line_end": 116,
+      "line_start": 61
+    },
+    {
+      "file": "routes/delivery.ts",
+      "line_end": 48,
+      "line_start": 1
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 3,
+      "line_start": 1
+    },
+    {
+      "file": "routes/easterEgg.ts",
+      "line_end": 16,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileServer.ts",
+      "line_end": 54,
+      "line_start": 1
+    },
+    {
+      "file": "routes/imageCaptcha.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/languages.ts",
+      "line_end": 90,
+      "line_start": 1
+    },
+    {
+      "file": "routes/likeProductReviews.ts",
+      "line_end": 62,
+      "line_start": 1
+    },
+    {
+      "file": "routes/logfileServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "routes/login.ts",
+      "line_end": 83,
+      "line_start": 75
+    },
+    {
+      "file": "routes/memory.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "routes/metrics.ts",
+      "line_end": 229,
+      "line_start": 1
+    },
+    {
+      "file": "routes/nftMint.ts",
+      "line_end": 53,
+      "line_start": 1
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 130,
+      "line_start": 81
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 219,
+      "line_start": 198
+    },
+    {
+      "file": "routes/orderHistory.ts",
+      "line_end": 39,
+      "line_start": 1
+    },
+    {
+      "file": "routes/payment.ts",
+      "line_end": 77,
+      "line_start": 1
+    },
+    {
+      "file": "routes/premiumReward.ts",
+      "line_end": 16,
+      "line_start": 1
+    },
+    {
+      "file": "routes/privacyPolicyProof.ts",
+      "line_end": 16,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageFileUpload.ts",
+      "line_end": 58,
+      "line_start": 51
+    },
+    {
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 51,
+      "line_start": 51
+    },
+    {
+      "file": "routes/quarantineServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "routes/recycles.ts",
+      "line_end": 26,
+      "line_start": 1
+    },
+    {
+      "file": "routes/repeatNotification.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 86,
+      "line_start": 81
+    },
+    {
+      "file": "routes/restoreProgress.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/saveLoginIp.ts",
+      "line_end": 41,
+      "line_start": 1
+    },
+    {
+      "file": "routes/securityQuestion.ts",
+      "line_end": 31,
+      "line_start": 1
+    },
+    {
+      "file": "routes/showProductReviews.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/trackOrder.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "routes/updateProductReviews.ts",
+      "line_end": 31,
+      "line_start": 1
+    },
+    {
+      "file": "routes/updateUserProfile.ts",
+      "line_end": 49,
+      "line_start": 1
+    },
+    {
+      "file": "routes/userProfile.ts",
+      "line_end": 106,
+      "line_start": 1
+    },
+    {
+      "file": "routes/verify.ts",
+      "line_end": 377,
+      "line_start": 161
+    },
+    {
+      "file": "routes/videoHandler.ts",
+      "line_end": 92,
+      "line_start": 1
+    },
+    {
+      "file": "routes/vulnCodeFixes.ts",
+      "line_end": 99,
+      "line_start": 1
+    },
+    {
+      "file": "routes/vulnCodeSnippet.ts",
+      "line_end": 116,
+      "line_start": 1
+    },
+    {
+      "file": "routes/web3Wallet.ts",
+      "line_end": 39,
+      "line_start": 1
+    },
+    {
+      "file": "app.ts",
+      "line_end": 17,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/confetti/index.ts",
+      "line_end": 42,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/main.ts",
+      "line_end": 130,
+      "line_start": 1
+    },
+    {
+      "file": "models/index.ts",
+      "line_end": 77,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 312,
+      "line_start": 169
+    },
+    {
+      "file": "server.ts",
+      "line_end": 419,
+      "line_start": 369
+    },
+    {
+      "file": "server.ts",
+      "line_end": 619,
+      "line_start": 471
+    },
+    {
+      "file": "server.ts",
+      "line_end": 813,
+      "line_start": 681
+    },
+    {
+      "file": "cypress.config.ts",
+      "line_end": 81,
+      "line_start": 1
+    },
+    {
+      "file": "data/datacache.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "data/datacreator.ts",
+      "line_end": 803,
+      "line_start": 1
+    },
+    {
+      "file": "data/mongodb.ts",
+      "line_end": 10,
+      "line_start": 1
+    },
+    {
+      "file": "data/static/contractABIs.ts",
+      "line_end": 569,
+      "line_start": 1
+    },
+    {
+      "file": "data/staticData.ts",
+      "line_end": 95,
+      "line_start": 1
+    },
+    {
+      "file": "data/types.ts",
+      "line_end": 46,
+      "line_start": 1
+    },
+    {
+      "file": "eslint.config.mjs",
+      "line_end": 58,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/eslint.config.mjs",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/backup.model.ts",
+      "line_end": 13,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/challenge.model.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/deliveryMethod.model.ts",
+      "line_end": 12,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/hint.model.ts",
+      "line_end": 12,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/product.model.ts",
+      "line_end": 16,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/review.model.ts",
+      "line_end": 10,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Models/securityQuestion.model.ts",
+      "line_end": 9,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/address.service.ts",
+      "line_end": 41,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/administration.service.ts",
+      "line_end": 26,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/basket.service.ts",
+      "line_end": 186,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/captcha.service.ts",
+      "line_end": 23,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/challenge.service.ts",
+      "line_end": 53,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/chat.service.ts",
+      "line_end": 104,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/code-fixes.service.ts",
+      "line_end": 38,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/code-snippet.service.ts",
+      "line_end": 33,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/complaint.service.ts",
+      "line_end": 23,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/configuration.service.ts",
+      "line_end": 125,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/conversation-storage.service.ts",
+      "line_end": 55,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/country-mapping.service.ts",
+      "line_end": 22,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/ctf-system-wide-notification.service.ts",
+      "line_end": 25,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/data-subject.service.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/delivery.service.ts",
+      "line_end": 39,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/feedback.service.ts",
+      "line_end": 33,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/hint.service.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/image-captcha.service.ts",
+      "line_end": 22,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/keys.service.ts",
+      "line_end": 74,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/languages.service.ts",
+      "line_end": 22,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/local-backup.service.ts",
+      "line_end": 110,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/order-history.service.ts",
+      "line_end": 31,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/payment.service.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/photo-wall.service.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/product-review.service.ts",
+      "line_end": 41,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/product.service.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/quantity.service.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/recycle.service.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/request.interceptor.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/security-answer.service.ts",
+      "line_end": 26,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/security-question.service.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/snack-bar-helper.service.ts",
+      "line_end": 34,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/socket-io.service.ts",
+      "line_end": 34,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/track-order.service.ts",
+      "line_end": 24,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/two-factor-auth-service.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/user.service.ts",
+      "line_end": 82,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/vuln-lines.service.ts",
+      "line_end": 26,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/wallet.service.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/Services/window-ref.service.ts",
+      "line_end": 19,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/about/about.component.ts",
+      "line_end": 131,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/accounting/accounting.component.ts",
+      "line_end": 166,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/address-create/address-create.component.ts",
+      "line_end": 153,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/address-select/address-select.component.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/address/address.component.ts",
+      "line_end": 108,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/administration/administration.component.ts",
+      "line_end": 142,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/app.component.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/app.guard.ts",
+      "line_end": 88,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/app.routing.ts",
+      "line_end": 322,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/basket/basket.component.ts",
+      "line_end": 52,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts",
+      "line_end": 171,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/challenge-status-badge/challenge-status-badge.component.ts",
+      "line_end": 46,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/change-password/change-password.component.ts",
+      "line_end": 144,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/chatbot/chat-conversation/chat-conversation.component.ts",
+      "line_end": 172,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/chatbot/chat-input-box/chat-input-box.component.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/chatbot/chat-welcome-page/chat-welcome-page.component.ts",
+      "line_end": 31,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/chatbot/chat-welcome-screen/chat-welcome-screen.component.ts",
+      "line_end": 97,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/chatbot/chat.model.ts",
+      "line_end": 23,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/chatbot/chatbot.component.ts",
+      "line_end": 17,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/coding-challenge-page.component.ts",
+      "line_end": 87,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/coding-challenge.types.ts",
+      "line_end": 15,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/components/coding-challenge-find-it/coding-challenge-find-it.component.ts",
+      "line_end": 340,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/components/coding-challenge-find-it/format-selected-lines.ts",
+      "line_end": 23,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/components/coding-challenge-fix-it/coding-challenge-fix-it.component.ts",
+      "line_end": 149,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/components/coding-challenge-section/coding-challenge-section.component.ts",
+      "line_end": 55,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/complaint/complaint.component.ts",
+      "line_end": 120,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/contact/contact.component.ts",
+      "line_end": 141,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/ctf-system-wide-notification/ctf-system-wide-notification.component.ts",
+      "line_end": 65,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/data-export/data-export.component.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/delivery-method/delivery-method.component.ts",
+      "line_end": 81,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/deluxe-user/deluxe-user.component.ts",
+      "line_end": 93,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/error-page/error-page.component.ts",
+      "line_end": 41,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/faucet/faucet.component.ts",
+      "line_end": 220,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/faucet/faucet.component.ts",
+      "line_end": 317,
+      "line_start": 277
+    },
+    {
+      "file": "frontend/src/app/faucet/faucet.module.ts",
+      "line_end": 49,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/feedback-details/feedback-details.component.ts",
+      "line_end": 31,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/last-login-ip/last-login-ip.component.ts",
+      "line_end": 44,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/login/login.component.ts",
+      "line_end": 151,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/mat-search-bar/abstract-value-accessor.ts",
+      "line_end": 46,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/mat-search-bar/mat-search-bar.component.ts",
+      "line_end": 91,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/navbar/navbar.component.ts",
+      "line_end": 309,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/nft-unlock/nft-unlock.component.ts",
+      "line_end": 70,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/oauth/oauth.component.ts",
+      "line_end": 81,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/order-completion/order-completion.component.ts",
+      "line_end": 107,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/order-history/order-history.component.ts",
+      "line_end": 126,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/order-summary/order-summary.component.ts",
+      "line_end": 96,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/password-strength-info/password-strength-info.component.ts",
+      "line_end": 45,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/password-strength/password-strength.component.ts",
+      "line_end": 66,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/payment-method/payment-method.component.ts",
+      "line_end": 129,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/payment/payment.component.ts",
+      "line_end": 299,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/photo-wall/mime-type.validator.ts",
+      "line_end": 52,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/photo-wall/photo-wall.component.ts",
+      "line_end": 139,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/privacy-policy/privacy-policy.component.ts",
+      "line_end": 44,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/privacy-security/privacy-security.component.ts",
+      "line_end": 16,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/product-details/product-details.component.ts",
+      "line_end": 106,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/product-review-edit/product-review-edit.component.ts",
+      "line_end": 59,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/product/product.component.ts",
+      "line_end": 191,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/purchase-basket/purchase-basket.component.ts",
+      "line_end": 200,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/qr-code/qr-code.component.ts",
+      "line_end": 38,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/recycle/recycle.component.ts",
+      "line_end": 148,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/register/register.component.ts",
+      "line_end": 114,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/roles.ts",
+      "line_end": 11,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/saved-address/saved-address.component.ts",
+      "line_end": 18,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/saved-payment-methods/saved-payment-methods.component.ts",
+      "line_end": 19,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/challenge-card/challenge-card.component.ts",
+      "line_end": 96,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/challenges-unavailable-warning/challenges-unavailable-warning.component.ts",
+      "line_end": 44,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/coding-challenge-progress-score-card/coding-challenge-progress-score-card.component.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/difficulty-overview-score-card/difficulty-overview-score-card.component.ts",
+      "line_end": 68,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/difficulty-stars/difficulty-stars.component.ts",
+      "line_end": 12,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/filter-settings/components/category-filter/category-filter.component.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/filter-settings/components/score-board-additional-settings-dialog/score-board-additional-settings-dialog.component.ts",
+      "line_end": 18,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/filter-settings/filter-settings.component.ts",
+      "line_end": 103,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/filter-settings/pipes/difficulty-selection-summary.pipe.ts",
+      "line_end": 54,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/hacking-challenge-progress-score-card/hacking-challenge-progress-score-card.component.ts",
+      "line_end": 19,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/score-card/score-card.component.ts",
+      "line_end": 18,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/tutorial-mode-warning/tutorial-mode-warning.component.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/components/warning-card/warning-card.component.ts",
+      "line_end": 10,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/filter-settings/FilterSetting.ts",
+      "line_end": 34,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/filter-settings/query-params-converters.ts",
+      "line_end": 41,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/helpers/challenge-filtering.ts",
+      "line_end": 115,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/helpers/challenge-sorting.ts",
+      "line_end": 9,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/score-board.component.ts",
+      "line_end": 192,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/score-board/types/EnrichedChallenge.ts",
+      "line_end": 10,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/search-result/search-result.component.ts",
+      "line_end": 212,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/server-started-notification/server-started-notification.component.ts",
+      "line_end": 110,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/shared/codemirror-extensions.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/shared/codemirror-theme.ts",
+      "line_end": 88,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/sidenav/sidenav.component.ts",
+      "line_end": 173,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/token-sale/token-sale.component.ts",
+      "line_end": 41,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/track-result/track-result.component.ts",
+      "line_end": 67,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts",
+      "line_end": 73,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/two-factor-auth/two-factor-auth.component.ts",
+      "line_end": 126,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/user-details/user-details.component.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/wallet-web3/wallet-web3.component.ts",
+      "line_end": 70,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/wallet-web3/wallet-web3.component.ts",
+      "line_end": 173,
+      "line_start": 127
+    },
+    {
+      "file": "frontend/src/app/wallet-web3/wallet-web3.module.ts",
+      "line_end": 51,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/wallet/wallet.component.ts",
+      "line_end": 48,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/web3-sandbox/web3-sandbox.component.ts",
+      "line_end": 338,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/web3-sandbox/web3-sandbox.module.ts",
+      "line_end": 51,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/welcome-banner/welcome-banner.component.ts",
+      "line_end": 71,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/welcome/welcome.component.ts",
+      "line_end": 47,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/CopyShader.js",
+      "line_end": 46,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/EffectComposer.js",
+      "line_end": 144,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/MaskPass.js",
+      "line_end": 86,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/OrbitControls.js",
+      "line_end": 583,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/RenderPass.js",
+      "line_end": 51,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/ShaderPass.js",
+      "line_end": 51,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/dat.gui.min.js",
+      "line_end": 82,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/private/stats.min.js",
+      "line_end": 6,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/assets/public/ContractABIs.ts",
+      "line_end": 1214,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/environments/environment.prod.ts",
+      "line_end": 9,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/environments/environment.ts",
+      "line_end": 21,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/mocks/ng-gallery.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/test-setup.ts",
+      "line_end": 63,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/stylelint-plugin-spacing-fixer.mjs",
+      "line_end": 128,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/stylelint.config.mjs",
+      "line_end": 33,
+      "line_start": 1
+    },
+    {
+      "file": "lib/accuracy.ts",
+      "line_end": 74,
+      "line_start": 1
+    },
+    {
+      "file": "lib/antiCheat.ts",
+      "line_end": 251,
+      "line_start": 1
+    },
+    {
+      "file": "lib/challengeUtils.ts",
+      "line_end": 133,
+      "line_start": 1
+    },
+    {
+      "file": "lib/codingChallenges.ts",
+      "line_end": 112,
+      "line_start": 1
+    },
+    {
+      "file": "lib/config.schema.ts",
+      "line_end": 221,
+      "line_start": 1
+    },
+    {
+      "file": "lib/is-docker.ts",
+      "line_end": 36,
+      "line_start": 1
+    },
+    {
+      "file": "lib/is-heroku.ts",
+      "line_end": 4,
+      "line_start": 1
+    },
+    {
+      "file": "lib/is-windows.ts",
+      "line_end": 6,
+      "line_start": 1
+    },
+    {
+      "file": "lib/logger.ts",
+      "line_end": 13,
+      "line_start": 1
+    },
+    {
+      "file": "lib/noUpdate.ts",
+      "line_end": 57,
+      "line_start": 1
+    },
+    {
+      "file": "lib/scripts/lintConfig.ts",
+      "line_end": 59,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/cleanupFtpFolder.ts",
+      "line_end": 21,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/customizeApplication.ts",
+      "line_end": 143,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/customizeEasterEgg.ts",
+      "line_end": 48,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/registerWebsocketEvents.ts",
+      "line_end": 29,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/restoreOverwrittenFilesWithOriginals.ts",
+      "line_end": 43,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/validateConfig.ts",
+      "line_end": 187,
+      "line_start": 1
+    },
+    {
+      "file": "lib/startup/validateDependencies.ts",
+      "line_end": 32,
+      "line_start": 1
+    }
+  ],
+  "verification_run": false
+}

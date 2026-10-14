@@ -1,0 +1,72 @@
+{
+  "candidates": [
+    {
+      "description": "The /rest/user/whoami endpoint accepts a `fields` query parameter that is split and used to index into the authenticated user's data object without an allowlist, allowing retrieval of sensitive fields like `password` (hash) and `totpSecret`.",
+      "file": "routes/currentUser.ts",
+      "line_end": 31,
+      "line_start": 29,
+      "provenance_paths": [
+        "routes/currentUser.ts"
+      ],
+      "rationale": "Lines 29-31 iterate over user-supplied field names and copy any matching property from user.data into the response. No allowlist restricts which fields are returned. The password field contains a hash (set via security.hash in models/user.ts:73) and totpSecret is also present. An authenticated user can request fields=password,totpSecret to leak their own secrets, and the JSONP path at line 58 enables cross-origin exfiltration.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Arbitrary field exposure via unvalidated fields parameter leaks password hash and TOTP secret"
+    },
+    {
+      "description": "The productId parameter is concatenated directly into a MongoDB $where JavaScript expression, allowing injection of arbitrary JavaScript evaluated server-side.",
+      "file": "routes/chat.ts",
+      "line_end": 149,
+      "line_start": 149,
+      "provenance_paths": [
+        "routes/chat.ts"
+      ],
+      "rationale": "Line 149 constructs `$where: 'this.product == ' + productId` where productId comes from user input. MongoDB's $where evaluates the string as JavaScript, so a crafted productId like `1 || sleep(5000) || 1` or `1; require('child_process').exec('...')` could execute arbitrary code or cause denial of service. No sanitization or parameterization is applied.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where with concatenated productId in chat route"
+    },
+    {
+      "description": "The id parameter is concatenated directly into a MongoDB $where JavaScript expression, enabling server-side JavaScript injection.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts"
+      ],
+      "rationale": "Line 36 builds `$where: 'this.product == ' + id` with unsanitized user input. The $where operator evaluates the string as JavaScript in the MongoDB server context. An attacker can inject expressions to exfiltrate data from other collections or cause resource exhaustion. The id parameter originates from the route's query or params without validation.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where with concatenated id in showProductReviews route"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/chat.ts",
+      "line_end": 160,
+      "line_start": 140
+    },
+    {
+      "file": "routes/showProductReviews.ts",
+      "line_end": 50,
+      "line_start": 25
+    },
+    {
+      "file": "routes/currentUser.ts",
+      "line_end": 61,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "$where",
+    "fields.*split",
+    "jsonp"
+  ],
+  "stop": false
+}

@@ -1,0 +1,86 @@
+{
+  "candidates": [
+    {
+      "description": "When paymentMode is neither 'wallet' nor 'card', both payment checks are skipped and the user is upgraded to deluxe without any payment verification.",
+      "file": "routes/deluxe.ts",
+      "line_end": 43,
+      "line_start": 43,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Route at server.ts:648 applies appendUserId() so UserId is authenticated, but the handler only validates payment when paymentMode equals 'wallet' or 'card'. Any other value (empty string, 'free', etc.) skips both branches and reaches the unconditional user.update at line 43, granting deluxe role without payment. Verification: POST /rest/deluxe-membership with paymentMode set to an unrecognized value and observe role change.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing payment validation allows free deluxe upgrade"
+    },
+    {
+      "description": "Negative totalPrice is detected via challengeUtils but processing continues; WalletModel.decrement with a negative value effectively adds to the wallet balance.",
+      "file": "routes/order.ts",
+      "line_end": 150,
+      "line_start": 144,
+      "provenance_paths": [
+        "routes/order.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 144 detects totalPrice<0 but does not return or throw. Execution reaches line 150 where WalletModel.decrement({balance: totalPrice}) with negative totalPrice increments the balance. The route at server.ts:623 lacks appendUserId so UserId is also attacker-controlled (separate finding). Verification: place an order with negative quantity items and observe wallet balance increase.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Negative order total not blocked enables wallet manipulation"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/search.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 130,
+      "line_start": 1
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 50,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "WalletModel.decrement",
+    "WalletModel.increment",
+    "req.body.UserId",
+    "appendUserId"
+  ],
+  "stop": false
+}

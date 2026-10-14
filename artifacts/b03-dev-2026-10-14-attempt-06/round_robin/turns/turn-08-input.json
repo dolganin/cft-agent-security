@@ -1,0 +1,112 @@
+{
+  "previous_context": [
+    {
+      "content": "111: import { repeatNotification } from './routes/repeatNotification'\n112: import { serveQuarantineFiles } from './routes/quarantineServer'\n113: import { showProductReviews } from './routes/showProductReviews'\n114: import { nftMintListener, walletNFTVerify } from './routes/nftMint'\n115: import { createProductReviews } from './routes/createProductReviews'\n116: import { getWalletBalance, addWalletBalance } from './routes/wallet'\n117: import { retrieveAppConfiguration } from './routes/appConfiguration'\n118: import { updateProductReviews } from './routes/updateProductReviews'\n119: import { servePrivacyPolicyProof } from './routes/privacyPolicyProof'\n120: import { profileImageUrlUpload } from './routes/profileImageUrlUpload'\n121: import { profileImageFileUpload } from './routes/profileImageFileUpload'\n122: import { serveCodeFixes, checkCorrectFix } from './routes/vulnCodeFixes'\n123: import { imageCaptchas, verifyImageCaptcha } from './routes/imageCaptcha'\n124: import { upgradeToDeluxe, deluxeMembershipStatus } from './routes/deluxe'\n125: import { serveCodeSnippet, checkVulnLines } from './routes/vulnCodeSnippet'\n126: import { orderHistory, allOrders, toggleDeliveryStatus } from './routes/orderHistory'\n127: import { continueCode, continueCodeFindIt, continueCodeFixIt } from './routes/continueCode'\n128: import { ensureFileIsPassed, handleZipFileUpload, checkUploadSize, checkFileType, handleXmlUpload, handleYamlUpload } from './routes/fileUpload'\n129: \n130: const app = express()\n131: const server = new http.Server(app)\n132: \n133: // errorhandler requires us from overwriting a string property on it's module which is a big no-no with esmodules :/\n134: \n135: const errorhandler = require('errorhandler')\n136: \n137: const startTime = Date.now()\n138: \n139: const swaggerDocument = yaml.load(fs.readFileSync('./swagger.yml', 'utf8'))\n140: \n141: const appName = config.get<string>('application.customMetricsPrefix')\n142: const startupGauge = new Prometheus.Gauge({\n143:   name: `${appName}_startup_duration_seconds`,\n144:   help: `Duration ${appName} required to perform a certain task during startup`,\n145:   labelNames: ['task']\n146: })\n147: \n148: // Wraps the function and measures its (async) execution time\n149: const collectDurationPromise = (name: string, func: (...args: any) => Promise<any>) => {\n150:   return async (...args: any) => {\n151:     const end = startupGauge.startTimer({ task: name })\n152:     try {\n153:       const res = await func(...args)\n154:       end()\n155:       return res\n156:     } catch (err) {\n157:       console.error('Error in timed startup function: ' + name, err)\n158:       throw err\n159:     }\n160:   }\n161: }\n162: \n163: /* Sets view engine to hbs */\n164: app.set('view engine', 'hbs')\n165: \n166: void collectDurationPromise('validatePreconditions', validatePreconditions)()",
+      "file": "server.ts",
+      "line_end": 166,
+      "line_start": 111
+    },
+    {
+      "content": "452:   app.put('/api/Feedbacks/:id', security.denyAll())\n453:   /* PrivacyRequests: Only allowed for authenticated users */\n454:   app.use('/api/PrivacyRequests', security.isAuthorized())\n455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },",
+      "file": "server.ts",
+      "line_end": 507,
+      "line_start": 452
+    },
+    {
+      "content": "446:   app.post('/api/BasketItems', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemAddition()), utils.asyncHandler(basketItems.addBasketItem()))\n447:   /* Accounting users are allowed to check and update quantities */\n448:   app.delete('/api/Quantitys/:id', security.denyAll())\n449:   app.post('/api/Quantitys', security.denyAll())\n450:   app.use('/api/Quantitys/:id', security.isAccounting(), IpFilter(['123.456.789'], { mode: 'allow' }))\n451:   /* Feedbacks: Do not allow changes of existing feedback */\n452:   app.put('/api/Feedbacks/:id', security.denyAll())\n453:   /* PrivacyRequests: Only allowed for authenticated users */\n454:   app.use('/api/PrivacyRequests', security.isAuthorized())\n455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: ",
+      "file": "server.ts",
+      "line_end": 501,
+      "line_start": 446
+    },
+    {
+      "content": "130:   'http://leanpub.com/juice-shop'\n131: ])\n132: \n133: export const isRedirectAllowed = (url: string) => {\n134:   let allowed = false\n135:   for (const allowedUrl of redirectAllowlist) {\n136:     allowed = allowed || url.includes(allowedUrl) \n137:   }\n138:   return allowed\n139: }\n140: \n141: \n142: export const roles = {\n143:   customer: 'customer',\n144:   deluxe: 'deluxe',\n145:   accounting: 'accounting',\n146:   admin: 'admin'\n147: }\n148: \n149: export const deluxeToken = (email: string) => {\n150:   const hmac = crypto.createHmac('sha256', privateKey)\n151:   return hmac.update(email + roles.deluxe).digest('hex')\n152: }\n153: \n154: export const isAccounting = () => {\n155:   return (req: Request, res: Response, next: NextFunction) => {\n156:     const decodedToken = verify(utils.jwtFrom(req)) && decode(utils.jwtFrom(req))\n157:     if (decodedToken?.data?.role === roles.accounting) {\n158:       next()\n159:     } else {\n160:       res.status(403).json({ error: 'Malicious activity detected' })\n161:     }\n162:   }\n163: }\n164: \n165: export const isDeluxe = (req: Request) => {",
+      "file": "lib/insecurity.ts",
+      "line_end": 165,
+      "line_start": 130
+    },
+    {
+      "content": "40:             }\n41:           }).catch((error: Error) => {\n42:             next(error)\n43:           })\n44:         }\n45:         if (challengeUtils.notSolved(challenges.dbSchemaChallenge)) {\n46:           let solved = true\n47:           void models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]: any) => {\n48:             const tableDefinitions = utils.queryResultToJson(data)\n49:             if (tableDefinitions.data?.length) {\n50:               for (let i = 0; i < tableDefinitions.data.length; i++) {\n51:                 if (tableDefinitions.data[i].sql) {\n52:                   solved = solved && utils.containsOrEscaped(dataString, tableDefinitions.data[i].sql)\n53:                   if (!solved) {\n54:                     break\n55:                   }\n56:                 }\n57:               }\n58:               if (solved) {\n59:                 challengeUtils.solve(challenges.dbSchemaChallenge)\n60:               }",
+      "file": "routes/search.ts",
+      "line_end": 60,
+      "line_start": 40
+    }
+  ],
+  "related_files": [],
+  "remaining_candidate_budget": 22,
+  "remaining_turns": 0,
+  "route_inventory": {
+    "dynamic_routes": 1,
+    "middleware_mounts": [],
+    "omitted_routes": 0,
+    "routes": [],
+    "schema_version": "cft.express_source_map.v1"
+  },
+  "search_results": [
+    {
+      "matches": [
+        {
+          "file": "routes/chat.ts",
+          "line": 149,
+          "text": "          return await db.reviewsCollection.find({ $where: 'this.product == ' + productId }) as Review[]"
+        },
+        {
+          "file": "routes/showProductReviews.ts",
+          "line": 36,
+          "text": "    db.reviewsCollection.find({ $where: 'this.product == ' + id }).then((reviews: Review[]) => {"
+        },
+        {
+          "file": "routes/trackOrder.ts",
+          "line": 18,
+          "text": "    db.ordersCollection.find({ $where: `this.orderId === '${id}'` }).then((order: any) => {"
+        }
+      ],
+      "query": "$where"
+    },
+    {
+      "matches": [
+        {
+          "file": "routes/login.ts",
+          "line": 34,
+          "text": "    models.sequelize.query(`SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = '<redacted>'')}' AND deletedAt IS NULL`, { model: UserModel, plain: true }) "
+        },
+        {
+          "file": "routes/search.ts",
+          "line": 23,
+          "text": "    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) "
+        },
+        {
+          "file": "routes/search.ts",
+          "line": 47,
+          "text": "          void models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]: any) => {"
+        }
+      ],
+      "query": "sequelize.query"
+    },
+    {
+      "matches": [
+        {
+          "file": "routes/showProductReviews.ts",
+          "line": 31,
+          "text": "    const id = !utils.isChallengeEnabled(challenges.noSqlCommandChallenge) ? Number(req.params.id) : utils.trunc(req.params.id, 40)"
+        },
+        {
+          "file": "routes/trackOrder.ts",
+          "line": 15,
+          "text": "    const id = !utils.isChallengeEnabled(challenges.reflectedXssChallenge) ? String(req.params.id).replace(/[^\\w-]+/g, '') : utils.trunc(req.params.id, 60)"
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line": 79,
+          "text": "        next(new Error('B2B customer complaints via file upload have been deprecated for security reasons: ' + utils.trunc(xmlString, 400) + ' (' + file.originalname + ')'))"
+        },
+        {
+          "file": "routes/fileUpload.ts",
+          "line": 111,
+          "text": "        next(new Error('B2B customer complaints via file upload have been deprecated for security reasons: ' + utils.trunc(yamlString, 400) + ' (' + file.originalname + ')'))"
+        }
+      ],
+      "query": "utils.trunc"
+    }
+  ],
+  "source_snippets": []
+}

@@ -1,0 +1,58 @@
+{
+  "candidates": [
+    {
+      "description": "POST /rest/2fa/verify is registered without security.isAuthorized() unlike sibling 2FA routes (status, setup, disable) which all require authentication. Only rate limiting is applied.",
+      "file": "server.ts",
+      "line_end": 480,
+      "line_start": 477,
+      "provenance_paths": [
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 477-480 register the verify route with only rateLimit middleware, while lines 482, 486, 492 all apply security.isAuthorized() to other 2FA endpoints. If the handler does not internally verify the caller's identity, an unauthenticated attacker could brute-force TOTP codes within the 100-request/5min window.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "2FA verify endpoint missing authentication middleware"
+    },
+    {
+      "description": "lib/insecurity.ts userEmailFrom reads user identity from the x-user-email request header without any server-side validation against the authenticated session.",
+      "file": "lib/insecurity.ts",
+      "line_end": 95,
+      "line_start": 93,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "The function returns headers['x-user-email'] directly. If any route handler uses this to identify the acting user without cross-checking against the JWT or authenticatedUsers map, an attacker can impersonate any user by setting the header. Need to trace consumers to confirm impact.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "userEmailFrom trusts client-supplied x-user-email header"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/2fa.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 560,
+      "line_start": 500
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "userEmailFrom",
+    "x-user-email",
+    "twoFactorAuth.verify"
+  ],
+  "stop": false
+}

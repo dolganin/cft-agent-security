@@ -1,0 +1,12 @@
+{
+  "schema_version": "b03.source_review_artifacts_seal.v1",
+  "files": {
+    "attempt-ledger.json": "7ebfef7e7554aa92b3c4f83526809df57d69721b85b2ba5c6aee70ba901a558c",
+    "source-review.json": "27bc6722c17c3841b832017780b60f4533b6f55c60bbefa1fc3141d49d84d273"
+  },
+  "bindings": {
+    "attempt_07_seal_sha256": "5d8026e1a75a07146abe542ea00cd701ee552833c41fa1e0b0cb195abed69a0b",
+    "candidate_bindings_sha256": "9ee070d5a507490a88851d6d6984a883235d3a9f36158e73f4308559219c2117",
+    "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37"
+  }
+}

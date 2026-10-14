@@ -1,0 +1,52 @@
+{
+  "candidates": [],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 120,
+      "line_start": 1
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileServer.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/basket.ts",
+      "line_end": 80,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "raw query sequelize literal",
+    "req.query redirect",
+    "path.join req.params",
+    "jwt.verify"
+  ],
+  "stop": false
+}

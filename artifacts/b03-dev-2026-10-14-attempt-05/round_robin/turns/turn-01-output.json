@@ -1,0 +1,52 @@
+{
+  "candidates": [],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageFileUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 80,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "raw(",
+    "sequelize.query",
+    "exec(",
+    "child_process"
+  ],
+  "stop": false
+}

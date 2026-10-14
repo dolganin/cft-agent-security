@@ -1,0 +1,72 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied query parameter `q` is interpolated directly into a raw SQL string passed to `sequelize.query`, allowing arbitrary SQL execution.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 21,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "Line 21 reads `req.query.q` into `criteria`; line 23 interpolates it into a template literal SQL string without parameterization. The only mitigation is a 200-char truncation which does not prevent injection. Verification: send a payload like `' UNION SELECT * FROM Users--` and observe whether user data appears in the JSON response.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in product search"
+    },
+    {
+      "description": "The `email` field from the request body is interpolated directly into a raw SQL SELECT statement, enabling authentication bypass or data exfiltration.",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts"
+      ],
+      "rationale": "Search results confirm line 34 contains `SELECT * FROM Users WHERE email = '${req.body.email || ''}' AND password = ...` with no parameterization. Verification: submit `' OR 1=1--` as email with any password and check if a valid JWT is returned.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via email field in login query"
+    },
+    {
+      "description": "The `imageUrl` request body field is passed directly to `fetch()` with no URL scheme, host, or allowlist validation, allowing the server to make arbitrary HTTP requests.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts"
+      ],
+      "rationale": "Line 19 reads `req.body.imageUrl` into `url`; line 24 calls `fetch(url)` with no validation of protocol, host, or port. The code even acknowledges SSRF via a challenge flag on line 20. Verification: set imageUrl to `http://169.254.169.254/latest/meta-data/` or an internal service and observe whether the response body is written to the uploads directory.",
+      "rule_id": "ssrf",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Server-side request forgery via unvalidated imageUrl in profile upload"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/login.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 180,
+      "line_start": 100
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 160,
+      "line_start": 100
+    }
+  ],
+  "search_queries": [
+    "isRedirectAllowed",
+    "redirectAllowlist",
+    "handleYamlUpload"
+  ],
+  "stop": false
+}

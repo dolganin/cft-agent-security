@@ -1,0 +1,57 @@
+{
+  "candidates": [
+    {
+      "description": "The continueCode endpoint uses Hashids with a hardcoded salt 'this is my salt' to encode solved challenge IDs. An attacker who knows this salt can encode arbitrary challenge IDs to forge a continue code claiming unsolved challenges as solved.",
+      "file": "routes/continueCode.ts",
+      "line_end": 13,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/continueCode.ts"
+      ],
+      "rationale": "Line 13 instantiates Hashids with the literal salt 'this is my salt'. The same salt pattern appears at lines 25 and 38 for findIt/fixIt variants. Since the salt is a static string in source, any attacker can compute valid continue codes for arbitrary challenge ID sets. The restoreProgress consumer likely decodes with the same salt, accepting forged codes. Verification: encode a known challenge ID with the same salt and submit to the restore endpoint.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Hardcoded Hashids salt enables continue code forgery"
+    },
+    {
+      "description": "The addMemory handler stores req.body.caption directly into the database without sanitization. If the frontend renders this field without escaping, an attacker can inject script tags that execute in other users' browsers.",
+      "file": "routes/memory.ts",
+      "line_end": 13,
+      "line_start": 13,
+      "provenance_paths": [
+        "routes/memory.ts"
+      ],
+      "rationale": "Line 13 assigns req.body.caption to the record without any sanitization or encoding. The getMemories endpoint at line 24 returns all memories including captions to any caller. The frontend photo-wall or memory display component likely binds this value to the DOM. Verification: submit a memory with a script-tag caption and observe if it renders as HTML in the photo-wall view.",
+      "rule_id": "xss",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Stored XSS via unsanitized memory caption"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/restoreProgress.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/memory.ts",
+      "line_end": 27,
+      "line_start": 1
+    },
+    {
+      "file": "frontend/src/app/photo-wall/photo-wall.component.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "Hashids",
+    "cookieParser",
+    "caption"
+  ],
+  "stop": false
+}

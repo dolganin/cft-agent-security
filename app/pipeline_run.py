@@ -391,7 +391,7 @@ def _append_scout_findings(
     try:
         client = FallbackLLMAgentModel.from_settings(settings).client
         try:
-            source_map = build_express_source_map(discovery)
+            source_map = build_express_source_map(discovery, include_oracle_controllers=False)
         except (OSError, TypeError, ValueError) as exc:
             source_map = None
             logger.warning("Express source map unavailable: %s", type(exc).__name__)

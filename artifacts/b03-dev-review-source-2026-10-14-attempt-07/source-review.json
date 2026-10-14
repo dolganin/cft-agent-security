@@ -1,0 +1,198 @@
+{
+  "schema_version": "b03.source-review.v1",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "measurement_identity_sha256": "e76a9747b535ece61432a7bae16f1a066131b4f0f37e104ba10016f2c6bda0ee",
+  "attempt_seal_sha256": "5d8026e1a75a07146abe542ea00cd701ee552833c41fa1e0b0cb195abed69a0b",
+  "candidate_bindings_sha256": "9ee070d5a507490a88851d6d6984a883235d3a9f36158e73f4308559219c2117",
+  "review_method": "Manual read-only source review of each generated observation and relevant route registration, middleware, helper, and local dependency. No target execution, exploit request, or runtime verifier was used.",
+  "interpretation": "supported_source_hypothesis means the described source behavior is present; it is not a confirmed vulnerability or FinalReport verdict. Partially supported and unresolved items need additional impact or runtime evidence. This review does not change the frozen benchmark matcher or labels.",
+  "runtime_verification": "not_run",
+  "observations": [
+    {
+      "id": "round_robin:scout:00",
+      "status": "supported_source_hypothesis",
+      "rationale": "The request query is interpolated into a raw Sequelize SQL string. This supports an injection hypothesis; no request was executed.",
+      "source_refs": ["routes/search.ts:21-24"]
+    },
+    {
+      "id": "round_robin:scout:01",
+      "status": "supported_source_hypothesis",
+      "rationale": "A user-supplied imageUrl reaches fetch() without a visible destination or protocol allowlist. The route also requires a logged-in user; runtime reachability was not tested.",
+      "source_refs": ["routes/profileImageUrlUpload.ts:18-28"]
+    },
+    {
+      "id": "round_robin:scout:02",
+      "status": "partially_supported_docker_disabled",
+      "rationale": "The extraction code writes using the archive entry path and checks only whether the resolved path contains the project root; that can permit writes outside uploads/complaints while remaining inside the repository. The claim that the condition is always true is inaccurate, and fileWriteChallenge is disabled in Docker, so this path is not active in the pinned benchmark environment.",
+      "source_refs": ["routes/fileUpload.ts:27-47", "data/static/challenges.yml:83-86"]
+    },
+    {
+      "id": "round_robin:scout:03",
+      "status": "supported_source_hypothesis",
+      "rationale": "The redirect handler calls isRedirectAllowed and then redirects; the allowlist predicate uses substring matching, which can accept a URL containing an allowed URL as a substring.",
+      "source_refs": ["lib/insecurity.ts:121-139", "routes/redirect.ts:12-19"]
+    },
+    {
+      "id": "round_robin:scout:04",
+      "status": "unresolved",
+      "rationale": "The raw URL can be stored as a profile image fallback, but this review found no application frontend consumer for profileImage and did not establish an executable HTML or script sink. The XSS claim is unsupported by the inspected flow.",
+      "source_refs": ["routes/profileImageUrlUpload.ts:18-46"]
+    },
+    {
+      "id": "round_robin:scout:05",
+      "status": "contradicted_by_source",
+      "rationale": "The route is intentionally usable before a full session: it requires a signed temporary token of the password-valid/second-factor type and a valid TOTP before issuing the full token.",
+      "source_refs": ["server.ts:476-492", "routes/2fa.ts:16-49", "routes/login.ts:37-45"]
+    },
+    {
+      "id": "round_robin:scout:06",
+      "status": "contradicted_by_source",
+      "rationale": "The helper returns the x-user-email header, but repository search found no production call site; only its definition and unit tests reference it. A reachable identity bypass was not established.",
+      "source_refs": ["lib/insecurity.ts:93-95"]
+    },
+    {
+      "id": "round_robin:scout:07",
+      "status": "contradicted_by_source",
+      "rationale": "The ORM User password setter hashes cleartext on assignment, including the reset handler update. The claim that this stores plaintext is contradicted.",
+      "source_refs": ["routes/resetPassword.ts:41-46", "models/user.ts:70-74"]
+    },
+    {
+      "id": "round_robin:scout:08",
+      "status": "contradicted_by_source",
+      "rationale": "Although the route has no outer authorization middleware, orderHistory checks for a known authenticated bearer token before returning orders.",
+      "source_refs": ["server.ts:642-644", "routes/orderHistory.ts:11-21"]
+    },
+    {
+      "id": "round_robin:scout:09",
+      "status": "not_active_in_pinned_docker",
+      "rationale": "trackOrder uses character filtering when reflectedXssChallenge is disabled and only truncates when it is enabled. That challenge is disabled in Docker, so the claimed raw $where injection path is not active in this benchmark environment.",
+      "source_refs": ["routes/trackOrder.ts:12-19", "data/static/challenges.yml:916-921"]
+    },
+    {
+      "id": "round_robin:scout:10",
+      "status": "not_active_in_pinned_docker_unproven_escape",
+      "rationale": "The handler passes request data to notevil safeEval only when the RCE challenge is enabled; that challenge is disabled in Docker. The source also does not establish that safeEval can be escaped.",
+      "source_refs": ["routes/b2bOrder.ts:16-24", "data/static/challenges.yml:176-179"]
+    },
+    {
+      "id": "round_robin:scout:11",
+      "status": "partially_supported",
+      "rationale": "The authenticated user object is indexed by a caller-selected fields list. The inspected route returns fields from the current user's own session data; cross-user access and the security impact of the claimed fields were not established.",
+      "source_refs": ["routes/currentUser.ts:11-40"]
+    },
+    {
+      "id": "handlers:scout:00",
+      "status": "supported_source_hypothesis",
+      "rationale": "The login email and password hash are interpolated into a raw SQL query. This supports an injection hypothesis; no payload was executed.",
+      "source_refs": ["routes/login.ts:32-35"]
+    },
+    {
+      "id": "handlers:scout:01",
+      "status": "supported_source_hypothesis_duplicate",
+      "rationale": "Same parameterized-query gap as round_robin:scout:00; counted as a duplicate source observation, not an independent vulnerability.",
+      "source_refs": ["routes/search.ts:21-24"]
+    },
+    {
+      "id": "handlers:scout:02",
+      "status": "supported_source_hypothesis_duplicate",
+      "rationale": "Same substring allowlist issue as round_robin:scout:03; not an independent vulnerability.",
+      "source_refs": ["lib/insecurity.ts:133-138", "routes/redirect.ts:12-19"]
+    },
+    {
+      "id": "handlers:scout:03",
+      "status": "partially_supported_duplicate",
+      "rationale": "Same own-user field selection as round_robin:scout:11. It exposes selected properties present in the current session object, but cross-user disclosure and impact are not shown.",
+      "source_refs": ["routes/currentUser.ts:17-40"]
+    },
+    {
+      "id": "handlers:scout:04",
+      "status": "contradicted_by_source",
+      "rationale": "The deluxe route is registered with appendUserId, which replaces request.body.UserId with the authenticated user's ID before the handler uses it.",
+      "source_refs": ["server.ts:645-648", "lib/insecurity.ts:175-183", "routes/deluxe.ts:16-25"]
+    },
+    {
+      "id": "handlers:scout:05",
+      "status": "unresolved_browser_context",
+      "rationale": "The profile update uses a cookie token and has no visible CSRF-token check. The benchmark challenge documentation says this challenge no longer works in current browsers; browser cookie policy and a real cross-site request were not tested.",
+      "source_refs": ["routes/updateUserProfile.ts:15-44", "data/static/challenges.yml:1377-1382"]
+    },
+    {
+      "id": "handlers:scout:06",
+      "status": "partially_supported_file_exposure",
+      "rationale": "The unauthenticated route serves files from encryptionkeys and directory browsing is enabled; the target's own API test expects premium.key to return 200. This supports an exposure concern, but this review did not read the key contents or establish their intended confidentiality. Forward-slash path traversal is explicitly rejected.",
+      "source_refs": ["server.ts:295-297", "routes/keyServer.ts:9-18", "test/api/file-serving.test.ts:134-160"]
+    },
+    {
+      "id": "handlers:scout:07",
+      "status": "contradicted_by_source",
+      "rationale": "The wallet endpoint runs appendUserId before the handler, replacing the caller's UserId with the authenticated user's ID.",
+      "source_refs": ["server.ts:645-646", "lib/insecurity.ts:175-183", "routes/wallet.ts:10-18"]
+    },
+    {
+      "id": "handlers:scout:08",
+      "status": "contradicted_by_source",
+      "rationale": "The wallet update endpoint also runs appendUserId before its handler, replacing the caller's UserId.",
+      "source_refs": ["server.ts:645-646", "lib/insecurity.ts:175-183", "routes/wallet.ts:21-31"]
+    },
+    {
+      "id": "handlers:scout:09",
+      "status": "partially_supported_control_gap",
+      "rationale": "verifyImageCaptcha proceeds when no recent captcha record exists. Whether a captcha is required in that state is a policy/runtime question, so this is a source-level control-gap hypothesis rather than a confirmed bypass.",
+      "source_refs": ["routes/imageCaptcha.ts:38-56", "server.ts:639-640"]
+    },
+    {
+      "id": "handlers:scout:10",
+      "status": "supported_source_hypothesis_duplicate",
+      "rationale": "Same user-controlled URL-to-fetch flow as round_robin:scout:01; not an independent vulnerability.",
+      "source_refs": ["routes/profileImageUrlUpload.ts:18-28"]
+    },
+    {
+      "id": "handlers:scout:11",
+      "status": "supported_source_hypothesis",
+      "rationale": "The current-password comparison runs only when the current parameter is truthy, while the handler then updates the authenticated user's password. This supports a re-authentication bypass hypothesis; no request was executed.",
+      "source_refs": ["routes/changePassword.ts:12-56", "models/user.ts:70-74"]
+    },
+    {
+      "id": "handlers:scout:12",
+      "status": "supported_source_hypothesis",
+      "rationale": "A request-body value is used directly as a Mongo-style _id selector with multi enabled. This supports an operator-injection hypothesis; database behavior was not exercised.",
+      "source_refs": ["routes/updateProductReviews.ts:14-24", "server.ts:653-654"]
+    },
+    {
+      "id": "handlers:scout:13",
+      "status": "not_active_in_pinned_docker_unproven_escape",
+      "rationale": "The RCE path is gated by challenges disabled in Docker. In addition, use of notevil safeEval alone does not prove a sandbox escape or arbitrary code execution.",
+      "source_refs": ["routes/b2bOrder.ts:16-24", "data/static/challenges.yml:176-179"]
+    },
+    {
+      "id": "handlers:scout:14",
+      "status": "supported_source_hypothesis",
+      "rationale": "The basket route requires authentication but looks up the basket by caller-controlled route ID; the inspected middleware does not bind that route parameter to the user's basket ID.",
+      "source_refs": ["server.ts:375-376", "server.ts:418-419", "server.ts:622-623", "routes/basket.ts:15-24"]
+    },
+    {
+      "id": "handlers:scout:15",
+      "status": "contradicted_by_source",
+      "rationale": "The data-export route runs appendUserId before the handler, replacing request.body.UserId with the authenticated user's ID.",
+      "source_refs": ["server.ts:639-640", "lib/insecurity.ts:175-183", "routes/dataExport.ts:15-27"]
+    },
+    {
+      "id": "handlers:scout:16",
+      "status": "not_active_in_pinned_docker",
+      "rationale": "showProductReviews converts the route ID to a number when noSqlCommandChallenge is disabled. That challenge is disabled in Docker, so the raw-string $where path described by the candidate is not active in the pinned benchmark environment.",
+      "source_refs": ["routes/showProductReviews.ts:28-40", "data/static/challenges.yml:774-777"]
+    },
+    {
+      "id": "handlers:scout:17",
+      "status": "partially_supported_limited_impact",
+      "rationale": "A fixed Hashids salt is used both to generate and decode progress codes, and decoded IDs are applied to game challenge state. This supports forging training progress; it does not establish access to customer data or application privileges.",
+      "source_refs": ["routes/continueCode.ts:12-20", "routes/restoreProgress.ts:16-35", "server.ts:628-633"]
+    },
+    {
+      "id": "handlers:scout:18",
+      "status": "contradicted_by_source",
+      "rationale": "The chat tool converts the supplied ID with Number() before concatenating it into the $where expression, contradicting the claim that arbitrary JavaScript is concatenated directly.",
+      "source_refs": ["routes/chat.ts:142-150"]
+    }
+  ]
+}

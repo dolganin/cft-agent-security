@@ -1,0 +1,106 @@
+{
+  "candidates": [
+    {
+      "description": "In changePassword, the current-password check is guarded by `if (currentPassword && ...)`. An empty or missing currentPassword makes the guard falsy, skipping verification entirely and allowing password change with only a valid auth token.",
+      "file": "routes/changePassword.ts",
+      "line_end": 42,
+      "line_start": 39,
+      "provenance_paths": [
+        "routes/changePassword.ts"
+      ],
+      "rationale": "Line 39: `if (currentPassword && security.hash(currentPassword) !== loggedInUser.data.password)` — when currentPassword is '' or undefined the short-circuit skips the check. Lines 44-51 then update the password unconditionally. Verification: send a valid Bearer token with query params current= (empty) and new=attackerpass; expect 200 and subsequent login with attackerpass.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password change bypasses current-password verification when currentPassword is empty"
+    },
+    {
+      "description": "getWalletBalance and addWalletBalance query WalletModel with req.body.UserId without confirming it matches the authenticated user. If appendUserId middleware is not applied to these routes, any authenticated user can read or inflate another user's wallet.",
+      "file": "routes/wallet.ts",
+      "line_end": 27,
+      "line_start": 12,
+      "provenance_paths": [
+        "routes/wallet.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 12: `WalletModel.findOne({ where: { UserId: req.body.UserId } })` and line 27: `WalletModel.increment({ balance: req.body.balance }, { where: { UserId: req.body.UserId } })` both trust the client-supplied UserId. lib/insecurity.ts:178 shows appendUserId overwrites req.body.UserId, but it must be confirmed that this middleware is mounted on the wallet routes. Verification: register two users, authenticate as user A, POST to wallet endpoint with UserId of user B; expect balance of B returned or modified.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Wallet balance read and top-up use unvalidated req.body.UserId enabling IDOR"
+    },
+    {
+      "description": "retrieveBasket fetches any basket by req.params.id with no comparison to the authenticated user's basket ID. The challenge-detection code at lines 21-23 confirms this is an intended vulnerability surface.",
+      "file": "routes/basket.ts",
+      "line_end": 23,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19: `BasketModel.findOne({ where: { id } })` uses the URL param directly. The route is mounted with security.isAuthorized() (server.ts:418) which only checks authentication, not ownership. Lines 21-23 explicitly detect cross-user basket access as a challenge. Verification: authenticate as user A, GET /rest/basket/<B's basket id>; expect 200 with B's basket contents.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Basket retrieval by ID lacks ownership check allowing horizontal privilege escalation"
+    },
+    {
+      "description": "dataExport verifies the caller is authenticated but then queries MemoryModel with req.body.UserId rather than the token-derived user ID, allowing any authenticated user to export another user's memories.",
+      "file": "routes/dataExport.ts",
+      "line_end": 26,
+      "line_start": 26,
+      "provenance_paths": [
+        "routes/dataExport.ts"
+      ],
+      "rationale": "Line 18 authenticates via token, but line 26: `MemoryModel.findAll({ where: { UserId: req.body.UserId } })` uses the body-supplied UserId. If appendUserId is not applied to this route, the attacker controls which user's memories are exported. Verification: authenticate as user A, POST /rest/data-export with body UserId=B; expect B's memories in response.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Data export uses req.body.UserId independent of authenticated identity enabling memory exfiltration"
+    },
+    {
+      "description": "Both changePassword (line 51) and resetPassword (line 44) call user.update({ password: newPassword }) without applying security.hash(), storing the new password in plaintext while the original was hashed.",
+      "file": "routes/changePassword.ts",
+      "line_end": 51,
+      "line_start": 51,
+      "provenance_paths": [
+        "routes/changePassword.ts",
+        "routes/resetPassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 51: `await user.update({ password: newPasswordInString })` — newPasswordInString is just newPassword?.toString() with no hash call. Compare with line 39 which uses security.hash() for comparison, confirming the stored format should be hashed. resetPassword.ts:44 has the same pattern. Verification: change password via API, then query the DB or attempt login with the raw new password; expect success confirming plaintext storage.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "New password stored without hashing in changePassword and resetPassword"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 470,
+      "line_start": 420
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 200,
+      "line_start": 175
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 36,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "/rest/wallet",
+    "appendUserId",
+    "data-export"
+  ],
+  "stop": false
+}

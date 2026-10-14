@@ -1,0 +1,86 @@
+{
+  "candidates": [
+    {
+      "description": "The current password check on line 39 is guarded by `if (currentPassword && ...)`, so when `currentPassword` is an empty string, undefined, or null, the entire verification is skipped and the password is changed without proof of the current one.",
+      "file": "routes/changePassword.ts",
+      "line_end": 42,
+      "line_start": 39,
+      "provenance_paths": [
+        "routes/changePassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 39 uses short-circuit evaluation: if `currentPassword` is falsy the hash comparison never executes. Line 51 then writes the new password unconditionally. An authenticated user can POST with `current=` (empty) to change their password without knowing the old one. Verification: send a change-password request with an empty `current` query param using a valid token and confirm the password is updated.",
+      "rule_id": "authentication",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Current password verification bypassed when parameter is falsy"
+    },
+    {
+      "description": "Line 51 stores `newPasswordInString` (the raw query parameter) directly into the user record, while line 39 expects the stored value to be a hash. After a successful change the password is persisted unhashed.",
+      "file": "routes/changePassword.ts",
+      "line_end": 51,
+      "line_start": 51,
+      "provenance_paths": [
+        "routes/changePassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "`newPasswordInString` is `newPassword?.toString()` with no hashing applied. Line 39 compares `security.hash(currentPassword)` against the stored value, proving the schema expects a hash. The challenge check on line 54 further confirms hashed storage is the norm. Verification: change a password, then read the user record via an admin or data-export endpoint and confirm the password field is the plain-text value.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "New password stored in plain text without hashing"
+    },
+    {
+      "description": "Lines 29-33 iterate over user-supplied field names and copy matching keys from `user.data` into the response without an allowlist, allowing extraction of sensitive fields such as the password hash.",
+      "file": "routes/currentUser.ts",
+      "line_end": 33,
+      "line_start": 29,
+      "provenance_paths": [
+        "routes/currentUser.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "The loop on line 29 checks only `user?.data[field] !== undefined` before including the value. No allowlist restricts which keys may be returned. Line 52 explicitly solves a challenge when `response.user.password` is present, confirming the password field is reachable through this path. Verification: request `/rest/user/whoami?fields=password` with a valid token and confirm the hash appears in the JSON response.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Arbitrary user-data field exposure via fields query parameter"
+    },
+    {
+      "description": "Line 26 inserts `req.body.author` directly into the review document without verifying it matches the authenticated user's email, allowing any authenticated user to post reviews attributed to another identity.",
+      "file": "routes/createProductReviews.ts",
+      "line_end": 26,
+      "line_start": 26,
+      "provenance_paths": [
+        "routes/createProductReviews.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "The `author` value is taken verbatim from the request body. The only related check (line 19) is a challenge-solve condition, not an enforcement gate. No middleware or handler rejects a mismatch between `user.data.email` and `req.body.author`. Verification: authenticate as user A, POST a review with `author` set to user B's email, and confirm the review is stored with the forged author.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Review author field not validated against authenticated user identity"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 660,
+      "line_start": 620
+    }
+  ],
+  "search_queries": [
+    "appendUserId",
+    "wallet",
+    "$where"
+  ],
+  "stop": false
+}

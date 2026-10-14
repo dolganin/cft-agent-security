@@ -1,0 +1,82 @@
+{
+  "candidates": [
+    {
+      "description": "The retrieveBasket handler queries BasketModel by req.params.id without verifying the authenticated user owns that basket. The isAuthorized() middleware only checks authentication, not ownership.",
+      "file": "routes/basket.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 uses req.params.id directly in findOne without comparing to the authenticated user's bid. The challenge detection at lines 22-23 explicitly checks user.bid != parseInt(id,10), confirming the code acknowledges cross-user access is possible. Route is mounted with security.isAuthorized() (server.ts:418) which only validates a valid JWT exists.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in basket retrieval allows reading any user's basket by ID"
+    },
+    {
+      "description": "The dataExport handler uses req.body.UserId to query MemoryModel without verifying it matches the authenticated user's own ID, allowing any authenticated user to export another user's photo-wall memories.",
+      "file": "routes/dataExport.ts",
+      "line_end": 26,
+      "line_start": 26,
+      "provenance_paths": [
+        "routes/dataExport.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 26 passes req.body.UserId directly to MemoryModel.findAll. Authentication is checked at lines 18-19 but only confirms a valid token exists; no comparison between loggedInUser.data.id and req.body.UserId is performed. Orders and reviews use email from the token, but memories use the unvalidated body parameter.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in data export allows querying another user's memories via UserId body parameter"
+    },
+    {
+      "description": "req.body.id is passed directly to db.reviewsCollection.findOne({_id: id}) without type validation, allowing an attacker to inject MongoDB query operators as an object to match and modify arbitrary reviews.",
+      "file": "routes/likeProductReviews.ts",
+      "line_end": 25,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/likeProductReviews.ts",
+        "data/mongodb.ts",
+        "data/types.ts"
+      ],
+      "rationale": "Line 18 reads req.body.id with no type check. Line 25 passes it as the _id query value. If id is an object like {\"$ne\":null}, MongoDB interprets it as a query operator matching all documents. The subsequent update at line 35-38 would then modify all matched reviews. The user is authenticated but the id parameter is not sanitized.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection in likeProductReviews via unvalidated id parameter"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 560,
+      "line_start": 500
+    },
+    {
+      "file": "routes/fileServer.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 460,
+      "line_start": 415
+    }
+  ],
+  "search_queries": [
+    "dataExport",
+    "/rest/data-export",
+    "appendUserId"
+  ],
+  "stop": false
+}

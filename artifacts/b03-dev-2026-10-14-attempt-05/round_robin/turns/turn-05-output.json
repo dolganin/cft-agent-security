@@ -1,0 +1,59 @@
+{
+  "candidates": [
+    {
+      "description": "The addWalletBalance handler passes req.body.balance directly to WalletModel.increment without validating the amount is positive or bounded, allowing an authenticated user to inflate their wallet by any arbitrary value.",
+      "file": "routes/wallet.ts",
+      "line_end": 27,
+      "line_start": 27,
+      "provenance_paths": [
+        "routes/wallet.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 27 calls WalletModel.increment({ balance: req.body.balance }) with no numeric validation or upper bound. The appendUserId middleware (server.ts:646) correctly binds UserId from the token, but the balance value itself is fully user-controlled, enabling arbitrary wallet inflation.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Unvalidated wallet balance increment allows arbitrary credit"
+    },
+    {
+      "description": "The order handler reads req.body.UserId at line 146 to look up and decrement/increment wallet balances. If appendUserId middleware is not applied to this route, an attacker can specify any UserId to manipulate another user's wallet balance.",
+      "file": "routes/order.ts",
+      "line_end": 162,
+      "line_start": 146,
+      "provenance_paths": [
+        "routes/order.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 146-162 use req.body.UserId to find the wallet and call decrement/increment. The appendUserId middleware overwrites req.body.UserId from the JWT token, but the order route registration in server.ts has not been confirmed to include it. If absent, UserId is fully attacker-controlled.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Order route may use attacker-controlled UserId for wallet operations"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 680,
+      "line_start": 620
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/authenticatedUsers.ts",
+      "line_end": 37,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "rest/order",
+    "authenticatedUsers",
+    "data-export"
+  ],
+  "stop": false
+}

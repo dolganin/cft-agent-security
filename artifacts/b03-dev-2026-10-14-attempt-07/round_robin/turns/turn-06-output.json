@@ -1,0 +1,60 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied `id` parameter is interpolated into a MongoDB `$where` JavaScript expression. When the reflected XSS challenge is enabled, only truncation is applied (no character filtering), allowing injection of arbitrary JavaScript into the `$where` evaluation context. The route has no authentication middleware.",
+      "file": "routes/trackOrder.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/trackOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 builds `$where: this.orderId === '${id}'` with `id` from `req.params.id`. Line 15 shows sanitization is conditional: when XSS challenge is enabled only `utils.trunc` (length limit) is applied, leaving injection characters intact. Route at server.ts:636 registers `trackOrder()` with no auth middleware. Verification: send a GET to `/rest/track-order/1' || '1'==='1` and observe if all orders are returned instead of one.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in trackOrder"
+    },
+    {
+      "description": "The `orderLinesData` field from the request body is passed to `notevil`'s `safeEval` inside a `vm.runInContext` call. While `notevil` restricts access to dangerous globals, it is still a code-execution sink on attacker-controlled input reachable by any authenticated user.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 reads `body.orderLinesData` directly from the request. Line 23 executes it via `vm.runInContext('safeEval(orderLinesData)', sandbox)`. The route is mounted under `/b2b/v2` with `security.isAuthorized()` middleware (server.ts:443), so any authenticated user can reach this sink. Verification: submit a POST to `/b2b/v2/orders` with a benign expression like `1+1` in `orderLinesData` and confirm the response differs from a non-expression string, proving evaluation occurs.",
+      "rule_id": "code-execution",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User input executed via vm.runInContext in b2bOrder"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "lib/utils.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "$where",
+    "vm.runInContext",
+    "safeEval",
+    "denyAll"
+  ],
+  "stop": false
+}

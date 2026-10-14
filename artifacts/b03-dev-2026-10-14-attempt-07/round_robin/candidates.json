@@ -1,0 +1,188 @@
+{
+  "candidates": [
+    {
+      "description": "The search criteria from req.query.q is directly interpolated into a raw SQL SELECT statement without parameterization or escaping, allowing SQL injection.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "Line 23 builds a SQL query via template literal embedding `criteria` (derived from req.query.q on line 21) directly into the WHERE clause. No parameterized query or escaping is applied. Verification: send a crafted q parameter with SQL metacharacters and observe altered query behavior.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Raw SQL string interpolation from user query parameter"
+    },
+    {
+      "description": "The imageUrl from req.body is passed directly to fetch() allowing server-side requests to arbitrary internal or external URLs.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts"
+      ],
+      "rationale": "Line 24 calls fetch(url) where url comes from req.body.imageUrl (line 19). The only check on line 20 is a regex that detects but does not block SSRF challenge URLs. No allowlist, protocol restriction, or private-IP blocking is applied. Verification: submit an imageUrl pointing to an internal service and observe whether the response body is written to disk.",
+      "rule_id": "ssrf",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User-controlled URL passed to fetch without validation"
+    },
+    {
+      "description": "The zip extraction path traversal guard uses a condition that is always true, allowing arbitrary file writes via crafted zip entries.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 34,
+      "line_start": 33,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "Line 33 checks `absolutePath.includes(path.resolve('.'))` but path.resolve('.') returns the CWD which is always a prefix of any resolved absolute path, making the guard always pass. A zip entry with path `../../etc/cron.d/x` would resolve outside the intended directory and be written. Verification: craft a zip with a traversal entry and confirm file creation outside uploads/complaints/.",
+      "rule_id": "path-traversal",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Zip entry path traversal check is ineffective"
+    },
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) which performs substring matching rather than exact or prefix matching, allowing an attacker to embed an allowed URL as a substring within a malicious URL to bypass the allowlist check.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 136 uses `url.includes(allowedUrl)` so a URL like `https://evil.com/?x=https://github.com/juice-shop/juice-shop` passes the check while redirecting to evil.com. Need to confirm the redirect route consumes this result as the actual redirect target.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect allowlist bypass via substring matching"
+    },
+    {
+      "description": "When the image fetch fails, the raw user-supplied imageUrl is stored directly as the user's profileImage field, which could contain javascript: or data: URIs rendered unsafely in the frontend.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts"
+      ],
+      "rationale": "Line 36 stores `url` (raw req.body.imageUrl) as profileImage when fetch throws. If the frontend renders this in an img src or href without scheme validation, a javascript: URI could execute. Need to confirm the rendering path in the profile component.",
+      "rule_id": "xss",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Stored XSS via unsanitized profileImage URL fallback"
+    },
+    {
+      "description": "POST /rest/2fa/verify is registered without security.isAuthorized() unlike sibling 2FA routes (status, setup, disable) which all require authentication. Only rate limiting is applied.",
+      "file": "server.ts",
+      "line_end": 480,
+      "line_start": 477,
+      "provenance_paths": [
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 477-480 register the verify route with only rateLimit middleware, while lines 482, 486, 492 all apply security.isAuthorized() to other 2FA endpoints. If the handler does not internally verify the caller's identity, an unauthenticated attacker could brute-force TOTP codes within the 100-request/5min window.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "2FA verify endpoint missing authentication middleware"
+    },
+    {
+      "description": "lib/insecurity.ts userEmailFrom reads user identity from the x-user-email request header without any server-side validation against the authenticated session.",
+      "file": "lib/insecurity.ts",
+      "line_end": 95,
+      "line_start": 93,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "The function returns headers['x-user-email'] directly. If any route handler uses this to identify the acting user without cross-checking against the JWT or authenticatedUsers map, an attacker can impersonate any user by setting the header. Need to trace consumers to confirm impact.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "userEmailFrom trusts client-supplied x-user-email header"
+    },
+    {
+      "description": "The resetPassword handler stores the new password directly from user input via user.update({ password: newPassword }) without any visible hashing step.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 44,
+      "provenance_paths": [
+        "routes/resetPassword.ts",
+        "server.ts"
+      ],
+      "rationale": "body.new flows unmodified into user.update at line 44. If the User model lacks a beforeUpdate/beforeSave hook that hashes, the password is persisted in plaintext. Verification: inspect models/user.ts for a password-hashing hook; if absent, confirm plaintext storage.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Plaintext password stored on reset without hashing"
+    },
+    {
+      "description": "The route GET /rest/order-history is registered without security.isAuthorized() or security.appendUserId() middleware, potentially exposing order history to unauthenticated callers.",
+      "file": "server.ts",
+      "line_end": 642,
+      "line_start": 642,
+      "provenance_paths": [
+        "server.ts"
+      ],
+      "rationale": "No auth middleware is attached at registration. The handler orderHistory() may perform its own check, but the route registration itself lacks one. Verification: read routes/orderHistory.ts to confirm whether it internally validates the authenticated user or returns data for any caller.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing authentication on GET /rest/order-history"
+    },
+    {
+      "description": "User-supplied `id` parameter is interpolated into a MongoDB `$where` JavaScript expression. When the reflected XSS challenge is enabled, only truncation is applied (no character filtering), allowing injection of arbitrary JavaScript into the `$where` evaluation context. The route has no authentication middleware.",
+      "file": "routes/trackOrder.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/trackOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 builds `$where: this.orderId === '${id}'` with `id` from `req.params.id`. Line 15 shows sanitization is conditional: when XSS challenge is enabled only `utils.trunc` (length limit) is applied, leaving injection characters intact. Route at server.ts:636 registers `trackOrder()` with no auth middleware. Verification: send a GET to `/rest/track-order/1' || '1'==='1` and observe if all orders are returned instead of one.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in trackOrder"
+    },
+    {
+      "description": "The `orderLinesData` field from the request body is passed to `notevil`'s `safeEval` inside a `vm.runInContext` call. While `notevil` restricts access to dangerous globals, it is still a code-execution sink on attacker-controlled input reachable by any authenticated user.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 reads `body.orderLinesData` directly from the request. Line 23 executes it via `vm.runInContext('safeEval(orderLinesData)', sandbox)`. The route is mounted under `/b2b/v2` with `security.isAuthorized()` middleware (server.ts:443), so any authenticated user can reach this sink. Verification: submit a POST to `/b2b/v2/orders` with a benign expression like `1+1` in `orderLinesData` and confirm the response differs from a non-expression string, proving evaluation occurs.",
+      "rule_id": "code-execution",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User input executed via vm.runInContext in b2bOrder"
+    },
+    {
+      "description": "The /rest/user/whoami endpoint accepts a `fields` query parameter that is split and used to index into the authenticated user's data object without an allowlist, allowing retrieval of sensitive fields like `password` (hash) and `totpSecret`.",
+      "file": "routes/currentUser.ts",
+      "line_end": 31,
+      "line_start": 29,
+      "provenance_paths": [
+        "routes/currentUser.ts"
+      ],
+      "rationale": "Lines 29-31 iterate over user-supplied field names and copy any matching property from user.data into the response. No allowlist restricts which fields are returned. The password field contains a hash (set via security.hash in models/user.ts:73) and totpSecret is also present. An authenticated user can request fields=password,totpSecret to leak their own secrets, and the JSONP path at line 58 enables cross-origin exfiltration.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Arbitrary field exposure via unvalidated fields parameter leaks password hash and TOTP secret"
+    }
+  ]
+}

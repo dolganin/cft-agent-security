@@ -1,0 +1,32 @@
+{
+  "candidates": [
+    {
+      "description": "req.body.id is passed directly to MongoDB _id queries without type validation, allowing operator objects like {\"$ne\":null} to match and modify arbitrary reviews.",
+      "file": "routes/likeProductReviews.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/likeProductReviews.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 18 reads id from req.body without type check. Lines 25,35,50 use it as _id in findOne/update. Route is authenticated (server.ts:654 security.isAuthorized) but NoSQL operators bypass the intended single-document scope. Verification: send {\"id\":{\"$ne\":null}} as authenticated user and observe likesCount increment on multiple reviews.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL operator injection via unvalidated id in likeProductReviews"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 250,
+      "line_start": 160
+    }
+  ],
+  "search_queries": [
+    "appendUserId"
+  ],
+  "stop": false
+}

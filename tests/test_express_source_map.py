@@ -1,6 +1,7 @@
 from discovery.express_routes import build_express_source_map, link_candidates_to_routes
 from schemas.discovery import ProjectDiscoveryResult
 from schemas.scout import CandidateFinding
+from tools.repository_source import RepositorySource
 
 
 def test_direct_express_routes_have_stable_anchors_and_imported_handlers(tmp_path):
@@ -46,3 +47,22 @@ def test_source_map_does_not_treat_unrelated_get_calls_as_express(tmp_path):
         repository_root=tmp_path, project_files=["app.ts"],
     ))
     assert result.routes == []
+
+
+def test_catalog_source_map_compatibility_does_not_change_live_reader_policy(tmp_path):
+    (tmp_path / "routes").mkdir()
+    (tmp_path / "routes/vulnCodeSnippet.ts").write_text(
+        "const app = express()\napp.get('/oracle-only', handler)\n",
+    )
+    inventory = ProjectDiscoveryResult(
+        repository_root=tmp_path, project_files=["routes/vulnCodeSnippet.ts"],
+    )
+
+    # Historical A02 catalog records this file in source-map diagnostics.
+    catalog_map = build_express_source_map(inventory)
+    assert "routes/vulnCodeSnippet.ts" in catalog_map.analyzed_files
+
+    # Runtime/Scout callers explicitly opt out; the default reader is also safe.
+    live_map = build_express_source_map(inventory, include_oracle_controllers=False)
+    assert "routes/vulnCodeSnippet.ts" not in live_map.analyzed_files
+    assert "routes/vulnCodeSnippet.ts" not in RepositorySource(inventory).files

@@ -146,7 +146,7 @@ def run(target, output, model, max_turns=8, sast_from=None):
     write(output / "sast/findings.json", [f.model_dump(mode="json") for f in findings])
     write(output / "sast/manifest.json", {**scanner_manifest,
           "diagnostics": raw.get("errors", []), "redaction": "extra.lines only"})
-    source_map = build_express_source_map(discovery)
+    source_map = build_express_source_map(discovery, include_oracle_controllers=False)
     write(output / "express-source-map.json", source_map.model_dump(mode="json"))
     for mode in ("round_robin", "handlers"):
         destination = output / mode

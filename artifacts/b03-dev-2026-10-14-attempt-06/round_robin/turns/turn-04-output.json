@@ -1,0 +1,50 @@
+{
+  "candidates": [
+    {
+      "description": "In upgradeToDeluxe, if req.body.paymentMode is neither 'wallet' nor 'card', both payment validation blocks are skipped and the user is upgraded to deluxe without any payment check.",
+      "file": "routes/deluxe.ts",
+      "line_end": 43,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 24 and 34 gate payment checks on exact string equality with 'wallet'/'card'. Any other value (or absence) skips both blocks, falling through to the unconditional user.update on line 43. The challenge detection on line 44-46 confirms this is a known bypass path. Verification: authenticate as a customer, POST /rest/deluxe-membership with paymentMode set to an arbitrary string and observe role change to deluxe.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Deluxe upgrade bypasses payment when paymentMode is omitted or invalid"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/orderHistory.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/trackOrder.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "routes/createProductReviews.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 40,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "orderHistory",
+    "trackOrder",
+    "createProductReviews",
+    "NoSQLInjection"
+  ],
+  "stop": false
+}

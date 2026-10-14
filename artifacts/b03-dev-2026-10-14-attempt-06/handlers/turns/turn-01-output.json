@@ -1,0 +1,52 @@
+{
+  "candidates": [
+    {
+      "description": "The login handler builds a raw SQL query using template-literal interpolation of req.body.email directly into the WHERE clause, allowing an attacker to inject arbitrary SQL.",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts"
+      ],
+      "rationale": "Line 34 uses sequelize.query with a template literal embedding req.body.email without parameterization. The email value flows from POST body directly into the SQL string. Verification: send a crafted email payload like \"' OR '1'='1\" and observe whether the query returns unintended rows or causes a SQL error.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized email interpolation in login query"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/changePassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "sequelize.query",
+    "req.body.email",
+    "security.hash"
+  ],
+  "stop": false
+}

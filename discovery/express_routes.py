@@ -33,9 +33,13 @@ class _Token:
     line: int
 
 
-def build_express_source_map(inventory: ProjectDiscoveryResult) -> ExpressSourceMap:
+def build_express_source_map(
+    inventory: ProjectDiscoveryResult, *, include_oracle_controllers: bool = True,
+) -> ExpressSourceMap:
     """Index statically recognizable registrations; never infer authorization."""
-    source = RepositorySource(inventory)
+    # The default preserves the frozen A02 catalog's analyzed-file inventory.
+    # Every live Scout/API call must explicitly opt out of answer-serving files.
+    source = RepositorySource(inventory, include_oracle_controllers=include_oracle_controllers)
     contents = {path: "\n".join(source.lines[path]) for path in source.files}
     tokenized: dict[str, list[_Token]] = {}
     unsupported: list[str] = []

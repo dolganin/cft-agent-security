@@ -1,0 +1,82 @@
+{
+  "case_level_gain_over_sast": {
+    "handlers": 3,
+    "round_robin": 2
+  },
+  "confirmed_metrics": null,
+  "holdout_evaluated": false,
+  "input_seal_sha256": "5d8026e1a75a07146abe542ea00cd701ee552833c41fa1e0b0cb195abed69a0b",
+  "limitations": [
+    "One paired run, not statistical or causal improvement evidence",
+    "Ordinary full application source traversal; DEV-only labels used after discovery",
+    "Read bindings are not vulnerability confirmation; no runtime verifier run",
+    "Outside-DEV-catalog candidates are not automatically false positives"
+  ],
+  "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "schema_version": "b03.discovery-review.v1",
+  "scores": {
+    "handlers": {
+      "detected_positive_case_ids": [
+        "JS-AUTH-001",
+        "JS-BOLA-001",
+        "JS-REDIRECT-001",
+        "JS-SSRF-001"
+      ],
+      "detection": {
+        "duplicates": 2,
+        "f1": 0.33333333333333337,
+        "fn": 16,
+        "fp": 0,
+        "outside_ground_truth": 88,
+        "precision": 1.0,
+        "recall": 0.2,
+        "tn": 2,
+        "tp": 4,
+        "unresolved": 0
+      },
+      "positive_cases": 20,
+      "safe_cases": 2
+    },
+    "round_robin": {
+      "detected_positive_case_ids": [
+        "JS-PATH-001",
+        "JS-REDIRECT-001",
+        "JS-SSRF-001"
+      ],
+      "detection": {
+        "duplicates": 2,
+        "f1": 0.2608695652173913,
+        "fn": 17,
+        "fp": 0,
+        "outside_ground_truth": 82,
+        "precision": 1.0,
+        "recall": 0.15,
+        "tn": 2,
+        "tp": 3,
+        "unresolved": 0
+      },
+      "positive_cases": 20,
+      "safe_cases": 2
+    },
+    "sast": {
+      "detected_positive_case_ids": [
+        "JS-REDIRECT-001"
+      ],
+      "detection": {
+        "duplicates": 1,
+        "f1": 0.09523809523809523,
+        "fn": 19,
+        "fp": 0,
+        "outside_ground_truth": 73,
+        "precision": 1.0,
+        "recall": 0.05,
+        "tn": 2,
+        "tp": 1,
+        "unresolved": 0
+      },
+      "positive_cases": 20,
+      "safe_cases": 2
+    }
+  },
+  "status": "dev_discovery_evaluated"
+}

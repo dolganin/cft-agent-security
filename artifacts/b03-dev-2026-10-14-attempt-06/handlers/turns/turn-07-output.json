@@ -1,0 +1,71 @@
+{
+  "candidates": [
+    {
+      "description": "The `id` parameter from `req.params.id` is concatenated into a MongoDB `$where` JavaScript expression. Even when truncated to 40 characters, arbitrary JavaScript can be injected into the `$where` clause, enabling data exfiltration or DoS.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 36 builds `$where: 'this.product == ' + id` where `id` is either `Number(req.params.id)` or `utils.trunc(req.params.id, 40)`. The `$where` operator evaluates arbitrary JavaScript server-side. Truncation to 40 chars still permits payloads like `1;sleep(2000)` or `1;this.admin==true`. Verification: send a truncated payload that causes a measurable delay or altered result set.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL JavaScript injection via $where in showProductReviews"
+    },
+    {
+      "description": "The resetPassword handler stores the new password directly via `user.update({ password: newPassword })` without applying `security.hash()`, while the login flow uses `security.hash()` for comparison. This may result in plaintext storage or broken authentication.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 44,
+      "provenance_paths": [
+        "routes/resetPassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 44 calls `user.update({ password: newPassword })` with the raw body value. `lib/insecurity.ts:41` defines `hash()` used by login for comparison. If no Sequelize hook hashes on save, the password is stored in plaintext. Verification: check UserModel for a `beforeSave`/`beforeUpdate` hook; if absent, confirm plaintext storage by resetting a synthetic user's password and inspecting the DB row.",
+      "rule_id": "authentication",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password stored in plaintext during reset without hashing"
+    },
+    {
+      "description": "The `addMemory` handler reads `UserId` directly from `req.body.UserId`. Although `security.appendUserId()` middleware is registered, the handler does not verify the authenticated user matches the submitted UserId, enabling memory creation for other users if the middleware is bypassed or the body value is not overwritten.",
+      "file": "routes/memory.ts",
+      "line_end": 15,
+      "line_start": 15,
+      "provenance_paths": [
+        "routes/memory.ts",
+        "server.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 15 uses `req.body.UserId` from the request body. The route at server.ts:331 includes `security.appendUserId()` middleware, but the handler does not independently validate that the UserId matches the authenticated session. If `appendUserId` only sets the field when absent (rather than overwriting), a crafted body could target another user. Verification: inspect `appendUserId` implementation at insecurity.ts:175 to confirm overwrite semantics; if it only appends, send a request with a foreign UserId and check if the memory is created for that user.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in addMemory allows creating memories for arbitrary users"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 195,
+      "line_start": 170
+    },
+    {
+      "file": "models/user.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "beforeSave",
+    "beforeUpdate",
+    "password.*hash"
+  ],
+  "stop": false
+}

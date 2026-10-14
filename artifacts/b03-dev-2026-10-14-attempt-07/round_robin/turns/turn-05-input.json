@@ -1,0 +1,791 @@
+{
+  "previous_context": [
+    {
+      "content": "453:   /* PrivacyRequests: Only allowed for authenticated users */\n454:   app.use('/api/PrivacyRequests', security.isAuthorized())\n455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n508:     { name: 'Complaint', exclude: [], model: ComplaintModel },",
+      "file": "server.ts",
+      "line_end": 508,
+      "line_start": 453
+    },
+    {
+      "content": "452:   app.put('/api/Feedbacks/:id', security.denyAll())\n453:   /* PrivacyRequests: Only allowed for authenticated users */\n454:   app.use('/api/PrivacyRequests', security.isAuthorized())\n455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },",
+      "file": "server.ts",
+      "line_end": 507,
+      "line_start": 452
+    },
+    {
+      "content": "446:   app.post('/api/BasketItems', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemAddition()), utils.asyncHandler(basketItems.addBasketItem()))\n447:   /* Accounting users are allowed to check and update quantities */\n448:   app.delete('/api/Quantitys/:id', security.denyAll())\n449:   app.post('/api/Quantitys', security.denyAll())\n450:   app.use('/api/Quantitys/:id', security.isAccounting(), IpFilter(['123.456.789'], { mode: 'allow' }))\n451:   /* Feedbacks: Do not allow changes of existing feedback */\n452:   app.put('/api/Feedbacks/:id', security.denyAll())\n453:   /* PrivacyRequests: Only allowed for authenticated users */\n454:   app.use('/api/PrivacyRequests', security.isAuthorized())\n455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: ",
+      "file": "server.ts",
+      "line_end": 501,
+      "line_start": 446
+    },
+    {
+      "content": "50: }\n51: \n52: export const isAuthorized = () => expressJwt(({ secret: publicKey }) as any)\n53: export const denyAll = () => expressJwt({ secret: '<redacted>' + Math.random() } as any)\n54: export const authorize = (user = {}) => jwt.sign(user, privateKey, { expiresIn: '6h', algorithm: 'RS256' })\n55: export const verify = (token: string) => token ? (jws.verify as ((token: string, secret: string) => boolean))(token, publicKey) : false\n56: export const decode = (token: string) => { return jws.decode(token)?.payload }\n57: \n58: export const sanitizeHtml = (html: string) => sanitizeHtmlLib(html)\n59: export const sanitizeLegacy = (input = '') => input.replace(/<(?:\\w+)\\W+?[\\w]/gi, '')\n60: export const sanitizeFilename = (filename: string) => sanitizeFilenameLib(filename)\n61: export const sanitizeSecure = (html: string): string => {\n62:   const sanitized = sanitizeHtml(html)\n63:   if (sanitized === html) {\n64:     return html\n65:   } else {\n66:     return sanitizeSecure(sanitized)\n67:   }\n68: }\n69: \n70: export const authenticatedUsers: IAuthenticatedUsers = {\n71:   tokenMap: {},\n72:   idMap: {},\n73:   put: function (token: string, user: ResponseWithUser) {\n74:     this.tokenMap[token] = user\n75:     this.idMap[user.data.id] = token\n76:   },\n77:   get: function (token?: string) {\n78:     return token ? this.tokenMap[utils.unquote(token)] : undefined\n79:   },\n80:   tokenOf: function (user: UserModel) {\n81:     return user ? this.idMap[user.id] : undefined\n82:   },\n83:   from: function (req: Request) {\n84:     const token = utils.jwtFrom(req)\n85:     return token ? this.get(token) : undefined\n86:   },\n87:   updateFrom: function (req: Request, user: ResponseWithUser) {\n88:     const token = utils.jwtFrom(req)\n89:     this.put(token, user)\n90:   }\n91: }\n92: \n93: export const userEmailFrom = ({ headers }: any) => {\n94:   return headers ? headers['x-user-email'] : undefined\n95: }\n96: \n97: export const generateCoupon = (discount: number, date = new Date()) => {\n98:   const coupon = utils.toMMMYY(date) + '-' + discount\n99:   return z85.encode(coupon)\n100: }",
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 50
+    }
+  ],
+  "related_files": [
+    "data/datacache.ts",
+    "lib/challengeUtils.ts",
+    "lib/config.schema.ts",
+    "lib/insecurity.ts",
+    "lib/utils.ts",
+    "models/address.ts",
+    "models/basket.ts",
+    "models/card.ts",
+    "models/hint.ts",
+    "models/index.ts",
+    "models/product.ts",
+    "models/recycle.ts",
+    "models/securityAnswer.ts",
+    "models/user.ts",
+    "models/wallet.ts"
+  ],
+  "remaining_candidate_budget": 25,
+  "remaining_turns": 3,
+  "route_inventory": {
+    "dynamic_routes": 1,
+    "middleware_mounts": [
+      {
+        "file": "server.ts",
+        "id": "express-9cfccd097af2794fa222",
+        "line_start": 402,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/Complaints/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 62
+      },
+      {
+        "file": "server.ts",
+        "id": "express-96447feebba7acb8d799",
+        "line_start": 412,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/SecurityQuestions/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 69
+      },
+      {
+        "file": "server.ts",
+        "id": "express-3b23f1ae788e2f5dc026",
+        "line_start": 415,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/SecurityAnswers/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 71
+      },
+      {
+        "file": "server.ts",
+        "id": "express-67f29676b3638afd5cbb",
+        "line_start": 417,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/user/authentication-details",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 72
+      },
+      {
+        "file": "server.ts",
+        "id": "express-15d34b6c2754447ea72d",
+        "line_start": 418,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/basket/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 73
+      },
+      {
+        "file": "server.ts",
+        "id": "express-fbf51ffc0820c12a52ea",
+        "line_start": 419,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/rest/basket/:id/order",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 74
+      },
+      {
+        "file": "server.ts",
+        "id": "express-f26f477ad7de8643c12c",
+        "line_start": 443,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/b2b/v2",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 82
+      },
+      {
+        "file": "server.ts",
+        "id": "express-076939fa4962d6772363",
+        "line_start": 450,
+        "middleware": [
+          "security.isAccounting()",
+          "IpFilter(['123.456.789'], { mode: 'allow' })"
+        ],
+        "mount_path": "/api/Quantitys/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 87
+      },
+      {
+        "file": "server.ts",
+        "id": "express-214bbeacffa19df0c56f",
+        "line_start": 454,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/api/PrivacyRequests",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 89
+      },
+      {
+        "file": "server.ts",
+        "id": "express-bc9ffacd2dfecfa07a6e",
+        "line_start": 455,
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "mount_path": "/api/PrivacyRequests/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 90
+      },
+      {
+        "file": "server.ts",
+        "id": "express-df2249f873bcdede085b",
+        "line_start": 465,
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "mount_path": "/api/PrivacyRequests/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 98
+      },
+      {
+        "file": "server.ts",
+        "id": "express-287c0371a4566dcdd9d1",
+        "line_start": 496,
+        "middleware": [
+          "verify.databaseRelatedChallenges()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 110
+      },
+      {
+        "file": "server.ts",
+        "id": "express-38df971c8f63bb429b05",
+        "line_start": 675,
+        "middleware": [
+          "dataErasure"
+        ],
+        "mount_path": "/dataerasure",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 160
+      },
+      {
+        "file": "server.ts",
+        "id": "express-6b2a040980de88a938f5",
+        "line_start": 697,
+        "middleware": [
+          "utils.asyncHandler(serveAngularClient())"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 171
+      },
+      {
+        "file": "server.ts",
+        "id": "express-21716998d5c736ac01e5",
+        "line_start": 700,
+        "middleware": [
+          "verify.errorHandlingChallenge()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 172
+      },
+      {
+        "file": "server.ts",
+        "id": "express-41e8e2ca2563b892b27a",
+        "line_start": 701,
+        "middleware": [
+          "errorhandler()"
+        ],
+        "mount_path": null,
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 173
+      }
+    ],
+    "omitted_routes": 0,
+    "routes": [
+      {
+        "file": "server.ts",
+        "handler_files": [],
+        "id": "express-0936ab1a5b1be432a6b8",
+        "line_end": 183,
+        "line_start": 182,
+        "method": "options",
+        "middleware": [
+          "cors()"
+        ],
+        "middleware_before": [],
+        "path": null,
+        "path_is_static": false,
+        "receiver": "app",
+        "registration_order": 2,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/verify.ts"
+        ],
+        "id": "express-1ece220157134f13d1e4",
+        "line_end": 215,
+        "line_start": 214,
+        "method": "get",
+        "middleware": [
+          "verify.accessControlChallenges()"
+        ],
+        "middleware_before": [
+          "server.ts:179 / compression()",
+          "server.ts:183 / cors()",
+          "server.ts:186 / helmet.noSniff()",
+          "server.ts:187 / helmet.frameguard()",
+          "server.ts:190 / featurePolicy({\n    features: {\n      payment: [\"'self'\"]\n    }\n  })",
+          "server.ts:197 / (req: Request, res: Response, next: NextFunction) => {\n    res.append('X-Recruiting', config.get('application.securityTx",
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()"
+        ],
+        "path": "/.well-known/security.txt",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 10,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/verify.ts"
+        ],
+        "id": "express-808c10c37612bb7731d4",
+        "line_end": 215,
+        "line_start": 214,
+        "method": "get",
+        "middleware": [
+          "verify.accessControlChallenges()"
+        ],
+        "middleware_before": [
+          "server.ts:179 / compression()",
+          "server.ts:183 / cors()",
+          "server.ts:186 / helmet.noSniff()",
+          "server.ts:187 / helmet.frameguard()",
+          "server.ts:190 / featurePolicy({\n    features: {\n      payment: [\"'self'\"]\n    }\n  })",
+          "server.ts:197 / (req: Request, res: Response, next: NextFunction) => {\n    res.append('X-Recruiting', config.get('application.securityTx",
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()"
+        ],
+        "path": "/security.txt",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 10,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/fileUpload.ts",
+          "routes/metrics.ts"
+        ],
+        "id": "express-b592c6159a8a25c22ad4",
+        "line_end": 329,
+        "line_start": 328,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "ensureFileIsPassed",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "checkUploadSize",
+          "checkFileType",
+          "handleZipFileUpload",
+          "handleXmlUpload",
+          "handleYamlUpload"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/file-upload",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 40,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/fileUpload.ts",
+          "routes/metrics.ts",
+          "routes/profileImageFileUpload.ts"
+        ],
+        "id": "express-04c26bf25870e8fd54ad",
+        "line_end": 330,
+        "line_start": 329,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "ensureFileIsPassed",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(profileImageFileUpload())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/profile/image/file",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 41,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/utils.ts",
+          "routes/profileImageUrlUpload.ts"
+        ],
+        "id": "express-a53bc90527fb384dd1d8",
+        "line_end": 331,
+        "line_start": 330,
+        "method": "post",
+        "middleware": [
+          "uploadToMemory.single('file')",
+          "utils.asyncHandler(profileImageUrlUpload())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/profile/image/url",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 42,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts",
+          "lib/utils.ts",
+          "routes/fileUpload.ts",
+          "routes/memory.ts",
+          "routes/metrics.ts"
+        ],
+        "id": "express-b31cc41066ee487a1c5f",
+        "line_end": 332,
+        "line_start": 331,
+        "method": "post",
+        "middleware": [
+          "uploadToDisk.single('image')",
+          "ensureFileIsPassed",
+          "security.appendUserId()",
+          "metrics.observeFileUploadMetricsMiddleware()",
+          "utils.asyncHandler(addMemory())"
+        ],
+        "middleware_before": [
+          "server.ts:203 / (req: Request, res: Response, next: NextFunction) => {\n    req.url = req.url.replace(/[/]+/g, '/')\n    next()\n  }",
+          "server.ts:209 / metrics.observeRequestMetricsMiddleware()",
+          "server.ts:226 / robots({ UserAgent: '*', Disallow: '/ftp' })",
+          "server.ts:229 / antiCheat.checkForPreSolveInteractions()",
+          "server.ts:307 / express.static(path.resolve('frontend/dist/frontend'))",
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })"
+        ],
+        "path": "/rest/memories",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 43,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-994c999a3bda3fb788b5",
+        "line_end": 383,
+        "line_start": 382,
+        "method": "get",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Users",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 54,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-631cd7bb38d07de191c5",
+        "line_end": 388,
+        "line_start": 388,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Products",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 55,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-0f4e37f74d5dd4894812",
+        "line_end": 391,
+        "line_start": 390,
+        "method": "delete",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Products/:id",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 56,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-1e54822cf99373cc97fa",
+        "line_end": 393,
+        "line_start": 392,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Challenges",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 57,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-692a1de029b86a63c48f",
+        "line_end": 396,
+        "line_start": 395,
+        "method": "post",
+        "middleware": [
+          "security.denyAll()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Hints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 59,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-97948d35db9ebc921528",
+        "line_end": 401,
+        "line_start": 400,
+        "method": "get",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 60,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-45b1c3ddd4cdaf4e0b5c",
+        "line_end": 402,
+        "line_start": 401,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Complaints",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 61,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "routes/recycles.ts"
+        ],
+        "id": "express-e3d7fc90e91fd0bf4c85",
+        "line_end": 405,
+        "line_start": 404,
+        "method": "get",
+        "middleware": [
+          "recycles.blockRecycleItems()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 63,
+        "service_id": "service"
+      },
+      {
+        "file": "server.ts",
+        "handler_files": [
+          "lib/insecurity.ts"
+        ],
+        "id": "express-2d27cc5dcb73b55f4cd9",
+        "line_end": 406,
+        "line_start": 405,
+        "method": "post",
+        "middleware": [
+          "security.isAuthorized()"
+        ],
+        "middleware_before": [
+          "server.ts:308 / cookieParser('kekse')",
+          "server.ts:324 / i18n.init",
+          "server.ts:326 / bodyParser.urlencoded({ extended: true })",
+          "server.ts:333 / bodyParser.text({ type: '*/*' })",
+          "server.ts:334 / function jsonParser (req: Request, res: Response, next: NextFunction) {\n    // @ts-expect-error FIXME intentionally savi",
+          "server.ts:357 / morgan('combined', { stream: accessLogStream })",
+          "server.ts:372 / verify.jwtChallenges()",
+          "server.ts:373 / security.updateAuthenticatedUsers()"
+        ],
+        "path": "/api/Recycles",
+        "path_is_static": true,
+        "receiver": "app",
+        "registration_order": 64,
+        "service_id": "service"
+      }
+    ],
+    "schema_version": "cft.express_source_map.v1"
+  },
+  "search_results": [
+    {
+      "matches": [
+        {
+          "file": "lib/insecurity.ts",
+          "line": 93,
+          "text": "export const userEmailFrom = ({ headers }: any) => {"
+        }
+      ],
+      "query": "userEmailFrom"
+    },
+    {
+      "matches": [
+        {
+          "file": "lib/insecurity.ts",
+          "line": 94,
+          "text": "  return headers ? headers['x-user-email'] : undefined"
+        },
+        {
+          "file": "frontend/src/app/Services/request.interceptor.ts",
+          "line": 23,
+          "text": "          'X-User-Email': String(localStorage.getItem('email'))"
+        }
+      ],
+      "query": "x-user-email"
+    },
+    {
+      "matches": [
+        {
+          "file": "server.ts",
+          "line": 479,
+          "text": "    utils.asyncHandler(twoFactorAuth.verify)"
+        }
+      ],
+      "query": "twoFactorAuth.verify"
+    }
+  ],
+  "source_snippets": [
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import config from 'config'\n7: import { type Request, type Response } from 'express'\n8: import { BasketModel } from '../models/basket'\n9: import { UserModel } from '../models/user'\n10: import * as challengeUtils from '../lib/challengeUtils'\n11: import * as utils from '../lib/utils'\n12: import { challenges } from '../data/datacache'\n13: import { generateSecret, verifySync } from 'otplib'\n14: import * as security from '../lib/insecurity'\n15: \n16: export async function verify (req: Request, res: Response) {\n17:   const { tmpToken, totpToken } = req.body\n18: \n19:   try {\n20:     const { userId, type } = security.verify(tmpToken) && security.decode(tmpToken)\n21: \n22:     if (type !== 'password_valid_needs_second_factor_token') {\n23:       throw new Error('Invalid token type')\n24:     }\n25: \n26:     const user = await UserModel.findByPk(userId)\n27:     if (user == null) {\n28:       throw new Error('No such user found!')\n29:     }\n30: \n31:     const isValid = verifySync({ secret: user.totpSecret, token: totpToken, epochTolerance: 30 }).valid\n32: \n33:     const plainUser = utils.queryResultToJson(user)\n34: \n35:     if (!isValid) {\n36:       return res.status(401).send()\n37:     }\n38:     challengeUtils.solveIf(challenges.twoFactorAuthUnsafeSecretStorageChallenge, () => { return user.email === 'wurstbrot@' + config.get<string>('application.domain') })\n39: \n40:     const [basket] = await BasketModel.findOrCreate({ where: { UserId: userId } })\n41: \n42:     const token = security.authorize(plainUser)\n43:     // @ts-expect-error FIXME set new property for original basket\n44:     plainUser.bid = basket.id // keep track of original basket for challenge solution check\n45:     security.authenticatedUsers.put(token, plainUser)\n46: \n47:     res.json({ authentication: { token, bid: basket.id, umail: user.email } })\n48:   } catch (error) {\n49:     res.status(401).send()\n50:   }\n51: }\n52: \n53: /**\n54:  * Check the 2FA status of the currently signed-in user.\n55:  *\n56:  * When 2FA is not set up, the result will include data required to start the setup.\n57:  */\n58: export async function status (req: Request, res: Response) {\n59:   try {\n60:     const data = security.authenticatedUsers.from(req)\n61:     if (!data) {\n62:       throw new Error('You need to be logged in to see this')\n63:     }\n64:     const { data: user } = data\n65: \n66:     if (user.totpSecret === '') {\n67:       const secret = generateSecret()\n68: \n69:       res.json({\n70:         setup: false,\n71:         secret,\n72:         email: user.email,\n73:         setupToken: security.authorize({\n74:           secret,\n75:           type: 'totp_setup_secret'\n76:         })\n77:       })\n78:     } else {\n79:       res.json({\n80:         setup: true",
+      "file": "routes/2fa.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "content": "500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n508:     { name: 'Complaint', exclude: [], model: ComplaintModel },\n509:     { name: 'Recycle', exclude: [], model: RecycleModel },\n510:     { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },\n511:     { name: 'SecurityAnswer', exclude: [], model: SecurityAnswerModel },\n512:     { name: 'Address', exclude: [], model: AddressModel },\n513:     { name: 'PrivacyRequest', exclude: [], model: PrivacyRequestModel },\n514:     { name: 'Card', exclude: [], model: CardModel },\n515:     { name: 'Quantity', exclude: [], model: QuantityModel },\n516:     { name: 'Hint', exclude: [], model: HintModel }\n517:   ]\n518: \n519:   for (const { name, exclude, model, include } of autoModels) {\n520:     const resource = finale.resource({\n521:       model,\n522:       endpoints: [`/api/${name}s`, `/api/${name}s/:id`],\n523:       excludeAttributes: exclude,\n524:       pagination: false,\n525:       include\n526:     })\n527: \n528:     // create a wallet when a new user is registered using API\n529:     if (name === 'User') { \n530:       resource.create.send.before((req: Request, res: Response, context: { instance: { id: any }, continue: any }) => { \n531:         WalletModel.create({ UserId: context.instance.id }).catch((err: unknown) => {\n532:           console.log(err)\n533:         })\n534:         return context.continue \n535:       }) \n536:     } \n537:     \n538: \n539:     // translate challenge descriptions on-the-fly\n540:     if (name === 'Challenge') {\n541:       resource.list.fetch.after((req: Request, res: Response, context: { instance: string | any[], continue: any }) => {\n542:         for (let i = 0; i < context.instance.length; i++) {\n543:           let description = context.instance[i].description\n544:           if (description?.includes('<em>(This challenge is <strong>')) {\n545:             const warning = description.substring(description.indexOf(' <em>(This challenge is <strong>'))\n546:             description = description.substring(0, description.indexOf(' <em>(This challenge is <strong>'))\n547:             context.instance[i].description = req.__(description) + req.__(warning)\n548:           } else {\n549:             context.instance[i].description = req.__(description)\n550:           }\n551:         }\n552:         return context.continue\n553:       })\n554:       resource.read.send.before((req: Request, res: Response, context: { instance: { description: string, hint: string }, continue: any }) => {\n555:         context.instance.description = req.__(context.instance.description)\n556:         return context.continue\n557:       })\n558:     }\n559: \n560:     // translate security questions on-the-fly",
+      "file": "server.ts",
+      "line_end": 560,
+      "line_start": 500
+    },
+    {
+      "content": "1: /*\n2:  * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\n3:  * SPDX-License-Identifier: MIT\n4:  */\n5: \n6: import config from 'config'\n7: import { type Request, type Response, type NextFunction } from 'express'\n8: \n9: import type { Memory as MemoryConfig } from '../lib/config.schema'\n10: import { SecurityAnswerModel } from '../models/securityAnswer'\n11: import * as challengeUtils from '../lib/challengeUtils'\n12: import { challenges, users } from '../data/datacache'\n13: import * as security from '../lib/insecurity'\n14: import { UserModel } from '../models/user'\n15: \n16: export function resetPassword () {\n17:   return async ({ body, connection }: Request, res: Response, next: NextFunction) => {\n18:     const email = body.email\n19:     const answer = body.answer\n20:     const newPassword = body.new\n21:     const repeatPassword = body.repeat\n22:     if (!email || !answer) {\n23:       next(new Error('Blocked illegal activity by ' + connection.remoteAddress))\n24:       return\n25:     }\n26:     if (!newPassword || newPassword === 'undefined') {\n27:       res.status(401).send(res.__('Password cannot be empty.'))\n28:       return\n29:     }\n30:     if (newPassword !== repeatPassword) {\n31:       res.status(401).send(res.__('New and repeated password do not match.'))\n32:       return\n33:     }\n34:     try {\n35:       const data = await SecurityAnswerModel.findOne({\n36:         include: [{\n37:           model: UserModel,\n38:           where: { email }\n39:         }]\n40:       })\n41:       if ((data != null) && security.hmac(answer) === data.answer) {\n42:         const user = await UserModel.findByPk(data.UserId)\n43:         if (user) {\n44:           const updatedUser = await user.update({ password: newPassword })\n45:           verifySecurityAnswerChallenges(updatedUser, answer)\n46:           res.json({ user: updatedUser })\n47:         }\n48:       } else {\n49:         res.status(401).send(res.__('Wrong answer to security question.'))\n50:       }\n51:     } catch (error) {\n52:       next(error)\n53:     }\n54:   }\n55: }\n56: \n57: function verifySecurityAnswerChallenges (user: UserModel, answer: string) {\n58:   challengeUtils.solveIf(challenges.resetPasswordJimChallenge, () => { return user.id === users.jim.id && answer === 'Samuel' })\n59:   challengeUtils.solveIf(challenges.resetPasswordBenderChallenge, () => { return user.id === users.bender.id && answer === 'Stop\\'n\\'Drop' })\n60:   challengeUtils.solveIf(challenges.resetPasswordBjoernChallenge, () => { return user.id === users.bjoern.id && answer === 'West-2082' })",
+      "file": "routes/resetPassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "content": "454:   app.use('/api/PrivacyRequests', security.isAuthorized())\n455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n508:     { name: 'Complaint', exclude: [], model: ComplaintModel },\n509:     { name: 'Recycle', exclude: [], model: RecycleModel },",
+      "file": "server.ts",
+      "line_end": 509,
+      "line_start": 454
+    },
+    {
+      "content": "455:   app.use('/api/PrivacyRequests/:id', security.isAuthorized())\n456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n508:     { name: 'Complaint', exclude: [], model: ComplaintModel },\n509:     { name: 'Recycle', exclude: [], model: RecycleModel },\n510:     { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },",
+      "file": "server.ts",
+      "line_end": 510,
+      "line_start": 455
+    },
+    {
+      "content": "456:   /* PaymentMethodRequests: Only allowed for authenticated users */\n457:   app.post('/api/Cards', security.appendUserId())\n458:   app.get('/api/Cards', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethods()))\n459:   app.put('/api/Cards/:id', security.denyAll())\n460:   app.delete('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.delPaymentMethodById()))\n461:   app.get('/api/Cards/:id', security.appendUserId(), utils.asyncHandler(payment.getPaymentMethodById()))\n462:   /* PrivacyRequests: Only POST allowed for authenticated users */\n463:   app.post('/api/PrivacyRequests', security.isAuthorized())\n464:   app.get('/api/PrivacyRequests', security.denyAll())\n465:   app.use('/api/PrivacyRequests/:id', security.denyAll())\n466: \n467:   app.post('/api/Addresss', security.appendUserId())\n468:   app.get('/api/Addresss', security.appendUserId(), utils.asyncHandler(address.getAddress()))\n469:   app.put('/api/Addresss/:id', security.appendUserId())\n470:   app.delete('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.delAddressById()))\n471:   app.get('/api/Addresss/:id', security.appendUserId(), utils.asyncHandler(address.getAddressById()))\n472:   app.get('/api/Deliverys', utils.asyncHandler(delivery.getDeliveryMethods()))\n473:   app.get('/api/Deliverys/:id', utils.asyncHandler(delivery.getDeliveryMethod()))\n474:   \n475: \n476:   /* Verify the 2FA Token */\n477:   app.post('/rest/2fa/verify',\n478:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n479:     utils.asyncHandler(twoFactorAuth.verify)\n480:   )\n481:   /* Check 2FA Status for the current User */\n482:   app.get('/rest/2fa/status', security.isAuthorized(), utils.asyncHandler(twoFactorAuth.status))\n483:   /* Enable 2FA for the current User */\n484:   app.post('/rest/2fa/setup',\n485:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n486:     security.isAuthorized(),\n487:     utils.asyncHandler(twoFactorAuth.setup)\n488:   )\n489:   /* Disable 2FA Status for the current User */\n490:   app.post('/rest/2fa/disable',\n491:     rateLimit({ windowMs: 5 * 60 * 1000, max: 100, validate: false }),\n492:     security.isAuthorized(),\n493:     utils.asyncHandler(twoFactorAuth.disable)\n494:   )\n495:   /* Verifying DB related challenges can be postponed until the next request for challenges is coming via finale */\n496:   app.use(verify.databaseRelatedChallenges())\n497: \n498:   \n499:   /* Generated API endpoints */\n500:   finale.initialize({ app, sequelize: seq })\n501: \n502:   const autoModels = [\n503:     { name: 'User', exclude: ['password', 'totpSecret'], model: UserModel },\n504:     { name: 'Product', exclude: [], model: ProductModel },\n505:     { name: 'Feedback', exclude: [], model: FeedbackModel },\n506:     { name: 'BasketItem', exclude: [], model: BasketItemModel },\n507:     { name: 'Challenge', exclude: [], model: ChallengeModel, include: [ChallengeDependencyModel] },\n508:     { name: 'Complaint', exclude: [], model: ComplaintModel },\n509:     { name: 'Recycle', exclude: [], model: RecycleModel },\n510:     { name: 'SecurityQuestion', exclude: [], model: SecurityQuestionModel },\n511:     { name: 'SecurityAnswer', exclude: [], model: SecurityAnswerModel },",
+      "file": "server.ts",
+      "line_end": 511,
+      "line_start": 456
+    },
+    {
+      "content": "624:   app.put('/rest/basket/:id/coupon/:coupon', utils.asyncHandler(applyCoupon()))\n625:   app.get('/rest/admin/application-version', utils.asyncHandler(retrieveAppVersion()))\n626:   app.get('/rest/admin/application-configuration', utils.asyncHandler(retrieveAppConfiguration()))\n627:   app.get('/rest/repeat-notification', utils.asyncHandler(repeatNotification()))\n628:   app.get('/rest/continue-code', utils.asyncHandler(continueCode()))\n629:   app.get('/rest/continue-code-findIt', utils.asyncHandler(continueCodeFindIt()))\n630:   app.get('/rest/continue-code-fixIt', utils.asyncHandler(continueCodeFixIt()))\n631:   app.put('/rest/continue-code-findIt/apply/:continueCode', utils.asyncHandler(restoreProgress.restoreProgressFindIt()))\n632:   app.put('/rest/continue-code-fixIt/apply/:continueCode', utils.asyncHandler(restoreProgress.restoreProgressFixIt()))\n633:   app.put('/rest/continue-code/apply/:continueCode', utils.asyncHandler(restoreProgress.restoreProgress()))\n634:   app.get('/rest/captcha', utils.asyncHandler(captchas()))\n635:   app.get('/rest/image-captcha', utils.asyncHandler(imageCaptchas()))\n636:   app.get('/rest/track-order/:id', trackOrder())\n637:   app.get('/rest/country-mapping', utils.asyncHandler(countryMapping()))\n638:   app.get('/rest/saveLoginIp', utils.asyncHandler(saveLoginIp()))\n639:   app.post('/rest/user/data-export', security.appendUserId(), utils.asyncHandler(verifyImageCaptcha()))\n640:   app.post('/rest/user/data-export', security.appendUserId(), utils.asyncHandler(dataExport()))\n641:   app.get('/rest/languages', utils.asyncHandler(getLanguageList()))\n642:   app.get('/rest/order-history', utils.asyncHandler(orderHistory()))\n643:   app.get('/rest/order-history/orders', security.isAccounting(), utils.asyncHandler(allOrders()))\n644:   app.put('/rest/order-history/:id/delivery-status', security.isAccounting(), utils.asyncHandler(toggleDeliveryStatus()))\n645:   app.get('/rest/wallet/balance', security.appendUserId(), utils.asyncHandler(getWalletBalance()))\n646:   app.put('/rest/wallet/balance', security.appendUserId(), utils.asyncHandler(addWalletBalance()))\n647:   app.get('/rest/deluxe-membership', deluxeMembershipStatus())\n648:   app.post('/rest/deluxe-membership', security.appendUserId(), utils.asyncHandler(upgradeToDeluxe()))\n649:   app.get('/rest/memories', utils.asyncHandler(getMemories()))\n650:   /* NoSQL API endpoints */\n651:   app.get('/rest/products/:id/reviews', showProductReviews())\n652:   app.put('/rest/products/:id/reviews', utils.asyncHandler(createProductReviews()))\n653:   app.patch('/rest/products/reviews', security.isAuthorized(), updateProductReviews())\n654:   app.post('/rest/products/reviews', security.isAuthorized(), utils.asyncHandler(likeProductReviews()))\n655: \n656:   /* Chat API endpoint */\n657:   app.post('/rest/chat', utils.asyncHandler(chat()))\n658: \n659:   /* Web3 API endpoints */\n660:   app.post('/rest/web3/submitKey', utils.asyncHandler(checkKeys()))\n661:   app.get('/rest/web3/nftUnlocked', nftUnlocked())\n662:   app.get('/rest/web3/nftMintListen', utils.asyncHandler(nftMintListener()))\n663:   app.post('/rest/web3/walletNFTVerify', walletNFTVerify())\n664:   app.post('/rest/web3/walletExploitAddress', utils.asyncHandler(contractExploitListener()))\n665: \n666:   /* B2B Order API */\n667:   app.post('/b2b/v2/orders', b2bOrder())\n668: \n669:   /* File Serving */\n670:   app.get('/the/devs/are/so/funny/they/hid/an/easter/egg/within/the/easter/egg', serveEasterEgg())\n671:   app.get('/this/page/is/hidden/behind/an/incredibly/high/paywall/that/could/only/be/unlocked/by/sending/1btc/to/us', servePremiumContent())\n672:   app.get('/we/may/also/instruct/you/to/refuse/all/reasonably/necessary/responsibility', servePrivacyPolicyProof())\n673: \n674:   /* Route for dataerasure page */\n675:   app.use('/dataerasure', dataErasure)\n676: \n677:   /* Route for redirects */\n678:   app.get('/redirect', performRedirect())\n679: ",
+      "file": "server.ts",
+      "line_end": 679,
+      "line_start": 624
+    }
+  ]
+}

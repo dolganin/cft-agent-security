@@ -131,6 +131,21 @@ def test_symbol_search_does_not_hide_definition_behind_first_16_callers(tmp_path
     assert matches[0]["file"] == "lib/auth.ts"
 
 
+def test_backend_models_are_indexed_before_large_frontend_trees(tmp_path):
+    files = {f"frontend/src/page-{i:03}.ts": "export const page = true;\n"
+             for i in range(300)}
+    files["models/user.ts"] = "export class User { password = hash(input); }\n"
+    source = RepositorySource(corpus(tmp_path, files))
+
+    assert len(source.lines) == 256
+    assert "models/user.ts" in source.lines
+    assert source.search("User") == [{
+        "file": "models/user.ts", "line": 1,
+        "text": "export class User { password = hash(input); }",
+    }]
+    assert len([path for path in source.lines if path.startswith("frontend/")]) < 256
+
+
 def test_source_map_prioritizes_only_indexed_handlers(tmp_path):
     source = RepositorySource(corpus(tmp_path, {
         "routes/a.ts": "query(req.query.q)\n", "lib/b.ts": "const safe = 1;\n",

@@ -1,0 +1,58 @@
+{
+  "candidates": [
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) which performs substring matching rather than exact or prefix matching, allowing an attacker to embed an allowed URL as a substring within a malicious URL to bypass the allowlist check.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 136 uses `url.includes(allowedUrl)` so a URL like `https://evil.com/?x=https://github.com/juice-shop/juice-shop` passes the check while redirecting to evil.com. Need to confirm the redirect route consumes this result as the actual redirect target.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect allowlist bypass via substring matching"
+    },
+    {
+      "description": "When the image fetch fails, the raw user-supplied imageUrl is stored directly as the user's profileImage field, which could contain javascript: or data: URIs rendered unsafely in the frontend.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts"
+      ],
+      "rationale": "Line 36 stores `url` (raw req.body.imageUrl) as profileImage when fetch throws. If the frontend renders this in an img src or href without scheme validation, a javascript: URI could execute. Need to confirm the rendering path in the profile component.",
+      "rule_id": "xss",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Stored XSS via unsanitized profileImage URL fallback"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 51,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 50
+    }
+  ],
+  "search_queries": [
+    "isRedirectAllowed",
+    "redirectAllowlist",
+    "profileImage",
+    "hmac("
+  ],
+  "stop": false
+}

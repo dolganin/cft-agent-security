@@ -1,0 +1,77 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied `req.query.q` is interpolated directly into a raw SQL SELECT statement via template literal, allowing arbitrary SQL execution.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts",
+        "lib/insecurity.ts",
+        "models/index.ts"
+      ],
+      "rationale": "`criteria` is derived from `req.query.q` (line 21-22) with only a length cap, then embedded in a template-literal SQL string passed to `sequelize.query`. No parameterization or escaping is applied. Verification: send a crafted `q` value with a UNION SELECT and observe whether extra rows or schema data appear in the JSON response.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in product search"
+    },
+    {
+      "description": "The order route uses `req.body.UserId` to decrement/increment wallet balances without verifying it matches the authenticated user, because `appendUserId()` middleware is absent from the route.",
+      "file": "routes/order.ts",
+      "line_end": 162,
+      "line_start": 146,
+      "provenance_paths": [
+        "routes/order.ts",
+        "lib/insecurity.ts",
+        "server.ts"
+      ],
+      "rationale": "Route inventory shows `/rest/basket/:id/order` has only `security.isAuthorized()` middleware, not `security.appendUserId()`. Lines 146-162 read `req.body.UserId` and call `WalletModel.decrement`/`increment` on that ID. An authenticated user can supply another user's ID to drain their wallet. Verification: authenticate as user A, place an order with `paymentMode=wallet` and `UserId` set to user B's ID, check if B's balance decreases.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR allows wallet manipulation via attacker-controlled UserId in order placement"
+    },
+    {
+      "description": "`isRedirectAllowed` checks `url.includes(allowedUrl)` so a URL like `https://github.com/juice-shop/juice-shop.evil.com` passes the check, enabling redirect to an attacker domain.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 uses `url.includes(allowedUrl)` rather than exact equality or URL parsing. Any URL that contains an allowlisted string as a substring is accepted. Verification: request the redirect endpoint with a URL that appends a controlled domain after an allowlisted prefix and confirm a 302 Location header points to the attacker domain.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Redirect allowlist uses substring match enabling domain-suffix bypass"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 58,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 445,
+      "line_start": 415
+    }
+  ],
+  "search_queries": [
+    "appendUserId",
+    "isRedirectAllowed",
+    "upgradeToDeluxe"
+  ],
+  "stop": false
+}

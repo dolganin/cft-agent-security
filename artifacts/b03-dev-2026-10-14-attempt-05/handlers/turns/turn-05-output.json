@@ -1,0 +1,53 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied req.body.key is concatenated directly into a file path for fs.stat and fs.readFile without sanitization, allowing directory traversal to read arbitrary .info.yml files outside the intended directory.",
+      "file": "routes/vulnCodeSnippet.ts",
+      "line_end": 90,
+      "line_start": 89,
+      "provenance_paths": [
+        "routes/vulnCodeSnippet.ts"
+      ],
+      "rationale": "Line 71 assigns req.body.key to a local variable. Lines 89-90 concatenate it into './data/static/codefixes/' + key + '.info.yml' for fs.stat and fs.readFile. No sanitizeFilename or path validation is applied. An attacker can supply '../../etc/passwd%00' or similar to escape the directory. Verification: send a POST with key containing '../' sequences and observe whether a file outside codefixes is read.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Path traversal via unsanitized key in vulnCodeSnippet file read"
+    },
+    {
+      "description": "The allOrders handler calls ordersCollection.find() with no filter and no authentication check, returning every user's order history to any caller.",
+      "file": "routes/orderHistory.ts",
+      "line_end": 29,
+      "line_start": 25,
+      "provenance_paths": [
+        "routes/orderHistory.ts"
+      ],
+      "rationale": "Unlike orderHistory() which checks loggedInUser, allOrders() has no security.authenticatedUsers.get() call or any guard. It returns all orders via ordersCollection.find(). Need to confirm the route registration in server.ts to verify no middleware provides authorization. Verification: request the endpoint without a JWT token and check if order data is returned.",
+      "rule_id": "access-control",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing authorization on allOrders endpoint exposes all order data"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 530,
+      "line_start": 470
+    },
+    {
+      "file": "routes/vulnCodeSnippet.ts",
+      "line_end": 23,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "orderHistory",
+    "allOrders",
+    "toggleDeliveryStatus",
+    "vulnCodeSnippet"
+  ],
+  "stop": false
+}

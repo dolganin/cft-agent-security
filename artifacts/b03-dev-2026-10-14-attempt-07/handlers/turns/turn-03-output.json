@@ -1,0 +1,126 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied query parameter `q` is directly interpolated into a raw SQL string without parameterization or escaping, allowing arbitrary SQL execution.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "Line 23 builds a SQL query using template literal interpolation of `criteria` derived from `req.query.q`. No parameterized query or escaping is applied. Verification: send a crafted `q` value with SQL metacharacters and observe whether the response reflects injected results or causes a SQL error.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query in searchProducts"
+    },
+    {
+      "description": "The redirect allowlist check uses `url.includes(allowedUrl)` instead of `url.startsWith(allowedUrl)`, allowing an attacker to embed an allowlisted URL as a substring in a malicious redirect target.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 of insecurity.ts uses `includes()` for allowlist matching. An attacker can craft a URL like `https://evil.com/?x=https://github.com/juice-shop/juice-shop` which passes the check but redirects to evil.com. The redirect is executed at line 18 of routes/redirect.ts. Verification: request `/redirect?to=https://evil.com/?x=https://github.com/juice-shop/juice-shop` and observe the Location header.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect bypass via substring match in isRedirectAllowed"
+    },
+    {
+      "description": "The `fields` query parameter allows requesting any property from the authenticated user's data object, potentially exposing the password hash or other sensitive fields.",
+      "file": "routes/currentUser.ts",
+      "line_end": 33,
+      "line_start": 27,
+      "provenance_paths": [
+        "routes/currentUser.ts"
+      ],
+      "rationale": "Lines 27-33 iterate over user-supplied field names and copy matching properties from `user.data` into the response without an allowlist. The challenge detection at line 52 confirms password leakage is possible. Verification: request `/rest/user/login` with a valid token and `?fields=password` to observe whether the hash is returned.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Arbitrary field disclosure via fields parameter in currentUser endpoint"
+    },
+    {
+      "description": "The upgradeToDeluxe handler uses `req.body.UserId` to locate and upgrade a user without verifying the authenticated user matches that ID, allowing any authenticated customer to upgrade any other user.",
+      "file": "routes/deluxe.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 queries `UserModel.findOne({ where: { id: req.body.UserId, role: security.roles.customer } })` using a client-supplied UserId. No middleware in the visible route registrations enforces that the token's user ID matches `req.body.UserId`. Verification: authenticate as user A, send POST to the deluxe upgrade endpoint with `UserId` set to user B's ID, and check if user B's role changes.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing ownership check in deluxe upgrade allows privilege escalation of other users"
+    },
+    {
+      "description": "The updateUserProfile route authenticates via `req.cookies.token` and performs a state-changing update without any CSRF token or SameSite cookie protection visible in the handler.",
+      "file": "routes/updateUserProfile.ts",
+      "line_end": 38,
+      "line_start": 17,
+      "provenance_paths": [
+        "routes/updateUserProfile.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 17 reads the auth token from cookies. Line 38 performs `user.update({ username: req.body.username })`. No CSRF token check exists in the handler. The origin/referer check at lines 32-35 is only for challenge detection, not enforcement. Verification: from a cross-origin page, POST to `/profile` with a valid cookie and observe if the username changes.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "CSRF on profile update via cookie-based authentication without token validation"
+    },
+    {
+      "description": "The keyServer route serves any file from the encryptionkeys directory with only a forward-slash check, exposing private keys to unauthenticated requests.",
+      "file": "routes/keyServer.ts",
+      "line_end": 14,
+      "line_start": 10,
+      "provenance_paths": [
+        "routes/keyServer.ts"
+      ],
+      "rationale": "Line 14 calls `res.sendFile(path.resolve('encryptionkeys/', file))` with no authentication middleware visible in the route registration and no file-type allowlist. Only forward slashes are blocked. Verification: request `/keys/private.pem` or enumerate filenames in the encryptionkeys directory and observe if file contents are returned.",
+      "rule_id": "file-exposure",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Encryption key files served without authentication or file-type restriction"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 380,
+      "line_start": 330
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "models/user.ts",
+      "line_end": 80,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "/keys/",
+    "/redirect",
+    "upgradeToDeluxe",
+    "profile.*update"
+  ],
+  "stop": false
+}

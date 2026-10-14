@@ -1,0 +1,99 @@
+{
+  "candidates": [
+    {
+      "description": "The isRedirectAllowed function uses url.includes(allowedUrl) instead of url.startsWith(allowedUrl), allowing an attacker to embed an allowed URL as a substring within a malicious URL to bypass the allowlist check.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 uses includes() for allowlist matching. routes/redirect.ts line 15 gates res.redirect(toUrl) on this check. A URL like https://evil.com/?x=https://github.com/juice-shop/juice-shop passes includes() but redirects to evil.com. Verification: request /redirect?to=https://evil.com/?x=https://github.com/juice-shop/juice-shop and observe 302 to evil.com.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect via substring matching in isRedirectAllowed"
+    },
+    {
+      "description": "The b2bOrder handler passes user-supplied orderLinesData into vm.runInContext with safeEval. While notevil restricts some operations, the vm module is known to be escapable.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts"
+      ],
+      "rationale": "Line 19 reads body.orderLinesData from the request. Line 23 evaluates it via vm.runInContext('safeEval(orderLinesData)', sandbox). The route is mounted at /b2b/v2 with isAuthorized() middleware. Verification: POST to /b2b/v2 with a payload that triggers a vm escape primitive and observe whether it executes outside the sandbox.",
+      "rule_id": "code-execution",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User-controlled input evaluated in vm.runInContext via safeEval"
+    },
+    {
+      "description": "handleYamlUpload passes user-controlled file content to yaml.load within a vm.runInContext call. YAML deserialization can trigger prototype pollution or resource exhaustion even inside a VM sandbox.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 109,
+      "line_start": 109,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "Line 105 reads file.buffer.toString() from the uploaded file. Line 109 calls vm.runInContext('JSON.stringify(yaml.load(data))', sandbox). The route is POST /file-upload. Verification: upload a .yml file with a crafted YAML payload (e.g., deep nesting or alias bomb) and observe whether it causes DoS or escapes the sandbox.",
+      "rule_id": "code-execution",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User-uploaded YAML parsed with yaml.load inside vm.runInContext"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/resetPassword.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/changePassword.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataErasure.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/wallet.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/order.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/basket.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/authenticatedUsers.ts",
+      "line_end": 40,
+      "line_start": 1
+    },
+    {
+      "file": "routes/dataExport.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "sequelize.query",
+    "req.body.UserId",
+    "findByPk",
+    "res.redirect"
+  ],
+  "stop": false
+}

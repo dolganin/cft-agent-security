@@ -1,0 +1,49 @@
+{
+  "schema_version": "b03.attempt-ledger.v1",
+  "final_metric_attempt": "artifacts/b03-dev-2026-10-14-attempt-07",
+  "entries": [
+    {
+      "attempt": "attempt-01",
+      "status": "setup_failure",
+      "counted": false,
+      "summary": "Stopped before SAST/model work because the operator invocation omitted the required working directory."
+    },
+    {
+      "attempt": "attempt-02",
+      "status": "partial_sast_valid_scout_incomplete",
+      "counted": false,
+      "summary": "Pinned SAST completed and its source-bound raw/normalized outputs are the cache reused by attempt-07. The paired Scout producer stopped on a schema validation failure; its partial candidates are not scored as a completed run."
+    },
+    {
+      "attempt": "attempt-03",
+      "status": "model_schema_failure",
+      "counted": false,
+      "summary": "Qwen3.8-27B returned a response that failed the required Scout schema. No completed pair."
+    },
+    {
+      "attempt": "attempt-04",
+      "status": "transport_failure",
+      "counted": false,
+      "summary": "Provider connection closed during the paired run. The bounded Scout network retry was added afterward; no completed pair."
+    },
+    {
+      "attempt": "attempt-05",
+      "status": "completed_exploratory_pilot_superseded",
+      "counted": false,
+      "summary": "Completed pair before training-oracle source exclusions. Retained for provenance; not pooled with final metrics."
+    },
+    {
+      "attempt": "attempt-06",
+      "status": "completed_pair_superseded_by_index_fix",
+      "counted": false,
+      "summary": "Completed pair after oracle exclusions, but backend model files were still crowded out by the 256-file corpus cap. Superseded by attempt-07."
+    },
+    {
+      "attempt": "attempt-07",
+      "status": "completed_final_dev_pair",
+      "counted": true,
+      "summary": "Final eight-turn round_robin/handlers pair after the backend source-priority fix, bound to the pinned target and implementation hashes."
+    }
+  ],
+  "counting_rule": "Only attempt-07 contributes to the reported final DEV scorecard. Failed attempts, the pilot, and the prior-index pair are not pooled or averaged."
+}

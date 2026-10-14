@@ -1,0 +1,68 @@
+{
+  "candidates": [
+    {
+      "description": "The login route constructs a raw SQL query by directly interpolating req.body.email into the query string without parameterization or escaping, allowing SQL injection through the email field.",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts"
+      ],
+      "rationale": "Line 34 uses a template literal to build a SQL query with `${req.body.email || ''}` directly embedded. Sequelize's raw query method does not parameterize string-interpolated values. An attacker can inject SQL via the email POST body to bypass authentication or extract data. Verification: send a crafted email value like `' OR 1=1 --` and observe if the query returns a user row.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized email interpolation in login query"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 100,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 200,
+      "line_start": 100
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileServer.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/logfileServer.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 50,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "sequelize.query",
+    "req.body.email",
+    "req.query",
+    "req.params"
+  ],
+  "stop": false
+}

@@ -1,0 +1,97 @@
+{
+  "candidates": [
+    {
+      "description": "The login route interpolates req.body.email directly into a SQL query string without parameterization, allowing SQL injection through the email field.",
+      "file": "routes/login.ts",
+      "line_end": 34,
+      "line_start": 34,
+      "provenance_paths": [
+        "routes/login.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 34 uses template literal interpolation of req.body.email into a sequelize.query call. The email value flows from POST body without sanitization or parameterized binding, enabling classic SQL injection to bypass authentication or extract data.",
+      "rule_id": "sql-injection",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via email parameter in login query"
+    },
+    {
+      "description": "The chat route passes productId directly into a MongoDB $where JavaScript expression, allowing arbitrary JavaScript execution in the database query context.",
+      "file": "routes/chat.ts",
+      "line_end": 149,
+      "line_start": 149,
+      "provenance_paths": [
+        "routes/chat.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 149 constructs a $where clause by string-concatenating productId into a JavaScript expression evaluated by MongoDB. An attacker controlling productId can inject arbitrary JS that executes server-side in the database engine.",
+      "rule_id": "nosql-injection",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in chat route"
+    },
+    {
+      "description": "The showProductReviews route concatenates the id parameter into a MongoDB $where JavaScript expression, enabling server-side code injection.",
+      "file": "routes/showProductReviews.ts",
+      "line_end": 36,
+      "line_start": 36,
+      "provenance_paths": [
+        "routes/showProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 36 builds a $where query by concatenating the id parameter into a JavaScript string evaluated by MongoDB. The id originates from a route parameter without type coercion or validation, allowing injection of arbitrary JS expressions.",
+      "rule_id": "nosql-injection",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in showProductReviews route"
+    },
+    {
+      "description": "The zip extraction in fileUpload.ts validates that the resolved path is under CWD but not under the intended uploads/complaints directory, allowing writes to sibling directories via ../ in zip entry names.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 34,
+      "line_start": 31,
+      "provenance_paths": [
+        "routes/fileUpload.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 33 checks absolutePath.includes(path.resolve('.')) which only ensures the path is under CWD, not under uploads/complaints/. A zip entry named '../config/evil.js' resolves to a path still under CWD, passing the check, while the write on line 34 uses the raw relative path escaping the intended directory.",
+      "rule_id": "path-traversal",
+      "service": null,
+      "severity": null,
+      "source": "model_scout",
+      "title": "Zip slip allows file write outside intended directory"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/login.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/chat.ts",
+      "line_end": 170,
+      "line_start": 130
+    },
+    {
+      "file": "routes/showProductReviews.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 165,
+      "line_start": 130
+    }
+  ],
+  "search_queries": [
+    "isRedirectAllowed",
+    "redirectAllowlist",
+    "checkFileType",
+    "handleXmlUpload"
+  ],
+  "stop": false
+}

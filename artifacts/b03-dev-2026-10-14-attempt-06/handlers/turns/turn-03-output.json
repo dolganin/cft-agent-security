@@ -1,0 +1,98 @@
+{
+  "candidates": [
+    {
+      "description": "The changePassword handler stores the new password as a raw string without applying security.hash(), while the current-password check at line 39 expects a hashed value. After a successful change the password is persisted in plaintext.",
+      "file": "routes/changePassword.ts",
+      "line_end": 51,
+      "line_start": 51,
+      "provenance_paths": [
+        "routes/changePassword.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 39 compares security.hash(currentPassword) against the stored value, proving the schema expects a hash. Line 51 writes newPasswordInString (raw toString of query param) directly via user.update(). Verification: register a user, change password, then query the DB or use the fields parameter on /rest/user/login to confirm the stored value equals the plaintext input.",
+      "rule_id": "authentication",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Password stored without hashing on change"
+    },
+    {
+      "description": "The retrieveLoggedInUser handler iterates over user-supplied comma-separated field names and copies any matching key from the authenticated user's data object into the response, including the password hash.",
+      "file": "routes/currentUser.ts",
+      "line_end": 33,
+      "line_start": 28,
+      "provenance_paths": [
+        "routes/currentUser.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Lines 29-33 loop over requestedFields and assign user.data[field] without an allowlist. Line 52 explicitly checks for password leakage, confirming the password field is reachable. Verification: authenticate, then GET /rest/user/authentication-details?fields=password and confirm the hash appears in the JSON body.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Arbitrary user-object field disclosure via fields query parameter"
+    },
+    {
+      "description": "isRedirectAllowed uses String.includes() to test whether the target URL contains an allowed entry, so any URL that embeds an allowed domain as a substring (e.g. https://github.com/juice-shop/juice-shop.evil.com) passes the check.",
+      "file": "lib/insecurity.ts",
+      "line_end": 136,
+      "line_start": 136,
+      "provenance_paths": [
+        "lib/insecurity.ts",
+        "routes/redirect.ts"
+      ],
+      "rationale": "Line 136 performs url.includes(allowedUrl) which is a substring test, not a prefix or exact-host match. An attacker-controlled URL containing an allowlisted string as a path or subdomain suffix will return true. Verification: call the redirect endpoint with url=https://github.com/juice-shop/juice-shop.attacker.tld and observe a 302 to the attacker host.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Redirect allowlist bypass via substring matching"
+    },
+    {
+      "description": "upgradeToDeluxe looks up the user by req.body.UserId without verifying it matches the token's user, allowing any authenticated customer to upgrade another user's account to deluxe.",
+      "file": "routes/deluxe.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "lib/insecurity.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 19 queries UserModel by req.body.UserId with no comparison to the JWT subject. The route is protected only by security.isAuthorized() (server.ts:443 for /b2b/v2 or equivalent), which checks authentication but not authorization to the target resource. Verification: authenticate as user A, POST the deluxe upgrade with UserId of user B, and confirm user B's role changes to deluxe.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR in deluxe upgrade – no binding between authenticated user and target UserId"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 70,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 220,
+      "line_start": 160
+    },
+    {
+      "file": "server.ts",
+      "line_end": 500,
+      "line_start": 450
+    }
+  ],
+  "search_queries": [
+    "changePassword",
+    "/rest/user/authentication-details",
+    "isRedirectAllowed",
+    "upgradeToDeluxe"
+  ],
+  "stop": false
+}

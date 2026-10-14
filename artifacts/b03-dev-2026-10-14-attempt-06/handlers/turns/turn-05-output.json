@@ -1,0 +1,74 @@
+{
+  "candidates": [
+    {
+      "description": "req.body.id is passed directly as the _id filter in a MongoDB update with multi:true. An attacker can supply an object like {\"$ne\":null} to match and modify all reviews.",
+      "file": "routes/updateProductReviews.ts",
+      "line_end": 20,
+      "line_start": 17,
+      "provenance_paths": [
+        "routes/updateProductReviews.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 18 uses req.body.id as the _id query filter without type validation. MongoDB interprets objects as operators, so {\"$ne\":null} matches all documents. Combined with multi:true on line 20, a single request can overwrite every review message. The authenticatedUsers.from() call on line 16 is only used for challenge detection, not authorization.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via MongoDB operator injection in review update"
+    },
+    {
+      "description": "isRedirectAllowed uses url.includes(allowedUrl) which permits any URL that contains an allowed domain as a substring, enabling redirect to attacker-controlled hosts.",
+      "file": "lib/insecurity.ts",
+      "line_end": 139,
+      "line_start": 133,
+      "provenance_paths": [
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 136 checks url.includes(allowedUrl) instead of parsing and comparing hostnames. A URL like http://evil.com/?x=http://localhost:3000 passes the check because it contains the allowed string. This function is used to validate redirect targets, so any consumer of it is vulnerable to open redirect.",
+      "rule_id": "open-redirect",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Open redirect allowlist bypass via substring matching"
+    },
+    {
+      "description": "retrieveBasket queries BasketModel by req.params.id without verifying the basket belongs to the authenticated user, enabling horizontal privilege escalation.",
+      "file": "routes/basket.ts",
+      "line_end": 19,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/basket.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 fetches the basket using only the URL parameter id with no ownership check. The challenge detection on lines 21-24 identifies cross-user access but does not block the response. Any authenticated user can enumerate basket IDs to read other users' cart contents including product names and quantities.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "IDOR on basket retrieval allows reading any user's basket"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 700,
+      "line_start": 640
+    },
+    {
+      "file": "routes/orderHistory.ts",
+      "line_end": 39,
+      "line_start": 1
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 130,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "allOrders",
+    "toggleDeliveryStatus",
+    "isRedirectAllowed"
+  ],
+  "stop": false
+}

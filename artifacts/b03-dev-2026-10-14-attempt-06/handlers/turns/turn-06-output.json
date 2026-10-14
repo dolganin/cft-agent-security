@@ -1,0 +1,37 @@
+{
+  "candidates": [
+    {
+      "description": "req.body.id is passed directly to MongoDB findOne and update queries without type validation, allowing operator injection (e.g. {\"$ne\":\"\"}) to match or modify arbitrary reviews.",
+      "file": "routes/likeProductReviews.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/likeProductReviews.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 reads id from req.body with no type check. Lines 25, 35, 50 pass it directly as the _id filter to db.reviewsCollection.findOne/update. An attacker sending {\"id\":{\"$ne\":\"\"}} as JSON body would match any review document, bypassing the intended single-review targeting. Route is behind security.isAuthorized() so only authenticated users can exploit, but they can still manipulate arbitrary reviews.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via unvalidated req.body.id in likeProductReviews"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 220,
+      "line_start": 160
+    },
+    {
+      "file": "routes/likeProductReviews.ts",
+      "line_end": 62,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "appendUserId",
+    "reviewsCollection"
+  ],
+  "stop": false
+}

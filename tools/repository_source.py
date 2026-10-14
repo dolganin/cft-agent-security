@@ -32,14 +32,14 @@ _SECRET_LITERAL = re.compile(
 _CREDENTIAL = re.compile(r"\bsk-[a-zA-Z0-9_-]{16,}|\beyJ[\w-]+\.[\w-]+\.[\w-]+")
 
 
-def _source_path(file: str) -> bool:
+def _source_path(file: str, *, include_oracle_controllers: bool = False) -> bool:
     path = PurePosixPath(file)
     parts = {part.casefold() for part in path.parts}
     return (
         not path.is_absolute() and ".." not in path.parts
         and path.suffix in _SOURCE_SUFFIXES
         and not parts.intersection(_EXCLUDED_PARTS)
-        and path.stem.casefold() not in _ORACLE_STEMS
+        and (include_oracle_controllers or path.stem.casefold() not in _ORACLE_STEMS)
         and not path.name.endswith(tuple(
             marker + suffix for marker in (".spec", ".test") for suffix in _SOURCE_SUFFIXES
         ) + (".d.ts",))
@@ -72,7 +72,7 @@ def _safe_lines(text: str) -> list[str]:
 class RepositorySource:
     """A finite text corpus selected exclusively from trusted discovery paths."""
 
-    def __init__(self, inventory: ProjectDiscoveryResult):
+    def __init__(self, inventory: ProjectDiscoveryResult, *, include_oracle_controllers: bool = False):
         self.root = inventory.repository_root.resolve()
         self.lines: dict[str, list[str]] = {}
         self.skipped: dict[str, int] = {}
@@ -84,7 +84,7 @@ class RepositorySource:
             except ValueError:
                 self._skip("unsafe_path")
                 continue
-            if not _source_path(file):
+            if not _source_path(file, include_oracle_controllers=include_oracle_controllers):
                 self._skip("outside_application_source")
                 continue
             if len(self.lines) >= 256 or total_bytes >= 4_194_304:
@@ -126,7 +126,14 @@ class RepositorySource:
             return 0
         if path.stem in {"server", "app", "index", "main"}:
             return 1
-        return 2
+        # Preserve room for server-side implementations and the functions they
+        # call before lexically earlier client bundles consume the file budget.
+        if set(path.parts).intersection({
+            "models", "model", "services", "service", "lib", "utils",
+            "database", "db", "auth", "security",
+        }):
+            return 2
+        return 3
 
     def _skip(self, reason: str) -> None:
         self.skipped[reason] = self.skipped.get(reason, 0) + 1

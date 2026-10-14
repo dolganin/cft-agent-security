@@ -1,0 +1,65 @@
+{
+  "candidates": [
+    {
+      "description": "The searchProducts handler interpolates req.query.q directly into a raw SQL SELECT statement using template literals, allowing SQL injection through the q parameter.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 23 builds a SQL query with `criteria` (from req.query.q, only length-limited to 200 chars) interpolated into a template literal passed to sequelize.query(). No parameterization or escaping is applied. The route GET /rest/products/search is registered without auth middleware. Verification: send a crafted q parameter with SQL metacharacters and observe whether the response reflects injected logic or errors.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via string interpolation in product search query"
+    },
+    {
+      "description": "The trackOrder handler passes user-supplied id into a MongoDB $where clause that evaluates JavaScript, enabling NoSQL injection and potential RCE when the XSS challenge is enabled.",
+      "file": "routes/trackOrder.ts",
+      "line_end": 18,
+      "line_start": 18,
+      "provenance_paths": [
+        "routes/trackOrder.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 18 uses `db.ordersCollection.find({ $where: \\`this.orderId === '${id}'\\` })` where id comes from req.params.id. When the reflectedXssChallenge is enabled (line 15), id is only truncated to 60 chars with no character filtering, allowing JavaScript injection into the $where expression. The route GET /rest/track-order/:id has no auth middleware. Verification: send a crafted id containing JavaScript expressions and observe whether the server evaluates them.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator with user-controlled JavaScript in trackOrder"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/search.ts",
+      "line_end": 60,
+      "line_start": 40
+    },
+    {
+      "file": "routes/redirect.ts",
+      "line_end": 30,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 50,
+      "line_start": 1
+    },
+    {
+      "file": "routes/fileUpload.ts",
+      "line_end": 60,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "sequelize.query",
+    "$where",
+    "performRedirect",
+    "b2bOrder"
+  ],
+  "stop": false
+}

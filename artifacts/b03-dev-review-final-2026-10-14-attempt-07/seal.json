@@ -1,0 +1,7 @@
+{
+  "candidate-bindings.json": "9ee070d5a507490a88851d6d6984a883235d3a9f36158e73f4308559219c2117",
+  "score-handlers-dev.json": "1d3abcb5fa603a151177a2dc0fcfc1ed2bc701dfe7b77f476837ffdd4939529c",
+  "score-round_robin-dev.json": "0afcf2de6966fab0065e2411a21a0d7f83e9ae591e062a49442fea17e1e3b4c8",
+  "score-sast-dev.json": "e38ea3503fbece5804c28b3e6a05aa24743b7a76169b740e47ac52abc278f864",
+  "summary.json": "28b9ebbb2743ac0c7eaf58daf64c6a76a18f6bcec5ba8beb771098d23b38b006"
+}

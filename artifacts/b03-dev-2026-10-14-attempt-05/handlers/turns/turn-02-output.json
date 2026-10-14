@@ -1,0 +1,73 @@
+{
+  "candidates": [
+    {
+      "description": "User-supplied `req.query.q` is interpolated directly into a raw SQL SELECT statement with only a length check, allowing injection of arbitrary SQL syntax.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "`criteria` is assigned from `req.query.q` (line 21) with only a 200-char truncation (line 22), then interpolated into a template literal passed to `sequelize.query` (line 23). No parameterization, escaping, or allowlist is applied. A crafted `q` value containing `'` and SQL keywords can alter query logic.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "SQL injection via unparameterized query string interpolation in product search"
+    },
+    {
+      "description": "`body.orderLinesData` is passed to `vm.runInContext` through `safeEval` (notevil). The notevil library is a known-bypassable JS sandbox and vm.runInContext itself exposes the sandbox context to prototype-chain escapes.",
+      "file": "routes/b2bOrder.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/b2bOrder.ts"
+      ],
+      "rationale": "`orderLinesData` originates from `body.orderLinesData` (line 19) and is evaluated inside `vm.runInContext('safeEval(orderLinesData)', sandbox)` (line 23). Although `notevil` restricts some constructs, published bypasses exist (e.g., via constructor chains or sandbox object references). The `vm` module context object is mutable from within the evaluated code.",
+      "rule_id": "code-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Sandboxed code execution on user-controlled input via vm.runInContext with notevil"
+    },
+    {
+      "description": "The upgradeToDeluxe handler queries and upgrades the user identified by `req.body.UserId` without verifying it matches the authenticated user from the JWT, allowing any authenticated user to upgrade another account.",
+      "file": "routes/deluxe.ts",
+      "line_end": 19,
+      "line_start": 19,
+      "provenance_paths": [
+        "routes/deluxe.ts",
+        "lib/insecurity.ts"
+      ],
+      "rationale": "Line 19 performs `UserModel.findOne({ where: { id: req.body.UserId, role: security.roles.customer } })` using a client-supplied `UserId`. The route is protected by `security.isAuthorized()` (JWT check) but the handler never compares `req.body.UserId` against the authenticated user's ID from `security.authenticatedUsers.from(req)`. An attacker with any valid token can set `UserId` to a victim's ID and trigger the upgrade flow.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Broken access control: deluxe upgrade uses unvalidated req.body.UserId without ownership check"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "server.ts",
+      "line_end": 460,
+      "line_start": 440
+    },
+    {
+      "file": "routes/search.ts",
+      "line_end": 80,
+      "line_start": 60
+    },
+    {
+      "file": "routes/deluxe.ts",
+      "line_end": 100,
+      "line_start": 70
+    }
+  ],
+  "search_queries": [
+    "/rest/deluxe-membership",
+    "/rest/search",
+    "orderLinesData"
+  ],
+  "stop": false
+}

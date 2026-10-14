@@ -41,7 +41,7 @@ def main() -> int:
         "llm_max_output_tokens": args.max_output_tokens,
     })
     discovery = ProjectDiscovery().discover(args.target)
-    source_map = build_express_source_map(discovery)
+    source_map = build_express_source_map(discovery, include_oracle_controllers=False)
     client = FallbackLLMAgentModel.from_settings(config).client
     scout = RepositoryScout(
         client, max_turns=args.max_turns, max_candidates=args.max_candidates,

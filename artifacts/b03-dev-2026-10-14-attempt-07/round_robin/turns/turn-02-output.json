@@ -1,0 +1,78 @@
+{
+  "candidates": [
+    {
+      "description": "The search criteria from req.query.q is directly interpolated into a raw SQL SELECT statement without parameterization or escaping, allowing SQL injection.",
+      "file": "routes/search.ts",
+      "line_end": 23,
+      "line_start": 23,
+      "provenance_paths": [
+        "routes/search.ts"
+      ],
+      "rationale": "Line 23 builds a SQL query via template literal embedding `criteria` (derived from req.query.q on line 21) directly into the WHERE clause. No parameterized query or escaping is applied. Verification: send a crafted q parameter with SQL metacharacters and observe altered query behavior.",
+      "rule_id": "sql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Raw SQL string interpolation from user query parameter"
+    },
+    {
+      "description": "The imageUrl from req.body is passed directly to fetch() allowing server-side requests to arbitrary internal or external URLs.",
+      "file": "routes/profileImageUrlUpload.ts",
+      "line_end": 24,
+      "line_start": 24,
+      "provenance_paths": [
+        "routes/profileImageUrlUpload.ts"
+      ],
+      "rationale": "Line 24 calls fetch(url) where url comes from req.body.imageUrl (line 19). The only check on line 20 is a regex that detects but does not block SSRF challenge URLs. No allowlist, protocol restriction, or private-IP blocking is applied. Verification: submit an imageUrl pointing to an internal service and observe whether the response body is written to disk.",
+      "rule_id": "ssrf",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "User-controlled URL passed to fetch without validation"
+    },
+    {
+      "description": "The zip extraction path traversal guard uses a condition that is always true, allowing arbitrary file writes via crafted zip entries.",
+      "file": "routes/fileUpload.ts",
+      "line_end": 34,
+      "line_start": 33,
+      "provenance_paths": [
+        "routes/fileUpload.ts"
+      ],
+      "rationale": "Line 33 checks `absolutePath.includes(path.resolve('.'))` but path.resolve('.') returns the CWD which is always a prefix of any resolved absolute path, making the guard always pass. A zip entry with path `../../etc/cron.d/x` would resolve outside the intended directory and be written. Verification: craft a zip with a traversal entry and confirm file creation outside uploads/complaints/.",
+      "rule_id": "path-traversal",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Zip entry path traversal check is ineffective"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 200,
+      "line_start": 100
+    },
+    {
+      "file": "routes/keyServer.ts",
+      "line_end": 20,
+      "line_start": 1
+    },
+    {
+      "file": "server.ts",
+      "line_end": 340,
+      "line_start": 325
+    },
+    {
+      "file": "lib/insecurity.ts",
+      "line_end": 50,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "appendUserId",
+    "isRedirectAllowed",
+    "redirectAllowlist",
+    "isAccounting"
+  ],
+  "stop": false
+}

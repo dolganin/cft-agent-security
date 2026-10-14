@@ -1,0 +1,64 @@
+{
+  "candidates": [
+    {
+      "description": "The resetPassword handler stores the new password directly from user input via user.update({ password: newPassword }) without any visible hashing step.",
+      "file": "routes/resetPassword.ts",
+      "line_end": 44,
+      "line_start": 44,
+      "provenance_paths": [
+        "routes/resetPassword.ts",
+        "server.ts"
+      ],
+      "rationale": "body.new flows unmodified into user.update at line 44. If the User model lacks a beforeUpdate/beforeSave hook that hashes, the password is persisted in plaintext. Verification: inspect models/user.ts for a password-hashing hook; if absent, confirm plaintext storage.",
+      "rule_id": "weak-cryptography",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Plaintext password stored on reset without hashing"
+    },
+    {
+      "description": "The route GET /rest/order-history is registered without security.isAuthorized() or security.appendUserId() middleware, potentially exposing order history to unauthenticated callers.",
+      "file": "server.ts",
+      "line_end": 642,
+      "line_start": 642,
+      "provenance_paths": [
+        "server.ts"
+      ],
+      "rationale": "No auth middleware is attached at registration. The handler orderHistory() may perform its own check, but the route registration itself lacks one. Verification: read routes/orderHistory.ts to confirm whether it internally validates the authenticated user or returns data for any caller.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing authentication on GET /rest/order-history"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "models/user.ts",
+      "line_end": 80,
+      "line_start": 1
+    },
+    {
+      "file": "routes/orderHistory.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/b2bOrder.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/trackOrder.ts",
+      "line_end": 40,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "beforeUpdate",
+    "beforeSave",
+    "bcrypt",
+    "password"
+  ],
+  "stop": false
+}

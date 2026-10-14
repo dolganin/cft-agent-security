@@ -1,0 +1,59 @@
+{
+  "candidates": [
+    {
+      "description": "The productId parameter is concatenated directly into a MongoDB $where JavaScript expression, allowing arbitrary code execution on the database server.",
+      "file": "routes/chat.ts",
+      "line_end": 149,
+      "line_start": 149,
+      "provenance_paths": [
+        "routes/chat.ts",
+        "server.ts"
+      ],
+      "rationale": "Line 149 uses `$where: 'this.product == ' + productId` where productId originates from user-controlled request input. The $where operator evaluates a JavaScript expression server-side, so injecting a payload like `1; sleep(5000)` or `1; this.constructor.constructor('return process')()` achieves code execution. Verification: send a synthetic productId with a timing payload and observe response delay.",
+      "rule_id": "nosql-injection",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "NoSQL injection via $where operator in chat route"
+    },
+    {
+      "description": "The /rest/2fa/verify route lacks security.isAuthorized() middleware, allowing unauthenticated users to brute-force 2FA tokens.",
+      "file": "server.ts",
+      "line_end": 480,
+      "line_start": 477,
+      "provenance_paths": [
+        "server.ts",
+        "routes/2fa.ts"
+      ],
+      "rationale": "Lines 477-480 register POST /rest/2fa/verify with only rateLimit middleware, while sibling endpoints /rest/2fa/status (line 482), /rest/2fa/setup (line 484), and /rest/2fa/disable (line 490) all require security.isAuthorized(). An unauthenticated attacker can submit TOTP tokens to any user's account. Verification: send a POST to /rest/2fa/verify without an Authorization header and confirm the request is processed rather than rejected with 401.",
+      "rule_id": "access-control",
+      "service": "service",
+      "severity": null,
+      "source": "model_scout",
+      "title": "Missing authentication on 2FA verify endpoint"
+    }
+  ],
+  "read_requests": [
+    {
+      "file": "routes/chat.ts",
+      "line_end": 160,
+      "line_start": 140
+    },
+    {
+      "file": "routes/2fa.ts",
+      "line_end": 60,
+      "line_start": 1
+    },
+    {
+      "file": "routes/trackOrder.ts",
+      "line_end": 40,
+      "line_start": 1
+    }
+  ],
+  "search_queries": [
+    "productId",
+    "totpSecret",
+    "isAuthorized"
+  ],
+  "stop": false
+}
