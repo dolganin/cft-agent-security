@@ -22,6 +22,8 @@ class FindingObservation(BaseModel):
     severity: str | None = None
     rationale: str | None = None
     provenance_paths: list[str] = Field(default_factory=list)
+    signal_type: Literal["code", "configuration", "dependency"] | None = None
+    cwe: list[str] = Field(default_factory=list)
 
 
 class FindingProvenance(BaseModel):

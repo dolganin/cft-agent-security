@@ -28,6 +28,11 @@ from pipeline.progress import PipelineProgressRecorder
 from pr_analysis.git_diff import read_git_diff
 from pr_analysis.service import PRAnalysisService
 from reporting.presentation import render_final_report
+from sast.profiles import (
+    classify_diagnostics,
+    load_scan_profile,
+    validate_target_snapshot,
+)
 from sast.repository import JsonFindingRepository
 from sast.semgrep_runner import SemgrepError, run_semgrep_scan
 from schemas.errors import ErrorDetail
@@ -64,7 +69,7 @@ def _parse_args() -> argparse.Namespace:
         "--architecture-overrides",
         help="Optional YAML overrides for automatically derived architecture context",
     )
-    parser.add_argument("--sast-config", default="auto", help="Semgrep config/ruleset")
+    parser.add_argument("--sast-config", default="auto", help="Semgrep config or digest-locked profile")
     parser.add_argument(
         "--output-dir",
         default="artifacts/security-pipeline",
@@ -643,9 +648,21 @@ def _resolve_findings(
 
     output_dir.mkdir(parents=True, exist_ok=True)
     print(f"SAST: scanning with Semgrep config={sast_config}")
+    profile = None
+    target_snapshot_before = None
+    config_files: str | list[str] = sast_config
+    if Path(sast_config).is_file():
+        try:
+            profile = load_scan_profile(sast_config)
+        except ValueError as exc:
+            if "Not a supported CFT Semgrep profile" not in str(exc):
+                raise
+        else:
+            config_files = profile["config_files"]
+            target_snapshot_before = validate_target_snapshot(target, profile["target_commit"])
     scan = run_semgrep_scan(
         target,
-        config=sast_config,
+        config=config_files,
         timeout_seconds=600,
         service_resolver=service_resolver,
     )
@@ -680,8 +697,68 @@ def _resolve_findings(
         "semgrep_errors": len(scan.raw.get("errors", []))
         if isinstance(scan.raw.get("errors", []), list)
         else 0,
+        "scanner_warnings": [str(item) for item in scan.raw.get("errors", [])
+                             if isinstance(item, dict)],
+        "scanner_stderr": scan.stderr,
+        "files_scanned": len(scan.raw.get("paths", {}).get("scanned", []))
+        if isinstance(scan.raw.get("paths", {}), dict) else None,
+        "files_skipped": sum(len(value) for value in scan.raw.get("paths", {}).get("skipped", {}).values())
+        if isinstance(scan.raw.get("paths", {}).get("skipped", {}), dict) else None,
+        "signal_types": dict(sorted(Counter(
+            str(item.get("extra", {}).get("metadata", {}).get("signal", "code"))
+            for item in scan.raw.get("results", []) if isinstance(item, dict)
+        ).items())),
     }
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    if profile is not None:
+        import subprocess
+
+        commit = subprocess.run(
+            ["git", "-C", str(target), "rev-parse", "HEAD"], capture_output=True,
+            text=True, check=False, timeout=10,
+        )
+        coverage_diagnostics, fatal_diagnostics = classify_diagnostics(scan.raw)
+        try:
+            target_snapshot_after = validate_target_snapshot(target, profile["target_commit"])
+        except ValueError as exc:
+            target_snapshot_after = None
+            fatal_diagnostics.append({"message": str(exc)})
+        metadata = {
+            "profile": profile["id"], "profile_version": profile["version"],
+            "profile_path": profile["profile_path"],
+            "semgrep_version_expected": profile["semgrep_version"],
+            "semgrep_version_reported": scan.raw.get("version"),
+            "target_commit_expected": profile.get("target_commit"),
+            "target_commit_observed": commit.stdout.strip() if commit.returncode == 0 else None,
+            "target_snapshot_before": target_snapshot_before,
+            "target_snapshot_after": target_snapshot_after,
+            "coverage_limitations": coverage_diagnostics,
+            "fatal_scanner_diagnostics": fatal_diagnostics,
+            "config_files": profile["config_files"],
+            "config_sha256": profile["config_sha256"],
+            "exclude": profile.get("exclude", []),
+            "raw_result": str(raw_path), "normalized_findings": str(findings_path),
+            "summary": str(summary_path),
+        }
+        validation_errors = []
+        if profile.get("semgrep_version") != scan.raw.get("version"):
+            validation_errors.append("Semgrep runtime version differs from profile pin")
+        if profile.get("target_commit") and (
+            commit.returncode != 0 or commit.stdout.strip() != profile["target_commit"]
+        ):
+            validation_errors.append("Target commit differs from profile pin")
+        if (target_snapshot_before is None or target_snapshot_after is None
+                or target_snapshot_before != target_snapshot_after):
+            validation_errors.append("Target source snapshot changed during scan")
+        if fatal_diagnostics:
+            validation_errors.append("Semgrep reported fatal or unclassified diagnostics")
+        metadata["validation_errors"] = validation_errors
+        metadata["technically_valid"] = not validation_errors
+        (output_dir / "manifest.json").write_text(
+            json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        if validation_errors:
+            raise SemgrepError("B02 SAST profile validation failed: " + "; ".join(validation_errors))
     print(f"SAST findings: {summary['total']} -> {findings_path}")
     return findings_path
 

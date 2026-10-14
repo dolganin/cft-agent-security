@@ -14,11 +14,20 @@ def rule_family(rule: str) -> str:
     value = rule.lower().replace("_", "-")
     for family, markers in (
         ("open-redirect", ("redirect",)),
-        ("path-traversal", ("path-traversal", "zip-slip")),
+        ("path-traversal", ("path-traversal", "zip-slip", "archive-path")),
         ("authentication", ("authn", "authentication", "credential")),
         ("sql-injection", ("sql-injection", "sequelize-injection", "sqli")),
+        ("nosql-injection", ("nosql-injection", "nosql-where")),
+        ("code-evaluation", ("code-evaluation", "dynamic-code", "eval")),
+        ("weak-cryptography", ("weak-cryptography", "weak-hash", "md5", "sha1")),
+        ("ssrf", ("ssrf", "request-url")),
+        ("xml-external-entities", ("xxe", "xml-external", "external-entities")),
         ("xss", ("xss", "dangerous-html", "dangerouslysetinnerhtml")),
         ("access-control", ("access-control", "idor", "broken-authorization")),
+        ("business-logic", ("business-logic",)),
+        ("file-validation", ("file-validation", "archive-path")),
+        ("sensitive-data-exposure", ("sensitive-data",)),
+        ("rate-limiting", ("rate-limiting",)),
         ("file-exposure", ("file-exposure", "directory-listing", "sensitive-directory")),
     ):
         if any(marker in value for marker in markers):

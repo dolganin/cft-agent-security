@@ -1,0 +1,572 @@
+{
+  "schema": "cft.b02-development-report.v1",
+  "scope": {
+    "split": "development",
+    "sample_kind": "original"
+  },
+  "dataset": "benchmarks/juice-shop-v20.2.0-v2/ground_truth.yaml",
+  "dataset_digest": "92b94001c1cffafbbee30efb550d2a1b19c5667a65535c25493b9b2393a01b05",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "target_snapshot": {
+    "commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "tracked_files": 1300,
+    "files_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818"
+  },
+  "profile": "juice-shop-v2",
+  "profile_version": 1,
+  "profile_sha256": "93303d3677dcd41c773d7ddaa59e1215d1659bb8ab70d272ff454d06b24f4ae6",
+  "semgrep_version": "1.174.0",
+  "config_files": [
+    "/Users/alekseikuhtin/Documents/ChatGPT/\u0426\u0424\u0422/cft-security-agent/benchmarks/baselines-a06-v5/semgrep-rules.yaml",
+    "/Users/alekseikuhtin/Documents/ChatGPT/\u0426\u0424\u0422/cft-security-agent/sast/rules/juice-shop-v2/local-rules.yaml"
+  ],
+  "config_sha256": {
+    "../../../benchmarks/baselines-a06-v5/semgrep-rules.yaml": "a1d0c4640085395aa39d09389d9cff7e673184daaa713b3f49f02806f0272dc6",
+    "local-rules.yaml": "ec97df6248fe1c0e687690c1598ce5a85d4b9c572e8d47f7d931d9f5a5631366"
+  },
+  "agent_baseline_alerts_and_scope_identical": true,
+  "agent_baseline_diagnostics_identical": false,
+  "agent_raw_digest": "b082833c94ead1fa13b548a755a6d3fde731577763cf382b5a959b29bb0d0132",
+  "baseline_raw_digest": "b082833c94ead1fa13b548a755a6d3fde731577763cf382b5a959b29bb0d0132",
+  "raw_alerts": {
+    "a06_before": 75,
+    "b02_agent": 98,
+    "b02_baseline": 98
+  },
+  "raw_json_sha256": {
+    "a06_before": "da26837401cdd45915ef6d19d4d9207add6b3a5d9d4e3793c11753b79ae6a074",
+    "b02_agent": "e60c816c9443c6ee59a982a431daed7ef0ca5843d0e6b146adb78a5695208f2f",
+    "b02_baseline": "ef346a422c0f4103ebd9d7a94d6063b203f72f4829ec7099d90744f232c2a135"
+  },
+  "parser_diagnostics": {
+    "a06_before": 61,
+    "b02_agent": 61,
+    "b02_baseline": 61
+  },
+  "coverage_limitations": {
+    "a06_before": 61,
+    "b02_agent": 61,
+    "b02_baseline": 61
+  },
+  "fatal_diagnostics": {
+    "a06_before": 0,
+    "b02_agent": 0,
+    "b02_baseline": 0
+  },
+  "stderr_files": {
+    "a06_before": "/Users/alekseikuhtin/Documents/ChatGPT/\u0426\u0424\u0422/cft-security-agent/artifacts/b02-sast-development-2026-10-13-final/raw/a06_before.stderr.txt",
+    "b02_agent": "/Users/alekseikuhtin/Documents/ChatGPT/\u0426\u0424\u0422/cft-security-agent/artifacts/b02-sast-development-2026-10-13-final/raw/b02_agent.stderr.txt",
+    "b02_baseline": "/Users/alekseikuhtin/Documents/ChatGPT/\u0426\u0424\u0422/cft-security-agent/artifacts/b02-sast-development-2026-10-13-final/raw/b02_baseline.stderr.txt"
+  },
+  "stderr_sha256": {
+    "a06_before": "53595f9037f87708f0c3ad60810be791a3ecb2121c16ddd7f1187a98ad826d0c",
+    "b02_agent": "deee4e7d28e9bbc4848a1bbb10241cb9c3cd5b7a33d27aa282886f12a9d2e175",
+    "b02_baseline": "deee4e7d28e9bbc4848a1bbb10241cb9c3cd5b7a33d27aa282886f12a9d2e175"
+  },
+  "scanned_files": {
+    "a06_before": 1027,
+    "b02_agent": 1027,
+    "b02_baseline": 1027
+  },
+  "family_scores": {
+    "a06_before": {
+      "access-control": {
+        "cases": 4,
+        "vulnerable": 4,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "authentication": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "authorization": {
+        "cases": 1,
+        "vulnerable": 0,
+        "safe": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 1,
+        "coverage": 0.0
+      },
+      "business-logic": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "code-evaluation": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "file-validation": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "nosql-injection": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "open-redirect": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "path-traversal": {
+        "cases": 2,
+        "vulnerable": 1,
+        "safe": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 1,
+        "coverage": 0.0
+      },
+      "rate-limiting": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "sensitive-data-exposure": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "ssrf": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "weak-cryptography": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "xml-external-entities": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "xss": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      }
+    },
+    "b02_agent": {
+      "access-control": {
+        "cases": 4,
+        "vulnerable": 4,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "authentication": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "authorization": {
+        "cases": 1,
+        "vulnerable": 0,
+        "safe": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 1,
+        "coverage": 0.0
+      },
+      "business-logic": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "code-evaluation": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "file-validation": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "nosql-injection": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.5
+      },
+      "open-redirect": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "path-traversal": {
+        "cases": 2,
+        "vulnerable": 1,
+        "safe": 1,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 1,
+        "coverage": 0.5
+      },
+      "rate-limiting": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "sensitive-data-exposure": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "ssrf": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "weak-cryptography": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "xml-external-entities": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "xss": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      }
+    },
+    "b02_baseline": {
+      "access-control": {
+        "cases": 4,
+        "vulnerable": 4,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "authentication": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "authorization": {
+        "cases": 1,
+        "vulnerable": 0,
+        "safe": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 1,
+        "coverage": 0.0
+      },
+      "business-logic": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "code-evaluation": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "file-validation": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "nosql-injection": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.5
+      },
+      "open-redirect": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "path-traversal": {
+        "cases": 2,
+        "vulnerable": 1,
+        "safe": 1,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 1,
+        "coverage": 0.5
+      },
+      "rate-limiting": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "sensitive-data-exposure": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "tn": 0,
+        "coverage": 0.0
+      },
+      "ssrf": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "weak-cryptography": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "xml-external-entities": {
+        "cases": 1,
+        "vulnerable": 1,
+        "safe": 0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "coverage": 1.0
+      },
+      "xss": {
+        "cases": 2,
+        "vulnerable": 2,
+        "safe": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "tn": 0,
+        "coverage": 0.0
+      }
+    }
+  },
+  "metrics": {
+    "a06_before": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 19,
+      "tn": 2,
+      "precision": 1.0,
+      "recall": 0.05,
+      "duplicates": 1,
+      "unresolved": 0,
+      "outside_ground_truth": 73
+    },
+    "b02_agent": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 13,
+      "tn": 2,
+      "precision": 1.0,
+      "recall": 0.35,
+      "duplicates": 3,
+      "unresolved": 0,
+      "outside_ground_truth": 88
+    },
+    "b02_baseline": {
+      "tp": 7,
+      "fp": 0,
+      "fn": 13,
+      "tn": 2,
+      "precision": 1.0,
+      "recall": 0.35,
+      "duplicates": 3,
+      "unresolved": 0,
+      "outside_ground_truth": 88
+    }
+  },
+  "scored_case_count": 22,
+  "caveats": [
+    "Source SAST candidates are detection only; none is an Evidence-backed confirmation.",
+    "DEV/original only. No HOLDOUT cases, anchors, or labels enter the score.",
+    "Parser diagnostics and partial coverage are preserved in the raw Semgrep JSON.",
+    "Identical-config repeat scans can report different per-rule timeout warnings; both raw diagnostics are retained.",
+    "Dependency/SCA signals are not implemented by this ruleset."
+  ]
+}

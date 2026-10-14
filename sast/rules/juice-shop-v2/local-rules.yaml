@@ -1,0 +1,118 @@
+rules:
+  - id: cft.node.weak-hash-md5-sha1
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: Weak MD5/SHA-1 digest used in application code.
+    metadata:
+      cwe: ["CWE-328"]
+      category: security
+      technology: [nodejs]
+      signal: code
+    patterns:
+      - pattern: crypto.createHash("$ALG")
+      - metavariable-regex:
+          metavariable: $ALG
+          regex: "^(md5|sha1)$"
+
+  - id: cft.node.dynamic-code-evaluation
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Dynamic code evaluation can execute attacker-controlled input.
+    metadata:
+      cwe: ["CWE-95"]
+      category: security
+      technology: [nodejs]
+      signal: code
+    patterns:
+      - pattern-either:
+          - pattern: eval($VALUE)
+          - pattern: new Function(..., $VALUE)
+
+  - id: cft.node.nosql-where-interpolation
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: MongoDB $where query is constructed with a dynamic string.
+    metadata:
+      cwe: ["CWE-943", "CWE-89"]
+      category: security
+      technology: [nodejs, mongodb]
+      signal: code
+    patterns:
+      - pattern-either:
+          - pattern: '$MODEL.find({$where: `...${$VALUE}...`})'
+          - pattern: '$MODEL.find({$where: "..." + $VALUE})'
+          - pattern: '$MODEL.find({$where: $VALUE})'
+
+  - id: cft.node.ssrf-request-url
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Outbound HTTP request uses a dynamic URL; validate scheme and destination.
+    metadata:
+      cwe: ["CWE-918"]
+      category: security
+      technology: [nodejs]
+      signal: code
+    patterns:
+      - pattern-either:
+          - pattern: fetch($URL, ...)
+          - pattern: axios.$METHOD($URL, ...)
+          - pattern: axios($URL, ...)
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern-not: "\"...\""
+            - pattern-not: "'...'"
+
+  - id: cft.node.xml-external-entities
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: XML parser enables entity expansion or external DTD loading.
+    metadata:
+      cwe: ["CWE-611"]
+      category: security
+      technology: [nodejs, xml]
+      signal: code
+    pattern-either:
+      - pattern: XML_PARSE_NOENT
+      - pattern: XML_PARSE_DTDLOAD
+      - pattern: $OPTIONS.XML_PARSE_NOENT
+      - pattern: $OPTIONS.XML_PARSE_DTDLOAD
+
+  - id: cft.node.archive-path-write
+    languages: [javascript, typescript]
+    severity: ERROR
+    message: Archive entry path reaches a filesystem write without containment validation.
+    metadata:
+      cwe: ["CWE-22"]
+      category: security
+      technology: [nodejs]
+      signal: code
+    mode: taint
+    pattern-sources:
+      - pattern: $ENTRY.path
+    pattern-sinks:
+      - pattern-either:
+          - pattern: fs.writeFile($PATH, ...)
+          - pattern: fs.createWriteStream($PATH, ...)
+          - pattern: $FS.promises.writeFile($PATH, ...)
+    pattern-sanitizers:
+      - pattern: path.basename($PATH)
+
+  - id: cft.node.open-redirect-user-url
+    languages: [javascript, typescript]
+    severity: WARNING
+    message: Redirect destination is dynamic; validate it against an allowlist.
+    metadata:
+      cwe: ["CWE-601"]
+      category: security
+      technology: [nodejs]
+      signal: code
+    patterns:
+      - pattern-either:
+          - pattern: res.redirect($URL)
+          - pattern: response.redirect($URL)
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern-not: "\"...\""
+            - pattern-not: "'...'"

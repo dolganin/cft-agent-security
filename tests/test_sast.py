@@ -84,6 +84,25 @@ def test_runner_uses_local_target_as_cwd(monkeypatch, tmp_path: Path) -> None:
     assert len(result.findings) == 1
 
 
+def test_runner_passes_every_selected_config_to_semgrep(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr("sast.semgrep_runner.shutil.which", lambda _: "semgrep")
+    captured: dict = {}
+
+    def fake_run(command, **_kwargs):
+        captured["command"] = command
+        return SimpleNamespace(returncode=0, stdout=json.dumps({"results": [], "errors": []}), stderr="")
+
+    monkeypatch.setattr("sast.semgrep_runner.run_cancellable_process", fake_run)
+    run_semgrep_scan(tmp_path, config=["base.yaml", "local.yaml"])
+
+    command = captured["command"]
+    assert [command[index + 1] for index, item in enumerate(command[:-1]) if item == "--config"] == [
+        "base.yaml", "local.yaml",
+    ]
+    assert "--metrics=off" in command
+    assert "--disable-version-check" in command
+
+
 def test_runner_explains_missing_semgrep(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.setattr("sast.semgrep_runner.shutil.which", lambda _: None)
     monkeypatch.setattr("sast.semgrep_runner._environment_semgrep", lambda: None)
