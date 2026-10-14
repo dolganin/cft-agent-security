@@ -23,7 +23,9 @@ from security.error_redaction import redact_observation
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def run(checkout, image, output):
+def run(checkout, image, output, *, max_questions=4):
+    if not 1 <= max_questions <= 4:
+        raise ValueError("DEV acceptance supports one to four explicitly selected questions")
     checkout, output = Path(checkout).resolve(), Path(output).resolve()
     if output.exists():
         raise FileExistsError("R07 is one fresh campaign, never overwrite/retry a saved run")
@@ -76,10 +78,11 @@ def run(checkout, image, output):
         write_json(output / "run-manifest.json", {"target": snapshot, "target_image": IMAGE,
             "implementation_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
             "model": "nsu:qwen3.8-flash-next", "model_output_tokens": 8192, "repetitions": 1,
+            "max_questions": max_questions,
             "http_grants": config["http_grants"], "benchmark_measurement": False,
             "purpose": "Live DEV read/write/run/candidate/independent-source-proof acceptance"})
         summary = campaign(profile=profile, configuration=config, client=client, output=output / "campaign",
-            sast=selected, limits=CampaignLimits(max_questions=4, max_actions=32, max_model_calls=36, wall_seconds=480,
+            sast=selected, limits=CampaignLimits(max_questions=max_questions, max_actions=32, max_model_calls=36, wall_seconds=480,
                                                dev_preferred_families=["weak-cryptography"]),
             research_limits=ResearchLimits(max_steps=8, max_model_calls=20, max_schema_corrections=1, max_model_io_bytes=2097152,
                                           wall_seconds=180), acceptance_require_script=True)
@@ -100,6 +103,7 @@ def run(checkout, image, output):
     result = {"checks": checks, "passed": all(checks.values()), "repetitions": 1,
         "reproducibility": "not_measured", "benchmark_measurement": False,
         "full_catalog_recall": "not_measured", "harness": "existing LangGraph research adapter",
+        "max_questions": max_questions,
         "harness_selection": "functional acceptance, not comparative efficacy ranking"}
     write_json(output / "acceptance.json", result)
     seal = {p.relative_to(output).as_posix(): sha256(p.read_bytes()).hexdigest() for p in sorted(output.rglob("*")) if p.is_file()}
@@ -112,5 +116,7 @@ if __name__ == "__main__":
     parser.add_argument("--checkout", type=Path, required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--max-questions", type=int, choices=range(1, 5), default=4,
+                        help="Explicit functional DEV scope, not full benchmark coverage")
     args = parser.parse_args()
-    print(json.dumps(run(args.checkout, args.image, args.output), indent=2))
+    print(json.dumps(run(args.checkout, args.image, args.output, max_questions=args.max_questions), indent=2))

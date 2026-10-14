@@ -95,7 +95,8 @@ def attach_source_review(state, reviews, output):
         summary="Independent AST evidence for the explicit weak-digest source condition only",
         verdict=compatible[0]["status"], reliability="high", hypothesis_id=state["hypothesis"].id,
         action=EvidenceAction(id=history.action.id, tool=history.action.tool, run_id=history.execution.run_id),
-        observation=EvidenceObservation(kind="independent_source_review", facts={"review": compatible[0]}),
+        observation=EvidenceObservation(kind="independent_source_review", facts={
+            "review": compatible[0], "runtime_exploit_verified": False}),
         scope=EvidenceScope(target=history.action.target, environment=history.action.environment,
                            description="Source-condition proof; runtime exploitability and impact unverified"),
         artifact_refs=[evidence_ref], artifacts=[EvidenceArtifact(ref=evidence_ref, role="other")])

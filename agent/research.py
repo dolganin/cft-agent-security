@@ -158,6 +158,9 @@ class ResearchAgentModel:
         finally:
             self.progress.model_calls += max(1, len(getattr(self.client, "last_attempts", [])))
             self.progress.provider_usage.append(getattr(self.client, "last_usage", None))
+            self.progress.model_validation_errors = [
+                {"loc": list(error.get("loc", [])), "type": error.get("type", "unknown")}
+                for error in getattr(self.client, "last_schema_errors", [])[:16]]
         turn = ResearchTurn.model_validate(turn)
         self.progress.model_diagnostic = "output_byte_limit"
         if len(encoded(turn.model_dump())) > int(getattr(self.client, "max_output_tokens", 4096)) * 4:

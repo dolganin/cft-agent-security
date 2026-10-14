@@ -104,6 +104,15 @@ def test_provider_repairs_future_refs_without_relaxing_provenance(monkeypatch):
     assert client.last_schema_errors
 
 
+def test_dev_acceptance_rejects_invalid_scope_before_output_creation(tmp_path):
+    from app.research_dev_acceptance import run
+
+    output = tmp_path / "result"
+    with pytest.raises(ValueError, match="one to four"):
+        run(tmp_path, "unused", output, max_questions=0)
+    assert not output.exists()
+
+
 def test_structured_redaction_preserves_json_and_failure_reason():
     value = {"observation": {"stderr": "Traceback (most recent call last):\n/private/error\nValueError: trial failed\n",
             "content": "line1\nline2\n", "body": 'Authorization: Bearer secret-value',

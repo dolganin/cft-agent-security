@@ -78,9 +78,9 @@ class ResearchTurn(BaseModel):
             raise ValueError("Choose exactly one next action or finish")
         if any(len(value) > 1000 for value in self.uncertainties):
             raise ValueError("Uncertainty description is too long")
-        if info.context is not None and "observation_refs" in info.context:
-            if not set(self.observation_refs) <= set(info.context["observation_refs"]):
-                raise ValueError("Use only persisted action IDs from observation_index, never future actions")
+        if (info.context is not None and "observation_refs" in info.context
+                and not set(self.observation_refs) <= set(info.context["observation_refs"])):
+            raise ValueError("Use only persisted action IDs from observation_index, never future actions")
         return self
 
 
@@ -106,6 +106,7 @@ class ResearchProgress(BaseModel):
     model_call_reservations: int = 0
     provider_usage: list[dict[str, int] | None] = Field(default_factory=list)
     model_diagnostic: str | None = None
+    model_validation_errors: list[dict] = Field(default_factory=list)
     model_io_bytes: int = 0
     observation_bytes: int = 0
     write_bytes: int = 0
