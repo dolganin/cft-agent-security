@@ -34,12 +34,23 @@ export function FindingBlock({ report }: { report: FinalReport }) {
             {location ? ` · ${location}` : ""}
           </small>
         </span>
-        <span className={`severity ${severityTone(report.finding.severity)}`}>
+        <span title="Уровень исходного сканера, не CVSS" className={`severity ${severityTone(report.finding.severity)}`}>
           {severityLabel(report.finding.severity)}
         </span>
       </summary>
 
       <div className="finding-details">
+        <section>
+          <span>Серьезность и приоритет</span>
+          <p>CVSS 4.0: {report.cvss?.assessment_status === "assessed"
+            ? `${report.cvss.score} · ${report.cvss.severity}`
+            : report.cvss?.assessment_status === "not_applicable" ? "не применимо" : "не оценено"}</p>
+          {report.technical_severity ? <p>Оценка по исходникам: {report.technical_severity.level}
+            {` (${report.technical_severity.scheme})`}</p> : null}
+          <p>Контекстный приоритет: {report.context_priority?.level ?? "не оценено"}
+            {report.context_priority?.assessment_status !== "assessed" ? " · предварительный" : ""}</p>
+          {report.context_priority?.unknown_inputs?.length ? <p>Неизвестные данные: {report.context_priority.unknown_inputs.join(", ")}</p> : null}
+        </section>
         {report.analysis_summary ? <p>{report.analysis_summary}</p> : null}
         {report.hypothesis ? (
           <section>

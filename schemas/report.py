@@ -8,7 +8,12 @@ from schemas.evidence import Evidence
 from schemas.finding import FindingProvenance
 from schemas.pipeline import FindingGateEffect, GateCategory
 from schemas.pr import PRFindingContext
-from schemas.scoring import ContextPriority, CVSSResult
+from schemas.scoring import (
+    ContextPriority,
+    CVSSResult,
+    ScoringReviewResolution,
+    TechnicalSeverity,
+)
 from schemas.verification_binding import BindingResolution
 
 ReportStatus = Literal["confirmed", "rejected", "inconclusive", "policy_blocked"]
@@ -97,6 +102,8 @@ class FinalReport(BaseModel):
     verification: VerificationSummary
     cvss: CVSSResult | None = None
     context_priority: ContextPriority | None = None
+    technical_severity: TechnicalSeverity | None = None
+    scoring_review_resolution: ScoringReviewResolution | None = None
     evidence: list[Evidence] = Field(default_factory=list)
     sandbox_actions: list[SandboxActionSummary] = Field(default_factory=list)
     policy_decisions: list[PolicyDecisionSummary] = Field(default_factory=list)

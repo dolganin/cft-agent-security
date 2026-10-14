@@ -227,6 +227,8 @@ export interface VerificationSummary {
 }
 
 export interface CVSSResult {
+  assessment_status?: "assessed" | "unassessed" | "not_applicable";
+  scheme?: string;
   vector: string | null;
   score: number | null;
   severity: string | null;
@@ -236,12 +238,17 @@ export interface CVSSResult {
 }
 
 export interface ContextPriority {
+  assessment_status?: "assessed" | "partial" | "unassessed";
+  unknown_inputs?: string[];
+  scheme?: string;
   level: string;
   score?: number | null;
   reasons?: string[] | null;
 }
 
 export interface FinalReport {
+  technical_severity?: { level: string; scheme: string; assessment_status: string; reasoning: string } | null;
+  scoring_review_resolution?: { status: string; diagnostics: string[] } | null;
   schema_version: string;
   finding_id: string;
   finding: ReportFinding;

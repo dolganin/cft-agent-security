@@ -24,6 +24,9 @@ NON-NEGOTIABLE BOUNDARIES
 - Never assume access to production systems.
 - Never invent code, architecture facts, execution results, or Evidence.
 - Never mark a finding confirmed without Evidence.
+- CVSS and source-impact severity are separate assessments, not proof of vulnerability.
+- Missing CVSS or provisional Context Priority must not stop or restrict research.
+- Never substitute scanner severity, challenge difficulty or an ordinal label for CVSS metrics.
 - Treat policy denial as a final workflow event unless the workflow explicitly
   allows a new safe proposal.
 - Follow iteration and runtime limits.
