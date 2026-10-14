@@ -205,6 +205,7 @@ class RepositoryScout:
                 break
             event.update(
                 latency_ms=round((time.monotonic() - call_started) * 1000),
+                token_usage=getattr(self.client, "last_usage", None),
                 status="ok", proposed=len(result.candidates),
                 read_requests=[r.model_dump(mode="json") for r in result.read_requests],
                 search_queries=[q[:120] for q in result.search_queries],
@@ -309,6 +310,14 @@ class RepositoryScout:
                 self.audit["stop_reason"] = "completed"
                 break
         self.audit["accepted_candidates"] = len(candidates)
+        usage = [t.get("token_usage") for t in self.audit["turns"]]
+        if usage and all(u and set(u) == {"prompt_tokens", "completion_tokens", "total_tokens"}
+                         for u in usage):
+            self.audit["cost"] = {
+                "currency_cost": None,
+                "token_usage": {k: sum(u[k] for u in usage) for k in usage[0]},
+                "reason": "provider_reported_tokens_no_verified_pricing",
+            }
         self.audit.update(unread_coverage(source, reviewed))
         reviewed_lines = _unique_line_count(reviewed)
         indexed_lines = sum(len(lines) for lines in source.lines.values())

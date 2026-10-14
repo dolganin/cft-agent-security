@@ -10,7 +10,7 @@ from app.config import settings
 from evaluation.benchmark_protocol import ROOT, load_protocol
 
 
-def manifest():
+def manifest(config=settings):
     protocol = load_protocol()
     paths = subprocess.run(
         ["git", "-C", str(ROOT), "ls-files", "--cached", "--others", "--exclude-standard"],
@@ -21,10 +21,10 @@ def manifest():
     selected = sorted({p for p in paths if p.endswith(".py") and p.split("/")[0] in components})
     hashes = {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in selected}
     allowed = [*protocol.baseline.settings, "scout_schedule_mode"]
-    config = {k: getattr(settings, k) for k in allowed}
+    config_values = {k: getattr(config, k) for k in allowed}
     commit = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"],
                             capture_output=True, text=True, check=True, timeout=10).stdout.strip()
-    identity = {"implementation_sha256": hashes, "settings": config,
+    identity = {"implementation_sha256": hashes, "settings": config_values,
                 "dataset_lock_sha256": hashlib.sha256(
                     (ROOT / "benchmarks/juice-shop-v20.2.0-v2/dataset.lock.json").read_bytes(),
                 ).hexdigest(), "target_commit": protocol.target_commit}

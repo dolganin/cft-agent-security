@@ -151,6 +151,7 @@ class ProviderFailoverClient:
         self.diagnostics_path = diagnostics_path
         self.last_attempts: list[LLMAttempt] = []
         self.last_selected_route: LLMRoute | None = None
+        self.last_usage: dict[str, int] | None = None
 
     def complete_model(
         self,
@@ -171,6 +172,7 @@ class ProviderFailoverClient:
 
         self.last_attempts = []
         self.last_selected_route = None
+        self.last_usage = None
         blocked_providers: set[str] = set()
 
         for route in self.routes:
@@ -185,6 +187,7 @@ class ProviderFailoverClient:
                 continue
 
             started = time.monotonic()
+            self.last_usage = None
             try:
                 raw = self._request_route(route, system_prompt, user_prompt)
                 payload = _extract_json_object(raw)
@@ -284,6 +287,13 @@ class ProviderFailoverClient:
                 effort = "xhigh"
             payload["reasoning_effort"] = effort
         result = _post_json(url, payload, headers=headers, timeout=self.timeout_seconds)
+        usage = result.get("usage")
+        self.last_usage = (
+            {k: v for k, v in usage.items()
+             if k in {"prompt_tokens", "completion_tokens", "total_tokens"}
+             and type(v) is int and v >= 0}
+            if isinstance(usage, dict) else None
+        ) or None
         choices = result.get("choices") or []
         if not choices:
             raise RuntimeError("response contains no choices")
