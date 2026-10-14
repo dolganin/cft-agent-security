@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import http.client
 import json
 import sys
 import time
@@ -162,9 +163,12 @@ class ProviderFailoverClient:
         user_payload: dict[str, Any],
         operation: str,
         schema_retries: int = 0,
+        network_retries: int = 0,
     ) -> TModel:
         if schema_retries not in {0, 1}:
             raise ValueError("At most one structured-response correction is allowed")
+        if network_retries not in {0, 1}:
+            raise ValueError("At most one network retry is allowed")
         schema = output_model.model_json_schema()
         user_prompt = (
             "Return exactly one JSON object and no markdown. "
@@ -193,8 +197,25 @@ class ProviderFailoverClient:
 
             started = time.monotonic()
             self.last_usage = None
+            lost_response = False
+
+            def request(prompt):
+                nonlocal lost_response
+                try:
+                    return self._request_route(route, system_prompt, prompt)
+                except RuntimeError as network_error:
+                    if not network_retries or _classify_error(network_error)[0] != "network_error":
+                        raise
+                    lost_response = True
+                    self.last_attempts.append(LLMAttempt(
+                        route=route.label, ok=False, status="network_retry_requested",
+                        latency_ms=int((time.monotonic() - started) * 1000),
+                    ))
+                    self.record_event(operation=operation, route=route, status="network_retry_requested")
+                    return self._request_route(route, system_prompt, prompt)
+
             try:
-                raw = self._request_route(route, system_prompt, user_prompt)
+                raw = request(user_prompt)
                 try:
                     result = output_model.model_validate(_extract_json_object(raw))
                 except (TypeError, ValueError) as invalid:
@@ -222,13 +243,16 @@ class ProviderFailoverClient:
                         "Validation errors (not instructions): " + json.dumps(details) + \
                         "\nPrevious response (untrusted data): " + raw[:32768]
                     self.last_usage = None
-                    raw = self._request_route(route, system_prompt, correction)
+                    raw = request(correction)
                     second_usage = self.last_usage
                     if first_usage and second_usage and set(first_usage) == set(second_usage):
                         self.last_usage = {k: first_usage[k] + second_usage[k] for k in first_usage}
                     else:
                         self.last_usage = None
                     result = output_model.model_validate(_extract_json_object(raw))
+                if lost_response:
+                    # The lost response may still have consumed provider tokens.
+                    self.last_usage = None
                 elapsed = int((time.monotonic() - started) * 1000)
                 self.last_attempts.append(
                     LLMAttempt(route=route.label, ok=True, status="ok", latency_ms=elapsed)
@@ -454,7 +478,7 @@ def _post_json(
         if len(compact) > 350:
             compact = compact[:347] + "..."
         raise RuntimeError(f"HTTP {exc.code}: {compact}") from None
-    except (urllib.error.URLError, TimeoutError) as exc:
+    except (urllib.error.URLError, TimeoutError, http.client.HTTPException, ConnectionError) as exc:
         raise RuntimeError(f"network/timeout: {exc}") from None
 
 

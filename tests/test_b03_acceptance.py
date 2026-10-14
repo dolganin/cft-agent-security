@@ -1,10 +1,11 @@
+import http.client
 import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 
-from agent.llm import ProviderFailoverClient, parse_route_specs
+from agent.llm import LLMUnavailableError, ProviderFailoverClient, _post_json, parse_route_specs
 from app.b03_acceptance import RecordingClient, snapshot
 from schemas.discovery import ProjectDiscoveryResult
 from schemas.scout import ScoutTurn
@@ -34,6 +35,28 @@ def test_bounded_schema_correction_does_not_relax_validation(monkeypatch):
     assert len(client.last_attempts) == 2
     assert client.last_schema_errors
     assert all("input" not in error for error in client.last_schema_errors)
+
+
+def test_disconnect_is_transport_failure_not_uncaught_pipeline_crash(monkeypatch):
+    def disconnected(*_args, **_kwargs):
+        raise http.client.RemoteDisconnected("peer closed")
+    monkeypatch.setattr("urllib.request.urlopen", disconnected)
+    with pytest.raises(RuntimeError, match="network/timeout"):
+        _post_json("https://example.invalid", {}, headers={}, timeout=1)
+
+
+def test_one_network_retry_then_explicit_failure(monkeypatch):
+    client = ProviderFailoverClient(routes=parse_route_specs("nsu:qwen3.8-flash-next"),
+                                   credentials={"NSU_OPENWEBUI_KEY": "synthetic"})
+    calls = []
+    def unavailable(*_args):
+        calls.append(1)
+        raise RuntimeError("network/timeout: peer closed")
+    monkeypatch.setattr(client, "_request_route", unavailable)
+    with pytest.raises(LLMUnavailableError):
+        client.complete_model(output_model=ScoutTurn, system_prompt="test", user_payload={},
+                              operation="test", network_retries=1)
+    assert len(calls) == 2
 
 
 def test_recording_client_cannot_execute_or_save_credentials(tmp_path):

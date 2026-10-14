@@ -196,7 +196,7 @@ class RepositoryScout:
                         "remaining_turns": self.max_turns - turn,
                         "remaining_candidate_budget": self.max_candidates - len(candidates),
                         "components": [c.model_dump(mode="json") for c in inventory.components],
-                    }, operation="repository_scout", schema_retries=1,
+                    }, operation="repository_scout", schema_retries=1, network_retries=1,
                 )
             except (LLMUnavailableError, ValueError) as exc:
                 event.update(status="model_unavailable", error_category=type(exc).__name__)
