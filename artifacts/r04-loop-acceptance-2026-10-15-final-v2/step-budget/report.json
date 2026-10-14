@@ -1,0 +1,367 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "r04-synthetic",
+  "finding": {
+    "id": "r04-synthetic",
+    "source": "operator",
+    "rule_id": "research-marker",
+    "title": "Read a marker",
+    "description": "Synthetic acceptance, not vulnerability benchmark",
+    "severity": null,
+    "service": null,
+    "file": "app.ts",
+    "line_start": 1,
+    "line_end": null,
+    "pr_context": null,
+    "provenance": null
+  },
+  "status": "inconclusive",
+  "analysis_summary": "Observe and revise a bounded experiment",
+  "risk_signals": [],
+  "code_context": "Source not yet read; use research tools.",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": false,
+    "criticality": "unknown",
+    "trust_zone": null,
+    "connected_services": [],
+    "databases": [],
+    "critical_paths": [],
+    "authentication": "unknown",
+    "blast_radius": "unknown",
+    "unknown_inputs": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ]
+  },
+  "hypothesis": "Marker is present",
+  "hypothesis_confidence": 0.0,
+  "verification": {
+    "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-2",
+    "capability": "write_workspace_file",
+    "target": "juice-verification",
+    "environment": "sandbox",
+    "validator_decision": "approved",
+    "validator_reason": "Allowed by deterministic Validator policy v0.1",
+    "evidence_count": 2,
+    "evidence_types": [
+      "research_observation"
+    ],
+    "decision_basis": "agent_budget"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS.",
+    "assessment_status": "unassessed",
+    "scheme": "CVSS:4.0/B",
+    "metric_facts": {},
+    "missing_metrics": [
+      "AV",
+      "AC",
+      "AT",
+      "PR",
+      "UI",
+      "VC",
+      "VI",
+      "VA",
+      "SC",
+      "SI",
+      "SA"
+    ]
+  },
+  "context_priority": {
+    "level": "LOW",
+    "score": 0.0,
+    "reasons": [
+      "public_exposure:not_public:+0",
+      "asset_criticality:unknown:+0",
+      "database_access:none:+0",
+      "critical_path:none:+0",
+      "authentication:unknown:+0",
+      "blast_radius:unknown:+0"
+    ],
+    "assessment_status": "partial",
+    "unknown_inputs": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ],
+    "scheme": "context-priority.v0.1"
+  },
+  "technical_severity": {
+    "scheme": "source-impact.a04.v1",
+    "level": "UNASSESSED",
+    "assessment_status": "unassessed",
+    "impact_facts": [],
+    "reasoning": "No operator-reviewed source-impact facts supplied."
+  },
+  "scoring_review_resolution": {
+    "status": "not_supplied",
+    "review_digest": null,
+    "reviewed_by": null,
+    "diagnostics": [],
+    "references": []
+  },
+  "evidence": [
+    {
+      "id": "evidence-fefaff3200",
+      "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-1",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-loop-acceptance-2026-10-15-final-v2/step-budget/evidence/execution-8c8cc4c102044a8aad2e182e7b0316dc.json",
+        "execution-8c8cc4c102044a8aad2e182e7b0316dc",
+        "audit:c71ccfa789824e70a218a87c547f045b"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31",
+      "hypothesis_id": "research-hypothesis-1",
+      "action": {
+        "id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-1",
+        "tool": "read_source",
+        "run_id": "c71ccfa789824e70a218a87c547f045b"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "app.ts",
+            "content": "1: export const marker = 'acceptance-marker';",
+            "truncated": false,
+            "visible_sha256": "2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8"
+          }
+        },
+        "captured_at": "2026-10-14T19:19:35.240479Z"
+      },
+      "scope": {
+        "target": "juice-verification",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-loop-acceptance-2026-10-15-final-v2/step-budget/evidence/execution-8c8cc4c102044a8aad2e182e7b0316dc.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-8c8cc4c102044a8aad2e182e7b0316dc",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:c71ccfa789824e70a218a87c547f045b",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-14T19:19:35.240499Z"
+    },
+    {
+      "id": "evidence-20a2f61aa1",
+      "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-2",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-loop-acceptance-2026-10-15-final-v2/step-budget/evidence/execution-d8dfe8fd92cc4c6ab5f21186367e4c2c.json",
+        "execution-d8dfe8fd92cc4c6ab5f21186367e4c2c",
+        "audit:6dddb085ed3a4e6dbc80ae03bf49f35e"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31",
+      "hypothesis_id": "research-hypothesis-2",
+      "action": {
+        "id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-2",
+        "tool": "write_workspace_file",
+        "run_id": "6dddb085ed3a4e6dbc80ae03bf49f35e"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "experiment.py",
+            "sha256": "166eb245f4790a58195948e39dd99bcaf20a5a759f564e83c298073604785d15",
+            "bytes": 33
+          }
+        },
+        "captured_at": "2026-10-14T19:19:35.463196Z"
+      },
+      "scope": {
+        "target": "juice-verification",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-loop-acceptance-2026-10-15-final-v2/step-budget/evidence/execution-d8dfe8fd92cc4c6ab5f21186367e4c2c.json",
+          "role": "other"
+        },
+        {
+          "ref": "execution-d8dfe8fd92cc4c6ab5f21186367e4c2c",
+          "role": "execution"
+        },
+        {
+          "ref": "audit:6dddb085ed3a4e6dbc80ae03bf49f35e",
+          "role": "audit"
+        }
+      ],
+      "created_at": "2026-10-14T19:19:35.463213Z"
+    }
+  ],
+  "sandbox_actions": [
+    {
+      "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-1",
+      "capability": "read_source",
+      "target": "juice-verification",
+      "environment": "sandbox",
+      "purpose": "Bounded synthetic experiment",
+      "parameter_names": [
+        "path"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 206,
+      "command": [],
+      "cwd": null,
+      "stdout": "{\"observation\": {\"path\": \"app.ts\", \"content\": \"1: export const marker = 'acceptance-marker';\", \"truncated\": false, \"visible_sha256\": \"2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": null,
+      "sandbox_session_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-loop-acceptance-2026-10-15-final-v2/step-budget/evidence/execution-8c8cc4c102044a8aad2e182e7b0316dc.json",
+        "execution-8c8cc4c102044a8aad2e182e7b0316dc",
+        "audit:c71ccfa789824e70a218a87c547f045b"
+      ],
+      "error": null
+    },
+    {
+      "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-2",
+      "capability": "write_workspace_file",
+      "target": "juice-verification",
+      "environment": "sandbox",
+      "purpose": "Bounded synthetic experiment",
+      "parameter_names": [
+        "content",
+        "path"
+      ],
+      "execution_status": "completed",
+      "exit_code": 0,
+      "timed_out": false,
+      "duration_ms": 212,
+      "command": [],
+      "cwd": null,
+      "stdout": "{\"observation\": {\"path\": \"experiment.py\", \"sha256\": \"166eb245f4790a58195948e39dd99bcaf20a5a759f564e83c298073604785d15\", \"bytes\": 33}, \"verdict\": \"inconclusive\"}",
+      "stderr": null,
+      "sandbox_session_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-loop-acceptance-2026-10-15-final-v2/step-budget/evidence/execution-d8dfe8fd92cc4c6ab5f21186367e4c2c.json",
+        "execution-d8dfe8fd92cc4c6ab5f21186367e4c2c",
+        "audit:6dddb085ed3a4e6dbc80ae03bf49f35e"
+      ],
+      "error": null
+    }
+  ],
+  "policy_decisions": [
+    {
+      "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-1",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    {
+      "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-2",
+      "decision": "approved",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    }
+  ],
+  "agent_decisions": [
+    {
+      "step": 1,
+      "outcome": "continue",
+      "reason": "Reconsider the experiment using persisted observations",
+      "evidence_ids": [
+        "evidence-fefaff3200"
+      ],
+      "plan_id": "research-plan-1",
+      "stop_reason": null,
+      "recorded_at": "2026-10-14T19:19:35.241457Z"
+    },
+    {
+      "step": 2,
+      "outcome": "stop",
+      "reason": "Agent step budget was exhausted without terminal Evidence.",
+      "evidence_ids": [
+        "evidence-20a2f61aa1"
+      ],
+      "plan_id": "research-plan-2",
+      "stop_reason": "step_budget_exhausted",
+      "recorded_at": "2026-10-14T19:19:35.464070Z"
+    }
+  ],
+  "workflow_errors": [],
+  "reasoning_events": [],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "r04-synthetic: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "Context Priority is provisional; unknown inputs: public_exposure, criticality, databases, critical_paths, authentication, blast_radius",
+    "No terminal capability-specific Evidence was obtained.",
+    "Agent stopped because the configured step budget was exhausted."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 2,
+  "stop_reason": "step_budget_exhausted",
+  "binding_resolution": null
+}

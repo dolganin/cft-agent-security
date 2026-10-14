@@ -1,0 +1,18 @@
+{
+  "target_id": "juice-verification",
+  "environment": "sandbox",
+  "session_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584",
+  "worker_image": "sha256:73fd92a20ad72cf189bfcda4604196b8476dfad07c54bbf06ec830e3ec0fa7e7",
+  "worker_sha256": "cc9deb9c6b627838b1352a221f53cbeefa8dda7366fd2826274a4ea76d1554fa",
+  "source_files": {
+    "app.ts": {
+      "original_sha256": "2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8",
+      "visible_sha256": "2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8"
+    }
+  },
+  "services": {},
+  "network_name": null,
+  "max_actions": 16,
+  "max_http_requests": 32,
+  "wall_seconds": 300
+}

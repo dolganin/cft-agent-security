@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "unit-suite": {
+      "exit_code": 0,
+      "passed": true
+    },
+    "ruff": {
+      "exit_code": 0,
+      "passed": true
+    },
+    "legacy-graph": {
+      "exit_code": 0,
+      "passed": true
+    },
+    "docker-loop-test": {
+      "exit_code": 0,
+      "passed": true
+    },
+    "diff-check": {
+      "exit_code": 0,
+      "passed": true
+    }
+  },
+  "passed": true,
+  "benchmark_measurement": false,
+  "live_llm": false
+}

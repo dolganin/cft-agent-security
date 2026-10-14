@@ -1,0 +1,11 @@
+{
+  "schema_version": "cft.research.r04.v1",
+  "benchmark_measurement": false,
+  "status": "inconclusive",
+  "stop_reason": "model_failure",
+  "actions": 0,
+  "http_requests": 0,
+  "model_calls": 1,
+  "cleanup_verified": true,
+  "independent_verification": "pending R06"
+}

@@ -1,0 +1,4 @@
+{"session_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584", "phase": "ready", "container": "cft-research-c3e2b4080987450b8ab6762a96be47d6", "scope_sha256": "a3ce0eb6ac3409721d226783d53de5d108b1f5429051fba6979372d57093f481"}
+{"session_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584", "phase": "action", "action_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584-1", "run_id": "74c22646f4854a5caddeb00c43e34446", "tool": "read_source", "requests": 0, "exit_code": 0}
+{"session_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584", "phase": "action", "action_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584-2", "run_id": "21a59c5ef4c94616a1da07e95e52d4df", "tool": "write_workspace_file", "requests": 0, "exit_code": 0}
+{"session_id": "research-e89f1993e1b44a5b8ebf14a9c09a9584", "phase": "closed", "cleanup_verified": true}

@@ -1,0 +1,68 @@
+{
+  "action_digest": "c662ca15cd30d9d07bdc37e376e379688507c158ffef632fcb4930328cc7e516",
+  "action_id": "accept-5f3f15ab9140439d9d6ed38fd543ddb6",
+  "audit_ref": "audit:224b592a831b4d8bab3f424eefcf3aaf",
+  "created_at": "2026-10-14T19:21:46.636732+00:00",
+  "duration_ms": 0,
+  "endpoint": "/health",
+  "error": {
+    "code": "EXECUTION_FAILED",
+    "layer": "executor",
+    "message": "Sandbox execution failed",
+    "retryable": false
+  },
+  "exit_code": 2,
+  "fixture_binding": null,
+  "id": "execution-1e08f8f7b27e4d739da82357cdcddd1e",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+    "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+    "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+  },
+  "run_id": "224b592a831b4d8bab3f424eefcf3aaf",
+  "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+  "status": "failed",
+  "stderr": "Research HTTP request budget exhausted",
+  "stdout": "",
+  "target": "research-acceptance",
+  "timed_out": false,
+  "tool": "target_http",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": ""
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "r04-synthetic",
+  "finding": {
+    "id": "r04-synthetic",
+    "source": "operator",
+    "rule_id": "research-marker",
+    "title": "Read a marker",
+    "description": "Synthetic acceptance, not vulnerability benchmark",
+    "severity": null,
+    "service": null,
+    "file": "app.ts",
+    "line_start": 1,
+    "line_end": null,
+    "pr_context": null,
+    "provenance": null
+  },
+  "status": "inconclusive",
+  "analysis_summary": null,
+  "risk_signals": [],
+  "code_context": "Source not yet read; use research tools.",
+  "architecture_context": {
+    "service": "juice",
+    "public_exposure": false,
+    "criticality": "unknown",
+    "trust_zone": null,
+    "connected_services": [],
+    "databases": [],
+    "critical_paths": [],
+    "authentication": "unknown",
+    "blast_radius": "unknown",
+    "unknown_inputs": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ]
+  },
+  "hypothesis": null,
+  "hypothesis_confidence": null,
+  "verification": {
+    "action_id": null,
+    "capability": null,
+    "target": null,
+    "environment": null,
+    "validator_decision": "not_run",
+    "validator_reason": null,
+    "evidence_count": 0,
+    "evidence_types": [],
+    "decision_basis": "workflow_state"
+  },
+  "cvss": {
+    "vector": "UNASSESSED",
+    "score": null,
+    "severity": "UNASSESSED",
+    "reasoning": "CVSS 4.0 may apply, but explicit justified metric values are not present in the current workflow input. Semgrep severity is not converted into CVSS.",
+    "assessment_status": "unassessed",
+    "scheme": "CVSS:4.0/B",
+    "metric_facts": {},
+    "missing_metrics": [
+      "AV",
+      "AC",
+      "AT",
+      "PR",
+      "UI",
+      "VC",
+      "VI",
+      "VA",
+      "SC",
+      "SI",
+      "SA"
+    ]
+  },
+  "context_priority": {
+    "level": "LOW",
+    "score": 0.0,
+    "reasons": [
+      "public_exposure:not_public:+0",
+      "asset_criticality:unknown:+0",
+      "database_access:none:+0",
+      "critical_path:none:+0",
+      "authentication:unknown:+0",
+      "blast_radius:unknown:+0"
+    ],
+    "assessment_status": "partial",
+    "unknown_inputs": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ],
+    "scheme": "context-priority.v0.1"
+  },
+  "technical_severity": {
+    "scheme": "source-impact.a04.v1",
+    "level": "UNASSESSED",
+    "assessment_status": "unassessed",
+    "impact_facts": [],
+    "reasoning": "No operator-reviewed source-impact facts supplied."
+  },
+  "scoring_review_resolution": {
+    "status": "not_supplied",
+    "review_digest": null,
+    "reviewed_by": null,
+    "diagnostics": [],
+    "references": []
+  },
+  "evidence": [],
+  "sandbox_actions": [],
+  "policy_decisions": [],
+  "agent_decisions": [
+    {
+      "step": 0,
+      "outcome": "stop",
+      "reason": "Finding workflow node failed: analyse",
+      "evidence_ids": [],
+      "plan_id": null,
+      "stop_reason": "model_failure",
+      "recorded_at": "2026-10-14T19:19:35.739392Z"
+    }
+  ],
+  "workflow_errors": [
+    {
+      "code": "VALIDATION_ERROR",
+      "layer": "llm",
+      "message": "Finding workflow node failed: analyse",
+      "retryable": false
+    }
+  ],
+  "reasoning_events": [],
+  "ci_gate_impact": {
+    "effect": "warn",
+    "category": "inconclusive",
+    "reason": "r04-synthetic: verification is inconclusive and needs review."
+  },
+  "explanation": "The workflow ended without terminal capability-specific Evidence.",
+  "limitations": [
+    "Finding workflow node failed: analyse",
+    "Context Priority is provisional; unknown inputs: public_exposure, criticality, databases, critical_paths, authentication, blast_radius",
+    "No terminal capability-specific Evidence was obtained."
+  ],
+  "next_step": "Collect stronger approved Evidence or add a bounded verification capability before making a terminal claim.",
+  "iterations": 0,
+  "stop_reason": "model_failure",
+  "binding_resolution": null
+}

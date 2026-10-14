@@ -1,0 +1,4073 @@
+[
+  {
+    "action": {
+      "id": "accept-6d77ab62958747ec87599ab97dd31d9f",
+      "tool": "list_source_files",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {},
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-6d77ab62958747ec87599ab97dd31d9f",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "f783765ab316410a9f4cb4f0f40e8c53",
+      "action_id": "accept-6d77ab62958747ec87599ab97dd31d9f",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"files\": [\"app.ts\", \"secret.ts\"], \"total\": 2, \"next_offset\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-c2f87577dfe9471c85e78031cbb6fbbe",
+      "audit_ref": "audit:f783765ab316410a9f4cb4f0f40e8c53",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-c2f87577dfe9471c85e78031cbb6fbbe.json"
+      ],
+      "duration_ms": 189,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-5ade719995",
+      "action_id": "accept-6d77ab62958747ec87599ab97dd31d9f",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-c2f87577dfe9471c85e78031cbb6fbbe.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-6d77ab62958747ec87599ab97dd31d9f",
+        "tool": "list_source_files",
+        "run_id": "f783765ab316410a9f4cb4f0f40e8c53"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "files": [
+              "app.ts",
+              "secret.ts"
+            ],
+            "total": 2,
+            "next_offset": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:29.887163Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-c2f87577dfe9471c85e78031cbb6fbbe.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:29.887182Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-f69b0b777e19499c8b6d95037c219c07",
+      "tool": "read_source",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "secret.ts"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-f69b0b777e19499c8b6d95037c219c07",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "e4d971c2e67e4d4fac029cea421dc2b9",
+      "action_id": "accept-f69b0b777e19499c8b6d95037c219c07",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"secret.ts\", \"content\": \"1: const api_key = <redacted>;\", \"truncated\": false, \"visible_sha256\": \"89f0a7ea37766f7c941784874f3c1c2f73a1b17f15fa33572b5b66c12d1b324b\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-cc99213f85f54d8aafaeb41bf91500a8",
+      "audit_ref": "audit:e4d971c2e67e4d4fac029cea421dc2b9",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-cc99213f85f54d8aafaeb41bf91500a8.json"
+      ],
+      "duration_ms": 189,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-5cdc1730a9",
+      "action_id": "accept-f69b0b777e19499c8b6d95037c219c07",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-cc99213f85f54d8aafaeb41bf91500a8.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-f69b0b777e19499c8b6d95037c219c07",
+        "tool": "read_source",
+        "run_id": "e4d971c2e67e4d4fac029cea421dc2b9"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "secret.ts",
+            "content": "1: const api_key = <redacted>;",
+            "truncated": false,
+            "visible_sha256": "89f0a7ea37766f7c941784874f3c1c2f73a1b17f15fa33572b5b66c12d1b324b"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:30.078500Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-cc99213f85f54d8aafaeb41bf91500a8.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:30.078515Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-3648954ca80b418fb411ff4ff068b93c",
+      "tool": "search_source",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "literal": "acceptance-marker"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-3648954ca80b418fb411ff4ff068b93c",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "2c300aea6a454071b3d923f463f1e7de",
+      "action_id": "accept-3648954ca80b418fb411ff4ff068b93c",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"matches\": [{\"path\": \"app.ts\", \"line\": 1, \"content\": \"export const marker = 'acceptance-marker';\"}], \"limit_reached\": false}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-f82b5f9c42b34528835a172ad2048d07",
+      "audit_ref": "audit:2c300aea6a454071b3d923f463f1e7de",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f82b5f9c42b34528835a172ad2048d07.json"
+      ],
+      "duration_ms": 196,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-f0dff41749",
+      "action_id": "accept-3648954ca80b418fb411ff4ff068b93c",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f82b5f9c42b34528835a172ad2048d07.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-3648954ca80b418fb411ff4ff068b93c",
+        "tool": "search_source",
+        "run_id": "2c300aea6a454071b3d923f463f1e7de"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "matches": [
+              {
+                "path": "app.ts",
+                "line": 1,
+                "content": "export const marker = 'acceptance-marker';"
+              }
+            ],
+            "limit_reached": false
+          }
+        },
+        "captured_at": "2026-10-14T19:21:30.276977Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f82b5f9c42b34528835a172ad2048d07.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:30.276994Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-16399ee3f9b1492a865f041dd83936b0",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "from pathlib import Path\nprint(Path('/target/app.ts').read_text())\nprint('confirmed')\n"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-16399ee3f9b1492a865f041dd83936b0",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "3ec2e2f89a414b5a9b05c0a03c64707e",
+      "action_id": "accept-16399ee3f9b1492a865f041dd83936b0",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"ed14b90adf56cebac44030ae5b3027a2c58c1d9810833a9db5f073c516d47507\", \"bytes\": 86}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-9b7881d602184e489bb85102362a1b04",
+      "audit_ref": "audit:3ec2e2f89a414b5a9b05c0a03c64707e",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-9b7881d602184e489bb85102362a1b04.json"
+      ],
+      "duration_ms": 209,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-811562661d",
+      "action_id": "accept-16399ee3f9b1492a865f041dd83936b0",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-9b7881d602184e489bb85102362a1b04.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-16399ee3f9b1492a865f041dd83936b0",
+        "tool": "write_workspace_file",
+        "run_id": "3ec2e2f89a414b5a9b05c0a03c64707e"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "ed14b90adf56cebac44030ae5b3027a2c58c1d9810833a9db5f073c516d47507",
+            "bytes": 86
+          }
+        },
+        "captured_at": "2026-10-14T19:21:30.488386Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-9b7881d602184e489bb85102362a1b04.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:30.488402Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-a0575b0076654a7e8d5b4bddad7e2ddf",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "ed14b90adf56cebac44030ae5b3027a2c58c1d9810833a9db5f073c516d47507"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-a0575b0076654a7e8d5b4bddad7e2ddf",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "4a3baca985024752a2c7cc5d1b25de45",
+      "action_id": "accept-a0575b0076654a7e8d5b4bddad7e2ddf",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"export const marker = 'acceptance-marker';\\n\\nconfirmed\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"ed14b90adf56cebac44030ae5b3027a2c58c1d9810833a9db5f073c516d47507\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-850fb6f7d2d84c5182229e71d401b8d4",
+      "audit_ref": "audit:4a3baca985024752a2c7cc5d1b25de45",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-850fb6f7d2d84c5182229e71d401b8d4.json"
+      ],
+      "duration_ms": 481,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-5980ec7679",
+      "action_id": "accept-a0575b0076654a7e8d5b4bddad7e2ddf",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-850fb6f7d2d84c5182229e71d401b8d4.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-a0575b0076654a7e8d5b4bddad7e2ddf",
+        "tool": "sandbox_command",
+        "run_id": "4a3baca985024752a2c7cc5d1b25de45"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "export const marker = 'acceptance-marker';\n\nconfirmed\n",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "ed14b90adf56cebac44030ae5b3027a2c58c1d9810833a9db5f073c516d47507",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:30.971607Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-850fb6f7d2d84c5182229e71d401b8d4.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:30.971624Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-eb68c1f75d8c4fd48ad6bf67726a3f03",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.js",
+        "content": "console.log('node-acceptance');"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-eb68c1f75d8c4fd48ad6bf67726a3f03",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "bf628ba537a34e8092372b7ee2f3aad3",
+      "action_id": "accept-eb68c1f75d8c4fd48ad6bf67726a3f03",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.js\", \"sha256\": \"8b2a7c3a20408e0458b0b766379d820e3325ede6b54d104775ff3f12b9642a4c\", \"bytes\": 31}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-f5199b403cd74d27b5bb505b069259e1",
+      "audit_ref": "audit:bf628ba537a34e8092372b7ee2f3aad3",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f5199b403cd74d27b5bb505b069259e1.json"
+      ],
+      "duration_ms": 215,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-31e8100007",
+      "action_id": "accept-eb68c1f75d8c4fd48ad6bf67726a3f03",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f5199b403cd74d27b5bb505b069259e1.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-eb68c1f75d8c4fd48ad6bf67726a3f03",
+        "tool": "write_workspace_file",
+        "run_id": "bf628ba537a34e8092372b7ee2f3aad3"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.js",
+            "sha256": "8b2a7c3a20408e0458b0b766379d820e3325ede6b54d104775ff3f12b9642a4c",
+            "bytes": 31
+          }
+        },
+        "captured_at": "2026-10-14T19:21:31.189555Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f5199b403cd74d27b5bb505b069259e1.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:31.189575Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-c2464973d215481eadc2c65312c85a2f",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "node",
+          "/workspace/probe.js"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "8b2a7c3a20408e0458b0b766379d820e3325ede6b54d104775ff3f12b9642a4c"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-c2464973d215481eadc2c65312c85a2f",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "ff180bf096d743888fc7f45477144deb",
+      "action_id": "accept-c2464973d215481eadc2c65312c85a2f",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"node-acceptance\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"8b2a7c3a20408e0458b0b766379d820e3325ede6b54d104775ff3f12b9642a4c\", \"argv\": [\"node\", \"/workspace/probe.js\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-419d5304d53445e090e16b04344680aa",
+      "audit_ref": "audit:ff180bf096d743888fc7f45477144deb",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-419d5304d53445e090e16b04344680aa.json"
+      ],
+      "duration_ms": 422,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-eb9451ffcd",
+      "action_id": "accept-c2464973d215481eadc2c65312c85a2f",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-419d5304d53445e090e16b04344680aa.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-c2464973d215481eadc2c65312c85a2f",
+        "tool": "sandbox_command",
+        "run_id": "ff180bf096d743888fc7f45477144deb"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "node-acceptance\n",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "8b2a7c3a20408e0458b0b766379d820e3325ede6b54d104775ff3f12b9642a4c",
+            "argv": [
+              "node",
+              "/workspace/probe.js"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:31.614583Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-419d5304d53445e090e16b04344680aa.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:31.614613Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-308f70757f344714a8cb6ee532ef48f9",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "from pathlib import Path\nPath('/workspace/persistent.txt').write_text('kept')\n"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-308f70757f344714a8cb6ee532ef48f9",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "896153a19663401e85f1f0569b2ec926",
+      "action_id": "accept-308f70757f344714a8cb6ee532ef48f9",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"79bbc29e60f82032a65750af777d66e14e1565b1ab9a8e950874990388706ca0\", \"bytes\": 78}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-b4ff50ff2c27401894bdda64a17ea08b",
+      "audit_ref": "audit:896153a19663401e85f1f0569b2ec926",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b4ff50ff2c27401894bdda64a17ea08b.json"
+      ],
+      "duration_ms": 210,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-81c619f80e",
+      "action_id": "accept-308f70757f344714a8cb6ee532ef48f9",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b4ff50ff2c27401894bdda64a17ea08b.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-308f70757f344714a8cb6ee532ef48f9",
+        "tool": "write_workspace_file",
+        "run_id": "896153a19663401e85f1f0569b2ec926"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "79bbc29e60f82032a65750af777d66e14e1565b1ab9a8e950874990388706ca0",
+            "bytes": 78
+          }
+        },
+        "captured_at": "2026-10-14T19:21:31.827064Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b4ff50ff2c27401894bdda64a17ea08b.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:31.827089Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-5d7f49a0cde84686bcd72ad3344a539d",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "79bbc29e60f82032a65750af777d66e14e1565b1ab9a8e950874990388706ca0"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-5d7f49a0cde84686bcd72ad3344a539d",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "fcf4862b530a49a1ade295fe54ef6072",
+      "action_id": "accept-5d7f49a0cde84686bcd72ad3344a539d",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"79bbc29e60f82032a65750af777d66e14e1565b1ab9a8e950874990388706ca0\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-bd77e1b1c4114d88ba92bb126caa88e1",
+      "audit_ref": "audit:fcf4862b530a49a1ade295fe54ef6072",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-bd77e1b1c4114d88ba92bb126caa88e1.json"
+      ],
+      "duration_ms": 465,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-b715268590",
+      "action_id": "accept-5d7f49a0cde84686bcd72ad3344a539d",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-bd77e1b1c4114d88ba92bb126caa88e1.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-5d7f49a0cde84686bcd72ad3344a539d",
+        "tool": "sandbox_command",
+        "run_id": "fcf4862b530a49a1ade295fe54ef6072"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "79bbc29e60f82032a65750af777d66e14e1565b1ab9a8e950874990388706ca0",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:32.294694Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-bd77e1b1c4114d88ba92bb126caa88e1.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:32.294714Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-63e6df38a7a7404a8e0bc31998e63711",
+      "tool": "read_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "persistent.txt"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-63e6df38a7a7404a8e0bc31998e63711",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "7ae208decbf94922b8ca457e7c8e46e7",
+      "action_id": "accept-63e6df38a7a7404a8e0bc31998e63711",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"persistent.txt\", \"content\": \"kept\", \"truncated\": false, \"sha256\": \"79f076abdd19a752db7267bfff2f9022161d120dea919fdaca2ffdfc24ca8c96\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-6bec72de09774ee49b7876f997af2f7f",
+      "audit_ref": "audit:7ae208decbf94922b8ca457e7c8e46e7",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-6bec72de09774ee49b7876f997af2f7f.json"
+      ],
+      "duration_ms": 203,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-6b35c87c1d",
+      "action_id": "accept-63e6df38a7a7404a8e0bc31998e63711",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-6bec72de09774ee49b7876f997af2f7f.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-63e6df38a7a7404a8e0bc31998e63711",
+        "tool": "read_workspace_file",
+        "run_id": "7ae208decbf94922b8ca457e7c8e46e7"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "persistent.txt",
+            "content": "kept",
+            "truncated": false,
+            "sha256": "79f076abdd19a752db7267bfff2f9022161d120dea919fdaca2ffdfc24ca8c96"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:32.500365Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-6bec72de09774ee49b7876f997af2f7f.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:32.500382Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-ebdce47bc4584b88bea94c3c3621aab1",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "from pathlib import Path\ntry:\n Path('/target/app.ts').write_text('bad')\nexcept OSError:\n print('read-only')\n"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-ebdce47bc4584b88bea94c3c3621aab1",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "10c7125288704e00866efda128ce6946",
+      "action_id": "accept-ebdce47bc4584b88bea94c3c3621aab1",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"537c70f7d36afe6f1caf6a5f9556c87ed62ac8cb88726937b806c9a084cfb6f8\", \"bytes\": 108}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-137798769c9e42b18a168636b2e099f0",
+      "audit_ref": "audit:10c7125288704e00866efda128ce6946",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-137798769c9e42b18a168636b2e099f0.json"
+      ],
+      "duration_ms": 227,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-4800d173bd",
+      "action_id": "accept-ebdce47bc4584b88bea94c3c3621aab1",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-137798769c9e42b18a168636b2e099f0.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-ebdce47bc4584b88bea94c3c3621aab1",
+        "tool": "write_workspace_file",
+        "run_id": "10c7125288704e00866efda128ce6946"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "537c70f7d36afe6f1caf6a5f9556c87ed62ac8cb88726937b806c9a084cfb6f8",
+            "bytes": 108
+          }
+        },
+        "captured_at": "2026-10-14T19:21:32.729898Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-137798769c9e42b18a168636b2e099f0.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:32.729914Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-b0d6b3ebb97a4a26b0de3a64cdbd3815",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "537c70f7d36afe6f1caf6a5f9556c87ed62ac8cb88726937b806c9a084cfb6f8"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-b0d6b3ebb97a4a26b0de3a64cdbd3815",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "df0fca37ebc24e4eade8548d7a1571f4",
+      "action_id": "accept-b0d6b3ebb97a4a26b0de3a64cdbd3815",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"read-only\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"537c70f7d36afe6f1caf6a5f9556c87ed62ac8cb88726937b806c9a084cfb6f8\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-f848cdb6c2d646a1929256d24c5bccbf",
+      "audit_ref": "audit:df0fca37ebc24e4eade8548d7a1571f4",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f848cdb6c2d646a1929256d24c5bccbf.json"
+      ],
+      "duration_ms": 482,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-ad37fc5991",
+      "action_id": "accept-b0d6b3ebb97a4a26b0de3a64cdbd3815",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f848cdb6c2d646a1929256d24c5bccbf.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-b0d6b3ebb97a4a26b0de3a64cdbd3815",
+        "tool": "sandbox_command",
+        "run_id": "df0fca37ebc24e4eade8548d7a1571f4"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "read-only\n",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "537c70f7d36afe6f1caf6a5f9556c87ed62ac8cb88726937b806c9a084cfb6f8",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:33.215233Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-f848cdb6c2d646a1929256d24c5bccbf.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:33.215257Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-28544b9639e14efcb055a0c3bb3491c6",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "import socket\ntry:\n socket.create_connection(('1.1.1.1',80),.2)\nexcept OSError:\n print('egress-blocked')\n"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-28544b9639e14efcb055a0c3bb3491c6",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "caf1ff87b27847079d32e0293ec81992",
+      "action_id": "accept-28544b9639e14efcb055a0c3bb3491c6",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"34b97a266b91da4d7c5cdccff566873b90b5298c95accb8373fdb770b7755a16\", \"bytes\": 105}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-7650f3882be6416f92851817795340fd",
+      "audit_ref": "audit:caf1ff87b27847079d32e0293ec81992",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-7650f3882be6416f92851817795340fd.json"
+      ],
+      "duration_ms": 203,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-6d34c99d09",
+      "action_id": "accept-28544b9639e14efcb055a0c3bb3491c6",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-7650f3882be6416f92851817795340fd.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-28544b9639e14efcb055a0c3bb3491c6",
+        "tool": "write_workspace_file",
+        "run_id": "caf1ff87b27847079d32e0293ec81992"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "34b97a266b91da4d7c5cdccff566873b90b5298c95accb8373fdb770b7755a16",
+            "bytes": 105
+          }
+        },
+        "captured_at": "2026-10-14T19:21:33.421135Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-7650f3882be6416f92851817795340fd.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:33.421178Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-c96d5732d29442c391de3e13075d63f7",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "34b97a266b91da4d7c5cdccff566873b90b5298c95accb8373fdb770b7755a16"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-c96d5732d29442c391de3e13075d63f7",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "f45b5b0f827d4df99ba0a910046dec1c",
+      "action_id": "accept-c96d5732d29442c391de3e13075d63f7",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"egress-blocked\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"34b97a266b91da4d7c5cdccff566873b90b5298c95accb8373fdb770b7755a16\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-2f3f58d7e6fe4f508a7de6ef8f66c66f",
+      "audit_ref": "audit:f45b5b0f827d4df99ba0a910046dec1c",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2f3f58d7e6fe4f508a7de6ef8f66c66f.json"
+      ],
+      "duration_ms": 467,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-6c7c98adf0",
+      "action_id": "accept-c96d5732d29442c391de3e13075d63f7",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2f3f58d7e6fe4f508a7de6ef8f66c66f.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-c96d5732d29442c391de3e13075d63f7",
+        "tool": "sandbox_command",
+        "run_id": "f45b5b0f827d4df99ba0a910046dec1c"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "egress-blocked\n",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "34b97a266b91da4d7c5cdccff566873b90b5298c95accb8373fdb770b7755a16",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:33.890721Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2f3f58d7e6fe4f508a7de6ef8f66c66f.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:33.890743Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-91643731186740749b2b9a315c0f74fd",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "print('x'*100000)"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-91643731186740749b2b9a315c0f74fd",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "9852012793fa429a8f0b7b3949e8f409",
+      "action_id": "accept-91643731186740749b2b9a315c0f74fd",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"e91e87c882186f03e572ed280d314cb150308330ad33f53d9bac05c4310e5101\", \"bytes\": 17}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-2a44089ff148416cacb3f3be812e3d6f",
+      "audit_ref": "audit:9852012793fa429a8f0b7b3949e8f409",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2a44089ff148416cacb3f3be812e3d6f.json"
+      ],
+      "duration_ms": 209,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-b5ca5ff997",
+      "action_id": "accept-91643731186740749b2b9a315c0f74fd",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2a44089ff148416cacb3f3be812e3d6f.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-91643731186740749b2b9a315c0f74fd",
+        "tool": "write_workspace_file",
+        "run_id": "9852012793fa429a8f0b7b3949e8f409"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "e91e87c882186f03e572ed280d314cb150308330ad33f53d9bac05c4310e5101",
+            "bytes": 17
+          }
+        },
+        "captured_at": "2026-10-14T19:21:34.102599Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2a44089ff148416cacb3f3be812e3d6f.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:34.102624Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-622f956d0dee4d08b19d457def7761dc",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "e91e87c882186f03e572ed280d314cb150308330ad33f53d9bac05c4310e5101"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-622f956d0dee4d08b19d457def7761dc",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "adb22b51ed29497aa16d839bb686a4cb",
+      "action_id": "accept-622f956d0dee4d08b19d457def7761dc",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", \"stderr\": \"\", \"truncated\": {\"stdout\": true, \"stderr\": false}, \"script_sha256\": \"e91e87c882186f03e572ed280d314cb150308330ad33f53d9bac05c4310e5101\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-a2194fcde27f4d38ac309ada30df0459",
+      "audit_ref": "audit:adb22b51ed29497aa16d839bb686a4cb",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-a2194fcde27f4d38ac309ada30df0459.json"
+      ],
+      "duration_ms": 416,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-4e28e9d979",
+      "action_id": "accept-622f956d0dee4d08b19d457def7761dc",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-a2194fcde27f4d38ac309ada30df0459.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-622f956d0dee4d08b19d457def7761dc",
+        "tool": "sandbox_command",
+        "run_id": "adb22b51ed29497aa16d839bb686a4cb"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+            "stderr": "",
+            "truncated": {
+              "stdout": true,
+              "stderr": false
+            },
+            "script_sha256": "e91e87c882186f03e572ed280d314cb150308330ad33f53d9bac05c4310e5101",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:34.521387Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-a2194fcde27f4d38ac309ada30df0459.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:34.521405Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-e99badddc5714c4196fa9561188028f3",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "import time\ntime.sleep(4)"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-e99badddc5714c4196fa9561188028f3",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "89286bc1db9a4bf3b3bca3a35d01ada8",
+      "action_id": "accept-e99badddc5714c4196fa9561188028f3",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"f732e2da839c0f61a775cc41b5a8aba17b2f3c55b3106ee4890a3fe0a2b5ef71\", \"bytes\": 25}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-ea8a7aa806814971929dbafbb2bd21d4",
+      "audit_ref": "audit:89286bc1db9a4bf3b3bca3a35d01ada8",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-ea8a7aa806814971929dbafbb2bd21d4.json"
+      ],
+      "duration_ms": 209,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-c1613fffe2",
+      "action_id": "accept-e99badddc5714c4196fa9561188028f3",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-ea8a7aa806814971929dbafbb2bd21d4.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-e99badddc5714c4196fa9561188028f3",
+        "tool": "write_workspace_file",
+        "run_id": "89286bc1db9a4bf3b3bca3a35d01ada8"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "f732e2da839c0f61a775cc41b5a8aba17b2f3c55b3106ee4890a3fe0a2b5ef71",
+            "bytes": 25
+          }
+        },
+        "captured_at": "2026-10-14T19:21:34.732090Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-ea8a7aa806814971929dbafbb2bd21d4.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:34.732104Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-81d2466dc6154075939d1a7a66f421a1",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "f732e2da839c0f61a775cc41b5a8aba17b2f3c55b3106ee4890a3fe0a2b5ef71"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-81d2466dc6154075939d1a7a66f421a1",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "6ab7d2fe76904fa5bc51947654dc027d",
+      "action_id": "accept-81d2466dc6154075939d1a7a66f421a1",
+      "status": "failed",
+      "exit_code": 124,
+      "stdout": "{\"observation\": {\"exit_code\": 124, \"timed_out\": true, \"stdout\": \"\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"f732e2da839c0f61a775cc41b5a8aba17b2f3c55b3106ee4890a3fe0a2b5ef71\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": true,
+      "evidence_ref": "execution-8e10011539894aeaa2da92daf87ea5d5",
+      "audit_ref": "audit:6ab7d2fe76904fa5bc51947654dc027d",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-8e10011539894aeaa2da92daf87ea5d5.json"
+      ],
+      "duration_ms": 2469,
+      "error": {
+        "code": "TIMEOUT",
+        "layer": "executor",
+        "message": "Sandbox execution timed out",
+        "retryable": true
+      }
+    },
+    "evidence": {
+      "id": "evidence-3bcab1257a",
+      "action_id": "accept-81d2466dc6154075939d1a7a66f421a1",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-8e10011539894aeaa2da92daf87ea5d5.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-81d2466dc6154075939d1a7a66f421a1",
+        "tool": "sandbox_command",
+        "run_id": "6ab7d2fe76904fa5bc51947654dc027d"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "failed",
+          "observation": {
+            "exit_code": 124,
+            "timed_out": true,
+            "stdout": "",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "f732e2da839c0f61a775cc41b5a8aba17b2f3c55b3106ee4890a3fe0a2b5ef71",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:37.203836Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-8e10011539894aeaa2da92daf87ea5d5.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:37.203861Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-da9d1b362e9b46aeb4b98426cc6db76e",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "import subprocess,sys\nsubprocess.Popen([sys.executable,'-c',\"import time;from pathlib import Path;time.sleep(1);Path('/workspace/escaped-child').write_text('bad')\"],start_new_session=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)\nprint('spawned')"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-da9d1b362e9b46aeb4b98426cc6db76e",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "61db89098d594d8aa7c9264d5688271b",
+      "action_id": "accept-da9d1b362e9b46aeb4b98426cc6db76e",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"e024939a7b219b1f52e3f47f9118dd165abbc958f1d6c8ba5853cb1210de202a\", \"bytes\": 257}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-17cc34ad7d084b5eadabb592ee079822",
+      "audit_ref": "audit:61db89098d594d8aa7c9264d5688271b",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-17cc34ad7d084b5eadabb592ee079822.json"
+      ],
+      "duration_ms": 202,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-c83fb5c893",
+      "action_id": "accept-da9d1b362e9b46aeb4b98426cc6db76e",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-17cc34ad7d084b5eadabb592ee079822.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-da9d1b362e9b46aeb4b98426cc6db76e",
+        "tool": "write_workspace_file",
+        "run_id": "61db89098d594d8aa7c9264d5688271b"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "e024939a7b219b1f52e3f47f9118dd165abbc958f1d6c8ba5853cb1210de202a",
+            "bytes": 257
+          }
+        },
+        "captured_at": "2026-10-14T19:21:37.408744Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-17cc34ad7d084b5eadabb592ee079822.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:37.408775Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-0f87d66da61e47b1ac8ed02667fc1140",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "e024939a7b219b1f52e3f47f9118dd165abbc958f1d6c8ba5853cb1210de202a"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-0f87d66da61e47b1ac8ed02667fc1140",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "5f6457a4cba34a99a8533d8fa031b31a",
+      "action_id": "accept-0f87d66da61e47b1ac8ed02667fc1140",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"spawned\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"e024939a7b219b1f52e3f47f9118dd165abbc958f1d6c8ba5853cb1210de202a\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-c95a2b124ebe43baae0f57b8d7c38ad5",
+      "audit_ref": "audit:5f6457a4cba34a99a8533d8fa031b31a",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-c95a2b124ebe43baae0f57b8d7c38ad5.json"
+      ],
+      "duration_ms": 452,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-0ddaf1e8ac",
+      "action_id": "accept-0f87d66da61e47b1ac8ed02667fc1140",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-c95a2b124ebe43baae0f57b8d7c38ad5.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-0f87d66da61e47b1ac8ed02667fc1140",
+        "tool": "sandbox_command",
+        "run_id": "5f6457a4cba34a99a8533d8fa031b31a"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "spawned\n",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "e024939a7b219b1f52e3f47f9118dd165abbc958f1d6c8ba5853cb1210de202a",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:37.863781Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-c95a2b124ebe43baae0f57b8d7c38ad5.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:37.863807Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-69c0b94525e548a3bf93682968aa6776",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "import time\nfrom pathlib import Path\ntime.sleep(1.3)\nprint('child-clean' if not Path('/workspace/escaped-child').exists() else 'child-leaked')"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-69c0b94525e548a3bf93682968aa6776",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "6a1d2f1695224844b45c3e60b4b605bc",
+      "action_id": "accept-69c0b94525e548a3bf93682968aa6776",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"b989ae06bfaaabc0ca9057dcb5392452ee8867ae9ebc60cede27d5473c49c86c\", \"bytes\": 142}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-9e895d2faa364c4ca3ec6e32858992cb",
+      "audit_ref": "audit:6a1d2f1695224844b45c3e60b4b605bc",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-9e895d2faa364c4ca3ec6e32858992cb.json"
+      ],
+      "duration_ms": 201,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-494fef92ea",
+      "action_id": "accept-69c0b94525e548a3bf93682968aa6776",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-9e895d2faa364c4ca3ec6e32858992cb.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-69c0b94525e548a3bf93682968aa6776",
+        "tool": "write_workspace_file",
+        "run_id": "6a1d2f1695224844b45c3e60b4b605bc"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "b989ae06bfaaabc0ca9057dcb5392452ee8867ae9ebc60cede27d5473c49c86c",
+            "bytes": 142
+          }
+        },
+        "captured_at": "2026-10-14T19:21:38.067129Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-9e895d2faa364c4ca3ec6e32858992cb.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:38.067147Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-dda24bd0771749a192dab1697f8c47dd",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "b989ae06bfaaabc0ca9057dcb5392452ee8867ae9ebc60cede27d5473c49c86c"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-dda24bd0771749a192dab1697f8c47dd",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "8ad1c755da0b445a9c5cefcbff5e5ec9",
+      "action_id": "accept-dda24bd0771749a192dab1697f8c47dd",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"child-clean\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"b989ae06bfaaabc0ca9057dcb5392452ee8867ae9ebc60cede27d5473c49c86c\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-80d33fe66b3f4095981f7101f9dc3118",
+      "audit_ref": "audit:8ad1c755da0b445a9c5cefcbff5e5ec9",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-80d33fe66b3f4095981f7101f9dc3118.json"
+      ],
+      "duration_ms": 1803,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-506d669d4e",
+      "action_id": "accept-dda24bd0771749a192dab1697f8c47dd",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-80d33fe66b3f4095981f7101f9dc3118.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-dda24bd0771749a192dab1697f8c47dd",
+        "tool": "sandbox_command",
+        "run_id": "8ad1c755da0b445a9c5cefcbff5e5ec9"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "child-clean\n",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "b989ae06bfaaabc0ca9057dcb5392452ee8867ae9ebc60cede27d5473c49c86c",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:39.873336Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-80d33fe66b3f4095981f7101f9dc3118.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:39.873355Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-570f2151e93145658de33332f660a31a",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "probe.py",
+        "content": "from pathlib import Path\nPath('/workspace/link').symlink_to('/etc/passwd')"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-570f2151e93145658de33332f660a31a",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "ebf0cc22552f40ab8903e0107ffe4f04",
+      "action_id": "accept-570f2151e93145658de33332f660a31a",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"27f9feeadaf086a50c9951b7c2fa38624aae8199ac44ff5b9a1f0dc98936d4c7\", \"bytes\": 74}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-a38d0ac893b74aee97af8fbe274af909",
+      "audit_ref": "audit:ebf0cc22552f40ab8903e0107ffe4f04",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-a38d0ac893b74aee97af8fbe274af909.json"
+      ],
+      "duration_ms": 210,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-d01c508abd",
+      "action_id": "accept-570f2151e93145658de33332f660a31a",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-a38d0ac893b74aee97af8fbe274af909.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-570f2151e93145658de33332f660a31a",
+        "tool": "write_workspace_file",
+        "run_id": "ebf0cc22552f40ab8903e0107ffe4f04"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "probe.py",
+            "sha256": "27f9feeadaf086a50c9951b7c2fa38624aae8199ac44ff5b9a1f0dc98936d4c7",
+            "bytes": 74
+          }
+        },
+        "captured_at": "2026-10-14T19:21:40.085513Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-a38d0ac893b74aee97af8fbe274af909.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:40.085529Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-3ecea4e8940548a88ab2197d25b8902a",
+      "tool": "sandbox_command",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "argv": [
+          "python3",
+          "/workspace/probe.py"
+        ],
+        "cwd": "/workspace",
+        "script_sha256": "27f9feeadaf086a50c9951b7c2fa38624aae8199ac44ff5b9a1f0dc98936d4c7"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-3ecea4e8940548a88ab2197d25b8902a",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "3e8d3440b4974f1b800b38684b8da30b",
+      "action_id": "accept-3ecea4e8940548a88ab2197d25b8902a",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"27f9feeadaf086a50c9951b7c2fa38624aae8199ac44ff5b9a1f0dc98936d4c7\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-0e766434829945e8a89da9ca97fd1430",
+      "audit_ref": "audit:3e8d3440b4974f1b800b38684b8da30b",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-0e766434829945e8a89da9ca97fd1430.json"
+      ],
+      "duration_ms": 481,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-fae1a98ff8",
+      "action_id": "accept-3ecea4e8940548a88ab2197d25b8902a",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-0e766434829945e8a89da9ca97fd1430.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-3ecea4e8940548a88ab2197d25b8902a",
+        "tool": "sandbox_command",
+        "run_id": "3e8d3440b4974f1b800b38684b8da30b"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "exit_code": 0,
+            "timed_out": false,
+            "stdout": "",
+            "stderr": "",
+            "truncated": {
+              "stdout": false,
+              "stderr": false
+            },
+            "script_sha256": "27f9feeadaf086a50c9951b7c2fa38624aae8199ac44ff5b9a1f0dc98936d4c7",
+            "argv": [
+              "python3",
+              "/workspace/probe.py"
+            ],
+            "cwd": "/workspace"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:40.568762Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-0e766434829945e8a89da9ca97fd1430.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:40.568783Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-a084ddcfc13e466ea3fcc4ba4c44e94c",
+      "tool": "read_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "link"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-a084ddcfc13e466ea3fcc4ba4c44e94c",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "8c3ba0a0db114afbbc2616b14776aa5a",
+      "action_id": "accept-a084ddcfc13e466ea3fcc4ba4c44e94c",
+      "status": "failed",
+      "exit_code": 2,
+      "stdout": "{\"error\": \"ValueError\", \"detail\": \"Linked worker file\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-87c266eec40e437087716db8ce6753e3",
+      "audit_ref": "audit:8c3ba0a0db114afbbc2616b14776aa5a",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-87c266eec40e437087716db8ce6753e3.json"
+      ],
+      "duration_ms": 199,
+      "error": {
+        "code": "EXECUTION_FAILED",
+        "layer": "executor",
+        "message": "Sandbox execution failed",
+        "retryable": false
+      }
+    },
+    "evidence": {
+      "id": "evidence-7c6c29fa9d",
+      "action_id": "accept-a084ddcfc13e466ea3fcc4ba4c44e94c",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-87c266eec40e437087716db8ce6753e3.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-a084ddcfc13e466ea3fcc4ba4c44e94c",
+        "tool": "read_workspace_file",
+        "run_id": "8c3ba0a0db114afbbc2616b14776aa5a"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "failed",
+          "observation": {
+            "worker_error": "ValueError",
+            "detail": "Linked worker file"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:40.769804Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-87c266eec40e437087716db8ce6753e3.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:40.769821Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-af66dc087c2145808991f65a133fc8a2",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "changed.py",
+        "content": "print('old')"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-af66dc087c2145808991f65a133fc8a2",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "0d3774510fc242329dc5a552fc5034b9",
+      "action_id": "accept-af66dc087c2145808991f65a133fc8a2",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"changed.py\", \"sha256\": \"88746aceb28720d8d7e63e945e3fabaccd21a77196344fd29d1446a4e8582d82\", \"bytes\": 12}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-b9888e53bbbb44f884235ecc59222054",
+      "audit_ref": "audit:0d3774510fc242329dc5a552fc5034b9",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b9888e53bbbb44f884235ecc59222054.json"
+      ],
+      "duration_ms": 210,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-a851332a0e",
+      "action_id": "accept-af66dc087c2145808991f65a133fc8a2",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b9888e53bbbb44f884235ecc59222054.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-af66dc087c2145808991f65a133fc8a2",
+        "tool": "write_workspace_file",
+        "run_id": "0d3774510fc242329dc5a552fc5034b9"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "changed.py",
+            "sha256": "88746aceb28720d8d7e63e945e3fabaccd21a77196344fd29d1446a4e8582d82",
+            "bytes": 12
+          }
+        },
+        "captured_at": "2026-10-14T19:21:40.983152Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b9888e53bbbb44f884235ecc59222054.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:40.983182Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-cfa197a0b3ea4b489bb20800d20c4ac8",
+      "tool": "write_workspace_file",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "changed.py",
+        "content": "print('new')"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": null,
+      "endpoint": null,
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-cfa197a0b3ea4b489bb20800d20c4ac8",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "1a2ff39cc47b4bcd9416d81eaafee849",
+      "action_id": "accept-cfa197a0b3ea4b489bb20800d20c4ac8",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"path\": \"changed.py\", \"sha256\": \"f62325f509a9489c4039c79c734d99d1b1d91fb9dfaff61f43f27262c70e21e1\", \"bytes\": 12}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-859f2d789c3f49a28b83db0843ae4ce7",
+      "audit_ref": "audit:1a2ff39cc47b4bcd9416d81eaafee849",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-859f2d789c3f49a28b83db0843ae4ce7.json"
+      ],
+      "duration_ms": 208,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-f055abc13c",
+      "action_id": "accept-cfa197a0b3ea4b489bb20800d20c4ac8",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-859f2d789c3f49a28b83db0843ae4ce7.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-cfa197a0b3ea4b489bb20800d20c4ac8",
+        "tool": "write_workspace_file",
+        "run_id": "1a2ff39cc47b4bcd9416d81eaafee849"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "path": "changed.py",
+            "sha256": "f62325f509a9489c4039c79c734d99d1b1d91fb9dfaff61f43f27262c70e21e1",
+            "bytes": 12
+          }
+        },
+        "captured_at": "2026-10-14T19:21:41.194062Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": null,
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-859f2d789c3f49a28b83db0843ae4ce7.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:41.194080Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-f4666c22c164453bb189c8d1aace1854",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/health"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/health",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-f4666c22c164453bb189c8d1aace1854",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "116ab617f231421abfe619ccfcf6203d",
+      "action_id": "accept-f4666c22c164453bb189c8d1aace1854",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/health\", \"status_code\": 200, \"body\": \"{\\\"health\\\": \\\"ok\\\", \\\"path\\\": \\\"/health\\\"}\", \"response_sha256\": \"202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-1ab400ab30d1427881dcb4e68aba0eaf",
+      "audit_ref": "audit:116ab617f231421abfe619ccfcf6203d",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-1ab400ab30d1427881dcb4e68aba0eaf.json"
+      ],
+      "duration_ms": 655,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-ab226f744e",
+      "action_id": "accept-f4666c22c164453bb189c8d1aace1854",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-1ab400ab30d1427881dcb4e68aba0eaf.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-f4666c22c164453bb189c8d1aace1854",
+        "tool": "target_http",
+        "run_id": "116ab617f231421abfe619ccfcf6203d"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/health",
+            "status_code": 200,
+            "body": "{\"health\": \"ok\", \"path\": \"/health\"}",
+            "response_sha256": "202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6",
+            "body_truncated": false,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:42.241557Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-1ab400ab30d1427881dcb4e68aba0eaf.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:42.241565Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-fef0fbd7591d442ab4c12931cd47897b",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/private"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/private",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-fef0fbd7591d442ab4c12931cd47897b",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "f19e9fd95ff34c88b8d328e2635e0aaa",
+      "action_id": "accept-fef0fbd7591d442ab4c12931cd47897b",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/private\", \"status_code\": 401, \"body\": \"{\\\"identity\\\": null, \\\"reflected\\\": \\\"\\\"}\", \"response_sha256\": \"72b702bb2d310df96e7631907ad33172b27b3ea2a97af5d60dbc2c2ee6223c63\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-5181c6d164804811936b92c888aac48c",
+      "audit_ref": "audit:f19e9fd95ff34c88b8d328e2635e0aaa",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-5181c6d164804811936b92c888aac48c.json"
+      ],
+      "duration_ms": 631,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-7164857426",
+      "action_id": "accept-fef0fbd7591d442ab4c12931cd47897b",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-5181c6d164804811936b92c888aac48c.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-fef0fbd7591d442ab4c12931cd47897b",
+        "tool": "target_http",
+        "run_id": "f19e9fd95ff34c88b8d328e2635e0aaa"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/private",
+            "status_code": 401,
+            "body": "{\"identity\": null, \"reflected\": \"\"}",
+            "response_sha256": "72b702bb2d310df96e7631907ad33172b27b3ea2a97af5d60dbc2c2ee6223c63",
+            "body_truncated": false,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:42.874219Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-5181c6d164804811936b92c888aac48c.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:42.874226Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-5f76a3c6020541fbb4edc63dbed73bf0",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/private",
+        "role_handle": "owner"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/private",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-5f76a3c6020541fbb4edc63dbed73bf0",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "9beef49e99b141f5aad612a7b254ff1f",
+      "action_id": "accept-5f76a3c6020541fbb4edc63dbed73bf0",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/private\", \"status_code\": 200, \"body\": \"{\\\"identity\\\": \\\"fixture-owner\\\", \\\"reflected\\\": \\\"<redacted>\\\"}\", \"response_sha256\": \"429252bb52f377b3e83d846380f7cbc7f316d940948f8d408175dbea270f0469\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": \"owner\"}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-8b7b96b53d7e418091a1c89d0f2d7ec9",
+      "audit_ref": "audit:9beef49e99b141f5aad612a7b254ff1f",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-8b7b96b53d7e418091a1c89d0f2d7ec9.json"
+      ],
+      "duration_ms": 616,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-c847935a07",
+      "action_id": "accept-5f76a3c6020541fbb4edc63dbed73bf0",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-8b7b96b53d7e418091a1c89d0f2d7ec9.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-5f76a3c6020541fbb4edc63dbed73bf0",
+        "tool": "target_http",
+        "run_id": "9beef49e99b141f5aad612a7b254ff1f"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/private",
+            "status_code": 200,
+            "body": "{\"identity\": \"fixture-owner\", \"reflected\": \"<redacted>\"}",
+            "response_sha256": "429252bb52f377b3e83d846380f7cbc7f316d940948f8d408175dbea270f0469",
+            "body_truncated": false,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "redirect_followed": false,
+            "role_handle": "owner"
+          }
+        },
+        "captured_at": "2026-10-14T19:21:43.491119Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-8b7b96b53d7e418091a1c89d0f2d7ec9.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:43.491127Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-c17a032a8bff41ed8a95c6683cbea923",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/redirect"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/redirect",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-c17a032a8bff41ed8a95c6683cbea923",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "bc0fe76a68464ac295c9b119fd65bed4",
+      "action_id": "accept-c17a032a8bff41ed8a95c6683cbea923",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/redirect\", \"status_code\": 302, \"body\": \"\", \"response_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"body_truncated\": false, \"headers\": {\"Location\": \"http://outside.invalid/\"}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-2fdc91bb9df44249af47bb3d86112947",
+      "audit_ref": "audit:bc0fe76a68464ac295c9b119fd65bed4",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2fdc91bb9df44249af47bb3d86112947.json"
+      ],
+      "duration_ms": 608,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-32826b357f",
+      "action_id": "accept-c17a032a8bff41ed8a95c6683cbea923",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2fdc91bb9df44249af47bb3d86112947.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-c17a032a8bff41ed8a95c6683cbea923",
+        "tool": "target_http",
+        "run_id": "bc0fe76a68464ac295c9b119fd65bed4"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/redirect",
+            "status_code": 302,
+            "body": "",
+            "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "body_truncated": false,
+            "headers": {
+              "Location": "http://outside.invalid/"
+            },
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:44.100735Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-2fdc91bb9df44249af47bb3d86112947.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:44.100742Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-a3d063bde44d4bd3bff426083fcda97b",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/echo",
+        "method": "POST",
+        "body": "owned-marker"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/echo",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-a3d063bde44d4bd3bff426083fcda97b",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "6a33c7640a7a470e9cbe73bfaae3d1c1",
+      "action_id": "accept-a3d063bde44d4bd3bff426083fcda97b",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"POST\", \"path\": \"/echo\", \"status_code\": 200, \"body\": \"owned-marker\", \"response_sha256\": \"56353d0dbebf237bc583421bd3262449a47fb7e9569846fa0179a11181a65603\", \"body_truncated\": false, \"headers\": {}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-67b373e0d8494cc8bb40adaa1cea3307",
+      "audit_ref": "audit:6a33c7640a7a470e9cbe73bfaae3d1c1",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-67b373e0d8494cc8bb40adaa1cea3307.json"
+      ],
+      "duration_ms": 620,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-e2601178ad",
+      "action_id": "accept-a3d063bde44d4bd3bff426083fcda97b",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-67b373e0d8494cc8bb40adaa1cea3307.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-a3d063bde44d4bd3bff426083fcda97b",
+        "tool": "target_http",
+        "run_id": "6a33c7640a7a470e9cbe73bfaae3d1c1"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "POST",
+            "path": "/echo",
+            "status_code": 200,
+            "body": "owned-marker",
+            "response_sha256": "56353d0dbebf237bc583421bd3262449a47fb7e9569846fa0179a11181a65603",
+            "body_truncated": false,
+            "headers": {},
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:44.721946Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-67b373e0d8494cc8bb40adaa1cea3307.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:44.721955Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-8fefbdea600c4ac58ba1a0e0a67e2144",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/health"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/health",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-8fefbdea600c4ac58ba1a0e0a67e2144",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "1cebe3569322464990727455b8f3de2f",
+      "action_id": "accept-8fefbdea600c4ac58ba1a0e0a67e2144",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/health\", \"status_code\": 200, \"body\": \"{\\\"health\\\": \\\"ok\\\", \\\"path\\\": \\\"/health\\\"}\", \"response_sha256\": \"202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-868d0741d9ec4350adef107e6b361df8",
+      "audit_ref": "audit:1cebe3569322464990727455b8f3de2f",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-868d0741d9ec4350adef107e6b361df8.json"
+      ],
+      "duration_ms": 668,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-926226e66f",
+      "action_id": "accept-8fefbdea600c4ac58ba1a0e0a67e2144",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-868d0741d9ec4350adef107e6b361df8.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-8fefbdea600c4ac58ba1a0e0a67e2144",
+        "tool": "target_http",
+        "run_id": "1cebe3569322464990727455b8f3de2f"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/health",
+            "status_code": 200,
+            "body": "{\"health\": \"ok\", \"path\": \"/health\"}",
+            "response_sha256": "202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6",
+            "body_truncated": false,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:45.391548Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-868d0741d9ec4350adef107e6b361df8.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:45.391556Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-c1e7d4e3cc7942e09b8521adb8b6e5ba",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/health"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/health",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-c1e7d4e3cc7942e09b8521adb8b6e5ba",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "ed2bbdaea74944318d34fd6a685f0caf",
+      "action_id": "accept-c1e7d4e3cc7942e09b8521adb8b6e5ba",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/health\", \"status_code\": 200, \"body\": \"{\\\"health\\\": \\\"ok\\\", \\\"path\\\": \\\"/health\\\"}\", \"response_sha256\": \"202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-95fda8d533804ee4adcc834659da9105",
+      "audit_ref": "audit:ed2bbdaea74944318d34fd6a685f0caf",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-95fda8d533804ee4adcc834659da9105.json"
+      ],
+      "duration_ms": 608,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-6895dc12d2",
+      "action_id": "accept-c1e7d4e3cc7942e09b8521adb8b6e5ba",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-95fda8d533804ee4adcc834659da9105.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-c1e7d4e3cc7942e09b8521adb8b6e5ba",
+        "tool": "target_http",
+        "run_id": "ed2bbdaea74944318d34fd6a685f0caf"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/health",
+            "status_code": 200,
+            "body": "{\"health\": \"ok\", \"path\": \"/health\"}",
+            "response_sha256": "202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6",
+            "body_truncated": false,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:46.000683Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-95fda8d533804ee4adcc834659da9105.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:46.000690Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-0ae94fe466ba4895811823f669d2a53c",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/health"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/health",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-0ae94fe466ba4895811823f669d2a53c",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "ceaa65173b3549a4ac0c24b28e96caa4",
+      "action_id": "accept-0ae94fe466ba4895811823f669d2a53c",
+      "status": "completed",
+      "exit_code": 0,
+      "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/health\", \"status_code\": 200, \"body\": \"{\\\"health\\\": \\\"ok\\\", \\\"path\\\": \\\"/health\\\"}\", \"response_sha256\": \"202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": null}, \"verdict\": \"inconclusive\"}",
+      "stderr": "",
+      "timed_out": false,
+      "evidence_ref": "execution-b6c8489816e5471a970db5e01fcb2ae7",
+      "audit_ref": "audit:ceaa65173b3549a4ac0c24b28e96caa4",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b6c8489816e5471a970db5e01fcb2ae7.json"
+      ],
+      "duration_ms": 633,
+      "error": null
+    },
+    "evidence": {
+      "id": "evidence-7a107597f9",
+      "action_id": "accept-0ae94fe466ba4895811823f669d2a53c",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b6c8489816e5471a970db5e01fcb2ae7.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-0ae94fe466ba4895811823f669d2a53c",
+        "tool": "target_http",
+        "run_id": "ceaa65173b3549a4ac0c24b28e96caa4"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "completed",
+          "observation": {
+            "method": "GET",
+            "path": "/health",
+            "status_code": 200,
+            "body": "{\"health\": \"ok\", \"path\": \"/health\"}",
+            "response_sha256": "202b44dd39519c82260e130a54fda414960f5121d965a2bb91d163a2e5d399a6",
+            "body_truncated": false,
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "redirect_followed": false,
+            "role_handle": null
+          }
+        },
+        "captured_at": "2026-10-14T19:21:46.635589Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-b6c8489816e5471a970db5e01fcb2ae7.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:46.635598Z"
+    }
+  },
+  {
+    "action": {
+      "id": "accept-5f3f15ab9140439d9d6ed38fd543ddb6",
+      "tool": "target_http",
+      "target": "research-acceptance",
+      "environment": "sandbox",
+      "iteration": 1,
+      "parameters": {
+        "path": "/health"
+      },
+      "purpose": "Controlled transport acceptance",
+      "expected_evidence": "A recorded observation",
+      "service": "fixture",
+      "endpoint": "/health",
+      "verification_binding": null,
+      "fixture_binding": null,
+      "research_binding": {
+        "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+        "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+        "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+      }
+    },
+    "validation": {
+      "approved": true,
+      "action_id": "accept-5f3f15ab9140439d9d6ed38fd543ddb6",
+      "reason": "Allowed by deterministic Validator policy v0.1",
+      "policy_rules": [
+        "policy_version_supported",
+        "action_id_valid",
+        "target_allowed",
+        "environment_allowed",
+        "target_environment_match",
+        "tool_allowed",
+        "research_scope_bound",
+        "iteration_within_limit",
+        "purpose_present",
+        "expected_evidence_present",
+        "parameters_allowed",
+        "parameter_values_valid",
+        "registered_artifacts_valid",
+        "logging_required"
+      ]
+    },
+    "execution": {
+      "run_id": "224b592a831b4d8bab3f424eefcf3aaf",
+      "action_id": "accept-5f3f15ab9140439d9d6ed38fd543ddb6",
+      "status": "failed",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Research HTTP request budget exhausted",
+      "timed_out": false,
+      "evidence_ref": "execution-1e08f8f7b27e4d739da82357cdcddd1e",
+      "audit_ref": "audit:224b592a831b4d8bab3f424eefcf3aaf",
+      "artifacts": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-1e08f8f7b27e4d739da82357cdcddd1e.json"
+      ],
+      "duration_ms": 0,
+      "error": {
+        "code": "EXECUTION_FAILED",
+        "layer": "executor",
+        "message": "Sandbox execution failed",
+        "retryable": false
+      }
+    },
+    "evidence": {
+      "id": "evidence-4b43033ef5",
+      "action_id": "accept-5f3f15ab9140439d9d6ed38fd543ddb6",
+      "type": "research_observation",
+      "summary": "Bounded research observation; independent claim review is required.",
+      "artifact_refs": [
+        "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-1e08f8f7b27e4d739da82357cdcddd1e.json"
+      ],
+      "reliability": "high",
+      "verdict": "inconclusive",
+      "source": "runtime",
+      "sandbox_session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+      "hypothesis_id": "acceptance",
+      "action": {
+        "id": "accept-5f3f15ab9140439d9d6ed38fd543ddb6",
+        "tool": "target_http",
+        "run_id": "224b592a831b4d8bab3f424eefcf3aaf"
+      },
+      "observation": {
+        "kind": "research_observation",
+        "facts": {
+          "record_loaded": true,
+          "binding_valid": true,
+          "executor_status": "failed",
+          "malformed_observation": true
+        },
+        "captured_at": "2026-10-14T19:21:46.637097Z"
+      },
+      "scope": {
+        "target": "research-acceptance",
+        "environment": "sandbox",
+        "service": "fixture",
+        "description": "operator-scoped research; no vulnerability oracle"
+      },
+      "artifacts": [
+        {
+          "ref": "/private/tmp/cft-security-agent-b05-main-integration/artifacts/r04-foundation-regression-2026-10-15/evidence/execution-1e08f8f7b27e4d739da82357cdcddd1e.json",
+          "role": "other"
+        }
+      ],
+      "created_at": "2026-10-14T19:21:46.637102Z"
+    }
+  }
+]

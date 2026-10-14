@@ -1,0 +1,3 @@
+{"session_id": "research-822c472c18764cc1b0a8afd3b601f33f", "phase": "ready", "container": "cft-research-25595d72cdb5494b9f0edaa4c41b1b46", "scope_sha256": "d1b2f63ca135b9875e9942d811a50194950d6bfa4663f8345e6741696c55175f"}
+{"session_id": "research-822c472c18764cc1b0a8afd3b601f33f", "phase": "action", "action_id": "research-822c472c18764cc1b0a8afd3b601f33f-1", "run_id": "87fedd9e97ee475f8e774afb9a394ecc", "tool": "read_source", "requests": 0, "exit_code": 0}
+{"session_id": "research-822c472c18764cc1b0a8afd3b601f33f", "phase": "closed", "cleanup_verified": true}

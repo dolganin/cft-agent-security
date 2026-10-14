@@ -1,0 +1,63 @@
+{
+  "action_digest": "7773766a4ee1248d76a5b0de43d4d735567086c735723b584ea01e689ede8625",
+  "action_id": "research-822c472c18764cc1b0a8afd3b601f33f-1",
+  "audit_ref": "audit:87fedd9e97ee475f8e774afb9a394ecc",
+  "created_at": "2026-10-14T19:19:34.110753+00:00",
+  "duration_ms": 191,
+  "endpoint": null,
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-5c71fbf2dc204bd48e7e518070c676c3",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "d1b2f63ca135b9875e9942d811a50194950d6bfa4663f8345e6741696c55175f",
+    "session_id": "research-822c472c18764cc1b0a8afd3b601f33f",
+    "source_snapshot": "51dd15fda198d3879e1903930521f34116c1e31ebb3e50db811a4c24ca38ae4f"
+  },
+  "run_id": "87fedd9e97ee475f8e774afb9a394ecc",
+  "session_id": "research-822c472c18764cc1b0a8afd3b601f33f",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"path\": \"app.ts\", \"content\": \"1: export const marker = 'acceptance-marker';\", \"truncated\": false, \"visible_sha256\": \"2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8\"}, \"verdict\": \"inconclusive\"}",
+  "target": "juice-verification",
+  "timed_out": false,
+  "tool": "read_source",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-822c472c18764cc1b0a8afd3b601f33f"
+}

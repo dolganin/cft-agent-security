@@ -1,0 +1,5 @@
+{"node": "load_context", "status": "context_loaded", "step": 0, "stop_reason": null, "progress": {"model_calls": 0, "model_io_bytes": 0, "observation_bytes": 0, "write_bytes": 0, "workspace_revision": 0, "ledger": [], "turns": []}}
+{"node": "score_finding", "status": "scored", "step": 0, "stop_reason": null, "progress": {"model_calls": 0, "model_io_bytes": 0, "observation_bytes": 0, "write_bytes": 0, "workspace_revision": 0, "ledger": [], "turns": []}}
+{"node": "guard_agent_budget", "status": "budget_ok", "step": 0, "stop_reason": null, "progress": {"model_calls": 0, "model_io_bytes": 0, "observation_bytes": 0, "write_bytes": 0, "workspace_revision": 0, "ledger": [], "turns": []}}
+{"node": "analyse", "status": "inconclusive", "step": 0, "stop_reason": "model_failure", "progress": {"model_calls": 1, "model_io_bytes": 23601, "observation_bytes": 0, "write_bytes": 0, "workspace_revision": 0, "ledger": [], "turns": []}}
+{"node": "report", "status": "inconclusive", "step": 0, "stop_reason": "model_failure", "progress": {"model_calls": 1, "model_io_bytes": 23601, "observation_bytes": 0, "write_bytes": 0, "workspace_revision": 0, "ledger": [], "turns": []}}

@@ -1,0 +1,63 @@
+{
+  "action_digest": "f06b687e5ff85ea864a180c2626691f559f29d5c2f54b984308a38a581d2c0d2",
+  "action_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31-2",
+  "audit_ref": "audit:6dddb085ed3a4e6dbc80ae03bf49f35e",
+  "created_at": "2026-10-14T19:19:35.461164+00:00",
+  "duration_ms": 212,
+  "endpoint": null,
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-d8dfe8fd92cc4c6ab5f21186367e4c2c",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "a1eb2e6bcb820f05e0159abd309320c77b8bb8a6bdc55161b224200f193d6afa",
+    "session_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31",
+    "source_snapshot": "51dd15fda198d3879e1903930521f34116c1e31ebb3e50db811a4c24ca38ae4f"
+  },
+  "run_id": "6dddb085ed3a4e6dbc80ae03bf49f35e",
+  "session_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"path\": \"experiment.py\", \"sha256\": \"166eb245f4790a58195948e39dd99bcaf20a5a759f564e83c298073604785d15\", \"bytes\": 33}, \"verdict\": \"inconclusive\"}",
+  "target": "juice-verification",
+  "timed_out": false,
+  "tool": "write_workspace_file",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-e250405ad3d24fc9bf738fcb9c5d5f31"
+}

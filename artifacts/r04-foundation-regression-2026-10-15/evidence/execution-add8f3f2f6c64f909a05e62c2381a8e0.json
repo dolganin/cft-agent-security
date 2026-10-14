@@ -1,0 +1,68 @@
+{
+  "action_digest": "caa3e07aa7c953149e26ae267871518b2cca53733b877c48bf768479fbde512b",
+  "action_id": "cancel-run",
+  "audit_ref": "audit:f8f8d8cc4db64c36ad2e27d308eb1b1c",
+  "created_at": "2026-10-14T19:21:47.894861+00:00",
+  "duration_ms": 820,
+  "endpoint": null,
+  "error": {
+    "code": "EXECUTION_FAILED",
+    "layer": "executor",
+    "message": "Sandbox execution failed",
+    "retryable": false
+  },
+  "exit_code": 130,
+  "fixture_binding": null,
+  "id": "execution-add8f3f2f6c64f909a05e62c2381a8e0",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "ec68ff2103aa0dc4a454e42d2fa09a4cd8a2e7ae931064c85d828504cef23a8d",
+    "session_id": "research-5e1132c1784d46beb22d1ba2843b8813",
+    "source_snapshot": "fd4b86964c8861120012b6cf143297a7b15b84dd5f489572ccaa3dc07ef81fa5"
+  },
+  "run_id": "f8f8d8cc4db64c36ad2e27d308eb1b1c",
+  "session_id": "research-5e1132c1784d46beb22d1ba2843b8813",
+  "status": "failed",
+  "stderr": "Research action cancelled by operator",
+  "stdout": "",
+  "target": "research-acceptance",
+  "timed_out": false,
+  "tool": "sandbox_command",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": ""
+}

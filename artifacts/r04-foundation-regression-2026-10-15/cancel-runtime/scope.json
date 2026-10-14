@@ -1,0 +1,18 @@
+{
+  "target_id": "research-acceptance",
+  "environment": "sandbox",
+  "session_id": "research-5e1132c1784d46beb22d1ba2843b8813",
+  "worker_image": "sha256:73fd92a20ad72cf189bfcda4604196b8476dfad07c54bbf06ec830e3ec0fa7e7",
+  "worker_sha256": "cc9deb9c6b627838b1352a221f53cbeefa8dda7366fd2826274a4ea76d1554fa",
+  "source_files": {
+    "app.ts": {
+      "original_sha256": "d67e2e944994496c8d8ec76eed0cf9f09679448d584b532bebf941852a37f5ed",
+      "visible_sha256": "7f8b1dfc466b6249f06cbe55c9174df2578e7754da793fded244ef5cba2a38f1"
+    }
+  },
+  "services": {},
+  "network_name": null,
+  "max_actions": 64,
+  "max_http_requests": 32,
+  "wall_seconds": 300
+}

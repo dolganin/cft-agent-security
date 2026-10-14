@@ -1,0 +1,63 @@
+{
+  "action_digest": "53d88e0007962f6d95f1b5254f4f8115546a11922f399c5470b4f210e847f43d",
+  "action_id": "accept-a0575b0076654a7e8d5b4bddad7e2ddf",
+  "audit_ref": "audit:4a3baca985024752a2c7cc5d1b25de45",
+  "created_at": "2026-10-14T19:21:30.970461+00:00",
+  "duration_ms": 481,
+  "endpoint": null,
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-850fb6f7d2d84c5182229e71d401b8d4",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "e7c760ef8ea65e37a4708d6d93c5edbfa6789f654d0dd4e77c14083f07695f39",
+    "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+    "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+  },
+  "run_id": "4a3baca985024752a2c7cc5d1b25de45",
+  "session_id": "research-d915026cf9ab4052b3e0a241daf97ed7",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"exit_code\": 0, \"timed_out\": false, \"stdout\": \"export const marker = 'acceptance-marker';\\n\\nconfirmed\\n\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"ed14b90adf56cebac44030ae5b3027a2c58c1d9810833a9db5f073c516d47507\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+  "target": "research-acceptance",
+  "timed_out": false,
+  "tool": "sandbox_command",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-d915026cf9ab4052b3e0a241daf97ed7"
+}

@@ -1,0 +1,38 @@
+........................................................................ [  5%]
+........................................................................ [ 11%]
+.....................................................s.................. [ 17%]
+........................................................................ [ 23%]
+........................................................................ [ 28%]
+........................................................................ [ 34%]
+........................................................................ [ 40%]
+......................................................................ss [ 46%]
+ssss.................................................................... [ 51%]
+........................................................................ [ 57%]
+.......................................................................s [ 63%]
+........................................................................ [ 69%]
+........................................................s............... [ 74%]
+........................................................................ [ 80%]
+.............................................ssss...........s........... [ 86%]
+....sss....................................................s............ [ 92%]
+...............................s........................................ [ 97%]
+...........................                                              [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_a05_benchmark_v2.py:552: set CFT_A05_DEMO_ARTIFACTS to the saved Juice Shop demo artifacts
+SKIPPED [1] tests/test_docker_sandbox_boundary.py:44: Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest
+SKIPPED [1] tests/test_docker_sandbox_boundary.py:89: Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest
+SKIPPED [1] tests/test_docker_sandbox_boundary.py:130: Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest
+SKIPPED [1] tests/test_docker_sandbox_boundary.py:169: Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest
+SKIPPED [1] tests/test_docker_sandbox_boundary.py:222: Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest
+SKIPPED [1] tests/test_docker_sandbox_boundary.py:270: Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest
+SKIPPED [1] tests/test_multi_run_docker_integration.py:55: Set SBERLAB_TARGET_PATH to run lifecycle integration
+SKIPPED [1] tests/test_research_agent.py:218: Opt-in immutable research Docker image required
+SKIPPED [1] tests/test_sandbox_manager_integration.py:36: Set SBERLAB_TARGET_PATH to run this integration test
+SKIPPED [1] tests/test_sandbox_manager_integration.py:36: Set AUTODEALER_TARGET_PATH to run this integration test
+SKIPPED [2] tests/test_sandbox_manager_integration.py:135: Set CFT_SANDBOX_IMAGE to an immutable digest-pinned image
+SKIPPED [1] tests/test_sandbox_runner_integration.py:92: Set CFT_SANDBOX_IMAGE to an immutable digest-pinned image
+SKIPPED [1] tests/test_sandbox_session_integration.py:76: Set SBERLAB_TARGET_PATH to run SberLab integration
+SKIPPED [1] tests/test_sandbox_session_integration.py:89: Set SBERLAB_TARGET_PATH to run SberLab integration
+SKIPPED [1] tests/test_sandbox_session_integration.py:100: Set SBERLAB_TARGET_PATH to run SberLab integration
+SKIPPED [1] tests/test_stage1_e2e.py:46: Set CFT_RUN_STAGE1_E2E=1 with provisioned Juice Shop and pinned images
+SKIPPED [1] tests/test_stage2_benchmark.py:442: Pinned checkout is an operator prerequisite
+1232 passed, 19 skipped, 1 warning in 21.78s

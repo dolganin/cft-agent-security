@@ -1,0 +1,21 @@
+{
+  "schema_version": "cft.research.r04.acceptance.v1",
+  "reasoning": "scripted test double",
+  "real_docker_execution": true,
+  "live_llm": false,
+  "benchmark_measurement": false,
+  "checks": {
+    "adaptive": true,
+    "failure-followed-by-new-experiment": true,
+    "script-output-read-back": true,
+    "all-actions-approved-and-audited": true,
+    "one-model-call-per-turn": true,
+    "expected-script-failure-not-pipeline-error": true,
+    "repeat": true,
+    "call-budget": true,
+    "step-budget": true,
+    "invalid-ref": true,
+    "original-source-unchanged": true
+  },
+  "passed": true
+}
