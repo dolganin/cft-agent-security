@@ -25,6 +25,8 @@ An observation or model conclusion cannot confirm/reject a vulnerability; indepe
 verification is a later stage. Finish honestly if further useful research is unavailable.
 Do not repeat an unchanged operation. Compute script SHA256 from the exact UTF-8
 content, or read its write observation's sha256; never invent a digest.
+For ALL tools except target_http, set service=null and endpoint=null. A finding's
+service is context, not permission to attach network scope to a source read/script.
 Return a ResearchTurn matching the provided schema, not a security verdict."""
 
 DISCOVERY_PROMPT = """

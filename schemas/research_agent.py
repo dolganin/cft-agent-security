@@ -3,6 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from schemas.research import RESEARCH_REQUESTS
 from schemas.scout import CandidateFinding
 
 
@@ -48,6 +49,15 @@ class ResearchChoice(BaseModel):
     expected_evidence: str = Field(min_length=1, max_length=1000)
     service: str | None = None
     endpoint: str | None = None
+
+    @model_validator(mode="after")
+    def typed_parameters_and_network_fields(self):
+        request = RESEARCH_REQUESTS[self.tool].model_validate(self.parameters)
+        if self.tool != "target_http" and (self.service is not None or self.endpoint is not None):
+            raise ValueError("Source/workspace tools require service=null and endpoint=null; they have no network scope")
+        if self.tool == "target_http" and (not self.service or self.endpoint != request.path):
+            raise ValueError("target_http requires the operator service ID and endpoint equal to parameters.path")
+        return self
 
 
 class ResearchTurn(BaseModel):

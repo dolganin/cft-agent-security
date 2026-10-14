@@ -12,6 +12,7 @@ from pipeline.research_queue import ResearchQueue
 from schemas.finding import Finding
 from schemas.research import ResearchFile, ResearchScope
 from schemas.research_agent import (
+    ResearchChoice,
     ResearchObservation,
     ResearchProgress,
     SourceProofClaim,
@@ -156,3 +157,14 @@ def test_dast_without_source_location_remains_a_candidate(tmp_path):
     assert queue.findings[0].provenance.anchor_status == "location_only"
     queue.import_candidates([])
     assert queue.findings[0].service == "app"
+
+
+def test_source_choice_network_fields_are_corrected_before_action_generation():
+    with pytest.raises(ValueError, match="service=null"):
+        ResearchChoice(tool="read_source", parameters={"path": "app.ts"}, service="app",
+                       purpose="Read source", expected_evidence="Numbered source")
+    with pytest.raises(ValueError):
+        ResearchChoice(tool="sandbox_command", parameters={"argv": ["sh", "-c", "echo invalid"]},
+                       purpose="Invalid script runner", expected_evidence="No execution")
+    assert ResearchChoice(tool="read_source", parameters={"path": "app.ts"},
+                          purpose="Read source", expected_evidence="Numbered source").service is None
