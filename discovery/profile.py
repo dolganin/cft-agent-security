@@ -98,6 +98,11 @@ class TargetProfileBuilder:
             payload["sast"] = sast
         if base_profile is not None:
             payload["fix_verification"] = base_profile.fix_verification
+            # These are operator-owned permissions/provenance, never discovered
+            # facts. Dropping them loses the managed runtime source binding.
+            payload["verification_routes"] = base_profile.verification_routes
+            payload["access_fixture"] = base_profile.access_fixture
+            payload["b06_verification"] = base_profile.b06_verification
         return TargetProfile.model_validate(payload)
 
 
