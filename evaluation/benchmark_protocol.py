@@ -6,9 +6,11 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from typing import Literal
 
 import yaml
 
+from evaluation.historical_baseline import historical_input
 from schemas.benchmark import BenchmarkCaseV2, BenchmarkProtocolV2, SplitPolicy
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,12 +24,16 @@ def baseline_digest(relative: str, raw: bytes) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
-def load_protocol(path: Path = PROTOCOL, *, check_baseline: bool = True) -> BenchmarkProtocolV2:
+def load_protocol(
+    path: Path = PROTOCOL, *, check_baseline: bool = True,
+    baseline_mode: Literal["historical", "live"] = "historical",
+) -> BenchmarkProtocolV2:
     """Fail closed on malformed protocol, raw-byte lock or frozen input mismatch.
 
-    Future V2 benchmark preflight must call this before infrastructure/model calls,
-    and additionally validate the A04 dataset and A06 scanner locks. This command
-    validates the A01 artifact only and never substitutes for a dataset preflight.
+    Historical mode verifies the recorded implementation in a fixed Git revision,
+    plus current benchmark/document inputs. It does NOT attest the running code.
+    An exact legacy live replay must explicitly request baseline_mode="live".
+    New Stage B measurements require a separate implementation/config manifest.
     """
     raw = path.read_bytes()
     protocol = BenchmarkProtocolV2.model_validate(yaml.safe_load(raw))
@@ -42,11 +48,22 @@ def load_protocol(path: Path = PROTOCOL, *, check_baseline: bool = True) -> Benc
     if lock != expected:
         raise ValueError("Protocol lock mismatch; create a new version, never overwrite the lock")
     if check_baseline:
+        if baseline_mode not in {"historical", "live"}:
+            raise ValueError("Unsupported baseline verification mode")
         for relative, digest in protocol.baseline.input_digests.items():
             source = (ROOT / relative).resolve()
             if not source.is_relative_to(ROOT) or not source.is_file():
                 raise ValueError("Frozen baseline input must be inside repository")
-            if baseline_digest(relative, source.read_bytes()) != digest:
+            raw_input = source.read_bytes()
+            if baseline_mode == "historical":
+                historical = historical_input(ROOT, relative)
+                if baseline_digest(relative, historical) != digest:
+                    raise ValueError("Frozen baseline input historical mismatch: " + relative)
+                # Benchmark/data/docs remain local and immutable; only historical
+                # Python implementation is allowed to evolve independently.
+                if relative.endswith(".py") and not relative.startswith("benchmarks/"):
+                    raw_input = historical
+            if baseline_digest(relative, raw_input) != digest:
                 raise ValueError("Frozen baseline input mismatch: " + relative)
     return protocol
 
@@ -80,8 +97,11 @@ def split_cases(cases: list[BenchmarkCaseV2], policy: SplitPolicy) -> dict[str, 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--protocol", type=Path, default=PROTOCOL)
-    protocol = load_protocol(parser.parse_args().protocol)
-    print(f"A01 protocol/lock/baseline valid: {protocol.dataset_id}; ground truth pending A04")
+    parser.add_argument("--baseline-mode", choices=["historical", "live"], default="historical")
+    args = parser.parse_args()
+    protocol = load_protocol(args.protocol, baseline_mode=args.baseline_mode)
+    print(f"A01 protocol/lock/{args.baseline_mode} baseline valid: {protocol.dataset_id}; "
+          "not a live measurement or dataset acceptance")
     return 0
 
 

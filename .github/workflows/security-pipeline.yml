@@ -83,6 +83,7 @@ jobs:
         with:
           repository: Ultramind-AI/cft-security-agent
           ref: ${{ inputs.agent_ref }}
+          fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.AGENT_REPOSITORY_TOKEN || github.token }}
 
@@ -125,6 +126,7 @@ jobs:
           repository: Ultramind-AI/cft-security-agent
           ref: ${{ inputs.agent_ref }}
           path: agent
+          fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.AGENT_REPOSITORY_TOKEN || github.token }}
 
@@ -191,6 +193,7 @@ jobs:
           repository: Ultramind-AI/cft-security-agent
           ref: ${{ inputs.agent_ref }}
           path: agent
+          fetch-depth: 0
           persist-credentials: false
           token: ${{ secrets.AGENT_REPOSITORY_TOKEN || github.token }}
 

@@ -1,0 +1,1246 @@
+{
+  "a06_input_integrity_complete": true,
+  "a07_attempt_seals": {
+    "agent-run-01": {
+      "available_files_verified": true,
+      "changed": [],
+      "declared_missing": [],
+      "extra": [],
+      "full_seal_verified": true,
+      "received_files": 15,
+      "sealed_files": 15
+    },
+    "agent-run-01-retry-01": {
+      "available_files_verified": true,
+      "changed": [],
+      "declared_missing": [],
+      "extra": [],
+      "full_seal_verified": true,
+      "received_files": 58,
+      "sealed_files": 58
+    },
+    "agent-run-02": {
+      "available_files_verified": true,
+      "changed": [],
+      "declared_missing": [],
+      "extra": [],
+      "full_seal_verified": true,
+      "received_files": 15,
+      "sealed_files": 15
+    },
+    "agent-run-03": {
+      "available_files_verified": true,
+      "changed": [],
+      "declared_missing": [],
+      "extra": [],
+      "full_seal_verified": true,
+      "received_files": 15,
+      "sealed_files": 15
+    }
+  },
+  "agent_configuration_digest": "d4847b45ebc0b5dec99e391823c3a0a5284aa3570d4065f00740c13483e17e5a",
+  "agent_original_scores": [
+    {
+      "cases": [
+        {
+          "case_id": "JS-AUTH-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "authentication",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-BIZ-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "business-logic",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-BIZ-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "business-logic",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-BOLA-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "access-control",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-BOLA-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "access-control",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-BOLA-003",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "access-control",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-BOLA-004",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "access-control",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-CODE-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "code-evaluation",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-CRYPTO-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "weak-cryptography",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-DATA-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "sensitive-data-exposure",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-FILE-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "file-validation",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-NOSQL-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "nosql-injection",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-NOSQL-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "nosql-injection",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-PATH-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "path-traversal",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-RATE-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "rate-limiting",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-REDIRECT-001",
+          "confirmation_supported": false,
+          "context_priority": "HIGH",
+          "detected": true,
+          "evidence": [
+            "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-6b0b5659dcec4c618e4061064cf59f43.json",
+            "audit:9eb5dcaa3cd145fab5c2fe43d811fcf3",
+            "execution-6b0b5659dcec4c618e4061064cf59f43"
+          ],
+          "expected": "vulnerable",
+          "family": "open-redirect",
+          "matched_observation_ids": [
+            "model-scout-b2a320314db979f4f269"
+          ],
+          "primary_observation_id": "model-scout-b2a320314db979f4f269",
+          "severity": "UNASSESSED",
+          "verification": "inconclusive"
+        },
+        {
+          "case_id": "JS-SAFE-AUTHZ-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "authorization",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SAFE-PATH-101",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "path-traversal",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SSRF-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "ssrf",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-XSS-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "xss",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-XSS-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "xss",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-XXE-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "xml-external-entities",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        }
+      ],
+      "context_priority": {
+        "accuracy": null,
+        "assessed_cases": 0,
+        "assessed_coverage": null,
+        "correct_cases": 0,
+        "reviewed_cases": 0
+      },
+      "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+      "dataset_id": "juice-shop-v20.2.0-v2",
+      "dataset_status": "frozen_a04",
+      "detection": {
+        "duplicates": 0,
+        "f1": 0.09523809523809523,
+        "fn": 19,
+        "fp": 0,
+        "outside_ground_truth": 9,
+        "precision": 1.0,
+        "recall": 0.05,
+        "tn": 2,
+        "tp": 1,
+        "unresolved": 0
+      },
+      "matches": [
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "model-scout-71a2526acad2e4e5b6b5"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "model-scout-3cb73957be76439ca7a1"
+        },
+        {
+          "candidate_case_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "case_id": "JS-REDIRECT-001",
+          "classification": "tp",
+          "observation_id": "model-scout-b2a320314db979f4f269"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "sequelize-injection.presentation:routes/login.ts:34"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "sequelize-injection.presentation:routes/search.ts:23"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:268"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:288"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:292"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:296"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:300"
+        }
+      ],
+      "sample_kind": "original",
+      "schema_version": "benchmark.score.v2",
+      "severity": {
+        "accuracy": null,
+        "assessed_cases": 0,
+        "assessed_coverage": null,
+        "correct_cases": 0,
+        "reviewed_cases": 0
+      },
+      "split": "development",
+      "technical_errors": [],
+      "technically_valid": true,
+      "verification": {
+        "abstention_rate": 1.0,
+        "abstention_reasons": {
+          "conflicting_evidence": 0,
+          "inconclusive": 1,
+          "invalid_evidence": 0,
+          "not_detected": 21,
+          "not_run": 0,
+          "policy_blocked": 0,
+          "technical_error": 0,
+          "timeout": 0,
+          "unsupported": 0
+        },
+        "answered_accuracy": null,
+        "confirmed_precision": null,
+        "counts": {
+          "abstained_cases": 22,
+          "confirmed_cases": 0,
+          "correct_confirmations": 0,
+          "correct_decisions": 0,
+          "correct_rejections": 0,
+          "decided_cases": 0,
+          "duplicates": 0,
+          "false_confirmations": 0,
+          "false_rejections": 0,
+          "labeled_cases": 22,
+          "negative_cases": 2,
+          "outside_ground_truth": 9,
+          "positive_cases": 20,
+          "rejected_cases": 0,
+          "unresolved": 0
+        },
+        "decision_coverage": 0.0,
+        "false_confirmation_rate": 0.0,
+        "schema_version": "benchmark.verification.v2",
+        "supported_verified_recall": 0.0
+      }
+    },
+    {
+      "cases": [
+        {
+          "case_id": "JS-AUTHZ-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "authorization",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-AUTHZ-002",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "authorization",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-CAPTCHA-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "anti-automation",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-DATA-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "vulnerable",
+          "family": "sensitive-data-exposure",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-FILE-001",
+          "confirmation_supported": true,
+          "context_priority": "HIGH",
+          "detected": true,
+          "evidence": [
+            "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-af23537f655a4ebe96dbfb07e800e75d.json",
+            "audit:95b18c37ced540b1bf6a1b199a595b24",
+            "execution-af23537f655a4ebe96dbfb07e800e75d"
+          ],
+          "expected": "vulnerable",
+          "family": "file-exposure",
+          "matched_observation_ids": [
+            "directory-listing.presentation:server.ts:288"
+          ],
+          "primary_observation_id": "directory-listing.presentation:server.ts:288",
+          "severity": "UNASSESSED",
+          "verification": "confirmed"
+        },
+        {
+          "case_id": "JS-SAFE-AUTH-101",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "authentication",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SAFE-AUTHZ-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "authorization",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SAFE-BIZ-101",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "business-logic",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SAFE-DATA-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "sensitive-data-exposure",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SAFE-FILE-101",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "file-validation",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SAFE-SQL-001",
+          "confirmation_supported": false,
+          "context_priority": null,
+          "detected": false,
+          "evidence": [],
+          "expected": "safe",
+          "family": "sql-injection",
+          "matched_observation_ids": [],
+          "primary_observation_id": null,
+          "severity": null,
+          "verification": "not_detected"
+        },
+        {
+          "case_id": "JS-SQL-001",
+          "confirmation_supported": true,
+          "context_priority": "HIGH",
+          "detected": true,
+          "evidence": [
+            "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ca2622b50fb4467e8ab295357890551a.json",
+            "audit:9bd8e1fbc202402fa2cd5374a6f0efb2",
+            "execution-ca2622b50fb4467e8ab295357890551a"
+          ],
+          "expected": "vulnerable",
+          "family": "sql-injection",
+          "matched_observation_ids": [
+            "sequelize-injection.presentation:routes/search.ts:23"
+          ],
+          "primary_observation_id": "sequelize-injection.presentation:routes/search.ts:23",
+          "severity": "UNASSESSED",
+          "verification": "confirmed"
+        },
+        {
+          "case_id": "JS-SQL-002",
+          "confirmation_supported": true,
+          "context_priority": "HIGH",
+          "detected": true,
+          "evidence": [
+            "C:/Users/User/Documents/GitHub/cft-security-agent/artifacts/a07-series/agent-run-01-retry-01/pipeline/evidence/execution-ea353ec5f4f74d649e7df9e4d9cce29b.json",
+            "audit:35d8653c360347ac8d71fa82d9a39f70",
+            "execution-ea353ec5f4f74d649e7df9e4d9cce29b"
+          ],
+          "expected": "vulnerable",
+          "family": "sql-injection",
+          "matched_observation_ids": [
+            "sequelize-injection.presentation:routes/login.ts:34"
+          ],
+          "primary_observation_id": "sequelize-injection.presentation:routes/login.ts:34",
+          "severity": "UNASSESSED",
+          "verification": "confirmed"
+        }
+      ],
+      "context_priority": {
+        "accuracy": null,
+        "assessed_cases": 0,
+        "assessed_coverage": null,
+        "correct_cases": 0,
+        "reviewed_cases": 0
+      },
+      "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+      "dataset_id": "juice-shop-v20.2.0-v2",
+      "dataset_status": "frozen_a04",
+      "detection": {
+        "duplicates": 0,
+        "f1": 0.6,
+        "fn": 4,
+        "fp": 0,
+        "outside_ground_truth": 7,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "tn": 6,
+        "tp": 3,
+        "unresolved": 0
+      },
+      "matches": [
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "model-scout-71a2526acad2e4e5b6b5"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "model-scout-3cb73957be76439ca7a1"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "model-scout-b2a320314db979f4f269"
+        },
+        {
+          "candidate_case_ids": [
+            "JS-SQL-002"
+          ],
+          "case_id": "JS-SQL-002",
+          "classification": "tp",
+          "observation_id": "sequelize-injection.presentation:routes/login.ts:34"
+        },
+        {
+          "candidate_case_ids": [
+            "JS-SQL-001"
+          ],
+          "case_id": "JS-SQL-001",
+          "classification": "tp",
+          "observation_id": "sequelize-injection.presentation:routes/search.ts:23"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:268"
+        },
+        {
+          "candidate_case_ids": [
+            "JS-FILE-001"
+          ],
+          "case_id": "JS-FILE-001",
+          "classification": "tp",
+          "observation_id": "directory-listing.presentation:server.ts:288"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:292"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:296"
+        },
+        {
+          "candidate_case_ids": [],
+          "case_id": null,
+          "classification": "outside_ground_truth",
+          "observation_id": "directory-listing.presentation:server.ts:300"
+        }
+      ],
+      "sample_kind": "original",
+      "schema_version": "benchmark.score.v2",
+      "severity": {
+        "accuracy": null,
+        "assessed_cases": 0,
+        "assessed_coverage": 0.0,
+        "correct_cases": 0,
+        "reviewed_cases": 4
+      },
+      "split": "holdout",
+      "technical_errors": [],
+      "technically_valid": true,
+      "verification": {
+        "abstention_rate": 0.7692307692307693,
+        "abstention_reasons": {
+          "conflicting_evidence": 0,
+          "inconclusive": 0,
+          "invalid_evidence": 0,
+          "not_detected": 10,
+          "not_run": 0,
+          "policy_blocked": 0,
+          "technical_error": 0,
+          "timeout": 0,
+          "unsupported": 0
+        },
+        "answered_accuracy": 1.0,
+        "confirmed_precision": 1.0,
+        "counts": {
+          "abstained_cases": 10,
+          "confirmed_cases": 3,
+          "correct_confirmations": 3,
+          "correct_decisions": 3,
+          "correct_rejections": 0,
+          "decided_cases": 3,
+          "duplicates": 0,
+          "false_confirmations": 0,
+          "false_rejections": 0,
+          "labeled_cases": 13,
+          "negative_cases": 6,
+          "outside_ground_truth": 7,
+          "positive_cases": 7,
+          "rejected_cases": 0,
+          "unresolved": 0
+        },
+        "decision_coverage": 0.23076923076923078,
+        "false_confirmation_rate": 0.0,
+        "schema_version": "benchmark.verification.v2",
+        "supported_verified_recall": 0.42857142857142855
+      }
+    }
+  ],
+  "agent_run_reproducibility": null,
+  "baseline": [
+    {
+      "input_integrity": {
+        "available_files_verified": true,
+        "changed": [],
+        "declared_missing": [],
+        "extra": [],
+        "full_seal_verified": true,
+        "received_files": 23,
+        "sealed_files": 23
+      },
+      "measurements": [
+        {
+          "detection": {
+            "duplicates": 1,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 92,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "split": "development",
+          "view": "sast"
+        },
+        {
+          "detection": {
+            "duplicates": 4,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 87,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-FILE-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "split": "holdout",
+          "view": "sast"
+        },
+        {
+          "detection": {
+            "duplicates": 0,
+            "f1": null,
+            "fn": 20,
+            "fp": 0,
+            "outside_ground_truth": 409,
+            "precision": null,
+            "recall": 0.0,
+            "tn": 2,
+            "tp": 0,
+            "unresolved": 0
+          },
+          "matched_ids": [],
+          "split": "development",
+          "view": "dast"
+        },
+        {
+          "detection": {
+            "duplicates": 0,
+            "f1": 0.25,
+            "fn": 6,
+            "fp": 0,
+            "outside_ground_truth": 408,
+            "precision": 1.0,
+            "recall": 0.14285714285714285,
+            "tn": 6,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-SQL-001"
+          ],
+          "split": "holdout",
+          "view": "dast"
+        },
+        {
+          "detection": {
+            "duplicates": 1,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 501,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "split": "development",
+          "view": "union"
+        },
+        {
+          "detection": {
+            "duplicates": 5,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 495,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-FILE-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "split": "holdout",
+          "view": "union"
+        }
+      ],
+      "observation_counts": {
+        "dast": 409,
+        "sast": 94,
+        "union": 503
+      },
+      "run": 1,
+      "score_basis": "verified available normalized observations, not full strict bundle validation",
+      "seconds": 229.84399999999914
+    },
+    {
+      "input_integrity": {
+        "available_files_verified": true,
+        "changed": [],
+        "declared_missing": [],
+        "extra": [],
+        "full_seal_verified": true,
+        "received_files": 23,
+        "sealed_files": 23
+      },
+      "measurements": [
+        {
+          "detection": {
+            "duplicates": 1,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 92,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "split": "development",
+          "view": "sast"
+        },
+        {
+          "detection": {
+            "duplicates": 4,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 87,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-FILE-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "split": "holdout",
+          "view": "sast"
+        },
+        {
+          "detection": {
+            "duplicates": 0,
+            "f1": null,
+            "fn": 20,
+            "fp": 0,
+            "outside_ground_truth": 405,
+            "precision": null,
+            "recall": 0.0,
+            "tn": 2,
+            "tp": 0,
+            "unresolved": 0
+          },
+          "matched_ids": [],
+          "split": "development",
+          "view": "dast"
+        },
+        {
+          "detection": {
+            "duplicates": 0,
+            "f1": 0.25,
+            "fn": 6,
+            "fp": 0,
+            "outside_ground_truth": 404,
+            "precision": 1.0,
+            "recall": 0.14285714285714285,
+            "tn": 6,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-SQL-001"
+          ],
+          "split": "holdout",
+          "view": "dast"
+        },
+        {
+          "detection": {
+            "duplicates": 1,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 497,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "split": "development",
+          "view": "union"
+        },
+        {
+          "detection": {
+            "duplicates": 5,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 491,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-FILE-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "split": "holdout",
+          "view": "union"
+        }
+      ],
+      "observation_counts": {
+        "dast": 405,
+        "sast": 94,
+        "union": 499
+      },
+      "run": 2,
+      "score_basis": "verified available normalized observations, not full strict bundle validation",
+      "seconds": 238.01600000000144
+    },
+    {
+      "input_integrity": {
+        "available_files_verified": true,
+        "changed": [],
+        "declared_missing": [],
+        "extra": [],
+        "full_seal_verified": true,
+        "received_files": 23,
+        "sealed_files": 23
+      },
+      "measurements": [
+        {
+          "detection": {
+            "duplicates": 1,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 73,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "split": "development",
+          "view": "sast"
+        },
+        {
+          "detection": {
+            "duplicates": 4,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 68,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-FILE-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "split": "holdout",
+          "view": "sast"
+        },
+        {
+          "detection": {
+            "duplicates": 0,
+            "f1": null,
+            "fn": 20,
+            "fp": 0,
+            "outside_ground_truth": 412,
+            "precision": null,
+            "recall": 0.0,
+            "tn": 2,
+            "tp": 0,
+            "unresolved": 0
+          },
+          "matched_ids": [],
+          "split": "development",
+          "view": "dast"
+        },
+        {
+          "detection": {
+            "duplicates": 0,
+            "f1": 0.25,
+            "fn": 6,
+            "fp": 0,
+            "outside_ground_truth": 411,
+            "precision": 1.0,
+            "recall": 0.14285714285714285,
+            "tn": 6,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-SQL-001"
+          ],
+          "split": "holdout",
+          "view": "dast"
+        },
+        {
+          "detection": {
+            "duplicates": 1,
+            "f1": 0.09523809523809523,
+            "fn": 19,
+            "fp": 0,
+            "outside_ground_truth": 485,
+            "precision": 1.0,
+            "recall": 0.05,
+            "tn": 2,
+            "tp": 1,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-REDIRECT-001"
+          ],
+          "split": "development",
+          "view": "union"
+        },
+        {
+          "detection": {
+            "duplicates": 5,
+            "f1": 0.6,
+            "fn": 4,
+            "fp": 0,
+            "outside_ground_truth": 479,
+            "precision": 1.0,
+            "recall": 0.42857142857142855,
+            "tn": 6,
+            "tp": 3,
+            "unresolved": 0
+          },
+          "matched_ids": [
+            "JS-FILE-001",
+            "JS-SQL-001",
+            "JS-SQL-002"
+          ],
+          "split": "holdout",
+          "view": "union"
+        }
+      ],
+      "observation_counts": {
+        "dast": 412,
+        "sast": 75,
+        "union": 487
+      },
+      "run": 3,
+      "score_basis": "verified available normalized observations, not full strict bundle validation",
+      "seconds": 265.2029999999995
+    }
+  ],
+  "case_count": 41,
+  "context_priority_accuracy": null,
+  "input_root": "a06-series and a07-series from supplied handoff",
+  "limitations": [
+    "single valid agent run",
+    "different baseline and agent discovery configurations",
+    "no successful negative benchmark verdicts",
+    "no severity/CP accuracy or MTTR",
+    "public previously inspected holdout is not unseen/generalization evidence"
+  ],
+  "matcher_sha256": "7b47607a7f68f7e6b61c8053c0cd8adc81a3e35539e4d56fe46e318c058f8f61",
+  "mttr": null,
+  "offline_reader_sha256": "9b5c17cfe5ab136ecc17308c180d57f618385565686109236f64495e5439792b",
+  "original_positive_inventory": {
+    "binding_family_mismatch": 1,
+    "confirmed_evidence": 3,
+    "discovery_no_candidate_after_anchor_read": 4,
+    "discovery_no_candidate_no_full_anchor_read": 18,
+    "evidence_insufficient": 1
+  },
+  "outside_observations": 6,
+  "patched_synthetic_agent_controls_executed": 0,
+  "readout_script_sha256": "c5d56685ec5d1615a551ae432441f0ecdae183f802751744d5c26b28ad702335",
+  "schema_version": "a08.readout.v1",
+  "severity_accuracy": null,
+  "status": "complete_with_declared_limitations",
+  "successful_agent_runs": 1
+}

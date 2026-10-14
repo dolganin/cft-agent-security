@@ -13,12 +13,13 @@ _EXCLUDED_PARTS = {
     ".git", ".venv", "node_modules", "dist", "build", "vendor", "coverage",
     "codefixes", "test", "tests", "__tests__", "__pycache__",
     "hacking-instructor", "hackinginstructor", "benchmark", "ground-truth",
-    "ground_truth", "solutions",
+    "ground_truth", "solutions", "benchmarks", "fixtures", "__fixtures__",
 }
 _INTEREST = re.compile(
     r"\b(?:req\.(?:query|body|params)|request\.|router\.|app\.(?:get|post|put|delete)|"
     r"sequelize|query\(|execute\(|sendFile|serveIndex|jwt|authorize|authenticate|"
-    r"dangerouslySetInnerHTML|innerHTML|render\(|password|isAdmin)"
+    r"dangerouslySetInnerHTML|innerHTML|render\(|password|isAdmin|redirect\(|"
+    r"createHash|hashlib|md5|sha1|child_process|exec\(|spawn\()"
 )
 _IMPORT = re.compile(r"(?:from\s*|require\(\s*)['\"](\.[^'\"]+)['\"]")
 _SECRET_LITERAL = re.compile(
@@ -35,7 +36,9 @@ def _source_path(file: str) -> bool:
         not path.is_absolute() and ".." not in path.parts
         and path.suffix in _SOURCE_SUFFIXES
         and not parts.intersection(_EXCLUDED_PARTS)
-        and not path.name.endswith((".spec.ts", ".spec.js", ".test.ts", ".test.js", ".d.ts"))
+        and not path.name.endswith(tuple(
+            marker + suffix for marker in (".spec", ".test") for suffix in _SOURCE_SUFFIXES
+        ) + (".d.ts",))
         and not path.name.startswith("test_")
     )
 
@@ -48,6 +51,18 @@ def _safe_line(line: str) -> str:
             line = ""
     line = _SECRET_LITERAL.sub(r"\1\2<redacted>\2", line)
     return _CREDENTIAL.sub("<redacted>", line)[:2_000]
+
+
+def _safe_lines(text: str) -> list[str]:
+    lines = []
+    private = False
+    for line in text.splitlines():
+        if re.search(r"-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----", line):
+            private = True
+        lines.append("<redacted-private-key>" if private else _safe_line(line))
+        if private and re.search(r"-----END (?:[A-Z0-9]+ )*PRIVATE KEY-----", line):
+            private = False
+    return lines
 
 
 class RepositorySource:
@@ -90,9 +105,9 @@ class RepositorySource:
                     self._skip("large_or_binary")
                     continue
                 total_bytes += len(raw)
-                self.lines[file] = [_safe_line(line) for line in raw.decode(
+                self.lines[file] = _safe_lines(raw.decode(
                     "utf-8-sig", errors="replace"
-                ).splitlines()]
+                ))
             except (OSError, ValueError):
                 self._skip("unreadable")
         self.files = sorted(self.lines, key=lambda p: (
@@ -111,6 +126,18 @@ class RepositorySource:
 
     def _skip(self, reason: str) -> None:
         self.skipped[reason] = self.skipped.get(reason, 0) + 1
+
+    def focused_windows(self, file: str) -> list[tuple[str, int, int]]:
+        windows = []
+        covered = 0
+        for number, line in enumerate(self.lines.get(file, []), start=1):
+            if number > covered and _INTEREST.search(line):
+                start = max(1, number - 20)
+                covered = start + 159
+                windows.append((file, start, covered))
+                if len(windows) == 4:
+                    break
+        return windows or [(file, 1, 160)]
 
     def read(self, file: str, start: int = 1, end: int = 100) -> dict:
         if file not in self.lines or start < 1 or end < start:

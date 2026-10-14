@@ -12,18 +12,30 @@ from app.config import settings
 from discovery.express_routes import build_express_source_map, link_candidates_to_routes
 from discovery.scout import merge_scout_candidates
 from discovery.service import ProjectDiscovery
+from schemas.finding import Finding
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target", required=True)
     parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--sast-findings", type=Path,
+                        help="Saved canonical Finding JSON array; never sent to Scout")
     parser.add_argument("--max-turns", type=int, default=settings.scout_max_turns)
+    parser.add_argument("--schedule", choices=["round_robin", "handlers"],
+                        default=settings.scout_schedule_mode)
+    parser.add_argument("--max-source-chars", type=int, default=settings.scout_max_source_chars)
+    parser.add_argument("--wall-clock-seconds", type=float, default=settings.scout_wall_clock_seconds)
     parser.add_argument("--max-candidates", type=int, default=settings.scout_max_candidates)
     parser.add_argument("--max-output-tokens", type=int, default=settings.llm_max_output_tokens)
     args = parser.parse_args()
+    baseline = []
+    if args.sast_findings:
+        baseline = [Finding.model_validate(item) for item in json.loads(
+            args.sast_findings.read_text(encoding="utf-8"),
+        )]
     destination = Path(args.output_dir)
-    destination.mkdir(parents=True, exist_ok=True)
+    destination.mkdir(parents=True, exist_ok=False)
     config = settings.model_copy(update={
         "executor_audit_log": destination / "audit/executor.jsonl",
         "llm_max_output_tokens": args.max_output_tokens,
@@ -33,15 +45,26 @@ def main() -> int:
     client = FallbackLLMAgentModel.from_settings(config).client
     scout = RepositoryScout(
         client, max_turns=args.max_turns, max_candidates=args.max_candidates,
-        max_source_chars=config.scout_max_source_chars,
-        wall_clock_seconds=config.scout_wall_clock_seconds,
+        max_source_chars=args.max_source_chars,
+        wall_clock_seconds=args.wall_clock_seconds,
+        schedule_mode=args.schedule,
     )
     batch = scout.scout(discovery, source_map=source_map)
     findings, duplicates = merge_scout_candidates(
-        [], batch.candidates, service_resolver=discovery.resolve_component,
+        baseline, batch.candidates, service_resolver=discovery.resolve_component,
         repository_root=discovery.repository_root,
     )
-    scout.audit.update(duplicates=duplicates, merged_candidates=len(findings))
+    original_ids = {item.id for item in baseline}
+    added = sum(not original_ids.intersection(
+        {item.id, *(item.provenance.aliases if item.provenance else [])},
+    ) for item in findings)
+    scout.audit.update(duplicates=duplicates, merged_candidates=added)
+    scout.audit["sast_vs_sast_scout"] = {
+        "sast_queue": len(baseline), "combined_queue": len(findings),
+        "new_scout_candidates": added, "duplicates": duplicates,
+        "baseline_supplied": args.sast_findings is not None,
+        "scope": "candidate_discovery_only_not_precision_recall_or_confirmed",
+    }
     scout.audit["express_source_map"] = {
         "analyzed_files": len(source_map.analyzed_files),
         "routes": len(source_map.routes),

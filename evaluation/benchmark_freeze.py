@@ -20,6 +20,7 @@ from evaluation.benchmark_protocol import ROOT, load_protocol, split_group
 from evaluation.control_catalog import anchor as grounded_anchor
 from evaluation.control_expansion import validate as validate_controls
 from evaluation.control_expansion_runtime import make_patch
+from evaluation.historical_baseline import BASELINE_REVISION, historical_input
 from evaluation.positive_catalog import validate_catalog
 
 DIRECTORY = ROOT / "benchmarks/juice-shop-v20.2.0-v2"
@@ -257,7 +258,12 @@ def validate(directory: Path = DIRECTORY, *, target: Path | None = None) -> dict
     if set(lock["input_sha256"]) != required:
         raise ValueError("Freeze input membership changed")
     for relative, expected in lock["input_sha256"].items():
-        if digest(safe_input(relative).read_bytes()) != expected:
+        current = safe_input(relative).read_bytes()
+        # A04 records historical generators, not a requirement to run their old
+        # implementation forever. Dataset/catalog/output bytes stay strict/local.
+        raw = (historical_input(ROOT, relative)
+               if relative.endswith(".py") and not relative.startswith("benchmarks/") else current)
+        if digest(raw) != expected:
             raise ValueError("Frozen input digest mismatch: " + relative)
     dataset = read_yaml(directory / "ground_truth.yaml")
     if dataset["schema_version"] != "benchmark.dataset.v2" or dataset["status"] != "frozen_a04" or dataset["target_commit"] != protocol.target_commit:
@@ -271,7 +277,9 @@ def validate(directory: Path = DIRECTORY, *, target: Path | None = None) -> dict
         "negative_count": sum(c["expected"] == "safe" for c in dataset["cases"]),
         "split": dict(Counter(c["split"] for c in dataset["cases"])),
         "inputs_bound": len(required), "target_source_checked": target is not None,
-        "new_runtime_cycles": 0}
+        "new_runtime_cycles": 0, "implementation_scope": "historical_generators",
+        "historical_implementation_revision": BASELINE_REVISION,
+        "current_implementation_verified": False}
 
 
 def main() -> int:

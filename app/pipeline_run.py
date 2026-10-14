@@ -400,6 +400,7 @@ def _append_scout_findings(
             max_source_chars=settings.scout_max_source_chars,
             max_candidates=settings.scout_max_candidates,
             wall_clock_seconds=settings.scout_wall_clock_seconds,
+            schedule_mode=settings.scout_schedule_mode,
             check_cancelled=check_cancelled,
             on_progress=(
                 lambda event: progress.scout(
@@ -434,6 +435,11 @@ def _append_scout_findings(
     ) for item in merged)
     audit.update(merged_candidates=added, duplicates=duplicates,
                  queue_before=len(findings), queue_after=len(merged))
+    audit["sast_vs_sast_scout"] = {
+        "sast_queue": len(findings), "combined_queue": len(merged),
+        "new_scout_candidates": added, "duplicates": duplicates,
+        "scope": "candidate_discovery_only_not_precision_recall_or_confirmed",
+    }
     if source_map is not None:
         audit["route_candidate_links"] = {
             "candidates": len(route_links),

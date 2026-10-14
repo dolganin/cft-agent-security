@@ -189,9 +189,15 @@ def finalize(inputs, output, original_pipeline_root, allow_missing):
         "case_count": len(rows), "outside_observations": len(outside),
         "agent_original_scores": [s.model_dump(mode="json") for s in score.slices if s.sample_kind == "original"],
         "baseline": baseline, "agent_run_reproducibility": None,
+        "a06_input_integrity_complete": all(
+            b["input_integrity"]["full_seal_verified"] for b in baseline
+        ),
         "mttr": None, "severity_accuracy": None, "context_priority_accuracy": None,
         "patched_synthetic_agent_controls_executed": 0,
-        "limitations": ["single valid agent run", "three declared A06 source snapshots omitted",
+        "limitations": ["single valid agent run"] + (
+            ["three declared A06 source snapshots omitted"]
+            if any(not b["input_integrity"]["full_seal_verified"] for b in baseline) else []
+        ) + [
                         "different baseline and agent discovery configurations",
                         "no successful negative benchmark verdicts", "no severity/CP accuracy or MTTR",
                         "public previously inspected holdout is not unseen/generalization evidence"],

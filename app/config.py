@@ -52,6 +52,7 @@ class Settings(BaseSettings):
     llm_allow_external_fallbacks: bool = False
     llm_trace: bool = False
     scout_max_turns: int = Field(default=8, ge=1, le=32)
+    scout_schedule_mode: Literal["round_robin", "handlers"] = "round_robin"
     scout_max_source_chars: int = Field(default=160_000, ge=1, le=1_000_000)
     scout_max_candidates: int = Field(default=32, ge=1, le=256)
     scout_wall_clock_seconds: float = Field(default=240.0, gt=0, le=1800)
