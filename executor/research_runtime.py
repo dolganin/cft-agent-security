@@ -24,6 +24,38 @@ from tools.repository_source import _safe_lines, _source_path
 WORKER = Path(__file__).with_name("research_worker.py")
 
 
+def resolve_research_endpoint(scope, service, docker, worker_image_id=None):
+    """Shared live container/network check; absent worker ID permits no extra peers."""
+    network = json.loads(docker(["network", "inspect", scope.network_name]).stdout)[0]
+    if network.get("Internal") is not True:
+        raise ValueError("HTTP broker requires an internal Docker network")
+    targets = {value.container_id for value in scope.services.values()}
+    for peer_id in network.get("Containers", {}):
+        if peer_id in targets:
+            continue
+        peer = json.loads(docker(["inspect", peer_id]).stdout)[0]
+        if (worker_image_id is None or peer["Config"].get("Labels", {}).get("cft.research.session") != scope.session_id
+                or peer["Image"] != worker_image_id):
+            raise ValueError("Unregistered peer in the research target network")
+    info = json.loads(docker(["inspect", service.container_id]).stdout)[0]
+    entry = info.get("NetworkSettings", {}).get("Networks", {}).get(scope.network_name)
+    if (not info["State"]["Running"] or info["Image"] != service.image_id or not entry
+            or set(info.get("NetworkSettings", {}).get("Networks", {})) != {scope.network_name}
+            or any(info.get("NetworkSettings", {}).get("Ports", {}).values())
+            or service.container_id not in network.get("Containers", {})):
+        raise ValueError("HTTP target identity/network generation changed")
+    ip = ipaddress.ip_address(entry["IPAddress"])
+    url = urlsplit(service.address)
+    if (url.scheme != "http" or not url.hostname or not url.port or url.username
+            or url.password or url.path not in {"", "/"} or url.query or url.fragment
+            or not ip.is_private or ip.is_loopback or ip.is_link_local):
+        raise ValueError("Invalid registered local HTTP service")
+    aliases = set(entry.get("Aliases") or []) | {info["Name"].lstrip("/"), str(ip)}
+    if url.hostname not in aliases:
+        raise ValueError("Runtime service address does not identify the registered container")
+    return f"http://{ip}:{url.port}", url.hostname
+
+
 class ResearchRuntime:
     """No provider handles; model-visible source is an explicit redacted projection."""
     def __init__(self, *, target, source_files: list[str], worker_image: str, output: Path,
@@ -60,7 +92,7 @@ class ResearchRuntime:
         total = 0
         for path in sorted(set(source_files)):
             path = normalize_source_path(path, self.root)
-            if not _source_path(path):
+            if not _source_path(path, research_mode=True):
                 continue
             raw = (self.root / path).read_bytes()
             total += len(raw)
@@ -196,35 +228,7 @@ class ResearchRuntime:
             raise
 
     def _endpoint(self, service):
-        network = json.loads(self._docker(["network", "inspect", self.scope.network_name]).stdout)[0]
-        if network.get("Internal") is not True:
-            raise ValueError("HTTP broker requires an internal Docker network")
-        targets = {value.container_id for value in self.scope.services.values()}
-        for peer_id in network.get("Containers", {}):
-            if peer_id in targets:
-                continue
-            peer = json.loads(self._docker(["inspect", peer_id]).stdout)[0]
-            if (peer["Config"].get("Labels", {}).get("cft.research.session") != self.scope.session_id
-                    or peer["Image"] != self._worker_image_id):
-                raise ValueError("Unregistered peer in the research target network")
-        info = json.loads(self._docker(["inspect", service.container_id]).stdout)[0]
-        entry = info.get("NetworkSettings", {}).get("Networks", {}).get(self.scope.network_name)
-        if (not info["State"]["Running"] or info["Image"] != service.image_id or not entry
-                or set(info["NetworkSettings"]["Networks"]) != {self.scope.network_name}
-                or any(info.get("NetworkSettings", {}).get("Ports", {}).values())
-                or service.container_id not in network.get("Containers", {})):
-            raise ValueError("HTTP target identity/network generation changed")
-        ip = ipaddress.ip_address(entry["IPAddress"])
-        url = urlsplit(service.address)
-        if (url.scheme != "http" or not url.hostname or not url.port or url.username
-                or url.password or url.path not in {"", "/"} or url.query or url.fragment
-                or not ip.is_private or ip.is_loopback or ip.is_link_local):
-            raise ValueError("Invalid registered local HTTP service")
-        # The address hostname must be this container's own alias/name/IP.
-        aliases = set(entry.get("Aliases") or []) | {info["Name"].lstrip("/"), str(ip)}
-        if url.hostname not in aliases:
-            raise ValueError("Runtime service address does not identify the registered container")
-        return f"http://{ip}:{url.port}", url.hostname
+        return resolve_research_endpoint(self.scope, service, self._docker, self._worker_image_id)
 
     def execute(self, action, run_id):
         with self._lock:

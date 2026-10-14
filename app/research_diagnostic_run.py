@@ -13,6 +13,7 @@ from app.config import settings
 from app.research_acceptance import docker
 from app.research_campaign import campaign, write_json
 from app.research_juice_smoke import COMMIT, IMAGE
+from executor.access_fixture import WORKER_IMAGE
 from sast.profiles import load_scan_profile, validate_target_snapshot
 from sast.semgrep_runner import run_semgrep_scan
 from schemas.llm import LLMProbeResult
@@ -33,12 +34,13 @@ def limits():
         max_write_bytes=4194304, max_http_requests=1024, dev_preferred_families=[])
 
 
-def run(checkout, image, browser_image, output):
+def run(checkout, image, browser_image, output, *, campaign_limits=None, question_limits=None):
     checkout, output = Path(checkout).resolve(), Path(output).resolve()
+    active_limits = campaign_limits or limits()
     if output.exists():
         raise FileExistsError("One new R09 output; never overwrite or silently restart")
     before = validate_target_snapshot(checkout, COMMIT)
-    for reference in (image, browser_image, IMAGE):
+    for reference in (image, browser_image, IMAGE, WORKER_IMAGE):
         docker(["image", "inspect", reference])
     output.mkdir(parents=True)
     started = time.monotonic()
@@ -80,24 +82,34 @@ def run(checkout, image, browser_image, output):
                 "services":{"juice":{"name":"juice", "address":"http://juice:3000", "ready":True,
                     "readiness_source":"http_probe"}}},
             "http_grants":{"juice":{"read_prefixes":["/"], "denied_prefixes":EXCLUDED, "write_paths":{}}}}
-        research_limits = ResearchLimits(max_steps=12, max_model_calls=28, max_schema_corrections=1,
+        research_limits = question_limits or ResearchLimits(max_steps=12, max_model_calls=28, max_schema_corrections=1,
             max_context_bytes=64000, max_model_io_bytes=4194304, wall_seconds=180)
         manifest = {"stage":"R09", "kind":"development_diagnostic", "started_at":datetime.now(UTC).isoformat(),
             "implementation_commit":subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT,text=True).strip(),
             "runner_sha256":sha256(Path(__file__).read_bytes()).hexdigest(), "target":before,
+            "implementation_dirty":bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()),
+            "implementation_sha256":{p.relative_to(ROOT).as_posix():sha256(p.read_bytes()).hexdigest()
+                for base in ("agent", "app", "schemas", "security", "executor", "pipeline", "tools", "evidence", "validator", "reporting", "sast")
+                for p in sorted((ROOT / base).rglob("*.py"))},
             "target_image":IMAGE, "research_image":image, "browser_image":browser_image,
             "model":"nsu:qwen3.8-flash-next", "model_output_tokens":8192, "repetitions":1,
-            "campaign_limits":limits().model_dump(), "research_limits":research_limits.model_dump(),
+            "campaign_limits":active_limits.model_dump(), "research_limits":research_limits.model_dump(),
             "selection":"All fresh SAST observations; no family representatives or preferred proof families",
             "fresh_sast_observations":len(scan.findings), "fresh_dast":False,
             "runtime_scope":"anonymous read-only HTTP/browser; no authenticated private fixture or write grant",
             "operator_grants":config["http_grants"], "evaluator_labels_provided_to_model":False,
+            "canonical_verification_profile":"targets/juice-verification.yaml",
+            "canonical_verification_worker_image":WORKER_IMAGE,
+            "canonical_verification_scope":"existing HTTP grants only; SQL/directory protocols; private fixture protocols unavailable",
             "full_benchmark_measurement":False, "mttr":"not_measured", "reproducibility":"not_measured"}
         write_json(output / "run-manifest.json", manifest)
         print(json.dumps({"phase":"campaign_started", "sast_observations":len(scan.findings),
-                          "max_wall_seconds":1800, "model":manifest["model"]}), flush=True)
+                          "max_wall_seconds":active_limits.wall_seconds, "model":manifest["model"]}), flush=True)
         result = campaign(profile=profile, configuration=config, client=ProviderFailoverClient(**client_args, max_output_tokens=8192),
-            output=output / "campaign", sast=scan.findings, limits=limits(), research_limits=research_limits)
+            output=output / "campaign", sast=scan.findings, limits=active_limits, research_limits=research_limits,
+            verification_profiles=(TargetProfile.from_yaml(ROOT / "targets/juice-verification.yaml",
+                                                          repository_path_override=checkout),),
+            verification_worker_image=WORKER_IMAGE)
     finally:
         if cid:
             docker(["rm", "--force", container])

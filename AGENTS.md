@@ -1245,3 +1245,32 @@ it. Empty exclusions preserve the previous serialized scope shape.
 Do not equate rendered UI, PNG or dialog with vulnerability confirmation/coverage.
 See `docs/research-r07-recovery-r08-browser.md` and the fixed recovery/browser/juice
 smoke acceptance CLIs. These are not R09/R10 benchmark measurements.
+
+# 34. R09 diagnostic repairs
+
+Research proposal preflight returns bounded serialized feedback for unavailable
+paths/methods and already attempted operations. It does not execute, approve or
+create Evidence. Up to two proposal corrections share the original model-call,
+byte and wall budgets; exhausted corrections are `proposal_corrections_exhausted`,
+not provider failure. Canonical Validator denials and live scope/integrity failures
+remain authoritative. Source/search operation fingerprints normalize typed defaults;
+raising a complete search's match limit is not progress.
+
+Research-only source selection includes application templates/styles and selected
+JSON manifests, with 1024 files/12 MiB limits. Historical RepositoryScout selection
+remains 256 files/4 MiB. Secret/oracle/test exclusions and projection redaction remain.
+Campaign memory is bounded navigation/interpretation, never reusable approval or
+current-session read provenance. Fair channel scheduling prefers server handlers
+and available registered verification paths, not evaluator labels.
+
+`pipeline.research_verification` exports source-bound handoffs. With explicit
+operator profiles and an immutable verification worker image it can run existing
+B01 SQL/directory protocols through Validator/Executor/persisted Evidence, within
+the current research method/path grant. It cannot enable POST or private fixtures
+merely because a verification route exists. Shared target identity checks bracket
+execution; matching audit, source integrity and cleanup precede final reporting.
+Original research reports remain preserved beside independent final reports.
+Fixed protocol network reservations are separate from observed research requests
+but consume the same campaign quota. B05/B06 private role/fixture bridges are NOT
+enabled by this integration. Do not claim new Recall or live-model improvement
+from scripted Docker regressions. See `docs/research-r09-diagnostic-repairs.md`.

@@ -97,8 +97,9 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
                "model_calls": model.progress.model_calls,
                "model_diagnostic": model.progress.model_diagnostic,
                "provider_failure_status": model.progress.provider_failure_status,
+               "proposal_corrections": len(model.progress.proposal_feedback),
                "cleanup_verified": runtime.closed,
-               "independent_verification": "pending R06"}
+               "independent_verification": "campaign review required; observations are not verdicts"}
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     return state, summary
 

@@ -8,7 +8,7 @@ from schemas.research_campaign import ResearchQuestion, RuntimeScannerObservatio
 
 
 class ResearchQueue:
-    def __init__(self, *, profile, source_map, source_files, preferred_families=()):
+    def __init__(self, *, profile, source_map, source_files, preferred_families=(), verification_paths=()):
         self.profile, self.source_map = profile, source_map
         self.source_files = set(source_files)
         self.raw = []
@@ -20,6 +20,7 @@ class ResearchQueue:
         self.origins = {}
         self.runtime_signals = {}
         self.preferred_families = set(preferred_families)
+        self.verification_paths = set(verification_paths)
 
     def import_findings(self, findings, origin):
         if origin not in {"sast", "dast"}:
@@ -110,9 +111,21 @@ class ResearchQueue:
             options = [x for x in self.questions if x.status == "pending" and x.origin == channel]
             if options:
                 self.cursor = (self.cursor + offset + 1) % 4
-                return min(options, key=lambda q: (q.finding.provenance is None or
-                    q.finding.provenance.family not in self.preferred_families, q.finding.file, q.id))
+                return min(options, key=self.priority)
         return None
+
+    def priority(self, question):
+        """Scheduling signals, NOT security severity or benchmark answers."""
+        finding = question.finding
+        preferred = bool(finding.provenance and finding.provenance.family in self.preferred_families)
+        handler = finding.file.startswith(("routes/", "controllers/", "api/", "middleware/"))
+        reachable = any(finding.file in r.handler_files or finding.file == r.file
+                        for r in self.source_map.routes)
+        signal = (finding.rule_id + " " + (finding.provenance.family if finding.provenance else "")).lower()
+        direct_impact = any(word in signal for word in (
+            "sql", "injection", "access", "traversal", "ssrf", "authentication", "command"))
+        return (not preferred, not handler, finding.file not in self.verification_paths, not reachable, not direct_impact,
+                finding.file, question.id)
 
     def complete(self, question, *, failed=False):
         question.status = "failed" if failed else "researched"
@@ -134,4 +147,5 @@ class ResearchQueue:
                 "read_lines": len(read), "unread_files": sorted(self.source_files - files_read),
                 "candidate_count": len(self.findings), "surface_questions_are_not_findings": True,
                 "pending_questions": [x.id for x in self.questions if x.status == "pending"],
+                "failed_questions": [x.id for x in self.questions if x.status == "failed"],
                 "source_line_coverage_is_not_vulnerability_recall": True}

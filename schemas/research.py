@@ -34,15 +34,21 @@ def relative_file(value: str) -> str:
 
 
 def request_path(value: str) -> str:
-    decoded = value
+    # Decode path and query separately: encoded query spaces/# are data, not
+    # path separators or URL fragments. Raw whitespace and decoded controls stay
+    # forbidden. Scope checks independently decode the path before matching it.
+    parsed = urlsplit(value)
+    path, query = parsed.path, parsed.query
     for _ in range(4):
-        decoded = unquote(decoded)
-    parsed = urlsplit(decoded)
-    if (not decoded.startswith("/") or decoded.startswith("//") or "\\" in decoded
+        path, query = unquote(path), unquote(query)
+    if (not value.startswith("/") or value.startswith("//") or not path.startswith("/") or path.startswith("//")
+            or "\\" in path or "\\" in query or "?" in path or "#" in path
             or parsed.scheme or parsed.netloc or parsed.fragment
-            or any(ord(c) <= 32 or ord(c) == 127 for c in decoded)
-            or any(part in {".", ".."} for part in parsed.path.split("/"))
-            or re.search(r"%[0-9a-fA-F]{2}", decoded)):
+            or any(ord(c) <= 32 or ord(c) == 127 for c in value)
+            or any(ord(c) <= 32 or ord(c) == 127 for c in path)
+            or any(ord(c) < 32 or ord(c) == 127 for c in query)
+            or any(part in {".", ".."} for part in path.split("/"))
+            or re.search(r"%[0-9a-fA-F]{2}", path + query)):
         raise ValueError("A bounded local path without URL/traversal is required")
     return value
 

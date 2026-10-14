@@ -54,7 +54,7 @@ def handoff(directories: list[Path], output: Path, base_ref="40f6633", *,
                          for name in names if not name.endswith(".pyc") and (ROOT / name).is_file()
                          and (name == "AGENTS.md" or name.split("/")[0] in {
                              "agent", "app", "docs", "executor", "evidence", "policies", "schemas",
-                             "security", "tools", "validator", "tests"})}
+                             "security", "tools", "validator", "tests", "pipeline", "reporting", "sast"})}
         (bundle / "source-provenance.json").write_text(json.dumps({
             "development_base_commit": subprocess.check_output(["git", "rev-parse", base_ref], cwd=ROOT, text=True).strip(),
             "implementation_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),

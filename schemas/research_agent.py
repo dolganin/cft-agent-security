@@ -33,6 +33,7 @@ class ResearchLimits(BaseModel):
     max_steps: int = Field(default=16, ge=1, le=64)
     max_model_calls: int = Field(default=20, ge=1, le=128)
     max_schema_corrections: int = Field(default=0, ge=0, le=1)
+    max_proposal_corrections: int = Field(default=2, ge=0, le=4)
     max_context_bytes: int = Field(default=48000, ge=4096, le=131072)
     max_model_io_bytes: int = Field(default=1048576, ge=4096, le=16777216)
     max_observation_bytes: int = Field(default=1048576, ge=1024, le=4194304)
@@ -96,6 +97,7 @@ class ResearchObservation(BaseModel):
     exit_code: int | None
     observation: dict
     bytes_observed: int = Field(ge=0)
+    request_summary: dict = Field(default_factory=dict)
     # Describes raw persisted results, never a vulnerability verdict.
     category: Literal["observation", "failed_experiment"]
 
@@ -118,3 +120,4 @@ class ResearchProgress(BaseModel):
     candidate_rejections: list[str] = Field(default_factory=list)
     source_claims: list[SourceProofClaim] = Field(default_factory=list)
     http_claims: list[HttpProofClaim] = Field(default_factory=list)
+    proposal_feedback: list[dict] = Field(default_factory=list)

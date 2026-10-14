@@ -30,6 +30,7 @@ AgentStopReason = Literal[
     "binding_unavailable",
     "research_complete",
     "research_budget_exhausted",
+    "proposal_corrections_exhausted",
 ]
 
 

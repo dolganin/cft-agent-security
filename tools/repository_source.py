@@ -9,6 +9,9 @@ from schemas.discovery import ProjectDiscoveryResult
 from security.source_paths import normalize_source_path
 
 _SOURCE_SUFFIXES = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".py"}
+_RESEARCH_SUFFIXES = {".html", ".htm", ".pug", ".hbs", ".handlebars", ".ejs",
+                      ".vue", ".svelte", ".css", ".scss"}
+_RESEARCH_CONFIGS = {"package.json", "tsconfig.json", "angular.json"}
 # Training-oracle controllers, not ordinary application handlers. Their backing
 # solution directories are already excluded; exclude the answer-serving code too.
 _ORACLE_STEMS = {"vulncodesnippet", "vulncodefixes"}
@@ -32,16 +35,18 @@ _SECRET_LITERAL = re.compile(
 _CREDENTIAL = re.compile(r"\bsk-[a-zA-Z0-9_-]{16,}|\beyJ[\w-]+\.[\w-]+\.[\w-]+")
 
 
-def _source_path(file: str, *, include_oracle_controllers: bool = False) -> bool:
+def _source_path(file: str, *, include_oracle_controllers: bool = False, research_mode: bool = False) -> bool:
     path = PurePosixPath(file)
     parts = {part.casefold() for part in path.parts}
     return (
         not path.is_absolute() and ".." not in path.parts
-        and path.suffix in _SOURCE_SUFFIXES
+        and (path.suffix in _SOURCE_SUFFIXES or research_mode and (
+            path.suffix in _RESEARCH_SUFFIXES or path.name in _RESEARCH_CONFIGS))
         and not parts.intersection(_EXCLUDED_PARTS)
         and (include_oracle_controllers or path.stem.casefold() not in _ORACLE_STEMS)
         and not path.name.endswith(tuple(
-            marker + suffix for marker in (".spec", ".test") for suffix in _SOURCE_SUFFIXES
+            marker + suffix for marker in (".spec", ".test")
+            for suffix in _SOURCE_SUFFIXES | (_RESEARCH_SUFFIXES if research_mode else set())
         ) + (".d.ts",))
         and not path.name.startswith("test_")
     )
@@ -72,11 +77,13 @@ def _safe_lines(text: str) -> list[str]:
 class RepositorySource:
     """A finite text corpus selected exclusively from trusted discovery paths."""
 
-    def __init__(self, inventory: ProjectDiscoveryResult, *, include_oracle_controllers: bool = False):
+    def __init__(self, inventory: ProjectDiscoveryResult, *, include_oracle_controllers: bool = False,
+                 research_mode: bool = False):
         self.root = inventory.repository_root.resolve()
         self.lines: dict[str, list[str]] = {}
         self.skipped: dict[str, int] = {}
         total_bytes = 0
+        max_files, max_bytes = (1024, 12_582_912) if research_mode else (256, 4_194_304)
         paths = sorted(set(inventory.project_files), key=lambda p: (self._path_rank(p), p))
         for file in paths:
             try:
@@ -84,10 +91,11 @@ class RepositorySource:
             except ValueError:
                 self._skip("unsafe_path")
                 continue
-            if not _source_path(file, include_oracle_controllers=include_oracle_controllers):
+            if not _source_path(file, include_oracle_controllers=include_oracle_controllers,
+                                research_mode=research_mode):
                 self._skip("outside_application_source")
                 continue
-            if len(self.lines) >= 256 or total_bytes >= 4_194_304:
+            if len(self.lines) >= max_files or total_bytes >= max_bytes:
                 self._skip("index_budget")
                 continue
             path = self.root / file
@@ -104,8 +112,8 @@ class RepositorySource:
                     self._skip("not_file")
                     continue
                 with resolved.open("rb") as stream:
-                    raw = stream.read(min(131_073, 4_194_304 - total_bytes + 1))
-                if len(raw) > 131_072 or total_bytes + len(raw) > 4_194_304 or b"\0" in raw:
+                    raw = stream.read(min(131_073, max_bytes - total_bytes + 1))
+                if len(raw) > 131_072 or total_bytes + len(raw) > max_bytes or b"\0" in raw:
                     self._skip("large_or_binary")
                     continue
                 total_bytes += len(raw)

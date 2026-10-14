@@ -514,6 +514,9 @@ def collect_evidence(state: AgentState) -> dict:
         size = len(encoded(observation))
         research.progress.ledger.append(ResearchObservation(
             action_id=action.id, tool=action.tool, fingerprint=research.fingerprint(action),
+            request_summary={key: value for key, value in action.parameters.items()
+                             if key in {"path", "paths", "literal", "line_start", "line_end",
+                                        "offset", "limit", "max_matches", "method"}},
             workspace_revision=research.progress.workspace_revision,
             evidence_ids=matching_evidence_ids, artifact_refs=artifact_refs,
             execution_status=execution.status, exit_code=execution.exit_code,
