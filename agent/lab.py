@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from contextlib import AbstractContextManager
+from contextlib import AbstractContextManager, contextmanager
 from contextvars import ContextVar
 
 from app.config import settings
@@ -53,3 +53,13 @@ class ManagedAgentLab(AbstractContextManager[SafeExecutor]):
 
 def active_executor() -> SafeExecutor | None:
     return _active_executor.get()
+
+
+@contextmanager
+def executor_context(executor: SafeExecutor):
+    """Operator-installed executor for one graph; ownership/cleanup stays with lab."""
+    token = _active_executor.set(executor)
+    try:
+        yield executor
+    finally:
+        _active_executor.reset(token)

@@ -28,6 +28,8 @@ AgentStopReason = Literal[
     "missing_capability",
     "candidates_exhausted",
     "binding_unavailable",
+    "research_complete",
+    "research_budget_exhausted",
 ]
 
 

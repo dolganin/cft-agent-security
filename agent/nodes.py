@@ -14,6 +14,7 @@ from agent.loop import (
 from agent.model import get_agent_model
 from agent.planning import DynamicPlanValidator
 from agent.recovery import stop_update
+from agent.research import active_research, encoded
 from app.config import settings
 from evidence.guard import evaluate_evidence
 from evidence.interpreter import build_evidence
@@ -45,10 +46,14 @@ def load_context(state: AgentState) -> dict:
             base_url_override=settings.target_base_url,
         )
 
-    code_context = state.get("code_context") or (
+    research = active_research({**state, "target_profile": target_profile})
+    if research is not None and state.get("research_scope") is None:
+        raise ValueError("Research run requires the operator-bound public scope")
+
+    code_context = state.get("code_context") or ("Source not yet read; use research tools." if research else (
         f"Synthetic code context for {finding.file}. "
         "Used only to validate orchestration."
-    )
+    ))
 
     architecture_context = state.get("architecture_context")
     if architecture_context is None:
@@ -56,7 +61,8 @@ def load_context(state: AgentState) -> dict:
         architecture_context = ArchitectureContext(service=service)
 
     max_iterations = int(state.get("max_iterations", settings.max_iterations))
-    max_steps = min(8, max(1, int(state.get("max_steps", max_iterations))))
+    max_steps = (min(research.limits.max_steps, research.scope.max_actions) if research else
+                 min(8, max(1, int(state.get("max_steps", max_iterations)))))
     runtime_services = state.get("runtime_services")
     return {
         "target_profile": target_profile,
@@ -72,11 +78,11 @@ def load_context(state: AgentState) -> dict:
         "max_iterations": max_iterations,
         "max_steps": max_steps,
         "started_at": state.get("started_at") or datetime.now(UTC),
-        "wall_clock_budget_seconds": float(
+        "wall_clock_budget_seconds": min(research.limits.wall_seconds, research.scope.wall_seconds) if research else float(
             state.get("wall_clock_budget_seconds", settings.agent_wall_clock_seconds)
         ),
         "sandbox_session_id": (
-            runtime_services.session_id
+            research.scope.session_id if research else runtime_services.session_id
             if runtime_services is not None
             else state.get("sandbox_session_id")
         ),
@@ -123,6 +129,7 @@ def guard_agent_budget(state: AgentState) -> dict:
 
 
 def _reasoning_call(state, operation, *args):
+    active_research(state)
     model = get_agent_model()
     offset = len(getattr(model, "reasoning_events", []))
     with reasoning_budget(state):
@@ -134,6 +141,12 @@ def _reasoning_call(state, operation, *args):
 def analyse(state: AgentState) -> dict:
     check_cancelled()
     analysis, diagnostics = _reasoning_call(state, "analyse")
+    research = active_research(state)
+    if research is not None:
+        diagnostics.update(research.state_update())
+        if research.turn.finish:
+            return {"analysis": analysis,
+                    **stop_update(state, "research_complete", research.turn.summary), **diagnostics}
 
     return {
         "analysis": analysis,
@@ -156,7 +169,8 @@ def form_hypothesis(state: AgentState) -> dict:
 def propose_action(state: AgentState) -> dict:
     check_cancelled()
     profile = state.get("target_profile")
-    if profile is not None and profile.verification_routes:
+    research = active_research(state)
+    if research is None and profile is not None and profile.verification_routes:
         from security.verification_binding import resolve_binding
         resolution = resolve_binding(profile, state["finding"])
         from agent.verification import verification_candidates
@@ -174,7 +188,7 @@ def propose_action(state: AgentState) -> dict:
                 else:
                     reason, explanation = "unsupported_runtime", "The mapped runtime or required fixture is unavailable."
             return {**stop_update(state, reason, explanation), "binding_resolution": resolution}
-    if settings.agent_mode == "llm":
+    if research is None and settings.agent_mode == "llm":
         from agent.llm_model import _allowed_plan_candidates, _has_javascript_artifact
 
         if _has_javascript_artifact(state) and not _allowed_plan_candidates(state):
@@ -195,7 +209,7 @@ def propose_action(state: AgentState) -> dict:
             }
 
     plan, diagnostics = _reasoning_call(state, "build_plan", state["analysis"], state["hypothesis"])
-    if profile is not None and profile.verification_routes:
+    if research is None and profile is not None and profile.verification_routes:
         # The provider chooses a public candidate ID, never its provenance.
         # Attach only the exact application-owned candidate selected by scope/argv.
         candidates = verification_candidates(state)
@@ -213,7 +227,7 @@ def propose_action(state: AgentState) -> dict:
                 "fixture_binding": matches[0].get("fixture_binding")})
     plan_validation = DynamicPlanValidator().validate(plan, state)
     proposal = plan.steps[0].action
-    if plan_validation.approved and action_was_attempted(state, proposal):
+    if plan_validation.approved and (research.repeated(proposal) if research else action_was_attempted(state, proposal)):
         attempted = {**state, "dynamic_plan": plan}
         return {**stop_update(attempted, "repeated_action", "The same operation was already attempted; a new ID is not progress."),
                 "dynamic_plan": plan, "plan_history": [*state.get("plan_history", []), plan],
@@ -221,7 +235,7 @@ def propose_action(state: AgentState) -> dict:
 
     return {
         "dynamic_plan": plan,
-        "binding_resolution": (resolution if profile is not None and profile.verification_routes else None),
+        "binding_resolution": (resolution if research is None and profile is not None and profile.verification_routes else None),
         "plan_history": [*state.get("plan_history", []), plan],
         "plan_validation": plan_validation,
         "proposed_action": proposal,
@@ -262,14 +276,15 @@ def validate_action(state: AgentState) -> dict:
         policy_options["capability_policy_file"] = (
             Path(__file__).resolve().parents[1] / "policies/b05-access.yaml"
         )
-    validator = PolicyValidator.from_yaml(
+    research = active_research(state)
+    validator = research.validator if research else PolicyValidator.from_yaml(
         (Path(__file__).resolve().parents[1] / "policies/b06.yaml"
          if state["target_profile"].b06_verification is not None else settings.policy_file),
         target_profile=state["target_profile"],
         **policy_options,
     )
     executor = active_executor()
-    if executor is not None:
+    if executor is not None and research is None:
         fixture = executor.verification_fixture(state["target_profile"].id)
         if fixture is not None:
             validator.fixture_bindings[state["target_profile"].id] = fixture
@@ -356,7 +371,7 @@ def execute_action(state: AgentState) -> dict:
         if access_runtime is not None:
             executor.bind_access_verifier(access_runtime)
 
-        if runtime_services is None:
+        if runtime_services is None or action.research_binding is not None:
             execution = executor.execute(action)
         else:
             # B05 passes only its broker-owned internal Docker network and service map.
@@ -397,7 +412,9 @@ def collect_evidence(state: AgentState) -> dict:
     record: dict = {}
     try:
         active = active_executor()
-        if action.fixture_binding is not None and active is not None:
+        if action.research_binding is not None and active is not None:
+            record = active.read_research_execution(action, execution)
+        elif action.fixture_binding is not None and active is not None:
             record = active.read_execution(execution.evidence_ref)
         else:
             record = JsonExecutionEvidenceStore(settings.evidence_dir).get_execution(execution.evidence_ref)
@@ -484,14 +501,47 @@ def collect_evidence(state: AgentState) -> dict:
             "sandbox_session_id": sandbox_session_id, "error": execution.error or read_error,
         }) if item.action.id == action.id else item for item in action_history]
 
+    research = active_research(state)
+    research_update = {}
+    if research is not None:
+        from schemas.research_agent import ResearchObservation
+
+        observation = next((x.observation.facts.get("observation", {}) for x in reversed(evidence)
+                            if x.action_id == action.id), {})
+        if not observation:
+            observation = {"diagnostic": execution.error.message if execution.error else
+                           "No valid persisted research observation", "stderr": record.get("stderr", "")[:2000]}
+        size = len(encoded(observation))
+        research.progress.ledger.append(ResearchObservation(
+            action_id=action.id, tool=action.tool, fingerprint=research.fingerprint(action),
+            workspace_revision=research.progress.workspace_revision,
+            evidence_ids=matching_evidence_ids, artifact_refs=artifact_refs,
+            execution_status=execution.status, exit_code=execution.exit_code,
+            observation=observation, bytes_observed=size,
+            category="observation" if evidence_loaded and execution.status == "completed" and execution.exit_code == 0
+                     and observation.get("exit_code", 0) == 0 and not observation.get("timed_out", False)
+                     else "failed_experiment"))
+        research.progress.observation_bytes += size
+        if action.tool == "write_workspace_file":
+            research.progress.write_bytes += len(action.parameters["content"].encode())
+        if action.tool in {"write_workspace_file", "sandbox_command"}:
+            research.progress.workspace_revision += 1
+        research_update = research.state_update()
+        if not evidence_loaded:
+            research_update.update(stop_update(state, "workflow_failure", "Research execution/audit readback failed"))
+
+    experiment_error = (research is not None and evidence_loaded and action.tool == "sandbox_command"
+                        and "exit_code" in observation)
+
     return {
         "evidence": evidence,
         "action_history": action_history,
         "sandbox_session_id": sandbox_session_id or state.get("sandbox_session_id"),
         "status": "evidence_collected",
         "workflow_errors": [*state.get("workflow_errors", []),
-                            *([execution.error] if execution.error is not None else []),
+                            *([execution.error] if execution.error is not None and not experiment_error else []),
                             *([read_error] if read_error is not None else [])],
+        **research_update,
     }
 
 
@@ -499,6 +549,22 @@ def reevaluate(state: AgentState) -> dict:
     check_cancelled()
     diagnostics = {}
     action = state.get("proposed_action")
+    research = active_research(state)
+    if research is not None:
+        # R04 raw observations have no independent verdict protocol. Failed
+        # experiments feed the next turn; policy denial remains terminal above.
+        if state["execution"].status == "denied":
+            return stop_update(state, "isolation_or_policy_blocked", "Research Executor refused the approved action after scope recheck")
+        latest = research.progress.ledger[-1]
+        if state["execution"].status != "completed" and latest.observation.get("diagnostic"):
+            return stop_update(state, "execution_failed", "Research runtime failure without a valid experiment observation")
+        result, reason = apply_budget_to_reevaluation(state, research.reevaluate(state))
+        if research.progress.observation_bytes > research.limits.max_observation_bytes:
+            result = ReevaluationResult(status="inconclusive", explanation="Observation budget exhausted")
+            reason = "research_budget_exhausted"
+        return {"status": result.status, "stop_reason": reason,
+                "decision_history": [*state.get("decision_history", []), decision_record(state, result, reason)],
+                **research.state_update()}
     guard = (
         evaluate_evidence(state)
         if action is not None and action.tool != "safe_noop"

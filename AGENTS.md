@@ -1179,3 +1179,19 @@ Historical `safe_noop` stays a synthetic graph stub, never benchmark proof.
 
 See `docs/b07-workflow-recovery.md` and `docs/b07-validation-2026-10-14.json`.
 B07 regression tests do not constitute new B05/B06 Docker acceptance or B09 metrics.
+
+# 31. R04 opt-in research loop
+
+`app.research_run` installs a per-run `ResearchAgentModel` behind the canonical
+LangGraph and a live operator-bound research scope/Executor. One schema-validated
+turn proposes one action or stops. It cannot execute or add permissions. Source,
+workspace and HTTP results are read back from persisted execution plus matching
+audit before entering the serializable ledger. A research scope in state alone
+does not enable this mode. Historical A/B profiles and policies stay unchanged.
+
+Expected script failures may inform the next experiment; policy denial, invalid
+scope and lost persistence cannot be bypassed. Calls, IO byte reservations,
+context, actions, writes and observations are bounded; IO reservations are not
+provider token billing. Model interpretations never become confirmed/rejected:
+R06 independent claim protocols are still pending. Checkpoints are diagnostics,
+not resumable Docker sessions/approvals. See `docs/research-loop-r04.md`.

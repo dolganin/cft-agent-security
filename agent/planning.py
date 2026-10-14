@@ -45,6 +45,24 @@ class DynamicPlanValidator:
         if len(plan.steps) != 1 or plan.max_steps != 1:
             return self._deny(plan, "Replan after exactly one action and its Evidence", rules)
 
+        if state.get("research_scope") is not None:
+            from agent.research import active_research
+            from security.research_scope import validate_research_action
+
+            try:
+                research = active_research(state)
+                if plan.sandbox_session_id != research.scope.session_id:
+                    raise ValueError("Research plan session mismatch")
+                action = plan.steps[0].action
+                if action.iteration != current_iteration + 1:
+                    raise ValueError("Research action iteration mismatch")
+                validate_research_action(research.scope, action)
+                research.check_action_budget(action)
+            except ValueError as exc:
+                return self._deny(plan, str(exc), rules)
+            return PlanValidationResult(approved=True, plan_id=plan.id,
+                reason="Research plan matches live operator scope", rules=[*rules, "research_scope_bound"])
+
         runtime_services = state.get("runtime_services")
         runtime_scoped = any(
             step.action.service is not None or step.action.endpoint is not None

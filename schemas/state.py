@@ -18,6 +18,8 @@ from schemas.finding import Finding
 from schemas.hypothesis import Hypothesis
 from schemas.plan import DynamicPlan, PlanValidationResult
 from schemas.report import FinalReport
+from schemas.research import ResearchScope
+from schemas.research_agent import ResearchProgress
 from schemas.runtime import RuntimeServiceMap
 from schemas.scoring import (
     ContextPriority,
@@ -32,6 +34,8 @@ from schemas.verification_binding import BindingResolution
 
 
 class AgentState(TypedDict, total=False):
+    research_scope: ResearchScope
+    research_progress: ResearchProgress
     project_discovery: ProjectDiscoveryResult | None
     target_profile: TargetProfile
     runtime_services: RuntimeServiceMap

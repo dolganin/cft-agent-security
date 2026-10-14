@@ -16,7 +16,7 @@ from executor.sandbox import SandboxResult
 from pipeline.cancellation import RunCancelled, current_token, suspend_cancellation
 from schemas.research import HttpServiceScope, ResearchFile, ResearchScope, content_digest
 from schemas.runtime import RuntimeServiceMap
-from security.error_redaction import redact_error_message
+from security.error_redaction import redact_error_message, redact_observation
 from security.research_scope import binding_for, validate_research_action
 from security.source_paths import normalize_source_path
 from tools.repository_source import _safe_lines, _source_path
@@ -292,8 +292,12 @@ class ResearchRuntime:
                             stdout = stdout.replace(piece, "<redacted>")
             self._event({"phase": "action", "action_id": action.id, "run_id": run_id,
                          "tool": action.tool, "requests": self.requests, "exit_code": exit_code})
+            try:
+                stdout = json.dumps(redact_observation(json.loads(stdout)), ensure_ascii=False)
+            except (ValueError, TypeError):
+                stdout = redact_error_message(stdout, max_length=32768)
             return SandboxResult(run_id=run_id, exit_code=exit_code,
-                                 stdout=redact_error_message(stdout, max_length=32768),
+                                 stdout=stdout,
                                  stderr=redact_error_message(stderr, max_length=16384),
                                  timed_out=timed_out, workspace_id=self.scope.session_id,
                                  duration_ms=int((time.monotonic() - started) * 1000),

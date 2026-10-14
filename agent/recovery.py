@@ -4,6 +4,7 @@ from functools import wraps
 
 from agent.budget import ReasoningBudgetExpired
 from agent.loop import wall_clock_exhausted
+from agent.research import ResearchBudgetExhausted, active_research
 from pipeline.cancellation import RunCancelled, check_cancelled
 from pipeline.errors import error_from_exception
 from schemas.agent_loop import AgentDecisionRecord
@@ -58,6 +59,10 @@ def protected_node(name, function):
                 "wall_clock_budget_exhausted",
                 "Reasoning deadline exhausted before another provider request.",
             )
+        except ResearchBudgetExhausted as exc:
+            research = active_research()
+            return {**stop_update(state, "research_budget_exhausted", str(exc)),
+                    **(research.state_update() if research else {})}
         except Exception as exc:  # noqa: BLE001 - finding boundary; cancellation propagates above
             layer = (
                 "llm"
@@ -83,6 +88,9 @@ def protected_node(name, function):
                 else "workflow_failure"
             )
             update = stop_update(state, reason, error.message)
+            research = active_research()
+            if research is not None:
+                update.update(research.state_update())
             update["workflow_errors"] = [*state.get("workflow_errors", []), error]
             action = state.get("proposed_action")
             history = list(state.get("action_history", []))

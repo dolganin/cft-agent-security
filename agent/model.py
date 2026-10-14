@@ -331,6 +331,11 @@ def get_agent_model() -> AgentReasoningModel:
     Узлы LangGraph зависят только от AgentReasoningModel. После подключения настоящего
     провайдера адаптер можно добавить сюда без переписывания топологии графа.
     """
+    from agent.research import active_research
+
+    research = active_research()
+    if research is not None:
+        return research
     if settings.agent_mode == "stub":
         return DeterministicAgentModel()
 

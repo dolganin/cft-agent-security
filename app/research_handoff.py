@@ -33,14 +33,18 @@ def verify_seal(directory):
     return len(seal)
 
 
-def handoff(directories: list[Path], output: Path, base_ref="40f6633"):
+def handoff(directories: list[Path], output: Path, base_ref="40f6633", *,
+            report="docs/research-foundation-report-2026-10-15.md",
+            bundle_name="research-foundation-2026-10-15"):
     counts = {directory.name: verify_seal(directory) for directory in directories}
     with tempfile.TemporaryDirectory(prefix="cft-research-handoff-") as temporary:
-        bundle = Path(temporary) / "research-foundation-2026-10-15"
+        relative_file(bundle_name)
+        relative_file(report)
+        bundle = Path(temporary) / bundle_name
         bundle.mkdir()
         for directory in directories:
             shutil.copytree(directory, bundle / directory.name)
-        shutil.copyfile(ROOT / "docs/research-foundation-report-2026-10-15.md", bundle / "README.md")
+        shutil.copyfile(ROOT / report, bundle / "README.md")
         # Source snapshot is represented by hashes and Git refs, not environment/code copies.
         names = subprocess.check_output(["git", "diff", "--name-only", base_ref], cwd=ROOT,
                                         text=True).splitlines()
@@ -49,7 +53,7 @@ def handoff(directories: list[Path], output: Path, base_ref="40f6633"):
         source_hashes = {name: sha256((ROOT / name).read_bytes()).hexdigest()
                          for name in names if not name.endswith(".pyc") and (ROOT / name).is_file()
                          and (name == "AGENTS.md" or name.split("/")[0] in {
-                             "app", "docs", "executor", "evidence", "policies", "schemas",
+                             "agent", "app", "docs", "executor", "evidence", "policies", "schemas",
                              "security", "tools", "validator", "tests"})}
         (bundle / "source-provenance.json").write_text(json.dumps({
             "development_base_commit": subprocess.check_output(["git", "rev-parse", base_ref], cwd=ROOT, text=True).strip(),
@@ -68,8 +72,11 @@ def main():
     parser.add_argument("--results", type=Path, nargs="+", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--base-ref", default="40f6633")
+    parser.add_argument("--report", default="docs/research-foundation-report-2026-10-15.md")
+    parser.add_argument("--bundle-name", default="research-foundation-2026-10-15")
     args = parser.parse_args()
-    print(json.dumps(handoff([p.resolve() for p in args.results], args.output.resolve(), args.base_ref), indent=2))
+    print(json.dumps(handoff([p.resolve() for p in args.results], args.output.resolve(), args.base_ref,
+                            report=args.report, bundle_name=args.bundle_name), indent=2))
 
 
 if __name__ == "__main__":

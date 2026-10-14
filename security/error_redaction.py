@@ -70,3 +70,26 @@ def redact_error_message(
 def _redact_bearer(match: re.Match[str]) -> str:
     header = match.group("header") or ""
     return f"{header}Bearer {REDACTION_MARKER}"
+
+
+def redact_observation(value: object, *, field: str = "") -> object:
+    """Redact parsed observations leaf-by-leaf without corrupting their JSON envelope.
+
+    The public error formatter deliberately drops tracebacks/collapses whitespace;
+    applying it to an encoded JSON object destroys source and failure observations.
+    """
+    if isinstance(value, dict):
+        return {key: (REDACTION_MARKER if re.fullmatch(_SECRET_NAME, key, re.IGNORECASE) else
+                      redact_observation(item, field=key)) for key, item in value.items()}
+    if isinstance(value, list):
+        return [redact_observation(item, field=field) for item in value]
+    if not isinstance(value, str):
+        return value
+    if field == "stderr" and value.lstrip().startswith(_TRACEBACK_MARKER):
+        value = next((line for line in reversed(value.splitlines()) if line.strip()), "Internal error")
+    value = _BASIC_AUTH_URL_RE.sub(rf"\g<scheme>\g<username>:{REDACTION_MARKER}@", value)
+    value = _BEARER_RE.sub(_redact_bearer, value)
+    value = _JSON_SECRET_RE.sub(rf"\g<prefix>\g<quote>{REDACTION_MARKER}\g<quote>", value)
+    value = _KEY_VALUE_SECRET_RE.sub(rf"\g<prefix>{REDACTION_MARKER}", value)
+    value = re.sub(r"\bsk-[a-zA-Z0-9_-]{16,}|\beyJ[\w-]+\.[\w-]+\.[\w-]+", REDACTION_MARKER, value)
+    return _WINDOWS_HOME_RE.sub("<home>", _POSIX_HOME_RE.sub("<home>", value))

@@ -68,7 +68,10 @@ def build_evidence(
                  "executor_status": execution.status}
         if valid:
             try:
-                facts["observation"] = json.loads(str(record.get("stdout", "")))["observation"]
+                payload = json.loads(str(record.get("stdout", "")))
+                facts["observation"] = payload.get("observation", {
+                    "worker_error": payload.get("error", "Unknown worker failure"),
+                    "detail": payload.get("detail", "")})
             except (ValueError, KeyError, TypeError):
                 facts["malformed_observation"] = True
         return _evidence(

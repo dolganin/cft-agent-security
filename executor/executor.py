@@ -233,6 +233,25 @@ class SafeExecutor:
     def read_execution(self, evidence_ref):
         return self._evidence_store.get_execution(evidence_ref)
 
+    def read_research_execution(self, action, execution):
+        """Require the separately persisted matching audit before graph observation."""
+        from executor.sandbox_audit import calculate_sha256_digest
+
+        record = self.read_execution(execution.evidence_ref)
+        matches = [item for item in self._audit_log.records()
+                   if item.get("run_id") == execution.run_id and item.get("action_id") == action.id]
+        if len(matches) != 1:
+            raise ValueError("Research execution audit is missing or ambiguous")
+        audit = matches[0]
+        if (audit.get("proposal_digest") != calculate_sha256_digest(action.model_dump())
+                or audit.get("evidence_digest") != calculate_sha256_digest(
+                    {key: value for key, value in record.items() if key not in {"id", "type", "created_at"}})
+                or audit.get("session_id") != action.research_binding.session_id
+                or audit.get("evidence_ref") != execution.evidence_ref
+                or audit.get("runtime_backend") != "docker"):
+            raise ValueError("Research execution and audit do not match")
+        return record
+
     def bind_fix_runtime(self, runtime) -> None:
         from executor.fix_runtime import DockerFixRuntime
         if not isinstance(runtime, DockerFixRuntime):
