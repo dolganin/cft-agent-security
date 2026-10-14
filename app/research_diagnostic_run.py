@@ -23,8 +23,8 @@ from security.error_redaction import redact_observation
 
 ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED = ["/socket.io", "/rest/challenges", "/api/Challenges", "/score-board", "/scoreboard",
-            "/rest/score-board", "/rest/continue-code", "/rest/coding-challenges", "/rest/hacking",
-            "/rest/admin/solved", "/snippets", "/codefixes", "/solutions", "/ftp/incident-support.kdbx"]
+            "/rest/score-board", "/rest/continue-code", "/rest/continue-code-findIt", "/rest/continue-code-fixIt",
+            "/snippets", "/codefixes", "/solutions"]
 
 
 def limits():
