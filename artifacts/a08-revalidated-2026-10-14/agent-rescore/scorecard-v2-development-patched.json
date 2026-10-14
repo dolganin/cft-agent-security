@@ -1,0 +1,102 @@
+{
+  "cases": [
+    {
+      "case_id": "JS-SAFE-NOSQL-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "nosql-injection",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    },
+    {
+      "case_id": "JS-SAFE-REDIRECT-101",
+      "confirmation_supported": false,
+      "context_priority": null,
+      "detected": false,
+      "evidence": [],
+      "expected": "safe",
+      "family": "open-redirect",
+      "matched_observation_ids": [],
+      "primary_observation_id": null,
+      "severity": null,
+      "verification": "not_detected"
+    }
+  ],
+  "context_priority": {
+    "accuracy": null,
+    "assessed_cases": 0,
+    "assessed_coverage": null,
+    "correct_cases": 0,
+    "reviewed_cases": 0
+  },
+  "dataset_digest": "702a00ee4e8da8b89f632396c7d9c07ec29b2905ad8fad6641156b2f033e7582",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_status": "frozen_a04",
+  "detection": {
+    "duplicates": 0,
+    "f1": null,
+    "fn": 0,
+    "fp": 0,
+    "outside_ground_truth": 0,
+    "precision": null,
+    "recall": null,
+    "tn": 2,
+    "tp": 0,
+    "unresolved": 0
+  },
+  "matches": [],
+  "sample_kind": "patched",
+  "schema_version": "benchmark.score.v2",
+  "severity": {
+    "accuracy": null,
+    "assessed_cases": 0,
+    "assessed_coverage": null,
+    "correct_cases": 0,
+    "reviewed_cases": 0
+  },
+  "split": "development",
+  "technical_errors": [],
+  "technically_valid": true,
+  "verification": {
+    "abstention_rate": 1.0,
+    "abstention_reasons": {
+      "conflicting_evidence": 0,
+      "inconclusive": 0,
+      "invalid_evidence": 0,
+      "not_detected": 2,
+      "not_run": 0,
+      "policy_blocked": 0,
+      "technical_error": 0,
+      "timeout": 0,
+      "unsupported": 0
+    },
+    "answered_accuracy": null,
+    "confirmed_precision": null,
+    "counts": {
+      "abstained_cases": 2,
+      "confirmed_cases": 0,
+      "correct_confirmations": 0,
+      "correct_decisions": 0,
+      "correct_rejections": 0,
+      "decided_cases": 0,
+      "duplicates": 0,
+      "false_confirmations": 0,
+      "false_rejections": 0,
+      "labeled_cases": 2,
+      "negative_cases": 2,
+      "outside_ground_truth": 0,
+      "positive_cases": 0,
+      "rejected_cases": 0,
+      "unresolved": 0
+    },
+    "decision_coverage": 0.0,
+    "false_confirmation_rate": 0.0,
+    "schema_version": "benchmark.verification.v2",
+    "supported_verified_recall": null
+  }
+}

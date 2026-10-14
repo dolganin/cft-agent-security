@@ -1,0 +1,7 @@
+id,source,file,line,family,status,evidence_backed,scope,rule
+model-scout-71a2526acad2e4e5b6b5,model_scout,lib/insecurity.ts,21,file-exposure,inconclusive,False,source_metadata,"excluded from benchmark TP/FP, retained for independent review"
+model-scout-3cb73957be76439ca7a1,model_scout,lib/insecurity.ts,41,authentication,inconclusive,False,source_metadata,"excluded from benchmark TP/FP, retained for independent review"
+directory-listing.presentation:server.ts:268,semgrep,server.ts,268,file-exposure,inconclusive,False,source_metadata,"excluded from benchmark TP/FP, retained for independent review"
+directory-listing.presentation:server.ts:292,semgrep,server.ts,292,file-exposure,inconclusive,False,runtime_directory_metadata;source_metadata,"excluded from benchmark TP/FP, retained for independent review"
+directory-listing.presentation:server.ts:296,semgrep,server.ts,296,file-exposure,confirmed,True,runtime_directory_metadata,"excluded from benchmark TP/FP, retained for independent review"
+directory-listing.presentation:server.ts:300,semgrep,server.ts,300,file-exposure,inconclusive,False,runtime_directory_metadata;source_metadata,"excluded from benchmark TP/FP, retained for independent review"
