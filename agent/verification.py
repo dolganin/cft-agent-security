@@ -43,18 +43,38 @@ def verification_candidates(state):
         file = normalize_source_path(finding.file, profile.repository_path)
     except ValueError:
         return []
-    artifacts = [a for a in profile.artifacts.values()
-                 if a.kind == "javascript" and a.relative_path == file]
-    if len(artifacts) != 1:
-        return []
-    artifact = artifacts[0]
-    candidates = []
     family = rule_family(finding.rule_id)
     if profile.verification_routes:
         resolution = resolve_binding(profile, finding)
         if resolution.binding is None:
             return []
         binding = resolution.binding
+        if binding.tool == "verify_access_control":
+            from security.access_verification import ACCESS_CHECKS
+            registrations = [check for check in ACCESS_CHECKS.values()
+                             if check.route_id == binding.route_id]
+            if len(registrations) != 1:
+                return []
+            registration = registrations[0]
+            from security.access_verification import is_access_check_supported
+            if not is_access_check_supported(registration.check_id):
+                return []
+            candidate = {
+                "candidate_id": "access-check:" + registration.check_id,
+                "tool": "verify_access_control", "parameters": {"check_id": registration.check_id},
+                "service": binding.service, "endpoint": binding.endpoint,
+                "verification_binding": binding,
+                "purpose": "Run one operator-registered access-control check against its bound fixture.",
+            }
+            if any(r.action.verification_binding == binding for r in state.get("action_history", [])):
+                return []
+            return [candidate]
+        artifacts = [a for a in profile.artifacts.values()
+                     if a.kind == "javascript" and a.relative_path == file]
+        if len(artifacts) != 1:
+            return []
+        artifact = artifacts[0]
+        candidates = []
         runtime = state.get("runtime_services")
         service = runtime.services.get(binding.service) if runtime else None
         if not service or not service.ready or binding.endpoint not in service.allowed_endpoints:
@@ -71,6 +91,12 @@ def verification_candidates(state):
         if any(r.action.verification_binding == binding for r in state.get("action_history", [])):
             return []
         return [candidate]
+    artifacts = [a for a in profile.artifacts.values()
+                 if a.kind == "javascript" and a.relative_path == file]
+    if len(artifacts) != 1:
+        return []
+    artifact = artifacts[0]
+    candidates = []
     # These bindings belong to the operator's trusted profile, not model guesses.
     key = f"verification.{file}:{finding.line_start}"
     endpoint = profile.metadata.get(key + ".endpoint")

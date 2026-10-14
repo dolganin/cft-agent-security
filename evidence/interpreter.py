@@ -3,6 +3,7 @@ from uuid import uuid4
 
 from pydantic import BaseModel, ValidationError
 
+from schemas.access_verification import AccessCheckTrace
 from schemas.action import ActionProposal
 from schemas.evidence import (
     Evidence,
@@ -27,6 +28,7 @@ SANDBOX_COMMAND_TOOL = "sandbox_command"
 
 
 _SPECIALIZED_RESULTS: dict[str, tuple[type[BaseModel], str]] = {
+    "verify_access_control": (AccessCheckTrace, "access_control_verification"),
     "inspect_javascript_security": (BoundedVerificationResult, "javascript_source_metadata"),
     "verify_sql_injection": (BoundedVerificationResult, "sql_differential_check"),
     "verify_sensitive_directory": (BoundedVerificationResult, "sensitive_directory_check"),
@@ -169,7 +171,8 @@ def _structured_capability_evidence(
 ) -> Evidence | None:
     if not evidence_loaded:
         return None
-    if str(record.get("status")) != "completed" or int(record.get("exit_code", 1)) != 0:
+    if (str(record.get("status")) != "completed" or int(record.get("exit_code", 1)) != 0) \
+            and action.tool != "verify_access_control":
         return None
 
     if action.verification_binding is not None:
@@ -215,6 +218,25 @@ def _structured_capability_evidence(
         )
 
     data = payload.model_dump(by_alias=True)
+    if isinstance(payload, AccessCheckTrace):
+        from evidence.access_control import evaluate_access_check
+        from security.access_verification import binding_id
+        decision = evaluate_access_check(payload, action)
+        return _evidence(
+            action=action,
+            execution=execution,
+            evidence_type=evidence_type,
+            summary=decision.reason,
+            facts={"b05_evidence": decision.model_dump(mode="json"),
+                   "b05_trace": data, "record_loaded": evidence_loaded,
+                   "persisted_action_digest": record.get("action_digest")},
+            scope_description="registered B05 check on a disposable B04 fixture",
+            artifact_refs=artifact_refs,
+            reliability="high" if evidence_loaded and decision.binding_id == binding_id(action) else "low",
+            verdict=decision.verdict,
+            hypothesis_id=hypothesis_id,
+            sandbox_session_id=sandbox_session_id,
+        )
     verdict = data.get("verdict")
     explanation = str(data.get("explanation", "Capability verification completed."))
     scope_description = str(data.get("scope", "bounded capability result"))

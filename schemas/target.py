@@ -312,6 +312,11 @@ class TargetProfile(BaseModel):
             )) or (route.tool == "verify_sensitive_directory" and (
                 route.check != "source_metadata" or route.family != "file-exposure"
                 or route.mode is not None or route.method != "GET"
+            )) or (route.tool == "verify_access_control" and (
+                route.family != "access-control" or route.mode is not None
+                or (route.check, route.method) not in {
+                    ("own_read", "GET"), ("own_write", "PUT"), ("ownership_transfer", "PUT")
+                }
             )):
                 raise ValueError("Verification route capability/method contract mismatch")
         if any(key != service.id for key, service in self.services.items()):

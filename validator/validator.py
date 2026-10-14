@@ -38,8 +38,33 @@ class PolicyValidator:
         *,
         target_file: str | Path | None = None,
         target_profile: TargetProfile | None = None,
+        capability_policy_file: str | Path | None = None,
     ) -> "PolicyValidator":
         data = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
+        if capability_policy_file is not None:
+            extension = yaml.safe_load(Path(capability_policy_file).read_text(encoding="utf-8")) or {}
+            extension_tools = extension.get("tools", {})
+            allowed = extension_tools.get("allowed", [])
+            contracts = extension_tools.get("parameter_contracts", {})
+            if (set(extension) != {"version", "tools"}
+                    or set(extension_tools) != {"allowed", "parameter_contracts"}
+                    or extension.get("version") != data.get("version")
+                    or allowed != ["verify_access_control"]
+                    or set(contracts) != {"verify_access_control"}
+                    or contracts["verify_access_control"] != {
+                        "allowed_keys": ["check_id"],
+                        "required_keys": ["check_id"],
+                        "enum_values": {"check_id": [
+                            "juice-basket-own-read-v1", "juice-address-own-write-v1",
+                            "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+                            "juice-address-ownership-transfer-v1"
+                        ]},
+                    }
+                    or "verify_access_control" in data.get("tools", {}).get("allowed", [])
+                    or "verify_access_control" in data.get("tools", {}).get("parameter_contracts", {})):
+                raise ValueError("Unsupported or overlapping capability policy extension")
+            data.setdefault("tools", {}).setdefault("allowed", []).extend(allowed)
+            data["tools"].setdefault("parameter_contracts", {}).update(contracts)
         target_environments: dict[str, str] = {}
         target_artifacts: dict[str, set[str]] = {}
 
@@ -293,6 +318,16 @@ class PolicyValidator:
         self,
         action: ActionProposal,
     ) -> tuple[str, str] | None:
+        if action.tool == "verify_access_control":
+            profile = self.target_profiles.get(action.target)
+            if profile is None:
+                return "B05 requires a registered operator target profile", "access_profile_denied"
+            try:
+                from security.access_verification import validate_access_action
+                validate_access_action(profile, action)
+            except (OSError, ValueError, TypeError) as exc:
+                return str(exc), "access_binding_denied"
+            return None
         if action.tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory"}:
             profile = self.target_profiles.get(action.target)
             artifact = profile.artifacts.get(action.parameters.get("artifact_id")) if profile else None

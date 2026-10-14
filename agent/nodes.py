@@ -1,5 +1,6 @@
 import json
 from datetime import UTC, datetime
+from pathlib import Path
 
 from agent.lab import active_executor
 from agent.loop import (
@@ -245,9 +246,15 @@ def validate_action(state: AgentState) -> dict:
             "status": "policy_blocked",
         }
 
+    policy_options = {}
+    if state["proposed_action"].tool == "verify_access_control":
+        policy_options["capability_policy_file"] = (
+            Path(__file__).resolve().parents[1] / "policies/b05-access.yaml"
+        )
     validator = PolicyValidator.from_yaml(
         settings.policy_file,
         target_profile=state["target_profile"],
+        **policy_options,
     )
     validation = validator.validate(state["proposed_action"])
 
@@ -276,39 +283,61 @@ def execute_action(state: AgentState) -> dict:
     action = state["proposed_action"]
     validation = state["validation"]
     runtime_services = state.get("runtime_services")
+    access_runtime = None
 
-    executor = active_executor()
-    if executor is None:
-        approvals = InMemoryApprovalStore()
-        approvals.record(action, validation)
-        executor = SafeExecutor.from_config(
-            approvals=approvals,
-            policy_file=settings.policy_file,
-            target_profile=state["target_profile"],
-            evidence_directory=settings.evidence_dir,
-            audit_log_path=settings.executor_audit_log,
-            workspace_directory=settings.executor_work_dir,
-            target_base_url=settings.target_base_url,
-            target_repository_path=settings.target_repository_path,
-            backend_override=("docker" if action.tool == "sandbox_command" else None),
-        )
-    else:
-        # Approval все еще привязан к конкретному proposal, lab не дает обход policy.
-        executor.record_approval(action, validation)
-        if CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target" and runtime_services is not None:
-            executor.open_managed_lab(runtime_services, state["target_profile"])
+    if action.tool == "verify_access_control":
+        # The B05 broker owns a fresh B04 Docker fixture. It is provisioned only
+        # after Validator approval, and its opaque sessions never enter AgentState.
+        from executor.access_control import AccessVerificationRuntime
+        from security.access_verification import validate_access_action
 
-    if runtime_services is None:
-        execution = executor.execute(action)
-    else:
-        # В CI target уже запущен менеджером: второй независимый lifecycle здесь не нужен.
-        sequence = executor.execute_sequence(
-            [action],
-            runtime_services=runtime_services,
+        profile = state["target_profile"]
+        validate_access_action(profile, action)
+        access_runtime = AccessVerificationRuntime(
+            profile=profile,
+            target_repository=profile.repository_path,
+            output_directory=settings.evidence_dir / "b05" / action.id,
+            active_check_id=action.parameters["check_id"],
         )
-        if not sequence.results:
-            raise RuntimeError("Sandbox runner returned no action result")
-        execution = sequence.results[0].execution
+        access_runtime.prepare()
+        runtime_services = access_runtime.runtime_services()
+
+    try:
+        executor = active_executor()
+        if executor is None:
+            approvals = InMemoryApprovalStore()
+            approvals.record(action, validation)
+            executor = SafeExecutor.from_config(
+                approvals=approvals,
+                policy_file=settings.policy_file,
+                target_profile=state["target_profile"],
+                evidence_directory=settings.evidence_dir,
+                audit_log_path=settings.executor_audit_log,
+                workspace_directory=settings.executor_work_dir,
+                target_base_url=settings.target_base_url,
+                target_repository_path=str(state["target_profile"].repository_path),
+                backend_override=("docker" if action.tool in {"sandbox_command", "verify_access_control"} else None),
+            )
+        else:
+            # Approval всё ещё привязано к proposal; B05 не переиспользует runtime.
+            executor.record_approval(action, validation)
+            if CAPABILITY_NETWORK_ACCESS.get(action.tool) == "target" and runtime_services is not None:
+                executor.open_managed_lab(runtime_services, state["target_profile"])
+        if access_runtime is not None:
+            executor.bind_access_verifier(access_runtime)
+
+        if runtime_services is None:
+            execution = executor.execute(action)
+        else:
+            # B05 passes only its broker-owned internal Docker network and service map.
+            sequence = executor.execute_sequence([action], runtime_services=runtime_services)
+            if not sequence.results:
+                raise RuntimeError("Sandbox runner returned no action result")
+            execution = sequence.results[0].execution
+    finally:
+        if (access_runtime is not None and access_runtime.lab.resources is not None
+                and not access_runtime.lab.close()):
+            raise RuntimeError("B05 fixture cleanup could not be verified")
 
     return {
         "execution": execution,

@@ -1,0 +1,9 @@
+version: 1
+tools:
+  allowed: [verify_access_control]
+  parameter_contracts:
+    verify_access_control:
+      allowed_keys: [check_id]
+      required_keys: [check_id]
+      enum_values:
+        check_id: [juice-basket-own-read-v1, juice-address-own-write-v1, juice-basket-own-write-v2, juice-basket-own-write-v3, juice-address-ownership-transfer-v1]

@@ -453,6 +453,16 @@ def _reasoning_context(state: AgentState) -> dict[str, Any]:
 
 
 def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
+    if _has_b05_access_route(state):
+        from agent.verification import verification_candidates
+        return [
+            {
+                "name": candidate["tool"],
+                "parameters": dict(candidate["parameters"]),
+                "purpose": candidate["purpose"],
+            }
+            for candidate in verification_candidates(state)
+        ]
     if _is_dockerfile_user_finding(state):
         return [
             {
@@ -502,6 +512,8 @@ def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
 
 
 def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
+    if _has_b05_access_route(state):
+        return verification_candidates(state)
     if _has_javascript_artifact(state):
         return verification_candidates(state)
     if _requires_registered_candidate(state):
@@ -564,6 +576,8 @@ def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
 
 def _requires_registered_candidate(state: AgentState) -> bool:
     return (
+        _has_b05_access_route(state)
+        or
         _is_dockerfile_user_finding(state)
         or _is_unvalidated_password_finding(state)
         or _is_react_dangerous_html_finding(state)
@@ -578,6 +592,14 @@ def _has_javascript_artifact(state: AgentState) -> bool:
         return False
     return any(item.kind == "javascript" and item.relative_path == finding.file
                for item in profile.artifacts.values())
+
+
+def _has_b05_access_route(state: AgentState) -> bool:
+    profile = state.get("target_profile")
+    finding = state.get("finding")
+    return bool(profile and finding and any(
+        route.tool == "verify_access_control" for route in profile.verification_routes
+    ))
 
 
 def _public_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
@@ -636,6 +658,13 @@ def _sanitize_action_parameters(choice, state: AgentState) -> dict[str, object]:
         return _react_html_flow_parameters(state)
     if choice.tool == "observe_http_surface":
         return {}
+    if choice.tool == "verify_access_control":
+        from agent.verification import verification_candidates
+        candidates = [item for item in verification_candidates(state)
+                      if item["tool"] == choice.tool]
+        if len(candidates) != 1:
+            raise ValueError("B05 check selection is not uniquely registered for this finding")
+        return dict(candidates[0]["parameters"])
     raise ValueError(f"No deterministic parameter contract for tool: {choice.tool}")
 
 
