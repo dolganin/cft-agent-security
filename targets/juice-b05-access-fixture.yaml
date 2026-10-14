@@ -1,0 +1,134 @@
+id: juice-access-fixture
+name: Juice Shop | B05 registered access verification
+repository_path: artifacts/benchmark-target/juice-shop
+environment: sandbox
+architecture:
+  file: targets/juice-presentation-architecture.yaml
+runtime:
+  type: operator_access_fixture
+services:
+  juice:
+    type: node
+    root: .
+    internal_port: 3000
+    healthcheck:
+      path: /
+    runtime_endpoints:
+    - /
+    - /rest/basket/:id
+    - /api/BasketItems/:id
+    - /api/Addresss/:id
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false
+metadata:
+  operator.scope: B05 fixed access checks on disposable synthetic objects only
+access_fixture:
+  id: juice-two-user-v1
+  adapter: juice_access_v1
+  reset_adapter: destroy_and_recreate_lab
+  roles: [role-a, role-b]
+  objects:
+  - {id: basket-a, kind: basket, owner_role_id: role-a}
+  - {id: basket-b, kind: basket, owner_role_id: role-b}
+  - {id: address-a, kind: address, owner_role_id: role-a}
+  - {id: address-b, kind: address, owner_role_id: role-b}
+  - {id: negative-control-b, kind: address, owner_role_id: role-b}
+  permissions:
+  - {role_id: role-a, object_id: basket-a, read: true, update: true}
+  - {role_id: role-a, object_id: basket-b, read: false, update: false}
+  - {role_id: role-a, object_id: address-a, read: true, update: true}
+  - {role_id: role-a, object_id: address-b, read: false, update: false}
+  - {role_id: role-a, object_id: negative-control-b, read: false, update: false}
+  - {role_id: role-b, object_id: basket-a, read: false, update: false}
+  - {role_id: role-b, object_id: basket-b, read: true, update: true}
+  - {role_id: role-b, object_id: address-a, read: false, update: false}
+  - {role_id: role-b, object_id: address-b, read: true, update: true}
+  - {role_id: role-b, object_id: negative-control-b, read: true, update: true}
+  prepare_http_budget: 64
+  control_http_budget: 32
+  request_timeout_seconds: 3
+  wall_time_seconds: 120
+  b05_write_candidate: true
+  b05_basket_write_candidate: true
+  b05_basket_write_v3_candidate: true
+  b05_ownership_transfer_candidate: true
+  worker_image: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
+verification_routes:
+- id: juice-basket-own-read
+  handler_id: juice.retrieveBasket
+  family: access-control
+  service: juice
+  endpoint: /rest/basket/:id
+  method: GET
+  tool: verify_access_control
+  check: own_read
+  registration:
+    file: server.ts
+    anchor: app.get('/rest/basket/:id', utils.asyncHandler(retrieveBasket()))
+  sources:
+  - file: server.ts
+    anchor: app.get('/rest/basket/:id', utils.asyncHandler(retrieveBasket()))
+  - file: routes/basket.ts
+    anchor: export function retrieveBasket () {
+- id: juice-address-own-write
+  handler_id: juice.address.update
+  family: access-control
+  service: juice
+  endpoint: /api/Addresss/:id
+  method: PUT
+  tool: verify_access_control
+  check: own_write
+  registration:
+    file: server.ts
+    anchor: app.put('/api/Addresss/:id', security.appendUserId())
+  sources:
+  - file: server.ts
+    anchor: app.put('/api/Addresss/:id', security.appendUserId())
+  - file: lib/insecurity.ts
+    anchor: export const appendUserId = () => {
+  - file: routes/address.ts
+    anchor: export function getAddressById () {
+
+
+# Versioned candidate routes; not canonical R01 enablement.
+- id: juice-basket-own-write-v2
+  handler_id: juice.basketItem.update
+  family: access-control
+  service: juice
+  endpoint: /api/BasketItems/:id
+  method: PUT
+  tool: verify_access_control
+  check: own_write
+  registration:
+    file: server.ts
+    anchor: app.put('/api/BasketItems/:id', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemUpdate()))
+  sources:
+  - file: server.ts
+    anchor: app.put('/api/BasketItems/:id', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemUpdate()))
+  - file: routes/basketItems.ts
+    anchor: export function quantityCheckBeforeBasketItemUpdate ()
+  - file: models/basketitem.ts
+    anchor: "tableName: 'BasketItems'"
+  - file: models/relations.ts
+    anchor: makeKeyNonUpdatable(BasketItemModel, 'BasketId')
+  - file: models/relations.ts
+    anchor: makeKeyNonUpdatable(BasketItemModel, 'ProductId')
+- id: juice-address-ownership-transfer
+  handler_id: juice.address.update
+  family: access-control
+  service: juice
+  endpoint: /api/Addresss/:id
+  method: PUT
+  tool: verify_access_control
+  check: ownership_transfer
+  registration:
+    file: server.ts
+    anchor: app.put('/api/Addresss/:id', security.appendUserId())
+  sources:
+  - file: models/address.ts
+    anchor: "tableName: 'Addresses'"
+  - file: models/index.ts
+    anchor: "storage: options?.inMemory ? ':memory:' : 'data/juiceshop.sqlite',"

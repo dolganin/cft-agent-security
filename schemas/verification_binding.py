@@ -25,10 +25,23 @@ class VerificationRoute(BaseModel):
     family: str = Field(min_length=1)
     service: str
     endpoint: str
-    method: Literal["GET", "POST"]
-    tool: Literal["verify_sql_injection", "verify_sensitive_directory",
-                  "verify_redirect_destination", "verify_auth_reauthentication"]
-    check: Literal["sql_interpolation", "source_metadata", "redirect_destination", "password_reauthentication"]
+    method: Literal["GET", "POST", "PUT"]
+    tool: Literal[
+        "verify_sql_injection",
+        "verify_sensitive_directory",
+        "verify_redirect_destination",
+        "verify_auth_reauthentication",
+        "verify_access_control",
+    ]
+    check: Literal[
+        "sql_interpolation",
+        "source_metadata",
+        "redirect_destination",
+        "password_reauthentication",
+        "own_read",
+        "own_write",
+        "ownership_transfer",
+    ]
     mode: Literal["search", "authentication"] | None = None
     registration: SourceSelector
     sources: list[SourceSelector] = Field(min_length=1, max_length=16)
@@ -51,7 +64,7 @@ class VerificationBinding(BaseModel):
     map_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     service: str
     endpoint: str
-    method: Literal["GET", "POST"]
+    method: Literal["GET", "POST", "PUT"]
     tool: str
     check: str
     mode: str | None = None

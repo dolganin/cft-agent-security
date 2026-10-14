@@ -41,6 +41,14 @@ class AccessFixtureProfile(BaseModel):
     control_http_budget: int = Field(default=32, ge=25, le=32)
     request_timeout_seconds: int = Field(default=3, ge=1, le=5)
     wall_time_seconds: int = Field(default=120, ge=30, le=180)
+    b05_write_candidate: bool = False
+    b05_basket_write_candidate: bool = False
+    b05_basket_write_v3_candidate: bool = False
+    b05_ownership_transfer_candidate: bool = False
+    worker_image: Literal[
+        "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7",
+        "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4",
+    ] = "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7"
 
     @model_validator(mode="after")
     def complete_owner_matrix(self):

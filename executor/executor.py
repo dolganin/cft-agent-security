@@ -137,6 +137,7 @@ CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
     "inspect_dockerfile_user": True,
     "inspect_python_password_assignment": True,
     "inspect_react_dangerous_html_flow": True,
+    "verify_access_control": False,
 }
 
 # Определяет, какой сетевой доступ разрешен для каждой capability
@@ -153,6 +154,7 @@ CAPABILITY_NETWORK_ACCESS: dict[str, str] = {
     "inspect_dockerfile_user": "none",  # Только чтение файлов, без сети
     "inspect_python_password_assignment": "none",
     "inspect_react_dangerous_html_flow": "none",
+    "verify_access_control": "none",  # B04 broker owns the internal Docker network and sessions
 }
 
 class SafeExecutor:
@@ -183,11 +185,13 @@ class SafeExecutor:
         self._verification_runtime = None
         self._registry.register("verify_redirect_destination", self._b06_parameters)
         self._registry.register("verify_auth_reauthentication", self._b06_parameters)
+        self._access_verifier = None
         self._registry.register("inspect_javascript_security", self._javascript_parameters)
         self._registry.register("verify_sql_injection", self._sql_parameters)
         self._registry.register("verify_sensitive_directory", self._javascript_parameters)
         self._registry.register("sandbox_command", self._sandbox_command_parameters)
         self._registry.register("observe_http_surface", self._no_parameters)
+        self._registry.register("verify_access_control", self._access_control_parameters)
         self._active_runtime_services: RuntimeServiceMap | None = None
         self._managed_lab: DockerSequenceRuntime | None = None
         self._sandbox_before_lab: Sandbox | None = None
@@ -233,6 +237,12 @@ class SafeExecutor:
         if not isinstance(runtime, DockerFixRuntime):
             raise TypeError("Only the disposable Docker fix runtime is supported")
         self._fix_runtime = runtime
+
+    def bind_access_verifier(self, runtime) -> None:
+        from executor.access_control import AccessVerificationRuntime
+        if not isinstance(runtime, AccessVerificationRuntime):
+            raise TypeError("Only the registered B05 Docker access runtime is supported")
+        self._access_verifier = runtime
 
     def open_managed_lab(
         self,
@@ -629,7 +639,24 @@ class SafeExecutor:
         except ValueError as exc:
             return self._finish(action, run_id, started, status="denied", exit_code=126, stderr=str(exc), decision_reason=str(exc), session_id=session_id)
 
-        if (action.verification_binding is not None or target.verification_routes) and action.tool in {
+        if action.tool == "verify_access_control":
+            try:
+                from security.access_verification import validate_access_action
+                validate_access_action(target, action)
+                binding = action.verification_binding
+                if self._access_verifier is None or self._access_verifier.profile != target:
+                    raise ValueError("B05 Docker runtime is not bound to this target")
+                runtime = self._active_runtime_services
+                if (runtime is None or runtime.session_id != self._access_verifier.run_session_id
+                        or runtime.network_name != (self._access_verifier.lab.resources or {}).get("network")
+                        or any(runtime.source_files_sha256.get(path) != source_digest
+                               for path, source_digest in binding.source_files.items())):
+                    raise ValueError("B05 approval does not match the active disposable Docker generation")
+            except (OSError, ValueError) as exc:
+                return self._finish(action, run_id, started, status="denied", exit_code=126,
+                                    stderr=str(exc), decision_reason="B05 binding/runtime denied",
+                                    session_id=session_id)
+        elif (action.verification_binding is not None or target.verification_routes) and action.tool in {
             "verify_sql_injection", "verify_sensitive_directory", "inspect_javascript_security",
             "verify_redirect_destination", "verify_auth_reauthentication"
         }:
@@ -690,6 +717,36 @@ class SafeExecutor:
         acquired, limit_reason = self._run_limiter.acquire(action.id)
         if not acquired:
             return self._finish(action, run_id, started, status="denied", exit_code=75, stderr=limit_reason, decision_reason=limit_reason, session_id=session_id)
+
+        if action.tool == "verify_access_control":
+            try:
+                trace = self._access_verifier.execute(action)
+                status = "failed" if trace.technical_error else "completed"
+                return self._finish(
+                    action, run_id, started, status=status,
+                    exit_code=1 if trace.technical_error else 0,
+                    stdout=trace.model_dump_json(),
+                    stderr=trace.technical_error or "",
+                    decision_reason=("B05 access schedule completed" if not trace.technical_error
+                                     else "B05 runtime or cleanup failure"),
+                    error=(_system_error("ISOLATION_BLOCKED", message="B05 Docker cleanup or integrity failed")
+                           if trace.technical_error in {"cleanup_unverified", "source_integrity_failed"}
+                           else _system_error("EXECUTION_FAILED", message="B05 technical execution failure")
+                           if trace.technical_error else None),
+                    session_id=self._access_verifier.run_session_id,
+                    runtime_backend="docker", network_mode="internal",
+                )
+            except Exception:
+                logger.exception("B05 runtime failed for action %s", action.id)
+                return self._finish(
+                    action, run_id, started, status="failed", exit_code=127,
+                    stderr="B05 runtime failed", decision_reason="B05 technical execution failure",
+                    error=_system_error("EXECUTION_FAILED", message="B05 runtime failed"),
+                    session_id=self._access_verifier.run_session_id if self._access_verifier else session_id,
+                    runtime_backend="docker", network_mode="internal",
+                )
+            finally:
+                self._run_limiter.release()
 
         try:
             try:
@@ -1113,6 +1170,15 @@ class SafeExecutor:
         if parameters:
             raise CapabilityInputError("HTTP capabilities do not accept parameters")
         return {}
+
+    @staticmethod
+    def _access_control_parameters(parameters: dict) -> dict:
+        from schemas.access_verification import AccessCheckSelection
+        try:
+            selection = AccessCheckSelection.model_validate(parameters)
+        except Exception as exc:
+            raise CapabilityInputError("B05 accepts only one registered check_id") from exc
+        return selection.model_dump(mode="json")
 
     @staticmethod
     def _artifact_id_parameter(parameters: dict) -> dict:
