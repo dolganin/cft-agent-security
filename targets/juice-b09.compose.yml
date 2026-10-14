@@ -1,0 +1,19 @@
+services:
+  juice:
+    image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b
+    expose: ["3000"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 768m
+    cpus: 1.0
+    networks: [default]
+    healthcheck:
+      test: ["CMD", "/nodejs/bin/node", "-e", "require('http').get('http://127.0.0.1:3000/',r=>{r.resume();process.exit(r.statusCode===200?0:1)}).on('error',()=>process.exit(1))"]
+      interval: 2s
+      timeout: 3s
+      start_period: 20s
+      retries: 20
+networks:
+  default:
+    internal: true

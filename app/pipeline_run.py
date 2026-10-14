@@ -122,6 +122,7 @@ def run_pipeline(
     *,
     profile_override: TargetProfile | None = None,
     runtime_services: RuntimeServiceMap | None = None,
+    verification_profiles: tuple[TargetProfile, ...] = (),
 ) -> int:
     """Запускаем часть пайплайна SAST -> agent -> FinalReport -> Gate
 
@@ -218,6 +219,14 @@ def run_pipeline(
     from agent.verification import register_source_artifacts
 
     profile = register_source_artifacts(profile, findings, target)
+    if verification_profiles:
+        if len({item.id for item in verification_profiles}) != len(verification_profiles):
+            raise ValueError("Duplicate operator verification profiles")
+        if any(item.repository_path != target or item.environment != profile.environment
+               for item in verification_profiles):
+            raise ValueError("Operator profiles must bind the same repository and environment")
+        verification_profiles = tuple(register_source_artifacts(item, findings, target)
+                                      for item in verification_profiles)
     if args.base_ref:
         if not args.base_findings:
             pipeline_errors.append(
@@ -270,6 +279,7 @@ def run_pipeline(
     reports: list[FinalReport] = []
     report_paths: dict[str, str] = {}
     graph = build_graph()
+    routing_records = []
     if findings:
         progress.verification_started()
 
@@ -290,7 +300,27 @@ def run_pipeline(
             file=finding.file,
         )
         try:
-            service = profile.resolve_service(finding.file) or finding.service
+            finding_profile = profile
+            if verification_profiles:
+                from agent.verification_routing import select_profile
+                finding_profile, routing_reason = select_profile(finding, verification_profiles)
+                routing_records.append({"finding_id": finding.id,
+                                        "profile": finding_profile.id if finding_profile else None,
+                                        "reason": routing_reason})
+                if finding_profile is None:
+                    report = _build_static_finding_report(finding, target,
+                        scoring_review=scoring_reviews.get(finding.id), reason=routing_reason)
+                    report.stop_reason = "binding_unavailable"
+                    report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
+                    report_path.write_text(report.model_dump_json(indent=2) + "\n", encoding="utf-8")
+                    reports.append(report)
+                    report_paths[finding.id] = str(report_path)
+                    persist_agent_trace(output_dir, finding.id, {"finding": finding,
+                        "status": report.status, "stop_reason": report.stop_reason})
+                    progress.finding_finished(finding_id=finding.id, status=report.status)
+                    print("  status=inconclusive capability=none context=unmapped")
+                    continue
+            service = finding_profile.resolve_service(finding.file) or finding.service
             if not service:
                 # Репозиторные файлы (.github, корневые конфиги) не принадлежат
                 # runtime-сервису, поэтому для них нельзя выдумывать dynamic-проверку.
@@ -318,7 +348,7 @@ def run_pipeline(
                 print("  status=inconclusive capability=none context=repository")
                 continue
 
-            unsupported_reason = _unsupported_verification_reason(profile, finding)
+            unsupported_reason = _unsupported_verification_reason(finding_profile, finding)
             if unsupported_reason is not None:
                 report = _build_static_finding_report(
                     finding,
@@ -328,6 +358,8 @@ def run_pipeline(
                 )
                 report.stop_reason = ("unsupported_runtime" if "unsupported in the pinned Docker" in unsupported_reason
                                       else "missing_capability")
+                persist_agent_trace(output_dir, finding.id, {"finding": finding,
+                    "status": report.status, "stop_reason": report.stop_reason})
                 report_path = reports_dir / f"{index:03d}-{_safe_name(finding.id)}.json"
                 report_path.write_text(
                     report.model_dump_json(indent=2) + "\n",
@@ -346,7 +378,7 @@ def run_pipeline(
                 findings_path=findings_path,
                 target_root=target,
                 architecture_path=architecture,
-                target_profile=profile,
+                target_profile=finding_profile,
                 architecture_overrides_path=architecture_overrides,
                 finding_id=finding.id,
                 finding_override=finding,
@@ -358,12 +390,12 @@ def run_pipeline(
             # PR metadata добавляем поверх source artifact, не переписывая его
             state["finding"] = finding
             state["scoring_review"] = scoring_reviews.get(finding.id)
-            if profile.b06_verification is not None:
+            if finding_profile.b06_verification is not None:
                 from agent.b06_lab import B06GraphLab
                 from security.verification_binding import resolve_binding
-                bound = resolve_binding(profile, finding)
+                bound = resolve_binding(finding_profile, finding)
                 if bound.binding is not None:
-                    with B06GraphLab(profile, finding, output_dir / "b06-runtime" / str(index)) as executor:
+                    with B06GraphLab(finding_profile, finding, output_dir / "b06-runtime" / str(index)) as executor:
                         runtime = executor._verification_runtime
                         state["target_profile"] = runtime.profile
                         state["runtime_services"] = runtime.runtime_map()
@@ -374,7 +406,7 @@ def run_pipeline(
                 result = graph.invoke(state)
             else:
                 # Один finding может пройти несколько итерации, workspace должен пережить их все.
-                with ManagedAgentLab(profile, runtime_services):
+                with ManagedAgentLab(finding_profile, runtime_services):
                     result = graph.invoke(state)
             check_cancelled()
             persist_agent_trace(output_dir, finding.id, result)
@@ -428,6 +460,9 @@ def run_pipeline(
             print(f"  ERROR [{error.code}/{error.layer}]: {error.message}")
 
     check_cancelled()
+    if verification_profiles:
+        (output_dir / "verification-routing.json").write_text(
+            json.dumps(routing_records, indent=2) + "\n", encoding="utf-8")
     gate = evaluate_gate(reports, errors=pipeline_errors, report_paths=report_paths)
     _write_index(output_dir, reports, report_paths)
     _write_gate(output_dir, gate)
