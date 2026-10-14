@@ -1148,7 +1148,7 @@ Research observations always remain inconclusive until independent R06 review.
 `app.research_plan` is the operator CLI. `app.research_acceptance` runs real Docker
 transport tests; `app.research_juice_smoke` observes ordinary pinned Juice Shop search.
 Neither is a benchmark or an LLM quality measurement. R04 autonomous tool selection
-and the private B04 fixture bridge remain future integration. R00 replay and R01
+is now opt-in; the private B04 fixture bridge remains future integration. R00 replay and R01
 static source audit do not change historical A04/B09 results. See
 `docs/research-foundation-report-2026-10-15.md` for artifacts and reproduction.
 
@@ -1193,5 +1193,27 @@ Expected script failures may inform the next experiment; policy denial, invalid
 scope and lost persistence cannot be bypassed. Calls, IO byte reservations,
 context, actions, writes and observations are bounded; IO reservations are not
 provider token billing. Model interpretations never become confirmed/rejected:
-R06 independent claim protocols are still pending. Checkpoints are diagnostics,
+R06 independent claim protocols are opt-in and property-specific. Checkpoints are diagnostics,
 not resumable Docker sessions/approvals. See `docs/research-loop-r04.md`.
+
+# 32. R05–R07 research integration
+
+`app.research_campaign` combines canonical scanner/model candidates and unexamined
+surface questions, with shared call/action/wall/byte budgets. Surface questions and
+read coverage are not vulnerability counts or Recall. Model candidates must bind
+actual source reads, ranges and exact anchors. Directory search expands only frozen
+approved projected files. Provider correction validates persisted observation IDs
+before acceptance; it cannot add permissions or bypass Validator.
+
+Independent R06 protocols currently cover explicit weak digest source calls and
+operator-owned confidential marker disclosure. Source confirmation is not runtime
+exploitability. HTTP replay uses two fresh generations, owner/negative controls,
+matching execution/audit and verified cleanup; arbitrary HTTP 200 is insufficient.
+Unsupported proofs remain pending. Marker/credentials stay operator-private; no
+private runtime handles enter state. Preserve historical A/B locks and policies.
+
+`app.research_dev_acceptance` is a bounded live functional DEV campaign, explicitly
+calibrated for implemented protocol coverage. It is not full benchmark metrics,
+reproducibility measurement or automatic fixes. Preserve unsuccessful starts and
+their seals; never treat them as successful repetitions. See
+`docs/research-integration-r05-r07.md` for results, limitations and handoff.
