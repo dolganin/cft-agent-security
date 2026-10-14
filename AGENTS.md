@@ -1217,3 +1217,31 @@ calibrated for implemented protocol coverage. It is not full benchmark metrics,
 reproducibility measurement or automatic fixes. Preserve unsuccessful starts and
 their seals; never treat them as successful repetitions. See
 `docs/research-integration-r05-r07.md` for results, limitations and handoff.
+
+# 33. R07 recovery / R08 browser
+
+Research campaigns retain model-failed questions and continue with remaining shared
+budgets. Reports expose `degraded` and `model_failures`; never hide incomplete
+questions as successful/rejected. Authentication/payment/rate-limit/model-route
+failures stop the campaign. Three consecutive model failures stop by default.
+One bounded correction still validates the same schemas and observation provenance.
+
+`browser_interact` is opt-in through an immutable browser image and trusted worker
+digest in ResearchScope. It passes canonical Validator/Executor/approval/audit.
+Chromium runs non-root/read-only in Docker with network=none; a separate fixed HTTP
+worker transports only independently scope-validated requests to the pinned target
+container/image/IP/network. Source scripts cannot access this channel. UI input is
+data, never model evaluate/JavaScript/CDP. Fresh anonymous contexts do not expose
+credentials, cookies or storage state. DOM/dialogs/screenshots remain inconclusive
+observations until an appropriate independent protocol exists.
+
+All redirects are blocked; require explicit approved navigation. Browser HTTP
+requests, including page resources, consume the same runtime/campaign network quota.
+Default opt-in browser quota is 128 per question, 64 per action; campaign defaults
+to 256 total. Resource/byte/action/time limits and cleanup remain mandatory.
+Before R09 configure operator scope excluding evaluator oracle/scoreboard routes.
+HttpServiceScope.denied_prefixes overrides grants; the worker never gets to expand
+it. Empty exclusions preserve the previous serialized scope shape.
+Do not equate rendered UI, PNG or dialog with vulnerability confirmation/coverage.
+See `docs/research-r07-recovery-r08-browser.md` and the fixed recovery/browser/juice
+smoke acceptance CLIs. These are not R09/R10 benchmark measurements.

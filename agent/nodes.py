@@ -530,8 +530,10 @@ def collect_evidence(state: AgentState) -> dict:
         if not evidence_loaded:
             research_update.update(stop_update(state, "workflow_failure", "Research execution/audit readback failed"))
 
-    experiment_error = (research is not None and evidence_loaded and action.tool == "sandbox_command"
-                        and "exit_code" in observation)
+    experiment_error = (research is not None and evidence_loaded and (
+        (action.tool == "sandbox_command" and "exit_code" in observation)
+        or (action.tool == "browser_interact" and observation.get("cleanup_verified") is True
+            and observation.get("kind") in {"browser_observation", "failed_browser_observation"})))
 
     return {
         "evidence": evidence,

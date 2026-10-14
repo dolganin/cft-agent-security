@@ -27,7 +27,7 @@ POLICY_IMAGE = "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f
 
 
 def execute_plan(*, profile: TargetProfile, configuration: dict, actions: list[dict], output: Path, role_headers=None):
-    if (set(configuration) - {"worker_image", "network_name", "services", "source_files", "runtime_service_map", "http_grants"}
+    if (set(configuration) - {"worker_image", "network_name", "services", "source_files", "runtime_service_map", "http_grants", "browser_image", "action_timeout", "max_http_requests"}
             or not 1 <= len(actions) <= 64):
         raise ValueError("Invalid operator configuration or action plan")
     if "source_files" in configuration:
@@ -50,6 +50,8 @@ def execute_plan(*, profile: TargetProfile, configuration: dict, actions: list[d
                          worker_image=configuration["worker_image"], output=output / "runtime",
                          services=services, network_name=network_name,
                          role_headers=role_headers,
+                         browser_image=configuration.get("browser_image"), timeout=configuration.get("action_timeout", 10),
+                         max_http_requests=configuration.get("max_http_requests", 128 if configuration.get("browser_image") else 32),
                          runtime_services=runtime_services) as runtime:
         validator = PolicyValidator.from_yaml(ROOT / "policies/research.yaml", target_profile=profile)
         validator.bind_research_scope(runtime.scope)

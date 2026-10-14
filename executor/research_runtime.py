@@ -30,6 +30,7 @@ class ResearchRuntime:
                  services: dict[str, HttpServiceScope] | None = None, network_name=None,
                  role_headers: dict[str, dict[str, str]] | None = None,
                  runtime_services: RuntimeServiceMap | None = None,
+                 browser_image: str | None = None,
                  timeout=10.0, wall_seconds=300, max_actions=64, max_http_requests=32):
         self.target = target
         self.root = target.repository_path.resolve(strict=True)
@@ -74,6 +75,8 @@ class ResearchRuntime:
         self.scope = ResearchScope(target_id=target.id, session_id="research-" + uuid4().hex,
                                    worker_image=worker_image, source_files=inventory,
                                    worker_sha256=sha256(WORKER.read_bytes()).hexdigest(),
+                                   browser_image=browser_image,
+                                   browser_worker_sha256=(self._browser_digest() if browser_image else None),
                                    services=services or {}, network_name=network_name,
                                    wall_seconds=wall_seconds, max_actions=max_actions,
                                    runtime_services_sha256=(content_digest(runtime_services.model_dump(mode="json")) if runtime_services else None),
@@ -88,6 +91,12 @@ class ResearchRuntime:
             raise ValueError("Invalid private role material")
         (self.output / "scope.json").write_text(self.scope.model_dump_json(indent=2))
         self._scope_digest = self.scope.digest
+
+    @staticmethod
+    def _browser_digest():
+        from executor.research_browser import WORKER as browser_worker
+        bridge = Path(__file__).with_name("research_browser.py")
+        return sha256(browser_worker.read_bytes() + bridge.read_bytes()).hexdigest()
 
     @staticmethod
     def services_from_runtime_map(target, runtime_services, grants):
@@ -105,7 +114,7 @@ class ResearchRuntime:
         for name, grant in grants.items():
             service = runtime_services.services[name]
             if (not service.ready or service.request_host is not None
-                    or set(grant) - {"read_prefixes", "write_paths", "role_handles"}):
+                    or set(grant) - {"read_prefixes", "write_paths", "role_handles", "denied_prefixes"}):
                 raise ValueError("Unsupported or unavailable runtime service grant")
             host = urlsplit(service.address).hostname
             matches = []
@@ -163,6 +172,8 @@ class ResearchRuntime:
     def start(self):
         try:
             self._worker_image_id = json.loads(self._docker(["image", "inspect", self.scope.worker_image]).stdout)[0]["Id"]
+            if self.scope.browser_image:
+                self._browser_image_id = json.loads(self._docker(["image", "inspect", self.scope.browser_image]).stdout)[0]["Id"]
             for service in self.scope.services.values():
                 self._endpoint(service)
             self._docker(["run", "--detach", "--pull=never", "--name", self.container,
@@ -226,6 +237,9 @@ class ResearchRuntime:
             self._check_source()
             self.actions += 1
             self.seen_actions.add(action.id)
+            if action.tool == "browser_interact":
+                from executor.research_browser import execute_browser
+                return execute_browser(self, action, request, run_id, WORKER)
             payload = {"tool": action.tool, "request": request.model_dump(mode="json"),
                        "visible_hashes": {p: f.visible_sha256 for p, f in self.scope.source_files.items()},
                        "timeout": min(self.timeout, self.scope.wall_seconds -
@@ -306,6 +320,8 @@ class ResearchRuntime:
                                  runtime_backend="docker")
 
     def _check_source(self):
+        if self.scope.browser_image and self._browser_digest() != self.scope.browser_worker_sha256:
+            raise ValueError("Trusted browser worker/bridge changed after scope freeze")
         if (self._runtime_services is not None and
                 content_digest(self._runtime_services.model_dump(mode="json")) != self.scope.runtime_services_sha256):
             raise ValueError("RuntimeServiceMap changed after research scope freeze")

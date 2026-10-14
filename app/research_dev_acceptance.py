@@ -94,7 +94,8 @@ def run(checkout, image, output, *, max_questions=4):
     after = validate_target_snapshot(checkout, COMMIT)
     ledgers = [json.loads(p.read_text()) for p in sorted((output / "campaign/questions").glob("*/progress.json"))]
     tools = [x["tool"] for progress in ledgers for x in progress["ledger"]]
-    checks = {"live_model": summary["model_calls"] > 0 and summary["stop_reason"] != "model_failure",
+    checks = {"live_model": summary["model_calls"] > 0 and not summary.get("degraded", False)
+              and summary["stop_reason"] not in {"model_failure", "provider_unavailable", "consecutive_model_failures"},
         "source_read": "read_source" in tools, "script_written": "write_workspace_file" in tools,
         "script_executed": "sandbox_command" in tools, "source_unchanged": snapshot == after,
         "http_observed": "target_http" in tools,

@@ -41,3 +41,5 @@ class CampaignLimits(BaseModel):
     max_observation_bytes: int = Field(default=4194304, ge=1024, le=16777216)
     max_write_bytes: int = Field(default=1048576, ge=0, le=4194304)
     dev_preferred_families: list[str] = Field(default_factory=list, max_length=8)
+    max_consecutive_model_failures: int = Field(default=3, ge=1, le=8)
+    max_http_requests: int = Field(default=256, ge=0, le=1024)

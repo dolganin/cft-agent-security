@@ -25,9 +25,25 @@ An observation or model conclusion cannot confirm/reject a vulnerability; indepe
 verification is a later stage. Finish honestly if further useful research is unavailable.
 Do not repeat an unchanged operation. Compute script SHA256 from the exact UTF-8
 content, or read its write observation's sha256; never invent a digest.
-For ALL tools except target_http, set service=null and endpoint=null. A finding's
+For ALL tools except target_http/browser_interact, set service=null and endpoint=null. A finding's
 service is context, not permission to attach network scope to a source read/script.
 Return a ResearchTurn matching the provided schema, not a security verdict."""
+
+TOOL_GUIDANCE = """
+Source paths in scripts are rooted at /target, not the workspace working directory.
+Use /target/routes/example.ts, never routes/example.ts. Read-only source tools take
+canonical relative paths without /target. sandbox_command requires argv such as
+["python3", "/workspace/check.py"] and script_sha256 copied EXACTLY from the write
+observation. Never guess a digest. If uncertain, read the workspace file first.
+To finish use finish=true and action=null. A finish turn cites only already persisted
+observation_index.action_id values, never a planned next action or a finding ID.
+Tool schemas in tools are authoritative: parameters have no extra keys.
+browser_interact is optional: open a permitted local path, inspect the snapshot's
+elements, then select bounded fill/click/press/snapshot steps. No evaluate/JavaScript,
+credentials, storage or arbitrary origins. Each call has a fresh anonymous browser
+context; put dependent form steps in one call. DOM/dialogs are observations, not
+security verdicts. Screenshots may help operator review but do not prove a claim.
+"""
 
 DISCOVERY_PROMPT = """
 You may report additional candidates independently of the current finding. Every
@@ -91,13 +107,15 @@ class ResearchAgentModel:
 
     def context(self, state):
         services = {name: {"read_prefixes": item.read_prefixes, "write_paths": item.write_paths,
-                           "role_handles": item.role_handles}
+                           "role_handles": item.role_handles, "denied_prefixes": item.denied_prefixes}
                     for name, item in self.scope.services.items()}
         # No full action/plan history or credentials; keep latest raw observations
         # and compact identities for ALL earlier observations (no silent forgetting).
         payload = {"finding": state["finding"].model_dump(mode="json"),
-                   "tools": research_tool_contracts(), "services": services,
+                   "tools": [x for x in research_tool_contracts()
+                             if x["name"] != "browser_interact" or self.scope.browser_image], "services": services,
                    "source_count": len(self.scope.source_files),
+                   "http_request_budget": self.scope.max_http_requests,
                    "limits": self.limits.model_dump(),
                    "usage": self.progress.model_dump(exclude={"ledger", "turns", "candidates", "candidate_rejections", "source_claims", "http_claims", "provider_usage"}),
                    "surface_context": self.surface_context,
@@ -136,7 +154,7 @@ class ResearchAgentModel:
         payload = self.context(state)
         # Include the schema/prompt and reserve UTF-8 output bytes before any API call.
         reservation = (len(encoded(payload)) + len(encoded(ResearchTurn.model_json_schema()))
-                       + len((PROMPT + DISCOVERY_PROMPT).encode()) + 512
+                       + len((PROMPT + DISCOVERY_PROMPT + TOOL_GUIDANCE).encode()) + 512
                        + int(getattr(self.client, "max_output_tokens", 4096)) * 4)
         reserved_attempts = 1 + self.limits.max_schema_corrections
         reservation = reservation * reserved_attempts + self.limits.max_schema_corrections * (
@@ -151,7 +169,7 @@ class ResearchAgentModel:
         if hasattr(self.client, "routes") and len(self.client.routes) != 1:
             raise ValueError("R04 requires exactly one explicitly selected provider route")
         try:
-            turn = self.client.complete_model(output_model=ResearchTurn, system_prompt=PROMPT + DISCOVERY_PROMPT,
+            turn = self.client.complete_model(output_model=ResearchTurn, system_prompt=PROMPT + DISCOVERY_PROMPT + TOOL_GUIDANCE,
                                               user_payload=payload, operation="research_turn",
                                               schema_retries=self.limits.max_schema_corrections, network_retries=0,
                                               validation_context={"observation_refs": [x.action_id for x in self.progress.ledger]})
@@ -161,6 +179,9 @@ class ResearchAgentModel:
             self.progress.model_validation_errors = [
                 {"loc": list(error.get("loc", [])), "type": error.get("type", "unknown")}
                 for error in getattr(self.client, "last_schema_errors", [])[:16]]
+            attempts = getattr(self.client, "last_attempts", [])
+            self.progress.provider_failure_status = (
+                attempts[-1].status if attempts and not attempts[-1].ok else None)
         turn = ResearchTurn.model_validate(turn)
         self.progress.model_diagnostic = "output_byte_limit"
         if len(encoded(turn.model_dump())) > int(getattr(self.client, "max_output_tokens", 4096)) * 4:

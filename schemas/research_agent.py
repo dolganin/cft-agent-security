@@ -43,7 +43,7 @@ class ResearchLimits(BaseModel):
 class ResearchChoice(BaseModel):
     model_config = ConfigDict(extra="forbid")
     tool: Literal["list_source_files", "read_source", "search_source", "write_workspace_file",
-                  "read_workspace_file", "sandbox_command", "target_http"]
+                  "read_workspace_file", "sandbox_command", "target_http", "browser_interact"]
     parameters: dict
     purpose: str = Field(min_length=1, max_length=1000)
     expected_evidence: str = Field(min_length=1, max_length=1000)
@@ -53,9 +53,9 @@ class ResearchChoice(BaseModel):
     @model_validator(mode="after")
     def typed_parameters_and_network_fields(self):
         request = RESEARCH_REQUESTS[self.tool].model_validate(self.parameters)
-        if self.tool != "target_http" and (self.service is not None or self.endpoint is not None):
+        if self.tool not in {"target_http", "browser_interact"} and (self.service is not None or self.endpoint is not None):
             raise ValueError("Source/workspace tools require service=null and endpoint=null; they have no network scope")
-        if self.tool == "target_http" and (not self.service or self.endpoint != request.path):
+        if self.tool in {"target_http", "browser_interact"} and (not self.service or self.endpoint != request.path):
             raise ValueError("target_http requires the operator service ID and endpoint equal to parameters.path")
         return self
 
@@ -107,6 +107,7 @@ class ResearchProgress(BaseModel):
     provider_usage: list[dict[str, int] | None] = Field(default_factory=list)
     model_diagnostic: str | None = None
     model_validation_errors: list[dict] = Field(default_factory=list)
+    provider_failure_status: str | None = None
     model_io_bytes: int = 0
     observation_bytes: int = 0
     write_bytes: int = 0

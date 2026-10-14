@@ -4,7 +4,7 @@ targets:
 environments:
   allowed: [sandbox]
 tools:
-  allowed: [list_source_files, read_source, search_source, write_workspace_file, read_workspace_file, sandbox_command, target_http]
+  allowed: [list_source_files, read_source, search_source, write_workspace_file, read_workspace_file, sandbox_command, target_http, browser_interact]
 limits:
   max_iterations: 64
   executor:

@@ -129,7 +129,17 @@ def http_observation(payload: dict) -> dict:
         connection.request(request["method"], request["path"],
                            body=request.get("body", "").encode() or None, headers=headers)
         response = connection.getresponse()
-        data = response.read(LIMIT + 1)
+        limit = 2097152 if payload.get("browser_transport") else LIMIT
+        data = response.read(limit + 1)
+        if payload.get("browser_transport"):
+            import base64
+            if len(data) > limit:
+                raise ValueError("Browser resource exceeded bounded transport")
+            return {"status": response.status, "body_base64": base64.b64encode(data).decode(),
+                    "headers": {k: v[:8192] for k, v in response.getheaders()
+                        if k.lower() in {"content-type", "location", "content-security-policy",
+                            "content-security-policy-report-only", "x-content-type-options",
+                            "x-frame-options", "referrer-policy", "permissions-policy"}}}
         return {"method": request["method"], "path": request["path"],
                 "status_code": response.status, "body": data[:LIMIT].decode(errors="replace"),
                 "response_sha256": hashlib.sha256(data[:LIMIT]).hexdigest(),
@@ -200,6 +210,19 @@ def work(payload: dict) -> dict:
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--browser-server"]:
+        for _ in range(64):
+            line = sys.stdin.readline(65537)
+            if not line:
+                break
+            try:
+                payload = json.loads(line)
+                if payload.get("tool") != "target_http" or payload.get("browser_transport") is not True:
+                    raise ValueError("Only fixed browser transport is supported")
+                print(json.dumps({"observation":http_observation(payload)}), flush=True)
+            except (ValueError, KeyError, TypeError, OSError, RuntimeError) as exc:
+                print(json.dumps({"error":type(exc).__name__}), flush=True)
+        sys.exit(0)
     try:
         payload = json.loads(sys.stdin.buffer.read(262145))
         result = work(payload)

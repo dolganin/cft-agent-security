@@ -1003,7 +1003,7 @@ class SafeExecutor:
                                 timed_out=result.timed_out, workspace_id=result.workspace_id,
                                 decision_reason="Research observation recorded", session_id=session_id,
                                 runtime_backend="docker",
-                                network_mode="target" if action.tool == "target_http" else "none")
+                                network_mode="target" if action.tool in {"target_http", "browser_interact"} else "none")
         except RunCancelled:
             self._finish(action, run_id, started, status="failed", exit_code=130,
                          stderr="Research action cancelled by operator",

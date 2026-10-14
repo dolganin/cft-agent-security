@@ -35,7 +35,7 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
     output = Path(output).resolve()
     if output.exists():
         raise FileExistsError("Choose a fresh output directory")
-    if set(configuration) - {"worker_image", "source_files", "runtime_service_map", "http_grants", "services", "network_name"}:
+    if set(configuration) - {"worker_image", "source_files", "runtime_service_map", "http_grants", "services", "network_name", "browser_image", "action_timeout", "max_http_requests"}:
         raise ValueError("Unknown operator configuration fields")
     files = configuration.get("source_files")
     if files is None:
@@ -59,7 +59,9 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
         runtime = stack.enter_context(ResearchRuntime(target=profile, source_files=files,
             worker_image=configuration["worker_image"], output=output / "runtime", services=services,
             network_name=network_name, runtime_services=runtime_services,
-            max_actions=limits.max_steps, wall_seconds=limits.wall_seconds))
+            max_actions=limits.max_steps, wall_seconds=limits.wall_seconds,
+            browser_image=configuration.get("browser_image"), timeout=configuration.get("action_timeout", 10),
+            max_http_requests=configuration.get("max_http_requests", 128 if configuration.get("browser_image") else 32)))
         validator = PolicyValidator.from_yaml(ROOT / "policies/research.yaml", target_profile=profile)
         validator.bind_research_scope(runtime.scope)
         policy = SandboxPolicy(sandbox_image=POLICY_IMAGE)
@@ -94,6 +96,7 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
                "actions": runtime.actions, "http_requests": runtime.requests,
                "model_calls": model.progress.model_calls,
                "model_diagnostic": model.progress.model_diagnostic,
+               "provider_failure_status": model.progress.provider_failure_status,
                "cleanup_verified": runtime.closed,
                "independent_verification": "pending R06"}
     (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")

@@ -35,11 +35,23 @@ def validate_research_action(scope: ResearchScope | None, action: ActionProposal
     if model is None:
         raise ValueError("Unsupported research capability")
     request = model.model_validate(action.parameters)
+    if action.tool == "browser_interact":
+        if scope.browser_image is None:
+            raise ValueError("Browser capability requires explicit operator provisioning")
+        http = action.model_copy(update={"tool": "target_http", "parameters": {"path": request.path}})
+        validate_research_action(scope, http)
+        return request
     if action.tool == "target_http":
         service = scope.services.get(action.service or "")
         if service is None or action.endpoint != request.path:
             raise ValueError("HTTP requires an operator service and matching local endpoint")
-        path = urlsplit(unquote(request.path)).path
+        decoded = request.path
+        for _ in range(4):
+            decoded = unquote(decoded)
+        path = urlsplit(decoded).path
+        if any(path == prefix.rstrip("/") or path.startswith(prefix.rstrip("/") + "/")
+               for prefix in service.denied_prefixes):
+            raise ValueError("Path is explicitly excluded by the operator")
         if request.role_handle is not None and request.role_handle not in service.role_handles:
             raise ValueError("Unknown operator role handle")
         if request.method in {"GET", "HEAD"}:

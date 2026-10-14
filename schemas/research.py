@@ -17,7 +17,7 @@ from pydantic import (
 )
 
 RESEARCH_TOOLS = frozenset({"list_source_files", "read_source", "search_source",
-                           "write_workspace_file", "read_workspace_file", "target_http"})
+                           "write_workspace_file", "read_workspace_file", "target_http", "browser_interact"})
 
 
 def content_digest(value: object) -> str:
@@ -63,8 +63,9 @@ class HttpServiceScope(StrictResearchModel):
     read_prefixes: list[str] = Field(default_factory=list, max_length=32)
     write_paths: dict[str, list[str]] = Field(default_factory=dict)
     role_handles: list[str] = Field(default_factory=list, max_length=16)
+    denied_prefixes: list[str] = Field(default_factory=list, max_length=32)
 
-    @field_validator("read_prefixes")
+    @field_validator("read_prefixes", "denied_prefixes")
     @classmethod
     def prefixes(cls, values):
         for value in values:
@@ -84,6 +85,13 @@ class HttpServiceScope(StrictResearchModel):
                     raise ValueError("Write grants cannot contain a query")
         return value
 
+    @model_serializer(mode="wrap")
+    def serialize(self, handler):
+        result = handler(self)
+        if not result["denied_prefixes"]:
+            result.pop("denied_prefixes")
+        return result
+
 
 class ResearchScope(StrictResearchModel):
     target_id: str
@@ -98,6 +106,8 @@ class ResearchScope(StrictResearchModel):
     target_runtime_session_id: str | None = None
     max_actions: int = Field(default=64, ge=1, le=256)
     max_http_requests: int = Field(default=32, ge=0, le=256)
+    browser_image: str | None = Field(default=None, pattern=r"^(?:sha256:[a-f0-9]{64}|[^\s]+@sha256:[a-f0-9]{64})$")
+    browser_worker_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     wall_seconds: int = Field(default=300, ge=1, le=3600)
 
     @field_validator("source_files")
@@ -111,6 +121,8 @@ class ResearchScope(StrictResearchModel):
 
     @model_validator(mode="after")
     def network(self):
+        if (self.browser_image is None) != (self.browser_worker_sha256 is None):
+            raise ValueError("Browser image and trusted worker digest are required together")
         if self.services and (not self.network_name or self.network_name in {"host", "bridge", "none"}):
             raise ValueError("Research HTTP requires an operator-owned internal network")
         if (self.runtime_services_sha256 is None) != (self.target_runtime_session_id is None):
@@ -120,7 +132,7 @@ class ResearchScope(StrictResearchModel):
     @model_serializer(mode="wrap")
     def serialize(self, handler):
         payload = handler(self)
-        for field in ("runtime_services_sha256", "target_runtime_session_id"):
+        for field in ("runtime_services_sha256", "target_runtime_session_id", "browser_image", "browser_worker_sha256"):
             if payload.get(field) is None:
                 payload.pop(field, None)
         return payload
@@ -223,9 +235,45 @@ class TargetHttpRequest(StrictResearchModel):
         return values
 
 
+class BrowserStep(StrictResearchModel):
+    operation: Literal["click", "fill", "press", "snapshot"]
+    selector: str | None = Field(default=None, min_length=1, max_length=300)
+    value: str | None = Field(default=None, max_length=4096)
+
+    @model_validator(mode="after")
+    def arguments(self):
+        if self.operation == "snapshot":
+            if self.selector is not None or self.value is not None:
+                raise ValueError("snapshot takes no selector/value")
+        elif self.selector is None:
+            raise ValueError("Interactions require an observed DOM selector")
+        if self.operation == "fill" and self.value is None:
+            raise ValueError("fill requires a value")
+        if self.operation == "click" and self.value is not None:
+            raise ValueError("click takes no value")
+        if self.operation == "press" and self.value not in {"Enter", "Tab", "Escape", "Space"}:
+            raise ValueError("Only bounded UI keys are supported")
+        return self
+
+
+class BrowserRequest(StrictResearchModel):
+    path: str = Field(min_length=1, max_length=2048)
+    fragment: str = Field(default="", max_length=1024)
+    steps: list[BrowserStep] = Field(default_factory=list, max_length=8)
+    screenshot: bool = False
+    _path = field_validator("path")(request_path)
+
+    @field_validator("fragment")
+    @classmethod
+    def fragment_only(cls, value):
+        if any(ord(c) < 32 or ord(c) == 127 for c in value):
+            raise ValueError("Invalid browser fragment")
+        return value
+
+
 RESEARCH_REQUESTS = {
     "list_source_files": ListSourceRequest, "read_source": ReadSourceRequest,
     "search_source": SearchSourceRequest, "write_workspace_file": WriteWorkspaceRequest,
     "read_workspace_file": ReadWorkspaceRequest, "sandbox_command": ScriptRequest,
-    "target_http": TargetHttpRequest,
+    "target_http": TargetHttpRequest, "browser_interact": BrowserRequest,
 }

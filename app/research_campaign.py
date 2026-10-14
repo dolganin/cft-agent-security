@@ -55,10 +55,12 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         "http_review_protocols": [spec.public() for spec, _ in http_review_registry.values()],
         "http_review_status": "enabled" if http_review_registry else "requires private operator-owned marker registry/factory",
         "benchmark_measurement": False, "repetitions": 1, "reproducibility": "not_measured"})
-    calls = actions = 0
+    calls = actions = http_requests = 0
     model_io = observation_bytes = write_bytes = 0
     ledgers, reports, reviews, runs = [], [], [], []
     stop = "queue_exhausted"
+    failures = []
+    consecutive_failures = 0
     for ordinal in range(limits.max_questions):
         check_cancelled()
         remaining_wall = int(limits.wall_seconds - (time.monotonic() - started))
@@ -84,11 +86,15 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
             "max_write_bytes": max(0, min(research_limits.max_write_bytes, limits.max_write_bytes - write_bytes)),
             "wall_seconds": min(research_limits.wall_seconds, remaining_wall)})
         directory = output / "questions" / str(ordinal)
-        state, summary = run_research(profile=profile, configuration=configuration, finding=question.finding,
+        question_config = {**configuration, "max_http_requests": min(
+            configuration.get("max_http_requests", 128 if configuration.get("browser_image") else 32),
+            max(0, limits.max_http_requests - http_requests))}
+        state, summary = run_research(profile=profile, configuration=question_config, finding=question.finding,
             client=client, output=directory, limits=scoped_limits, surface_context=related)
         progress, scope = state["research_progress"], state["research_scope"]
         calls += summary["model_calls"]
         actions += summary["actions"]
+        http_requests += summary.get("http_requests", 0)
         model_io += progress.model_io_bytes
         observation_bytes += progress.observation_bytes
         write_bytes += progress.write_bytes
@@ -137,8 +143,23 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         write_json(output / "reviews.json", reviews)
         write_json(output / "coverage.json", queue.coverage(ledgers))
         if state.get("stop_reason") == "model_failure":
-            stop = "model_failure"
-            break
+            consecutive_failures += 1
+            failure = {"question_id": question.id, "category": progress.provider_failure_status or "local_model_contract",
+                       "diagnostic": progress.model_diagnostic,
+                       "validation_errors": progress.model_validation_errors}
+            failures.append(failure)
+            write_json(output / "model-failures.json", failures)
+            if failure["category"] in {"auth_or_access", "payment_required", "rate_limited", "model_or_endpoint_unavailable"}:
+                stop = "provider_unavailable"
+                break
+            if consecutive_failures >= limits.max_consecutive_model_failures:
+                stop = "consecutive_model_failures"
+                break
+            if not summary["cleanup_verified"]:
+                stop = "cleanup_unverified"
+                break
+        else:
+            consecutive_failures = 0
     else:
         stop = "question_budget_exhausted"
     manifest = json.loads((output / "manifest.json").read_text())
@@ -146,10 +167,12 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
                     for p, digest in manifest["source_sha256"].items())
     summary = {"schema": "cft.research.campaign.result.v1", "runs": runs,
         "model_calls": calls, "actions": actions, "questions_researched": len(runs),
+        "http_requests": http_requests,
         "model_io_reserved_bytes": model_io, "observation_bytes": observation_bytes, "write_bytes": write_bytes,
         "candidate_count": len(queue.findings), "review_counts": {status: sum(r["status"] == status for r in reviews)
             for status in ("confirmed", "rejected", "review_pending")},
         "stop_reason": stop, "source_unchanged": integrity,
+        "model_failures": failures, "degraded": bool(failures),
         "cleanup_verified": all(r["summary"]["cleanup_verified"] for r in runs),
         "elapsed_seconds": round(time.monotonic() - started, 3), "benchmark_measurement": False,
         "source_confirmations_are_not_runtime_exploits": True}

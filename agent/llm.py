@@ -251,7 +251,13 @@ class ProviderFailoverClient:
                         self.last_usage = {k: first_usage[k] + second_usage[k] for k in first_usage}
                     else:
                         self.last_usage = None
-                    result = output_model.model_validate(_extract_json_object(raw), context=validation_context)
+                    try:
+                        result = output_model.model_validate(_extract_json_object(raw), context=validation_context)
+                    except ValidationError as invalid_correction:
+                        self.last_schema_errors.extend(
+                            {k: error[k] for k in ("loc", "type", "msg")}
+                            for error in invalid_correction.errors(include_input=False, include_url=False)[:16])
+                        raise
                 if lost_response:
                     # The lost response may still have consumed provider tokens.
                     self.last_usage = None
