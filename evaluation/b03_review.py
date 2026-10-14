@@ -16,6 +16,7 @@ from sast.identity import rule_family
 from schemas.benchmark_v2 import BenchmarkDatasetV2, BenchmarkObservationV2
 from schemas.scout import CandidateFindingBatch
 from scripts.a08_finalize import read, seal_review, sha, write
+from security.source_paths import normalize_source_path
 
 
 def review(inputs, target, output):
@@ -47,9 +48,10 @@ def review(inputs, target, output):
             if not _has_read_provenance(candidate, ranges):
                 raise ValueError("Candidate not bound to successful read source")
             identity = f"{mode}:scout:{i:02d}"
+            file = normalize_source_path(candidate.file, target)
             observations.append(BenchmarkObservationV2(
                 id=identity, source="model_scout", family=rule_family(candidate.rule_id),
-                service="juice", source_file=candidate.file,
+                service="juice", source_file=file,
                 line_start=candidate.line_start, line_end=candidate.line_end,
                 verification="not_run", evidence_backed=False,
             ))
@@ -57,7 +59,7 @@ def review(inputs, target, output):
                                 "line_start": candidate.line_start, "line_end": candidate.line_end,
                                 "family": rule_family(candidate.rule_id), "title": candidate.title,
                                 "read_binding": "passed", "runtime_verdict": "not_run",
-                                "source_file_sha256": read(inputs / "snapshot.json")["files"][candidate.file]})
+                                "source_file_sha256": read(inputs / "snapshot.json")["files"][file]})
         scores[mode] = score_v2(dataset, [*baseline, *observations],
                                 split="development", sample_kind="original")
     summary = {

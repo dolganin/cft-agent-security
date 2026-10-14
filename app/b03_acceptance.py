@@ -75,7 +75,7 @@ class RecordingClient:
         return result
 
 
-def run(target, output, model, max_turns=8):
+def run(target, output, model, max_turns=8, sast_from=None):
     target, output = Path(target).resolve(), Path(output).resolve()
     if output.exists() or output.is_relative_to(target):
         raise ValueError("Output must be fresh and outside target")
@@ -103,11 +103,29 @@ def run(target, output, model, max_turns=8):
     command = _docker_command(target, RULES.resolve())
     command[2:2] = ["--cpus=2", "--memory=2g", "--pids-limit=128"]
     started = time.monotonic()
-    scanned = run_cancellable_process(command, cwd=target, timeout=600)
-    if scanned.returncode:
-        write(output / "scanner-failure.json", {"exit_code": scanned.returncode})
-        raise ValueError("SAST failed; no successful comparison claimed")
-    raw = json.loads(scanned.stdout)
+    if sast_from is None:
+        scanned = run_cancellable_process(command, cwd=target, timeout=600)
+        if scanned.returncode:
+            write(output / "scanner-failure.json", {"exit_code": scanned.returncode})
+            raise ValueError("SAST failed; no successful comparison claimed")
+        raw = json.loads(scanned.stdout)
+        scanner_manifest = {
+            "image": _DOCKER_SEMGREP_IMAGE, "rules_sha256": sha(RULES),
+            "original_stdout_sha256": hashlib.sha256(scanned.stdout.encode()).hexdigest(),
+            "seconds": round(time.monotonic() - started, 3), "exit_code": scanned.returncode,
+        }
+    else:
+        previous = Path(sast_from).resolve()
+        if read_json(previous / "snapshot.json") != before:
+            raise ValueError("Cached SAST target snapshot mismatch")
+        scanner_manifest = read_json(previous / "sast/manifest.json")
+        if (scanner_manifest["image"] != _DOCKER_SEMGREP_IMAGE
+                or scanner_manifest["rules_sha256"] != sha(RULES)
+                or scanner_manifest["exit_code"] != 0):
+            raise ValueError("Cached scanner identity/status mismatch")
+        raw = read_json(previous / "sast/raw-redacted.json")
+        scanner_manifest = {**scanner_manifest, "reused_from": previous.name,
+                            "reuse_raw_sha256": sha(previous / "sast/raw-redacted.json")}
     if not isinstance(raw.get("results"), list):
         raise TypeError("Invalid scanner output")
     if any(e.get("level", "").lower() == "error" for e in raw.get("errors", [])):
@@ -115,18 +133,18 @@ def run(target, output, model, max_turns=8):
         raise ValueError("Scanner diagnostics prevent acceptance")
     findings = normalize_semgrep_payload(raw, repository_root=target,
                                         service_resolver=lambda _path: "juice", scanner_root="/src")
+    if sast_from is not None and [f.model_dump(mode="json") for f in findings] != read_json(
+        Path(sast_from) / "sast/findings.json",
+    ):
+        raise ValueError("Cached normalized SAST differs from source-bound recomputation")
     # Do not publish scanner code snippets/literals; locations and rules unchanged.
     for item in raw["results"]:
         if "lines" in item.get("extra", {}):
             item["extra"]["lines"] = "<source-snippet-not-published>"
     write(output / "sast/raw-redacted.json", raw)
     write(output / "sast/findings.json", [f.model_dump(mode="json") for f in findings])
-    write(output / "sast/manifest.json", {
-        "image": _DOCKER_SEMGREP_IMAGE, "rules_sha256": sha(RULES),
-        "original_stdout_sha256": hashlib.sha256(scanned.stdout.encode()).hexdigest(),
-        "seconds": round(time.monotonic() - started, 3), "exit_code": scanned.returncode,
-        "diagnostics": raw.get("errors", []), "redaction": "extra.lines only",
-    })
+    write(output / "sast/manifest.json", {**scanner_manifest,
+          "diagnostics": raw.get("errors", []), "redaction": "extra.lines only"})
     source_map = build_express_source_map(discovery)
     write(output / "express-source-map.json", source_map.model_dump(mode="json"))
     for mode in ("round_robin", "handlers"):
@@ -173,8 +191,14 @@ def main():
     parser.add_argument("--model", choices=["qwen3.8-flash-next", "Qwen3.8-27B"],
                         default="qwen3.8-flash-next")
     parser.add_argument("--max-turns", type=int, choices=range(1, 17), default=8)
+    parser.add_argument("--sast-from", type=Path,
+                        help="Reuse measured SAST only after snapshot/config and normalization checks")
     args = parser.parse_args()
-    run(args.target, args.output, args.model, args.max_turns)
+    run(args.target, args.output, args.model, args.max_turns, args.sast_from)
+
+
+def read_json(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":
