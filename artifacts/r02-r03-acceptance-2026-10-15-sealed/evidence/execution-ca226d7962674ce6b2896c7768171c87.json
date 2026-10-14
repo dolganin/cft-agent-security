@@ -1,0 +1,68 @@
+{
+  "action_digest": "cdb2b0dd3563c410bb2ff60d765f71a7a82c1c6295ebe6a0c6b413737ca4210f",
+  "action_id": "accept-58654d04f1f44321a996a9a91b1250cc",
+  "audit_ref": "audit:c8a5814512864e22b1a6162a3cddbf8e",
+  "created_at": "2026-10-14T18:43:03.335078+00:00",
+  "duration_ms": 3634,
+  "endpoint": null,
+  "error": {
+    "code": "TIMEOUT",
+    "layer": "executor",
+    "message": "Sandbox execution timed out",
+    "retryable": true
+  },
+  "exit_code": 124,
+  "fixture_binding": null,
+  "id": "execution-ca226d7962674ce6b2896c7768171c87",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "49cd87667bc69acee07cbbf8de2fda38afba8c52f6c8aad27643483bcba527b4",
+    "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+    "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+  },
+  "run_id": "c8a5814512864e22b1a6162a3cddbf8e",
+  "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+  "status": "failed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"exit_code\": 124, \"timed_out\": true, \"stdout\": \"\", \"stderr\": \"\", \"truncated\": {\"stdout\": false, \"stderr\": false}, \"script_sha256\": \"f732e2da839c0f61a775cc41b5a8aba17b2f3c55b3106ee4890a3fe0a2b5ef71\", \"argv\": [\"python3\", \"/workspace/probe.py\"], \"cwd\": \"/workspace\"}, \"verdict\": \"inconclusive\"}",
+  "target": "research-acceptance",
+  "timed_out": true,
+  "tool": "sandbox_command",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd"
+}

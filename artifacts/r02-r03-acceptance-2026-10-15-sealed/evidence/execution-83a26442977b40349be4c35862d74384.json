@@ -1,0 +1,63 @@
+{
+  "action_digest": "ec12905a77069061ea493277c3d41f5962f255ac82efac02b5011d6f5db5112a",
+  "action_id": "accept-b03bfc76b63c402db530eab4754219de",
+  "audit_ref": "audit:c514d380dfb947c7bb11b8d470e5f8be",
+  "created_at": "2026-10-14T18:42:56.787509+00:00",
+  "duration_ms": 791,
+  "endpoint": null,
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-83a26442977b40349be4c35862d74384",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "49cd87667bc69acee07cbbf8de2fda38afba8c52f6c8aad27643483bcba527b4",
+    "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+    "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+  },
+  "run_id": "c514d380dfb947c7bb11b8d470e5f8be",
+  "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"path\": \"probe.py\", \"sha256\": \"e91e87c882186f03e572ed280d314cb150308330ad33f53d9bac05c4310e5101\", \"bytes\": 17}, \"verdict\": \"inconclusive\"}",
+  "target": "research-acceptance",
+  "timed_out": false,
+  "tool": "write_workspace_file",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd"
+}

@@ -1,0 +1,63 @@
+{
+  "action_digest": "88453500be8f6e55352a9668faa520e0930855311d80d9f13e720c6ccaab5e72",
+  "action_id": "research-262cb646bed64862990125cd0528cb54",
+  "audit_ref": "audit:dde352e667544687b5056655f480ef96",
+  "created_at": "2026-10-14T18:45:42.120431+00:00",
+  "duration_ms": 845,
+  "endpoint": null,
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-c698440f3f29456b9090bfc710dae1fb",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "9c5f3f3b7f358dbbf6f591b5fa24cf90ce3ea5272f1525b77eb6fb0499e02b5d",
+    "session_id": "research-ce6e7f6f7fed4bd6b91b71014536db60",
+    "source_snapshot": "341b4bea7d9bdd41123024ba84400165b1fb5681d61e777cfa99dca262ba97f3"
+  },
+  "run_id": "dde352e667544687b5056655f480ef96",
+  "session_id": "research-ce6e7f6f7fed4bd6b91b71014536db60",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"path\": \"routes/search.ts\", \"content\": \"1: /*\\n2: * Copyright (c) 2014-2026 Bjoern Kimminich & the OWASP Juice Shop contributors.\\n3: * SPDX-License-Identifier: MIT\\n4: */\\n5: \\n6: import { type Request, type Response, type NextFunction } from 'express'\\n7: \\n8: import * as utils from '../lib/utils'\\n9: import * as models from '../models/index'\\n10: import { UserModel } from '../models/user'\\n11: import { challenges } from '../data/datacache'\\n12: import * as challengeUtils from '../lib/challengeUtils'\\n13: \\n14: class ErrorWithParent extends Error {\\n15: parent: Error | undefined\\n16: }\\n17: \\n18: \\n19: export function searchProducts () {\\n20: return (req: Request, res: Response, next: NextFunction) => {\\n21: let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''\\n22: criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)\\n23: models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) \\n24: .then(([products]: any) => {\\n25: const dataString = JSON.stringify(products)\\n26: if (challengeUtils.notSolved(challenges.unionSqlInjectionChallenge)) { \\n27: let solved = true\\n28: UserModel.findAll().then(data => {\\n29: const users = utils.queryResultToJson(data)\\n30: if (users.data?.length) {\\n31: for (let i = 0; i < users.data.length; i++) {\\n32: solved = solved && utils.containsOrEscaped(dataString, users.data[i].email) && dataString.includes(users.data[i].password)\\n33: if (!solved) {\\n34: break\\n35: }\\n36: }\\n37: if (solved) {\\n38: challengeUtils.solve(challenges.unionSqlInjectionChallenge)\\n39: }\\n40: }\\n41: }).catch((error: Error) => {\\n42: next(error)\\n43: })\\n44: }\\n45: if (challengeUtils.notSolved(challenges.dbSchemaChallenge)) {\\n46: let solved = true\\n47: void models.sequelize.query('SELECT sql FROM sqlite_master').then(([data]: any) => {\\n48: const tableDefinitions = utils.queryResultToJson(data)\\n49: if (tableDefinitions.data?.length) {\\n50: for (let i = 0; i < tableDefinitions.data.length; i++) {\\n51: if (tableDefinitions.data[i].sql) {\\n52: solved = solved && utils.containsOrEscaped(dataString, tableDefinitions.data[i].sql)\\n53: if (!solved) {\\n54: break\\n55: }\\n56: }\\n57: }\\n58: if (solved) {\\n59: challengeUtils.solve(challenges.dbSchemaChallenge)\\n60: }\", \"truncated\": false, \"visible_sha256\": \"6bf4971c5951888c9ce945d50e19dae181c11c906e7d7d909bb859a9f0730b31\"}, \"verdict\": \"inconclusive\"}",
+  "target": "juice-research-smoke",
+  "timed_out": false,
+  "tool": "read_source",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-ce6e7f6f7fed4bd6b91b71014536db60"
+}

@@ -1,0 +1,224 @@
+{
+  "schema": "research-baseline.v1",
+  "archive": "b09-single-2026-10-15.zip",
+  "archive_sha256": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+  "verified_archive_files": 742,
+  "verified_replay_files": 12,
+  "offline_replay_identical": true,
+  "baseline_run": "b09-single-2026-10-15-final",
+  "run_result": {
+    "exit_code": 1,
+    "finished_at": "2026-10-14T17:14:11.589743+00:00",
+    "target_snapshot_after": {
+      "commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+      "tracked_files": 1300,
+      "files_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818"
+    },
+    "source_unchanged": true
+  },
+  "run_config": {
+    "llm_routes": "nsu:qwen3.8-flash-next",
+    "llm_timeout_seconds": 55,
+    "llm_max_output_tokens": 8192,
+    "llm_reasoning_effort": "low",
+    "llm_allow_external_fallbacks": false,
+    "scout_schedule_mode": "handlers",
+    "scout_max_turns": 8,
+    "scout_wall_clock_seconds": 240,
+    "scout_max_candidates": 32,
+    "scout_max_source_chars": 160000,
+    "agent_wall_clock_seconds": 120,
+    "max_iterations": 2,
+    "repetitions": 1,
+    "reproducibility": "not_measured",
+    "mttr": "not_measured",
+    "implementation_commit": "149759abaa35b939a945274727cbe646bed8cac2",
+    "started_at": "2026-10-14T17:09:27.003724+00:00",
+    "target_snapshot": {
+      "commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+      "tracked_files": 1300,
+      "files_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818"
+    },
+    "operator_inputs_sha256": {
+      "targets/juice-verification.yaml": "7b8c8770b5b1ea7f4d33efc348182c6efd0d7b0ada3a259f7b68c53ebc482dd7",
+      "targets/juice-b05-access-fixture.yaml": "90866a6b475078f4ad4b73a1f3c0bac62e1e341af9818dcc40fb1271089f37d6",
+      "targets/juice-b06-verification.yaml": "4384e6cb0e9c09abdae9fbe55a86a4e2e478b69ef4aefc5fc10cfd0940308d4a",
+      "targets/juice-b09.compose.yml": "89440db54fb47976c7fcabbfbe79023bcd0a00eb45ff80ce7ff2f6fac9df1a0b",
+      "sast/rules/juice-shop-v2/profile.yaml": "93303d3677dcd41c773d7ddaa59e1215d1659bb8ab70d272ff454d06b24f4ae6"
+    }
+  },
+  "development_base_commit": "40f6633b7350c136d535b3038a45ec615076fdf2",
+  "dataset_sha256": "579b9a51531010e8b4d53b27cb7607f410898cb144fe1db76cef9810e82a5366",
+  "measurement": {
+    "technically_valid": true,
+    "technical_errors": [],
+    "sast_coverage_warnings": 59,
+    "queue_size": 115,
+    "reported_verdicts": {
+      "inconclusive": 107,
+      "confirmed": 8
+    },
+    "evidence_backed_binary_observations": 8,
+    "metrics": {
+      "development": {
+        "detection": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 10,
+          "tn": 2,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6666666666666666,
+          "duplicates": 3,
+          "unresolved": 0,
+          "outside_ground_truth": 102
+        },
+        "verification": {
+          "schema_version": "benchmark.verification.v2",
+          "counts": {
+            "labeled_cases": 22,
+            "positive_cases": 20,
+            "negative_cases": 2,
+            "confirmed_cases": 2,
+            "rejected_cases": 0,
+            "decided_cases": 2,
+            "correct_confirmations": 2,
+            "false_confirmations": 0,
+            "correct_rejections": 0,
+            "false_rejections": 0,
+            "correct_decisions": 2,
+            "abstained_cases": 20,
+            "unresolved": 0,
+            "outside_ground_truth": 102,
+            "duplicates": 3
+          },
+          "abstention_reasons": {
+            "inconclusive": 0,
+            "unsupported": 8,
+            "timeout": 0,
+            "policy_blocked": 0,
+            "technical_error": 0,
+            "not_detected": 12,
+            "not_run": 0,
+            "invalid_evidence": 0,
+            "conflicting_evidence": 0
+          },
+          "confirmed_precision": 1.0,
+          "supported_verified_recall": 0.1,
+          "false_confirmation_rate": 0.0,
+          "answered_accuracy": 1.0,
+          "decision_coverage": 0.09090909090909091,
+          "abstention_rate": 0.9090909090909091
+        },
+        "sast_detection": {
+          "tp": 7,
+          "fp": 0,
+          "fn": 13,
+          "tn": 2,
+          "precision": 1.0,
+          "recall": 0.35,
+          "f1": 0.5185185185185185,
+          "duplicates": 3,
+          "unresolved": 0,
+          "outside_ground_truth": 88
+        }
+      },
+      "holdout": {
+        "detection": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 4,
+          "tn": 6,
+          "precision": 1.0,
+          "recall": 0.42857142857142855,
+          "f1": 0.6,
+          "duplicates": 0,
+          "unresolved": 0,
+          "outside_ground_truth": 112
+        },
+        "verification": {
+          "schema_version": "benchmark.verification.v2",
+          "counts": {
+            "labeled_cases": 13,
+            "positive_cases": 7,
+            "negative_cases": 6,
+            "confirmed_cases": 3,
+            "rejected_cases": 0,
+            "decided_cases": 3,
+            "correct_confirmations": 3,
+            "false_confirmations": 0,
+            "correct_rejections": 0,
+            "false_rejections": 0,
+            "correct_decisions": 3,
+            "abstained_cases": 10,
+            "unresolved": 0,
+            "outside_ground_truth": 112,
+            "duplicates": 0
+          },
+          "abstention_reasons": {
+            "inconclusive": 0,
+            "unsupported": 0,
+            "timeout": 0,
+            "policy_blocked": 0,
+            "technical_error": 0,
+            "not_detected": 10,
+            "not_run": 0,
+            "invalid_evidence": 0,
+            "conflicting_evidence": 0
+          },
+          "confirmed_precision": 1.0,
+          "supported_verified_recall": 0.42857142857142855,
+          "false_confirmation_rate": 0.0,
+          "answered_accuracy": 1.0,
+          "decision_coverage": 0.23076923076923078,
+          "abstention_rate": 0.7692307692307693
+        },
+        "sast_detection": {
+          "tp": 3,
+          "fp": 0,
+          "fn": 4,
+          "tn": 6,
+          "precision": 1.0,
+          "recall": 0.42857142857142855,
+          "f1": 0.6,
+          "duplicates": 4,
+          "unresolved": 0,
+          "outside_ground_truth": 91
+        }
+      }
+    },
+    "repetitions": 1,
+    "reproducibility": null,
+    "mttr": null,
+    "limitations": [
+      "Only frozen A04 original cases, DEV and HOLDOUT separately.",
+      "Out-of-truth findings are not automatically false positives.",
+      "Known Semgrep warnings mean incomplete source coverage.",
+      "No new DAST baseline or repair measurement.",
+      "B05 write-v3 is not accepted; no claim of full Stage B completion."
+    ]
+  },
+  "limitations": {
+    "final_runs": 1,
+    "reproducibility": "N/A",
+    "mttr": "N/A",
+    "cp_accuracy": "N/A",
+    "fresh_dast_baseline": false
+  },
+  "measurement_contract": {
+    "matching": "frozen A05 case matcher; deduplicate independent causes",
+    "positive_denominator": 27,
+    "negative_denominator": 8,
+    "sample_kind": "original",
+    "splits": [
+      "development",
+      "holdout"
+    ],
+    "holdout_independence": "historically inspected; no claim of unseen generalization",
+    "reported_fpr": "false confirmations/all safe cases; unresolved negatives reported",
+    "outside_ground_truth": "review separately, not automatic FP",
+    "comparative_spike": "DEV only; same model/inputs/scope/budgets; log exceptions",
+    "production_inputs": "projected source + observations, never evaluator labels",
+    "final_run_count": 1
+  }
+}

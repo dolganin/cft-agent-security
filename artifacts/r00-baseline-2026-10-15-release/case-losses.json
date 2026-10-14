@@ -1,0 +1,156 @@
+[
+  {
+    "split": "development",
+    "case_id": "JS-BIZ-001",
+    "family": "business-logic",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-BIZ-002",
+    "family": "business-logic",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-BOLA-001",
+    "family": "access-control",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-BOLA-002",
+    "family": "access-control",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-BOLA-003",
+    "family": "access-control",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-BOLA-004",
+    "family": "access-control",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-CODE-001",
+    "family": "code-evaluation",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-CRYPTO-001",
+    "family": "weak-cryptography",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-DATA-002",
+    "family": "sensitive-data-exposure",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-FILE-002",
+    "family": "file-validation",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-NOSQL-001",
+    "family": "nosql-injection",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-NOSQL-002",
+    "family": "nosql-injection",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-PATH-001",
+    "family": "path-traversal",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-RATE-001",
+    "family": "rate-limiting",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-SSRF-001",
+    "family": "ssrf",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-XSS-001",
+    "family": "xss",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-XSS-002",
+    "family": "xss",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "development",
+    "case_id": "JS-XXE-001",
+    "family": "xml-external-entities",
+    "detected": true,
+    "reason": "unsupported"
+  },
+  {
+    "split": "holdout",
+    "case_id": "JS-AUTHZ-001",
+    "family": "authorization",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "holdout",
+    "case_id": "JS-AUTHZ-002",
+    "family": "authorization",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "holdout",
+    "case_id": "JS-CAPTCHA-001",
+    "family": "anti-automation",
+    "detected": false,
+    "reason": "not_detected"
+  },
+  {
+    "split": "holdout",
+    "case_id": "JS-DATA-001",
+    "family": "sensitive-data-exposure",
+    "detected": false,
+    "reason": "not_detected"
+  }
+]

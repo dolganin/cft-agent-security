@@ -1,0 +1,147 @@
+{
+  "schema": "research-harness-audit.v1",
+  "method": "static source audit; no upstream code execution",
+  "candidates": {
+    "strix": {
+      "repository": "https://github.com/usestrix/strix",
+      "commit": "87f2d783d6595d0aa557809e02c67d94e52bda05",
+      "license": "Apache-2.0",
+      "files": [
+        "LICENSE",
+        "pyproject.toml",
+        "uv.lock",
+        "strix/runtime/docker_client.py",
+        "strix/runtime/session_manager.py",
+        "strix/agents/factory.py"
+      ],
+      "decision": "component/design reference; full runtime fails current isolation acceptance",
+      "observations": [
+        "Docker adapter adds NET_ADMIN/NET_RAW and host-gateway",
+        "Source bind mounts default to writable unless caller overrides",
+        "Current core depends on openai-agents, not a drop-in LangGraph node"
+      ],
+      "source_evidence": {
+        "LICENSE": {
+          "sha256": "7db9697134251e314bd8d39257fe170c98b3e2ad9b2ed67e97acaf9613e7b9e3",
+          "url": "https://github.com/usestrix/strix/blob/87f2d783d6595d0aa557809e02c67d94e52bda05/LICENSE"
+        },
+        "pyproject.toml": {
+          "sha256": "8b4b6f1c0b4531a4cbc72b1f04877432d1fad2547f07a5b19c244aee4083c2b2",
+          "url": "https://github.com/usestrix/strix/blob/87f2d783d6595d0aa557809e02c67d94e52bda05/pyproject.toml"
+        },
+        "uv.lock": {
+          "sha256": "727b2713f2e4c1962684dd67ec39fd2c790186e0a80209bd3ae375d1ba630dbd",
+          "url": "https://github.com/usestrix/strix/blob/87f2d783d6595d0aa557809e02c67d94e52bda05/uv.lock"
+        },
+        "strix/runtime/docker_client.py": {
+          "sha256": "081563d467cce5957818f50a7d4fce3df64a503d737d3b9332f56593178d8c4f",
+          "url": "https://github.com/usestrix/strix/blob/87f2d783d6595d0aa557809e02c67d94e52bda05/strix/runtime/docker_client.py"
+        },
+        "strix/runtime/session_manager.py": {
+          "sha256": "739589d5d79f3d18b2ee86c27c7c3cf749889575e8d19e2ff6e89a6eb8c90fe4",
+          "url": "https://github.com/usestrix/strix/blob/87f2d783d6595d0aa557809e02c67d94e52bda05/strix/runtime/session_manager.py"
+        },
+        "strix/agents/factory.py": {
+          "sha256": "7f65d8cedec1a5178723b35b9189b1762051fba040c74f7f2d224107cf957aa8",
+          "url": "https://github.com/usestrix/strix/blob/87f2d783d6595d0aa557809e02c67d94e52bda05/strix/agents/factory.py"
+        }
+      }
+    },
+    "software-agent-sdk": {
+      "repository": "https://github.com/OpenHands/software-agent-sdk",
+      "commit": "95cb37b7f04ff281e92bfb3c3fc66573db2df38a",
+      "license": "MIT",
+      "files": [
+        "LICENSE",
+        "pyproject.toml",
+        "uv.lock",
+        "openhands-sdk/pyproject.toml",
+        "openhands-tools/pyproject.toml",
+        "openhands-sdk/openhands/sdk/agent/agent.py",
+        "openhands-sdk/openhands/sdk/workspace/base.py",
+        "openhands-sdk/openhands/sdk/llm/llm.py"
+      ],
+      "decision": "shortlist for R04/R07 custom-tool harness adapter",
+      "observations": [
+        "Typed tools dispatch through _execute_action_event",
+        "Confirmation policy/security analyzer exist; deterministic CFT Validator must be installed as a custom tool boundary",
+        "Custom model base_url is configurable; actual NSU compatibility remains a runtime check",
+        "SDK requires Python >=3.12 and pydantic >=2.13.5; isolate its dependencies from the current >=3.11 application"
+      ],
+      "source_evidence": {
+        "LICENSE": {
+          "sha256": "14a9b631c658eee682c6c2973525fbdf808c3457176bc47513052c559cc5ce86",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/LICENSE"
+        },
+        "pyproject.toml": {
+          "sha256": "6ca189574974a2723a4d2eb6034186d72893be5c21e662a3615f6fb30cb73c1d",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/pyproject.toml"
+        },
+        "uv.lock": {
+          "sha256": "38e1d063a2d6580e6d23afbbcb64ddadb85feeab3a669486ddf3435cfe17d196",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/uv.lock"
+        },
+        "openhands-sdk/pyproject.toml": {
+          "sha256": "63acd349c0a9a94c11df075a5b3f3437f222d9a409b29aee33805abb22950a9c",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/openhands-sdk/pyproject.toml"
+        },
+        "openhands-tools/pyproject.toml": {
+          "sha256": "1858d83f27b53d959929a2f59846edf08d0d7dee544cffa6b506c23733281446",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/openhands-tools/pyproject.toml"
+        },
+        "openhands-sdk/openhands/sdk/agent/agent.py": {
+          "sha256": "0fe8c703580ae6a6ae2dba97a0bc1966811950d224b4672a3d6af33001d30c92",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/openhands-sdk/openhands/sdk/agent/agent.py"
+        },
+        "openhands-sdk/openhands/sdk/workspace/base.py": {
+          "sha256": "0c41c50b4542af180c930c89c451189196993af09fbfdd9c74c3519136291602",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/openhands-sdk/openhands/sdk/workspace/base.py"
+        },
+        "openhands-sdk/openhands/sdk/llm/llm.py": {
+          "sha256": "2e977d0f0f0a7d650173da7b3efc16efde11bf4e470b72324b6283abe363343e",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/95cb37b7f04ff281e92bfb3c3fc66573db2df38a/openhands-sdk/openhands/sdk/llm/llm.py"
+        }
+      }
+    },
+    "PentestGPT": {
+      "repository": "https://github.com/GreyDGL/PentestGPT",
+      "commit": "e8b1bb77d1ac00329675cec3b060aba971ec1ac8",
+      "license": "MIT",
+      "files": [
+        "LICENSE.md",
+        "docs/architecture.md",
+        "pentestgpt_agent/pyproject.toml"
+      ],
+      "decision": "state/coverage architecture reference",
+      "observations": [
+        "Maintained two-role loop uses deterministic leases/evidence/state",
+        "FULL_ACCESS relies on deployment isolation",
+        "Current provider wrappers target Claude Code/Codex; NSU support is not established"
+      ],
+      "source_evidence": {
+        "LICENSE.md": {
+          "sha256": "980fb30b5ba64d63bf64e774924402aa99f87cf222f72d28dd4ec9530cbcca25",
+          "url": "https://github.com/GreyDGL/PentestGPT/blob/e8b1bb77d1ac00329675cec3b060aba971ec1ac8/LICENSE.md"
+        },
+        "docs/architecture.md": {
+          "sha256": "3df0080e0cb10a1acfb4e9901abbdf8735e4a9b00b2bccc556ba850b6cf1b3ef",
+          "url": "https://github.com/GreyDGL/PentestGPT/blob/e8b1bb77d1ac00329675cec3b060aba971ec1ac8/docs/architecture.md"
+        },
+        "pentestgpt_agent/pyproject.toml": {
+          "sha256": "353f943814f403a30812e528b04430bdc22db8e6d61d9e41793a6a906d8586db",
+          "url": "https://github.com/GreyDGL/PentestGPT/blob/e8b1bb77d1ac00329675cec3b060aba971ec1ac8/pentestgpt_agent/pyproject.toml"
+        }
+      }
+    }
+  },
+  "shortlist": [
+    "current-python-langgraph",
+    "OpenHands custom tools adapter"
+  ],
+  "implementation_choice": "backend-neutral CFT research tools behind existing Validator/Executor",
+  "quality_winner": null,
+  "quality_comparison_stage": "R07",
+  "upstream_code_copied": false,
+  "new_runtime_dependencies": [],
+  "license_scope": "root licenses and direct dependency manifests checked; transitive NOTICE audit required before code adoption"
+}

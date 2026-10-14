@@ -1,0 +1,63 @@
+{
+  "action_digest": "9a8686afb4dc7071aadee553e4b7dc1672fd35a23b7a4ce5d6798fe5e04b0c63",
+  "action_id": "accept-9da508759ea34f12a93adc39136ee294",
+  "audit_ref": "audit:045b1874a35c469292c6dd37aed698b4",
+  "created_at": "2026-10-14T18:42:39.414076+00:00",
+  "duration_ms": 887,
+  "endpoint": null,
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-e83c0e365a0e484f8ab85ff1ece5c60b",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "49cd87667bc69acee07cbbf8de2fda38afba8c52f6c8aad27643483bcba527b4",
+    "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+    "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+  },
+  "run_id": "045b1874a35c469292c6dd37aed698b4",
+  "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"files\": [\"app.ts\", \"secret.ts\"], \"total\": 2, \"next_offset\": null}, \"verdict\": \"inconclusive\"}",
+  "target": "research-acceptance",
+  "timed_out": false,
+  "tool": "list_source_files",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd"
+}

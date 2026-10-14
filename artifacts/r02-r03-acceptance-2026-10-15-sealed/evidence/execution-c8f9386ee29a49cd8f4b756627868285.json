@@ -1,0 +1,63 @@
+{
+  "action_digest": "5ce16f924da934b24f170f01ebf4b8edd2059e36b918319ab29fdd49cf4b573d",
+  "action_id": "accept-dcd224ec26334c1ab8f8d32d2766129a",
+  "audit_ref": "audit:9d7aa61f2e3d450f8bb4391ef48fa44e",
+  "created_at": "2026-10-14T18:43:29.062150+00:00",
+  "duration_ms": 2849,
+  "endpoint": "/private",
+  "error": null,
+  "exit_code": 0,
+  "fixture_binding": null,
+  "id": "execution-c8f9386ee29a49cd8f4b756627868285",
+  "limits": {
+    "cpu_time_seconds": 2,
+    "max_cpus": 1.0,
+    "max_file_bytes": 1048576,
+    "max_output_bytes": 16384,
+    "max_processes": 8,
+    "memory_bytes": 268435456,
+    "tmpfs_size_bytes": 67108864,
+    "umask": 63,
+    "wall_time_seconds": 5.0
+  },
+  "policy": {
+    "allowed_environments": [
+      "local",
+      "sandbox",
+      "staging"
+    ],
+    "allowed_internal_network": "cft_internal_security_net",
+    "backend": "docker",
+    "container_user": "65534:65534",
+    "fail_closed": true,
+    "limits": {
+      "cpu_time_seconds": 2,
+      "max_cpus": 1.0,
+      "max_file_bytes": 1048576,
+      "max_output_bytes": 16384,
+      "max_processes": 8,
+      "memory_bytes": 268435456,
+      "tmpfs_size_bytes": 67108864,
+      "umask": 63,
+      "wall_time_seconds": 5.0
+    },
+    "network_mode": "none",
+    "sandbox_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+  },
+  "research_binding": {
+    "scope_sha256": "49cd87667bc69acee07cbbf8de2fda38afba8c52f6c8aad27643483bcba527b4",
+    "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+    "source_snapshot": "d6a33db871cd9c84f2220c547b8ca3211cee5d4225fbde9832f314479e5a14e7"
+  },
+  "run_id": "9d7aa61f2e3d450f8bb4391ef48fa44e",
+  "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+  "status": "completed",
+  "stderr": "",
+  "stdout": "{\"observation\": {\"method\": \"GET\", \"path\": \"/private\", \"status_code\": 200, \"body\": \"{\\\"identity\\\": \\\"fixture-owner\\\", \\\"reflected\\\": \\\"<redacted>\\\"}\", \"response_sha256\": \"cbf14b566544958777a639eea0726d608973d223cc614ef4b535e9ce9542e77d\", \"body_truncated\": false, \"headers\": {\"Content-Type\": \"application/json\"}, \"redirect_followed\": false, \"role_handle\": \"owner\"}, \"verdict\": \"inconclusive\"}",
+  "target": "research-acceptance",
+  "timed_out": false,
+  "tool": "target_http",
+  "type": "executor_result",
+  "verification_binding": null,
+  "workspace_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd"
+}

@@ -1,0 +1,149 @@
+{
+  "technically_valid": true,
+  "technical_errors": [],
+  "sast_coverage_warnings": 59,
+  "queue_size": 115,
+  "reported_verdicts": {
+    "inconclusive": 107,
+    "confirmed": 8
+  },
+  "evidence_backed_binary_observations": 8,
+  "metrics": {
+    "development": {
+      "detection": {
+        "tp": 10,
+        "fp": 0,
+        "fn": 10,
+        "tn": 2,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "duplicates": 3,
+        "unresolved": 0,
+        "outside_ground_truth": 102
+      },
+      "verification": {
+        "schema_version": "benchmark.verification.v2",
+        "counts": {
+          "labeled_cases": 22,
+          "positive_cases": 20,
+          "negative_cases": 2,
+          "confirmed_cases": 2,
+          "rejected_cases": 0,
+          "decided_cases": 2,
+          "correct_confirmations": 2,
+          "false_confirmations": 0,
+          "correct_rejections": 0,
+          "false_rejections": 0,
+          "correct_decisions": 2,
+          "abstained_cases": 20,
+          "unresolved": 0,
+          "outside_ground_truth": 102,
+          "duplicates": 3
+        },
+        "abstention_reasons": {
+          "inconclusive": 0,
+          "unsupported": 8,
+          "timeout": 0,
+          "policy_blocked": 0,
+          "technical_error": 0,
+          "not_detected": 12,
+          "not_run": 0,
+          "invalid_evidence": 0,
+          "conflicting_evidence": 0
+        },
+        "confirmed_precision": 1.0,
+        "supported_verified_recall": 0.1,
+        "false_confirmation_rate": 0.0,
+        "answered_accuracy": 1.0,
+        "decision_coverage": 0.09090909090909091,
+        "abstention_rate": 0.9090909090909091
+      },
+      "sast_detection": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 13,
+        "tn": 2,
+        "precision": 1.0,
+        "recall": 0.35,
+        "f1": 0.5185185185185185,
+        "duplicates": 3,
+        "unresolved": 0,
+        "outside_ground_truth": 88
+      }
+    },
+    "holdout": {
+      "detection": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "tn": 6,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "duplicates": 0,
+        "unresolved": 0,
+        "outside_ground_truth": 112
+      },
+      "verification": {
+        "schema_version": "benchmark.verification.v2",
+        "counts": {
+          "labeled_cases": 13,
+          "positive_cases": 7,
+          "negative_cases": 6,
+          "confirmed_cases": 3,
+          "rejected_cases": 0,
+          "decided_cases": 3,
+          "correct_confirmations": 3,
+          "false_confirmations": 0,
+          "correct_rejections": 0,
+          "false_rejections": 0,
+          "correct_decisions": 3,
+          "abstained_cases": 10,
+          "unresolved": 0,
+          "outside_ground_truth": 112,
+          "duplicates": 0
+        },
+        "abstention_reasons": {
+          "inconclusive": 0,
+          "unsupported": 0,
+          "timeout": 0,
+          "policy_blocked": 0,
+          "technical_error": 0,
+          "not_detected": 10,
+          "not_run": 0,
+          "invalid_evidence": 0,
+          "conflicting_evidence": 0
+        },
+        "confirmed_precision": 1.0,
+        "supported_verified_recall": 0.42857142857142855,
+        "false_confirmation_rate": 0.0,
+        "answered_accuracy": 1.0,
+        "decision_coverage": 0.23076923076923078,
+        "abstention_rate": 0.7692307692307693
+      },
+      "sast_detection": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "tn": 6,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "duplicates": 4,
+        "unresolved": 0,
+        "outside_ground_truth": 91
+      }
+    }
+  },
+  "repetitions": 1,
+  "reproducibility": null,
+  "mttr": null,
+  "limitations": [
+    "Only frozen A04 original cases, DEV and HOLDOUT separately.",
+    "Out-of-truth findings are not automatically false positives.",
+    "Known Semgrep warnings mean incomplete source coverage.",
+    "No new DAST baseline or repair measurement.",
+    "B05 write-v3 is not accepted; no claim of full Stage B completion."
+  ]
+}

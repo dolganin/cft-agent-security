@@ -1,0 +1,57 @@
+{
+  "schema": "research-verification.v1",
+  "date": "2026-10-15",
+  "development_base_commit": "40f6633",
+  "host_python": "3.13.11",
+  "checks": [
+    {
+      "command": "python -m pytest -q -rs",
+      "exit_code": 0,
+      "result": "1216 passed, 18 skipped, 1 warning in 98.35s (0:01:38)",
+      "skip_prerequisites": [
+        "1 A05 demo artifact path",
+        "6 historical Docker boundary tests without CFT_SANDBOX_IMAGE",
+        "1 SberLab multi-run",
+        "2 sandbox manager target paths",
+        "2 sandbox manager pinned-image settings",
+        "1 sandbox runner pinned-image setting",
+        "3 SberLab sessions",
+        "1 opt-in stage1 E2E",
+        "1 stage2 pinned checkout"
+      ]
+    },
+    {
+      "command": "python -m pytest -q tests/test_research_foundation.py tests/test_runtime_service_map.py",
+      "exit_code": 0,
+      "result": "66 passed, 1 warning in 1.41s",
+      "purpose": "Targeted checks after adding RuntimeServiceMap adapter"
+    },
+    {
+      "command": "CFT_SANDBOX_IMAGE=python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4 python -m pytest -q tests/test_docker_sandbox_boundary.py",
+      "exit_code": 0,
+      "result": "6 passed in 10.94s"
+    },
+    {
+      "command": "python -m ruff check .",
+      "exit_code": 0,
+      "result": "All checks passed!"
+    },
+    {
+      "command": "python -m app.main",
+      "exit_code": 0,
+      "result": "Workflow status: confirmed; Finding: demo-001; Iterations: 1; Evidence count: 1"
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0,
+      "result": "No output"
+    }
+  ],
+  "live_outputs": [
+    "r00-baseline-2026-10-15-release",
+    "r01-harness-audit-2026-10-15-final",
+    "r02-r03-acceptance-2026-10-15-sealed",
+    "r03-juice-smoke-2026-10-15-map"
+  ],
+  "note": "Targeted counts overlap the full suite and must not be added together. Transport acceptance is separate from benchmark quality. No new LLM calls."
+}

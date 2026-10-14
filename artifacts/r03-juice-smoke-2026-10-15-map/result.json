@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "target_image": "bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+  "runtime_image_id": "sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+  "operator_source_image_binding_only": true,
+  "status_code": 200,
+  "llm_calls": 0,
+  "benchmark_run": false,
+  "cleanup_verified": true
+}

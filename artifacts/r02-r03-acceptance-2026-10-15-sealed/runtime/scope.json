@@ -1,0 +1,39 @@
+{
+  "target_id": "research-acceptance",
+  "environment": "sandbox",
+  "session_id": "research-d0c2bb9490e74417aa7f5c79d6cd8bcd",
+  "worker_image": "sha256:73fd92a20ad72cf189bfcda4604196b8476dfad07c54bbf06ec830e3ec0fa7e7",
+  "worker_sha256": "cc9deb9c6b627838b1352a221f53cbeefa8dda7366fd2826274a4ea76d1554fa",
+  "source_files": {
+    "app.ts": {
+      "original_sha256": "2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8",
+      "visible_sha256": "2f39730acc0e12cdf7748b6a8e47e0b6a4f7e08c68ad0870c893082d7f56e1f8"
+    },
+    "secret.ts": {
+      "original_sha256": "6be430a6f3d3c01fbfa3ee73878d64cad91f8a0ca3be9816d41bcdb917da6b12",
+      "visible_sha256": "89f0a7ea37766f7c941784874f3c1c2f73a1b17f15fa33572b5b66c12d1b324b"
+    }
+  },
+  "services": {
+    "fixture": {
+      "container_id": "07e7809b4a54a06eff909a2f799845c96857048f381302f4a775de5fe5a73f20",
+      "image_id": "sha256:73fd92a20ad72cf189bfcda4604196b8476dfad07c54bbf06ec830e3ec0fa7e7",
+      "address": "http://fixture:8080",
+      "read_prefixes": [
+        "/"
+      ],
+      "write_paths": {
+        "POST": [
+          "/echo"
+        ]
+      },
+      "role_handles": [
+        "owner"
+      ]
+    }
+  },
+  "network_name": "r03-accept-f5618b708837-net",
+  "max_actions": 64,
+  "max_http_requests": 8,
+  "wall_seconds": 300
+}

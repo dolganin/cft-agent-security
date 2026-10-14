@@ -1,0 +1,35 @@
+{
+  "target_id": "juice-research-smoke",
+  "environment": "sandbox",
+  "session_id": "research-ce6e7f6f7fed4bd6b91b71014536db60",
+  "worker_image": "sha256:73fd92a20ad72cf189bfcda4604196b8476dfad07c54bbf06ec830e3ec0fa7e7",
+  "worker_sha256": "cc9deb9c6b627838b1352a221f53cbeefa8dda7366fd2826274a4ea76d1554fa",
+  "source_files": {
+    "routes/search.ts": {
+      "original_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+      "visible_sha256": "6bf4971c5951888c9ce945d50e19dae181c11c906e7d7d909bb859a9f0730b31"
+    },
+    "server.ts": {
+      "original_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b",
+      "visible_sha256": "48053d98f9e28d165a56094b3ae44e9feaa9a2d7be88d5a72420513fd8619e63"
+    }
+  },
+  "services": {
+    "juice": {
+      "container_id": "a49006f32ffb4503c5249d6b9f257fe7bc01dead9db4026c00152b831e23e8bd",
+      "image_id": "sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b",
+      "address": "http://juice:3000",
+      "read_prefixes": [
+        "/rest/products/search"
+      ],
+      "write_paths": {},
+      "role_handles": []
+    }
+  },
+  "network_name": "r03-juice-a651942018be-net",
+  "runtime_services_sha256": "a4020b07d9b040c7e6eea23509e71e998f66db550da40c9cf5a3df0927193776",
+  "target_runtime_session_id": "r03-juice-a651942018be",
+  "max_actions": 64,
+  "max_http_requests": 32,
+  "wall_seconds": 300
+}

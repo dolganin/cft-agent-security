@@ -1,0 +1,205 @@
+[
+  {
+    "finding_id": "model-scout-1a6367342c866e273428",
+    "file": "lib/insecurity.ts",
+    "line": 136,
+    "capability": "verify_redirect_destination",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "model-scout-1a6367342c866e273428",
+        "case_id": "JS-REDIRECT-001",
+        "candidate_case_ids": [
+          "JS-REDIRECT-001"
+        ],
+        "classification": "tp"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Two independent trials established the mapped runtime effect."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/53/audit.jsonl",
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/53/execution/execution-78da0d4096ba4da4b3c6eef5e00281a5.json",
+      "audit:6962f41ca8d849fca69d36926442bbc6",
+      "execution-78da0d4096ba4da4b3c6eef5e00281a5"
+    ]
+  },
+  {
+    "finding_id": "model-scout-bfbe44b56c744ac157f8",
+    "file": "routes/changePassword.ts",
+    "line": 39,
+    "capability": "verify_auth_reauthentication",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "model-scout-bfbe44b56c744ac157f8",
+        "case_id": "JS-AUTH-001",
+        "candidate_case_ids": [
+          "JS-AUTH-001"
+        ],
+        "classification": "tp"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Two independent trials established the mapped runtime effect."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/65/audit.jsonl",
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/65/execution/execution-759e23729f93427a8f5b5b73437c9729.json",
+      "audit:95c1528460af4163b28ef38fbb260a46",
+      "execution-759e23729f93427a8f5b5b73437c9729"
+    ]
+  },
+  {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/login.ts:34",
+    "file": "routes/login.ts",
+    "line": 34,
+    "capability": "verify_sql_injection",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/login.ts:34",
+        "case_id": "JS-SQL-002",
+        "candidate_case_ids": [
+          "JS-SQL-002"
+        ],
+        "classification": "tp"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Repeated boolean SQL probe changed structured results while repeated negative controls did not."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/evidence/execution-95a68dddb2c9427dbcee7413a4c4b570.json",
+      "audit:d46fcb79a6d04264aafd1cbab4ee5394",
+      "execution-95a68dddb2c9427dbcee7413a4c4b570"
+    ]
+  },
+  {
+    "finding_id": "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+    "file": "routes/redirect.ts",
+    "line": 18,
+    "capability": "verify_redirect_destination",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+        "case_id": "JS-REDIRECT-001",
+        "candidate_case_ids": [
+          "JS-REDIRECT-001"
+        ],
+        "classification": "duplicate"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Two independent trials established the mapped runtime effect."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/90/audit.jsonl",
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/90/execution/execution-5a8c027dfcea45658dd2aa73dfeaa1e7.json",
+      "audit:7d7a23d725cf463496921d9a82094d05",
+      "execution-5a8c027dfcea45658dd2aa73dfeaa1e7"
+    ]
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18",
+    "file": "routes/redirect.ts",
+    "line": 18,
+    "capability": "verify_redirect_destination",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18",
+        "case_id": "JS-REDIRECT-001",
+        "candidate_case_ids": [
+          "JS-REDIRECT-001"
+        ],
+        "classification": "duplicate"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Two independent trials established the mapped runtime effect."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/91/audit.jsonl",
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/91/execution/execution-cec2d8eb3cd14df6adcd78572a83fae8.json",
+      "audit:b00c74e05b57498ba6879ee1f2d0a2f2",
+      "execution-cec2d8eb3cd14df6adcd78572a83fae8"
+    ]
+  },
+  {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+    "file": "routes/search.ts",
+    "line": 23,
+    "capability": "verify_sql_injection",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+        "case_id": "JS-SQL-001",
+        "candidate_case_ids": [
+          "JS-SQL-001"
+        ],
+        "classification": "tp"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Repeated boolean SQL probe changed structured results while repeated negative controls did not."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/evidence/execution-1246ff70be3848709bb194c8f7f1013b.json",
+      "audit:9b771faea15242d08251747500e192a1",
+      "execution-1246ff70be3848709bb194c8f7f1013b"
+    ]
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:288",
+    "file": "server.ts",
+    "line": 288,
+    "capability": "verify_sensitive_directory",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [
+      {
+        "observation_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:288",
+        "case_id": "JS-FILE-001",
+        "candidate_case_ids": [
+          "JS-FILE-001"
+        ],
+        "classification": "tp"
+      }
+    ],
+    "outside_frozen_truth": false,
+    "scope": [
+      "Unauthenticated directory listing exposes sensitive file names; contents were not downloaded."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/evidence/execution-0c486a047a33427d9453f65446a8f6f9.json",
+      "audit:d5408b016bd847818f0c3bdd9a652a47",
+      "execution-0c486a047a33427d9453f65446a8f6f9"
+    ]
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:296",
+    "file": "server.ts",
+    "line": 296,
+    "capability": "verify_sensitive_directory",
+    "persisted_execution_audit_and_approval_trace_match": true,
+    "matches": [],
+    "outside_frozen_truth": true,
+    "scope": [
+      "Unauthenticated directory listing exposes sensitive file names; contents were not downloaded."
+    ],
+    "evidence_refs": [
+      "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/evidence/execution-8caaf66b116b4c0da5de6675cd1e5149.json",
+      "audit:5c87e8bcf62d42dfadaff7b8c3ee80e4",
+      "execution-8caaf66b116b4c0da5de6675cd1e5149"
+    ]
+  }
+]

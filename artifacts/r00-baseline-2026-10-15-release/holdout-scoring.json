@@ -1,0 +1,28 @@
+{
+  "schema_version": "scoring.evaluation.b08.v1",
+  "severity_scheme": "source-impact.a04.v1",
+  "severity": {
+    "total_cases": 13,
+    "reviewed_cases": 4,
+    "assessed_cases": 0,
+    "correct_cases": 0,
+    "reviewed_coverage": 0.3076923076923077,
+    "assessed_coverage": 0.0,
+    "accuracy": null
+  },
+  "context_priority": {
+    "total_cases": 13,
+    "reviewed_cases": 0,
+    "assessed_cases": 0,
+    "correct_cases": 0,
+    "reviewed_coverage": 0.0,
+    "assessed_coverage": null,
+    "accuracy": null
+  },
+  "cvss_accuracy": null,
+  "limitations": [
+    "CVSS is not compared with ordinal A04 labels.",
+    "Absent independent CP labels make CP accuracy unavailable.",
+    "This evaluates supplied matched reports, not detection recall."
+  ]
+}
