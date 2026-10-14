@@ -112,6 +112,25 @@ def test_invalid_schedule_rejected():
         RepositoryScout(Client(), schedule_mode="unknown")
 
 
+def test_solution_serving_controllers_are_not_model_source(tmp_path):
+    source = RepositorySource(corpus(tmp_path, {
+        "routes/vulnCodeSnippet.ts": "return expectedAnswer;\n",
+        "routes/vulnCodeFixes.ts": "return correctFix;\n",
+        "routes/application.ts": "query(req.query.q);\n",
+    }))
+    assert source.files == ["routes/application.ts"]
+
+
+def test_symbol_search_does_not_hide_definition_behind_first_16_callers(tmp_path):
+    source = RepositorySource(corpus(tmp_path, {
+        "server.ts": "appendUserId();\n" * 40,
+        "lib/auth.ts": "export const appendUserId = () => {};\n",
+    }))
+    matches = source.search("appendUserId")
+    assert len(matches) == 16
+    assert matches[0]["file"] == "lib/auth.ts"
+
+
 def test_source_map_prioritizes_only_indexed_handlers(tmp_path):
     source = RepositorySource(corpus(tmp_path, {
         "routes/a.ts": "query(req.query.q)\n", "lib/b.ts": "const safe = 1;\n",

@@ -9,6 +9,9 @@ from schemas.discovery import ProjectDiscoveryResult
 from security.source_paths import normalize_source_path
 
 _SOURCE_SUFFIXES = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".py"}
+# Training-oracle controllers, not ordinary application handlers. Their backing
+# solution directories are already excluded; exclude the answer-serving code too.
+_ORACLE_STEMS = {"vulncodesnippet", "vulncodefixes"}
 _EXCLUDED_PARTS = {
     ".git", ".venv", "node_modules", "dist", "build", "vendor", "coverage",
     "codefixes", "test", "tests", "__tests__", "__pycache__",
@@ -36,6 +39,7 @@ def _source_path(file: str) -> bool:
         not path.is_absolute() and ".." not in path.parts
         and path.suffix in _SOURCE_SUFFIXES
         and not parts.intersection(_EXCLUDED_PARTS)
+        and path.stem.casefold() not in _ORACLE_STEMS
         and not path.name.endswith(tuple(
             marker + suffix for marker in (".spec", ".test") for suffix in _SOURCE_SUFFIXES
         ) + (".d.ts",))
@@ -163,13 +167,20 @@ class RepositorySource:
         if not query.strip() or len(query) > 120:
             return []
         matches = []
+        definitions = []
+        symbol = re.compile(
+            r"\b(?:function|class|def|const|let|var)\s+" + re.escape(query) + r"\b"
+        ) if re.fullmatch(r"[A-Za-z_$][\w$]*", query) else None
         for file in self.files:
             for number, line in enumerate(self.lines[file], start=1):
                 if query.casefold() in line.casefold():
-                    matches.append({"file": file, "line": number, "text": line[:400]})
-                    if len(matches) == 16:
-                        return matches
-        return matches
+                    match = {"file": file, "line": number, "text": line[:400]}
+                    if symbol and symbol.search(line):
+                        if len(definitions) < 16:
+                            definitions.append(match)
+                    elif len(matches) < 16:
+                        matches.append(match)
+        return [*definitions, *matches][:16]
 
     def related_files(self, file: str) -> list[str]:
         related = []

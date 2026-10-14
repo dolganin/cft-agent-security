@@ -199,20 +199,20 @@ class ProviderFailoverClient:
             self.last_usage = None
             lost_response = False
 
-            def request(prompt):
+            def request(prompt, selected_route=route, attempt_started=started):
                 nonlocal lost_response
                 try:
-                    return self._request_route(route, system_prompt, prompt)
+                    return self._request_route(selected_route, system_prompt, prompt)
                 except RuntimeError as network_error:
                     if not network_retries or _classify_error(network_error)[0] != "network_error":
                         raise
                     lost_response = True
                     self.last_attempts.append(LLMAttempt(
-                        route=route.label, ok=False, status="network_retry_requested",
-                        latency_ms=int((time.monotonic() - started) * 1000),
+                        route=selected_route.label, ok=False, status="network_retry_requested",
+                        latency_ms=int((time.monotonic() - attempt_started) * 1000),
                     ))
-                    self.record_event(operation=operation, route=route, status="network_retry_requested")
-                    return self._request_route(route, system_prompt, prompt)
+                    self.record_event(operation=operation, route=selected_route, status="network_retry_requested")
+                    return self._request_route(selected_route, system_prompt, prompt)
 
             try:
                 raw = request(user_prompt)
