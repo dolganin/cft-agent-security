@@ -121,3 +121,20 @@ python -m app.research_score \
   --run artifacts/juice-fixed-source-acceptance-retry-3-2026-10-15 \
   --output artifacts/juice-fixed-score-replayed
 ```
+
+## Передаваемый пакет
+
+`artifacts/juice-shop-development-2026-10-15.zip` содержит 205 файлов:
+новые sealed source/SAST inputs, оба scorecard-пакета, integrated runtime
+Evidence/audit, отдельную fixture-приемку, README и source provenance.
+Размер — 1 156 778 байт. SHA256:
+`a80c067e72ea71f986c3d70c0477363bd2943961e3504053b17ffd34f64caba1`.
+Среды, target checkout, `.env`, ключи и `node_modules` не включены.
+
+ZIP распакован в новую папку; оба оценщика выполнены по распакованным входам.
+И source, и runtime `summary.json` побайтно совпали с исходными результатами.
+ZIP CRC, membership и SHA256 каждого файла проверены. Это воспроизводимость
+офлайн-пересчета, не повторный независимый запуск агента.
+
+Код сохранен локальными коммитами `5078b3b` и `35987c2`. В `main` не сливался,
+на сервер в рамках этого захода не отправлялся.
