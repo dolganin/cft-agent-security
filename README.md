@@ -93,6 +93,10 @@ LLM не является границей безопасности. Реаль�
 Пересчёт исходных подтверждений: `python -m app.fix_scope --output artifacts/c01-fresh.json`.
 Это выбор области; генерация патчей и их полная runtime-проверка относятся к C02/C03.
 
+[C02: реальные LLM-предложения патчей](docs/c02-llm-patch-proposals.md):
+`python -m app.patch_propose --target <pinned-checkout> --family sql-search --output <new-directory>`.
+Предложение сохраняется без применения к оригиналу.
+
 ### Требования
 
 - Python `3.11+`;

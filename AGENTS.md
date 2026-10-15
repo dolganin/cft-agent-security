@@ -1350,3 +1350,24 @@ tests, operator reference passes, deny-all and probe-only shortcuts fail. It doe
 not replace full build/tests/start/smoke or B01-bound runtime verification in C03.
 Do not treat target stdout or the source evaluator as independent runtime Evidence.
 See `docs/c01-fix-scope.md` for eligibility, budgets, protected inputs and limitations.
+
+# 38. C02 real LLM patch proposals
+
+`app.patch_propose` uses the real ProviderFailoverClient for one operator-selected
+C01 family/route. It replays original B09 proof, binds the complete clean pinned
+source snapshot, projects only bounded AST source and redacted Evidence facts,
+and receives a strict ProposedPatch subclass. No IntegrationPatchClient/reference
+diff, model tool call, target execution or application is used in this path.
+
+Check exact paths, byte/line budgets, source digest/window and C01 scope before
+accepting. SQL query structure/parameter API and strict redirect equality shapes
+are deterministic operator gates; do not widen them on model request. Evaluator,
+baseline, credentials, dependencies and unrelated protections cannot be patched.
+Secret responses are discarded; successful raw responses and canonical reviews
+have separate digests. Recheck full source/C01 integrity after generation.
+
+Persist ready/rejected/failed/ineligible explicitly. A real provider attempt is
+required for ready, but is not proof of remediation. PatchReviewArtifact remains
+applied=false/security_verified=false until independent C03 verification; never
+reinterpret model rationale or adapter telemetry as security Evidence. See
+`docs/c02-llm-patch-proposals.md` for budgets, real runs and reproduction.
