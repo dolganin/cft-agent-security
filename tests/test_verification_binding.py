@@ -68,6 +68,27 @@ def action_for(profile, finding, runtime):
                           verification_binding=candidate["verification_binding"])
 
 
+def test_registry_capacity_keeps_operator_bound_verification_available(fixture):
+    profile, finding, runtime = fixture
+    root = profile.repository_path
+    noise = []
+    for index in range(65):
+        file = f"unbound-{index:03d}.ts"
+        (root / file).write_text("export const ordinary = true\n", encoding="utf-8")
+        noise.append(finding.model_copy(update={"id": file, "file": file, "provenance": None}))
+    caller = finding.model_copy(update={"id": "caller", "file": "server.ts",
+                                       "line_start": 1, "line_end": 1, "provenance": None})
+    updated = register_source_artifacts(profile, [*noise, caller, finding], root)
+    assert len(updated.artifacts) == 64
+    assert any(a.relative_path == "server.ts" for a in updated.artifacts.values())
+    assert not any(a.relative_path == "server.ts" for a in profile.artifacts.values())
+    candidates = verification_candidates({"target_profile": updated, "finding": caller,
+                                          "runtime_services": runtime})
+    assert len(candidates) == 1
+    assert candidates[0]["tool"] == "verify_sql_injection"
+    assert candidates[0]["endpoint"] == "/search"
+
+
 def test_inserted_lines_relocate_exact_anchor_and_keep_route_id(fixture):
     profile, finding, runtime = fixture
     before = resolve_binding(profile, finding).binding

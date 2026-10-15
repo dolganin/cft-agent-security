@@ -20,7 +20,7 @@ from sast.semgrep_runner import run_semgrep_scan
 from schemas.llm import LLMProbeResult
 from schemas.research_agent import ResearchLimits
 from schemas.research_campaign import CampaignLimits
-from schemas.research_fixtures import ResearchFixtureGrant
+from schemas.research_fixtures import ResearchFixtureGrant, ResearchVerificationGrant
 from schemas.target import TargetProfile
 from security.error_redaction import redact_observation
 
@@ -33,6 +33,7 @@ FIXTURE_GRANTS = (
     ResearchFixtureGrant(protocol="b06.redirect.v1", max_http_requests=38),
     ResearchFixtureGrant(protocol="b06.password-reauth.v1", max_http_requests=194),
 )
+VERIFICATION_GRANTS = (ResearchVerificationGrant(protocol="b01.login-sql.v1", route_id="juice-login"),)
 
 
 def limits():
@@ -140,13 +141,14 @@ def _run(checkout, image, browser_image, output, *, campaign_limits=None, questi
             "campaign_limits":active_limits.model_dump(), "research_limits":research_limits.model_dump(),
             "selection":"All fresh SAST observations; no family representatives or preferred proof families",
             "fresh_sast_observations":len(scan.findings), "fresh_dast":False,
-            "runtime_scope":"anonymous read-only research plus exact operator-granted B05 own-read and B06 redirect/re-auth fixtures; no model-selected credentials, writes, or arbitrary fixture actions",
+            "runtime_scope":"anonymous read-only model research plus fixed B01 SQL/login verification and exact operator-granted B05 own-read and B06 redirect/re-auth protocols; model has no POST grant, credentials, or arbitrary fixture actions",
             "operator_grants":config["http_grants"], "evaluator_labels_provided_to_model":False,
             "canonical_verification_profiles":["targets/juice-verification.yaml",
                 "targets/juice-b05-access-fixture.yaml", "targets/juice-b06-verification.yaml"],
             "canonical_fixture_grants":[grant.model_dump() for grant in FIXTURE_GRANTS],
+            "canonical_verification_grants":[grant.model_dump() for grant in VERIFICATION_GRANTS],
             "canonical_verification_worker_image":WORKER_IMAGE,
-            "canonical_verification_scope":"B01 SQL/directory plus explicitly granted B05 own-read and B06 redirect/re-auth; each exact protocol remains source-bound and independently validated",
+            "canonical_verification_scope":"B01 SQL/directory plus the exact fixed juice-login SQL grant and explicitly granted B05 own-read/B06 redirect/re-auth; each protocol remains source-bound and independently validated",
             "full_benchmark_measurement":False, "mttr":"not_measured", "reproducibility":"not_measured"}
         write_json(output / "run-manifest.json", manifest)
         print(json.dumps({"phase":"campaign_started", "sast_observations":len(scan.findings),
@@ -161,7 +163,8 @@ def _run(checkout, image, browser_image, output, *, campaign_limits=None, questi
         result = campaign(profile=profile, configuration=config, client=ProviderFailoverClient(**client_args, max_output_tokens=8192),
             output=output / "campaign", sast=scan.findings, limits=active_limits, research_limits=research_limits,
             verification_profiles=verification_profiles,
-            verification_worker_image=WORKER_IMAGE, fixture_grants=FIXTURE_GRANTS)
+            verification_worker_image=WORKER_IMAGE, fixture_grants=FIXTURE_GRANTS,
+            verification_grants=VERIFICATION_GRANTS)
     finally:
         from pipeline.cancellation import suspend_cancellation
 

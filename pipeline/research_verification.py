@@ -20,6 +20,7 @@ from pipeline.cancellation import check_cancelled
 from reporting.builder import build_final_report
 from schemas.action import ActionProposal
 from schemas.agent_loop import AgentActionRecord
+from schemas.research_fixtures import ResearchVerificationGrant
 from schemas.runtime import RuntimeService, RuntimeServiceMap
 from security.verification_binding import resolve_binding
 from tools.research import research_proposal
@@ -30,6 +31,7 @@ REQUEST_RESERVATIONS = {"verify_sql_injection": 4, "verify_sensitive_directory":
 RULE_ALIASES = {
     "javascript.express.security.injection.tainted-sql-string.tainted-sql-string": "sql-injection",
     "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query": "sql-injection",
+    "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection": "sql-injection",
 }
 
 
@@ -93,11 +95,12 @@ def verification_handoff(findings, profiles, repository):
 
 
 def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_http_requests, worker_image,
-                           fixture_grants=(), remaining_wall_seconds=3600):
+                           fixture_grants=(), verification_grants=(), remaining_wall_seconds=3600):
     """Optional fixed canonical verification bridge for B01, B05 and B06.
 
-    Operator profiles select a protocol but cannot enlarge the research HTTP grant.
-    This function never uses model argv, HTTP bodies, credentials or target URLs.
+    Operator profiles select a protocol but cannot enlarge model research scope.
+    Fixed B01 POST checks need their separate route-exact grant. This function
+    never uses model argv, HTTP bodies, credentials or target URLs.
     """
     plan = verification_handoff([finding], profiles, repository)["checks"][0]
     pending = {**plan, "status": "review_pending", "requests_reserved": 0, "actions": 0}
@@ -114,14 +117,17 @@ def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_
             grants=fixture_grants, max_http_requests=max_http_requests, remaining_wall_seconds=remaining_wall_seconds)
     if cost > max_http_requests:
         return {**pending, "reason": "Insufficient remaining network reservation"}
-    # Reuse deterministic request scope validation without actually executing it.
+    # Reuse the model's read-only grant when it covers this exact protocol. The
+    # login verifier has a separate, fixed operator grant: it never adds POST to
+    # ResearchScope, and the model cannot choose its body or credentials.
     try:
         research_proposal(scope=scope, action_id="bridge-preflight", tool="target_http",
             parameters={"method": binding.method, "path": binding.endpoint},
             service=binding.service, endpoint=binding.endpoint,
             purpose="Check existing operator grant", expected_evidence="No execution")
     except ValueError:
-        return {**pending, "reason": "Protocol method/path is not granted by the research operator"}
+        if not _fixed_verification_granted(binding, profile, verification_grants):
+            return {**pending, "reason": "Protocol method/path is not granted by the research operator"}
     if any(p not in scope.source_files or scope.source_files[p].original_sha256 != h
            for p, h in binding.source_files.items()):
         return {**pending, "reason": "Protocol source snapshot is outside or differs from research inventory"}
@@ -183,3 +189,21 @@ def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_
     }).model_dump(mode="json")
     (output / "result.json").write_text(json.dumps(result, indent=2) + "\n")
     return result
+
+
+def _fixed_verification_granted(binding, profile, grants):
+    """Match the complete reviewed B01 login route; never widen generic HTTP scope."""
+    grants = tuple(ResearchVerificationGrant.model_validate(grant) for grant in grants)
+    return any(
+        grant.protocol == "b01.login-sql.v1"
+        and grant.route_id == "juice-login"
+        and profile.id == "juice-verification"
+        and binding.route_id == grant.route_id
+        and binding.tool == "verify_sql_injection"
+        and binding.check == "sql_interpolation"
+        and binding.mode == "authentication"
+        and binding.method == "POST"
+        and binding.endpoint == "/rest/user/login"
+        and grant.max_http_requests == REQUEST_RESERVATIONS["verify_sql_injection"]
+        for grant in grants
+    )

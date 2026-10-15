@@ -107,10 +107,14 @@ class ResearchQueue:
                 runtime_observation=self.runtime_signals.get(finding.id),
                 status="researched" if aliases & self.aliases_researched else previous.get(finding.id, ResearchQuestion(
                     id=finding.id, finding=finding, origin=origin, is_candidate=True)).status))
-        covered = {x.finding.file for x in questions}
+        surface_paths = set()
         for route in self.source_map.routes:
             path = next((p for p in route.handler_files if p in self.source_files), route.file)
-            if path not in self.source_files or path in covered:
+            # A scanner finding only covers its own anchored observation; it does
+            # not mean the rest of a route handler was explored. Keep one separate
+            # surface question per trusted source path, even when SAST/DAST already
+            # reported another issue in that file.
+            if path not in self.source_files or path in surface_paths:
                 continue
             identifier = "surface-" + sha256(path.encode()).hexdigest()[:20]
             finding = Finding(id=identifier, source="surface_question", rule_id="unexamined-handler",
@@ -119,7 +123,7 @@ class ResearchQueue:
             questions.append(ResearchQuestion(id=identifier, finding=finding, origin="surface", is_candidate=False,
                 route_ids=[r.id for r in self.source_map.routes if path in r.handler_files or path == r.file],
                 status=previous[identifier].status if identifier in previous else "pending"))
-            covered.add(path)
+            surface_paths.add(path)
         if not questions:
             for path in sorted(self.source_files)[:32]:
                 identifier = "source-gap-" + sha256(path.encode()).hexdigest()[:20]

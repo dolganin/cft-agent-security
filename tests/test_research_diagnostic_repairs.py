@@ -199,6 +199,10 @@ def test_scanner_rule_alias_is_local_and_preserves_observation_identity():
     assert mapped.id == original.id and mapped.file == original.file
     assert original.rule_id == rule
     assert rule_family(rule) == rule  # Historical normalization is intentionally unchanged.
+    second_rule = "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection"
+    second = finding().model_copy(update={"rule_id": second_rule})
+    assert verification_finding(second).rule_id == "sql-injection"
+    assert second.rule_id == second_rule
     unknown = finding().model_copy(update={"rule_id": "unreviewed-tainted-sql-string"})
     assert verification_finding(unknown).rule_id == unknown.rule_id
 
@@ -231,6 +235,7 @@ def test_existing_sql_verifier_accepts_research_candidate_without_llm(tmp_path):
     from pipeline.research_verification import verify_bound_candidate
     from sast.identity import normalize_finding
     from schemas.research import HttpServiceScope
+    from schemas.research_fixtures import ResearchVerificationGrant
     from security.verification_binding import source_snapshot
 
     def docker(*args):
@@ -286,6 +291,14 @@ def test_existing_sql_verifier_accepts_research_candidate_without_llm(tmp_path):
         assert blocked["status"] == "review_pending"
         assert "not granted" in blocked["reason"]
         assert not (tmp_path / "no-post-grant").exists()
+        login_result = verify_bound_candidate(finding=login, profiles=(profile,), scope=bound_scope,
+            repository=repository, output=tmp_path / "fixed-login-grant", max_http_requests=4,
+            worker_image=WORKER_IMAGE,
+            verification_grants=(ResearchVerificationGrant(protocol="b01.login-sql.v1", route_id="juice-login"),))
+        assert login_result["status"] == "confirmed", login_result
+        assert login_result["requests_reserved"] == 4
+        assert login_result["evidence"]["verdict"] == "confirmed"
+        assert login_result["worker_cleanup_verified"]
         if os.getenv("CFT_RESEARCH_IMAGE"):
             from app.research_campaign import campaign
             from schemas.research_campaign import CampaignLimits
@@ -307,6 +320,19 @@ def test_existing_sql_verifier_accepts_research_candidate_without_llm(tmp_path):
             reports = json.loads((out / "reports.json").read_text())
             assert reports[0]["report"]["status"] == "confirmed"
             assert reports[0]["research_report"]["status"] == "inconclusive"
+            login_output = tmp_path / "integrated-login-campaign"
+            login_summary = campaign(profile=TargetProfile(id="repair-login", environment="sandbox",
+                repository_path=repository, services={"juice": {"internal_port": 3000}}),
+                configuration={"worker_image": os.environ["CFT_RESEARCH_IMAGE"], "network_name": network,
+                    "services": {"juice": bound_scope.services["juice"].model_dump(mode="json")}},
+                client=Client([turn()]), output=login_output, sast=[login],
+                limits=CampaignLimits(max_questions=1, max_actions=2, max_model_calls=2, max_http_requests=4),
+                verification_profiles=(profile,), verification_worker_image=WORKER_IMAGE,
+                verification_grants=(ResearchVerificationGrant(protocol="b01.login-sql.v1", route_id="juice-login"),))
+            assert login_summary["canonical_runtime_review_counts"]["confirmed"] == 1
+            login_reviews = json.loads((login_output / "canonical-runtime-reviews.json").read_text())
+            assert login_reviews[0]["finding_id"] == login.id
+            assert login_reviews[0]["status"] == "confirmed"
     finally:
         subprocess.run(["docker", "rm", "-f", container], capture_output=True, timeout=30, check=False)
         docker("network", "rm", network)

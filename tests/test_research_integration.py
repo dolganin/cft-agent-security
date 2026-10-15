@@ -123,9 +123,14 @@ def test_queue_preserves_duplicates_and_exploration_is_not_finding(tmp_path):
     (tmp_path / "app.ts").write_text("const x = 'source';\n")
     (tmp_path / "unread.ts").write_text("const y = 'source';\n")
     profile = TargetProfile(id="queue-test", environment="sandbox", repository_path=tmp_path)
-    surface = ExpressSourceMap(routes=[ExpressRouteRegistration(id="route", file="app.ts", receiver="app",
-        method="get", path="/unread", path_is_static=True, line_start=1, line_end=1,
-        registration_order=0, handler_files=["unread.ts"])])
+    surface = ExpressSourceMap(routes=[
+        ExpressRouteRegistration(id="route", file="app.ts", receiver="app",
+            method="get", path="/unread", path_is_static=True, line_start=1, line_end=1,
+            registration_order=0, handler_files=["unread.ts"]),
+        ExpressRouteRegistration(id="direct-route", file="app.ts", receiver="app",
+            method="get", path="/other", path_is_static=True, line_start=1, line_end=1,
+            registration_order=1),
+    ])
     queue = ResearchQueue(profile=profile, source_map=surface, source_files=["app.ts", "unread.ts"])
     def finding(id, source):
         return Finding(id=id, source=source, rule_id="weak-hash", title="Digest candidate", description="Unverified",
@@ -136,6 +141,7 @@ def test_queue_preserves_duplicates_and_exploration_is_not_finding(tmp_path):
     assert len(queue.raw) == 2
     assert set(queue.findings[0].provenance.aliases) == {"sast-1", "dast-1"}
     assert any(q.origin == "surface" and not q.is_candidate for q in queue.questions)
+    assert any(q.origin == "surface" and q.finding.file == "app.ts" for q in queue.questions)
     selected = queue.next_question()
     queue.complete(selected)
     assert queue.next_question().id != selected.id

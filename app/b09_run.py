@@ -56,10 +56,14 @@ def main():
     settings.llm_reasoning_effort = "low"
     settings.llm_allow_external_fallbacks = False
     settings.scout_schedule_mode = "handlers"
-    settings.scout_max_turns = 8
-    settings.scout_wall_clock_seconds = 240
-    settings.scout_max_candidates = 32
-    settings.scout_max_source_chars = 160000
+    # The first valid B09 stopped after 15.04% of indexed source lines because
+    # the 160k source-character cap was exhausted. This single follow-up keeps
+    # the same target, benchmark and verifier policy while allowing a broader
+    # bounded Scout pass. The exact budget is sealed in run-config.json.
+    settings.scout_max_turns = 24
+    settings.scout_wall_clock_seconds = 600
+    settings.scout_max_candidates = 48
+    settings.scout_max_source_chars = 480000
     settings.agent_wall_clock_seconds = 120
     pinned = {name: getattr(settings, name) for name in (
         "llm_routes", "llm_timeout_seconds", "llm_max_output_tokens", "llm_reasoning_effort",

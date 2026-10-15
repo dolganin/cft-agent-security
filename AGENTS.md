@@ -1303,3 +1303,23 @@ benchmark labels, policies and scorer contracts remain unchanged.
 `app.research_saved_report` writes a separate operational readout and input seal;
 it does not modify original artifacts, revalidate security Evidence or calculate
 benchmark metrics. See `docs/research-run-recovery-2026-10-15.md`.
+
+# 36. Research measurement and fixed login grant
+
+`ResearchVerificationGrant(protocol="b01.login-sql.v1", route_id="juice-login")`
+authorizes only the existing fixed four-request B01 login SQL protocol. It does
+not add POST to model HTTP grants. Exact profile/route/tool/check/method/endpoint,
+source binding, Validator, Executor and persisted execution/audit remain required.
+
+Scanner observations do not mark a whole handler as explored. ResearchQueue keeps
+a separate surface question for a file with scanner candidates. The finite source
+artifact registry prioritizes files referenced by operator verification routes so
+unrelated findings cannot crowd out an existing verifier such as `/ftp`.
+
+`app.research_score --run <sealed-run> --output <fresh-evaluation>` replays saved
+canonical runtime protocols and applies the unchanged frozen A04 matcher. It uses
+no model or target requests. Archived audit paths are resolved within the verified
+local result directory for offline portability; original action/record bytes are
+not rewritten. Source-condition MD5 proofs remain separate from runtime Recall.
+Degraded/budget-limited research is diagnostic evidence, not clean acceptance or
+an independent held-out evaluation. See `docs/research-latest-results-2026-10-15.md`.

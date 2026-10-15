@@ -12,7 +12,21 @@ from security.verification_binding import resolve_binding
 def register_source_artifacts(profile, findings, repository):
     root = Path(repository).resolve()
     artifacts = dict(profile.artifacts)
-    for finding in findings:
+    # Keep files needed by existing operator verifiers ahead of unrelated scanner
+    # observations. A broader Scout pass must not consume the finite registry
+    # before a registered route's source is reached. Registration alone grants
+    # no execution: the exact binding/Validator checks still run independently.
+    bound_files = {normalize_source_path(source.file, root)
+                   for route in profile.verification_routes
+                   for source in [route.registration, *route.sources]}
+
+    def operator_bound(finding):
+        try:
+            return normalize_source_path(finding.file, root) in bound_files
+        except ValueError:
+            return False
+
+    for finding in sorted(findings, key=lambda item: not operator_bound(item)):
         try:
             relative = normalize_source_path(finding.file, root)
         except ValueError:
