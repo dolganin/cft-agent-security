@@ -26,7 +26,7 @@ class ResearchQuestion(BaseModel):
     finding: Finding
     origin: Literal["sast", "dast", "model", "surface"]
     is_candidate: bool
-    status: Literal["pending", "researched", "failed", "unavailable"] = "pending"
+    status: Literal["pending", "researched", "failed", "unavailable", "grouped"] = "pending"
     route_ids: list[str] = Field(default_factory=list)
     runtime_observation: RuntimeScannerObservation | None = None
 

@@ -54,11 +54,13 @@ def protected_node(name, function):
         except RunCancelled:
             raise
         except ReasoningBudgetExpired:
-            return stop_update(
+            update = stop_update(
                 state,
                 "wall_clock_budget_exhausted",
                 "Reasoning deadline exhausted before another provider request.",
             )
+            research = active_research()
+            return {**update, **(research.state_update() if research else {})}
         except ResearchBudgetExhausted as exc:
             research = active_research()
             return {**stop_update(state, "research_budget_exhausted", str(exc)),

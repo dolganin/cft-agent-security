@@ -1280,3 +1280,26 @@ enforced. `tests/test_research_fixture_campaign.py` is the real-Docker acceptanc
 its scripted research step does not measure model quality or benchmark metrics.
 See `docs/research-private-fixture-campaign-2026-10-15.md` and
 `docs/research-r09-diagnostic-repairs.md`.
+
+# 35. Research campaign finalization
+
+Provider HTTP requests have a total deadline in a fixed disposable transport
+process. Campaign and question deadlines can only shorten it; cancellation joins
+the transport child. This does not interrupt Executor cleanup or enable host
+execution of target code. Credentials are not command-line arguments.
+
+Question/campaign/diagnostic runner interruptions persist partial accounting,
+`completed=false` and an explicit cause before propagating cancellation. Atomic
+JSON checkpoints preserve the previous snapshot. A partial seal proves saved
+bytes, not successful measurement or sufficient Evidence. Target cleanup is
+verified against the exact operator-created container/network.
+
+ResearchQueue may group identical source anchors, families and column spans for
+scheduling only. Preserve all canonical Finding/raw observations and expose
+`grouped` plus representative IDs; do not copy security verdicts to those rows.
+Different sinks and unbound observations remain independent. Existing historical
+benchmark labels, policies and scorer contracts remain unchanged.
+
+`app.research_saved_report` writes a separate operational readout and input seal;
+it does not modify original artifacts, revalidate security Evidence or calculate
+benchmark metrics. See `docs/research-run-recovery-2026-10-15.md`.

@@ -4,9 +4,10 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
+from time import monotonic
 
 from agent.graph import build_graph
 from agent.lab import executor_context
@@ -22,12 +23,38 @@ from executor.research_runtime import ResearchRuntime
 from executor.sandbox import DockerSandbox, RunLimiter
 from executor.sandbox_policy import SandboxPolicy
 from executor.targets import TargetRegistry
+from pipeline.cancellation import RunCancelled
+from reporting.checkpoints import write_json
 from schemas.finding import Finding
 from schemas.research import HttpServiceScope
 from schemas.research_agent import ResearchLimits
 from schemas.runtime import RuntimeServiceMap
 from schemas.target import TargetProfile
 from validator.validator import PolicyValidator
+
+
+@contextmanager
+def failure_checkpoint(output, handles):
+    started = monotonic()
+    try:
+        yield
+    except BaseException as exc:
+        if output.is_dir():
+            runtime, model = handles()
+            progress = model.progress if model is not None else None
+            if progress is not None:
+                write_json(output / "progress.json", progress.model_dump(mode="json"))
+            summary = {"schema_version": "cft.research.r04.v1", "benchmark_measurement": False,
+                "completed": False, "status": "inconclusive",
+                "stop_reason": "operator_cancelled" if isinstance(exc, (KeyboardInterrupt, RunCancelled)) else "question_failed",
+                "failure_type": type(exc).__name__, "elapsed_seconds": round(monotonic() - started, 3),
+                "actions": runtime.actions if runtime is not None else 0,
+                "http_requests": runtime.requests if runtime is not None else 0,
+                "model_calls": progress.model_calls if progress is not None else 0,
+                "cleanup_verified": runtime.closed if runtime is not None else False,
+                "independent_verification": "Interrupted question has no terminal security verdict"}
+            write_json(output / "summary.json", summary)
+        raise
 
 
 def run_research(*, profile, configuration, finding, output, client, limits=None, surface_context=None):
@@ -55,7 +82,9 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
     output.mkdir(parents=True)
     state = {"finding": finding, "target_profile": profile,
              "started_at": datetime.now(UTC)}
-    with ExitStack() as stack:
+    started = monotonic()
+    runtime = model = None
+    with failure_checkpoint(output, lambda: (runtime, model)), ExitStack() as stack:
         runtime = stack.enter_context(ResearchRuntime(target=profile, source_files=files,
             worker_image=configuration["worker_image"], output=output / "runtime", services=services,
             network_name=network_name, runtime_services=runtime_services,
@@ -78,20 +107,29 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
         if runtime_services is not None:
             state["runtime_services"] = runtime_services
         # Checkpoints are inspectable diagnostics, NOT resumable live approvals.
+        node_seconds = {}
+        previous_checkpoint = monotonic()
         with (output / "events.jsonl").open("x") as events:
             for update in build_graph().stream(state, config={"recursion_limit": 1024}, stream_mode="updates"):
                 for node, values in update.items():
+                    now = monotonic()
+                    node_seconds[node] = node_seconds.get(node, 0) + now - previous_checkpoint
+                    previous_checkpoint = now
                     state.update(values)
                     checkpoint = {"node": node, "status": state.get("status"),
+                                  "timestamp": datetime.now(UTC).isoformat(),
+                                  "elapsed_seconds": round(monotonic() - started, 3),
                                   "step": state.get("iteration_count", 0),
                                   "stop_reason": state.get("stop_reason"),
                                   "progress": model.progress.model_dump(mode="json")}
                     events.write(json.dumps(checkpoint, ensure_ascii=False) + "\n")
                     events.flush()
-                    (output / "progress.json").write_text(model.progress.model_dump_json(indent=2))
+                    write_json(output / "progress.json", model.progress.model_dump(mode="json"))
+                    write_json(output / "timings.json", {"node_seconds": node_seconds})
         report = state["final_report"]
-        (output / "report.json").write_text(report.model_dump_json(indent=2))
+        write_json(output / "report.json", report.model_dump(mode="json"))
     summary = {"schema_version": "cft.research.r04.v1", "benchmark_measurement": False,
+               "completed": True, "elapsed_seconds": round(monotonic() - started, 3),
                "status": report.status, "stop_reason": state.get("stop_reason"),
                "actions": runtime.actions, "http_requests": runtime.requests,
                "model_calls": model.progress.model_calls,
@@ -100,7 +138,7 @@ def run_research(*, profile, configuration, finding, output, client, limits=None
                "proposal_corrections": len(model.progress.proposal_feedback),
                "cleanup_verified": runtime.closed,
                "independent_verification": "campaign review required; observations are not verdicts"}
-    (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+    write_json(output / "summary.json", summary)
     return state, summary
 
 

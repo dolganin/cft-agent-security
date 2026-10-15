@@ -20,7 +20,20 @@ def reasoning_budget(state):
         raise ValueError("Agent wall-clock budget must be finite")
     started = state.get("started_at")
     elapsed = (datetime.now(UTC) - started).total_seconds() if started is not None else 0.0
-    token = _DEADLINE.set(monotonic() + max(0.0, budget - elapsed))
+    deadline = monotonic() + max(0.0, budget - elapsed)
+    outer = _DEADLINE.get()
+    token = _DEADLINE.set(min(deadline, outer) if outer is not None else deadline)
+    try:
+        yield
+    finally:
+        _DEADLINE.reset(token)
+
+
+@contextmanager
+def provider_deadline(deadline):
+    """Campaign's monotonic provider deadline; nested finding budgets cannot extend it."""
+    outer = _DEADLINE.get()
+    token = _DEADLINE.set(min(deadline, outer) if outer is not None else deadline)
     try:
         yield
     finally:

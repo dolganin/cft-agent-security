@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-import http.client
 import json
 import sys
 import time
-import urllib.error
 import urllib.parse
-import urllib.request
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any, TypeVar
@@ -14,6 +11,7 @@ from typing import Any, TypeVar
 from pydantic import BaseModel, ValidationError
 
 from agent.budget import bounded_timeout
+from agent.http_transport import post_json
 from security.error_redaction import redact_error_message
 
 TModel = TypeVar("TModel", bound=BaseModel)
@@ -471,23 +469,13 @@ def _post_json(
         "User-Agent": "cft-security-agent/llm-fallback-v0.1",
         **headers,
     }
-    request = urllib.request.Request(
-        url,
-        data=json.dumps(payload).encode("utf-8"),
-        headers=request_headers,
-        method="POST",
-    )
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
-            return json.loads(response.read().decode("utf-8"))
-    except urllib.error.HTTPError as exc:
-        body = exc.read().decode("utf-8", errors="replace")
-        compact = " ".join(body.split())
-        if len(compact) > 350:
-            compact = compact[:347] + "..."
-        raise RuntimeError(f"HTTP {exc.code}: {compact}") from None
-    except (urllib.error.URLError, TimeoutError, http.client.HTTPException, ConnectionError) as exc:
-        raise RuntimeError(f"network/timeout: {exc}") from None
+        return post_json(url, payload, headers=request_headers, timeout=timeout)
+    except RuntimeError as exc:
+        if "provider total request deadline exhausted" in str(exc):
+            # An expired campaign/finding budget is not a provider outage.
+            bounded_timeout(timeout)
+        raise
 
 
 def _extract_json_object(text: str) -> dict[str, Any]:

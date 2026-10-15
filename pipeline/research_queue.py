@@ -2,7 +2,7 @@
 from hashlib import sha256
 
 from discovery.scout import merge_scout_candidates
-from sast.identity import deduplicate_findings, normalize_finding
+from sast.identity import deduplicate_findings, normalize_finding, rule_family
 from schemas.finding import Finding
 from schemas.research_campaign import ResearchQuestion, RuntimeScannerObservation
 
@@ -21,6 +21,31 @@ class ResearchQueue:
         self.runtime_signals = {}
         self.preferred_families = set(preferred_families)
         self.verification_paths = set(verification_paths)
+        self.grouped_questions = {}
+        self.completed_work = {}
+
+    @staticmethod
+    def work_key(finding):
+        """Coalesce only identical source anchors/families, preserving all findings.
+
+        The explicit research adapter aliases are routing vocabulary, not evidence.
+        Different lines/column sinks, unbound observations and different properties
+        remain independent work. No confirmation is copied to a grouped observation.
+        """
+        from pipeline.research_verification import verification_finding
+
+        p = finding.provenance
+        if p is None or p.anchor_status != "source_bound":
+            return (finding.id,)
+        columns = {(o.column_start, o.column_end) for o in p.observations if o.column_start is not None}
+        return (finding.service, finding.file, finding.line_start, finding.line_end or finding.line_start,
+                p.file_sha256, p.anchor_sha256, rule_family(verification_finding(finding).rule_id),
+                tuple(sorted(columns, key=lambda span: (span[0], span[1] or 0))))
+
+    def related_observations(self, question):
+        key = self.work_key(question.finding)
+        return [q.finding.model_dump(mode="json") for q in self.questions
+                if q.is_candidate and self.work_key(q.finding) == key][:16]
 
     def import_findings(self, findings, origin):
         if origin not in {"sast", "dast"}:
@@ -103,6 +128,11 @@ class ResearchQueue:
                     title="Explore application source", description="No vulnerability is asserted", file=path, line_start=1),
                     status=previous[identifier].status if identifier in previous else "pending"))
         self.questions = questions
+        for question in self.questions:
+            representative = self.completed_work.get(self.work_key(question.finding)) if question.is_candidate else None
+            if representative is not None and representative != question.id and question.status == "pending":
+                question.status = "grouped"
+                self.grouped_questions[question.id] = representative
 
     def next_question(self):
         channels = ("model", "sast", "surface", "dast")
@@ -132,6 +162,13 @@ class ResearchQueue:
         if not failed:
             self.aliases_researched.update(question.finding.provenance.aliases
                 if question.finding.provenance else [question.finding.id])
+            if question.is_candidate:
+                key = self.work_key(question.finding)
+                self.completed_work[key] = question.id
+                for related in self.questions:
+                    if related.id != question.id and related.is_candidate and related.status == "pending" and self.work_key(related.finding) == key:
+                        related.status = "grouped"
+                        self.grouped_questions[related.id] = question.id
 
     def coverage(self, ledgers):
         read = set()
@@ -148,4 +185,6 @@ class ResearchQueue:
                 "candidate_count": len(self.findings), "surface_questions_are_not_findings": True,
                 "pending_questions": [x.id for x in self.questions if x.status == "pending"],
                 "failed_questions": [x.id for x in self.questions if x.status == "failed"],
+                "grouped_questions": dict(self.grouped_questions),
+                "grouped_observations_have_no_inherited_verdict": True,
                 "source_line_coverage_is_not_vulnerability_recall": True}

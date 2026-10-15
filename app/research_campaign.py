@@ -6,6 +6,7 @@ from datetime import UTC, datetime
 from hashlib import sha256
 from pathlib import Path
 
+from agent.budget import provider_deadline
 from app.research_run import run_research
 from discovery.express_routes import build_express_source_map
 from discovery.service import ProjectDiscovery
@@ -19,21 +20,54 @@ from pipeline.research_verification import (
     verify_bound_candidate,
 )
 from reporting.builder import build_final_report
+from reporting.checkpoints import write_json
+from reporting.research_diagnostics import saved_campaign_diagnostics
 from schemas.research_agent import ResearchLimits
 from schemas.research_campaign import CampaignLimits
 from security.error_redaction import redact_error_message
 from tools.repository_source import RepositorySource
 
 
-def write_json(path, value):
-    path = Path(path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
-
-
 def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits=None, research_limits=None,
              http_review_registry=None, acceptance_require_script=False, verification_profiles=(),
              verification_worker_image=None, fixture_grants=()):
+    output = Path(output).resolve()
+    if output.exists():
+        raise FileExistsError("A campaign never overwrites a saved run")
+    started = time.monotonic()
+    try:
+        with provider_deadline(started + (limits or CampaignLimits()).wall_seconds):
+            result = _campaign(profile=profile, configuration=configuration, client=client, output=output,
+                sast=sast, dast=dast, limits=limits, research_limits=research_limits,
+                http_review_registry=http_review_registry, acceptance_require_script=acceptance_require_script,
+                verification_profiles=verification_profiles, verification_worker_image=verification_worker_image,
+                fixture_grants=fixture_grants)
+        write_json(output / "operational-diagnostics.json", saved_campaign_diagnostics(output))
+        return result
+    except (KeyboardInterrupt, RunCancelled, Exception) as exc:
+        if output.is_dir():
+            diagnostic = saved_campaign_diagnostics(output)
+            active = json.loads((output / "active-phase.json").read_text()) if (output / "active-phase.json").exists() else {}
+            write_json(output / "summary.json", {"schema": "cft.research.campaign.result.v1",
+                "completed": False, "benchmark_measurement": False, "degraded": True,
+                "stop_reason": "operator_cancelled" if isinstance(exc, (KeyboardInterrupt, RunCancelled)) else "campaign_failed",
+                "failure_type": type(exc).__name__, "elapsed_seconds": round(time.monotonic() - started, 3),
+                "questions_researched": diagnostic["questions_completed"],
+                "incomplete_questions": diagnostic["incomplete_questions"],
+                "model_calls": diagnostic["model_calls_completed_questions"] +
+                    sum(row["model_calls"] for row in diagnostic["incomplete_questions"]),
+                "canonical_runtime_review_counts": diagnostic["persisted_runtime_status_counts"],
+                "cleanup_verified": active.get("phase") == "research" and bool(diagnostic["incomplete_questions"]) and
+                    all(row.get("summary") and row["summary"].get("cleanup_verified")
+                    for row in diagnostic["incomplete_questions"]) and all(
+                        json.loads(p.read_text()).get("cleanup_verified") for p in (output / "questions").glob("*/summary.json"))})
+            write_json(output / "operational-diagnostics.json", diagnostic)
+        raise
+
+
+def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limits=None, research_limits=None,
+              http_review_registry=None, acceptance_require_script=False, verification_profiles=(),
+              verification_worker_image=None, fixture_grants=()):
     from schemas.research_fixtures import ResearchFixtureGrant
 
     limits, research_limits = limits or CampaignLimits(), research_limits or ResearchLimits(max_steps=8)
@@ -55,6 +89,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         raise ValueError("No approved application source")
     configuration = {**configuration, "source_files": files}
     verification_paths = set()
+    fixture_routes = []
     if verification_worker_image or fixture_grants:
         grants = configuration.get("http_grants", configuration.get("services", {}))
         for operator_profile in verification_profiles:
@@ -64,11 +99,25 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
                         any(route.endpoint == prefix.rstrip("/") or route.endpoint.startswith(prefix.rstrip("/") + "/")
                             for prefix in grant.get("read_prefixes", []))):
                     verification_paths.update(source.file for source in route.sources)
+                from pipeline.research_fixture_verification import PROTOCOLS
+
+                for fixture_grant in fixture_grants:
+                    target, selection, _, family = PROTOCOLS[fixture_grant.protocol]
+                    if target == operator_profile.id and ((family == "b05" and route.tool == "verify_access_control" and route.check == "own_read") or
+                            (family == "b06" and route.tool == selection)):
+                        verification_paths.update(source.file for source in route.sources)
+                        fixture_routes.append({"protocol": fixture_grant.protocol, "profile_id": target,
+                            "route_id": route.id, "family": route.family, "endpoint": route.endpoint,
+                            "source_files": [source.file for source in route.sources],
+                            "operator_bound_protocol": True, "is_evidence": False})
     queue = ResearchQueue(profile=profile, source_map=source_map, source_files=files,
                           preferred_families=limits.dev_preferred_families, verification_paths=verification_paths)
     http_review_registry = http_review_registry or {}
     queue.import_findings(sast, "sast")
     queue.import_findings(dast, "dast")
+    write_json(output / "questions.json", [q.model_dump(mode="json") for q in queue.questions])
+    write_json(output / "findings.json", [f.model_dump(mode="json") for f in queue.findings])
+    write_json(output / "raw-observations.json", queue.raw)
     write_json(output / "surface-map.json", source_map.model_dump(mode="json"))
     write_json(output / "manifest.json", {"schema": "cft.research.campaign.v1",
         "started_at": datetime.now(UTC).isoformat(), "limits": limits.model_dump(),
@@ -94,6 +143,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
     failures = []
     question_failures = []
     consecutive_failures = 0
+    stage_seconds = {"research": 0.0, "source_review": 0.0, "canonical_verification": 0.0}
     for ordinal in range(limits.max_questions):
         check_cancelled()
         remaining_wall = int(limits.wall_seconds - (time.monotonic() - started))
@@ -108,6 +158,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         if question is None:
             break
         related = source_map.for_context({question.finding.file}, limit=12)
+        related["related_observations"] = queue.related_observations(question)
         related["source_priority_index"] = [p for p in files if p.startswith(("routes/", "lib/", "models/"))][:48]
         related["http_proof_specs"] = [spec.public() for spec, _ in http_review_registry.values()]
         # Only bounded navigation metadata crosses question sessions; old observations
@@ -129,6 +180,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
             "http_protocols": [spec.public() for spec, _ in http_review_registry.values()],
             "legacy_b_verifiers_connected": bool(verification_profiles and verification_worker_image),
             "private_fixture_protocols_connected": [grant.protocol for grant in fixture_grants],
+            "private_fixture_routes": fixture_routes,
             "unsupported_claims": "retain as pending; never infer rejected from missing verification"}
         if acceptance_require_script:
             related["dev_acceptance_objective"] = "Demonstrate a self-authored Python/Node source-inspection script and an ordinary non-mutating allowed target_http observation before finishing. Script stdout and a successful HTTP response are NOT security verdicts. Use read/write/run tools, not host execution."
@@ -140,11 +192,17 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
             "max_write_bytes": max(0, min(research_limits.max_write_bytes, limits.max_write_bytes - write_bytes)),
             "wall_seconds": min(research_limits.wall_seconds, remaining_wall)})
         directory = output / "questions" / str(ordinal)
+        write_json(output / "active-phase.json", {"phase": "research", "question": str(ordinal), "finding_id": question.id})
         question_config = {**configuration, "max_http_requests": min(
             configuration.get("max_http_requests", 128 if configuration.get("browser_image") else 32),
             max(0, limits.max_http_requests - http_requests - verification_http_reserved))}
+        stage_started = time.monotonic()
         state, summary = run_research(profile=profile, configuration=question_config, finding=question.finding,
             client=client, output=directory, limits=scoped_limits, surface_context=related)
+        stage_seconds["research"] += time.monotonic() - stage_started
+        write_json(output / "timings.json", stage_seconds)
+        write_json(output / "active-phase.json", {"phase": "source_review", "question": str(ordinal)})
+        stage_started = time.monotonic()
         progress, scope = state["research_progress"], state["research_scope"]
         calls += summary["model_calls"]
         actions += summary["actions"]
@@ -173,6 +231,9 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         report = build_final_report(state)
         reports.append({"question_id": question.id, "is_candidate": question.is_candidate,
                         "report": report.model_dump(mode="json")})
+        stage_seconds["source_review"] += time.monotonic() - stage_started
+        stage_started = time.monotonic()
+        write_json(output / "active-phase.json", {"phase": "canonical_verification", "question": str(ordinal)})
         if (verification_profiles and (verification_worker_image or fixture_grants) and summary["cleanup_verified"]
                 and actions + unknown_action_reservations < limits.max_actions
                 and time.monotonic() - started + 30 < limits.wall_seconds):
@@ -211,6 +272,9 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
                     "workflow_errors": reports[-1]["research_report"].get("workflow_errors", []) +
                                        runtime_review["report"].get("workflow_errors", [])}
             write_json(output / "canonical-runtime-reviews.json", runtime_reviews)
+        stage_seconds["canonical_verification"] += time.monotonic() - stage_started
+        write_json(output / "timings.json", stage_seconds)
+        write_json(output / "active-phase.json", {"phase": "checkpoint", "question": str(ordinal)})
         # A new cause discovered during another question owns its own report;
         # don't attribute a crypto proof to the original unrelated SAST finding.
         already_reported = {r["report"]["finding_id"] for r in reports}
@@ -232,6 +296,8 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         runs.append({"question_id": question.id, "summary": summary,
                      "interpretation": last_turn.summary[:800] if last_turn else None,
                      "uncertainties": [s[:200] for s in last_turn.uncertainties[:3]] if last_turn else []})
+        write_json(output / "checkpoint.json", {"completed": False, "runs": runs,
+            "elapsed_seconds": round(time.monotonic() - started, 3)})
         write_json(output / "verification-backlog.json", [{
             "finding_id": row["report"]["finding_id"], "status": row["report"]["status"],
             "reason": "No sufficient independent protocol Evidence; not a safe verdict"}
@@ -273,7 +339,8 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
     manifest = json.loads((output / "manifest.json").read_text())
     integrity = all(sha256((profile.repository_path / p).read_bytes()).hexdigest() == digest
                     for p, digest in manifest["source_sha256"].items())
-    summary = {"schema": "cft.research.campaign.result.v1", "runs": runs,
+    summary = {"schema": "cft.research.campaign.result.v1", "completed": True, "runs": runs,
+        "timing_seconds": stage_seconds,
         "model_calls": calls, "actions": actions, "questions_researched": len(runs),
         "actions_execution_unknown": unknown_action_reservations,
         "action_budget_used": actions + unknown_action_reservations,
@@ -296,6 +363,7 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         "elapsed_seconds": round(time.monotonic() - started, 3), "benchmark_measurement": False,
         "source_confirmations_are_not_runtime_exploits": True}
     write_json(output / "summary.json", summary)
+    write_json(output / "active-phase.json", {"phase": "finished"})
     write_json(output / "rejected-inputs.json", queue.rejections)
     write_json(output / "coverage.json", queue.coverage(ledgers))
     if not integrity:
