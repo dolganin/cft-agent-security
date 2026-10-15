@@ -202,6 +202,7 @@ class TargetFixConfig(BaseModel):
 
     model_config = ConfigDict(extra="forbid", frozen=True)
     adapter: Literal["juice_node_v1"] = "juice_node_v1"
+    family: Literal["sql-search", "redirect-allowlist"] | None = None
     image: str
     service: str
     source_commit: str = Field(pattern=r"^[a-f0-9]{40}$")

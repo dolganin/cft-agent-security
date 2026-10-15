@@ -17,7 +17,7 @@ from schemas.runtime import RuntimeService, RuntimeServiceMap
 from schemas.target import TargetProfile
 from security.error_redaction import redact_error_message
 
-STAGES = {"prepare", "build", "tests", "start", "smoke"}
+STAGES = {"prepare", "build", "tests", "start", "smoke", "c03_fixture", "c03_source", "c03_http"}
 _PREPARE = (
     "import shutil,pathlib,hashlib; "
     "assert pathlib.Path('/input/package.json').read_bytes().replace(b'\\r\\n',b'\\n') == "
@@ -90,7 +90,7 @@ class DockerFixRuntime:
             "--tmpfs", "/workspace:rw,nosuid,size=2g,uid=1000,gid=1000",
             "--tmpfs", "/tmp:rw,noexec,nosuid,size=64m,uid=1000,gid=1000",
             "--mount", f"type=bind,source={self.profile.repository_path},target=/input,readonly",
-            "--mount", f"type=bind,source={Path(__file__).with_name('fix_test_reporter.mjs')},target=/fix/reporter.mjs,readonly",
+            "--mount", f"type=bind,source={getattr(self, 'reporter_path', Path(__file__).with_name('fix_test_reporter.mjs'))},target=/fix/reporter.mjs,readonly",
             "--env", "HOME=/tmp", "--env", "NODE_ENV=test",
             "--entrypoint", "python3", self.config.image,
             "-c", "import time; time.sleep(3600)",
@@ -140,8 +140,10 @@ class DockerFixRuntime:
         return result
 
     def runtime_services(self) -> RuntimeServiceMap:
+        from security.verification_binding import source_snapshot
         service = self.profile.services[self.config.service]
-        return RuntimeServiceMap(session_id=self.id, network_name=self.network, services={
+        hashes = source_snapshot(self.profile)[1] if self.profile.verification_routes else {}
+        return RuntimeServiceMap(session_id=self.id, network_name=self.network, source_files_sha256=hashes, services={
             service.id: RuntimeService(name=service.id, type=service.type,
                 address=f"http://{service.id}:3000", ready=True, readiness_source="http_probe",
                 allowed_endpoints=service.runtime_endpoints, request_host=service.request_host),

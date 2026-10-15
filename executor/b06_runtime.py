@@ -298,8 +298,7 @@ class B06Runtime:
         finally:
             self.ready = False
         try:
-            unchanged = (validate_target(self.original_profile.repository_path, SimpleNamespace(target_commit=COMMIT))
-                         == self.original and source_snapshot(self.profile)[1] == self.source_files)
+            unchanged = self._source_unchanged()
         except (OSError, ValueError, RuntimeError):
             unchanged = False
         result = B06VerificationResult(binding=self.binding, action_digest=proposal_digest(self.action),
@@ -310,3 +309,7 @@ class B06Runtime:
         stdout = json.dumps(result.model_dump(mode="json", exclude_none=True), separators=(",", ":"))
         return SandboxResult(request.run_id, 0, stdout, "", False, self.id,
                              int((time.monotonic() - started) * 1000), "docker")
+
+    def _source_unchanged(self):
+        return (validate_target(self.original_profile.repository_path, SimpleNamespace(target_commit=COMMIT))
+                == self.original and source_snapshot(self.profile)[1] == self.source_files)

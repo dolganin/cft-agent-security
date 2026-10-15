@@ -1,6 +1,7 @@
 """Evidence-backed fix verification through the canonical Validator and Executor."""
 from __future__ import annotations
 
+import subprocess
 import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
@@ -87,6 +88,17 @@ def original_binding(report: FinalReport, profile: TargetProfile) -> ActionPropo
 
 
 class FixVerificationService:
+    def _check_review(self, review, source, report):
+        return check_review(review, source, report.finding_id, review.run_id, review.file)
+
+    def _original_binding(self, report, profile):
+        return original_binding(report, profile)
+
+    def _check_scope(self, profile, review, report):
+        """Extension point for operator-owned, versioned scope contracts."""
+        if review.file != report.finding.file:
+            raise ValueError("Patch review file differs from the original finding")
+
     def confirm_original(self, *, report: FinalReport, profile: TargetProfile,
                          run_id: str, artifact_directory: Path,
                          policy_file: Path = ROOT / "policies/default.yaml") -> FinalReport:
@@ -160,14 +172,15 @@ class FixVerificationService:
         try:
             if source is None or not source.is_dir():
                 raise ValueError("Original target checkout is unavailable")
-            check_review(review, source, report.finding_id, review.run_id, report.finding.file)
+            self._check_review(review, source, report)
+            self._check_scope(profile, review, report)
             if profile.fix_verification is None:
                 raise RuntimeError("Configure a digest-pinned fix image in TargetProfile.fix_verification")
             artifact.original_commit = original_commit(source)
             if artifact.original_commit != profile.fix_verification.source_commit:
                 raise ValueError("Target commit differs from the trusted fix profile")
             profile = register_source_artifacts(profile, [report.finding], source)
-            action = original_binding(report, profile)
+            action = self._original_binding(report, profile)
             artifact.trusted_binding = {k: v for k, v in action.model_dump().items()
                                         if k in {"tool", "target", "environment", "parameters", "service", "endpoint"}}
             with tempfile.TemporaryDirectory(prefix="cft-fix-") as temporary:
@@ -179,14 +192,14 @@ class FixVerificationService:
                 if snapshot(source) != original_manifest or snapshot(workspace) != original_manifest:
                     raise ValueError("Source changed while creating the isolated snapshot")
                 isolated = profile.model_copy(update={"repository_path": workspace})
-                check_review(review, workspace, report.finding_id, review.run_id, report.finding.file)
+                self._check_review(review, workspace, report)
                 before = self._phase(isolated, action, "before", artifact, artifact_directory, policy_file)
                 artifact.before_evidence = before
                 artifact.before_evidence_sha256 = digest(before.model_dump_json().encode()) if before else None
                 if before is None or before.verdict != "confirmed":
                     artifact.explanation = "Original vulnerability was not reproduced; no fix claim is possible"
                 else:
-                    check_review(review, workspace, report.finding_id, review.run_id, report.finding.file)
+                    self._check_review(review, workspace, report)
                     artifact.patched_file_sha256 = apply_patch(workspace, review.proposal.unified_diff, review.file)
                     artifact.applied = True
                     artifact.patch_application = PatchApplicationResult(status="applied", detail="Applied only in disposable snapshot")
@@ -211,7 +224,7 @@ class FixVerificationService:
         except ValueError as exc:
             artifact.status = "REJECTED"
             artifact.explanation = redact_error_message(str(exc))
-        except (RuntimeError, OSError, TimeoutError) as exc:
+        except (RuntimeError, OSError, TimeoutError, subprocess.SubprocessError) as exc:
             artifact.status = "INCONCLUSIVE"
             artifact.explanation = redact_error_message(str(exc))
         finally:

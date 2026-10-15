@@ -127,7 +127,7 @@ class FixVerificationArtifact(BaseModel):
 
 class FixStageResult(BaseModel):
     phase: Literal["before", "after"]
-    stage: Literal["prepare", "build", "tests", "start", "smoke"]
+    stage: Literal["prepare", "build", "tests", "start", "smoke", "c03_fixture", "c03_source", "c03_http"]
     attempted: bool = True
     profile_id: str
     status: Literal["passed", "failed", "error", "timed_out"]

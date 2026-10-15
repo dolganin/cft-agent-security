@@ -97,6 +97,10 @@ LLM не является границей безопасности. Реаль�
 `python -m app.patch_propose --target <pinned-checkout> --family sql-search --output <new-directory>`.
 Предложение сохраняется без применения к оригиналу.
 
+[C03: независимая проверка патча](docs/c03-independent-patch-verification.md):
+SQL reference — FIXED; redirect reference — REGRESSION на обязательных upstream tests.
+Все upstream tests сохранены; C03 целиком пока не закрыт.
+
 ### Требования
 
 - Python `3.11+`;

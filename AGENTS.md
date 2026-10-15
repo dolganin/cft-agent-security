@@ -1371,3 +1371,28 @@ required for ready, but is not proof of remediation. PatchReviewArtifact remains
 applied=false/security_verified=false until independent C03 verification; never
 reinterpret model rationale or adapter telemetry as security Evidence. See
 `docs/c02-llm-patch-proposals.md` for budgets, real runs and reproduction.
+
+# 39. C03 independent patch verification
+
+`app.independent_fix` specializes the existing isolated FixVerificationService.
+C01 scope, frozen B09 source, B01 binding, Validator, SafeExecutor and persisted
+execution/audit are mandatory. Patches cannot modify the evaluator or native
+tests. Fixed readonly runners execute all native unit files; separate source and
+HTTP checks cannot substitute for the original canonical runtime hypothesis.
+
+FIXED requires fresh BEFORE confirmed, explicit AFTER rejected, all required
+successful stages, original integrity and verified owned-resource cleanup.
+Offline replay checks receipts, stage inventory and source/patch digests; it
+cannot upgrade an inconclusive verifier result. No missing response, endpoint
+or model conclusion proves rejection. Reference engineering runs are not C02
+LLM generation claims.
+
+All upstream tests still execute unchanged. Roman subsequently authorized a
+protected security-contract replacement only for the two exact redirect
+assertions requiring vulnerable behavior. contracts/c03/native-security-contract.json
+pins their source hashes, names, assertion lines and false-vs-true outcomes.
+Raw native failures/exit 1 remain persisted; they permit continuation only after
+the exact contract is independently rechecked. No other failure/skip is accepted.
+Independent source/HTTP tests and canonical AFTER rejected remain mandatory;
+the exception itself never creates FIXED. Historical REGRESSION evidence stays
+unchanged. See docs/c03-independent-patch-verification.md.

@@ -1,0 +1,2 @@
+# C03 persisted policy digests are byte-exact and portable.
+c03.yaml text eol=lf

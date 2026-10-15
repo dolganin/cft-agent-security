@@ -80,4 +80,4 @@ exclude = [
 ]
 
 [tool.setuptools.package-data]
-executor = ["fix_test_reporter.mjs"]
+executor = ["fix_test_reporter.mjs", "c03_test_reporter.mjs"]

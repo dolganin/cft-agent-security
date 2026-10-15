@@ -1,0 +1,285 @@
+{
+  "schema_version": "cft.c03.protected-contract-acceptance.v1",
+  "completion": "passed_under_explicitly_authorized_contract",
+  "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+  "all_upstream_tests_executed_unmodified": true,
+  "historical_regression_preserved": true,
+  "runs": [
+    {
+      "family": "sql-search",
+      "status": "FIXED",
+      "before": "confirmed",
+      "after": "rejected",
+      "original_unchanged": true,
+      "cleanup_complete": true,
+      "security_verified": true,
+      "replay": {
+        "status": "FIXED",
+        "reason": "complete_independent_chain",
+        "seal_sha256": "85b4703f1d9dc30b797666c88e4ec23e87a3f8776a8b49c778e3aa7d544cfdf9"
+      },
+      "local_complete_bundle": "artifacts/c03-sql-protected-contract-01",
+      "native_tests": [
+        {
+          "action_id": "fix-be8e5ffaa36a41fd884491a31eac3a05-before-0-tests",
+          "summary": {
+            "success": true,
+            "counts": {
+              "tests": 415,
+              "failed": 0,
+              "passed": 413,
+              "cancelled": 0,
+              "skipped": 2,
+              "todo": 0,
+              "topLevel": 40,
+              "suites": 130
+            },
+            "duration_ms": 13335.71533
+          },
+          "assertion_failures": [],
+          "operator_contract": {
+            "schema_version": "cft.c03.native-contract-result.v1",
+            "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+            "family": "sql-search",
+            "phase": "before",
+            "raw_exit_code": 0,
+            "native_suite_success": true,
+            "accepted_security_assertions": [],
+            "independent_security_verification_required": false
+          }
+        },
+        {
+          "action_id": "fix-be8e5ffaa36a41fd884491a31eac3a05-after-0-tests",
+          "summary": {
+            "success": true,
+            "counts": {
+              "tests": 415,
+              "failed": 0,
+              "passed": 413,
+              "cancelled": 0,
+              "skipped": 2,
+              "todo": 0,
+              "topLevel": 40,
+              "suites": 130
+            },
+            "duration_ms": 13151.076112
+          },
+          "assertion_failures": [],
+          "operator_contract": {
+            "schema_version": "cft.c03.native-contract-result.v1",
+            "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+            "family": "sql-search",
+            "phase": "after",
+            "raw_exit_code": 0,
+            "native_suite_success": true,
+            "accepted_security_assertions": [],
+            "independent_security_verification_required": false
+          }
+        }
+      ]
+    },
+    {
+      "family": "redirect-allowlist",
+      "status": "FIXED",
+      "before": "confirmed",
+      "after": "rejected",
+      "original_unchanged": true,
+      "cleanup_complete": true,
+      "security_verified": true,
+      "replay": {
+        "status": "FIXED",
+        "reason": "complete_independent_chain",
+        "seal_sha256": "660d2bb892639a3fdc04b65553d82f86b6652a5f8205216529ed58e27ebe53d2"
+      },
+      "local_complete_bundle": "artifacts/c03-redirect-protected-contract-02",
+      "native_tests": [
+        {
+          "action_id": "fix-8fd39db71dbd43f58d157cf2e7e69cf1-before-0-tests",
+          "summary": {
+            "success": true,
+            "counts": {
+              "tests": 415,
+              "failed": 0,
+              "passed": 413,
+              "cancelled": 0,
+              "skipped": 2,
+              "todo": 0,
+              "topLevel": 40,
+              "suites": 130
+            },
+            "duration_ms": 13487.209054
+          },
+          "assertion_failures": [],
+          "operator_contract": {
+            "schema_version": "cft.c03.native-contract-result.v1",
+            "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+            "family": "redirect-allowlist",
+            "phase": "before",
+            "raw_exit_code": 0,
+            "native_suite_success": true,
+            "accepted_security_assertions": [],
+            "independent_security_verification_required": false
+          }
+        },
+        {
+          "action_id": "fix-8fd39db71dbd43f58d157cf2e7e69cf1-before-1-tests",
+          "summary": {
+            "success": true,
+            "counts": {
+              "tests": 415,
+              "failed": 0,
+              "passed": 413,
+              "cancelled": 0,
+              "skipped": 2,
+              "todo": 0,
+              "topLevel": 40,
+              "suites": 130
+            },
+            "duration_ms": 15296.108847
+          },
+          "assertion_failures": [],
+          "operator_contract": {
+            "schema_version": "cft.c03.native-contract-result.v1",
+            "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+            "family": "redirect-allowlist",
+            "phase": "before",
+            "raw_exit_code": 0,
+            "native_suite_success": true,
+            "accepted_security_assertions": [],
+            "independent_security_verification_required": false
+          }
+        },
+        {
+          "action_id": "fix-8fd39db71dbd43f58d157cf2e7e69cf1-after-0-tests",
+          "summary": {
+            "success": false,
+            "counts": {
+              "tests": 415,
+              "failed": 2,
+              "passed": 411,
+              "cancelled": 0,
+              "skipped": 2,
+              "todo": 0,
+              "topLevel": 40,
+              "suites": 130
+            },
+            "duration_ms": 15174.899571
+          },
+          "assertion_failures": [
+            {
+              "file": "test/server/insecurity.unit.test.ts",
+              "name": "returns true for URLs containing allowed URLs",
+              "line": 259,
+              "failure_type": "testCodeFailure",
+              "code": "ERR_ASSERTION",
+              "actual": false,
+              "expected": true
+            },
+            {
+              "file": "test/server/redirect.unit.test.ts",
+              "name": "tricking the allowlist should solve \"redirectChallenge\"",
+              "line": 84,
+              "failure_type": "testCodeFailure",
+              "code": "ERR_ASSERTION",
+              "actual": false,
+              "expected": true
+            }
+          ],
+          "operator_contract": {
+            "schema_version": "cft.c03.native-contract-result.v1",
+            "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+            "family": "redirect-allowlist",
+            "phase": "after",
+            "raw_exit_code": 1,
+            "native_suite_success": false,
+            "accepted_security_assertions": [
+              {
+                "file": "test/server/insecurity.unit.test.ts",
+                "name": "returns true for URLs containing allowed URLs",
+                "line": 259
+              },
+              {
+                "file": "test/server/redirect.unit.test.ts",
+                "name": "tricking the allowlist should solve \"redirectChallenge\"",
+                "line": 84
+              }
+            ],
+            "independent_security_verification_required": true
+          }
+        },
+        {
+          "action_id": "fix-8fd39db71dbd43f58d157cf2e7e69cf1-after-1-tests",
+          "summary": {
+            "success": false,
+            "counts": {
+              "tests": 415,
+              "failed": 2,
+              "passed": 411,
+              "cancelled": 0,
+              "skipped": 2,
+              "todo": 0,
+              "topLevel": 40,
+              "suites": 130
+            },
+            "duration_ms": 15383.622199
+          },
+          "assertion_failures": [
+            {
+              "file": "test/server/insecurity.unit.test.ts",
+              "name": "returns true for URLs containing allowed URLs",
+              "line": 259,
+              "failure_type": "testCodeFailure",
+              "code": "ERR_ASSERTION",
+              "actual": false,
+              "expected": true
+            },
+            {
+              "file": "test/server/redirect.unit.test.ts",
+              "name": "tricking the allowlist should solve \"redirectChallenge\"",
+              "line": 84,
+              "failure_type": "testCodeFailure",
+              "code": "ERR_ASSERTION",
+              "actual": false,
+              "expected": true
+            }
+          ],
+          "operator_contract": {
+            "schema_version": "cft.c03.native-contract-result.v1",
+            "contract_sha256": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e",
+            "family": "redirect-allowlist",
+            "phase": "after",
+            "raw_exit_code": 1,
+            "native_suite_success": false,
+            "accepted_security_assertions": [
+              {
+                "file": "test/server/insecurity.unit.test.ts",
+                "name": "returns true for URLs containing allowed URLs",
+                "line": 259
+              },
+              {
+                "file": "test/server/redirect.unit.test.ts",
+                "name": "tricking the allowlist should solve \"redirectChallenge\"",
+                "line": 84
+              }
+            ],
+            "independent_security_verification_required": true
+          }
+        }
+      ]
+    }
+  ],
+  "pytest": {
+    "passed": 1483,
+    "skipped": 29,
+    "failed": 0
+  },
+  "sql_archive_sha256": "73cccfda019df0fca6da9d2968b0f76d4dfa60a0815ce53ef3c05e9dbb6abfae",
+  "implementation_sha256_lf": {
+    "fix_verification/native_contract.py": "89eba4279c9b399896b6a1c08a1434cebd5d08fb9a758381851d7946a2b6a883",
+    "fix_verification/independent.py": "6b187ec7d84c9262fc9f45c9e0a3996ba9ac12418491513c340592984a5b4080",
+    "fix_verification/independent_replay.py": "bd079899900934d1ba7a9a98cb9836f8d6d3528ce306f9b56542ce4095586ff7",
+    "executor/c03_runtime.py": "c7555627fd33e1b989c68a3c9e184b93521d8964acafd6c295fee1b75ef5ca97",
+    "executor/c03_test_reporter.mjs": "6085ab2976d98ea08e824cc91a89acd917f75a80772323498d95f6f236265c7d",
+    "contracts/c03/native-security-contract.json": "c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e"
+  }
+}

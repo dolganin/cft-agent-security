@@ -332,3 +332,10 @@ Output: `artifacts/stage1-e2e/stage1-<unique-id>/fix-verification.json` вмес
   provisioned image digest; без конфигурации возвращается INCONCLUSIVE.
   Официальный E2E entrypoint делает эту binding из preflight-checked local image.
   В README приведена конфигурация для подключения demo UI.
+# C03 extension (15 October 2026)
+
+The versioned operator C03 entry point specializes this service for the two C01
+families, B01 binding, independent HTTP observations and offline replay. Stage 1
+callers keep the existing API/artifact. C03's redirect reference acceptance is
+blocked by upstream tests requiring vulnerable behavior; it is not COMPLETE.
+See [C03 engineering report](c03-independent-patch-verification.md).

@@ -1,0 +1,639 @@
+{
+  "completion": "blocked",
+  "upstream_tests": "all mandatory; no accepted failures",
+  "runs": [
+    {
+      "family": "sql-search",
+      "status": "FIXED",
+      "replay_reason": "complete_independent_chain",
+      "seal_sha256": "ff546095f6e66ce27c6b7b00392aebbb7318887d777132c9753b83e12d4a6cf9",
+      "before": "confirmed",
+      "after": "rejected",
+      "original_unchanged": true,
+      "cleanup_complete": true,
+      "security_verified": true,
+      "native_tests": [
+        {
+          "action_id": "fix-9d67d9e665d14be998923618c0f69bcc-before-0-tests",
+          "exit_code": 0,
+          "reports": [
+            {
+              "summary": {
+                "success": true,
+                "counts": {
+                  "tests": 415,
+                  "failed": 0,
+                  "passed": 413,
+                  "cancelled": 0,
+                  "skipped": 2,
+                  "todo": 0,
+                  "topLevel": 40,
+                  "suites": 130
+                },
+                "duration_ms": 15651.362757
+              },
+              "files": [
+                "test/server/accuracy.unit.test.ts",
+                "test/server/angular.unit.test.ts",
+                "test/server/antiCheat.unit.test.ts",
+                "test/server/appConfiguration.unit.test.ts",
+                "test/server/appVersion.unit.test.ts",
+                "test/server/b2bOrder.unit.test.ts",
+                "test/server/blueprint.unit.test.ts",
+                "test/server/challengeCountryMapping.unit.test.ts",
+                "test/server/challengeTag.unit.test.ts",
+                "test/server/challengeTutorialSequence.unit.test.ts",
+                "test/server/challengeUtils.unit.test.ts",
+                "test/server/chat.unit.test.ts",
+                "test/server/codeSnippet.unit.test.ts",
+                "test/server/codingChallengeFixes.unit.test.ts",
+                "test/server/codingChallenges.unit.test.ts",
+                "test/server/configValidation.unit.test.ts",
+                "test/server/continueCode.unit.test.ts",
+                "test/server/countryMapping.unit.test.ts",
+                "test/server/currentUser.unit.test.ts",
+                "test/server/dataExport.unit.test.ts",
+                "test/server/easterEgg.unit.test.ts",
+                "test/server/fileServer.unit.test.ts",
+                "test/server/fileUpload.unit.test.ts",
+                "test/server/insecurity.unit.test.ts",
+                "test/server/is-docker.unit.test.ts",
+                "test/server/keyServer.unit.test.ts",
+                "test/server/noUpdate.unit.test.ts",
+                "test/server/order.unit.test.ts",
+                "test/server/preconditionValidation.unit.test.ts",
+                "test/server/premiumReward.unit.test.ts",
+                "test/server/redirect.unit.test.ts",
+                "test/server/rsn.unit.test.ts",
+                "test/server/saveLoginIp.unit.test.ts",
+                "test/server/system-prompt-extraction.unit.test.ts",
+                "test/server/utils.unit.test.ts",
+                "test/server/verify.unit.test.ts",
+                "test/server/webhook.unit.test.ts",
+                "test/server/xml.unit.test.ts"
+              ],
+              "skipped": [
+                {
+                  "name": "infinite loop payload does not succeed but solves \"rceChallenge\"",
+                  "reason": "true"
+                },
+                {
+                  "name": "timeout after 2 seconds solves \"rceOccupyChallenge\"",
+                  "reason": "true"
+                }
+              ],
+              "event_count": 545,
+              "events_sha256": "91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33"
+            }
+          ],
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":15651.362757},\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"}",
+          "stderr": ""
+        },
+        {
+          "action_id": "fix-9d67d9e665d14be998923618c0f69bcc-after-0-tests",
+          "exit_code": 0,
+          "reports": [
+            {
+              "summary": {
+                "success": true,
+                "counts": {
+                  "tests": 415,
+                  "failed": 0,
+                  "passed": 413,
+                  "cancelled": 0,
+                  "skipped": 2,
+                  "todo": 0,
+                  "topLevel": 40,
+                  "suites": 130
+                },
+                "duration_ms": 13460.014711
+              },
+              "files": [
+                "test/server/accuracy.unit.test.ts",
+                "test/server/angular.unit.test.ts",
+                "test/server/antiCheat.unit.test.ts",
+                "test/server/appConfiguration.unit.test.ts",
+                "test/server/appVersion.unit.test.ts",
+                "test/server/b2bOrder.unit.test.ts",
+                "test/server/blueprint.unit.test.ts",
+                "test/server/challengeCountryMapping.unit.test.ts",
+                "test/server/challengeTag.unit.test.ts",
+                "test/server/challengeTutorialSequence.unit.test.ts",
+                "test/server/challengeUtils.unit.test.ts",
+                "test/server/chat.unit.test.ts",
+                "test/server/codeSnippet.unit.test.ts",
+                "test/server/codingChallengeFixes.unit.test.ts",
+                "test/server/codingChallenges.unit.test.ts",
+                "test/server/configValidation.unit.test.ts",
+                "test/server/continueCode.unit.test.ts",
+                "test/server/countryMapping.unit.test.ts",
+                "test/server/currentUser.unit.test.ts",
+                "test/server/dataExport.unit.test.ts",
+                "test/server/easterEgg.unit.test.ts",
+                "test/server/fileServer.unit.test.ts",
+                "test/server/fileUpload.unit.test.ts",
+                "test/server/insecurity.unit.test.ts",
+                "test/server/is-docker.unit.test.ts",
+                "test/server/keyServer.unit.test.ts",
+                "test/server/noUpdate.unit.test.ts",
+                "test/server/order.unit.test.ts",
+                "test/server/preconditionValidation.unit.test.ts",
+                "test/server/premiumReward.unit.test.ts",
+                "test/server/redirect.unit.test.ts",
+                "test/server/rsn.unit.test.ts",
+                "test/server/saveLoginIp.unit.test.ts",
+                "test/server/system-prompt-extraction.unit.test.ts",
+                "test/server/utils.unit.test.ts",
+                "test/server/verify.unit.test.ts",
+                "test/server/webhook.unit.test.ts",
+                "test/server/xml.unit.test.ts"
+              ],
+              "skipped": [
+                {
+                  "name": "infinite loop payload does not succeed but solves \"rceChallenge\"",
+                  "reason": "true"
+                },
+                {
+                  "name": "timeout after 2 seconds solves \"rceOccupyChallenge\"",
+                  "reason": "true"
+                }
+              ],
+              "event_count": 545,
+              "events_sha256": "91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33"
+            }
+          ],
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":13460.014711},\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"}",
+          "stderr": ""
+        }
+      ],
+      "lifecycle": [
+        {
+          "phase": "before",
+          "generations": [
+            "cft-fix-4dc9e604d5b04774927a"
+          ],
+          "cleanup_complete": true,
+          "canonical_worker_cleanup": true,
+          "worker_cleanup_proofs": [],
+          "cleanup_proofs": [
+            [
+              {
+                "kind": "container",
+                "name": "cft-fix-4dc9e604d5b04774927a",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-4dc9e604d5b04774927a-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              }
+            ]
+          ]
+        },
+        {
+          "phase": "after",
+          "generations": [
+            "cft-fix-fcb8224ff8f0489b98e6"
+          ],
+          "cleanup_complete": true,
+          "canonical_worker_cleanup": true,
+          "worker_cleanup_proofs": [],
+          "cleanup_proofs": [
+            [
+              {
+                "kind": "container",
+                "name": "cft-fix-fcb8224ff8f0489b98e6",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-fcb8224ff8f0489b98e6-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "container",
+                "name": "cft-c03-observer-99b3d7ee544547a28437",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "container",
+                "name": "cft-c03-observer-0f310b9e0ff54836b31c",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              }
+            ]
+          ]
+        }
+      ],
+      "replay_bundle": "sql-runtime.zip",
+      "bundle_sha256": "28ea4e60acfaf30de46e47d630282a759c0f6a0ee19a4c60cc5c8bcd952edc09"
+    },
+    {
+      "family": "redirect-allowlist",
+      "status": "REGRESSION",
+      "replay_reason": "stage_failed:tests",
+      "seal_sha256": "c918fbb40f5a3083f14d099264276acfced3584e26a2dd12ee4843a2418ba756",
+      "before": "confirmed",
+      "after": null,
+      "original_unchanged": true,
+      "cleanup_complete": true,
+      "security_verified": false,
+      "native_tests": [
+        {
+          "action_id": "fix-7e25ca3f45aa4426a6213c95f4bbe30c-before-0-tests",
+          "exit_code": 0,
+          "reports": [
+            {
+              "summary": {
+                "success": true,
+                "counts": {
+                  "tests": 415,
+                  "failed": 0,
+                  "passed": 413,
+                  "cancelled": 0,
+                  "skipped": 2,
+                  "todo": 0,
+                  "topLevel": 40,
+                  "suites": 130
+                },
+                "duration_ms": 13095.662127
+              },
+              "files": [
+                "test/server/accuracy.unit.test.ts",
+                "test/server/angular.unit.test.ts",
+                "test/server/antiCheat.unit.test.ts",
+                "test/server/appConfiguration.unit.test.ts",
+                "test/server/appVersion.unit.test.ts",
+                "test/server/b2bOrder.unit.test.ts",
+                "test/server/blueprint.unit.test.ts",
+                "test/server/challengeCountryMapping.unit.test.ts",
+                "test/server/challengeTag.unit.test.ts",
+                "test/server/challengeTutorialSequence.unit.test.ts",
+                "test/server/challengeUtils.unit.test.ts",
+                "test/server/chat.unit.test.ts",
+                "test/server/codeSnippet.unit.test.ts",
+                "test/server/codingChallengeFixes.unit.test.ts",
+                "test/server/codingChallenges.unit.test.ts",
+                "test/server/configValidation.unit.test.ts",
+                "test/server/continueCode.unit.test.ts",
+                "test/server/countryMapping.unit.test.ts",
+                "test/server/currentUser.unit.test.ts",
+                "test/server/dataExport.unit.test.ts",
+                "test/server/easterEgg.unit.test.ts",
+                "test/server/fileServer.unit.test.ts",
+                "test/server/fileUpload.unit.test.ts",
+                "test/server/insecurity.unit.test.ts",
+                "test/server/is-docker.unit.test.ts",
+                "test/server/keyServer.unit.test.ts",
+                "test/server/noUpdate.unit.test.ts",
+                "test/server/order.unit.test.ts",
+                "test/server/preconditionValidation.unit.test.ts",
+                "test/server/premiumReward.unit.test.ts",
+                "test/server/redirect.unit.test.ts",
+                "test/server/rsn.unit.test.ts",
+                "test/server/saveLoginIp.unit.test.ts",
+                "test/server/system-prompt-extraction.unit.test.ts",
+                "test/server/utils.unit.test.ts",
+                "test/server/verify.unit.test.ts",
+                "test/server/webhook.unit.test.ts",
+                "test/server/xml.unit.test.ts"
+              ],
+              "skipped": [
+                {
+                  "name": "infinite loop payload does not succeed but solves \"rceChallenge\"",
+                  "reason": "true"
+                },
+                {
+                  "name": "timeout after 2 seconds solves \"rceOccupyChallenge\"",
+                  "reason": "true"
+                }
+              ],
+              "event_count": 545,
+              "events_sha256": "91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33"
+            }
+          ],
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":13095.662127},\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"}",
+          "stderr": ""
+        },
+        {
+          "action_id": "fix-7e25ca3f45aa4426a6213c95f4bbe30c-before-1-tests",
+          "exit_code": 0,
+          "reports": [
+            {
+              "summary": {
+                "success": true,
+                "counts": {
+                  "tests": 415,
+                  "failed": 0,
+                  "passed": 413,
+                  "cancelled": 0,
+                  "skipped": 2,
+                  "todo": 0,
+                  "topLevel": 40,
+                  "suites": 130
+                },
+                "duration_ms": 13131.996986
+              },
+              "files": [
+                "test/server/accuracy.unit.test.ts",
+                "test/server/angular.unit.test.ts",
+                "test/server/antiCheat.unit.test.ts",
+                "test/server/appConfiguration.unit.test.ts",
+                "test/server/appVersion.unit.test.ts",
+                "test/server/b2bOrder.unit.test.ts",
+                "test/server/blueprint.unit.test.ts",
+                "test/server/challengeCountryMapping.unit.test.ts",
+                "test/server/challengeTag.unit.test.ts",
+                "test/server/challengeTutorialSequence.unit.test.ts",
+                "test/server/challengeUtils.unit.test.ts",
+                "test/server/chat.unit.test.ts",
+                "test/server/codeSnippet.unit.test.ts",
+                "test/server/codingChallengeFixes.unit.test.ts",
+                "test/server/codingChallenges.unit.test.ts",
+                "test/server/configValidation.unit.test.ts",
+                "test/server/continueCode.unit.test.ts",
+                "test/server/countryMapping.unit.test.ts",
+                "test/server/currentUser.unit.test.ts",
+                "test/server/dataExport.unit.test.ts",
+                "test/server/easterEgg.unit.test.ts",
+                "test/server/fileServer.unit.test.ts",
+                "test/server/fileUpload.unit.test.ts",
+                "test/server/insecurity.unit.test.ts",
+                "test/server/is-docker.unit.test.ts",
+                "test/server/keyServer.unit.test.ts",
+                "test/server/noUpdate.unit.test.ts",
+                "test/server/order.unit.test.ts",
+                "test/server/preconditionValidation.unit.test.ts",
+                "test/server/premiumReward.unit.test.ts",
+                "test/server/redirect.unit.test.ts",
+                "test/server/rsn.unit.test.ts",
+                "test/server/saveLoginIp.unit.test.ts",
+                "test/server/system-prompt-extraction.unit.test.ts",
+                "test/server/utils.unit.test.ts",
+                "test/server/verify.unit.test.ts",
+                "test/server/webhook.unit.test.ts",
+                "test/server/xml.unit.test.ts"
+              ],
+              "skipped": [
+                {
+                  "name": "infinite loop payload does not succeed but solves \"rceChallenge\"",
+                  "reason": "true"
+                },
+                {
+                  "name": "timeout after 2 seconds solves \"rceOccupyChallenge\"",
+                  "reason": "true"
+                }
+              ],
+              "event_count": 545,
+              "events_sha256": "91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33"
+            }
+          ],
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":13131.996986},\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"}",
+          "stderr": ""
+        },
+        {
+          "action_id": "fix-7e25ca3f45aa4426a6213c95f4bbe30c-after-0-tests",
+          "exit_code": 1,
+          "reports": [
+            {
+              "summary": {
+                "success": false,
+                "counts": {
+                  "tests": 415,
+                  "failed": 2,
+                  "passed": 411,
+                  "cancelled": 0,
+                  "skipped": 2,
+                  "todo": 0,
+                  "topLevel": 40,
+                  "suites": 130
+                },
+                "duration_ms": 12961.344401
+              },
+              "files": [
+                "test/server/accuracy.unit.test.ts",
+                "test/server/angular.unit.test.ts",
+                "test/server/antiCheat.unit.test.ts",
+                "test/server/appConfiguration.unit.test.ts",
+                "test/server/appVersion.unit.test.ts",
+                "test/server/b2bOrder.unit.test.ts",
+                "test/server/blueprint.unit.test.ts",
+                "test/server/challengeCountryMapping.unit.test.ts",
+                "test/server/challengeTag.unit.test.ts",
+                "test/server/challengeTutorialSequence.unit.test.ts",
+                "test/server/challengeUtils.unit.test.ts",
+                "test/server/chat.unit.test.ts",
+                "test/server/codeSnippet.unit.test.ts",
+                "test/server/codingChallengeFixes.unit.test.ts",
+                "test/server/codingChallenges.unit.test.ts",
+                "test/server/configValidation.unit.test.ts",
+                "test/server/continueCode.unit.test.ts",
+                "test/server/countryMapping.unit.test.ts",
+                "test/server/currentUser.unit.test.ts",
+                "test/server/dataExport.unit.test.ts",
+                "test/server/easterEgg.unit.test.ts",
+                "test/server/fileServer.unit.test.ts",
+                "test/server/fileUpload.unit.test.ts",
+                "test/server/insecurity.unit.test.ts",
+                "test/server/is-docker.unit.test.ts",
+                "test/server/keyServer.unit.test.ts",
+                "test/server/noUpdate.unit.test.ts",
+                "test/server/order.unit.test.ts",
+                "test/server/preconditionValidation.unit.test.ts",
+                "test/server/premiumReward.unit.test.ts",
+                "test/server/redirect.unit.test.ts",
+                "test/server/rsn.unit.test.ts",
+                "test/server/saveLoginIp.unit.test.ts",
+                "test/server/system-prompt-extraction.unit.test.ts",
+                "test/server/utils.unit.test.ts",
+                "test/server/verify.unit.test.ts",
+                "test/server/webhook.unit.test.ts",
+                "test/server/xml.unit.test.ts"
+              ],
+              "skipped": [
+                {
+                  "name": "infinite loop payload does not succeed but solves \"rceChallenge\"",
+                  "reason": "true"
+                },
+                {
+                  "name": "timeout after 2 seconds solves \"rceOccupyChallenge\"",
+                  "reason": "true"
+                }
+              ],
+              "event_count": 545,
+              "events_sha256": "091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc"
+            }
+          ],
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":12961.344401},\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc\"}",
+          "stderr": ""
+        }
+      ],
+      "lifecycle": [
+        {
+          "phase": "before",
+          "generations": [
+            "cft-fix-59dbec0d5d264cd1bc26",
+            "cft-fix-6227d78e79c8405a89d1"
+          ],
+          "cleanup_complete": true,
+          "canonical_worker_cleanup": true,
+          "worker_cleanup_proofs": [
+            {
+              "name": "cft-c03-b06-8f0ec85005f04edc",
+              "exit_code": 0,
+              "remaining": "",
+              "absent": true
+            },
+            {
+              "name": "cft-c03-b06-a3e5b87310d8417b",
+              "exit_code": 0,
+              "remaining": "",
+              "absent": true
+            },
+            {
+              "name": "cft-c03-b06-8f0ec85005f04edc",
+              "exit_code": 0,
+              "remaining": "",
+              "absent": true
+            },
+            {
+              "name": "cft-c03-b06-a3e5b87310d8417b",
+              "exit_code": 0,
+              "remaining": "",
+              "absent": true
+            }
+          ],
+          "cleanup_proofs": [
+            [
+              {
+                "kind": "container",
+                "name": "cft-fix-59dbec0d5d264cd1bc26",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-59dbec0d5d264cd1bc26-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "container",
+                "name": "cft-fix-59dbec0d5d264cd1bc26",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-59dbec0d5d264cd1bc26-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "container",
+                "name": "cft-fix-59dbec0d5d264cd1bc26",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-59dbec0d5d264cd1bc26-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              }
+            ],
+            [
+              {
+                "kind": "container",
+                "name": "cft-fix-6227d78e79c8405a89d1",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-6227d78e79c8405a89d1-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "container",
+                "name": "cft-fix-6227d78e79c8405a89d1",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-6227d78e79c8405a89d1-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "container",
+                "name": "cft-fix-6227d78e79c8405a89d1",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-6227d78e79c8405a89d1-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              }
+            ]
+          ]
+        },
+        {
+          "phase": "after",
+          "generations": [
+            "cft-fix-96b2665e666c47d18647"
+          ],
+          "cleanup_complete": true,
+          "canonical_worker_cleanup": true,
+          "worker_cleanup_proofs": [],
+          "cleanup_proofs": [
+            [
+              {
+                "kind": "container",
+                "name": "cft-fix-96b2665e666c47d18647",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              },
+              {
+                "kind": "network",
+                "name": "cft-fix-96b2665e666c47d18647-net",
+                "exit_code": 0,
+                "remaining": "",
+                "absent": true
+              }
+            ]
+          ]
+        }
+      ],
+      "publication": "Summary projection only; full sealed evidence remains local. Source contains target seeded private-key fixture."
+    }
+  ]
+}
