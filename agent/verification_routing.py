@@ -16,7 +16,7 @@ def select_profile(finding, profiles):
         return matches[0], "Unique operator source/route binding"
     if matches:
         return None, "More than one operator profile binds this finding"
-    if rule_family(finding.rule_id) == "code-injection" and finding.file in {
+    if rule_family(finding.rule_id) in {"code-injection", "code-evaluation"} and finding.file in {
         "routes/userProfile.ts", "routes/updateUserProfile.ts",
     }:
         disabled = [p for p in profiles if p.b06_verification is not None]

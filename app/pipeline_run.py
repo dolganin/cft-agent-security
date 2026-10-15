@@ -669,7 +669,7 @@ def _unsupported_verification_reason(profile: TargetProfile, finding) -> str | N
     rule_id = finding.rule_id.lower()
     if profile.b06_verification is not None:
         from sast.identity import rule_family
-        if (rule_family(finding.rule_id) == "code-injection"
+        if (rule_family(finding.rule_id) in {"code-injection", "code-evaluation"}
                 and finding.file in {"routes/userProfile.ts", "routes/updateUserProfile.ts"}):
             return ("B06 code evaluation is unsupported in the pinned Docker configuration: "
                     "usernameXssChallenge is disabled under auto safety mode. No runtime marker was executed.")

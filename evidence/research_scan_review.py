@@ -7,7 +7,7 @@ from evidence.research_source_reviewer import review
 from security.source_paths import normalize_source_path
 
 
-def review_scanner_source_conditions(*, root, findings, output):
+def review_scanner_source_conditions(*, root, findings, output, source_sha256=None):
     """Verify explicit weak-digest calls without changing runtime finding verdicts."""
     root, output = Path(root).resolve(strict=True), Path(output)
     if output.exists():
@@ -43,5 +43,10 @@ def review_scanner_source_conditions(*, root, findings, output):
         reports.append(row)
     result = {"schema": "cft.research.source-condition-reviews.v1", "scope": "source_condition_only",
         "runtime_verdicts_changed": False, "reviewed_findings": len(reports), "reviews": reports}
+    if (source_sha256 and {"models/user.ts", "lib/insecurity.ts"} <= source_sha256.keys()
+            and any(row.get("file") == "lib/insecurity.ts" for row in reports)):
+        from evidence.password_storage_review import review_password_storage
+        result["password_storage_review"] = review_password_storage(root=root,
+            model_file="models/user.ts", helper_file="lib/insecurity.ts", source_sha256=source_sha256)
     (output / "reviews.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
     return result

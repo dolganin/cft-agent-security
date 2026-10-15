@@ -45,6 +45,25 @@ def test_scanner_source_review_does_not_accept_stale_source_binding(tmp_path):
     assert "file" not in output["reviews"][0]
 
 
+def test_password_chain_is_additional_source_proof_not_runtime(tmp_path):
+    from hashlib import sha256
+
+    finding = candidate(tmp_path)
+    model = tmp_path / "models/user.ts"
+    model.parent.mkdir()
+    model.write_text("import * as security from '../lib/insecurity'\n"
+                     "class User {}\nUser.init({ password: { set(value: string) {"
+                     "this.setDataValue('password', security.hash(value)) } } })\n")
+    hashes = {name: sha256((tmp_path / name).read_bytes()).hexdigest()
+              for name in ("models/user.ts", "lib/insecurity.ts")}
+    result = review_scanner_source_conditions(root=tmp_path, findings=[finding],
+        output=tmp_path / "review", source_sha256=hashes)
+    assert result["password_storage_review"]["status"] == "confirmed"
+    assert result["password_storage_review"]["runtime_exploit_verified"] is False
+    assert result["runtime_verdicts_changed"] is False
+    assert result["reviewed_findings"] == 1
+
+
 @pytest.mark.skipif(not os.getenv("CFT_RESEARCH_BRIDGE_TARGET"), reason="Opt-in pinned Juice Shop source check")
 def test_real_juice_shop_md5_helper_gets_source_only_proof(tmp_path):
     from pathlib import Path

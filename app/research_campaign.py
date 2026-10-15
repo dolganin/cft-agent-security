@@ -247,8 +247,9 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     queue.import_findings(sast, "sast")
     queue.import_findings(dast, "dast")
     queue.import_findings(source_detector_findings, "source_detector")
+    source_sha256 = {p: sha256((profile.repository_path / p).read_bytes()).hexdigest() for p in files}
     fixed_source_review = review_scanner_source_conditions(root=profile.repository_path,
-        findings=queue.findings, output=output / "source-condition-reviews")
+        findings=queue.findings, output=output / "source-condition-reviews", source_sha256=source_sha256)
     write_json(output / "questions.json", [q.model_dump(mode="json") for q in queue.questions])
     write_json(output / "findings.json", [f.model_dump(mode="json") for f in queue.findings])
     write_json(output / "raw-observations.json", queue.raw)
@@ -258,8 +259,8 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         "research_limits": research_limits.model_dump(), "source_files": files,
         "engine": "fixed_verification_only" if verification_only else "research_and_fixed_verification",
         "source_inventory_exclusions": source.skipped,
-        "source_sha256": {p: sha256((profile.repository_path / p).read_bytes()).hexdigest() for p in files},
-        "source_review_protocols": ["weak_digest_call.v1"],
+        "source_sha256": source_sha256,
+        "source_review_protocols": ["weak_digest_call.v1", "direct_password_digest.source.v1"],
         "source_review_scope": "source condition only; not runtime exploitability",
         "fixed_source_condition_reviews": {"artifact": "source-condition-reviews/reviews.json",
             "scope": "source_condition_only", "changes_runtime_verdicts": False},

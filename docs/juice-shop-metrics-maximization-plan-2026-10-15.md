@@ -2,6 +2,11 @@
 
 ## Обновление после восстановления постоянной рабочей копии
 
+Следующий заход: [`juice-verification-gap-plan-2026-10-15.md`](juice-verification-gap-plan-2026-10-15.md)
+содержит разбор всех 20 оставшихся случаев и очередность runtime-протоколов.
+Добавлены evaluator-only gap audit, cross-file password-storage source proof
+и исправление code-evaluation routing. Runtime-confirmed пока остается 7/27.
+
 Подробности и доступные свежие артефакты:
 [`juice-shop-development-progress-2026-10-15.md`](juice-shop-development-progress-2026-10-15.md).
 Исторические временные runtime-артефакты предыдущего захода утрачены; записи

@@ -1365,3 +1365,19 @@ The source-map default preserves the historical evaluator projection. Every
 production Scout/API/research caller explicitly disables oracle controllers and
 vulnerability regions. Do not change protected A02 code or A04 locks to accommodate
 live source filtering.
+
+# 38. Proof-gap diagnosis and password storage source review
+
+`evaluation.juice_verification_gaps` is evaluator-only: it replays a sealed run
+and the frozen A04 matcher before listing case-level operational blockers.
+Its case IDs, anchors and priorities must never become model context, operator
+permissions or Evidence. `not_run` is not a failed check or a safe verdict.
+
+`evidence.password_storage_review` independently binds a direct User password
+setter to its imported exported-const helper and resolved weak digest using ASTs
+and both source hashes. It accepts only the narrow direct unsalted storage chain;
+ambiguous/transformed/salted/stale/reassigned chains remain pending. This is a
+source-condition proof, never runtime exploitation or another runtime-confirmed
+case. Scanner source reviews attach it separately when both files are in the
+trusted source inventory. `app.juice_password_source_review` runs the pinned
+source-only acceptance. See `docs/juice-verification-gap-plan-2026-10-15.md`.

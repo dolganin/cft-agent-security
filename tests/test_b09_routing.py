@@ -34,6 +34,23 @@ def test_unregistered_finding_is_not_given_a_fallback_profile(monkeypatch):
     assert selected is None
 
 
+@pytest.mark.parametrize("rule", ["code-injection", "cft.node.dynamic-code-evaluation"])
+def test_disabled_code_family_reaches_existing_operator_availability_guard(monkeypatch, rule):
+    from app.pipeline_run import _unsupported_verification_reason
+
+    monkeypatch.setattr("agent.verification_routing.resolve_binding", lambda p, f:
+        SimpleNamespace(status="inconclusive", candidates=[]))
+    finding = SimpleNamespace(rule_id=rule, file="routes/userProfile.ts")
+    profile = SimpleNamespace(id="juice-b06-verification", b06_verification=object())
+    selected, _ = select_profile(finding, [profile])
+    assert selected is profile
+    assert "unsupported in the pinned Docker" in _unsupported_verification_reason(profile, finding)
+    finding.file = "routes/other.ts"
+    assert select_profile(finding, [profile])[0] is None
+    finding.file = "routes/userProfile.ts"
+    assert select_profile(finding, [profile, profile])[0] is None
+
+
 @pytest.mark.parametrize("name", ["juice-verification.yaml", "juice-b05-access-fixture.yaml",
                                   "juice-b06-verification.yaml"])
 def test_discovery_preserves_operator_verification_configuration(tmp_path, name):
