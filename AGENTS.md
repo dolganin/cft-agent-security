@@ -1330,3 +1330,23 @@ local result directory for offline portability; original action/record bytes are
 not rewritten. Source-condition MD5 proofs remain separate from runtime Recall.
 Degraded/budget-limited research is diagnostic evidence, not clean acceptance or
 an independent held-out evaluation. See `docs/research-latest-results-2026-10-15.md`.
+
+# 37. C01 bounded fix scope
+
+`contracts/c01/families.json` selects only SQL search and redirect allowlist repair
+families from the sealed valid B09. `app.fix_scope` replays persisted execution,
+audit and approved traces; missing proof is explicitly failed, unselected families
+are ineligible. This is not automatic repair or a new confirmed/FIXED verdict.
+
+`fix_verification.scope.validate_candidate` checks the protected evaluator/baseline
+lock, source digest and an exact single existing application file allowlist.
+C02/C03 must call it before patch application and recheck locks after verification.
+Never allow patches to evaluator tests, frozen original baseline, manifests or
+dependencies. The evaluator must stay outside the writable patched target.
+
+`app.fix_scope_acceptance` qualifies 13 independent source-level tests in fixed,
+networkless, non-root disposable Docker containers: original fails cause-specific
+tests, operator reference passes, deny-all and probe-only shortcuts fail. It does
+not replace full build/tests/start/smoke or B01-bound runtime verification in C03.
+Do not treat target stdout or the source evaluator as independent runtime Evidence.
+See `docs/c01-fix-scope.md` for eligibility, budgets, protected inputs and limitations.

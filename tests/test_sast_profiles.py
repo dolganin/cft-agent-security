@@ -82,7 +82,7 @@ def test_profile_rejects_changed_config_digest(tmp_path: Path, monkeypatch) -> N
     }
     profile_path = tmp_path / "profile.yaml"
     text = yaml.safe_dump(value)
-    profile_path.write_text(text, encoding="utf-8")
+    profile_path.write_text(text, encoding="utf-8", newline="\n")
     (tmp_path / "profile.lock.json").write_text(json.dumps({
         "schema": "cft.semgrep-profile-lock.v1",
         "profile_sha256": hashlib.sha256(text.encode()).hexdigest(),
@@ -119,7 +119,7 @@ def test_target_snapshot_rejects_dirty_and_untracked_files(tmp_path: Path) -> No
     subprocess.run(["git", "init", "-q", str(target)], check=True)
     subprocess.run(["git", "-C", str(target), "config", "user.email", "test@example.invalid"], check=True)
     subprocess.run(["git", "-C", str(target), "config", "user.name", "Test"], check=True)
-    (target / "app.js").write_text("const safe = true\n", encoding="utf-8")
+    (target / "app.js").write_text("const safe = true\n", encoding="utf-8", newline="\n")
     subprocess.run(["git", "-C", str(target), "add", "app.js"], check=True)
     subprocess.run(["git", "-C", str(target), "commit", "-qm", "fixture"], check=True)
     commit = subprocess.run(

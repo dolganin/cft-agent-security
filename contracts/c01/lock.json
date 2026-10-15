@@ -1,0 +1,25 @@
+{
+  "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "files": {
+    "contracts/c01/families.json": "8cf026eb8175bc215894036b89f9eb42d2c0971b56f209647d2936836d54ed04",
+    "contracts/c01/evaluator.cjs": "a37be154fbd4ba4d42b5e183aaed8c2780f559ed081ab925e762dcd0ba000d62",
+    "artifacts/handoffs/b09-single-2026-10-15.zip": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+    "fix_verification/scope.py": "6fcb09dc5bf7725d7962982d1cfc03b3149c9c9eea978b0c67cd53d524b0c365",
+    "fix_verification/scope_source.py": "9253e326cf930b553609f0e1d86f30a2dc09adca099ced5401df13886cb0a3eb",
+    "schemas/fix_scope.py": "a823788866bb7fcb24f8b82a1d5d610cb45bbb614124d52695d5c2afda39e59b",
+    "app/fix_scope.py": "e569db3bfd0e53c7cc61e561f401389103162005e9ea7fb93a7da0d0be3913fb",
+    "app/fix_scope_acceptance.py": "0a220e932e08e748e8a6d6b4bdc948e5938d68298a7f37a63b89fa372a339d49",
+    "tests/test_fix_scope.py": "828f40163f3f56ee39ab1036c56a0ba5f728a6d0ff0b168c54e988224355be33",
+    "contracts/c01/reference/redirect-allowlist.patch": "b67e41dac259982a17f9badec0be5fb528fc80bddfe67ba4c050f1a1b8c04640",
+    "contracts/c01/reference/sql-search.patch": "7d235ceec9d9804dfa486f3b29ef4b21bf32a2336cbfd2352356d33553a4302a"
+  },
+  "excluded_families": {
+    "sql-login": "Confirmed but not selected: search-only SQL repair scope; do not infer login repair coverage",
+    "sensitive-directory": "Confirmed listing only; file authorization/content repair oracle not qualified in C01",
+    "auth-reauthentication": "Confirmed but credential rotation/valid old-password functional oracle not qualified in C01",
+    "access-control": "No selected evidence-backed benchmark confirmation in B09",
+    "code-evaluation": "Docker-disabled branch; unsupported runtime",
+    "other": "All families outside this exact two-family registry are ineligible"
+  },
+  "text_hash_mode": "LF-normalized text; archives exact bytes"
+}

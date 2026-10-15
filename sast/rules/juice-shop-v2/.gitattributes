@@ -1,0 +1,2 @@
+# Profile and rules locks use exact LF bytes on every platform.
+*.yaml text eol=lf
