@@ -881,6 +881,13 @@ standalone report; completion of all historical role-based tasks is not required
 before the first metrics delivery. The historical SberLab order below remains
 background context, not the active team queue. Security invariants still apply.
 
+Current search/verification work is specialized for the pinned Juice Shop corpus
+at the user's direction: `docs/juice-shop-metrics-maximization-plan-2026-10-15.md`.
+Its J01–J10 sequence supersedes generic research expansion for this stage.
+Cross-project generalization is secondary. Frozen matching, proof scope and actual
+Evidence remain required; the known corpus is a development target, not an unseen
+holdout. Fix automation/MTTR follows measured detection and verification progress.
+
 Current correct order:
 
 ```text
