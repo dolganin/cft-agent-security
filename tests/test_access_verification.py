@@ -583,12 +583,106 @@ def test_ownership_transfer_requires_independent_persisted_owner_proofs(bound_ac
 
 def test_unsafe_juice_address_update_is_not_offered_or_approved(bound_action):
     profile, action = bound_action["juice-address-own-write-v1"]
-    assert len(ACCESS_CHECKS) == 5
+    assert len(ACCESS_CHECKS) == 6
     assert is_access_check_supported("juice-basket-own-read-v1")
     assert not is_access_check_supported("juice-address-own-write-v1")
     result = _b05_validator(profile).validate(action)
     assert not result.approved
     assert "rewrites object ownership" in result.reason
+
+
+def _basket_insert_trace(action, *, vulnerable):
+    check_id = "juice-basket-insert-owner-check-v1"
+    rows = []
+    generations = []
+    for index in (1, 2):
+        generation = _generation(index).model_copy(update={
+            "role_a_user_id": 100 + index * 2,
+            "role_b_user_id": 101 + index * 2,
+            "permission_profile_sha256": digest_value("owner-only-permissions"),
+            "role_a_session_binding_sha256": digest_value(f"session-a-{index}"),
+            "role_b_session_binding_sha256": digest_value(f"session-b-{index}"),
+        })
+        generations.append(generation)
+        base_hash = digest_value(f"basket-b-baseline-{index}")
+        after_hash = digest_value(f"basket-b-after-{index}" if vulnerable else f"basket-b-baseline-{index}")
+        item_hash = digest_value(f"inserted-item-{index}") if vulnerable else None
+        suffix = f"t{index}"
+        specifications = [
+            (f"baseline-b-{suffix}", "GET", "role-b", "basket-b", None, 200,
+             "unknown", base_hash, False, None, 0, True),
+            (f"owner-a-insert-{suffix}", "POST", "role-a", "basket-a", "owned-basket-insert", 201,
+             "changed", None, False, digest_value(f"owner-item-{index}"), 1, True),
+            (f"owner-a-readback-{suffix}", "GET", "role-a", "basket-a", None, 200,
+             "changed", digest_value(f"owner-basket-{index}"), True, digest_value(f"owner-item-{index}"), 1, True),
+            (f"denied-b-insert-{suffix}", "POST", "role-a", "basket-b", "single-foreign-basket-insert", 401,
+             "unchanged", None, False, None, 0, False),
+            (f"denied-b-readback-{suffix}", "GET", "role-b", "basket-b", None, 200,
+             "unchanged", base_hash, False, None, 0, True),
+            (f"probe-duplicate-basket-{suffix}", "POST", "role-a", "basket-b",
+             "duplicate-own-first-foreign-last-insert", 201 if vulnerable else 401,
+             "changed" if vulnerable else "unchanged", None, False, item_hash, 1 if vulnerable else 0, vulnerable),
+            (f"probe-b-readback-{suffix}", "GET", "role-b", "basket-b", None, 200,
+             "changed" if vulnerable else "unchanged", after_hash, vulnerable, item_hash,
+             1 if vulnerable else 0, True),
+        ]
+        for (exchange_id, method, role_id, object_ref, request_shape, status, effect,
+             object_hash, marker, value_hash, added_count, owner_ok) in specifications:
+            basket_identity = digest_value(f"basket:{object_ref}:{index}")
+            expected_request = digest_value({
+                "method": method, "endpoint_id": "basket-write" if method == "POST" else "basket-read",
+                "object_ref": object_ref, "basket_identity_sha256": basket_identity,
+                "request_shape": request_shape,
+                "product_id": 5 if method == "POST" else None,
+                "quantity": 1 if method == "POST" else None,
+            })
+            rows.append(AccessExchange(
+                exchange_id=exchange_id, index=len(rows) + 1, role_id=role_id,
+                object_ref=object_ref, method=method,
+                endpoint_id="basket-write" if method == "POST" else "basket-read",
+                status=status, object_sha256=object_hash, value_sha256=value_hash,
+                private_marker_match=marker, owner_data_present=owner_ok,
+                mutation_effect=effect, independent_readback=method == "GET",
+                request_shape=request_shape, product_id=5 if method == "POST" else None,
+                added_item_count=added_count,
+                generation_sha256=generation.generation_sha256,
+                actor_identity_sha256=(generation.role_a_identity_sha256 if role_id == "role-a"
+                                       else generation.role_b_identity_sha256),
+                actor_session_binding_sha256=(generation.role_a_session_binding_sha256 if role_id == "role-a"
+                                              else generation.role_b_session_binding_sha256),
+                request_sha256=expected_request, object_identity_sha256=basket_identity,
+                parent_basket_identity_sha256=basket_identity,
+            ))
+    return AccessCheckTrace(
+        check_id=check_id, binding_id=binding_id(action),
+        source_snapshot_digest=action.verification_binding.source_snapshot,
+        target=action.target, environment=action.environment, operation="basket_insert",
+        endpoint_id="basket-write", method="POST", object_ref="basket-b", mutation_field="BasketId",
+        controls={key: True for key in ("owner_write_control", "attacker_self", "negative_control",
+            "ownership", "permission_relation", "cleanup_baseline")},
+        generations=generations, exchanges=rows, exchange_count=14, request_budget=14,
+        reset_complete=True, cleanup_complete=True, integrity_verified=True,
+    )
+
+
+def test_duplicate_basket_id_insert_requires_two_owner_readbacks(bound_action):
+    action = bound_action["juice-basket-insert-owner-check-v1"][1]
+    assert evaluate_access_check(_basket_insert_trace(action, vulnerable=True), action).verdict == "confirmed"
+    assert evaluate_access_check(_basket_insert_trace(action, vulnerable=False), action).verdict == "rejected"
+    trace = _basket_insert_trace(action, vulnerable=True)
+    exchanges = list(trace.exchanges)
+    exchanges[6] = exchanges[6].model_copy(update={"private_marker_match": False})
+    assert evaluate_access_check(trace.model_copy(update={"exchanges": exchanges}), action).verdict == "inconclusive"
+
+
+def test_partial_basket_insert_trace_is_inconclusive(bound_action):
+    action = bound_action["juice-basket-insert-owner-check-v1"][1]
+    partial = _basket_insert_trace(action, vulnerable=True).model_copy(update={
+        "controls": {}, "generations": [], "exchanges": [], "exchange_count": 0,
+        "reset_complete": False, "cleanup_complete": False,
+        "integrity_verified": False, "technical_error": "docker_runtime_or_fixture_failure",
+    })
+    assert evaluate_access_check(partial, action).verdict == "inconclusive"
 
 
 def test_http_status_alone_never_decides_access_verdict(bound_action):

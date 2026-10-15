@@ -970,7 +970,7 @@ def _verify_sensitive_directory(url, parameters, timeout, request_host):
         if re.search(r"(?:\.bak|\.log|\.kdbx|\.env|\.pem|\.key)$", name, re.IGNORECASE):
             sensitive.append(name[:128])
     confirmed = status == 200 and "html" in content_type and directory and bool(sensitive)
-    facts.update(endpoint=urlsplit(url).path, status=status, directory_listing=directory,
+    facts.update(endpoint=urlsplit(url).path, status=status, requests=1, directory_listing=directory,
                  sensitive_file_names=sorted(set(sensitive))[:16], file_contents_read=False, truncated=len(body) > 65_536)
     return _verification_result("runtime_directory_metadata", confirmed,
                                 "Unauthenticated directory listing exposes sensitive file names; contents were not downloaded."

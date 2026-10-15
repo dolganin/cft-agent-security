@@ -1,6 +1,7 @@
 """Operator-owned disposable fixture lifecycle. Not registered as an agent tool."""
 import json
 import os
+import re
 import subprocess
 import time
 from functools import wraps
@@ -21,7 +22,7 @@ WORKER_IMAGE = "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48a
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = ("server.ts", "lib/insecurity.ts", "routes/currentUser.ts", "routes/address.ts",
            "routes/basket.ts", "routes/basketItems.ts", "models/user.ts", "models/basket.ts",
-           "models/address.ts", "models/basketitem.ts", "models/relations.ts", "models/index.ts")
+           "models/address.ts", "models/basketitem.ts", "models/relations.ts", "models/index.ts", "lib/utils.ts")
 
 
 def digest(value):
@@ -54,7 +55,7 @@ class AccessFixtureLab:
         if active_check_id not in {
             "juice-basket-own-read-v1", "juice-address-own-write-v1",
             "juice-basket-own-write-v2", "juice-basket-own-write-v3",
-            "juice-address-ownership-transfer-v1",
+            "juice-address-ownership-transfer-v1", "juice-basket-insert-owner-check-v1",
         }:
             raise ValueError("B05 active check is not registered")
         self.active_check_id = active_check_id
@@ -72,6 +73,8 @@ class AccessFixtureLab:
             if (self.profile.access_fixture.b05_basket_write_candidate
                     or self.profile.access_fixture.b05_basket_write_v3_candidate):
                 expected_endpoints.extend(["/rest/basket/:id", "/api/BasketItems/:id"])
+            if self.profile.access_fixture.b05_basket_insert_candidate:
+                expected_endpoints.extend(["/api/BasketItems", "/rest/basket/:id"])
         if (self.profile.id != "juice-access-fixture" or self.profile.access_fixture is None
                 or self.profile.environment != "sandbox"
                 or self.profile.runtime.type != "operator_access_fixture"
@@ -263,6 +266,7 @@ class AccessFixtureLab:
         """Create candidate data only after the existing B04 controls passed."""
         if self.active_check_id not in {
             "juice-address-own-write-v1", "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+            "juice-basket-insert-owner-check-v1",
         } or self.resources is None or self.context is None or self.context.status != "ready":
             raise ValueError("B05 candidate provisioning requires the ready registered fixture")
         result = self._operation("b05-provision")
@@ -278,21 +282,25 @@ class AccessFixtureLab:
                    "b05-own-write-second", "b05-own-write-cleanup", "b05-basket-write-first",
                    "b05-basket-write-second", "b05-basket-write-cleanup",
                    "b05-basket-write-v3-first", "b05-basket-write-v3-second", "b05-basket-write-v3-cleanup",
+                   "b05-basket-insert-first", "b05-basket-insert-second",
                    "b05-ownership-transfer-first", "b05-ownership-transfer-second"}
         requires_address = operation.startswith(("b05-own-write", "b05-ownership-transfer"))
         requires_basket = operation.startswith("b05-basket-write")
+        requires_basket = requires_basket or operation.startswith("b05-basket-insert")
         if (operation not in allowed or self.resources is None or self.context is None
                 or self.context.status != "ready"
                 or (requires_address and not (self.profile.access_fixture.b05_write_candidate
                                                or self.profile.access_fixture.b05_ownership_transfer_candidate))
                 or (requires_basket and not (self.profile.access_fixture.b05_basket_write_candidate
-                                              or self.profile.access_fixture.b05_basket_write_v3_candidate))):
+                                              or self.profile.access_fixture.b05_basket_write_v3_candidate
+                                              or self.profile.access_fixture.b05_basket_insert_candidate))):
             raise ValueError("B05 requires a ready operator-owned B04 fixture")
         allowed_for_check = {
             "juice-basket-own-read-v1": operation.startswith("b05-own-read"),
             "juice-address-own-write-v1": operation.startswith("b05-own-write"),
             "juice-basket-own-write-v2": operation.startswith("b05-basket-write"),
             "juice-basket-own-write-v3": operation.startswith("b05-basket-write-v3"),
+            "juice-basket-insert-owner-check-v1": operation.startswith("b05-basket-insert"),
             "juice-address-ownership-transfer-v1": operation.startswith("b05-ownership-transfer"),
         }
         if not allowed_for_check[self.active_check_id]:
@@ -301,7 +309,31 @@ class AccessFixtureLab:
             raise ValueError("B05 source snapshot changed before execution")
         result = self._docker(["exec", self.resources["worker"], "python", "/app/fixture.py", operation],
                               check=False, timeout=30)
-        step = AccessWorkerStep.model_validate_json(result.stdout)
+        try:
+            step = AccessWorkerStep.model_validate_json(result.stdout)
+        except ValueError as exc:
+            worker_result = None
+            try:
+                worker_result = json.loads(result.stdout)
+            except (TypeError, ValueError):
+                pass
+            reason = worker_result.get("reason") if isinstance(worker_result, dict) else None
+            reason_code = reason.split(":", 1)[0] if isinstance(reason, str) else None
+            if not isinstance(reason_code, str) or not re.fullmatch(r"[a-z][a-z0-9_]{1,63}", reason_code):
+                reason_code = None
+            validation_errors = [
+                {"loc": list(item.get("loc", ())), "type": item.get("type")}
+                for item in exc.errors(include_input=False)[:16]
+            ] if hasattr(exc, "errors") else []
+            self._persist({"phase": operation, "generation": self.generation,
+                           "source_snapshot": digest(self.source_files),
+                           "worker_returncode": result.returncode,
+                           "worker_stdout_bytes": len(result.stdout),
+                           "worker_stderr_bytes": len(result.stderr),
+                           "worker_status": worker_result.get("status") if isinstance(worker_result, dict) else None,
+                           "worker_reason_code": reason_code,
+                           "validation_errors": validation_errors})
+            raise ValueError("B05 worker output schema validation failed") from None
         if (step.operation != operation or step.status != "completed"
                 or step.generation_sha256 != digest(self.generation)
                 or step.source_snapshot_digest != digest(self.source_files)

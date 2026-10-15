@@ -13,11 +13,13 @@ from security.source_paths import normalize_source_path
 def rule_family(rule: str) -> str:
     value = rule.lower().replace("_", "-")
     for family, markers in (
+        ("anti-automation", ("juice.captcha.",)),
+        ("authorization", ("juice.authorization.",)),
         ("open-redirect", ("redirect",)),
         ("path-traversal", ("path-traversal", "zip-slip", "archive-path")),
         ("authentication", ("authn", "authentication", "credential")),
-        ("sql-injection", ("sql-injection", "sequelize-injection", "sqli")),
         ("nosql-injection", ("nosql-injection", "nosql-where")),
+        ("sql-injection", ("sql-injection", "sequelize-injection", "sqli")),
         ("code-evaluation", ("code-evaluation", "dynamic-code", "eval")),
         ("weak-cryptography", ("weak-cryptography", "weak-hash", "md5", "sha1")),
         ("ssrf", ("ssrf", "request-url")),

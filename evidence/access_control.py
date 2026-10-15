@@ -20,6 +20,13 @@ BASKET_WRITE_V3_SCHEDULE = [
     "sc-a-update", "sc-a-readback", "probe-b-t1", "probe-b-t1-readback",
     "baseline-b-t2", "probe-b-t2", "probe-b-t2-readback", "cleanup-b-baseline",
 ]
+BASKET_INSERT_SCHEDULE = [
+    "baseline-b-t1", "owner-a-insert-t1", "owner-a-readback-t1",
+    "denied-b-insert-t1", "denied-b-readback-t1", "probe-duplicate-basket-t1",
+    "probe-b-readback-t1", "baseline-b-t2", "owner-a-insert-t2",
+    "owner-a-readback-t2", "denied-b-insert-t2", "denied-b-readback-t2",
+    "probe-duplicate-basket-t2", "probe-b-readback-t2",
+]
 TRANSFER_SCHEDULE = [
     "oc-t-owner", "nc-t-deny", "nc-t-owner", "probe-t-transfer",
     "probe-t-attacker-read", "probe-t-owner-read", "oc-t-owner-t2", "nc-t-deny-t2",
@@ -31,6 +38,7 @@ TRANSFER_SCHEDULE = [
 def evaluate_access_check(trace: AccessCheckTrace, action: ActionProposal | None = None) -> AccessCheckEvidence:
     registration = registered_check({"check_id": trace.check_id})
     controls = dict(trace.controls)
+    by_id = {item.exchange_id: item for item in trace.exchanges}
     if registration.operation == "own_read":
         required_controls = {"owner_availability", "negative_control", "attacker_self", "ownership",
                              "permission_relation", "cleanup_baseline"}
@@ -47,6 +55,11 @@ def evaluate_access_check(trace: AccessCheckTrace, action: ActionProposal | None
                              "repeat_reset", "cleanup_baseline"}
         expected_schedule = BASKET_WRITE_V3_SCHEDULE
         generation_count = 3
+    elif trace.check_id == "juice-basket-insert-owner-check-v1":
+        required_controls = {"owner_write_control", "attacker_self", "negative_control", "ownership",
+                             "permission_relation", "cleanup_baseline"}
+        expected_schedule = BASKET_INSERT_SCHEDULE
+        generation_count = 2
     elif registration.operation == "ownership_transfer":
         required_controls = {"owner_availability", "negative_control", "attacker_identity", "ownership",
                              "permission_relation"}
@@ -72,7 +85,7 @@ def evaluate_access_check(trace: AccessCheckTrace, action: ActionProposal | None
                 and item.ownership_verified and item.permission_relation_verified
                 and item.reset_from_previous_verified for item in trace.generations)
     )
-    if trace.check_id == "juice-basket-own-write-v3":
+    if trace.check_id in {"juice-basket-own-write-v3", "juice-basket-insert-owner-check-v1"}:
         generations_valid = generations_valid and all(
             item.role_a_user_id is not None and item.role_b_user_id is not None
             and item.role_a_user_id != item.role_b_user_id
@@ -130,6 +143,30 @@ def evaluate_access_check(trace: AccessCheckTrace, action: ActionProposal | None
             verdict, reason = "rejected", "Both cross-user reads were denied or exposed no owner-only object data."
     elif base_valid and trace.check_id == "juice-basket-own-write-v3":
         verdict, reason = _v3_write_verdict(trace)
+    elif base_valid and trace.check_id == "juice-basket-insert-owner-check-v1":
+        trials = [(by_id[f"probe-duplicate-basket-{suffix}"], by_id[f"probe-b-readback-{suffix}"],
+                   by_id[f"baseline-b-{suffix}"]) for suffix in ("t1", "t2")]
+        confirmed = all(
+            request.status in {200, 201} and request.mutation_effect == "changed"
+            and request.added_item_count == 1 and request.owner_data_present is True
+            and read.status == 200 and read.role_id == "role-b" and read.independent_readback
+            and read.private_marker_match and read.mutation_effect == "changed"
+            and read.added_item_count == 1 and read.value_sha256 == request.value_sha256
+            and baseline.object_sha256 != read.object_sha256
+            for request, read, baseline in trials
+        )
+        rejected = all(
+            request.status in {200, 201, 400, 401, 403, 404}
+            and request.mutation_effect == "unchanged" and request.added_item_count == 0
+            and read.status == 200 and read.role_id == "role-b" and read.independent_readback
+            and not read.private_marker_match and read.mutation_effect == "unchanged"
+            and read.added_item_count == 0 and read.object_sha256 == baseline.object_sha256
+            for request, read, baseline in trials
+        )
+        if confirmed:
+            verdict, reason = "confirmed", "Both reset-separated duplicate-key insertions added exactly one owner-bound BasketItem, independently read back by the basket owner."
+        elif rejected:
+            verdict, reason = "rejected", "Both duplicate-key probes left the owner-bound basket unchanged while authorized insertion and denial controls passed."
     elif base_valid and trace.check_id == "juice-basket-own-write-v2":
         puts = [item for item in trace.exchanges if item.exchange_id in {"probe-b-t1", "probe-b-t2"}]
         reads = [item for item in trace.exchanges
@@ -243,6 +280,22 @@ def _exchange_bindings_valid(trace: AccessCheckTrace) -> bool:
             ("probe-b-t2-readback", "GET", "role-b", "basket-write-candidate-b", "basket-read"),
             ("cleanup-b-baseline", "GET", "role-b", "basket-write-candidate-b", "basket-read"),
         ],
+        "juice-basket-insert-owner-check-v1": [
+            ("baseline-b-t1", "GET", "role-b", "basket-b", "basket-read"),
+            ("owner-a-insert-t1", "POST", "role-a", "basket-a", "basket-write"),
+            ("owner-a-readback-t1", "GET", "role-a", "basket-a", "basket-read"),
+            ("denied-b-insert-t1", "POST", "role-a", "basket-b", "basket-write"),
+            ("denied-b-readback-t1", "GET", "role-b", "basket-b", "basket-read"),
+            ("probe-duplicate-basket-t1", "POST", "role-a", "basket-b", "basket-write"),
+            ("probe-b-readback-t1", "GET", "role-b", "basket-b", "basket-read"),
+            ("baseline-b-t2", "GET", "role-b", "basket-b", "basket-read"),
+            ("owner-a-insert-t2", "POST", "role-a", "basket-a", "basket-write"),
+            ("owner-a-readback-t2", "GET", "role-a", "basket-a", "basket-read"),
+            ("denied-b-insert-t2", "POST", "role-a", "basket-b", "basket-write"),
+            ("denied-b-readback-t2", "GET", "role-b", "basket-b", "basket-read"),
+            ("probe-duplicate-basket-t2", "POST", "role-a", "basket-b", "basket-write"),
+            ("probe-b-readback-t2", "GET", "role-b", "basket-b", "basket-read"),
+        ],
         "juice-basket-own-write-v2": [
             ("oc-b-update", "PUT", "role-b", "basket-write-control-b", "basket-write"),
             ("oc-b-readback", "GET", "role-b", "basket-write-control-b", "basket-read"),
@@ -280,6 +333,43 @@ def _exchange_bindings_valid(trace: AccessCheckTrace) -> bool:
         for item, row in zip(trace.exchanges, expected, strict=True)
     ):
         return False
+    if trace.check_id == "juice-basket-insert-owner-check-v1":
+        generations = {item.generation_sha256: item for item in trace.generations}
+        for event in trace.exchanges:
+            generation = generations.get(event.generation_sha256)
+            if (generation is None or event.request_sha256 is None
+                    or event.object_identity_sha256 is None
+                    or event.parent_basket_identity_sha256 != event.object_identity_sha256):
+                return False
+            identity = (generation.role_a_identity_sha256 if event.role_id == "role-a"
+                        else generation.role_b_identity_sha256)
+            session = (generation.role_a_session_binding_sha256 if event.role_id == "role-a"
+                       else generation.role_b_session_binding_sha256)
+            if (event.actor_kind != "authenticated" or event.actor_identity_sha256 != identity
+                    or event.actor_session_binding_sha256 != session):
+                return False
+            expected_request = canonical_value_digest({
+                "method": event.method, "endpoint_id": event.endpoint_id,
+                "object_ref": event.object_ref,
+                "basket_identity_sha256": event.object_identity_sha256,
+                "request_shape": event.request_shape,
+                "product_id": event.product_id,
+                "quantity": 1 if event.method == "POST" else None,
+            })
+            if (event.product_id != (5 if event.method == "POST" else None)
+                    or expected_request != event.request_sha256):
+                return False
+            expected_shape = {
+                "owner-a-insert-t1": "owned-basket-insert",
+                "owner-a-insert-t2": "owned-basket-insert",
+                "denied-b-insert-t1": "single-foreign-basket-insert",
+                "denied-b-insert-t2": "single-foreign-basket-insert",
+                "probe-duplicate-basket-t1": "duplicate-own-first-foreign-last-insert",
+                "probe-duplicate-basket-t2": "duplicate-own-first-foreign-last-insert",
+            }.get(event.exchange_id)
+            if event.request_shape != expected_shape:
+                return False
+        return True
     if trace.check_id != "juice-basket-own-write-v3":
         return True
     generations = {item.generation_sha256: item for item in trace.generations}
@@ -327,6 +417,56 @@ def _controls_match_exchanges(trace: AccessCheckTrace) -> bool:
             and by_id["baseline-r-digest"].status == 200 and by_id["baseline-r-digest"].private_marker_match
             and by_id["cleanup-r-verify"].status == 200 and by_id["cleanup-r-verify"].private_marker_match
         )
+    if trace.check_id == "juice-basket-insert-owner-check-v1":
+        required = {
+            f"{prefix}-{suffix}"
+            for suffix in ("t1", "t2")
+            for prefix in (
+                "baseline-b", "owner-a-insert", "owner-a-readback", "denied-b-insert",
+                "denied-b-readback", "probe-duplicate-basket", "probe-b-readback",
+            )
+        }
+        if not required <= by_id.keys():
+            return False
+        for suffix in ("t1", "t2"):
+            baseline = by_id[f"baseline-b-{suffix}"]
+            owner_write = by_id[f"owner-a-insert-{suffix}"]
+            owner_read = by_id[f"owner-a-readback-{suffix}"]
+            denied = by_id[f"denied-b-insert-{suffix}"]
+            denied_read = by_id[f"denied-b-readback-{suffix}"]
+            probe = by_id[f"probe-duplicate-basket-{suffix}"]
+            probe_read = by_id[f"probe-b-readback-{suffix}"]
+            if not (baseline.status == 200 and baseline.role_id == "role-b"
+                    and baseline.owner_data_present is True and baseline.independent_readback
+                    and owner_write.status in {200, 201} and owner_write.added_item_count == 1
+                    and owner_read.status == 200 and owner_read.role_id == "role-a"
+                    and owner_read.owner_data_present is True and owner_read.private_marker_match
+                    and owner_read.independent_readback and owner_read.value_sha256 == owner_write.value_sha256
+                    and denied.status in {400, 401, 403, 404}
+                    and denied.mutation_effect == "unchanged"
+                    and denied_read.status == 200 and denied_read.role_id == "role-b"
+                    and denied_read.owner_data_present is True and denied_read.independent_readback
+                    and denied_read.object_sha256 == baseline.object_sha256
+                    and denied_read.added_item_count == 0 and denied_read.mutation_effect == "unchanged"
+                    and probe_read.status == 200 and probe_read.role_id == "role-b"
+                    and probe_read.owner_data_present is True and probe_read.independent_readback):
+                return False
+            if probe.mutation_effect == "changed":
+                if not (probe.status in {200, 201} and probe.added_item_count == 1
+                        and probe_read.private_marker_match and probe_read.added_item_count == 1
+                        and probe_read.value_sha256 == probe.value_sha256
+                        and probe_read.mutation_effect == "changed"):
+                    return False
+            elif probe.mutation_effect == "unchanged":
+                if not (probe.status in {200, 201, 400, 401, 403, 404}
+                        and probe.added_item_count == 0 and not probe_read.private_marker_match
+                        and probe_read.added_item_count == 0
+                        and probe_read.object_sha256 == baseline.object_sha256
+                        and probe_read.mutation_effect == "unchanged"):
+                    return False
+            else:
+                return False
+        return True
     if trace.check_id == "juice-basket-own-write-v2":
         if not set(BASKET_WRITE_SCHEDULE) <= by_id.keys():
             return False

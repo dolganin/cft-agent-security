@@ -49,6 +49,27 @@ def test_source_map_does_not_treat_unrelated_get_calls_as_express(tmp_path):
     assert result.routes == []
 
 
+def test_evaluator_can_index_annotated_source_without_exposing_it_to_live_projection(tmp_path):
+    (tmp_path / "server.ts").write_text(
+        "const app = express()\n"
+        "// vuln-code-snippet hide-start challenge\n"
+        "app.post('/feedback', handler) // vuln-code-snippet vuln-line challenge\n"
+        "// vuln-code-snippet hide-end challenge\n",
+    )
+    inventory = ProjectDiscoveryResult(repository_root=tmp_path, project_files=["server.ts"])
+
+    live = build_express_source_map(inventory, include_oracle_controllers=False,
+                                    include_vulnerability_regions=False)
+    legacy_evaluator = build_express_source_map(inventory)
+    evaluator = build_express_source_map(inventory, include_vulnerability_regions=True)
+
+    assert live.routes == []
+    assert legacy_evaluator.routes == evaluator.routes
+    assert [(route.method, route.path) for route in evaluator.routes] == [("post", "/feedback")]
+    assert "vuln-code-snippet" not in repr(evaluator.model_dump(mode="json"))
+    assert "app.post" not in "\n".join(RepositorySource(inventory).lines["server.ts"])
+
+
 def test_catalog_source_map_compatibility_does_not_change_live_reader_policy(tmp_path):
     (tmp_path / "routes").mkdir()
     (tmp_path / "routes/vulnCodeSnippet.ts").write_text(

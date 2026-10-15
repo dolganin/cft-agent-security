@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 B05CheckId = Literal[
     "juice-basket-own-read-v1", "juice-address-own-write-v1",
     "juice-basket-own-write-v2", "juice-basket-own-write-v3",
-    "juice-address-ownership-transfer-v1",
+    "juice-address-ownership-transfer-v1", "juice-basket-insert-owner-check-v1",
 ]
 AccessRole = Literal["role-a", "role-b"]
 AccessObjectRef = Literal[
@@ -32,7 +32,7 @@ class AccessExchange(BaseModel):
     role_id: AccessRole | None = None
     actor_kind: Literal["authenticated", "anonymous"] = "authenticated"
     object_ref: AccessObjectRef
-    method: Literal["GET", "PUT"]
+    method: Literal["GET", "PUT", "POST"]
     endpoint_id: Literal[
         "basket-read", "basket-write", "address-read", "address-write",
     ]
@@ -55,6 +55,12 @@ class AccessExchange(BaseModel):
     request_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     object_identity_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     parent_basket_identity_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    request_shape: Literal[
+        "owned-basket-insert", "single-foreign-basket-insert",
+        "duplicate-own-first-foreign-last-insert",
+    ] | None = None
+    product_id: Literal[5] | None = None
+    added_item_count: int | None = Field(default=None, ge=0, le=1)
 
 
 class AccessBasketItemState(BaseModel):
@@ -142,12 +148,12 @@ class AccessCheckTrace(BaseModel):
     source_snapshot_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
     target: Literal["juice-access-fixture"]
     environment: Literal["sandbox"]
-    operation: Literal["own_read", "own_write", "ownership_transfer"]
+    operation: Literal["own_read", "own_write", "ownership_transfer", "basket_insert"]
     endpoint_id: Literal["basket-read", "basket-write", "address-write"]
-    method: Literal["GET", "PUT"]
+    method: Literal["GET", "PUT", "POST"]
     actor_ref: Literal["role-a"] = "role-a"
     object_ref: Literal["basket-b", "basket-write-candidate-b", "address-b", "write-candidate-b"]
-    mutation_field: Literal["city", "quantity"] | None = None
+    mutation_field: Literal["city", "quantity", "BasketId"] | None = None
     mutation_value_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     allowed_technical_fields: list[Literal["updatedAt"]] = Field(default_factory=list, max_length=1)
     controls: dict[str, bool]
@@ -171,6 +177,7 @@ class AccessWorkerStep(BaseModel):
         "b05-own-write-second", "b05-own-write-cleanup",
         "b05-basket-write-first", "b05-basket-write-second", "b05-basket-write-cleanup",
         "b05-basket-write-v3-first", "b05-basket-write-v3-second", "b05-basket-write-v3-cleanup",
+        "b05-basket-insert-first", "b05-basket-insert-second",
         "b05-ownership-transfer-first", "b05-ownership-transfer-second",
     ]
     generation_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
@@ -197,7 +204,7 @@ class AccessCheckEvidence(BaseModel):
     source_snapshot_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
     control_results: dict[str, bool]
     repeated_trials: int = Field(ge=0, le=2)
-    exchange_count: int = Field(ge=0, le=12)
+    exchange_count: int = Field(ge=0, le=14)
     reset_complete: bool
     cleanup_complete: bool
     integrity_verified: bool

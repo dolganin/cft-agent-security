@@ -16,6 +16,7 @@ services:
     runtime_endpoints:
     - /
     - /rest/basket/:id
+    - /api/BasketItems
     - /api/BasketItems/:id
     - /api/Addresss/:id
 constraints:
@@ -54,6 +55,7 @@ access_fixture:
   b05_write_candidate: true
   b05_basket_write_candidate: true
   b05_basket_write_v3_candidate: true
+  b05_basket_insert_candidate: true
   b05_ownership_transfer_candidate: true
   worker_image: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
 verification_routes:
@@ -73,6 +75,7 @@ verification_routes:
     anchor: app.get('/rest/basket/:id', utils.asyncHandler(retrieveBasket()))
   - file: routes/basket.ts
     anchor: export function retrieveBasket () {
+    extent: function
 - id: juice-address-own-write
   handler_id: juice.address.update
   family: access-control
@@ -116,6 +119,25 @@ verification_routes:
     anchor: makeKeyNonUpdatable(BasketItemModel, 'BasketId')
   - file: models/relations.ts
     anchor: makeKeyNonUpdatable(BasketItemModel, 'ProductId')
+- id: juice-basket-insert-owner-check
+  handler_id: juice.basketItem.add
+  family: access-control
+  service: juice
+  endpoint: /api/BasketItems
+  method: POST
+  tool: verify_access_control
+  check: own_write
+  registration:
+    file: server.ts
+    anchor: app.post('/api/BasketItems', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemAddition()), utils.asyncHandler(basketItems.addBasketItem()))
+  sources:
+  - file: server.ts
+    anchor: app.post('/api/BasketItems', security.appendUserId(), utils.asyncHandler(basketItems.quantityCheckBeforeBasketItemAddition()), utils.asyncHandler(basketItems.addBasketItem()))
+  - file: routes/basketItems.ts
+    anchor: export function addBasketItem () {
+    extent: function
+  - file: lib/utils.ts
+    anchor: 'export const parseJsonCustom = (jsonString: string) => {'
 - id: juice-address-ownership-transfer
   handler_id: juice.address.update
   family: access-control

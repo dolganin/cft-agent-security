@@ -59,7 +59,8 @@ class PolicyValidator:
                         "enum_values": {"check_id": [
                             "juice-basket-own-read-v1", "juice-address-own-write-v1",
                             "juice-basket-own-write-v2", "juice-basket-own-write-v3",
-                            "juice-address-ownership-transfer-v1"
+                            "juice-address-ownership-transfer-v1",
+                            "juice-basket-insert-owner-check-v1"
                         ]},
                     }
                     or "verify_access_control" in data.get("tools", {}).get("allowed", [])

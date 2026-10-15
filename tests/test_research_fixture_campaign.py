@@ -8,14 +8,19 @@ from types import SimpleNamespace
 import pytest
 
 
-@pytest.mark.parametrize(("protocol", "profile_file", "family", "tool"), [
-    ("b05.own-read.v1", "targets/juice-b05-access-fixture.yaml", "access-control", "verify_access_control"),
-    ("b06.redirect.v1", "targets/juice-b06-verification.yaml", "open-redirect", "verify_redirect_destination"),
-    ("b06.password-reauth.v1", "targets/juice-b06-verification.yaml", "authentication", "verify_auth_reauthentication"),
+@pytest.mark.parametrize(("protocol", "profile_file", "family", "tool", "route_id"), [
+    ("b05.own-read.v1", "targets/juice-b05-access-fixture.yaml", "access-control",
+     "verify_access_control", "juice-basket-own-read"),
+    ("b05.basket-insert.v1", "targets/juice-b05-access-fixture.yaml", "access-control",
+     "verify_access_control", "juice-basket-insert-owner-check"),
+    ("b06.redirect.v1", "targets/juice-b06-verification.yaml", "open-redirect",
+     "verify_redirect_destination", "b06-redirect"),
+    ("b06.password-reauth.v1", "targets/juice-b06-verification.yaml", "authentication",
+     "verify_auth_reauthentication", "b06-reauthentication"),
 ])
 @pytest.mark.skipif(not os.getenv("CFT_RESEARCH_FIXTURE_ACCEPTANCE_CHECKOUT"),
                     reason="Set an immutable Juice Shop checkout to run actual private fixtures")
-def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profile_file, family, tool):
+def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profile_file, family, tool, route_id):
     from app import research_campaign as module
     from executor.access_fixture import WORKER_IMAGE
     from sast.identity import normalize_finding
@@ -29,7 +34,7 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
 
     checkout = Path(os.environ["CFT_RESEARCH_FIXTURE_ACCEPTANCE_CHECKOUT"]).resolve(strict=True)
     profile = TargetProfile.from_yaml(profile_file, repository_path_override=checkout)
-    route = next(item for item in profile.verification_routes if item.tool == tool and item.family == family)
+    route = next(item for item in profile.verification_routes if item.id == route_id)
     selector = next(item for item in route.sources if item.file != route.registration.file)
     source = checkout / selector.file
     lines = source.read_text(encoding="utf-8").splitlines()
@@ -61,13 +66,14 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
     monkeypatch.setattr(module, "attach_source_review", lambda state, *_args: state)
     monkeypatch.setattr(module, "build_final_report", lambda state: SimpleNamespace(model_dump=lambda **_kwargs: {
         "finding_id": state["finding"].id, "finding": state["finding"].model_dump(mode="json"),
-        "status": "inconclusive", "workflow_errors": []}))
+        "status": state.get("status", "inconclusive"), "workflow_errors": []}))
 
     persistent = os.getenv("CFT_RESEARCH_FIXTURE_ACCEPTANCE_OUTPUT")
     output = (Path(persistent).resolve() / protocol.replace(".", "-") if persistent else
               tmp_path / protocol.replace(".", "-"))
     grant = ResearchFixtureGrant(protocol=protocol, wall_seconds=300,
-        max_http_requests={"b05.own-read.v1": 238, "b06.redirect.v1": 38,
+        max_http_requests={"b05.own-read.v1": 238, "b05.basket-insert.v1": 238,
+                           "b06.redirect.v1": 38,
                            "b06.password-reauth.v1": 194}[protocol])
     from pipeline.research_verification import verify_bound_candidate
     rejected_grant = verify_bound_candidate(finding=finding, profiles=(profile,), scope=research_scope,
@@ -96,7 +102,7 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
     assert review["executed"] is True and review["worker_cleanup_verified"] is True
     assert review["evidence"]["verdict"] == review["status"]
     assert review["report"]["status"] == review["status"]
-    execution_dir = output / "canonical-verification" / "0"
+    execution_dir = output / "preverification" / "checks" / "0"
     assert (execution_dir / "audit.jsonl").is_file()
     assert list((execution_dir / "execution").glob("*.json"))
     events = [json.loads(line) for line in (execution_dir / "audit.jsonl").read_text().splitlines()]
@@ -113,3 +119,52 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
         seal = {path.relative_to(output).as_posix(): sha256(path.read_bytes()).hexdigest()
                 for path in sorted(output.rglob("*")) if path.is_file() and path.name != "seal.json"}
         (output / "seal.json").write_text(json.dumps(seal, indent=2) + "\n")
+
+
+@pytest.mark.skipif(not os.getenv("CFT_RESEARCH_FIXTURE_ACCEPTANCE_CHECKOUT"),
+                    reason="Opt-in pinned Juice Shop Docker fixture acceptance")
+def test_all_registered_fixture_lifecycles_fit_one_campaign(tmp_path):
+    """Four real independent protocols share a campaign, never a model session."""
+    from app.research_campaign import campaign
+    from app.research_diagnostic_run import FIXTURE_GRANTS
+    from executor.access_fixture import WORKER_IMAGE
+    from sast.identity import normalize_finding
+    from schemas.finding import Finding
+    from schemas.research_campaign import CampaignLimits
+    from schemas.target import TargetProfile
+
+    checkout = Path(os.environ["CFT_RESEARCH_FIXTURE_ACCEPTANCE_CHECKOUT"]).resolve(strict=True)
+    access = TargetProfile.from_yaml("targets/juice-b05-access-fixture.yaml", repository_path_override=checkout)
+    auth = TargetProfile.from_yaml("targets/juice-b06-verification.yaml", repository_path_override=checkout)
+    selections = ((access, "juice-basket-own-read"), (access, "juice-basket-insert-owner-check"),
+                  (auth, "b06-redirect"), (auth, "b06-reauthentication"))
+    findings = []
+    for profile, route_id in selections:
+        route = next(r for r in profile.verification_routes if r.id == route_id)
+        selector = next(s for s in route.sources if s.file != route.registration.file)
+        lines = (checkout / selector.file).read_text().splitlines()
+        line, = [n for n, text in enumerate(lines, 1) if selector.anchor in text]
+        findings.append(normalize_finding(Finding(id="acceptance-" + route_id,
+            source="operator_acceptance", rule_id=route.family, title="Fixed protocol acceptance",
+            description="Operator-supplied test question, not a discovered vulnerability",
+            file=selector.file, line_start=line, line_end=line), repository_root=checkout))
+    persistent = os.getenv("CFT_RESEARCH_FIXTURE_ACCEPTANCE_OUTPUT")
+    output = Path(persistent).resolve() / "combined-fixtures" if persistent else tmp_path / "combined"
+    result = campaign(profile=TargetProfile(id="combined-acceptance", environment="sandbox",
+        repository_path=checkout, services={"juice": {"internal_port": 3000}}),
+        configuration={"worker_image": WORKER_IMAGE}, client=None, output=output,
+        sast=findings, verification_profiles=(access, auth), verification_worker_image=WORKER_IMAGE,
+        fixture_grants=FIXTURE_GRANTS,
+        limits=CampaignLimits(max_questions=1, max_model_calls=1, max_actions=4,
+                              wall_seconds=1200, max_http_requests=1024))
+    reviews = json.loads((output / "canonical-runtime-reviews.json").read_text())
+    assert len(reviews) == 4
+    assert all(row["status"] == "confirmed" for row in reviews), reviews
+    assert all(row["worker_cleanup_verified"] for row in reviews)
+    assert result["canonical_verification_http_requests_reserved"] == 708
+    assert result["canonical_verification_http_requests_observed"] <= 708
+    assert result["model_calls"] == 0
+    assert result["source_unchanged"] and result["cleanup_verified"]
+    seal = {p.relative_to(output).as_posix(): sha256(p.read_bytes()).hexdigest()
+            for p in sorted(output.rglob("*")) if p.is_file() and p.name != "seal.json"}
+    (output / "seal.json").write_text(json.dumps(seal, indent=2) + "\n")

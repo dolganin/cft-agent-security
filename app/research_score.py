@@ -38,10 +38,44 @@ def validate_seal(root):
     return len(seal)
 
 
+def runtime_result_paths(root):
+    paths = set((root / "campaign/canonical-verification").glob("*/result.json"))
+    paths.update((root / "campaign/preverification/checks").glob("*/result.json"))
+    return sorted(paths)
+
+
+def _validated_job_finding_ids(primary_id, review, binding, findings):
+    """Allow one proof job to cover only same-anchor, same-family observations."""
+    from pipeline.research_verification import verification_finding
+    from sast.identity import rule_family
+
+    ids = (review or {}).get("job_finding_ids") or [primary_id]
+    if primary_id not in ids or len(ids) != len(set(ids)):
+        raise ValueError("Runtime verification job has invalid observation identities")
+    source_digest = binding.source_files.get(binding.source_file)
+    for finding_id in ids:
+        finding = findings.get(finding_id)
+        provenance = finding.provenance if finding is not None else None
+        if (finding is None or provenance is None
+                or finding.file != binding.source_file
+                or finding.line_start != binding.line_start
+                or (finding.line_end or finding.line_start) != binding.line_end
+                or finding.service != binding.service
+                or provenance.file_sha256 != source_digest
+                or provenance.anchor_sha256 != binding.anchor_sha256
+                or rule_family(verification_finding(finding).rule_id) != binding.family):
+            raise ValueError("Runtime verification job includes an unrelated observation")
+    return ids
+
+
 def replay_runtime(root):
     """Recompute protocol Evidence using its approved action, execution and audit."""
     dispositions = []
-    for path in sorted((root / "campaign/canonical-verification").glob("*/result.json")):
+    finding_by_id = {finding.id: finding for finding in
+                     (Finding.model_validate(value) for value in read(root / "campaign/findings.json"))}
+    review_path = root / "campaign/canonical-runtime-reviews.json"
+    review_index = {row.get("finding_id"): row for row in read(review_path)} if review_path.is_file() else {}
+    for path in runtime_result_paths(root):
         row = read(path)
         action = ActionProposal.model_validate(row["action"])
         execution = ExecutionResult.model_validate(row["execution"])
@@ -53,6 +87,8 @@ def replay_runtime(root):
                 or report["finding_id"] != row["finding_id"]
                 or action.verification_binding.finding_id != row["finding_id"]):
             raise ValueError("Runtime review approval/finding/cleanup mismatch")
+        job_finding_ids = _validated_job_finding_ids(row["finding_id"],
+            review_index.get(row["finding_id"]), action.verification_binding, finding_by_id)
         record = read_protocol_execution(JsonExecutionEvidenceStore(path.parent / "execution"),
             JsonlAuditLog(path.parent / "audit.jsonl"), action, execution, evidence["sandbox_session_id"])
         # B06 replay reads its audit artifact. Resolve the already verified local
@@ -66,6 +102,7 @@ def replay_runtime(root):
                 or rebuilt.source != "runtime" or rebuilt.reliability not in {"high", "medium"}):
             raise ValueError("Persisted runtime verdict failed independent replay")
         dispositions.append({"finding_id": row["finding_id"], "status": rebuilt.verdict,
+            "job_finding_ids": job_finding_ids,
             "route_id": action.verification_binding.route_id, "action_id": action.id,
             "capability": action.tool, "service": action.service, "endpoint": action.endpoint,
             "method": action.verification_binding.method,
@@ -112,28 +149,48 @@ def score_research(root, dataset_path, output):
     reports = {r["report"]["finding_id"]: r["report"] for r in read(root / "campaign/reports.json")
                if r["is_candidate"]}
     runtime_reviews = replay_runtime(root)
-    runtime = {row["finding_id"]: row for row in runtime_reviews}
+    runtime = {}
+    for row in runtime_reviews:
+        for finding_id in row["job_finding_ids"]:
+            if finding_id in runtime:
+                raise ValueError("More than one runtime job claims the same finding")
+            runtime[finding_id] = row
     if not set(runtime) <= {f.id for f in findings}:
         raise ValueError("Runtime verdict belongs to absent finding")
     observed = [observation(f, report=reports.get(f.id), runtime=runtime.get(f.id)) for f in findings]
     baseline = [BenchmarkObservationV2.model_validate(row) for row in
                 observations_semgrep_b02(read(root / "sast/raw-redacted.json"))]
-    summary = {"measurement": "bounded_research_diagnostic", "repetitions": 1,
+    fixed_source_path = root / "campaign/source-condition-reviews/reviews.json"
+    fixed_source_reviews = read(fixed_source_path) if fixed_source_path.is_file() else {
+        "schema": "cft.research.source-condition-reviews.v1", "scope": "source_condition_only",
+        "runtime_verdicts_changed": False, "reviewed_findings": 0, "reviews": []}
+    fixed_only = manifest.get("engine") == "fixed_verification_only"
+    limitations = [("Explicit fixed-protocol acceptance; model research was not run."
+                     if fixed_only else
+                     "Research queue stopped at its configured question budget; pending cases remain in the denominator."),
+        "Independent source-condition MD5 proofs are not counted as runtime confirmations.",
+        "Fixed source-condition reviews are reported separately and are not mapped to A04 cases or runtime metrics.",
+        "Unmatched findings are not automatically false positives.",
+        "Historical HOLDOUT has already informed development.",
+        "This bounded diagnostic is not the J10 full-coverage acceptance run."]
+    if result["campaign"]["degraded"]:
+        limitations.append("Per-question model/proposal failures make this a degraded diagnostic.")
+    summary = {"measurement": "fixed_verification_development" if fixed_only else "bounded_research_diagnostic", "repetitions": 1,
         "input_seal_verified_files": sealed, "elapsed_seconds": result["elapsed_seconds"],
         "research_degraded": result["campaign"]["degraded"],
         "stop_reason": result["campaign"]["stop_reason"], "metrics": {},
         "scope": "Frozen original A04 cases; runtime confirmations only; source proofs separate",
+        "source_condition_review_counts": {status: sum(
+            row.get("review", {}).get("status") == status for row in fixed_source_reviews["reviews"])
+            for status in ("confirmed", "rejected", "review_pending")},
         "mttr": None, "reproducibility": None, "severity_accuracy": None,
         "context_priority_accuracy": None, "negative_decision_fpr": None,
-        "limitations": ["Research queue stopped at budget; pending findings remain in denominator.",
-            "Independent source-condition MD5 proofs are not counted as runtime confirmations.",
-            "Unmatched findings are not automatically false positives.",
-            "Historical HOLDOUT has already informed development.",
-            "Per-question model/proposal failures make this a degraded diagnostic, not clean acceptance."]}
+        "limitations": limitations}
     output.mkdir(parents=True)
     write(output / "observations.json", [o.model_dump(mode="json") for o in observed])
     write(output / "runtime-review.json", runtime_reviews)
     write(output / "source-reviews.json", read(root / "campaign/reviews.json"))
+    write(output / "fixed-source-condition-reviews.json", fixed_source_reviews)
     losses, families = [], {}
     for split in ("development", "holdout"):
         scored = score_v2(dataset, observed, split=split, sample_kind="original")

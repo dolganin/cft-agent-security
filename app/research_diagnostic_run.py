@@ -10,11 +10,17 @@ from uuid import uuid4
 
 from agent.llm import ProviderFailoverClient, parse_route_specs
 from app.config import settings
+from app.juice_run_preflight import (
+    check_candidate_catalog_reproducibility,
+    require_immutable_image,
+    verify_frozen_benchmark,
+)
 from app.research_acceptance import docker
 from app.research_campaign import campaign, write_json
 from app.research_juice_smoke import COMMIT, IMAGE
 from executor.access_fixture import WORKER_IMAGE
 from pipeline.cancellation import RunCancelled
+from pipeline.research_verification import verification_handoff
 from sast.profiles import load_scan_profile, validate_target_snapshot
 from sast.semgrep_runner import run_semgrep_scan
 from schemas.llm import LLMProbeResult
@@ -22,14 +28,22 @@ from schemas.research_agent import ResearchLimits
 from schemas.research_campaign import CampaignLimits
 from schemas.research_fixtures import ResearchFixtureGrant, ResearchVerificationGrant
 from schemas.target import TargetProfile
-from security.error_redaction import redact_observation
+from security.error_redaction import redact_error_message, redact_observation
 
 ROOT = Path(__file__).resolve().parents[1]
+BENCHMARK = ROOT / "benchmarks/juice-shop-v20.2.0-v2/ground_truth.yaml"
+SCAN_PROFILE = ROOT / "sast/rules/juice-shop-v2/profile.yaml"
+VERIFICATION_PROFILE_PATHS = (
+    "targets/juice-verification.yaml",
+    "targets/juice-b05-access-fixture.yaml",
+    "targets/juice-b06-verification.yaml",
+)
 EXCLUDED = ["/socket.io", "/rest/challenges", "/api/Challenges", "/score-board", "/scoreboard",
             "/rest/score-board", "/rest/continue-code", "/rest/continue-code-findIt", "/rest/continue-code-fixIt",
             "/snippets", "/codefixes", "/solutions"]
 FIXTURE_GRANTS = (
     ResearchFixtureGrant(protocol="b05.own-read.v1", max_http_requests=238),
+    ResearchFixtureGrant(protocol="b05.basket-insert.v1", max_http_requests=238),
     ResearchFixtureGrant(protocol="b06.redirect.v1", max_http_requests=38),
     ResearchFixtureGrant(protocol="b06.password-reauth.v1", max_http_requests=194),
 )
@@ -42,14 +56,91 @@ def limits():
         max_write_bytes=4194304, max_http_requests=1024, dev_preferred_families=[])
 
 
-def run(checkout, image, browser_image, output, *, campaign_limits=None, question_limits=None):
+def preflight(checkout, image, browser_image, *, probe_model=False, diagnostics_path=None):
+    """Validate immutable inputs and operator wiring before any measurement work."""
+    checkout = Path(checkout).resolve(strict=True)
+    target = validate_target_snapshot(checkout, COMMIT)
+    benchmark = verify_frozen_benchmark(ROOT, expected_commit=COMMIT)
+    catalog_reproducibility = check_candidate_catalog_reproducibility(checkout, root=ROOT)
+    scan_profile = load_scan_profile(SCAN_PROFILE)
+    if scan_profile["target_commit"] != COMMIT:
+        raise ValueError("Semgrep profile target pin differs from Juice Shop")
+    try:
+        semgrep_version = subprocess.check_output(["semgrep", "--version"], text=True,
+            stderr=subprocess.STDOUT, timeout=15).strip().splitlines()[-1]
+    except (OSError, subprocess.SubprocessError, IndexError) as exc:
+        raise ValueError("Pinned Semgrep executable is unavailable") from exc
+    if semgrep_version != scan_profile["semgrep_version"]:
+        raise ValueError("Semgrep executable version differs from the locked profile")
+
+    verification_profiles = tuple(TargetProfile.from_yaml(ROOT / relative,
+        repository_path_override=checkout) for relative in VERIFICATION_PROFILE_PATHS)
+    verification_handoff([], verification_profiles, checkout)
+    profile_ids = {profile.id for profile in verification_profiles}
+    from pipeline.research_fixture_verification import PROTOCOLS
+
+    if any(PROTOCOLS[grant.protocol][0] not in profile_ids for grant in FIXTURE_GRANTS):
+        raise ValueError("A fixed fixture grant has no matching operator profile")
+    for grant in VERIFICATION_GRANTS:
+        owner = next((item for item in verification_profiles if item.id == "juice-verification"), None)
+        if owner is None or not any(route.id == grant.route_id and route.tool == "verify_sql_injection"
+                                    and route.endpoint == "/rest/user/login" and route.method == "POST"
+                                    for route in owner.verification_routes):
+            raise ValueError("A fixed verification grant has no exact operator route")
+    for profile in verification_profiles:
+        for route in profile.verification_routes:
+            for source in route.sources:
+                candidate = (checkout / source.file).resolve(strict=True)
+                if not candidate.is_relative_to(checkout) or not candidate.is_file():
+                    raise ValueError("Operator verification source is missing or outside the pinned target")
+
+    image_refs = tuple(dict.fromkeys((image, browser_image, IMAGE, WORKER_IMAGE)))
+    images = [require_immutable_image(reference, docker) for reference in image_refs]
+    generation = {"status": "not_run", "model": "nsu:qwen3.8-flash-next", "calls": 0}
+    if probe_model:
+        client = ProviderFailoverClient(
+            routes=parse_route_specs("nsu:qwen3.8-flash-next", allow_external_fallbacks=False),
+            credentials=settings.llm_provider_credentials(), timeout_seconds=45,
+            reasoning_effort="low", diagnostics_path=diagnostics_path, max_output_tokens=256)
+        try:
+            client.complete_model(output_model=LLMProbeResult,
+                system_prompt="Return status ready and note ok.",
+                user_payload={"purpose": "Juice Shop generation/authentication preflight"},
+                operation="juice_shop_preflight")
+            generation = {"status": "validated", "model": "nsu:qwen3.8-flash-next",
+                "calls": len(client.last_attempts)}
+        except (RuntimeError, ValueError, TypeError) as exc:
+            generation = {"status": "failed", "model": "nsu:qwen3.8-flash-next",
+                "calls": len(client.last_attempts), "reason": redact_error_message(exc),
+                "attempts": [{"route": row.route, "status": row.status,
+                    "error": redact_error_message(row.error) if row.error else None}
+                    for row in client.last_attempts]}
+    warnings = []
+    if catalog_reproducibility["status"] != "reproducible":
+        warnings.append("Current A02 candidate extractor differs from its frozen output; changed fields are summarized separately, while A04 lock and target snapshot are validated independently.")
+    status = "blocked" if generation["status"] == "failed" else "ready_with_warnings" if warnings else "ready"
+    return {"status": status, "target": target,
+        "benchmark": benchmark, "candidate_catalog_reproducibility": catalog_reproducibility,
+        "warnings": warnings,
+        "scan_profile": {"id": scan_profile["id"], "version": scan_profile["version"],
+            "semgrep_version": semgrep_version, "profile_sha256": scan_profile["profile_sha256"],
+            "config_sha256": scan_profile["config_sha256"]},
+        "verification_profiles": [{"id": profile.id, "routes": len(profile.verification_routes)}
+            for profile in verification_profiles],
+        "images": images, "generation": generation,
+        "model_labels_received": False, "target_checks_started": False}
+
+
+def run(checkout, image, browser_image, output, *, campaign_limits=None, question_limits=None,
+        verification_only=False):
     output = Path(output).resolve()
     if output.exists():
         raise FileExistsError("One new R09 output; never overwrite or silently restart")
     started = time.monotonic()
     try:
         return _run(checkout, image, browser_image, output,
-                    campaign_limits=campaign_limits, question_limits=question_limits)
+                    campaign_limits=campaign_limits, question_limits=question_limits,
+                    verification_only=verification_only)
     except (KeyboardInterrupt, RunCancelled, Exception) as exc:
         if output.is_dir():
             state = json.loads((output / "run-state.json").read_text()) if (output / "run-state.json").exists() else {}
@@ -74,29 +165,30 @@ def _seal(output):
         for p in sorted(output.rglob("*")) if p.is_file() and p != output / "seal.json"})
 
 
-def _run(checkout, image, browser_image, output, *, campaign_limits=None, question_limits=None):
+def _run(checkout, image, browser_image, output, *, campaign_limits=None, question_limits=None,
+         verification_only=False):
     checkout, output = Path(checkout).resolve(), Path(output).resolve()
     active_limits = campaign_limits or limits()
     if output.exists():
         raise FileExistsError("One new R09 output; never overwrite or silently restart")
-    before = validate_target_snapshot(checkout, COMMIT)
-    for reference in (image, browser_image, IMAGE, WORKER_IMAGE):
-        docker(["image", "inspect", reference])
     output.mkdir(parents=True)
     started = time.monotonic()
-    run_state = {"phase": "preflight", "target": before, "cleanup_verified": True}
+    run_state = {"phase": "preflight", "cleanup_verified": True}
     write_json(output / "run-state.json", run_state)
-    client_args = {"routes":parse_route_specs("nsu:qwen3.8-flash-next", allow_external_fallbacks=False),
-        "credentials":settings.llm_provider_credentials(), "timeout_seconds":45,
-        "reasoning_effort":"low", "diagnostics_path":output / "llm-attempts.jsonl"}
-    probe = ProviderFailoverClient(**client_args, max_output_tokens=256)
-    probe.complete_model(output_model=LLMProbeResult, system_prompt="Return status ready and note ok.",
-        user_payload={"purpose":"R09 generation/authentication preflight"}, operation="r09_preflight")
-    write_json(output / "preflight.json", {"generation_validated":True, "model":"nsu:qwen3.8-flash-next",
-        "calls":len(probe.last_attempts), "provider_usage":probe.last_usage})
+    checked = preflight(checkout, image, browser_image, probe_model=not verification_only,
+                        diagnostics_path=output / "llm-attempts.jsonl")
+    before = checked["target"]
+    write_json(output / "preflight.json", checked)
+    run_state.update({"target": before, "preflight": checked["status"]})
+    write_json(output / "run-state.json", run_state)
+    if not verification_only and checked["generation"]["status"] != "validated":
+        raise RuntimeError("Juice Shop run stopped: configured Qwen generation preflight failed")
+    run_state.update({"target": before, "preflight": "passed",
+                      "engine": "fixed_verification_only" if verification_only else "research_and_fixed_verification"})
+    write_json(output / "run-state.json", run_state)
     run_state["phase"] = "sast"
     write_json(output / "run-state.json", run_state)
-    scan_profile = load_scan_profile(ROOT / "sast/rules/juice-shop-v2/profile.yaml")
+    scan_profile = load_scan_profile(SCAN_PROFILE)
     scan = run_semgrep_scan(checkout, config=scan_profile["config_files"], timeout_seconds=120)
     write_json(output / "sast/raw-redacted.json", redact_observation(scan.raw))
     write_json(output / "sast/findings.json", [x.model_dump(mode="json") for x in scan.findings])
@@ -122,6 +214,14 @@ def _run(checkout, image, browser_image, output, *, campaign_limits=None, questi
             raise RuntimeError("R09 target readiness failed")
         profile = TargetProfile(id="juice-research-r09", name="Pinned R09 diagnostic DEV target",
             environment="sandbox", repository_path=checkout, services={"juice":{"internal_port":3000}})
+        from discovery.service import ProjectDiscovery
+        from pipeline.juice_source_detectors import detect_juice_source_candidates
+        from tools.repository_source import RepositorySource
+
+        source_detector_findings = detect_juice_source_candidates(profile,
+            RepositorySource(ProjectDiscovery().discover(checkout), research_mode=True))
+        write_json(output / "source-detectors/findings.json",
+                   [f.model_dump(mode="json") for f in source_detector_findings])
         config = {"worker_image":image, "browser_image":browser_image, "action_timeout":30,
             "max_http_requests":128, "runtime_service_map":{"session_id":prefix, "network_name":network,
                 "services":{"juice":{"name":"juice", "address":"http://juice:3000", "ready":True,
@@ -134,13 +234,16 @@ def _run(checkout, image, browser_image, output, *, campaign_limits=None, questi
             "runner_sha256":sha256(Path(__file__).read_bytes()).hexdigest(), "target":before,
             "implementation_dirty":bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()),
             "implementation_sha256":{p.relative_to(ROOT).as_posix():sha256(p.read_bytes()).hexdigest()
-                for base in ("agent", "app", "schemas", "security", "executor", "pipeline", "tools", "evidence", "validator", "reporting", "sast")
+                for base in ("agent", "app", "schemas", "security", "executor", "pipeline", "tools", "evidence", "validator", "reporting", "sast", "discovery")
                 for p in sorted((ROOT / base).rglob("*.py"))},
-            "target_image":IMAGE, "research_image":image, "browser_image":browser_image,
-            "model":"nsu:qwen3.8-flash-next", "model_output_tokens":8192, "repetitions":1,
+            "preflight": checked, "target_image":IMAGE, "research_image":image, "browser_image":browser_image,
+            "engine": "fixed_verification_only" if verification_only else "research_and_fixed_verification",
+            "model": None if verification_only else "nsu:qwen3.8-flash-next",
+            "model_output_tokens": 0 if verification_only else 8192, "repetitions":1,
             "campaign_limits":active_limits.model_dump(), "research_limits":research_limits.model_dump(),
             "selection":"All fresh SAST observations; no family representatives or preferred proof families",
             "fresh_sast_observations":len(scan.findings), "fresh_dast":False,
+            "source_detector_enabled": True, "source_detector_findings": len(source_detector_findings),
             "runtime_scope":"anonymous read-only model research plus fixed B01 SQL/login verification and exact operator-granted B05 own-read and B06 redirect/re-auth protocols; model has no POST grant, credentials, or arbitrary fixture actions",
             "operator_grants":config["http_grants"], "evaluator_labels_provided_to_model":False,
             "canonical_verification_profiles":["targets/juice-verification.yaml",
@@ -157,14 +260,19 @@ def _run(checkout, image, browser_image, output, *, campaign_limits=None, questi
                           "preparation_seconds": round(time.monotonic() - started, 3)})
         write_json(output / "run-state.json", run_state)
         verification_profiles = tuple(TargetProfile.from_yaml(ROOT / relative,
-            repository_path_override=checkout) for relative in (
-                "targets/juice-verification.yaml", "targets/juice-b05-access-fixture.yaml",
-                "targets/juice-b06-verification.yaml"))
-        result = campaign(profile=profile, configuration=config, client=ProviderFailoverClient(**client_args, max_output_tokens=8192),
+            repository_path_override=checkout) for relative in VERIFICATION_PROFILE_PATHS)
+        client = None
+        if not verification_only:
+            client = ProviderFailoverClient(
+                routes=parse_route_specs("nsu:qwen3.8-flash-next", allow_external_fallbacks=False),
+                credentials=settings.llm_provider_credentials(), timeout_seconds=45,
+                reasoning_effort="low", diagnostics_path=output / "llm-attempts.jsonl", max_output_tokens=8192)
+        result = campaign(profile=profile, configuration=config, client=client,
             output=output / "campaign", sast=scan.findings, limits=active_limits, research_limits=research_limits,
             verification_profiles=verification_profiles,
             verification_worker_image=WORKER_IMAGE, fixture_grants=FIXTURE_GRANTS,
-            verification_grants=VERIFICATION_GRANTS)
+            verification_grants=VERIFICATION_GRANTS, source_detector_findings=source_detector_findings,
+            verification_only=verification_only)
     finally:
         from pipeline.cancellation import suspend_cancellation
 
@@ -203,15 +311,32 @@ if __name__ == "__main__":
     parser.add_argument("--checkout", type=Path, required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--browser-image", required=True)
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--preflight-only", action="store_true",
+                        help="Check pinned inputs/images and operator profiles without running SAST or research")
+    parser.add_argument("--probe-model", action="store_true",
+                        help="Make one small generation/authentication request to the configured Qwen route")
     parser.add_argument("--wall-seconds", type=int, default=1800, help="Campaign budget; preparation is reported separately")
     parser.add_argument("--max-questions", type=int, default=64)
+    parser.add_argument("--verification-only", action="store_true",
+                        help="Explicit fixed-protocol acceptance with fresh source detection; no model calls")
     args = parser.parse_args()
+    if args.preflight_only:
+        try:
+            report = preflight(args.checkout, args.image, args.browser_image, probe_model=args.probe_model)
+            print(json.dumps(report, indent=2))
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
+            parser.exit(1, "Juice Shop preflight failed: " + redact_observation(str(exc)) + "\n")
+        if report["status"] == "blocked":
+            raise SystemExit(2)
+        raise SystemExit(0)
+    if args.output is None:
+        parser.error("--output is required unless --preflight-only is selected")
     selected_limits = CampaignLimits.model_validate({**limits().model_dump(),
         "wall_seconds": args.wall_seconds, "max_questions": args.max_questions})
     try:
         print(json.dumps(run(args.checkout, args.image, args.browser_image, args.output,
-                             campaign_limits=selected_limits), indent=2))
+                             campaign_limits=selected_limits, verification_only=args.verification_only), indent=2))
     except (KeyboardInterrupt, RunCancelled):
         print(json.dumps({"completed": False, "stop_reason": "operator_cancelled", "output": str(args.output)}))
         raise SystemExit(130) from None

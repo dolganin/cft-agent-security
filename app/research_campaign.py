@@ -12,6 +12,8 @@ from discovery.express_routes import build_express_source_map
 from discovery.service import ProjectDiscovery
 from evidence.research_http_replay import replay_marker
 from evidence.research_review import attach_source_review, review_source_claims
+from evidence.research_scan_review import review_scanner_source_conditions
+from executor.research_runtime import ResearchRuntime
 from pipeline.cancellation import RunCancelled, check_cancelled
 from pipeline.research_queue import ResearchQueue
 from pipeline.research_verification import (
@@ -22,16 +24,19 @@ from pipeline.research_verification import (
 from reporting.builder import build_final_report
 from reporting.checkpoints import write_json
 from reporting.research_diagnostics import saved_campaign_diagnostics
+from schemas.research import HttpServiceScope
 from schemas.research_agent import ResearchLimits
 from schemas.research_campaign import CampaignLimits
 from schemas.research_fixtures import ResearchVerificationGrant
+from schemas.runtime import RuntimeServiceMap
 from security.error_redaction import redact_error_message
 from tools.repository_source import RepositorySource
 
 
 def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits=None, research_limits=None,
              http_review_registry=None, acceptance_require_script=False, verification_profiles=(),
-             verification_worker_image=None, fixture_grants=(), verification_grants=()):
+             verification_worker_image=None, fixture_grants=(), verification_grants=(),
+             source_detector_findings=(), verification_only=False):
     output = Path(output).resolve()
     if output.exists():
         raise FileExistsError("A campaign never overwrites a saved run")
@@ -42,7 +47,8 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
                 sast=sast, dast=dast, limits=limits, research_limits=research_limits,
                 http_review_registry=http_review_registry, acceptance_require_script=acceptance_require_script,
                 verification_profiles=verification_profiles, verification_worker_image=verification_worker_image,
-                fixture_grants=fixture_grants, verification_grants=verification_grants)
+                fixture_grants=fixture_grants, verification_grants=verification_grants,
+                source_detector_findings=source_detector_findings, verification_only=verification_only)
         write_json(output / "operational-diagnostics.json", saved_campaign_diagnostics(output))
         return result
     except (KeyboardInterrupt, RunCancelled, Exception) as exc:
@@ -66,9 +72,115 @@ def campaign(*, profile, configuration, client, output, sast=(), dast=(), limits
         raise
 
 
+def _preverify_bound_findings(*, queue, profile, configuration, output, limits,
+                             verification_profiles, verification_worker_image,
+                             fixture_grants, verification_grants, started):
+    """Run already-supported fixed checks before spending LLM research budget."""
+    if not verification_profiles or not (verification_worker_image or fixture_grants or verification_grants):
+        return {}, [], 0, 0, 0, 0, False
+
+    selected = {}
+    for question in sorted((q for q in queue.questions if q.is_candidate), key=queue.priority):
+        handoff = verification_handoff([question.finding], verification_profiles, profile.repository_path)
+        row = handoff["checks"][0]
+        if row["status"] != "ready_for_canonical_verification":
+            continue
+        selected.setdefault(queue.work_key(question.finding), question)
+    if not selected:
+        return {}, [], 0, 0, 0, 0, False
+
+    preverification = Path(output) / "preverification"
+    preverification.mkdir(parents=True, exist_ok=False)
+    runtime_services = None
+    if configuration.get("runtime_service_map") is not None:
+        runtime_services = RuntimeServiceMap.model_validate(configuration["runtime_service_map"])
+        grants = configuration.get("http_grants", configuration.get("services", {}))
+        services = ResearchRuntime.services_from_runtime_map(profile, runtime_services, grants)
+        network_name = runtime_services.network_name
+    else:
+        services = {name: HttpServiceScope.model_validate(value)
+                    for name, value in configuration.get("services", {}).items()}
+        network_name = configuration.get("network_name")
+
+    runtime = ResearchRuntime(target=profile, source_files=configuration.get("source_files", sorted(queue.source_files)),
+        worker_image=configuration["worker_image"], output=preverification / "scope",
+        services=services, network_name=network_name, runtime_services=runtime_services,
+        browser_image=configuration.get("browser_image"), timeout=configuration.get("action_timeout", 10),
+        wall_seconds=limits.wall_seconds, max_actions=1,
+        max_http_requests=min(256, limits.max_http_requests))
+    reviews, by_key = [], {}
+    actions = unknown_actions = reserved = observed = 0
+    checks_directory = preverification / "checks"
+    checks_directory.mkdir()
+    with runtime:
+        for ordinal, (key, question) in enumerate(selected.items()):
+            remaining_wall = limits.wall_seconds - int(time.monotonic() - started)
+            remaining_http = max(0, limits.max_http_requests - reserved)
+            if remaining_wall <= 0 or actions + unknown_actions >= limits.max_actions:
+                break
+            try:
+                review = verify_bound_candidate(finding=question.finding, profiles=verification_profiles,
+                    scope=runtime.scope, repository=profile.repository_path,
+                    output=checks_directory / str(ordinal), max_http_requests=remaining_http,
+                    worker_image=verification_worker_image or "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7",
+                    fixture_grants=fixture_grants, verification_grants=verification_grants,
+                    remaining_wall_seconds=remaining_wall)
+            except (OSError, ValueError, RuntimeError, TypeError, KeyError, IndexError,
+                    AssertionError, subprocess.SubprocessError) as exc:
+                review = {"finding_id": question.finding.id, "status": "inconclusive",
+                    "executed": None, "actions": 1, "requests_reserved": min(4, remaining_http),
+                    "worker_cleanup_verified": False, "reason": redact_error_message(exc)}
+            review["job_finding_ids"] = _job_finding_ids(queue, key)
+            review.setdefault("finding_id", question.finding.id)
+            review.setdefault("executed", False)
+            review.setdefault("actions", 0)
+            review.setdefault("requests_reserved", 0)
+            reserved += int(review["requests_reserved"])
+            observed += int(review.get("requests_observed", 0))
+            if review["executed"] is True:
+                actions += int(review.get("actions", 0))
+            elif review["executed"] is None:
+                unknown_actions += int(review.get("actions", 0))
+            by_key[key] = review
+            reviews.append(review)
+            write_json(checks_directory / f"{ordinal}-result.json", review)
+            write_json(preverification / "canonical-runtime-reviews.json", reviews)
+            if review["status"] in {"confirmed", "rejected"}:
+                queue.complete(question)
+            if review.get("worker_cleanup_verified") is False:
+                break
+    fatal = any(review.get("worker_cleanup_verified") is False for review in reviews)
+    return by_key, reviews, actions, unknown_actions, reserved, observed, fatal
+
+
+def _preverified_terminal_reports(queue, preverified):
+    """Emit one report for the exact representative; grouped observations inherit none."""
+    reports = []
+    for question in queue.questions:
+        if not question.is_candidate or question.status == "grouped":
+            continue
+        key = queue.work_key(question.finding)
+        review = preverified.get(key)
+        if not review or review.get("status") not in {"confirmed", "rejected"}:
+            continue
+        report = review.get("report")
+        if not isinstance(report, dict) or report.get("finding_id") != question.id:
+            raise ValueError("Pre-verification report does not bind the exact finding")
+        reports.append({"question_id": question.id, "is_candidate": True,
+                        "report": report, "canonical_runtime_review": review})
+    return reports
+
+
+def _job_finding_ids(queue, key):
+    """Keep all exact-sink scanner observations attached to one proof job."""
+    return sorted(question.id for question in queue.questions
+                  if question.is_candidate and queue.work_key(question.finding) == key)
+
+
 def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limits=None, research_limits=None,
               http_review_registry=None, acceptance_require_script=False, verification_profiles=(),
-              verification_worker_image=None, fixture_grants=(), verification_grants=()):
+              verification_worker_image=None, fixture_grants=(), verification_grants=(),
+              source_detector_findings=(), verification_only=False):
     from schemas.research_fixtures import ResearchFixtureGrant, ResearchVerificationGrant
 
     limits, research_limits = limits or CampaignLimits(), research_limits or ResearchLimits(max_steps=8)
@@ -86,7 +198,8 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     output.mkdir(parents=True)
     inventory = ProjectDiscovery().discover(profile.repository_path)
     source = RepositorySource(inventory, research_mode=True)
-    source_map = build_express_source_map(inventory, include_oracle_controllers=False)
+    source_map = build_express_source_map(inventory, include_oracle_controllers=False,
+                                          include_vulnerability_regions=False)
     files = configuration.get("source_files", list(source.files))
     files = [p for p in files if p in source.files]
     if not files:
@@ -107,7 +220,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
 
                 for fixture_grant in fixture_grants:
                     target, selection, _, family = PROTOCOLS[fixture_grant.protocol]
-                    if target == operator_profile.id and ((family == "b05" and route.tool == "verify_access_control" and route.check == "own_read") or
+                    if target == operator_profile.id and ((family == "b05" and route.tool == "verify_access_control" and route.id == selection) or
                             (family == "b06" and route.tool == selection)):
                         verification_paths.update(source.file for source in route.sources)
                         fixture_routes.append({"protocol": fixture_grant.protocol, "profile_id": target,
@@ -128,10 +241,14 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
                 if route is not None:
                     verification_paths.update(source.file for source in route.sources)
     queue = ResearchQueue(profile=profile, source_map=source_map, source_files=files,
-                          preferred_families=limits.dev_preferred_families, verification_paths=verification_paths)
+                          preferred_families=limits.dev_preferred_families, verification_paths=verification_paths,
+                          verification_profiles=verification_profiles)
     http_review_registry = http_review_registry or {}
     queue.import_findings(sast, "sast")
     queue.import_findings(dast, "dast")
+    queue.import_findings(source_detector_findings, "source_detector")
+    fixed_source_review = review_scanner_source_conditions(root=profile.repository_path,
+        findings=queue.findings, output=output / "source-condition-reviews")
     write_json(output / "questions.json", [q.model_dump(mode="json") for q in queue.questions])
     write_json(output / "findings.json", [f.model_dump(mode="json") for f in queue.findings])
     write_json(output / "raw-observations.json", queue.raw)
@@ -139,10 +256,13 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     write_json(output / "manifest.json", {"schema": "cft.research.campaign.v1",
         "started_at": datetime.now(UTC).isoformat(), "limits": limits.model_dump(),
         "research_limits": research_limits.model_dump(), "source_files": files,
+        "engine": "fixed_verification_only" if verification_only else "research_and_fixed_verification",
         "source_inventory_exclusions": source.skipped,
         "source_sha256": {p: sha256((profile.repository_path / p).read_bytes()).hexdigest() for p in files},
         "source_review_protocols": ["weak_digest_call.v1"],
         "source_review_scope": "source condition only; not runtime exploitability",
+        "fixed_source_condition_reviews": {"artifact": "source-condition-reviews/reviews.json",
+            "scope": "source_condition_only", "changes_runtime_verdicts": False},
         "canonical_verification_profiles": [p.model_dump(mode="json") for p in verification_profiles],
         "canonical_verification_worker_image": verification_worker_image,
         "canonical_fixture_grants": [grant.model_dump(mode="json") for grant in fixture_grants],
@@ -162,7 +282,30 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     question_failures = []
     consecutive_failures = 0
     stage_seconds = {"research": 0.0, "source_review": 0.0, "canonical_verification": 0.0}
+    preverification_started = time.monotonic()
+    preverified, pre_reviews, pre_actions, pre_unknown_actions, pre_reserved, pre_observed, pre_fatal = (
+        _preverify_bound_findings(queue=queue, profile=profile, configuration=configuration, output=output,
+            limits=limits, verification_profiles=verification_profiles,
+            verification_worker_image=verification_worker_image, fixture_grants=fixture_grants,
+            verification_grants=verification_grants, started=started))
+    runtime_reviews.extend(pre_reviews)
+    stage_seconds["canonical_verification"] += time.monotonic() - preverification_started
+    actions += pre_actions
+    unknown_action_reservations += pre_unknown_actions
+    verification_http_reserved += pre_reserved
+    verification_http_observed += pre_observed
+    write_json(output / "questions.json", [q.model_dump(mode="json") for q in queue.questions])
+    write_json(output / "findings.json", [f.model_dump(mode="json") for f in queue.findings])
+    write_json(output / "canonical-runtime-reviews.json", runtime_reviews)
+    reports.extend(_preverified_terminal_reports(queue, preverified))
+    if pre_fatal:
+        stop = "cleanup_unverified"
     for ordinal in range(limits.max_questions):
+        if stop == "cleanup_unverified":
+            break
+        if verification_only:
+            stop = "fixed_verification_only"
+            break
         check_cancelled()
         remaining_wall = int(limits.wall_seconds - (time.monotonic() - started))
         remaining_calls = limits.max_model_calls - calls
@@ -212,6 +355,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         directory = output / "questions" / str(ordinal)
         write_json(output / "active-phase.json", {"phase": "research", "question": str(ordinal), "finding_id": question.id})
         question_config = {**configuration, "max_http_requests": min(
+            256,
             configuration.get("max_http_requests", 128 if configuration.get("browser_image") else 32),
             max(0, limits.max_http_requests - http_requests - verification_http_reserved))}
         stage_started = time.monotonic()
@@ -252,7 +396,10 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         stage_seconds["source_review"] += time.monotonic() - stage_started
         stage_started = time.monotonic()
         write_json(output / "active-phase.json", {"phase": "canonical_verification", "question": str(ordinal)})
-        if (verification_profiles and (verification_worker_image or fixture_grants or verification_grants)
+        verification_key = queue.work_key(question.finding)
+        runtime_review = preverified.get(verification_key)
+        if (runtime_review is None and verification_profiles and
+                (verification_worker_image or fixture_grants or verification_grants)
                 and summary["cleanup_verified"]
                 and actions + unknown_action_reservations < limits.max_actions
                 and time.monotonic() - started + 30 < limits.wall_seconds):
@@ -276,7 +423,9 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
                     "executed": None, "actions": 1, "requests_reserved": min(max_reserved,
                         max(0, limits.max_http_requests - http_requests - verification_http_reserved)),
                     "worker_cleanup_verified": False, "reason": redact_error_message(exc)}
+            runtime_review["job_finding_ids"] = _job_finding_ids(queue, verification_key)
             runtime_reviews.append(runtime_review)
+            preverified[verification_key] = runtime_review
             if runtime_review.get("executed") is None:
                 unknown_action_reservations += runtime_review.get("actions", 0)
             else:
@@ -292,6 +441,11 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
                     "workflow_errors": reports[-1]["research_report"].get("workflow_errors", []) +
                                        runtime_review["report"].get("workflow_errors", [])}
             write_json(output / "canonical-runtime-reviews.json", runtime_reviews)
+        elif runtime_review is not None:
+            reports[-1]["canonical_runtime_review"] = runtime_review
+            if runtime_review.get("status") in {"confirmed", "rejected"}:
+                reports[-1]["research_report"] = reports[-1]["report"]
+                reports[-1]["report"] = runtime_review["report"]
         stage_seconds["canonical_verification"] += time.monotonic() - stage_started
         write_json(output / "timings.json", stage_seconds)
         write_json(output / "active-phase.json", {"phase": "checkpoint", "question": str(ordinal)})
@@ -375,6 +529,9 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         "model_io_reserved_bytes": model_io, "observation_bytes": observation_bytes, "write_bytes": write_bytes,
         "candidate_count": len(queue.findings), "review_counts": {status: sum(r["status"] == status for r in reviews)
             for status in ("confirmed", "rejected", "review_pending")},
+        "fixed_source_condition_review_counts": {status: sum(
+            row["review"].get("status") == status for row in fixed_source_review["reviews"])
+            for status in ("confirmed", "rejected", "review_pending")},
         "stop_reason": stop, "source_unchanged": integrity,
         "model_failures": failures, "question_failures": question_failures,
         "degraded": bool(failures or question_failures or stop == "cleanup_unverified"),
@@ -383,6 +540,12 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         "elapsed_seconds": round(time.monotonic() - started, 3), "benchmark_measurement": False,
         "source_confirmations_are_not_runtime_exploits": True}
     write_json(output / "summary.json", summary)
+    # Early fixed verification can finish before any research question executes.
+    # Its reports and the empty research-review stream must still be portable.
+    write_json(output / "reports.json", reports)
+    write_json(output / "reviews.json", reviews)
+    write_json(output / "canonical-verification-handoff.json",
+               verification_handoff(queue.findings, verification_profiles, profile.repository_path))
     write_json(output / "active-phase.json", {"phase": "finished"})
     write_json(output / "rejected-inputs.json", queue.rejections)
     write_json(output / "coverage.json", queue.coverage(ledgers))
@@ -411,7 +574,8 @@ def main():
     parser.add_argument("--verification-profile", type=Path, action="append", default=[],
                         help="Operator profile for a source-bound handoff; does not execute new checks")
     parser.add_argument("--verification-worker-image", help="Enable fixed SQL/directory review using this immutable Docker image")
-    parser.add_argument("--fixture-grant", choices=("b05.own-read.v1", "b06.redirect.v1", "b06.password-reauth.v1"),
+    parser.add_argument("--fixture-grant", choices=("b05.own-read.v1", "b05.basket-insert.v1",
+                        "b06.redirect.v1", "b06.password-reauth.v1"),
                         action="append", default=[], help="Explicit operator permission for one closed private fixture protocol")
     parser.add_argument("--verification-grant", choices=("b01.login-sql.v1",), action="append", default=[],
                         help="Explicit grant for a fixed canonical verification protocol; does not enable model HTTP")
@@ -431,7 +595,8 @@ def main():
                                     for p in args.verification_profile),
         verification_worker_image=args.verification_worker_image,
         fixture_grants=tuple(ResearchFixtureGrant(protocol=item, max_http_requests={
-            "b05.own-read.v1": 238, "b06.redirect.v1": 38, "b06.password-reauth.v1": 194}[item])
+            "b05.own-read.v1": 238, "b05.basket-insert.v1": 238,
+            "b06.redirect.v1": 38, "b06.password-reauth.v1": 194}[item])
             for item in args.fixture_grant),
         verification_grants=tuple(ResearchVerificationGrant(protocol=item, route_id="juice-login")
                                   for item in args.verification_grant)), indent=2))

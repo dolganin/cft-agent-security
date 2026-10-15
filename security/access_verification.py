@@ -56,6 +56,12 @@ ACCESS_CHECKS: dict[str, AccessCheckRegistration] = {
         endpoint_id="address-write", operation="ownership_transfer", object_ref="address-b",
         mutation_field=None, mutation_value=None, request_budget=12,
     ),
+    "juice-basket-insert-owner-check-v1": AccessCheckRegistration(
+        check_id="juice-basket-insert-owner-check-v1", route_id="juice-basket-insert-owner-check",
+        check="own_write", method="POST", endpoint="/api/BasketItems",
+        endpoint_id="basket-write", operation="basket_insert", object_ref="basket-b",
+        mutation_field="BasketId", mutation_value=None, request_budget=14,
+    ),
 }
 
 
@@ -100,6 +106,8 @@ def validate_access_action(profile: TargetProfile, action: ActionProposal) -> Ac
         raise ValueError("B05 BasketItem v2 candidate is not enabled in the operator fixture")
     if registration.check_id == "juice-basket-own-write-v3" and not fixture.b05_basket_write_v3_candidate:
         raise ValueError("B05 BasketItem v3 candidate is not enabled in the operator fixture")
+    if registration.check_id == "juice-basket-insert-owner-check-v1" and not fixture.b05_basket_insert_candidate:
+        raise ValueError("B05 BasketItem insertion candidate is not enabled in the operator fixture")
     if (registration.check_id == "juice-address-ownership-transfer-v1"
             and not fixture.b05_ownership_transfer_candidate):
         raise ValueError("B05 ownership-transfer candidate is not enabled in the operator fixture")

@@ -16,6 +16,21 @@ from discovery.scout import merge_scout_candidates, validate_scout_candidates
 from reporting.builder import build_final_report
 from sast.identity import deduplicate_findings, normalize_finding
 from sast.normalizer import normalize_semgrep_payload, normalize_semgrep_result
+
+
+@pytest.mark.parametrize(("rule", "family"), [
+    ("juice.nosql-injection.request-selector", "nosql-injection"),
+    ("nosql-injection", "nosql-injection"),
+    ("juice.captcha.replayable-verification", "anti-automation"),
+    ("juice.authorization.client-role-setter", "authorization"),
+    ("juice.access-control.review-selector-without-owner", "access-control"),
+    ("juice.file-validation.filename-normalization", "file-validation"),
+    ("sql-injection", "sql-injection"),
+])
+def test_specific_source_families_do_not_collapse_into_neighboring_taxonomy(rule, family):
+    from sast.identity import rule_family
+
+    assert rule_family(rule) == family
 from sast.repository import JsonFindingRepository
 from schemas.discovery import ProjectDiscoveryResult
 from schemas.finding import Finding

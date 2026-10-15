@@ -1,8 +1,103 @@
 # План повышения метрик на закрепленном Juice Shop
 
+## Обновление после восстановления постоянной рабочей копии
+
+Подробности и доступные свежие артефакты:
+[`juice-shop-development-progress-2026-10-15.md`](juice-shop-development-progress-2026-10-15.md).
+Исторические временные runtime-артефакты предыдущего захода утрачены; записи
+ниже сохраняются как история, но не заменяют свежие seals.
+
+Новый source-only producer вместе со свежим SAST обнаружил **27/27** A04
+positive cases (SAST отдельно **10/27**). Один candidate alert попал на safe
+business-logic control. Это результат поиска на известном development corpus,
+не 100% runtime Recall. J05–J08 теперь частично покрыты поиском, но их новые
+runtime-протоколы и безопасные counterparts еще не закрыты.
+
+Выполнена новая общая Docker-приемка четырех fixture-протоколов: 4 confirmed,
+427 фактических HTTP-обменов, cleanup проверен. Исправлена привязка B05 findings
+внутри AST-тела функции; отдельный integrated verification-only запуск проверяет
+фактических кандидатов source/SAST без LLM. J09 остается частичным, J10 открыт.
+Полный pytest текущего кода: **1360 passed, 27 skipped**, Ruff и smoke проходят.
+
 Дата: 15 октября 2026.
-Статус: согласованное направление; задачи ниже еще не выполнены.
+Статус на 15 октября 2026: J01 выполнен. J02 прошёл короткую интеграционную
+приёмку на Qwen; offline-пересчёт sealed run из копии совпал. В J03 исправлена и
+проверена связь scanner aliases одного точного source-bound sink с общим
+verification-job. J04 прошёл component-level runtime-приёмки. J05 частично выполнен:
+BOLA-001 read и отдельный BOLA-002 POST insert подтверждены; прочие случаи не закрыты.
+J06–J10 открыты.
 База перед этим планом: `ceec37d`, опубликована в `main`.
+
+Текущий статус очереди:
+
+| Шаг | Статус |
+|---|---|
+| J01 Паспорт 35 случаев | Выполнен в `docs/juice-shop-case-passport-2026-10-15.md` |
+| J02 Единый runner и лаборатория | Короткий Qwen campaign завершился; seal и offline-пересчёт копии проверены. Runner/preflight и A02 catalog compatibility regression проверены; full campaign ещё впереди |
+| J03 Идентичность, нормализация и бюджет | Exact-source job association интеграционно проверена; alias-дубликаты не расширяют доказательство на другой sink |
+| J04 SQL, redirect, auth, FTP и source-condition | Короткие runtime/source приемки пройдены; source-condition не смешивается с runtime |
+| J05 Доступ, роли и раскрытие данных | Частично: BOLA-001 own-read и отдельный BOLA-002 duplicate-BasketId POST confirmed на двух поколениях; прочие случаи не закрыты |
+| J06 NoSQL, SSRF, traversal, XXE, file | Не начат |
+| J07 XSS и code evaluation | Не начат; закреплённый runtime сообщает unsupported для code evaluation |
+| J08 Business logic, CAPTCHA, rate limiting | Не начат |
+| J09 Короткая приемка | Не завершена; есть component-level J04/J05 и короткий 5-вопросный runner acceptance; J06–J08 и safe controls не готовы |
+| J10 Один полный прогон и отчет | Не начат; требуется закрыть J09; текущий успешный Qwen preflight не заменяет проверку campaign |
+
+### Уже выполненная короткая приемка
+
+- `app.research_diagnostic_run` проверил 114 locked inputs, 27 положительных и
+  8 безопасных A04 cases, pinned target и четыре неизменяемых Docker image IDs.
+  Qwen generation preflight прошёл. Ключ передавался только процессу и не
+  сохранялся в конфигурации/артефактах.
+- Первый ограниченный campaign на 5 вопросах: 25 model calls, 21 action,
+  250.4 секунды, 95 SAST observations и 59 queue candidates; 4 fixed runtime checks
+  confirmed, 2 inconclusive, 5 review_pending; 2 source-condition reviews отдельно.
+- После фикса exact-job association проведён новый sealed acceptance: 1 вопрос,
+  7 campaign model calls, 10 actions, 98.7 секунды; 4 fixed runtime checks
+  confirmed, 2 inconclusive, 2 review_pending; 2 source-condition reviews отдельно.
+  Исходник не изменился, все контейнеры/сети удалены, ошибок модели/исполнения нет.
+- Offline A04 score последнего acceptance: detection 10/27 (DEV 7/20, HOLDOUT
+  3/7), совпадает с SAST baseline 10/27; runtime-confirmed 3/27, все три решения
+  правильные (`JS-SQL-001`, `JS-SQL-002`, `JS-FILE-001`), precision подтверждений
+  3/3. Безопасные 0/8 получили решение, поэтому FPR по разрешённым safe-case
+  оценить нельзя; decision coverage всего 3/35. Source-condition MD5: ещё 2
+  подтверждения отдельно, не runtime и не часть этих метрик.
+- Seal проверен, offline score скопированного run дал побайтно такой же `summary.json`.
+  Это интеграционная диагностика, не J10 измерение: research queue остановилась
+  по лимиту в 1 вопрос, поэтому показатели поиска не являются полным агентным проходом.
+- Для совместимости A02 сохранён default evaluator-only режим source-map, а все
+  production callers явно запрашивают projection без benchmark-регионов. Это
+  восстанавливает вывод locked candidate catalog без изменения защищённого
+  `evaluation/positive_catalog.py` или файлов A04.
+- Первый offline score limited campaign дал detection 10/27 — столько же, сколько
+  свежий SAST baseline; runtime score недосчитал подтверждённые SQL случаи, потому
+  что scanner aliases одного exact sink не были связаны с verification-job. Исправлено
+  явным `job_finding_ids` и проверкой source/line/family/binding; новый sealed score
+  теперь учитывает алиасы только в пределах того же source-bound job.
+- Канонические B01 SQL search, B01 login SQL и FTP directory listing проверены на
+  закреплённом Juice Shop v20.2.0 в Docker. Все три runtime-протокола дали
+  `confirmed`; FTP проверил только имена, не скачивал файлы. Фактический счётчик
+  HTTP для FTP теперь сохраняется в Evidence и сверяется с reservation.
+- Канонический B06 acceptance: redirect и повторная аутентификация прошли на
+  исходном и безопасном counterpart: четыре ожидаемых решения из четырёх, все
+  исполнения завершены, аудит присутствует, cleanup подтвержден.
+- B04/B05 own-read acceptance: два независимых поколения, 7 HTTP-обменов,
+  `confirmed` чтение чужой корзины, identity/owner controls и cleanup пройдены.
+- BOLA-002 duplicate-BasketId POST acceptance: два reset-separated поколения,
+  14 проверочных HTTP-обменов, authorized-insert/foreign-denial controls и
+  независимый owner readback подтвердили по одной вставке в чужую корзину в каждом
+  поколении; source binding и cleanup прошли. Это доказательство одного свойства,
+  не метрика обнаружения и не общий J05/Recall результат.
+- A02 route-catalog reproducibility: default evaluator-only source-map сохраняет
+  historical route IDs; Scout/API callers используют явный безопасный режим. A02
+  generated catalog воспроизводится без правок frozen catalog и A04 ground truth.
+- MD5 scanner candidate получил отдельное source-condition доказательство на
+  pinned исходнике; оно не меняет runtime verdict и не прибавляется к Recall.
+- После evaluator compatibility fix полный pytest: 1338 passed, 26 skipped,
+  без падений. Ruff, `git diff --check` и `python -m app.main` проходят.
+
+Эти проверки подтверждают capabilities и их controls, но не являются измерением
+27/8 набора и не заменяют J09 или J10.
 
 ## 1. Цель и приоритеты
 
@@ -391,10 +486,13 @@ controls и результат. В оценщике это отдельный п
 
 1. Закрыть J01: паспорт 35 случаев и уровни proof с точными controls.
 2. Реализовать J02/J03: единый runner, unique jobs, typed HTTP и явный manifest.
-3. Закрыть J04 короткими приемками: вернуть пять существующих runtime классов и MD5 scope.
-4. Приступить к J05: общее состояние/роли и data exposure + BOLA, затем остальные волны.
+3. J04: вернуть пять существующих runtime-классов и вынести MD5 в source-condition
+   доказательство; короткие приемки выполнены.
+4. Продолжить J05: общее состояние/роли и data exposure + BOLA, затем остальные волны.
 
 После каждого захода результат — код, короткие приемки и обновленная матрица.
-Полный прогон проводится после J09. Если какой-то случай невозможно доказать
+Сейчас J04 принят на уровне отдельных capabilities, J05 начат; это не означает,
+что J05–J08 можно пропустить. Полный прогон проводится только после коротких
+приемок всех поддерживаемых протоколов. Если какой-то случай невозможно доказать
 на текущем pinned runtime, фиксируем причину и продолжаем остальные вместо
 бесконечного повторения одной и той же гипотезы.

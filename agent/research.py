@@ -14,6 +14,7 @@ from schemas.research import RESEARCH_REQUESTS
 from schemas.research_agent import ResearchLimits, ResearchProgress, ResearchTurn
 from security.error_redaction import redact_error_message
 from security.research_scope import expand_search_paths
+from tools.repository_source import safe_model_text
 from tools.research import research_proposal, research_tool_contracts
 
 _active = ContextVar("research_agent_run", default=None)
@@ -122,6 +123,17 @@ def compact(value, size):
     return value
 
 
+def _model_projection(value):
+    """Redact benchmark-only annotations from every nested finding text field."""
+    if isinstance(value, str):
+        return safe_model_text(value)
+    if isinstance(value, list):
+        return [_model_projection(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _model_projection(item) for key, item in value.items()}
+    return value
+
+
 class ResearchAgentModel:
     def __init__(self, *, client, scope, validator, limits=None, surface_context=None):
         self.client, self.scope, self.validator = client, scope, validator
@@ -136,7 +148,7 @@ class ResearchAgentModel:
                     for name, item in self.scope.services.items()}
         # No full action/plan history or credentials; keep latest raw observations
         # and compact identities for ALL earlier observations (no silent forgetting).
-        payload = {"finding": state["finding"].model_dump(mode="json"),
+        payload = {"finding": _model_projection(state["finding"].model_dump(mode="json")),
                    "tools": [x for x in research_tool_contracts()
                              if x["name"] != "browser_interact" or self.scope.browser_image], "services": services,
                    "source_count": len(self.scope.source_files),
@@ -147,7 +159,7 @@ class ResearchAgentModel:
                    "limits": self.limits.model_dump(),
                    "usage": self.progress.model_dump(exclude={"ledger", "turns", "candidates", "candidate_rejections", "source_claims", "http_claims", "provider_usage", "proposal_feedback"}),
                    "proposal_feedback": self.progress.proposal_feedback[-8:],
-                   "surface_context": self.surface_context,
+                   "surface_context": _model_projection(self.surface_context),
                    "candidate_rejections": self.progress.candidate_rejections[-8:],
                    "observation_index": [{"action_id": x.action_id, "tool": x.tool,
                                           "category": x.category,
@@ -161,7 +173,7 @@ class ResearchAgentModel:
         if len(encoded(payload)) > self.limits.max_context_bytes:
             raise ResearchBudgetExhausted("Context metadata exceeds byte budget")
         for observation in reversed(self.progress.ledger):
-            item = observation.model_dump(mode="json")
+            item = _model_projection(observation.model_dump(mode="json"))
             payload["observations"].insert(0, item)
             if len(payload["observations"]) == 1 and len(encoded(payload)) > self.limits.max_context_bytes - 128:
                 # Always retain a bounded sample of the newest observation,

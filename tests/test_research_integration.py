@@ -1,6 +1,7 @@
 """R05–R06 positive, negative and unavailable proofs; no live LLM required."""
 import json
 from hashlib import sha256
+from types import SimpleNamespace
 
 import pytest
 
@@ -108,6 +109,46 @@ def test_candidates_must_bind_real_read_lines(tmp_path):
     assert not model.read_anchor("outside.ts", 2, 2, ["read-1"])
 
 
+def test_source_detector_channel_keeps_origin_and_requires_source_inventory(tmp_path):
+    (tmp_path / "app.ts").write_text("store.update(req.body)\n")
+    queue = ResearchQueue(profile=TargetProfile(id="detector-test", environment="sandbox",
+        repository_path=tmp_path), source_map=ExpressSourceMap(), source_files=["app.ts"])
+    candidate = Finding(id="detected", source="juice_source_detector", rule_id="access-control",
+        title="Unverified body update", description="Requires independent ownership verification",
+        file="app.ts", line_start=1, line_end=1)
+    queue.import_findings([candidate, candidate.model_copy(update={"id": "outside", "file": "other.ts"})],
+                          "source_detector")
+    selected = queue.next_question()
+    assert selected.id == "detected" and selected.origin == "source_detector"
+    assert selected.finding.source == "juice_source_detector"
+    assert selected.finding.provenance.anchor_status == "source_bound"
+    assert queue.raw[0]["origin"] == "source_detector"
+    assert queue.rejections[0]["id"] == "outside"
+    assert len(queue.findings) == 1
+
+
+def test_explicit_fixed_only_campaign_writes_empty_research_streams_without_model_calls(tmp_path):
+    from app.research_campaign import campaign
+
+    target = tmp_path / "target"
+    target.mkdir()
+    (target / "app.ts").write_text("const value = 1\n")
+
+    class ForbiddenClient:
+        def complete_model(self, **_kwargs):
+            raise AssertionError("Fixed-only acceptance must not call a provider")
+
+    output = tmp_path / "out"
+    result = campaign(profile=TargetProfile(id="fixed-only", environment="sandbox",
+        repository_path=target), configuration={"worker_image": "unused"},
+        client=ForbiddenClient(), output=output, verification_only=True)
+    assert result["model_calls"] == 0 and result["stop_reason"] == "fixed_verification_only"
+    assert result["completed"] and not result["degraded"]
+    assert json.loads((output / "reports.json").read_text()) == []
+    assert json.loads((output / "reviews.json").read_text()) == []
+    assert json.loads((output / "manifest.json").read_text())["engine"] == "fixed_verification_only"
+
+
 def test_source_review_is_independent_and_changed_source_not_confirmed(tmp_path):
     path, scope, observation = fixture_source(tmp_path)
     progress = ResearchProgress(ledger=[observation], source_claims=[SourceProofClaim(protocol="weak_digest_call.v1",
@@ -146,6 +187,99 @@ def test_queue_preserves_duplicates_and_exploration_is_not_finding(tmp_path):
     queue.complete(selected)
     assert queue.next_question().id != selected.id
     assert queue.coverage([])["unread_files"] == ["app.ts", "unread.ts"]
+
+
+def test_queue_schedules_other_routes_before_deeper_same_route_work(tmp_path):
+    for name in ("server.ts", "route-a.ts", "route-b.ts"):
+        (tmp_path / name).write_text("const value = 'source';\nconst other = 'sink';\n")
+    profile = TargetProfile(id="breadth-test", environment="sandbox", repository_path=tmp_path)
+    source_map = ExpressSourceMap(routes=[
+        ExpressRouteRegistration(id="route-a", file="server.ts", receiver="app", method="get",
+            path="/a", path_is_static=True, line_start=1, line_end=1, registration_order=0,
+            handler_files=["route-a.ts"]),
+        ExpressRouteRegistration(id="route-b", file="server.ts", receiver="app", method="get",
+            path="/b", path_is_static=True, line_start=1, line_end=1, registration_order=1,
+            handler_files=["route-b.ts"]),
+    ])
+    queue = ResearchQueue(profile=profile, source_map=source_map,
+                          source_files=["server.ts", "route-a.ts", "route-b.ts"])
+    candidates = [
+        Finding(id="route-a-first", source="semgrep", rule_id="sql-injection", title="first",
+                description="candidate", file="route-a.ts", line_start=1, line_end=1),
+        Finding(id="route-a-second", source="semgrep", rule_id="sql-injection", title="second",
+                description="distinct sink", file="route-a.ts", line_start=2, line_end=2),
+        Finding(id="route-b-first", source="semgrep", rule_id="sql-injection", title="third",
+                description="other route", file="route-b.ts", line_start=1, line_end=1),
+    ]
+    queue.import_findings(candidates, "sast")
+
+    first = queue.next_question()
+    second = queue.next_question()
+    third = queue.next_question()
+
+    assert first.finding.file == "route-a.ts"
+    assert second.finding.file == "route-b.ts"
+    assert third.finding.file == "route-a.ts"
+    coverage = queue.coverage([])
+    assert coverage["unique_candidate_verification_jobs"] == 3
+    assert coverage["unique_candidate_jobs_by_status"] == {"pending": 3}
+    assert coverage["scheduler_route_visits"] == {"route-a": 2, "route-b": 1}
+
+
+def test_queue_coalesces_operator_bound_observations_by_property_and_snapshot(tmp_path, monkeypatch):
+    from security import verification_binding as binding_module
+
+    (tmp_path / "app.ts").write_text("const a = source;\nconst b = sink;\n")
+    route = {
+        "id": "search", "handler_id": "app.search", "family": "sql-injection",
+        "service": "app", "endpoint": "/search", "method": "GET",
+        "tool": "verify_sql_injection", "check": "sql_interpolation", "mode": "search",
+        "registration": {"file": "server.ts", "anchor": "app.get('/search', search())"},
+        "sources": [{"file": "app.ts", "anchor": "function search()"}],
+    }
+    profile = TargetProfile(id="job-key-test", environment="sandbox", repository_path=tmp_path,
+        services={"app": {"type": "node", "runtime_endpoints": ["/search"]}},
+        verification_routes=[route])
+    primary = SimpleNamespace(target="job-key-test", source_snapshot="a" * 64, map_sha256="b" * 64,
+        route_id="search", handler_id="app.search", family="sql-injection", service="app",
+        method="GET", endpoint="/search", tool="verify_sql_injection",
+        check="sql_interpolation", mode="search", source_file="app.ts", line_start=1, line_end=1,
+        anchor_sha256="c" * 64)
+    other = primary.model_copy(update={"source_snapshot": "c" * 64}) if hasattr(primary, "model_copy") else SimpleNamespace(
+        **{**vars(primary), "source_snapshot": "c" * 64})
+
+    def resolve(_profile, item):
+        if item.rule_id == "other-snapshot":
+            binding = other
+        else:
+            binding = SimpleNamespace(**{**vars(primary), "line_start": item.line_start,
+                "line_end": item.line_end, "anchor_sha256": sha256(str(item.line_start).encode()).hexdigest()})
+        return SimpleNamespace(status="bound", binding=binding)
+
+    monkeypatch.setattr(binding_module, "resolve_binding", resolve)
+    source_map = ExpressSourceMap()
+    campaign_profile = TargetProfile(id="campaign-target", environment="sandbox", repository_path=tmp_path,
+        services={"app": {"type": "node", "runtime_endpoints": ["/search"]}})
+    queue = ResearchQueue(profile=campaign_profile, source_map=source_map, source_files=["app.ts"],
+                          verification_profiles=(profile,))
+    observations = [
+        Finding(id="scanner-one", source="semgrep", rule_id="sql-injection", title="one",
+                description="candidate", file="app.ts", line_start=1, line_end=1),
+        Finding(id="scanner-two", source="model_scout", rule_id="sql-injection", title="two",
+                description="same operator property", file="app.ts", line_start=1, line_end=1),
+        Finding(id="scanner-three", source="semgrep", rule_id="sql-injection", title="three",
+                description="different sink on same route", file="app.ts", line_start=2, line_end=2),
+    ]
+    queue.import_findings(observations, "sast")
+
+    assert len(queue.raw) == 3
+    assert len(queue.questions) == 2
+    assert queue.work_key(queue.questions[0].finding) != queue.work_key(queue.questions[1].finding)
+    assert set(queue.questions[0].finding.provenance.aliases) >= {"scanner-one", "scanner-two"}
+    queue.complete(queue.questions[0])
+    assert queue.questions[1].status == "pending"
+    assert queue.work_key(queue.questions[0].finding) != queue.work_key(
+        queue.questions[0].finding.model_copy(update={"rule_id": "other-snapshot"}))
 
 
 def test_dast_without_source_location_remains_a_candidate(tmp_path):

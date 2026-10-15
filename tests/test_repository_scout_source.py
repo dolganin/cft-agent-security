@@ -120,6 +120,35 @@ def test_source_reader_blocks_links_tests_secrets_and_answer_annotations(tmp_pat
         source.read("../scout-outside.ts")
 
 
+def test_source_projection_hides_annotation_blocks_but_keeps_real_behavior_and_line_numbers():
+    from tools.repository_source import _safe_lines
+
+    source = r"""const visibleBefore = true
+// vuln-code-snippet start weakPasswordChallenge
+const actualHash = security.hash(clearTextPassword) // vuln-code-snippet vuln-line weakPasswordChallenge
+// vuln-code-snippet hide-start weakPasswordChallenge
+const hiddenSetup = loadChallengeAnswer()
+const hiddenAnswer = 'do-not-show'
+// vuln-code-snippet hide-end weakPasswordChallenge
+const hiddenLine = 'do-not-show-either' // vuln-code-snippet hide-line weakPasswordChallenge
+const markerParser = /^#\s*vuln-code-snippet\s/
+// vuln-code-snippet end weakPasswordChallenge
+const visibleAfter = true"""
+
+    projected = _safe_lines(source)
+
+    assert len(projected) == len(source.splitlines())
+    rendered = "\n".join(projected)
+    assert "weakPasswordChallenge" not in rendered
+    assert "hiddenAnswer" not in rendered
+    assert "hiddenSetup" not in rendered
+    assert "hiddenLine" not in rendered
+    assert "actualHash = security.hash(clearTextPassword)" in rendered
+    assert "markerParser = /^#\\s*vuln-code-snippet\\s/" in rendered
+    assert "const visibleBefore = true" in projected[0]
+    assert "const visibleAfter = true" in projected[-1]
+
+
 def test_source_redaction_preserves_flow_indentation_and_read_limits(tmp_path):
     discovery = inventory(tmp_path, {
         "routes/search.ts": "  const password = req.body.password\n"

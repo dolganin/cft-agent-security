@@ -171,8 +171,15 @@ def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_
             raise ValueError("Canonical source binding changed during verification")
         evidence = build_evidence(action=action, execution=execution, record=record, evidence_loaded=True,
             artifact_refs=execution.artifacts, hypothesis_id=finding.id, sandbox_session_id=runtime.session_id)
+        observation = evidence.observation.facts
+        observed_facts = observation.get("facts", {}) if isinstance(observation, dict) else {}
+        observed_requests = observed_facts.get("requests") if isinstance(observed_facts, dict) else None
+        if (isinstance(observed_requests, bool) or not isinstance(observed_requests, int)
+                or observed_requests < 0 or observed_requests > cost):
+            raise ValueError("Canonical verifier did not report a valid bounded HTTP exchange count")
         result = {**plan, "status": evidence.verdict, "security_verdict": evidence.verdict,
             "executed": True, "runtime_provisioned": True, "actions": 1, "requests_reserved": cost,
+            "requests_observed": observed_requests,
             "origin": "canonical_fixed_verifier; not a model-generated proof",
             "action": action.model_dump(mode="json"), "validation": validation.model_dump(mode="json"),
             "execution": execution.model_dump(mode="json"), "evidence": evidence.model_dump(mode="json")}

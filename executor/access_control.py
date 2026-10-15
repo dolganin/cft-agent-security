@@ -47,6 +47,7 @@ class AccessVerificationRuntime:
             raise RuntimeError("B04 identity and availability controls did not pass")
         if self.lab.active_check_id in {
             "juice-address-own-write-v1", "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+            "juice-basket-insert-owner-check-v1",
         }:
             context = self.lab.provision_b05()
         self.initial_snapshot = dict(self.lab.source_files)
@@ -74,6 +75,7 @@ class AccessVerificationRuntime:
         roles = {role.id: role for role in context.roles}
         permission_id = ("basket-b" if operation == "own_read" or check_id in {
             "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+            "juice-basket-insert-owner-check-v1",
         }
                          else "address-b")
         operation_key = "read" if operation == "own_read" else "update"
@@ -108,6 +110,7 @@ class AccessVerificationRuntime:
             raise RuntimeError("B04 post-reset controls failed")
         if self.lab.active_check_id in {
             "juice-address-own-write-v1", "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+            "juice-basket-insert-owner-check-v1",
         }:
             context = self.lab.provision_b05()
         return context
@@ -136,6 +139,9 @@ class AccessVerificationRuntime:
                 {"owner_write_control", "attacker_self", "authentication_control", "ownership",
                  "permission_relation", "non_interference", "repeat_reset", "cleanup_baseline"}
                 if registration.check_id == "juice-basket-own-write-v3" else
+                {"owner_write_control", "attacker_self", "negative_control", "ownership",
+                 "permission_relation", "cleanup_baseline"}
+                if registration.check_id == "juice-basket-insert-owner-check-v1" else
                 {"owner_availability", "negative_control", "attacker_identity", "ownership",
                  "permission_relation"}
                 if operation == "ownership_transfer" else
@@ -145,7 +151,7 @@ class AccessVerificationRuntime:
 
             def merge_controls(step):
                 values = {key: value for key, value in step.controls.items() if key in required_controls}
-                if registration.check_id == "juice-basket-own-write-v3":
+                if registration.check_id in {"juice-basket-own-write-v3", "juice-basket-insert-owner-check-v1"}:
                     for key, value in values.items():
                         controls[key] = controls.get(key, True) and value
                 else:
@@ -153,6 +159,7 @@ class AccessVerificationRuntime:
 
             first_name = (
                 "b05-own-read-first" if operation == "own_read" else
+                "b05-basket-insert-first" if registration.check_id == "juice-basket-insert-owner-check-v1" else
                 "b05-basket-write-v3-first" if registration.check_id == "juice-basket-own-write-v3" else
                 "b05-basket-write-first" if registration.check_id == "juice-basket-own-write-v2" else
                 "b05-ownership-transfer-first" if operation == "ownership_transfer" else
@@ -192,6 +199,7 @@ class AccessVerificationRuntime:
             contexts.append(second_context)
             second_name = (
                 "b05-own-read-second" if operation == "own_read" else
+                "b05-basket-insert-second" if registration.check_id == "juice-basket-insert-owner-check-v1" else
                 "b05-basket-write-v3-second" if registration.check_id == "juice-basket-own-write-v3" else
                 "b05-basket-write-second" if registration.check_id == "juice-basket-own-write-v2" else
                 "b05-ownership-transfer-second" if operation == "ownership_transfer" else
@@ -245,9 +253,9 @@ class AccessVerificationRuntime:
                     session_bindings={"role_a": cleanup.role_a_session_binding_sha256,
                                       "role_b": cleanup.role_b_session_binding_sha256},
                 ))
-        except (OSError, ValueError, RuntimeError, KeyError, TypeError, subprocess.SubprocessError):
-            # Persist a stable diagnostic code; raw exception text may contain target data.
-            technical_error = "docker_runtime_or_fixture_failure"
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError, subprocess.SubprocessError) as exc:
+            # Keep only the exception class; raw text may contain target data.
+            technical_error = f"docker_runtime_or_fixture_failure:{type(exc).__name__}"
             reset_complete = False
         finally:
             cleanup_complete = self.lab.close()
@@ -256,6 +264,8 @@ class AccessVerificationRuntime:
 
         if not cleanup_complete:
             technical_error = technical_error or "cleanup_unverified"
+        if registration.check_id == "juice-basket-insert-owner-check-v1":
+            controls["cleanup_baseline"] = cleanup_complete
         if not source_integrity:
             technical_error = technical_error or "source_integrity_failed"
 

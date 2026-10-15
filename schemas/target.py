@@ -317,8 +317,10 @@ class TargetProfile(BaseModel):
             )) or (route.tool == "verify_access_control" and (
                 route.family != "access-control" or route.mode is not None
                 or (route.check, route.method) not in {
-                    ("own_read", "GET"), ("own_write", "PUT"), ("ownership_transfer", "PUT")
+                    ("own_read", "GET"), ("own_write", "PUT"), ("ownership_transfer", "PUT"),
+                    ("own_write", "POST")
                 }
+                or (route.method == "POST" and route.endpoint != "/api/BasketItems")
             )):
                 raise ValueError("Verification route capability/method contract mismatch")
             b06 = {"verify_redirect_destination": ("redirect_destination", "open-redirect", "/redirect"),

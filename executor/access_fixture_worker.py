@@ -60,16 +60,20 @@ class FixtureClient:
         self.limit = config["profile"]["prepare_http_budget"]
         self.opener = build_opener(ProxyHandler({}), NoRedirect())
 
-    def request(self, method, path, data=None, role=None, *, json_response=True):
+    def request(self, method, path, data=None, role=None, *, json_response=True, raw_body=None):
         if self.operation_exchanges >= self.limit or time.monotonic() >= self.deadline:
             raise FixtureFailure("fixture_budget_exhausted")
+        if data is not None and raw_body is not None:
+            raise FixtureFailure("ambiguous_request_body")
         self.exchanges += 1
         self.operation_exchanges += 1
         headers = {"Accept": "application/json", "User-Agent": "cft-b04-fixture/1"}
         if role:
             token = self.roles[role]["token"]
             headers.update(Authorization="Bearer " + token, Cookie="token=" + token)
-        encoded = json.dumps(data).encode() if data is not None else None
+        if raw_body is not None and not isinstance(raw_body, str):
+            raise FixtureFailure("invalid_raw_json_request")
+        encoded = raw_body.encode() if raw_body is not None else json.dumps(data).encode() if data is not None else None
         if encoded is not None:
             if len(encoded) > 4096:
                 raise FixtureFailure("request_body_limit")
@@ -279,6 +283,7 @@ class FixtureClient:
             self._create_b05_write_candidate()
         if self.config.get("active_check_id") in {
             "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+            "juice-basket-insert-owner-check-v1",
         }:
             self._create_b05_basket_write_items()
         self._save_state()
@@ -469,6 +474,87 @@ class FixtureClient:
                             self.basket_write_baseline["basket-b"] = rows
         return event, row, baseline, payload
 
+    def _basket_insert_exchange(self, exchange_id, role, basket_ref, *, request_shape=None,
+                                data=None, raw_body=None):
+        basket = self.objects[basket_ref]
+        basket_id = basket["server_object_id"]
+        if data is not None or raw_body is not None:
+            status, payload = self.request(
+                "POST", "/api/BasketItems", data, role=role, raw_body=raw_body,
+                json_response=request_shape != "single-foreign-basket-insert",
+            )
+            row = payload.get("data") if isinstance(payload, dict) else None
+            row_id = row.get("id") if isinstance(row, dict) else None
+            valid = (status in {200, 201} and isinstance(row, dict) and type(row_id) is int
+                     and row.get("BasketId") == basket_id and row.get("ProductId") == 5
+                     and row.get("quantity") == 1)
+            item_hash = self._opaque_identity("item", row_id) if valid else None
+            effect = "changed" if valid else "unchanged" if status in {400, 401, 403, 404} else "unknown"
+            event = {"exchange_id": exchange_id, "index": self.exchanges, "role_id": role,
+                "object_ref": basket_ref, "method": "POST", "endpoint_id": "basket-write",
+                "status": status, "value_sha256": item_hash, "object_sha256": None,
+                "private_marker_match": False, "owner_data_present": valid,
+                "mutation_effect": effect, "independent_readback": False,
+                "changed_fields": [], "request_shape": request_shape,
+                "product_id": 5,
+                "added_item_count": 1 if valid else 0}
+            event.update(self._bind_basket_insert_event(event, basket_id, request_shape))
+            return event, (row_id if valid else None), payload
+
+        status, payload = self.request("GET", self.object_path(basket_ref), role=role)
+        data_payload = payload.get("data") if isinstance(payload, dict) else None
+        rows, owner_ok = self._basket_rows_for_insert(basket_ref, data_payload)
+        row_map = {str(row["id"]): row for row in rows} if owner_ok else {}
+        event = {"exchange_id": exchange_id, "index": self.exchanges, "role_id": role,
+            "object_ref": basket_ref, "method": "GET", "endpoint_id": "basket-read",
+            "status": status, "value_sha256": digest(sorted(row_map)),
+            "object_sha256": digest(row_map) if owner_ok else None,
+            "private_marker_match": False, "owner_data_present": owner_ok,
+            "mutation_effect": "unknown", "independent_readback": status == 200 and owner_ok,
+            "changed_fields": [], "product_id": None, "added_item_count": 0}
+        event.update(self._bind_basket_insert_event(event, basket_id, None))
+        return event, row_map, data_payload
+
+    def _basket_rows_for_insert(self, basket_ref, data):
+        role = OWNERS[basket_ref]
+        if (not isinstance(data, dict) or integer(data.get("id")) != self.objects[basket_ref]["server_object_id"]
+                or integer(data.get("UserId")) != self.roles[role]["user_id"]):
+            return [], False
+        products = data.get("Products")
+        if not isinstance(products, list):
+            return [], False
+        rows = []
+        for product in products:
+            item = product.get("BasketItem") if isinstance(product, dict) else None
+            if not isinstance(item, dict):
+                return [], False
+            try:
+                row = {"id": integer(item.get("id")), "BasketId": integer(item.get("BasketId")),
+                    "ProductId": integer(item.get("ProductId")), "quantity": integer(item.get("quantity")),
+                    "createdAt": item.get("createdAt"), "updatedAt": item.get("updatedAt")}
+            except FixtureFailure:
+                return [], False
+            if (product.get("id") != row["ProductId"]
+                    or row["BasketId"] != self.objects[basket_ref]["server_object_id"]
+                    or not isinstance(row["createdAt"], str) or not isinstance(row["updatedAt"], str)):
+                return [], False
+            rows.append(row)
+        return rows, len({row["id"] for row in rows}) == len(rows)
+
+    def _bind_basket_insert_event(self, event, basket_id, request_shape):
+        role = event["role_id"]
+        role_data = self.roles[role]
+        identity = self._opaque_identity("basket", basket_id)
+        return {"actor_kind": "authenticated", "generation_sha256": digest(self.config["generation"]),
+            "actor_identity_sha256": digest([role_data["user_id"], role_data["email"]]),
+            "actor_session_binding_sha256": role_data["session_binding_sha256"],
+            "object_identity_sha256": identity, "parent_basket_identity_sha256": identity,
+            "request_sha256": digest({"method": event["method"], "endpoint_id": event["endpoint_id"],
+                "object_ref": event["object_ref"], "basket_identity_sha256": identity,
+                "request_shape": request_shape,
+                "product_id": event.get("product_id"),
+                "quantity": 1 if event["method"] == "POST" else None})}
+
     def _opaque_identity(self, kind, value):
         if not isinstance(self.opaque_key, bytes) or len(self.opaque_key) < 32:
             raise FixtureFailure("v3_opaque_identity_key_missing")
@@ -632,6 +718,7 @@ class FixtureClient:
                              "b05-basket-write-second", "b05-basket-write-cleanup",
                              "b05-basket-write-v3-first", "b05-basket-write-v3-second",
                              "b05-basket-write-v3-cleanup",
+                             "b05-basket-insert-first", "b05-basket-insert-second",
                              "b05-ownership-transfer-first", "b05-ownership-transfer-second"}:
             raise FixtureFailure("unknown_b05_operation")
         saved = json.loads(STATE.read_text(encoding="utf-8"))
@@ -642,7 +729,8 @@ class FixtureClient:
         self.basket_item_ids = saved.get("basket_item_ids", {})
         self.basket_write_items = saved.get("basket_write_items", {})
         self.basket_write_baseline = saved.get("basket_write_baseline", {})
-        self.limit = 12
+        is_insert = self.config.get("active_check_id") == "juice-basket-insert-owner-check-v1"
+        self.limit = 14 if is_insert else 12
         self.deadline = time.monotonic() + 20
         self.exchanges = 0
         self.operation_exchanges = 0
@@ -665,6 +753,15 @@ class FixtureClient:
             controls["ownership"] = all(ref in self.basket_write_items for ref in (
                 "basket-write-candidate-b", "basket-write-control-b",
                 "basket-write-negative-b", "basket-write-self-a"))
+        elif operation.startswith("b05-basket-insert"):
+            controls["permission_relation"] = any(
+                item["role_id"] == "role-a" and item["object_id"] == "basket-b"
+                and item["update"] is False for item in permissions
+            )
+            controls["ownership"] = (
+                self.objects.get("basket-b", {}).get("ownership_verified") is True
+                and self.objects.get("basket-a", {}).get("ownership_verified") is True
+            )
         elif operation.startswith("b05-ownership-transfer"):
             controls["permission_relation"] = any(
                 item["role_id"] == "role-a" and item["object_id"] == "address-b"
@@ -1022,6 +1119,81 @@ class FixtureClient:
                 controls["trial1_mutation_ack"] = probe["status"] in {200, 201}
             else:
                 controls["trial2_mutation_ack"] = probe["status"] in {200, 201}
+        elif operation.startswith("b05-basket-insert"):
+            suffix = "-t2" if operation.endswith("second") else "-t1"
+            target_id = self.objects["basket-b"]["server_object_id"]
+            attacker_basket_id = self.objects["basket-a"]["server_object_id"]
+            baseline, baseline_rows, _ = self._basket_insert_exchange(
+                "baseline-b" + suffix, "role-b", "basket-b")
+            controls["ownership"] = controls["ownership"] and baseline["owner_data_present"] is True
+
+            owner_write, owner_item_id, _ = self._basket_insert_exchange(
+                "owner-a-insert" + suffix, "role-a", "basket-a",
+                request_shape="owned-basket-insert",
+                data={"BasketId": attacker_basket_id, "ProductId": 5, "quantity": 1})
+            owner_read, owner_rows, _ = self._basket_insert_exchange(
+                "owner-a-readback" + suffix, "role-a", "basket-a")
+            owner_row = owner_rows.get(str(owner_item_id)) if isinstance(owner_rows, dict) else None
+            owner_ok = (owner_write["status"] in {200, 201} and owner_item_id is not None
+                and owner_read["status"] == 200 and owner_read["owner_data_present"] is True
+                and owner_row is not None and owner_row["BasketId"] == attacker_basket_id
+                and owner_row["ProductId"] == 5 and owner_row["quantity"] == 1)
+            owner_read.update({"private_marker_match": owner_ok,
+                "value_sha256": self._opaque_identity("item", owner_item_id) if owner_ok else None,
+                "added_item_count": 1 if owner_ok else 0,
+                "mutation_effect": "changed" if owner_ok else "unknown",
+                "changed_fields": ["BasketItems"] if owner_ok else []})
+            controls["owner_write_control"] = owner_ok
+            controls["attacker_self"] = owner_ok
+
+            denied, _, _ = self._basket_insert_exchange(
+                "denied-b-insert" + suffix, "role-a", "basket-b",
+                request_shape="single-foreign-basket-insert",
+                data={"BasketId": target_id, "ProductId": 5, "quantity": 1})
+            denied_read, denied_rows, _ = self._basket_insert_exchange(
+                "denied-b-readback" + suffix, "role-b", "basket-b")
+            denied_unchanged = (isinstance(baseline_rows, dict) and denied_rows == baseline_rows)
+            denied_effect = "unchanged" if denied_unchanged else "changed" if denied_rows else "unknown"
+            denied.update({"mutation_effect": denied_effect})
+            denied_read.update({"mutation_effect": denied_effect,
+                "changed_fields": [] if denied_unchanged else ["BasketItems"],
+                "added_item_count": 0 if denied_unchanged else max(0, len(denied_rows) - len(baseline_rows))})
+            controls["negative_control"] = (
+                denied["status"] in {400, 401, 403, 404}
+                and denied_read["status"] == 200 and denied_read["owner_data_present"] is True
+                and denied_unchanged
+            )
+
+            raw_body = (f'{{"BasketId":{attacker_basket_id},"ProductId":5,"quantity":1,'
+                        f'"BasketId":{target_id}}}')
+            probe, probe_item_id, _ = self._basket_insert_exchange(
+                "probe-duplicate-basket" + suffix, "role-a", "basket-b",
+                request_shape="duplicate-own-first-foreign-last-insert", raw_body=raw_body)
+            probe_read, probe_rows, _ = self._basket_insert_exchange(
+                "probe-b-readback" + suffix, "role-b", "basket-b")
+            new_ids = set(probe_rows) - set(baseline_rows) if isinstance(probe_rows, dict) else set()
+            removed_ids = set(baseline_rows) - set(probe_rows) if isinstance(probe_rows, dict) else set()
+            changed_existing = isinstance(probe_rows, dict) and any(
+                probe_rows.get(key) != row for key, row in baseline_rows.items())
+            inserted = probe_rows.get(str(probe_item_id)) if isinstance(probe_rows, dict) else None
+            exact_insert = (len(new_ids) == 1 and not removed_ids and not changed_existing
+                and probe_item_id is not None and inserted is not None
+                and inserted["BasketId"] == target_id and inserted["ProductId"] == 5
+                and inserted["quantity"] == 1)
+            unchanged = isinstance(probe_rows, dict) and probe_rows == baseline_rows
+            effect = "changed" if exact_insert else "unchanged" if unchanged else "unknown"
+            controls["trial1_mutation_ack" if suffix == "-t1" else "trial2_mutation_ack"] = (
+                probe["status"] in {200, 201} if exact_insert else probe["status"] in {400, 401, 403, 404, 200}
+            )
+            probe.update({"mutation_effect": effect})
+            probe_read.update({"private_marker_match": exact_insert,
+                "value_sha256": self._opaque_identity("item", probe_item_id) if exact_insert else None,
+                "mutation_effect": effect,
+                "changed_fields": ["BasketItems"] if exact_insert else [],
+                "added_item_count": len(new_ids) if isinstance(probe_rows, dict) else None})
+            controls["ownership"] = controls["ownership"] and probe_read["owner_data_present"] is True
+            events.extend((baseline, owner_write, owner_read, denied, denied_read, probe, probe_read))
+            controls["permission_relation"] = controls["permission_relation"]
         else:
             cleanup, _ = get("cleanup-w-verify", "role-b", "write-candidate-b", "address-read",
                              self.object_path("write-candidate-b"))
@@ -1034,9 +1206,9 @@ class FixtureClient:
                 "exchanges": events,
                 "basket_snapshots": self.basket_snapshots if is_v3 else [],
                 "role_a_session_binding_sha256": (self.roles.get("role-a", {}).get("session_binding_sha256")
-                                                   if is_v3 else None),
+                                                   if is_v3 or is_insert else None),
                 "role_b_session_binding_sha256": (self.roles.get("role-b", {}).get("session_binding_sha256")
-                                                   if is_v3 else None),
+                                                   if is_v3 or is_insert else None),
                 "technical_error": None}
 
 

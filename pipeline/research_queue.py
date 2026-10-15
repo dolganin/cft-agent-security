@@ -8,8 +8,10 @@ from schemas.research_campaign import ResearchQuestion, RuntimeScannerObservatio
 
 
 class ResearchQueue:
-    def __init__(self, *, profile, source_map, source_files, preferred_families=(), verification_paths=()):
+    def __init__(self, *, profile, source_map, source_files, preferred_families=(), verification_paths=(),
+                 verification_profiles=()):
         self.profile, self.source_map = profile, source_map
+        self.verification_profiles = tuple(verification_profiles)
         self.source_files = set(source_files)
         self.raw = []
         self.findings = []
@@ -19,13 +21,14 @@ class ResearchQueue:
         self.cursor = 0
         self.origins = {}
         self.runtime_signals = {}
+        self.route_visits = {}
+        self.selected_route_visits = {}
         self.preferred_families = set(preferred_families)
         self.verification_paths = set(verification_paths)
         self.grouped_questions = {}
         self.completed_work = {}
 
-    @staticmethod
-    def work_key(finding):
+    def work_key(self, finding):
         """Coalesce only identical source anchors/families, preserving all findings.
 
         The explicit research adapter aliases are routing vocabulary, not evidence.
@@ -33,6 +36,29 @@ class ResearchQueue:
         remain independent work. No confirmation is copied to a grouped observation.
         """
         from pipeline.research_verification import verification_finding
+        from security.verification_binding import resolve_binding
+
+        # A trusted operator route declares one exact property/protocol. Multiple
+        # scanner rules or caller/helper anchors that bind to that same property
+        # share one job. The source snapshot and route-map digest prevent reuse
+        # after the source or operator binding changes. This never merges findings
+        # solely because their family or file matches.
+        profiles = self.verification_profiles or (self.profile,)
+        bound = []
+        for profile in profiles:
+            if not profile.verification_routes:
+                continue
+            resolution = resolve_binding(profile, verification_finding(finding))
+            if resolution.binding is not None:
+                bound.append(resolution.binding)
+        if len(bound) == 1:
+            binding = bound[0]
+            return (
+                "operator-route", binding.target, binding.source_snapshot, binding.map_sha256,
+                binding.route_id, binding.handler_id, binding.family, binding.service,
+                binding.method, binding.endpoint, binding.tool, binding.check, binding.mode,
+                binding.source_file, binding.line_start, binding.line_end, binding.anchor_sha256,
+            )
 
         p = finding.provenance
         if p is None or p.anchor_status != "source_bound":
@@ -48,8 +74,8 @@ class ResearchQueue:
                 if q.is_candidate and self.work_key(q.finding) == key][:16]
 
     def import_findings(self, findings, origin):
-        if origin not in {"sast", "dast"}:
-            raise ValueError("Explicit scanner origin is required")
+        if origin not in {"sast", "dast", "source_detector"}:
+            raise ValueError("Explicit scanner or source detector origin is required")
         accepted = []
         for item in findings:
             self.raw.append({"origin": origin, "finding": item.model_dump(mode="json")})
@@ -102,9 +128,14 @@ class ResearchQueue:
         for finding in self.findings:
             aliases = set(finding.provenance.aliases) if finding.provenance else {finding.id}
             sources = {x.source for x in finding.provenance.observations} if finding.provenance else {finding.source}
-            origin = "model" if sources == {"model_scout"} else "dast" if any(self.origins.get(alias) == "dast" for alias in aliases) else "sast"
+            origins = {self.origins.get(alias) for alias in aliases}
+            origin = ("model" if sources == {"model_scout"} else
+                      "dast" if "dast" in origins else
+                      "source_detector" if origins == {"source_detector"} else "sast")
             questions.append(ResearchQuestion(id=finding.id, finding=finding, origin=origin, is_candidate=True,
                 runtime_observation=self.runtime_signals.get(finding.id),
+                route_ids=sorted(r.id for r in self.source_map.routes
+                    if finding.file in r.handler_files or finding.file == r.file),
                 status="researched" if aliases & self.aliases_researched else previous.get(finding.id, ResearchQuestion(
                     id=finding.id, finding=finding, origin=origin, is_candidate=True)).status))
         surface_paths = set()
@@ -139,14 +170,36 @@ class ResearchQueue:
                 self.grouped_questions[question.id] = representative
 
     def next_question(self):
-        channels = ("model", "sast", "surface", "dast")
-        for offset in range(4):
-            channel = channels[(self.cursor + offset) % 4]
+        channels = ("model", "source_detector", "sast", "surface", "dast")
+        for offset in range(len(channels)):
+            channel = channels[(self.cursor + offset) % len(channels)]
             options = [x for x in self.questions if x.status == "pending" and x.origin == channel]
             if options:
-                self.cursor = (self.cursor + offset + 1) % 4
-                return min(options, key=self.priority)
+                self.cursor = (self.cursor + offset + 1) % len(channels)
+                selected = min(options, key=lambda question: (
+                    self.route_visits.get(self._breadth_group(question), 0),
+                    self.priority(question),
+                ))
+                group = self._breadth_group(selected)
+                self.route_visits[group] = self.route_visits.get(group, 0) + 1
+                for route_id in selected.route_ids:
+                    self.selected_route_visits[route_id] = self.selected_route_visits.get(route_id, 0) + 1
+                return selected
         return None
+
+    def _breadth_group(self, question):
+        """Prefer one initial job per route before revisiting a route.
+
+        Bound verification protocols take precedence because they identify the
+        exact operator-owned property. Otherwise, group by trusted route metadata,
+        then by source file. This affects scheduling only; it never merges jobs.
+        """
+        work = self.work_key(question.finding)
+        if work and work[0] == "operator-route":
+            return ("verification", *work[1:])
+        if question.route_ids:
+            return ("route", question.route_ids[0])
+        return ("source", question.finding.file)
 
     def priority(self, question):
         """Scheduling signals, NOT security severity or benchmark answers."""
@@ -184,9 +237,32 @@ class ResearchQueue:
                         if sep and number.isdigit():
                             read.add((item.observation["path"], int(number)))
         files_read = {p for p, _ in read}
+        candidates = [question for question in self.questions if question.is_candidate]
+        jobs = {}
+        for question in candidates:
+            key = sha256(repr(self.work_key(question.finding)).encode()).hexdigest()
+            jobs.setdefault(key, []).append(question)
+        job_status = {}
+        for related in jobs.values():
+            statuses = {question.status for question in related}
+            status = "researched" if "researched" in statuses else "pending" if "pending" in statuses else "failed"
+            job_status[status] = job_status.get(status, 0) + 1
+        origin_counts = {}
+        for question in candidates:
+            origin_counts[question.origin] = origin_counts.get(question.origin, 0) + 1
+        raw_origins = {}
+        for row in self.raw:
+            origin = row.get("origin")
+            if origin in {"sast", "dast"}:
+                raw_origins[origin] = raw_origins.get(origin, 0) + 1
         return {"source_files": len(self.source_files), "files_read": len(files_read),
                 "read_lines": len(read), "unread_files": sorted(self.source_files - files_read),
                 "candidate_count": len(self.findings), "surface_questions_are_not_findings": True,
+                "candidate_observations_by_origin": raw_origins,
+                "candidate_questions_by_origin": origin_counts,
+                "unique_candidate_verification_jobs": len(jobs),
+                "unique_candidate_jobs_by_status": job_status,
+                "scheduler_route_visits": dict(sorted(self.selected_route_visits.items())),
                 "pending_questions": [x.id for x in self.questions if x.status == "pending"],
                 "failed_questions": [x.id for x in self.questions if x.status == "failed"],
                 "grouped_questions": dict(self.grouped_questions),

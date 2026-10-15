@@ -1,5 +1,6 @@
 """Regressions for observed R09 failures, not benchmark performance claims."""
 import os
+from types import SimpleNamespace
 
 import pytest
 
@@ -18,6 +19,89 @@ def scope():
     return ResearchScope(target_id="repair-test", session_id="research-" + "a" * 32,
         worker_image="sha256:" + "b" * 64, worker_sha256="c" * 64,
         source_files={"app.ts": ResearchFile(original_sha256="d" * 64, visible_sha256="e" * 64)})
+
+
+def test_diagnostic_campaign_can_reserve_all_enabled_fixture_lifecycles():
+    from app.research_diagnostic_run import FIXTURE_GRANTS, limits
+    from pipeline.research_fixture_verification import PROTOCOLS
+
+    required = sum(PROTOCOLS[grant.protocol][2] for grant in FIXTURE_GRANTS)
+    assert required < limits().max_http_requests <= 1024
+
+
+@pytest.mark.parametrize("max_actions", [1, 4])
+def test_preverification_separates_campaign_budget_from_per_scope_cap(tmp_path, monkeypatch, max_actions):
+    import time
+
+    from app import research_campaign as module
+    from schemas.research_campaign import CampaignLimits
+
+    captured_scopes, remaining = [], []
+
+    class Runtime:
+        def __init__(self, **kwargs):
+            captured_scopes.append(kwargs["max_http_requests"])
+            self.scope = scope()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+    questions = [SimpleNamespace(id=str(n), finding=SimpleNamespace(id=str(n)),
+                                 is_candidate=True) for n in range(4)]
+    queue = SimpleNamespace(questions=questions, priority=lambda q: q.id,
+                            work_key=lambda f: f.id, source_files=["app.ts"])
+    monkeypatch.setattr(module, "ResearchRuntime", Runtime)
+    monkeypatch.setattr(module, "verification_handoff", lambda *_args: {
+        "checks": [{"status": "ready_for_canonical_verification"}]})
+
+    def verify(**kwargs):
+        remaining.append(kwargs["max_http_requests"])
+        return {"status": "inconclusive", "executed": True, "actions": 1,
+                "requests_reserved": 238, "requests_observed": 100,
+                "worker_cleanup_verified": True}
+
+    monkeypatch.setattr(module, "verify_bound_candidate", verify)
+    result = module._preverify_bound_findings(queue=queue,
+        profile=TargetProfile(id="repair-test", environment="sandbox", repository_path=tmp_path),
+        configuration={"worker_image": "sha256:" + "b" * 64}, output=tmp_path,
+        limits=CampaignLimits(max_http_requests=1024, max_actions=max_actions), verification_profiles=(object(),),
+        verification_worker_image="sha256:" + "b" * 64,
+        fixture_grants=(), verification_grants=(), started=time.monotonic())
+    assert captured_scopes == [256]
+    assert remaining == [1024, 786, 548, 310][:max_actions]
+    assert result[2:6] == (max_actions, 0, 238 * max_actions, 100 * max_actions)
+
+
+def test_preverification_report_is_emitted_once_for_its_exact_group_representative():
+    from app.research_campaign import _preverified_terminal_reports
+
+    representative = SimpleNamespace(id="sql-primary", finding=SimpleNamespace(key="same-job"),
+                                     is_candidate=True, status="researched")
+    grouped = SimpleNamespace(id="sql-alias", finding=SimpleNamespace(key="same-job"),
+                              is_candidate=True, status="grouped")
+    queue = SimpleNamespace(questions=[representative, grouped],
+                            work_key=lambda finding: finding.key)
+    review = {"status": "confirmed", "report": {"finding_id": "sql-primary"}}
+
+    reports = _preverified_terminal_reports(queue, {"same-job": review})
+
+    assert len(reports) == 1
+    assert reports[0]["question_id"] == "sql-primary"
+
+
+def test_preverification_report_with_unknown_finding_id_fails_closed():
+    from app.research_campaign import _preverified_terminal_reports
+
+    question = SimpleNamespace(id="sql-primary", finding=SimpleNamespace(key="same-job"),
+                               is_candidate=True, status="researched")
+    queue = SimpleNamespace(questions=[question], work_key=lambda finding: finding.key)
+    review = {"status": "confirmed", "report": {"finding_id": "not-in-queue"}}
+
+    with pytest.raises(ValueError, match="exact finding"):
+        _preverified_terminal_reports(queue, {"same-job": review})
 
 
 def finding():
@@ -318,8 +402,10 @@ def test_existing_sql_verifier_accepts_research_candidate_without_llm(tmp_path):
             assert summary["actions"] == 1
             assert summary["cleanup_verified"]
             reports = json.loads((out / "reports.json").read_text())
-            assert reports[0]["report"]["status"] == "confirmed"
-            assert reports[0]["research_report"]["status"] == "inconclusive"
+            candidate_report = next(row for row in reports if row["report"]["finding_id"] == candidate.id)
+            assert candidate_report["report"]["status"] == "confirmed"
+            assert candidate_report["canonical_runtime_review"]["origin"] == "canonical_fixed_verifier; not a model-generated proof"
+            assert "research_report" not in candidate_report
             login_output = tmp_path / "integrated-login-campaign"
             login_summary = campaign(profile=TargetProfile(id="repair-login", environment="sandbox",
                 repository_path=repository, services={"juice": {"internal_port": 3000}}),
@@ -332,7 +418,27 @@ def test_existing_sql_verifier_accepts_research_candidate_without_llm(tmp_path):
             assert login_summary["canonical_runtime_review_counts"]["confirmed"] == 1
             login_reviews = json.loads((login_output / "canonical-runtime-reviews.json").read_text())
             assert login_reviews[0]["finding_id"] == login.id
+            assert json.loads((login_output / "reports.json").read_text())[0]["canonical_runtime_review"]["status"] == "confirmed"
             assert login_reviews[0]["status"] == "confirmed"
+
+        ftp_route = next(item for item in profile.verification_routes if item.id == "juice-directory-ftp")
+        ftp_registration = ftp_route.registration
+        ftp_lines = (repository / ftp_registration.file).read_text().splitlines()
+        ftp_matches = [index for index, value in enumerate(ftp_lines, 1) if ftp_registration.anchor in value]
+        assert len(ftp_matches) == 1
+        ftp = normalize_finding(candidate.model_copy(update={"id": "research-ftp", "provenance": None,
+            "rule_id": "file-exposure",
+            "title": "Bounded FTP listing candidate", "description": "Source-bound directory listing observation",
+            "file": ftp_registration.file, "line_start": ftp_matches[0], "line_end": ftp_matches[0]}),
+            repository_root=repository)
+        ftp_output = verify_bound_candidate(finding=ftp, profiles=(profile,), scope=bound_scope,
+            repository=repository, output=tmp_path / "fixed-ftp-verifier", max_http_requests=1,
+            worker_image=WORKER_IMAGE)
+        assert ftp_output["executed"] is True
+        assert ftp_output["requests_reserved"] == 1
+        assert ftp_output["requests_observed"] == 1
+        assert ftp_output["worker_cleanup_verified"] is True
+        assert ftp_output["evidence"]["observation"]["facts"]["facts"]["file_contents_read"] is False
     finally:
         subprocess.run(["docker", "rm", "-f", container], capture_output=True, timeout=30, check=False)
         docker("network", "rm", network)

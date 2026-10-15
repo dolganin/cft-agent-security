@@ -1330,3 +1330,38 @@ local result directory for offline portability; original action/record bytes are
 not rewritten. Source-condition MD5 proofs remain separate from runtime Recall.
 Degraded/budget-limited research is diagnostic evidence, not clean acceptance or
 an independent held-out evaluation. See `docs/research-latest-results-2026-10-15.md`.
+
+# 37. Juice Shop targeted development and fixed verification acceptance
+
+`pipeline.juice_source_detectors` emits unverified canonical Findings from the
+trusted projected application inventory. The separate `source_detector` queue
+channel preserves their origin beside SAST, DAST, model and surface questions.
+It does not import benchmark labels, create permissions, set severity or decide
+that a vulnerability is confirmed. The diagnostic runner explicitly enables it.
+
+`app.juice_source_scan` produces a sealed source-only result and optional fresh
+SAST baseline. `evaluation.juice_source_progress` is the separate offline A04
+comparison; detection gains are not runtime confirmations or unseen evaluation.
+All historical A04 cases and matching stay unchanged.
+
+The total targeted campaign budget is 1024 HTTP reservations, including complete
+fixed fixture lifecycles. Each research runtime stays capped at 256. Preverification
+also obeys the campaign action budget. Record actual exchanges separately from
+reserved ceilings; an exhausted budget never implies that the target is safe.
+
+`app.research_diagnostic_run --verification-only` is an explicit acceptance mode:
+fresh SAST/source detection and registered canonical protocols with zero provider
+calls. It writes `engine=fixed_verification_only`, an absent model, its pending
+queue, final reports, audit and seal. It is not a fallback or a full LLM campaign.
+Use ordinary research mode for J10 after remaining protocols are accepted.
+
+In the dedicated B05 profile, `retrieveBasket` and `addBasketItem` selectors have
+`extent: function`, so real body-line source observations bind through the existing
+TypeScript AST resolver. A test question anchored only on a function declaration
+does not prove that production detector lines bind. B05 insertion remains a fixed,
+operator-granted protocol with isolated generations and independent owner readback.
+
+The source-map default preserves the historical evaluator projection. Every
+production Scout/API/research caller explicitly disables oracle controllers and
+vulnerability regions. Do not change protected A02 code or A04 locks to accommodate
+live source filtering.

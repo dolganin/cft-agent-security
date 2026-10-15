@@ -24,7 +24,7 @@ class ResearchQuestion(BaseModel):
     model_config = ConfigDict(extra="forbid")
     id: str
     finding: Finding
-    origin: Literal["sast", "dast", "model", "surface"]
+    origin: Literal["sast", "dast", "source_detector", "model", "surface"]
     is_candidate: bool
     status: Literal["pending", "researched", "failed", "unavailable", "grouped"] = "pending"
     route_ids: list[str] = Field(default_factory=list)

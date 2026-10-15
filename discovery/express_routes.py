@@ -35,11 +35,16 @@ class _Token:
 
 def build_express_source_map(
     inventory: ProjectDiscoveryResult, *, include_oracle_controllers: bool = True,
+    include_vulnerability_regions: bool | None = None,
 ) -> ExpressSourceMap:
     """Index statically recognizable registrations; never infer authorization."""
-    # The default preserves the frozen A02 catalog's analyzed-file inventory.
-    # Every live Scout/API call must explicitly opt out of answer-serving files.
-    source = RepositorySource(inventory, include_oracle_controllers=include_oracle_controllers)
+    # ``None`` preserves the historical A02 evaluator projection for existing
+    # default calls; production callers explicitly set both flags false. The
+    # evaluator projection is source-map-only and is never passed to a model.
+    if include_vulnerability_regions is None:
+        include_vulnerability_regions = include_oracle_controllers
+    source = RepositorySource(inventory, include_oracle_controllers=include_oracle_controllers,
+                              include_vulnerability_regions=include_vulnerability_regions)
     contents = {path: "\n".join(source.lines[path]) for path in source.files}
     tokenized: dict[str, list[_Token]] = {}
     unsupported: list[str] = []

@@ -63,6 +63,29 @@ def test_one_model_call_shared_by_reasoning_nodes():
     assert plan.steps[0].action.target == scope().target_id
 
 
+def test_finding_context_removes_juice_shop_solution_annotations_without_mutating_source():
+    original = finding().model_copy(update={
+        "title": "Inspect handler // vuln-code-snippet vuln-line hiddenChallenge",
+        "description": "Keep this behavior\n"
+                      "// vuln-code-snippet hide-start hiddenChallenge\n"
+                      "secret solution body\n"
+                      "// vuln-code-snippet hide-end hiddenChallenge\n"
+                      "Keep this control",
+    })
+    adapter = ResearchAgentModel(client=Client(finish()), scope=scope(), validator=None,
+        surface_context={"source_hint": "// vuln-code-snippet hide-line hiddenCampaignAnswer"})
+
+    payload = adapter.context({"finding": original})
+
+    rendered = json.dumps(payload, ensure_ascii=False)
+    assert "hiddenChallenge" not in rendered
+    assert "secret solution body" not in rendered
+    assert "vuln-code-snippet" not in rendered
+    assert "hiddenCampaignAnswer" not in rendered
+    assert "Keep this behavior" in rendered and "Keep this control" in rendered
+    assert "hiddenChallenge" in original.title and "secret solution body" in original.description
+
+
 def test_fabricated_observation_refs_rejected():
     adapter = ResearchAgentModel(client=Client(finish(observation_refs=["imaginary"])),
                                  scope=scope(), validator=None)

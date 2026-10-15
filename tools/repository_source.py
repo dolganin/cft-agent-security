@@ -33,6 +33,9 @@ _SECRET_LITERAL = re.compile(
     r"\b[\"']?\s*[:=]\s*)([\"'])(.*?)(\2)"
 )
 _CREDENTIAL = re.compile(r"\bsk-[a-zA-Z0-9_-]{16,}|\beyJ[\w-]+\.[\w-]+\.[\w-]+")
+_VULN_ANNOTATION = re.compile(
+    r"(?P<comment>//|/\*|<!--)\s*vuln-code-snippet\b(?P<tail>.*)$", re.IGNORECASE
+)
 
 
 def _source_path(file: str, *, include_oracle_controllers: bool = False, research_mode: bool = False) -> bool:
@@ -52,33 +55,75 @@ def _source_path(file: str, *, include_oracle_controllers: bool = False, researc
     )
 
 
-def _safe_line(line: str) -> str:
-    # Evaluation hints are not application behavior; retain physical line numbering.
+def _safe_line(line: str, *, max_chars: int | None = 2_000) -> str:
+    # Strip only an actual comment annotation, not a string literal that happens
+    # to mention the marker (for example, code that parses upload metadata).
+    annotation = _VULN_ANNOTATION.search(line)
+    if annotation:
+        if re.search(r"\bhide-line\b", annotation.group("tail"), re.IGNORECASE):
+            return ""
+        line = line[:annotation.start("comment")]
+    line = _SECRET_LITERAL.sub(r"\1\2<redacted>\2", line)
+    line = _CREDENTIAL.sub("<redacted>", line)
+    return line if max_chars is None else line[:max_chars]
+
+
+def _evaluator_line(line: str, *, max_chars: int | None = 2_000) -> str:
+    """Preserve the historical evaluator projection without feeding it to a model.
+
+    A02 candidate route IDs were generated before live source projection began
+    removing complete ``hide-start`` regions. Keep that frozen extraction
+    behavior explicit so catalog regeneration remains reproducible; live callers
+    must continue using ``_safe_line``/``_safe_lines`` with the default mode.
+    """
     if "vuln-code-snippet" in line:
         line = line.split("// vuln-code-snippet", 1)[0]
         if "vuln-code-snippet" in line:
             line = ""
     line = _SECRET_LITERAL.sub(r"\1\2<redacted>\2", line)
-    return _CREDENTIAL.sub("<redacted>", line)[:2_000]
+    line = _CREDENTIAL.sub("<redacted>", line)
+    return line if max_chars is None else line[:max_chars]
 
 
-def _safe_lines(text: str) -> list[str]:
+def _safe_lines(text: str, *, max_line_chars: int | None = 2_000,
+                include_vulnerability_regions: bool = False) -> list[str]:
     lines = []
     private = False
+    hidden_depth = 0
     for line in text.splitlines():
         if re.search(r"-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----", line):
             private = True
-        lines.append("<redacted-private-key>" if private else _safe_line(line))
+        annotation = _VULN_ANNOTATION.search(line)
+        tail = annotation.group("tail") if annotation else ""
+        starts_hidden = bool(re.search(r"\bhide-start\b", tail, re.IGNORECASE))
+        ends_hidden = bool(re.search(r"\bhide-end\b", tail, re.IGNORECASE))
+        if include_vulnerability_regions:
+            lines.append("<redacted-private-key>" if private else _evaluator_line(line, max_chars=max_line_chars))
+        elif hidden_depth or starts_hidden:
+            if starts_hidden:
+                hidden_depth += 1
+            if ends_hidden and hidden_depth:
+                hidden_depth -= 1
+            lines.append("")
+        else:
+            lines.append("<redacted-private-key>" if private else _safe_line(line, max_chars=max_line_chars))
         if private and re.search(r"-----END (?:[A-Z0-9]+ )*PRIVATE KEY-----", line):
             private = False
     return lines
+
+
+def safe_model_text(text: str) -> str:
+    """Remove benchmark-only source annotations from untrusted model text."""
+    if not isinstance(text, str):
+        return text
+    return "\n".join(_safe_lines(text, max_line_chars=None))
 
 
 class RepositorySource:
     """A finite text corpus selected exclusively from trusted discovery paths."""
 
     def __init__(self, inventory: ProjectDiscoveryResult, *, include_oracle_controllers: bool = False,
-                 research_mode: bool = False):
+                 research_mode: bool = False, include_vulnerability_regions: bool = False):
         self.root = inventory.repository_root.resolve()
         self.lines: dict[str, list[str]] = {}
         self.skipped: dict[str, int] = {}
@@ -119,7 +164,7 @@ class RepositorySource:
                 total_bytes += len(raw)
                 self.lines[file] = _safe_lines(raw.decode(
                     "utf-8-sig", errors="replace"
-                ))
+                ), include_vulnerability_regions=include_vulnerability_regions)
             except (OSError, ValueError):
                 self._skip("unreadable")
         self.files = sorted(self.lines, key=lambda p: (

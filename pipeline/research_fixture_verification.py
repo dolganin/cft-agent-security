@@ -27,7 +27,8 @@ from validator.validator import PolicyValidator
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOLS = {
-    "b05.own-read.v1": ("juice-access-fixture", "juice-basket-own-read-v1", 238, "b05"),
+    "b05.own-read.v1": ("juice-access-fixture", "juice-basket-own-read", 238, "b05"),
+    "b05.basket-insert.v1": ("juice-access-fixture", "juice-basket-insert-owner-check", 238, "b05"),
     "b06.redirect.v1": ("juice-b06-verification", "verify_redirect_destination", 38, "b06"),
     "b06.password-reauth.v1": ("juice-b06-verification", "verify_auth_reauthentication", 194, "b06"),
 }
@@ -49,7 +50,7 @@ def _grant_for(profile, finding, grants):
                       if resolution.binding and item.id == resolution.binding.route_id), None)
         if route is None:
             continue
-        if family == "b05" and (route.tool != "verify_access_control" or route.check != "own_read"):
+        if family == "b05" and (route.tool != "verify_access_control" or route.id != selection):
             continue
         if family == "b06" and route.tool != selection:
             continue
@@ -57,14 +58,17 @@ def _grant_for(profile, finding, grants):
     return None, None
 
 
-def _b05(*, finding, profile, route, scope, output, worker_image, wall_seconds):
+def _b05(*, finding, profile, route, scope, output, worker_image, wall_seconds,
+         request_reservation):
     from security.verification_binding import resolve_binding
 
     resolution = resolve_binding(profile, finding)
     binding = resolution.binding
     if binding is None or binding.route_id != route.id or not _source_matches(binding, scope):
         return None
-    registration = ACCESS_CHECKS["juice-basket-own-read-v1"]
+    registration = next((item for item in ACCESS_CHECKS.values() if item.route_id == route.id), None)
+    if registration is None:
+        return None
     action = ActionProposal(id="research-b05-" + uuid4().hex, tool="verify_access_control",
         target=profile.id, environment="sandbox", parameters={"check_id": registration.check_id},
         purpose="Operator-authorized fixed own-read verification", expected_evidence="Two-generation identity-bound B05 trace",
@@ -104,14 +108,24 @@ def _b05(*, finding, profile, route, scope, output, worker_image, wall_seconds):
             artifact_refs=execution.artifacts, hypothesis_id=finding.id,
             sandbox_session_id=runtime.run_session_id)
         trace = evidence.observation.facts.get("b05_trace", {})
-        requests = sum(int(item.get("context", {}).get("http_exchanges", 0))
-                       for item in runtime.lab.records if item.get("phase") in {"prepare", "control"})
+        requests = 0
+        last_control_by_generation = {}
+        for item in runtime.lab.records:
+            phase, generation = item.get("phase"), item.get("generation")
+            context = item.get("context", {})
+            exchanges = int(context.get("http_exchanges", 0))
+            if phase in {"prepare", "control"}:
+                requests += exchanges
+                if phase == "control":
+                    last_control_by_generation[generation] = exchanges
+            elif phase == "b05-provision":
+                requests += max(0, exchanges - last_control_by_generation.get(generation, 0))
         requests += int(trace.get("exchange_count", 0))
-        if requests > 238:
+        if requests > request_reservation:
             raise ValueError("B05 actual HTTP exchange ledger exceeded its fixed reservation")
         result = {"status": evidence.verdict, "security_verdict": evidence.verdict,
             "executed": True, "runtime_provisioned": True, "actions": 1,
-            "requests_reserved": 238, "requests_observed": requests,
+            "requests_reserved": request_reservation, "requests_observed": requests,
             "worker_cleanup_verified": True,
             "origin": "canonical_fixed_B05_verifier", "action": action.model_dump(mode="json"),
             "validation": validation.model_dump(mode="json"), "execution": execution.model_dump(mode="json"),
@@ -221,7 +235,8 @@ def verify_fixture_candidate(*, finding, routed, profile, binding, scope, reposi
         return {**pending, "reason": "Fixture checkout differs from campaign target"}
     if kind == "b05":
         result = _b05(finding=routed, profile=profile, route=route, scope=scope, output=Path(output),
-                      worker_image=profile.access_fixture.worker_image, wall_seconds=grant.wall_seconds)
+                      worker_image=profile.access_fixture.worker_image, wall_seconds=grant.wall_seconds,
+                      request_reservation=reservation)
     else:
         result = _b06(finding=routed, profile=profile, route=route, scope=scope, output=Path(output),
                       worker_image=WORKER_IMAGE, wall_seconds=grant.wall_seconds)

@@ -176,6 +176,7 @@ def test_directory_check_returns_only_names_and_never_follows_redirect():
         result = BoundedVerificationResult.model_validate_json(stdout)
         assert code == 0 and result.verdict == "confirmed"
         assert result.facts["sensitive_file_names"] == ["access.log"]
+        assert result.facts["requests"] == 1
         assert "file_contents_read\":false" in stdout
 
         code, stdout, _ = worker._verify_sensitive_directory(base + "/logs", params, 1.0, None)
