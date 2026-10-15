@@ -1,0 +1,11 @@
+{
+  "schema": "cft.c01.delivery-seal.v1",
+  "implementation_base": "fb24e03",
+  "files": {
+    "qualification.json": "f3d37ca181e8ba3f218223ce6ba668a3f0bf60ed8631c6ec67b26ca564b106c9",
+    "eligibility.json": "2b7376d17cf0e9bf68be36cc6895d0ab661233b0ee12f48c26ad642661dd4fd4",
+    "pytest.txt": "e1c3dc168136f1030fd78c80bc1bc53d264667eec19f71e7df2d8e030ad56386",
+    "ruff.txt": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+    "app-main.txt": "1970499bd4d691847f112045f1b5171219568bb1bcde3795cdf6f5a0094b75b6"
+  }
+}

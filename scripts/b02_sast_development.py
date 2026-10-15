@@ -110,9 +110,9 @@ def main() -> int:
             scan = run_semgrep_scan(target, config=configs)
             scans[name] = scan.raw
             raw_path.write_text(
-                json.dumps(scan.raw, ensure_ascii=False, indent=2), encoding="utf-8"
+                json.dumps(scan.raw, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n"
             )
-            stderr_path.write_text(scan.stderr, encoding="utf-8")
+            stderr_path.write_text(scan.stderr, encoding="utf-8", newline="\n")
 
     versions = {name: raw.get("version") for name, raw in scans.items()}
     if any(version != profile["semgrep_version"] for version in versions.values()):
@@ -134,7 +134,7 @@ def main() -> int:
             split="development", sample_kind="original",
         )
         (output / f"{name}-score.json").write_text(
-            scorecards[name].model_dump_json(indent=2), encoding="utf-8"
+            scorecards[name].model_dump_json(indent=2), encoding="utf-8", newline="\n"
         )
 
     dev_agent_digest = canonical_scan_digest(scans["b02_agent"])
@@ -219,7 +219,7 @@ def main() -> int:
             "Dependency/SCA signals are not implemented by this ruleset.",
         ],
     }
-    (output / "manifest.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    (output / "manifest.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8", newline="\n")
     lines = [
         "# B02 DEV/original SAST comparison", "",
         f"Target: `{target_commit}`; Semgrep CE `{profile['semgrep_version']}`.",
@@ -251,7 +251,7 @@ def main() -> int:
         "Raw JSON and stderr are retained under `raw/`; parser warnings and partial parse coverage remain visible.",
         "",
     ])
-    (output / "report.md").write_text("\n".join(lines), encoding="utf-8")
+    (output / "report.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
     print(json.dumps(metadata, indent=2))
     return 0
 
