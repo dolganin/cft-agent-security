@@ -1,0 +1,7 @@
+id,family,repetition,status,attempts,regression_attempts,duration_ms,verified_ms,fresh_before_to_verified_ms,historical_confirmed_to_verified_ms,stop_reason
+01-sql-search,sql-search,1,FIXED,1,0,165758,165758,75595.754,113779100.275,independently_verified
+01-redirect-allowlist,redirect-allowlist,1,FIXED,1,0,302837,302837,146937.881,114167195.127,independently_verified
+02-sql-search,sql-search,2,FIXED,1,0,166366,166366,76674.197,114248307.033,independently_verified
+02-redirect-allowlist,redirect-allowlist,2,FIXED,1,0,288335,288335,146854.709,114621900.77399999,independently_verified
+03-sql-search,sql-search,3,FIXED,1,0,173555,173555,82471.466,114710202.86600001,independently_verified
+03-redirect-allowlist,redirect-allowlist,3,FIXED,1,0,302786,302786,147598.834,115098248.541,independently_verified

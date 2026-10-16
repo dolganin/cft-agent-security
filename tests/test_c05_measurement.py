@@ -213,7 +213,7 @@ def test_execution_preserves_failure_receipts_without_replacement(series, monkey
     assert 'Private exception' not in next((root / 'receipts').glob('*.json')).read_text()
 
 
-@pytest.mark.parametrize('mutation', ['start', 'end', 'clock'])
+@pytest.mark.parametrize('mutation', ['start', 'end', 'clock', 'nonfinite'])
 def test_verified_time_requires_bound_start_finish_and_monotonic_duration(series, monkeypatch, mutation):
     root, plan = series
     slot = plan['slots'][0]
@@ -225,6 +225,8 @@ def test_verified_time_requires_bound_start_finish_and_monotonic_duration(series
         value['started_at'] = '2026-10-16T11:00:00+00:00'
     elif mutation == 'end':
         value['finished_at'] = '2026-10-16T12:00:40+00:00'
+    elif mutation == 'nonfinite':
+        value['duration_ms'] = float('nan')
     else:
         value['duration_ms'] = 5
     path.write_text(json.dumps(value), encoding='utf-8')

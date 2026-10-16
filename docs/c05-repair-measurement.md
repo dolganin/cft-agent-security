@@ -77,5 +77,56 @@ Replay проверяет внешний seal, сохранённый прото
 Полный локальный пакет содержит исходные B01 helper snapshots с учебным seeded
 private-key fixture Juice Shop. В Git публикуется явно обозначенная проекция;
 она не выдаётся за полный replayable пакет. Полные originals сохраняются локально.
-Результаты серии и итоговый пакет будут перечислены в разделе итогов после
-завершения всех шести слотов.
+
+## Итог серии 16 октября 2026
+
+Серия: `artifacts/c05-series-final-2026-10-16`. Протокол и шесть слотов заморожены
+commit `adff663` до первого запроса этой серии. Последующие изменения усиливают
+офлайн-проверку отчёта, не меняя C04/C03, выбор случаев, runtime, бюджеты или
+измеренные исходы. Все шесть запусков выполнены реальным NSU provider; reference
+diff и IntegrationPatchClient не использовались.
+
+| Показатель | Результат |
+|---|---:|
+| Eligible / confirmed unique cases B09 | **2/5, 40%** |
+| Verified / eligible case-runs | **6/6, 100% в этой серии** |
+| SQL / redirect успешных повторов | 3/3 и 3/3 |
+| Реальных LLM-попыток / verifier запусков | 6 / 6 |
+| REGRESSION attempts / NOT_FIXED / technical / interrupted / not-run | 0 / 0 / 0 / 0 / 0 |
+| Confirmed-input → verified patch: n, mean, median | 6; **233.273 с**; 230.945 с |
+| То же время, min–max | 165.758–302.837 с |
+| Fresh BEFORE → verified patch: mean | 112.689 с |
+| Historical/production MTTR | **N/A** |
+
+Для каждого успеха BEFORE confirmed, AFTER rejected, обязательные source/HTTP/
+functional/build/startup/smoke gates, original integrity и cleanup подтверждены
+сохранённым C03 и независимым C04 replay. Raw native failures двух устаревших
+redirect assertions не спрятаны: их учитывает неизменённый защищённый C03 contract.
+Ноль REGRESSION не означает ноль raw native assertion failures.
+
+В новой фиксированной серии неуспехов не наблюдалось. Для диагностики отчёт
+сохраняет **отдельный реальный исторический неуспех C04**: redirect REGRESSION,
+feedback, повторный одинаковый patch и завершённый NOT_FIXED/duplicate_patch.
+Причина native process failure не приписывается патчу; canonical AFTER там не
+достигнут. Этот случай не подмешан в знаменатели или latency новой серии.
+Также сохранён подготовительный C05 сбой создания каталога receipts до первого
+C04/LLM вызова: 0 provider calls, 0 измеренных попыток. Он не скрыт и не представлен
+как заменённый неудачный measured slot.
+
+Результат описывает два известных DEV случая и три повтора. Он не является
+100% repair rate всех классов, unseen holdout, статистической оценкой обобщения
+или повышением B09 Recall. B09 по-прежнему содержит 13/27 найденных и 5/27
+подтверждённых случаев; его полный неизменный поиск включён в пакет отдельно.
+
+Публичные данные: [таблица](evidence/c05/report.md), [метрики](evidence/c05/measurement.json),
+[CSV](evidence/c05/slots.csv), [raw native tests и gates](evidence/c05/native-and-gates.json).
+Полный локальный ZIP: `artifacts/c05-series-final-2026-10-16.zip`; его SHA256,
+исходный seal и проверка replay перечислены в `docs/evidence/c05/delivery.json`.
+SQL ZIPs в публичной проекции — полные отдельные C04 runs; публичная проекция
+всей серии не заменяет полный ZIP с redirect source и B09.
+
+Проверки: полный pytest **1610 passed, 32 skipped**, отдельно C05 **25 passed**;
+полный Ruff и `python -m app.main` прошли. Пропуски Windows/opt-in перечислены
+в сохранённом логе. Два offline replay полного пакета одинаковы; subprocess,
+Docker и provider calls запрещены при этой проверке. Сами измеренные originals
+и исторические C01–C04 artifacts не переписывались.

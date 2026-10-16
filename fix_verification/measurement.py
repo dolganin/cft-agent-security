@@ -169,6 +169,10 @@ def summarize(root: Path):
             row['status'] = 'INTERRUPTED' if receipt['error'] == 'operator_interrupted' else 'TECHNICAL_ERROR'
             row['stop_reason'] = receipt['error'] or 'unfinished'
             row['duration_ms'] = receipt.get('duration_ms')
+            if row['duration_ms'] is not None and (type(row['duration_ms']) is not int or row['duration_ms'] < 0):
+                raise ValueError('Invalid monotonic clock duration')
+            if receipt['error'] is None and receipt['replay'] is None:
+                row['status'] = 'INTERRUPTED'
             directory = root / 'runs' / slot['id']
             if receipt['replay'] is not None:
                 if receipt['error'] is not None:
