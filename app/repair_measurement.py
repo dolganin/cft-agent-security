@@ -4,7 +4,14 @@ import json
 import zipfile
 from pathlib import Path
 
-from fix_verification.measurement import execute, finalize, freeze, protocol, replay_series
+from fix_verification.measurement import (
+    execute,
+    finalize,
+    freeze,
+    protocol,
+    render_report,
+    replay_series,
+)
 
 
 def main():
@@ -13,8 +20,12 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--replay', action='store_true')
     parser.add_argument('--bundle', type=Path)
+    parser.add_argument('--report', type=Path, help='New Markdown projection outside original and sealed series')
     args = parser.parse_args()
     root = args.output.resolve()
+    if args.report and (args.report.exists() or args.report.resolve().is_relative_to(root)
+                        or (args.target and args.report.resolve().is_relative_to(args.target.resolve()))):
+        parser.error('Report must be new and outside series and original target')
     if args.bundle and (args.bundle.exists() or args.bundle.resolve().is_relative_to(root)
                         or (args.target and args.bundle.resolve().is_relative_to(args.target.resolve()))):
         parser.error('Bundle must be new and outside series and original target')
@@ -36,6 +47,12 @@ def main():
             for file in sorted(root.rglob('*')):
                 if file.is_file():
                     archive.write(file, file.relative_to(root).as_posix())
+    if args.report:
+        destination = args.report.resolve()
+        if destination.is_relative_to(root) or destination.is_relative_to(Path(protocol(root)['original_path']).resolve()):
+            parser.error('Report must be outside original target and sealed series')
+        with destination.open('x', encoding='utf-8', newline='\n') as stream:
+            stream.write(render_report(report, protocol(root)))
     print(json.dumps({'complete': report['complete'], 'statuses': report['statuses'],
                       'verified_eligible': report['verified_eligible']}))
     return 0 if report['complete'] else 2

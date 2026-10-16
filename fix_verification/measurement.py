@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+import tempfile
 import zipfile
 from datetime import UTC, datetime
 from pathlib import Path
@@ -13,11 +14,18 @@ from time import monotonic
 from agent.llm import ProviderFailoverClient, parse_route_specs
 from app.config import Settings
 from app.stage1_e2e import pinned_image
+from evaluation.offline_rescore import observations_from_artifacts
 from fix_verification.generation import write_json as write_new_json
 from fix_verification.patch_context import original_input
 from fix_verification.repair_loop import run, seal
 from fix_verification.repair_replay import replay
-from fix_verification.scope import BASELINE, SOURCE_COMMIT, assess_scope, load_scope
+from fix_verification.scope import (
+    BASELINE,
+    SOURCE_COMMIT,
+    _verified_archive,
+    assess_scope,
+    load_scope,
+)
 from fix_verification.workspace import digest, safe_file
 from schemas.repair_loop import RepairLimits
 
@@ -42,8 +50,13 @@ def population():
     specs, _lock = load_scope()
     with zipfile.ZipFile(BASELINE) as archive:
         review = json.loads(archive.read('b09-single-2026-10-15-final/evaluation/confirmed-review.json'))
+    with tempfile.TemporaryDirectory(prefix='cft-c05-baseline-') as temporary:
+        baseline = Path(temporary)
+        _verified_archive(BASELINE, baseline)
+        observations = observations_from_artifacts(baseline / 'b09-single-2026-10-15-final/pipeline')
+    backed_ids = {o.id for o in observations if o.verification == 'confirmed' and o.evidence_backed}
     confirmed = sorted({m['case_id'] for row in review
-                        if row['persisted_execution_audit_and_approval_trace_match']
+                        if row['finding_id'] in backed_ids and row['persisted_execution_audit_and_approval_trace_match']
                         for m in row['matches'] if m['classification'] == 'tp'})
     cases = []
     for family in FAMILIES:
@@ -153,19 +166,28 @@ def summarize(root: Path):
             if (any(receipt.get(k) != v for k, v in slot.items())
                     or receipt['protocol_sha256'] != digest((root / 'protocol.json').read_bytes())):
                 raise ValueError('Receipt does not match frozen slot')
-            row['status'] = 'TECHNICAL_ERROR'
+            row['status'] = 'INTERRUPTED' if receipt['error'] == 'operator_interrupted' else 'TECHNICAL_ERROR'
             row['stop_reason'] = receipt['error'] or 'unfinished'
             row['duration_ms'] = receipt.get('duration_ms')
             directory = root / 'runs' / slot['id']
             if receipt['replay'] is not None:
+                if receipt['error'] is not None:
+                    raise ValueError('Contradictory completion receipt')
                 checked = replay(directory)
                 if checked != receipt['replay']:
                     raise ValueError('Saved replay receipt changed')
                 result = json.loads(safe_file(directory, 'result.json').read_bytes())
+                config = json.loads(safe_file(directory, 'configuration.json').read_bytes())
+                if config['routes'] != [ROUTE.replace(':', '/', 1)]:
+                    raise ValueError('Series provider route changed')
                 if result['family'] != slot['family'] or result['limits'] != plan['limits']:
                     raise ValueError('Run does not match series configuration')
-                if json.loads(safe_file(directory, 'runtime.json').read_bytes())['fix_image'] != plan['fix_image']:
-                    raise ValueError('Series runtime image changed')
+                runtime = directory / 'runtime.json'
+                if runtime.exists():
+                    if json.loads(safe_file(directory, 'runtime.json').read_bytes())['fix_image'] != plan['fix_image']:
+                        raise ValueError('Series runtime image changed')
+                elif checked['status'] != 'TECHNICAL_ERROR' or checked['attempts']:
+                    raise ValueError('Missing runtime provenance')
                 row.update(status=checked['status'], stop_reason=checked['stop_reason'],
                            attempts=checked['attempts'], seal_sha256=checked['seal_sha256'])
                 row['regression_attempts'] = sum(a['verification_status'] == 'REGRESSION' for a in result['attempts'])
@@ -175,6 +197,13 @@ def summarize(root: Path):
                     for a in result['attempts']]
                 if row['status'] == 'FIXED':
                     start, finish = datetime.fromisoformat(receipt['started_at']), datetime.fromisoformat(receipt['finished_at'])
+                    started_receipt = json.loads(safe_file(root, 'starts/' + slot['id'] + '.json').read_bytes())
+                    if (started_receipt['started_at'] != receipt['started_at']
+                            or any(started_receipt.get(k) != v for k, v in slot.items())
+                            or started_receipt['protocol_sha256'] != receipt['protocol_sha256']
+                            or not start <= datetime.fromisoformat(result['started_at'])
+                            <= datetime.fromisoformat(result['finished_at']) <= finish):
+                        raise ValueError('Confirmed input timing is not bound to C04 execution')
                     elapsed = (finish - start).total_seconds() * 1000
                     if elapsed < 0 or abs(elapsed - row['duration_ms']) > 5000:
                         raise ValueError('Series clock disagreement')
@@ -219,6 +248,42 @@ def finalize(root: Path):
     write_json(root / 'measurement.json', report)
     seal(root)
     return report
+
+
+def render_report(report: dict, plan: dict):
+    """Deterministic public projection; never include target source or raw secrets."""
+    eligibility, verified = report['eligible_confirmed'], report['verified_eligible']
+    lines = ['# C05 — измерения исправлений', '',
+             f"Protocol SHA256: `{report['protocol_sha256']}`.", '',
+             f"Eligible / confirmed: **{eligibility['eligible']}/{eligibility['confirmed']}** unique benchmark cases.",
+             f"Verified / eligible: **{verified['verified']}/{verified['eligible']}** case-runs.",
+             f"Попыток: {report['attempts']}; REGRESSION attempts: {report['regression_attempts']}.",
+             f"Статусы: `{json.dumps(report['statuses'], sort_keys=True)}`.", '',
+             '| Слот | Результат | Попытки | Регрессии | Весь слот, с | До verified patch, с | Причина |',
+             '|---|---|---:|---:|---:|---:|---|']
+    for row in report['rows']:
+        duration = f"{row['duration_ms'] / 1000:.3f}" if row['duration_ms'] is not None else 'N/A'
+        fixed = f"{row['verified_ms'] / 1000:.3f}" if row['verified_ms'] is not None else 'N/A'
+        lines.append(f"| {row['id']} | {row['status']} | {row['attempts']} | {row['regression_attempts']} | "
+                     f"{duration} | {fixed} | {row['stop_reason']} |")
+    lines += ['', '## Время', '']
+    for key, label in [('time_confirmed_input_to_verified', 'Confirmed-input → independently verified patch'),
+                       ('fresh_before_to_verified', 'Fresh BEFORE confirmed → independently verified patch')]:
+        value = report[key]
+        text = (f"mean {value['mean_ms'] / 1000:.3f} s; median {value['median_ms'] / 1000:.3f} s; "
+                f"min–max {value['min_ms'] / 1000:.3f}–{value['max_ms'] / 1000:.3f} s"
+                if value['n'] else 'N/A')
+        lines.append(f"- {label}: n={value['n']}; {text}.")
+    lines += ['', 'Неуспехи не входят в среднее времени успешного исправления, но остаются в таблице и знаменателе.',
+              'Historical/production MTTR: **N/A**. Календарное время от B09 включает простой; оно сохранено отдельно в JSON.',
+              '', '## Воспроизведение и границы', '',
+              f"Исходный B09 SHA256: `{plan['baseline_sha256']}`; полный архив — `b09-full-search.zip`.",
+              f"Модель: `{plan['route']}`; лимиты: `{json.dumps(plan['limits'], sort_keys=True)}`.",
+              'Команда: `python -m app.repair_measurement --replay --output <extracted-series>`.',
+              'Это проекция полного sealed пакета. Она не заменяет raw C04/C03 receipts и source snapshots.',
+              'Known DEV corpus; две выбранные причины, три повтора. Проценты описательные, не оценка всех классов.',
+              'Полный B09 сохранён отдельно от fix-среза. C05 не повышает исторические search/confirmation Recall.', '']
+    return '\n'.join(lines)
 
 
 def replay_series(root: Path):
