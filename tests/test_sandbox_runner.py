@@ -190,7 +190,9 @@ def test_persistent_docker_runtime_uses_one_container_and_execs(monkeypatch, tmp
         def __init__(self): self.stdin, self.stdout, self.stderr, self.returncode = io.BytesIO(), io.BytesIO(b"ok"), io.BytesIO(), 0
         def poll(self): return 0
         def kill(self): pass
-    def fake_popen(argv, **kwargs): calls.append(argv); return Proc()
+    def fake_popen(argv, **kwargs):
+        calls.append(argv)
+        return Proc()
     monkeypatch.setattr("executor.sandbox.subprocess.Popen", fake_popen)
     worker = tmp_path / "worker.py"
     worker.write_text("", encoding="utf-8")

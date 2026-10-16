@@ -407,6 +407,7 @@ class DockerSandbox:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 shell=False,
+                start_new_session=os.name == "posix",
             )
 
             raw_stdout, stdout_trunc, raw_stderr, stderr_trunc, timed_out = _communicate_bounded(
@@ -482,7 +483,8 @@ class DockerSequenceRuntime:
         started = time.perf_counter()
         argv = ["docker", "exec", "-i", self._container_name, "python", "/app/worker.py"]
         try:
-            proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
+            proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    shell=False, start_new_session=os.name == "posix")
             stdout, stdout_cut, stderr, stderr_cut, timed_out = _communicate_bounded(proc, json.dumps(payload).encode("utf-8"), self.policy.limits.wall_time_seconds, self.policy.limits.max_output_bytes)
             return SandboxResult(request.run_id, 124 if timed_out else proc.returncode or 0, _format_bounded_output(stdout, stdout_cut), _format_bounded_output(stderr, stderr_cut), timed_out, self.runtime_instance_id, int((time.perf_counter() - started) * 1000), "docker")
         except OSError as exc:

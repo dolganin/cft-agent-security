@@ -5,7 +5,6 @@ import json
 import re
 import subprocess
 import zipfile
-from datetime import UTC, datetime
 from pathlib import Path
 from time import monotonic
 
@@ -300,15 +299,16 @@ class IndependentPatchVerificationService(FixVerificationService):
             workspace_directory=directory / 'workspaces', backend_override='docker')
         validator = PolicyValidator.from_yaml(policy_file, target_profile=profile)
         count = 2 if self.family_id == 'redirect-allowlist' else 1
-        runtimes, redirect = [], None
+        runtimes, controls, redirect = [], [], None
         canonical_cleanup = True
         try:
             for generation in range(count):
                 runtime = C03FixRuntime(profile)
                 runtime.phase = phase
                 runtimes.append(runtime)  # cleanup even when open/provisioning fails
-                runtime.deadline = monotonic() + profile.fix_verification.wall_clock_budget_seconds - (
-                    datetime.now(UTC) - artifact.started_at).total_seconds()
+                runtime.deadline = self._runtime_deadline(profile, artifact)
+                controls.append(self._bound_runtime_control(runtime))
+                self._check_deadline()
                 runtime.open()
                 executor.bind_fix_runtime(runtime)
                 stages = ['prepare', 'build', 'tests', 'start', 'smoke']
@@ -337,6 +337,7 @@ class IndependentPatchVerificationService(FixVerificationService):
                     if status != 'passed':
                         return None
             action = action.model_copy(update={'id': f'{artifact.id}-{phase}-security'})
+            self._check_deadline()
             if count == 2:
                 redirect = C03RedirectRuntime(profile, runtimes, directory / 'b06')
                 redirect.open()
@@ -346,6 +347,7 @@ class IndependentPatchVerificationService(FixVerificationService):
                 services = redirect.runtime_map()
             else:
                 services = runtimes[0].runtime_services()
+            self._check_deadline()
             execution, evidence = self._execute(action, executor, approvals, validator, store, audit, services)
             if count == 1:
                 record = store.get_execution(execution.evidence_ref)
@@ -364,6 +366,8 @@ class IndependentPatchVerificationService(FixVerificationService):
                                       'evidence': [evidence], 'max_steps': 1, 'iteration_count': 1})
             return evidence if guard and guard.status in {'confirmed', 'rejected'} else None
         finally:
+            for runtime, control in zip(runtimes, controls, strict=True):
+                runtime._control = control
             results = [canonical_cleanup]
             for runtime in ([redirect] if redirect is not None else []) + runtimes:
                 try:

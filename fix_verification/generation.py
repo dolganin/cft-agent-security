@@ -18,6 +18,7 @@ from fix_verification.workspace import digest
 from sast.profiles import validate_target_snapshot
 from schemas.fix import PatchReviewArtifact, ProposedPatch
 from schemas.patch_generation import BoundedPatchResponse, PatchGenerationArtifact
+from schemas.repair_loop import RepairFeedback
 from security.error_redaction import redact_error_message, redact_observation
 
 SYSTEM = (
@@ -57,7 +58,9 @@ def pinned_source(root: Path, file: str) -> bytes:
 
 
 def generate(*, repository: Path, family: str, output: Path,
-             client: ProviderFailoverClient) -> PatchGenerationArtifact:
+             client: ProviderFailoverClient,
+             feedback: RepairFeedback | None = None,
+             previous_review: PatchReviewArtifact | None = None) -> PatchGenerationArtifact:
     if not isinstance(client, ProviderFailoverClient):
         raise TypeError("C02 requires the real provider adapter, never IntegrationPatchClient")
     root, output = repository.resolve(strict=True), output.resolve()
@@ -95,6 +98,24 @@ def generate(*, repository: Path, family: str, output: Path,
             "evidence": evidence_view(report),
             "constraints": {"max_diff_bytes": 16384, "max_changed_lines": 64,
                 "only_supplied_file": True, "no_apply": True}}
+        if feedback is not None:
+            from fix_verification.repair_feedback import validate_feedback
+            payload["previous_attempt"] = validate_feedback(feedback)
+        if previous_review is not None:
+            previous = previous_review.proposal
+            if (feedback is None or feedback.stage != "verification"
+                    or previous_review.file != file or previous_review.source_sha256 != digest(raw)
+                    or previous.finding_id != report.finding_id
+                    or previous_review.proposal_sha256 != digest(previous.model_dump_json().encode())
+                    or feedback.previous_patch_sha256 != digest(previous.unified_diff.encode())):
+                raise ValueError("previous_proposal_binding")
+            checked = validate_review_diff(previous, file=file, source=raw.decode(),
+                editable_start=start, editable_end=end)
+            validate_candidate(family_id=family, proposal=previous.model_copy(update={"unified_diff": checked}),
+                source_root=root, source_sha256=digest(raw))
+            defensive_shape(family, checked)
+            from fix_verification.repair_feedback import proposal_view
+            payload["previous_proposal"] = proposal_view(previous_review)
         request = {"system_prompt": SYSTEM, "payload": payload}
         encoded = json.dumps(request, ensure_ascii=False, sort_keys=True).encode()
         if len(encoded) > 24000 or sensitive(request, client):
@@ -110,6 +131,7 @@ def generate(*, repository: Path, family: str, output: Path,
         if sensitive(response.model_dump(mode="json"), client):
             artifact.status, artifact.reason = "rejected", "secret_in_model_response"
             return artifact
+        artifact.response_patch_sha256 = digest(response.unified_diff.encode())
         if response.finding_id != report.finding_id:
             artifact.status, artifact.reason = "rejected", "finding_id_mismatch"
             return artifact

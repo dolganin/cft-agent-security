@@ -1,0 +1,30 @@
+{
+  "schema_version": "cft.c04.delivery.v1",
+  "files": {
+    "README.md": "cce33bda302ae6aaddef461f808441607af8aa6660290f3d184e366858a1d4a9",
+    "app-main.txt": "c5f15c8f2e804b2631c2acd46fcde8d2aea7bbd92806f6966aca290d676727ea",
+    "docker-boundary.txt": "0169ba3483439e9ffe8db3bbdb9d5397aa5e0093bc2350ff9e621b9895266e6b",
+    "offline-replay.json": "23382fb39d6f25ed1a4ca6f817af8283556f69357f5cb7df811641944c329104",
+    "pytest.txt": "21222ea723cad3808839537985816ddfdb58bc8dd29705e58c8d16e1c537b540",
+    "redirect-history/001/attempt.json": "2e7678c106643538e2aba91568fa0c2849c19684edabe3ac29d1a9f0fe3c5dec",
+    "redirect-history/001/feedback.json": "dd82928430cec8e205215c7cbfbabc2fea3eb58a8d99d22a6a7c979c2348ba68",
+    "redirect-history/001/generation.json": "8f8e0ec87245bee4e5b383051841e2d5f01331ead0c5bfbd33ef8a1d1ebdafe1",
+    "redirect-history/001/model-response.json": "6e07a025e8ebc1509a2ae1ae045e79a03adc444943ffec951188bba692038070",
+    "redirect-history/001/patch-review.json": "2cbfb4c0298d862e753f40eaa084b95f4f0354779436674bd358b5cdd0ea6695",
+    "redirect-history/001/request.json": "29959abfdb5da1004eaf1b323ea8c793a6217a44b4f92f0e200f10c8f1ef5865",
+    "redirect-history/002/attempt.json": "8e5fc0c9da41233bac418e1b17e1443c44992bb9909b9fa97aeb691cbb2f4d28",
+    "redirect-history/002/generation.json": "b4d3dee5794683d491fa70f19d7cc846e8433222c0dc387d158ad1b7bb500f37",
+    "redirect-history/002/model-response.json": "bc6242b0977071d7ae1251fc1ab7648f325b4850d54e58d1b3708d199589878f",
+    "redirect-history/002/patch-review.json": "a82d12e9f68cfc26ced007ab21781c138367a40171a3233ac6b0edf6fd30d0cc",
+    "redirect-history/002/request.json": "520400696298bf67ec5cdf7056d48a21d5a17dbaaf71beca1fee761d95588681",
+    "redirect-history/events.jsonl": "3966212829b454bcb0ac8150b2d543537a4c0ca1c84544f102431154f6d47aea",
+    "redirect-history/result.json": "96243271cdb81e35c0b8f1f5f656e4c0e3400c23fc2e30f4bdbd2217d79eaeba",
+    "results.json": "b483512890ba1386d848dde26ceacf0ff0be3b016b70cc70cf8bd74c2b38e316",
+    "ruff-full.txt": "b5eee7435691617f6b5f49341a6961b74c162eff26335a7000387c80a5c655e1",
+    "ruff-scoped.txt": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "secret-scan.json": "8b57d8eab6c3931786ab901b6bcb1d92eaf5b83f9ecf35c56fd37895f79be9d9",
+    "sql-live-final.zip": "539bbe936a264788c46104dc8e0511feea01fa6ac1deeae3cd141b631f80bca3",
+    "sql-live.zip": "d5fa9b51e1fafabe43f2be18627e807204f906aea2bf4e0e6e75d1ad14b4d040",
+    "transport-timeout-observation.md": "28409a86917d1dc482f526ee549a758f53a199a36bb3b7524a447d471ef7ca2f"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "sql_initial": {
+    "first": {
+      "status": "FIXED",
+      "stop_reason": "independently_verified",
+      "attempts": 1,
+      "successful_attempt": 1,
+      "original_unchanged": true,
+      "seal_sha256": "5fe8d02f6551ddc20c3b4a42ba0a8a93f25bb6c525616627a8e8f909cae6c177"
+    },
+    "second": {
+      "status": "FIXED",
+      "stop_reason": "independently_verified",
+      "attempts": 1,
+      "successful_attempt": 1,
+      "original_unchanged": true,
+      "seal_sha256": "5fe8d02f6551ddc20c3b4a42ba0a8a93f25bb6c525616627a8e8f909cae6c177"
+    },
+    "identical": true
+  },
+  "sql_final": {
+    "first": {
+      "status": "FIXED",
+      "stop_reason": "independently_verified",
+      "attempts": 1,
+      "successful_attempt": 1,
+      "original_unchanged": true,
+      "seal_sha256": "8ba5c76811fb7b5e6029dc526c4eb365a333e7d9ccbf30daaddb8d2854b73c8b"
+    },
+    "second": {
+      "status": "FIXED",
+      "stop_reason": "independently_verified",
+      "attempts": 1,
+      "successful_attempt": 1,
+      "original_unchanged": true,
+      "seal_sha256": "8ba5c76811fb7b5e6029dc526c4eb365a333e7d9ccbf30daaddb8d2854b73c8b"
+    },
+    "identical": true
+  },
+  "redirect": {
+    "first": {
+      "status": "NOT_FIXED",
+      "stop_reason": "duplicate_patch",
+      "attempts": 2,
+      "successful_attempt": null,
+      "original_unchanged": true,
+      "seal_sha256": "6ebd82d56cb090a94f750ddd7357207058de4ee7e070a0a050c67d318c94409e"
+    },
+    "second": {
+      "status": "NOT_FIXED",
+      "stop_reason": "duplicate_patch",
+      "attempts": 2,
+      "successful_attempt": null,
+      "original_unchanged": true,
+      "seal_sha256": "6ebd82d56cb090a94f750ddd7357207058de4ee7e070a0a050c67d318c94409e"
+    },
+    "identical": true
+  }
+}

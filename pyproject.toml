@@ -49,6 +49,8 @@ target-version = "py311"
 [tool.ruff.lint.per-file-ignores]
 # A06 code is hash-frozen; keep its legacy optional A05 import block byte-identical.
 "evaluation/scanner_baseline.py" = ["I001"]
+# Frozen A04 standalone CLI bootstraps sys.path before repository imports.
+"benchmarks/juice-shop-v20.2.0/scorecard.py" = ["E402"]
 
 [tool.setuptools.packages.find]
 where = ["."]

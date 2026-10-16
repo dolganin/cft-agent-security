@@ -1,0 +1,12 @@
+{
+  "schema_version": "cft.c04.followup.v1",
+  "files": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "app-main.txt": "1970499bd4d691847f112045f1b5171219568bb1bcde3795cdf6f5a0094b75b6",
+    "focused-pytest.txt": "4d76024f059c4114f010c5bf38fa45ee4ab3f24f5cebc2f6e3c5387a6f3c85c2",
+    "pytest.txt": "b4492e51caa111ad0b2aa85915c894c20afbdbca48342d4f174142836a383068",
+    "README.md": "aa552d2474a19b5d26feb28334f9b123f8378826adf70a6439e2888360e09bed",
+    "ruff-core.txt": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+    "ruff.txt": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+  }
+}

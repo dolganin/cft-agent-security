@@ -72,7 +72,8 @@ def bound_action(tmp_path):
 
 
 def _generation(index: int) -> AccessGenerationEvidence:
-    value = lambda x: sha256(x.encode()).hexdigest()
+    def value(x):
+        return sha256(x.encode()).hexdigest()
     return AccessGenerationEvidence(
         generation_sha256=value(f"generation-{index}"),
         role_a_identity_sha256=value(f"role-a-{index}"),
@@ -325,7 +326,8 @@ def test_basket_write_v2_requires_exact_delta_and_all_independent_controls(bound
 
 def _basket_write_v3_trace(verdict="confirmed"):
     from schemas.access_verification import AccessBasketItemState, AccessBasketSnapshot
-    h = lambda value: sha256(value.encode()).hexdigest()
+    def h(value):
+        return sha256(value.encode()).hexdigest()
     schedule = [
         ("oc-b-update", "PUT", "role-b", "basket-write-control-b", "basket-write", 0),
         ("oc-b-readback", "GET", "role-b", "basket-write-control-b", "basket-read", 0),

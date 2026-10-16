@@ -36,7 +36,7 @@ def seal(directory):
     return digest((directory / 'seal.json').read_bytes())
 
 
-def run(*, family, target, output, fix_image, report=None, review=None):
+def run(*, family, target, output, fix_image, report=None, review=None, deadline_monotonic=None):
     source = target.resolve(strict=True)
     destination = output.resolve()
     if destination.is_relative_to(source) or source.is_relative_to(destination):
@@ -63,7 +63,25 @@ def run(*, family, target, output, fix_image, report=None, review=None):
             proposal=proposal, validation_detail='C01 scope and source digest checked',
             editable_start=1, editable_end=len(raw.decode().splitlines()))
     service = IndependentPatchVerificationService(family)
-    result = service.verify(report=report, review=review, profile=profile, artifact_directory=destination)
+    verification_options = {'deadline_monotonic': deadline_monotonic} if deadline_monotonic is not None else {}
+    try:
+        result = service.verify(report=report, review=review, profile=profile,
+            artifact_directory=destination, **verification_options)
+    except KeyboardInterrupt:
+        partial = getattr(service, 'partial_result', None)
+        if partial is not None:
+            # A completed base phase can still be interrupted during independent
+            # replay. Preserve its observations without claiming verification.
+            partial = partial.model_copy(update={'status': 'INCONCLUSIVE', 'security_verified': False,
+                'verdict': 'inconclusive', 'explanation': 'Fix verification interrupted by operator'})
+            package = C03Artifact(family=family, inputs=service.inputs, result=partial,
+                receipts=service.receipts, lifecycle=service.lifecycle,
+                reason_codes=['operator_interrupted'])
+            write_json(destination / 'manifest.json', package.model_dump(mode='json'))
+        write_json(destination / 'interruption.json', {'reason': 'operator_interrupted',
+            'partial_manifest': partial is not None})
+        seal(destination)
+        raise
     package = C03Artifact(family=family, inputs=service.inputs, result=result,
         receipts=service.receipts, lifecycle=service.lifecycle,
         reason_codes=service.reason_codes or ['preflight_failed'])

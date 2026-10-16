@@ -5,6 +5,7 @@ the host. Commands come from this adapter, not package.json or model output.
 """
 from __future__ import annotations
 
+import os
 import subprocess
 from dataclasses import replace
 from pathlib import Path
@@ -71,7 +72,7 @@ class DockerFixRuntime:
     def _control(self, argv: list[str], timeout: float = 30) -> SandboxResult:
         started = monotonic()
         process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE, shell=False)
+                                   stderr=subprocess.PIPE, shell=False, start_new_session=os.name == 'posix')
         out, cut_out, err, cut_err, timed_out = _communicate_bounded(process, b"", timeout, 16384)
         return SandboxResult(
             self.id, 124 if timed_out else process.returncode or 0,

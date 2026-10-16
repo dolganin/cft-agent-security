@@ -1396,3 +1396,32 @@ the exact contract is independently rechecked. No other failure/skip is accepted
 Independent source/HTTP tests and canonical AFTER rejected remain mandatory;
 the exception itself never creates FIXED. Historical REGRESSION evidence stays
 unchanged. See docs/c03-independent-patch-verification.md.
+
+# 40. C04 bounded repair loop
+
+`app.repair` composes real C02 generation with independent C03 verification for
+the existing C01 SQL/redirect families. Each proposal uses a newly verified copy
+of the original commit and a new verifier instance. Always pass the generated
+review explicitly: C03's reference-patch default is never a C04 fallback.
+
+Raw/canonical diff and resulting-file duplicates stop the campaign. Attempts,
+provider/stage deadlines, typed feedback, execution/audit Evidence, integrity,
+cleanup and terminal reasons remain persisted. Feedback is a bounded registered
+projection, not raw private tests, secrets, stderr or instructions to change policy.
+Feedback v2 identifies the failed AFTER build/native-test stage without claiming
+its cause. The next request includes only the previous validated diff projected
+through the same source redaction as C02, bound to its canonical patch digest;
+never forward rationale, evaluator annotations or raw test output. Replay checks
+the prior-attempt binding, and legacy bundles retain their original contract.
+Shared work deadlines cannot prevent bounded cleanup. Transport process groups
+must be isolated before cancellation can terminate a child.
+
+FIXED requires persisted C03 replay plus matching model-response/proposal/source
+bindings, original integrity and cleanup. C04 NOT_FIXED is an unsuccessful repair
+campaign, not independently confirmed vulnerability persistence. Interruptions and
+technical failures preserve partial sealed history without success claims.
+
+`app.repair --replay <directory>` validates saved C04/C03 artifacts without target,
+Docker or LLM. Keep complete local evidence and any redacted/partial public
+readout distinct. Never modify original target files or merge automatically.
+See `docs/c04-bounded-repair-loop.md` and `docs/evidence/c04/README.md`.

@@ -29,6 +29,7 @@ class PatchGenerationArtifact(BaseModel):
     original_report_sha256: str = ""
     request_sha256: str = ""
     response_sha256: str | None = None
+    response_patch_sha256: str | None = None
     c01_lock_sha256: str = ""
     original_unchanged: bool = False
     review: PatchReviewArtifact | None = None

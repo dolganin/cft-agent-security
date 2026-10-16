@@ -3,7 +3,9 @@ from __future__ import annotations
 
 import subprocess
 import tempfile
+from contextlib import contextmanager
 from datetime import UTC, datetime
+from math import isfinite
 from pathlib import Path
 from time import monotonic
 from uuid import uuid4
@@ -25,6 +27,12 @@ from fix_verification.workspace import (
     snapshot,
     tree_digest,
 )
+from pipeline.cancellation import (
+    CancellationToken,
+    cancellation_scope,
+    current_token,
+    suspend_cancellation,
+)
 from schemas.action import ActionProposal
 from schemas.fix import (
     FixStageResult,
@@ -40,6 +48,22 @@ from security.error_redaction import redact_error_message
 from validator.validator import PolicyValidator
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class _DeadlineToken(CancellationToken):
+    """Let the existing bounded subprocess transport terminate on the budget."""
+    def __init__(self, deadline, parent):
+        super().__init__()
+        self.deadline, self.parent = deadline, parent
+
+    def is_cancelled(self):
+        return monotonic() >= self.deadline or bool(self.parent and self.parent.is_cancelled())
+
+    def raise_if_cancelled(self):
+        if monotonic() >= self.deadline:
+            raise TimeoutError('Fix verification wall-clock budget exhausted')
+        if self.parent:
+            self.parent.raise_if_cancelled()
 
 
 def trusted_action(finding, profile: TargetProfile, capability: str) -> ActionProposal:
@@ -88,6 +112,50 @@ def original_binding(report: FinalReport, profile: TargetProfile) -> ActionPropo
 
 
 class FixVerificationService:
+    def _check_deadline(self):
+        deadline = getattr(self, '_deadline_monotonic', None)
+        if deadline is not None and monotonic() >= deadline:
+            raise TimeoutError('Fix verification wall-clock budget exhausted')
+
+    def _runtime_deadline(self, profile, artifact):
+        elapsed = (datetime.now(UTC) - artifact.started_at).total_seconds()
+        deadline = monotonic() + profile.fix_verification.wall_clock_budget_seconds - elapsed
+        outer = getattr(self, '_deadline_monotonic', None)
+        return min(deadline, outer) if outer is not None else deadline
+
+    @contextmanager
+    def _execution_budget(self):
+        deadline = getattr(self, '_deadline_monotonic', None)
+        if deadline is None:
+            yield
+        else:
+            with cancellation_scope(_DeadlineToken(deadline, current_token())):
+                yield
+
+    def _bound_runtime_control(self, runtime):
+        """Bound provisioning too; restore before cleanup, which must still run."""
+        control = runtime._control
+        if getattr(self, '_deadline_monotonic', None) is not None:
+            def bounded(argv, timeout=30):
+                remaining = runtime.deadline - monotonic()
+                if remaining <= 0:
+                    raise TimeoutError('Fix verification wall-clock budget exhausted')
+                with self._execution_budget():
+                    return control(argv, min(timeout, remaining))
+            runtime._control = bounded
+            original_close = runtime.close
+
+            def close():
+                runtime._control = control
+                try:
+                    with suspend_cancellation():
+                        return original_close()
+                finally:
+                    runtime._control = bounded
+
+            runtime.close = close
+        return control
+
     def _check_review(self, review, source, report):
         return check_review(review, source, report.finding_id, review.run_id, review.file)
 
@@ -148,7 +216,13 @@ class FixVerificationService:
 
     def verify(self, *, report: FinalReport, review: PatchReviewArtifact,
                profile: TargetProfile, artifact_directory: Path,
-               policy_file: Path = ROOT / "policies/default.yaml") -> FixVerificationArtifact:
+               policy_file: Path = ROOT / "policies/default.yaml",
+               deadline_monotonic: float | None = None) -> FixVerificationArtifact:
+        if deadline_monotonic is not None and (
+                isinstance(deadline_monotonic, bool) or not isinstance(deadline_monotonic, (float, int))
+                or not isfinite(deadline_monotonic)):
+            raise ValueError('deadline_monotonic must be finite')
+        self._deadline_monotonic = deadline_monotonic
         if report.status != "confirmed":
             raise ValueError("Fix verification requires a CONFIRMED finding")
         # Freeze caller-owned models across the long BEFORE phase. A concurrent
@@ -170,6 +244,7 @@ class FixVerificationService:
         original_manifest = None
         source = profile.repository_path
         try:
+            self._check_deadline()
             if source is None or not source.is_dir():
                 raise ValueError("Original target checkout is unavailable")
             self._check_review(review, source, report)
@@ -193,12 +268,14 @@ class FixVerificationService:
                     raise ValueError("Source changed while creating the isolated snapshot")
                 isolated = profile.model_copy(update={"repository_path": workspace})
                 self._check_review(review, workspace, report)
+                self._check_deadline()
                 before = self._phase(isolated, action, "before", artifact, artifact_directory, policy_file)
                 artifact.before_evidence = before
                 artifact.before_evidence_sha256 = digest(before.model_dump_json().encode()) if before else None
                 if before is None or before.verdict != "confirmed":
                     artifact.explanation = "Original vulnerability was not reproduced; no fix claim is possible"
                 else:
+                    self._check_deadline()
                     self._check_review(review, workspace, report)
                     artifact.patched_file_sha256 = apply_patch(workspace, review.proposal.unified_diff, review.file)
                     artifact.applied = True
@@ -206,6 +283,7 @@ class FixVerificationService:
                     after = self._phase(isolated, action, "after", artifact, artifact_directory, policy_file)
                     artifact.after_evidence = after
                     artifact.after_evidence_sha256 = digest(after.model_dump_json().encode()) if after else None
+                    self._check_deadline()
                     if after and after.verdict == "rejected":
                         artifact.status = "FIXED"
                         artifact.explanation = "Original bounded probe is rejected after patch; build, tests and functional checks passed"
@@ -221,6 +299,10 @@ class FixVerificationService:
                     expected[review.file] = (artifact.patched_file_sha256, original_manifest[review.file][1])
                 if snapshot(workspace) != expected:
                     raise ValueError("Unexpected changes in the isolated patch scope")
+        except KeyboardInterrupt:
+            artifact.status = "INCONCLUSIVE"
+            artifact.explanation = "Fix verification interrupted by operator"
+            raise
         except ValueError as exc:
             artifact.status = "REJECTED"
             artifact.explanation = redact_error_message(str(exc))
@@ -240,12 +322,13 @@ class FixVerificationService:
             artifact.verdict = "verified" if artifact.security_verified else "not_verified" if artifact.status in {"REJECTED", "NOT_FIXED", "REGRESSION"} else "inconclusive"
             artifact.finished_at = datetime.now(UTC)
             artifact.duration_ms = int((monotonic() - started) * 1000)
+            self.partial_result = FixVerificationArtifact.model_validate(artifact.model_dump())
         return FixVerificationArtifact.model_validate(artifact.model_dump())
 
     def _phase(self, profile, original_action, phase, artifact, directory, policy_file):
         runtime = DockerFixRuntime(profile)
-        elapsed = (datetime.now(UTC) - artifact.started_at).total_seconds()
-        runtime.deadline = monotonic() + profile.fix_verification.wall_clock_budget_seconds - elapsed
+        runtime.deadline = self._runtime_deadline(profile, artifact)
+        control = self._bound_runtime_control(runtime)
         approvals = InMemoryApprovalStore()
         directory = Path(directory) / artifact.id / phase
         store = JsonExecutionEvidenceStore(directory / "evidence")
@@ -257,6 +340,7 @@ class FixVerificationService:
         )
         validator = PolicyValidator.from_yaml(policy_file, target_profile=profile)
         try:
+            self._check_deadline()
             runtime.open()
             executor.bind_fix_runtime(runtime)
             for stage in ("prepare", "build", "tests", "start", "smoke"):
@@ -287,16 +371,17 @@ class FixVerificationService:
                                        "evidence": [evidence], "max_steps": 1, "iteration_count": 1})
             return evidence if guard and guard.status in {"confirmed", "rejected"} else None
         finally:
+            runtime._control = control
             clean = runtime.close()
             artifact.cleanup_complete = clean and (artifact.cleanup_complete or phase == "before")
 
-    @staticmethod
-    def _execute(action, executor, approvals, validator, store, audit, runtime_services=None):
+    def _execute(self, action, executor, approvals, validator, store, audit, runtime_services=None):
         validation = validator.validate(action)
         if not validation.approved:
             raise ValueError("Validator denied fix action: " + validation.reason)
         approvals.record(action, validation)
-        execution = executor.execute_sequence([action], runtime_services=runtime_services).results[0].execution
+        with self._execution_budget():
+            execution = executor.execute_sequence([action], runtime_services=runtime_services).results[0].execution
         record = store.get_execution(execution.evidence_ref)
         events = [event for event in audit.records() if event.get("run_id") == execution.run_id]
         valid = (

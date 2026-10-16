@@ -1,0 +1,235 @@
+{
+  "schema_version": "cft.c04.acceptance.v1",
+  "date": "2026-10-16",
+  "base_commit": "b8197c3",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "provider_route": "nsu/qwen3.8-flash-next",
+  "sql": {
+    "status": "FIXED",
+    "stop_reason": "independently_verified",
+    "duration_ms": 92287,
+    "attempts": 1,
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "c03_status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "native_stages": [
+      {
+        "phase": "before",
+        "status": "passed",
+        "exit_code": 0,
+        "counts": {
+          "tests": 415,
+          "failed": 0,
+          "passed": 413,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 40,
+          "suites": 130
+        },
+        "file_level_failure": false
+      },
+      {
+        "phase": "after",
+        "status": "passed",
+        "exit_code": 0,
+        "counts": {
+          "tests": 415,
+          "failed": 0,
+          "passed": 413,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 40,
+          "suites": 130
+        },
+        "file_level_failure": false
+      }
+    ],
+    "seal_sha256": "5fe8d02f6551ddc20c3b4a42ba0a8a93f25bb6c525616627a8e8f909cae6c177",
+    "zip_sha256": "d5fa9b51e1fafabe43f2be18627e807204f906aea2bf4e0e6e75d1ad14b4d040"
+  },
+  "redirect": {
+    "status": "NOT_FIXED",
+    "stop_reason": "duplicate_patch",
+    "duration_ms": 191303,
+    "attempts": 2,
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "c03_status": "REGRESSION",
+    "before": "confirmed",
+    "after": null,
+    "native_stages": [
+      {
+        "phase": "before",
+        "status": "passed",
+        "exit_code": 0,
+        "counts": {
+          "tests": 362,
+          "failed": 0,
+          "passed": 360,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 36,
+          "suites": 108
+        },
+        "file_level_failure": false
+      },
+      {
+        "phase": "before",
+        "status": "passed",
+        "exit_code": 0,
+        "counts": {
+          "tests": 403,
+          "failed": 0,
+          "passed": 401,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 39,
+          "suites": 127
+        },
+        "file_level_failure": false
+      },
+      {
+        "phase": "after",
+        "status": "failed",
+        "exit_code": 1,
+        "counts": {
+          "tests": 396,
+          "failed": 2,
+          "passed": 392,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 40,
+          "suites": 121
+        },
+        "file_level_failure": true
+      }
+    ],
+    "seal_sha256": "6ebd82d56cb090a94f750ddd7357207058de4ee7e070a0a050c67d318c94409e",
+    "zip_sha256": "cb0d43bdbd43262d0d5733e2f860cb71e800206c9fdc629dae1286bcb1041768"
+  },
+  "fix_image": "cft-fix-juice@sha256:bce6ed1779de11ff1e66842730d5531f89e8e9d38858cf72f6bfc18ecaaa28a5",
+  "c04_provider_attempts": 5,
+  "c04_accepted_proposals": 4,
+  "excluded_initial_auth_failure": 1,
+  "notes": [
+    "The redirect native gate failed with a file-level failure plus an assertion; no claim that the patch caused that process failure.",
+    "Redirect AFTER canonical security verification was not reached; NOT_FIXED is campaign failure, not proof of vulnerability persistence.",
+    "Full redirect bundle remains local because its two bound source files contain the upstream seeded private-key fixture.",
+    "No C05 quality rate is inferred from these functional acceptances."
+  ],
+  "sql_final": {
+    "status": "FIXED",
+    "stop_reason": "independently_verified",
+    "duration_ms": 70351,
+    "original_unchanged": true,
+    "attempts": 1,
+    "cleanup_complete": true,
+    "before": "confirmed",
+    "after": "rejected",
+    "seal_sha256": "8ba5c76811fb7b5e6029dc526c4eb365a333e7d9ccbf30daaddb8d2854b73c8b",
+    "zip_sha256": "539bbe936a264788c46104dc8e0511feea01fa6ac1deeae3cd141b631f80bca3",
+    "implementation_commit": "04cdd5d",
+    "required_stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "before",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0
+      }
+    ]
+  },
+  "validation": {
+    "pytest": "1587 passed, 24 skipped in 82.51s",
+    "c04_pytest": "99 passed in 23.27s",
+    "docker_boundary": "6 passed in 7.51s",
+    "ruff_changed_files": "PASS",
+    "ruff_full": "7 pre-existing errors in unchanged files",
+    "app_main_stub": "PASS",
+    "offline_replay_identical": true
+  }
+}
