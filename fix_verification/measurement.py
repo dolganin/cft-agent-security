@@ -13,7 +13,7 @@ from time import monotonic
 from agent.llm import ProviderFailoverClient, parse_route_specs
 from app.config import Settings
 from app.stage1_e2e import pinned_image
-from fix_verification.generation import write_json
+from fix_verification.generation import write_json as write_new_json
 from fix_verification.patch_context import original_input
 from fix_verification.repair_loop import run, seal
 from fix_verification.repair_replay import replay
@@ -25,6 +25,11 @@ FAMILIES = ('sql-search', 'redirect-allowlist')
 ROUTE = 'nsu:qwen3.8-flash-next'
 REPETITIONS = 3
 LIMITS = RepairLimits(max_attempts=3, wall_clock_seconds=900)
+
+
+def write_json(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_new_json(path, value)
 
 
 def now():
@@ -64,6 +69,7 @@ def freeze(target: Path, output: Path):
     plan = {'schema_version': 'cft.c05.protocol.v1', 'frozen_at': now(),
             'implementation_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
             'source_commit': SOURCE_COMMIT, 'route': ROUTE, 'repetitions': REPETITIONS,
+            'original_path': str(source),
             'limits': LIMITS.model_dump(mode='json'), 'fix_image': pinned_image('cft-fix-juice:stage1'),
             'baseline_sha256': digest(BASELINE.read_bytes()), 'population': population(),
             'slots': [{'id': f'{repetition:02d}-{family}', 'family': family, 'repetition': repetition}
@@ -99,13 +105,14 @@ def execute(target: Path, root: Path):
     for slot in plan['slots']:
         directory = root / 'runs' / slot['id']
         receipt = root / 'receipts' / (slot['id'] + '.json')
-        if receipt.exists() or directory.exists():
+        start_receipt = root / 'starts' / (slot['id'] + '.json')
+        if receipt.exists() or directory.exists() or start_receipt.exists():
             raise ValueError('C05 does not replace or silently resume attempted slots')
         started_at, started = now(), monotonic()
         row = {**slot, 'started_at': started_at, 'finished_at': None,
                'protocol_sha256': digest((root / 'protocol.json').read_bytes()), 'replay': None,
                'error': None}
-        write_json(receipt, row)
+        write_json(start_receipt, row)
         try:
             client = ProviderFailoverClient(routes=parse_route_specs(ROUTE, allow_external_fallbacks=False),
                 credentials=Settings().llm_provider_credentials(), timeout_seconds=45,
@@ -139,6 +146,8 @@ def summarize(root: Path):
         row = {**slot, 'status': 'NOT_RUN', 'attempts': 0, 'regression_attempts': 0,
                'duration_ms': None, 'verified_ms': None, 'fresh_before_to_verified_ms': None,
                'historical_confirmed_to_verified_ms': None, 'stop_reason': 'missing_receipt'}
+        if (root / 'starts' / (slot['id'] + '.json')).exists() and not receipt_path.exists():
+            row.update(status='INTERRUPTED', stop_reason='missing_final_receipt')
         if receipt_path.is_file():
             receipt = json.loads(safe_file(root, receipt_path.relative_to(root).as_posix()).read_bytes())
             if (any(receipt.get(k) != v for k, v in slot.items())
@@ -209,4 +218,25 @@ def finalize(root: Path):
     report = summarize(root)
     write_json(root / 'measurement.json', report)
     seal(root)
+    return report
+
+
+def replay_series(root: Path):
+    saved_seal = json.loads(safe_file(root, 'seal.json').read_bytes())
+    members = {}
+    total = 0
+    for file in root.rglob('*'):
+        if file.is_symlink():
+            raise ValueError('Linked series member')
+        if file.is_file() and file != root / 'seal.json':
+            total += file.stat().st_size
+            if total > 256 * 1024 * 1024 or len(members) >= 10000:
+                raise ValueError('Series archive exceeds budget')
+            name = file.relative_to(root).as_posix()
+            members[name] = digest(safe_file(root, name).read_bytes())
+    if saved_seal != {'schema_version': 'cft.c04.seal.v1', 'files': members}:
+        raise ValueError('Series seal mismatch')
+    report = summarize(root)
+    if report != json.loads(safe_file(root, 'measurement.json').read_bytes()):
+        raise ValueError('Saved C05 metrics disagree with offline replay')
     return report

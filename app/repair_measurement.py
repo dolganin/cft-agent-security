@@ -4,7 +4,7 @@ import json
 import zipfile
 from pathlib import Path
 
-from fix_verification.measurement import execute, finalize, freeze, summarize
+from fix_verification.measurement import execute, finalize, freeze, protocol, replay_series
 
 
 def main():
@@ -19,10 +19,7 @@ def main():
                         or (args.target and args.bundle.resolve().is_relative_to(args.target.resolve()))):
         parser.error('Bundle must be new and outside series and original target')
     if args.replay:
-        report = summarize(root)
-        saved = json.loads((root / 'measurement.json').read_bytes())
-        if report != saved:
-            raise ValueError('Saved C05 metrics disagree with offline replay')
+        report = replay_series(root)
     else:
         if args.target is None:
             parser.error('--target is required for a new series')
@@ -31,8 +28,10 @@ def main():
             execute(args.target, root)
         finally:
             finalize(root)
-        report = summarize(root)
+        report = replay_series(root)
     if args.bundle:
+        if args.bundle.resolve().is_relative_to(Path(protocol(root)['original_path']).resolve()):
+            parser.error('Bundle must be outside original target')
         with zipfile.ZipFile(args.bundle, 'x', zipfile.ZIP_DEFLATED) as archive:
             for file in sorted(root.rglob('*')):
                 if file.is_file():
