@@ -29,7 +29,8 @@ def aggregate_search(summary):
     """Pool independent case counts, never average split percentages."""
     splits = list(summary["metrics"].values())
     counts = {key: sum(s["verification"]["counts"][key] for s in splits)
-              for key in splits[0]["verification"]["counts"]}
+              for key in splits[0]["verification"]["counts"]
+              if key not in {"outside_ground_truth", "duplicates", "unresolved"}}
     detection = {key: sum(s["detection"][key] for s in splits)
                  for key in ("tp", "fp", "fn", "tn")}
     baseline = {key: sum(s["sast_detection"][key] for s in splits)
@@ -51,6 +52,11 @@ def aggregate_search(summary):
         "context_priority_accuracy": summary["context_priority_accuracy"],
         "reproducibility": {"value": None, "reason": "not_measured_by_user_request"},
         "outside_observations_are_not_automatic_false_positives": True,
+        "observation_accounting_by_split": {
+            name: {key: value["verification"]["counts"][key]
+                   for key in ("outside_ground_truth", "duplicates", "unresolved")
+                   if key in value["verification"]["counts"]}
+            for name, value in summary["metrics"].items()},
     }
 
 

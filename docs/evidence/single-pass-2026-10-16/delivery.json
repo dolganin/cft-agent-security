@@ -1,0 +1,77 @@
+{
+  "schema_version": "cft.single-pass-delivery.v1",
+  "measurement_status": "completed_with_limitations",
+  "integration_commit": "3d8f362",
+  "new_search_runs": 1,
+  "new_repair_campaigns": 2,
+  "reproducibility_measured": false,
+  "search_seconds": 1845.308,
+  "benchmark": {
+    "target_version": "20.2.0",
+    "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "positive_cases": 27,
+    "safe_cases": 8,
+    "detected_positive_cases": 27,
+    "correct_confirmations": 13,
+    "false_confirmations": 0,
+    "decided_cases": 13,
+    "severity_accuracy": null,
+    "context_priority_accuracy": null
+  },
+  "repairs": [
+    {
+      "family": "sql-search",
+      "status": "FIXED",
+      "attempts": 1,
+      "laboratory_verified_ms": 59625,
+      "before": "confirmed",
+      "after": "rejected",
+      "offline_replay_passed": true,
+      "original_unchanged": true,
+      "cleanup_complete": true
+    },
+    {
+      "family": "redirect-allowlist",
+      "status": "FIXED",
+      "attempts": 1,
+      "laboratory_verified_ms": 102347,
+      "before": "confirmed",
+      "after": "rejected",
+      "offline_replay_passed": true,
+      "original_unchanged": true,
+      "cleanup_complete": true
+    }
+  ],
+  "laboratory_mean_verified_ms": 80986,
+  "laboratory_timing_n": 2,
+  "production_mttr": null,
+  "sealed_run": "artifacts/single-pass-search-and-repair-2026-10-16",
+  "sealed_file_count": 677,
+  "run_seal_sha256": "3e14826efa7dfba8e323178221078e7d833b45cb5d2b64409a0f815b2c3e273e",
+  "report": "docs/bespalov-metrics-2026-10-16.md",
+  "report_sha256": "5878258c873cdd009f17bd4ec88631fa891db6f75d7812ae5b7a2a7a7cfdf31a",
+  "archive": "artifacts/handoffs/single-pass-search-and-repair-2026-10-16.zip",
+  "archive_bytes": 5358498,
+  "archive_sha256": "4186da83b279e6878cbfaf4bd9165e9aceb44e31c938d8a7023a6d5135066996",
+  "zip_integrity_and_manifest_verified": true,
+  "offline_final_validation": {
+    "subprocesses_forbidden": true,
+    "provider_calls_forbidden": true,
+    "all_sealed_bytes_verified": true,
+    "both_c04_c03_replays_passed": true
+  },
+  "post_measurement_code_difference": {
+    "file": "app/delivery_metrics.py",
+    "reason": "Keep outside-ground-truth, duplicate and unresolved observation accounting per split instead of pooling it as unique counts",
+    "enumerated_case_metrics_unchanged": true,
+    "original_sealed_measurements_unchanged": true
+  },
+  "limitations": [
+    "Search stopped at its wall budget and retains model/proposal failures",
+    "Confirmed precision applies to matched benchmark cases only",
+    "No binary safe-case decisions; decided-safe FPR is unavailable",
+    "The two-family C04 fix slice retains protected C01/B09 inputs and has fresh C03 BEFORE/AFTER verification",
+    "Historical A06 uses different scanner rules, role coverage and budgets",
+    "Known development corpus, not unseen holdout or cross-project quality"
+  ]
+}

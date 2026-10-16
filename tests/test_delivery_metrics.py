@@ -34,6 +34,9 @@ def test_unequal_splits_are_pooled_without_excluding_abstentions_or_counting_out
     assert result["decision_coverage"]["value"] == 13 / 35
     assert result["detection_precision"]["value"] == 27 / 28
     assert result["severity_accuracy"] is result["context_priority_accuracy"] is None
+    assert "outside_ground_truth" not in result["counts"]
+    assert result["observation_accounting_by_split"]["development"]["outside_ground_truth"] == 100
+    assert result["observation_accounting_by_split"]["holdout"]["outside_ground_truth"] == 100
 
 
 def test_false_confirmations_and_safe_rejections_remain_in_their_denominators():
