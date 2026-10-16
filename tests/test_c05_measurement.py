@@ -53,6 +53,15 @@ def test_started_but_interrupted_is_not_unattempted(series):
     assert m.summarize(root)['statuses']['INTERRUPTED'] == 1
 
 
+def test_all_started_without_terminal_receipts_is_not_a_complete_series(series):
+    root, plan = series
+    for slot in plan['slots']:
+        m.write_json(root / 'starts' / (slot['id'] + '.json'), slot)
+    result = m.summarize(root)
+    assert result['statuses']['INTERRUPTED'] == 6
+    assert not result['complete']
+
+
 @pytest.mark.parametrize('mutation', ['family', 'protocol'])
 def test_receipt_cannot_change_the_selected_case_or_protocol(series, mutation):
     root, plan = series

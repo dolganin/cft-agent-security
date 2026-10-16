@@ -227,7 +227,7 @@ def summarize(root: Path):
     families = {f: {'verified': sum(r['status'] == 'FIXED' for r in rows if r['family'] == f),
                     'eligible_runs': REPETITIONS} for f in FAMILIES}
     return {'schema_version': 'cft.c05.measurement.v1', 'protocol_sha256': digest((root / 'protocol.json').read_bytes()),
-            'complete': all(r['status'] != 'NOT_RUN' for r in rows),
+            'complete': all(r['status'] not in {'NOT_RUN', 'INTERRUPTED'} for r in rows),
             'eligible_confirmed': {'eligible': len(FAMILIES), 'confirmed': len(plan['population']['confirmed_case_ids']),
                                    'unit': 'unique benchmark case'},
             'verified_eligible': {'verified': statuses['FIXED'], 'eligible': len(plan['slots']), 'unit': 'case-run'},
