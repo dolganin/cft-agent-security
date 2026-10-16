@@ -1,0 +1,73 @@
+{
+  "cohort": "Historical C04, excluded from C05 denominators",
+  "result": {
+    "status": "NOT_FIXED",
+    "stop_reason": "duplicate_patch",
+    "duration_ms": 191303,
+    "attempts": 2,
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "c03_status": "REGRESSION",
+    "before": "confirmed",
+    "after": null,
+    "native_stages": [
+      {
+        "phase": "before",
+        "status": "passed",
+        "exit_code": 0,
+        "counts": {
+          "tests": 362,
+          "failed": 0,
+          "passed": 360,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 36,
+          "suites": 108
+        },
+        "file_level_failure": false
+      },
+      {
+        "phase": "before",
+        "status": "passed",
+        "exit_code": 0,
+        "counts": {
+          "tests": 403,
+          "failed": 0,
+          "passed": 401,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 39,
+          "suites": 127
+        },
+        "file_level_failure": false
+      },
+      {
+        "phase": "after",
+        "status": "failed",
+        "exit_code": 1,
+        "counts": {
+          "tests": 396,
+          "failed": 2,
+          "passed": 392,
+          "cancelled": 0,
+          "skipped": 2,
+          "todo": 0,
+          "topLevel": 40,
+          "suites": 121
+        },
+        "file_level_failure": true
+      }
+    ],
+    "seal_sha256": "6ebd82d56cb090a94f750ddd7357207058de4ee7e070a0a050c67d318c94409e",
+    "zip_sha256": "cb0d43bdbd43262d0d5733e2f860cb71e800206c9fdc629dae1286bcb1041768"
+  },
+  "source": "docs/evidence/c04/results.json",
+  "interpretation": "Finished NOT_FIXED/duplicate_patch after REGRESSION; canonical AFTER not reached. Native process failure is not attributed to the patch. Full original private bundle remains on its operator machine.",
+  "c05_setup_failure": {
+    "path": "artifacts/c05-series-2026-10-16",
+    "provider_calls": 0,
+    "reason": "Receipt parent directory missing before first C04 call; retained as setup failure, not a replacement measured slot"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "projection_only": true,
+  "complete_local_series": "C:\\Users\\Roman\\Documents\\GitHub\\cft-security-agent\\artifacts\\c05-series-final-2026-10-16",
+  "complete_local_zip": "C:\\Users\\Roman\\Documents\\GitHub\\cft-security-agent\\artifacts\\c05-series-final-2026-10-16.zip",
+  "full_zip_sha256": "102a3ec643bab748169d94b639beba9f1f5a7ecd448de3710c4c778a26c35b5c",
+  "source_seal_sha256": "146004049e8a35ea5129c5f6a7d35484f5b42115a5efc8830226f2fb4609dbd0",
+  "offline_replay": {
+    "identical_repetitions": 2,
+    "processes_and_provider_calls_forbidden": true
+  },
+  "historical_mttr": null,
+  "production_mttr": null,
+  "extracted_zip_replay_passed": true,
+  "actual_provider_attempts": 6,
+  "final_original_source_unchanged": true
+}

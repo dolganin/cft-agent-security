@@ -98,8 +98,15 @@ LLM не является границей безопасности. Реаль�
 Предложение сохраняется без применения к оригиналу.
 
 [C03: независимая проверка патча](docs/c03-independent-patch-verification.md):
-SQL reference — FIXED; redirect reference — REGRESSION на обязательных upstream tests.
-Все upstream tests сохранены; C03 целиком пока не закрыт.
+SQL и redirect проверяются в изолированных копиях. Для двух устаревших redirect
+assertions действует защищённый security contract; raw failures сохраняются.
+
+[C04: ограниченный цикл исправления](docs/c04-bounded-repair-loop.md) связывает
+реальную генерацию LLM, verifier, feedback и повторы без изменения оригинала.
+
+[C05: повторяемые измерения исправлений](docs/c05-repair-measurement.md):
+`python -m app.repair_measurement --target <pinned-checkout> --output <new-directory>`.
+Полный B09 сохраняется отдельно от fix-среза; лабораторное время не является MTTR.
 
 ### Требования
 

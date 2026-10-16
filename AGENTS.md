@@ -1425,3 +1425,24 @@ technical failures preserve partial sealed history without success claims.
 Docker or LLM. Keep complete local evidence and any redacted/partial public
 readout distinct. Never modify original target files or merge automatically.
 See `docs/c04-bounded-repair-loop.md` and `docs/evidence/c04/README.md`.
+
+# 41. C05 repair measurements
+
+`app.repair_measurement` freezes three interleaved repetitions of both C01
+eligible benchmark cases before real C04 calls. Case labels and the complete B09
+archive are evaluator inputs, never model context. Count unique cases rather
+than duplicate findings; keep every planned slot in verified/eligible, including
+technical failures and interruptions. Do not replace unsuccessful attempts or
+reinterpret C04 technical outcomes as safe/fixed.
+
+Every verified row requires independent C04/C03 replay, the fixed provider/image,
+original source and scope binding. Preserve the full B09 separately from the fix
+slice. Public projections cannot substitute for a complete private source bundle.
+Outer seals and receipts are operator provenance, not cryptographic attestation.
+
+Primary laboratory timing starts at acceptance of archived confirmed input and
+ends after C04 replay, including generation/retries and cleanup. Fresh BEFORE
+timing and historical calendar elapsed time are separate. Production/historical
+MTTR remain N/A without actual operational remediation events. Report the n of
+successful latency observations alongside all unsuccessful durations. See
+`docs/c05-repair-measurement.md` for the fixed protocol and reproduction.

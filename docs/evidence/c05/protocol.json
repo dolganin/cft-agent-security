@@ -1,0 +1,177 @@
+{
+  "schema_version": "cft.c05.protocol.v1",
+  "frozen_at": "2026-10-16T00:46:33.804181+00:00",
+  "implementation_commit": "adff66348d7fe1ccbf229612d5bce2ca4784a5b8",
+  "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "route": "nsu:qwen3.8-flash-next",
+  "repetitions": 3,
+  "original_path": "C:\\Users\\Roman\\Documents\\GitHub\\cft-security-agent\\artifacts\\benchmark-target\\juice-shop",
+  "limits": {
+    "max_attempts": 3,
+    "wall_clock_seconds": 900.0
+  },
+  "fix_image": "cft-fix-juice@sha256:c29711a8786b81eb9f8694f87638ef2272126d5c9a8ac6bb628ee6989f64a12d",
+  "baseline_sha256": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+  "population": {
+    "unit": "unique frozen benchmark case, not finding or family category",
+    "confirmed_case_ids": [
+      "JS-AUTH-001",
+      "JS-FILE-001",
+      "JS-REDIRECT-001",
+      "JS-SQL-001",
+      "JS-SQL-002"
+    ],
+    "cases": [
+      {
+        "family": "sql-search",
+        "case_id": "JS-SQL-001",
+        "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+        "report_sha256": "c240a4a17e61f47e6997913f2a9d613d46bef373fcdd806f8fa1e46feac84114",
+        "historical_confirmed_at": "2026-10-14T17:13:06.865731+00:00",
+        "related_finding_ids": [
+          "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23"
+        ]
+      },
+      {
+        "family": "redirect-allowlist",
+        "case_id": "JS-REDIRECT-001",
+        "finding_id": "model-scout-1a6367342c866e273428",
+        "report_sha256": "43157affaeb04f82dcb02ceddba6f9d3ee23504e8422ad47e47c7c2c6c6e3bd1",
+        "historical_confirmed_at": "2026-10-14T17:11:41.609033+00:00",
+        "related_finding_ids": [
+          "model-scout-1a6367342c866e273428",
+          "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+          "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18"
+        ]
+      }
+    ],
+    "scope": {
+      "schema_version": "cft.fix-scope.v1",
+      "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+      "baseline_archive_sha256": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+      "evaluator_lock_sha256": "43113eb31f06cf2330fe90d1816cd534224f8034af8da19e92ee03f117ecff96",
+      "entries": [
+        {
+          "family_id": "sql-search",
+          "status": "eligible",
+          "reason": "B09 persisted execution/audit and approved trace replay matched",
+          "finding_ids": [
+            "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23"
+          ],
+          "evidence_refs": [
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/evidence/execution-1246ff70be3848709bb194c8f7f1013b.json",
+            "audit:9b771faea15242d08251747500e192a1",
+            "execution-1246ff70be3848709bb194c8f7f1013b"
+          ]
+        },
+        {
+          "family_id": "redirect-allowlist",
+          "status": "eligible",
+          "reason": "B09 persisted execution/audit and approved trace replay matched",
+          "finding_ids": [
+            "model-scout-1a6367342c866e273428",
+            "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+            "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18"
+          ],
+          "evidence_refs": [
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/53/audit.jsonl",
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/53/execution/execution-78da0d4096ba4da4b3c6eef5e00281a5.json",
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/90/audit.jsonl",
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/90/execution/execution-5a8c027dfcea45658dd2aa73dfeaa1e7.json",
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/91/audit.jsonl",
+            "/private/tmp/cft-security-agent-b05-main-integration/artifacts/b09-single-2026-10-15-final/pipeline/b06-runtime/91/execution/execution-cec2d8eb3cd14df6adcd78572a83fae8.json",
+            "audit:6962f41ca8d849fca69d36926442bbc6",
+            "audit:7d7a23d725cf463496921d9a82094d05",
+            "audit:b00c74e05b57498ba6879ee1f2d0a2f2",
+            "execution-5a8c027dfcea45658dd2aa73dfeaa1e7",
+            "execution-78da0d4096ba4da4b3c6eef5e00281a5",
+            "execution-cec2d8eb3cd14df6adcd78572a83fae8"
+          ]
+        },
+        {
+          "family_id": "sql-login",
+          "status": "ineligible",
+          "reason": "Confirmed but not selected: search-only SQL repair scope; do not infer login repair coverage",
+          "finding_ids": [],
+          "evidence_refs": []
+        },
+        {
+          "family_id": "sensitive-directory",
+          "status": "ineligible",
+          "reason": "Confirmed listing only; file authorization/content repair oracle not qualified in C01",
+          "finding_ids": [],
+          "evidence_refs": []
+        },
+        {
+          "family_id": "auth-reauthentication",
+          "status": "ineligible",
+          "reason": "Confirmed but credential rotation/valid old-password functional oracle not qualified in C01",
+          "finding_ids": [],
+          "evidence_refs": []
+        },
+        {
+          "family_id": "access-control",
+          "status": "ineligible",
+          "reason": "No selected evidence-backed benchmark confirmation in B09",
+          "finding_ids": [],
+          "evidence_refs": []
+        },
+        {
+          "family_id": "code-evaluation",
+          "status": "ineligible",
+          "reason": "Docker-disabled branch; unsupported runtime",
+          "finding_ids": [],
+          "evidence_refs": []
+        },
+        {
+          "family_id": "other",
+          "status": "ineligible",
+          "reason": "All families outside this exact two-family registry are ineligible",
+          "finding_ids": [],
+          "evidence_refs": []
+        }
+      ],
+      "eligible": 2,
+      "failed": 0,
+      "ineligible": 6,
+      "fixes_attempted": 0,
+      "security_verified": false
+    }
+  },
+  "slots": [
+    {
+      "id": "01-sql-search",
+      "family": "sql-search",
+      "repetition": 1
+    },
+    {
+      "id": "01-redirect-allowlist",
+      "family": "redirect-allowlist",
+      "repetition": 1
+    },
+    {
+      "id": "02-sql-search",
+      "family": "sql-search",
+      "repetition": 2
+    },
+    {
+      "id": "02-redirect-allowlist",
+      "family": "redirect-allowlist",
+      "repetition": 2
+    },
+    {
+      "id": "03-sql-search",
+      "family": "sql-search",
+      "repetition": 3
+    },
+    {
+      "id": "03-redirect-allowlist",
+      "family": "redirect-allowlist",
+      "repetition": 3
+    }
+  ],
+  "selection": "All two eligible unique cases, fixed interleaved order; no replacement runs",
+  "time_origin": "C05 accepts archived evidence-backed confirmed input before calling C04",
+  "historical_mttr": null,
+  "production_mttr": null
+}
