@@ -12,5 +12,7 @@ executor_data/
 .codex/
 .agents/
 .playwright-cli/
+output/
+tmp/
 
 api_data/
