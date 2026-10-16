@@ -1,0 +1,24 @@
+{
+  "number": 2,
+  "directory": "attempts/002",
+  "started_at": "2026-10-15T17:16:39.656102Z",
+  "finished_at": "2026-10-15T17:16:46.292073Z",
+  "duration_ms": 6636,
+  "generation_ms": 4917,
+  "verification_ms": 0,
+  "source_snapshot": {
+    "commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "tracked_files": 1300,
+    "files_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818"
+  },
+  "workspace_cleanup": true,
+  "generation_status": "ready_for_review",
+  "generation_reason": "bounded_proposal_validated",
+  "response_patch_sha256": "1c0455888a6f03c824f830798be90bd2ed313c3b64f5af4948d64433db0e5c9c",
+  "patch_sha256": null,
+  "patched_file_sha256": null,
+  "verification_status": null,
+  "decision": "duplicate",
+  "reason": "duplicate_patch",
+  "feedback": null
+}

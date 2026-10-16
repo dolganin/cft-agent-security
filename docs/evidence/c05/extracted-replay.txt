@@ -1,0 +1,3 @@
+C:\Users\Roman\Lib\site-packages\langgraph\cache\base\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+  from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+{"complete": true, "statuses": {"FIXED": 6, "NOT_FIXED": 0, "TECHNICAL_ERROR": 0, "INTERRUPTED": 0, "NOT_RUN": 0}, "verified_eligible": {"verified": 6, "eligible": 6, "unit": "case-run"}}

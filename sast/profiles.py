@@ -13,6 +13,26 @@ ROOT = Path(__file__).resolve().parents[1]
 SUPPORTED_EXCLUDES = [".venv", "node_modules", "dist", "build"]
 
 
+def _parse_index_records(raw: bytes) -> list[tuple[str, str, str, str]]:
+    """Parse Git's NUL-delimited index records without locale decoding paths."""
+    if not raw or not raw.endswith(b"\0"):
+        raise ValueError("Target Git index output is malformed")
+
+    records = []
+    for record in raw[:-1].split(b"\0"):
+        metadata, separator, path_bytes = record.partition(b"\t")
+        fields = metadata.split(b" ")
+        if not separator or len(fields) != 3 or not path_bytes:
+            raise ValueError("Target Git index record is malformed")
+        try:
+            mode, blob, stage = (field.decode("ascii", errors="strict") for field in fields)
+            relative = path_bytes.decode("utf-8", errors="strict")
+        except UnicodeDecodeError as exc:
+            raise ValueError("Target Git index contains invalid UTF-8 path data") from exc
+        records.append((mode, blob, stage, relative))
+    return records
+
+
 def load_scan_profile(path: str | Path) -> dict:
     profile_path = Path(path).expanduser().resolve()
     value = yaml.safe_load(profile_path.read_text(encoding="utf-8"))
@@ -71,24 +91,29 @@ def validate_target_snapshot(target: str | Path, expected_commit: str) -> dict:
     """Require a clean checkout and verify every tracked file against Git blobs."""
     target_path = Path(target).expanduser().resolve(strict=True)
 
-    def git(*args: str) -> str:
+    def git(*args: str) -> bytes:
         result = subprocess.run(
             ["git", "-C", str(target_path), *args], capture_output=True,
-            text=True, check=False, timeout=30,
+            check=False, timeout=30,
         )
         if result.returncode:
-            raise ValueError(f"Target provenance check failed: {result.stderr.strip()[:500]}")
+            try:
+                detail = result.stderr.decode("utf-8", errors="strict").strip()[:500]
+            except UnicodeDecodeError:
+                detail = "Git returned a non-UTF-8 diagnostic"
+            raise ValueError(f"Target provenance check failed: {detail}")
         return result.stdout
 
-    commit = git("rev-parse", "HEAD").strip()
+    try:
+        commit = git("rev-parse", "HEAD").decode("ascii", errors="strict").strip()
+    except UnicodeDecodeError as exc:
+        raise ValueError("Target Git commit id is not ASCII") from exc
     if commit != expected_commit:
         raise ValueError("Target commit differs from Semgrep profile pin")
-    if git("status", "--porcelain", "--untracked-files=all"):
+    if git("status", "--porcelain", "--untracked-files=all", "-z"):
         raise ValueError("Target checkout must be clean, including untracked files")
-    records = git("ls-files", "-s", "-z").rstrip("\0").split("\0")
     file_hashes = {}
-    for record in records:
-        mode, blob, stage, relative = record.split(maxsplit=3)
+    for mode, blob, stage, relative in _parse_index_records(git("ls-files", "-s", "-z")):
         path = target_path / relative
         if stage != "0" or mode not in {"100644", "100755"} or path.is_symlink():
             raise ValueError("Target contains an unsupported tracked file")

@@ -1,0 +1,225 @@
+{
+  "schema_version": "cft.c05.measurement.v1",
+  "protocol_sha256": "00841636e4afa6cfa7076759c58c1500b104816e0cac0be1dd2d97fc926c8939",
+  "complete": true,
+  "eligible_confirmed": {
+    "eligible": 2,
+    "confirmed": 5,
+    "unit": "unique benchmark case"
+  },
+  "verified_eligible": {
+    "verified": 6,
+    "eligible": 6,
+    "unit": "case-run"
+  },
+  "statuses": {
+    "FIXED": 6,
+    "NOT_FIXED": 0,
+    "TECHNICAL_ERROR": 0,
+    "INTERRUPTED": 0,
+    "NOT_RUN": 0
+  },
+  "families": {
+    "sql-search": {
+      "verified": 3,
+      "eligible_runs": 3
+    },
+    "redirect-allowlist": {
+      "verified": 3,
+      "eligible_runs": 3
+    }
+  },
+  "rows": [
+    {
+      "id": "01-sql-search",
+      "family": "sql-search",
+      "repetition": 1,
+      "status": "FIXED",
+      "attempts": 1,
+      "regression_attempts": 0,
+      "duration_ms": 165758,
+      "verified_ms": 165758,
+      "fresh_before_to_verified_ms": 75595.754,
+      "historical_confirmed_to_verified_ms": 113779100.275,
+      "stop_reason": "independently_verified",
+      "seal_sha256": "13368a6609ead935bc1b9f3f829854b78ed9ca9e3e0d147e6535bee74fd46386",
+      "original_unchanged": true,
+      "attempt_history": [
+        {
+          "number": 1,
+          "generation_status": "ready_for_review",
+          "verification_status": "FIXED",
+          "decision": "fixed",
+          "reason": "independently_verified",
+          "duration_ms": 149642,
+          "generation_ms": 6362,
+          "verification_ms": 130651,
+          "workspace_cleanup": true
+        }
+      ]
+    },
+    {
+      "id": "01-redirect-allowlist",
+      "family": "redirect-allowlist",
+      "repetition": 1,
+      "status": "FIXED",
+      "attempts": 1,
+      "regression_attempts": 0,
+      "duration_ms": 302837,
+      "verified_ms": 302837,
+      "fresh_before_to_verified_ms": 146937.881,
+      "historical_confirmed_to_verified_ms": 114167195.127,
+      "stop_reason": "independently_verified",
+      "seal_sha256": "79c1049e813ec3723ef0d45a708c9452d629ca20d597848b926b5afcb39538d8",
+      "original_unchanged": true,
+      "attempt_history": [
+        {
+          "number": 1,
+          "generation_status": "ready_for_review",
+          "verification_status": "FIXED",
+          "decision": "fixed",
+          "reason": "independently_verified",
+          "duration_ms": 289880,
+          "generation_ms": 8183,
+          "verification_ms": 267861,
+          "workspace_cleanup": true
+        }
+      ]
+    },
+    {
+      "id": "02-sql-search",
+      "family": "sql-search",
+      "repetition": 2,
+      "status": "FIXED",
+      "attempts": 1,
+      "regression_attempts": 0,
+      "duration_ms": 166366,
+      "verified_ms": 166366,
+      "fresh_before_to_verified_ms": 76674.197,
+      "historical_confirmed_to_verified_ms": 114248307.033,
+      "stop_reason": "independently_verified",
+      "seal_sha256": "7df0344d6fb7a5f76950ac36d613c0a6d5443786534cc04182f6cca74298f810",
+      "original_unchanged": true,
+      "attempt_history": [
+        {
+          "number": 1,
+          "generation_status": "ready_for_review",
+          "verification_status": "FIXED",
+          "decision": "fixed",
+          "reason": "independently_verified",
+          "duration_ms": 153973,
+          "generation_ms": 8330,
+          "verification_ms": 131247,
+          "workspace_cleanup": true
+        }
+      ]
+    },
+    {
+      "id": "02-redirect-allowlist",
+      "family": "redirect-allowlist",
+      "repetition": 2,
+      "status": "FIXED",
+      "attempts": 1,
+      "regression_attempts": 0,
+      "duration_ms": 288335,
+      "verified_ms": 288335,
+      "fresh_before_to_verified_ms": 146854.709,
+      "historical_confirmed_to_verified_ms": 114621900.77399999,
+      "stop_reason": "independently_verified",
+      "seal_sha256": "4471df4b209a133312e5e2d0161a1783ffadcc91b682af9b6e746fee1dab4f1d",
+      "original_unchanged": true,
+      "attempt_history": [
+        {
+          "number": 1,
+          "generation_status": "ready_for_review",
+          "verification_status": "FIXED",
+          "decision": "fixed",
+          "reason": "independently_verified",
+          "duration_ms": 274604,
+          "generation_ms": 8030,
+          "verification_ms": 251550,
+          "workspace_cleanup": true
+        }
+      ]
+    },
+    {
+      "id": "03-sql-search",
+      "family": "sql-search",
+      "repetition": 3,
+      "status": "FIXED",
+      "attempts": 1,
+      "regression_attempts": 0,
+      "duration_ms": 173555,
+      "verified_ms": 173555,
+      "fresh_before_to_verified_ms": 82471.466,
+      "historical_confirmed_to_verified_ms": 114710202.86600001,
+      "stop_reason": "independently_verified",
+      "seal_sha256": "3ed386cf9cb96f3e0d0e34f76aefb941005147c83db5bf2edfc740245a38b10c",
+      "original_unchanged": true,
+      "attempt_history": [
+        {
+          "number": 1,
+          "generation_status": "ready_for_review",
+          "verification_status": "FIXED",
+          "decision": "fixed",
+          "reason": "independently_verified",
+          "duration_ms": 160505,
+          "generation_ms": 9860,
+          "verification_ms": 136662,
+          "workspace_cleanup": true
+        }
+      ]
+    },
+    {
+      "id": "03-redirect-allowlist",
+      "family": "redirect-allowlist",
+      "repetition": 3,
+      "status": "FIXED",
+      "attempts": 1,
+      "regression_attempts": 0,
+      "duration_ms": 302786,
+      "verified_ms": 302786,
+      "fresh_before_to_verified_ms": 147598.834,
+      "historical_confirmed_to_verified_ms": 115098248.541,
+      "stop_reason": "independently_verified",
+      "seal_sha256": "c90e462845ff93d122586b181520d0b5e5b654e29bc70ea4f59453701d273e4e",
+      "original_unchanged": true,
+      "attempt_history": [
+        {
+          "number": 1,
+          "generation_status": "ready_for_review",
+          "verification_status": "FIXED",
+          "decision": "fixed",
+          "reason": "independently_verified",
+          "duration_ms": 289625,
+          "generation_ms": 8425,
+          "verification_ms": 265750,
+          "workspace_cleanup": true
+        }
+      ]
+    }
+  ],
+  "regression_attempts": 0,
+  "attempts": 6,
+  "time_confirmed_input_to_verified": {
+    "n": 6,
+    "mean_ms": 233272.83333333334,
+    "median_ms": 230945.0,
+    "min_ms": 165758,
+    "max_ms": 302837
+  },
+  "fresh_before_to_verified": {
+    "n": 6,
+    "mean_ms": 112688.80683333334,
+    "median_ms": 114663.0875,
+    "min_ms": 75595.754,
+    "max_ms": 147598.834
+  },
+  "historical_mttr": null,
+  "production_mttr": null,
+  "limitations": [
+    "Known development corpus; not unseen holdout or general repair quality",
+    "Success timing excludes failures; all failure durations remain in rows",
+    "Historical elapsed times include idle days and are not laboratory latency or production MTTR"
+  ]
+}

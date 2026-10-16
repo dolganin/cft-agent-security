@@ -1,0 +1,56 @@
+{
+  "schema_version": "cft.patch-generation.c02.v1",
+  "family_id": "redirect-allowlist",
+  "status": "ready_for_review",
+  "reason": "bounded_proposal_validated",
+  "generation_method": "llm",
+  "provider_route": "nsu/qwen3.8-flash-next",
+  "provider_attempts": [
+    {
+      "route": "nsu/qwen3.8-flash-next",
+      "ok": true,
+      "status": "ok",
+      "latency_ms": 3957
+    }
+  ],
+  "model_response_received": true,
+  "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "source_snapshot_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818",
+  "source_file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+  "baseline_archive_sha256": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+  "original_report_sha256": "43157affaeb04f82dcb02ceddba6f9d3ee23504e8422ad47e47c7c2c6c6e3bd1",
+  "request_sha256": "b893ea4a526ad312fda33f6ea0f1a2576be00ab673fdc0786cb4fa6603c96d0d",
+  "response_sha256": "c4451c9f581a2cee65a121d800c3f108f7f7a14ca62f4903a136b688722a1fd2",
+  "response_patch_sha256": "1c0455888a6f03c824f830798be90bd2ed313c3b64f5af4948d64433db0e5c9c",
+  "c01_lock_sha256": "43113eb31f06cf2330fe90d1816cd534224f8034af8da19e92ee03f117ecff96",
+  "original_unchanged": true,
+  "review": {
+    "schema_version": "1.0",
+    "id": "patch-ae3b4b47a33e4038915bbf739d22bca8",
+    "run_id": "c02-afa99a9ea9c143e4936c12a4995c012d",
+    "finding_id": "model-scout-1a6367342c866e273428",
+    "file": "lib/insecurity.ts",
+    "status": "ready_for_review",
+    "source_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+    "proposal_sha256": "4f1f3fc13def515c107f5b163c1aa46fac88439a85c4b5b4811b3c64040225d3",
+    "model": "nsu/qwen3.8-flash-next",
+    "generated_at": "2026-10-15T17:16:45.806057Z",
+    "proposal": {
+      "finding_id": "model-scout-1a6367342c866e273428",
+      "rationale": "Функция isRedirectAllowed использует подстрочное сравнение url.includes(allowedUrl), что позволяет атакующему обойти проверку, встроив разрешённый URL как подстроку в вредоносный адрес (например, https://evil.com/?x=https://allowed.com). Исправление заменяет подстрочное сравнение на строгое равенство (===), сохраняя булев аккумулятор, цикл и исходный allowlist без изменений.",
+      "unified_diff": "--- a/lib/insecurity.ts\n+++ b/lib/insecurity.ts\n@@ -133,7 +133,7 @@\n export const isRedirectAllowed = (url: string) => {\n   let allowed = false\n   for (const allowedUrl of redirectAllowlist) {\n-    allowed = allowed || url.includes(allowedUrl) // vuln-code-snippet vuln-line redirectChallenge\n+    allowed = allowed || url === allowedUrl\n   }\n   return allowed\n }\n"
+    },
+    "validation_detail": "C01 scope, bounded AST window and C02 defensive shape checked; not applied",
+    "validation_policy": "single_file_scope_v1",
+    "editable_start": 133,
+    "editable_end": 139,
+    "applied": false,
+    "security_verified": false,
+    "limitations": [
+      "LLM proposal only; no build, tests, apply or security verification",
+      "C03 must repeat independent BEFORE/AFTER runtime verification"
+    ]
+  },
+  "applied": false,
+  "security_verified": false
+}

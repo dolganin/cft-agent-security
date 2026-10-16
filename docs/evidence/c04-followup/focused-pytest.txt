@@ -1,0 +1,12 @@
+...................s.................................................... [ 72%]
+..........................ss                                             [100%]
+============================== warnings summary ===============================
+..\..\..\Lib\site-packages\langgraph\cache\base\__init__.py:8
+  C:\Users\Roman\Lib\site-packages\langgraph\cache\base\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_c04_acceptance_replay.py:250: Set CFT_C04_FAILURE_ARTIFACTS to the complete local redirect bundle
+SKIPPED [2] tests\test_c04_transport.py:10: POSIX process-group regression
+97 passed, 3 skipped, 1 warning in 118.18s (0:01:58)

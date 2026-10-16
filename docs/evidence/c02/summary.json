@@ -1,0 +1,112 @@
+{
+  "schema": "cft.c02.live-acceptance.v1",
+  "implementation_base": "bdbac9f",
+  "real_provider_calls": 10,
+  "ready_for_review": 8,
+  "rejected": 2,
+  "failed": 0,
+  "ineligible": 0,
+  "final_selected": [
+    "sql-delivery",
+    "redirect-delivery"
+  ],
+  "original_snapshot": {
+    "commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "tracked_files": 1300,
+    "files_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818"
+  },
+  "applied": false,
+  "security_verified": false,
+  "runs": [
+    {
+      "run": "sql-live-01",
+      "phase": "development",
+      "family": "sql-search",
+      "status": "rejected",
+      "reason": "diff_scope_or_defensive_policy",
+      "original_unchanged": true,
+      "has_raw_response": false
+    },
+    {
+      "run": "sql-live-02",
+      "phase": "development",
+      "family": "sql-search",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": false
+    },
+    {
+      "run": "redirect-live-01",
+      "phase": "development",
+      "family": "redirect-allowlist",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": false
+    },
+    {
+      "run": "sql-acceptance",
+      "phase": "development",
+      "family": "sql-search",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": true
+    },
+    {
+      "run": "redirect-acceptance",
+      "phase": "development",
+      "family": "redirect-allowlist",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": true
+    },
+    {
+      "run": "sql-final",
+      "phase": "development",
+      "family": "sql-search",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": true
+    },
+    {
+      "run": "redirect-final",
+      "phase": "development",
+      "family": "redirect-allowlist",
+      "status": "rejected",
+      "reason": "invalid_diff_format_or_window",
+      "original_unchanged": true,
+      "has_raw_response": false
+    },
+    {
+      "run": "redirect-final-02",
+      "phase": "development",
+      "family": "redirect-allowlist",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": true
+    },
+    {
+      "run": "sql-delivery",
+      "phase": "delivery",
+      "family": "sql-search",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": true
+    },
+    {
+      "run": "redirect-delivery",
+      "phase": "delivery",
+      "family": "redirect-allowlist",
+      "status": "ready_for_review",
+      "reason": "bounded_proposal_validated",
+      "original_unchanged": true,
+      "has_raw_response": true
+    }
+  ]
+}

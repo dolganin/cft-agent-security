@@ -103,8 +103,9 @@ def harness(tmp_path, monkeypatch):
             return SandboxResult(request.run_id, 0, sql_output(action, state[phase]), "", False, "fake-docker", 1, "docker")
         yield SimpleNamespace(run=run, runtime_instance_id="fake-docker")
     monkeypatch.setattr(DockerSandbox, "open_sequence", sequence)
-    verify = lambda: FixVerificationService().verify(report=report, review=review, profile=profile,
-                                                     artifact_directory=tmp_path / "artifacts")
+    def verify():
+        return FixVerificationService().verify(report=report, review=review, profile=profile,
+                                               artifact_directory=tmp_path / "artifacts")
     return SimpleNamespace(profile=profile, report=report, review=review, state=state, verify=verify,
                            directory=tmp_path / "artifacts", original=original)
 

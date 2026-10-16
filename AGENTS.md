@@ -1451,3 +1451,118 @@ reservation pending rather than exceed the cap or imply safety. The operator's
 all-ready-protocol run explicitly selects 1708 requests, covering 1696 reserved
 fixture requests and 12 reserved B01 requests; the individual research scope
 cap remains 256 and no tool/target permissions are added by a quota override.
+# 41. C01 bounded fix scope
+
+`contracts/c01/families.json` selects only SQL search and redirect allowlist repair
+families from the sealed valid B09. `app.fix_scope` replays persisted execution,
+audit and approved traces; missing proof is explicitly failed, unselected families
+are ineligible. This is not automatic repair or a new confirmed/FIXED verdict.
+
+`fix_verification.scope.validate_candidate` checks the protected evaluator/baseline
+lock, source digest and an exact single existing application file allowlist.
+C02/C03 must call it before patch application and recheck locks after verification.
+Never allow patches to evaluator tests, frozen original baseline, manifests or
+dependencies. The evaluator must stay outside the writable patched target.
+
+`app.fix_scope_acceptance` qualifies 13 independent source-level tests in fixed,
+networkless, non-root disposable Docker containers: original fails cause-specific
+tests, operator reference passes, deny-all and probe-only shortcuts fail. It does
+not replace full build/tests/start/smoke or B01-bound runtime verification in C03.
+Do not treat target stdout or the source evaluator as independent runtime Evidence.
+See `docs/c01-fix-scope.md` for eligibility, budgets, protected inputs and limitations.
+
+# 42. C02 real LLM patch proposals
+
+`app.patch_propose` uses the real ProviderFailoverClient for one operator-selected
+C01 family/route. It replays original B09 proof, binds the complete clean pinned
+source snapshot, projects only bounded AST source and redacted Evidence facts,
+and receives a strict ProposedPatch subclass. No IntegrationPatchClient/reference
+diff, model tool call, target execution or application is used in this path.
+
+Check exact paths, byte/line budgets, source digest/window and C01 scope before
+accepting. SQL query structure/parameter API and strict redirect equality shapes
+are deterministic operator gates; do not widen them on model request. Evaluator,
+baseline, credentials, dependencies and unrelated protections cannot be patched.
+Secret responses are discarded; successful raw responses and canonical reviews
+have separate digests. Recheck full source/C01 integrity after generation.
+
+Persist ready/rejected/failed/ineligible explicitly. A real provider attempt is
+required for ready, but is not proof of remediation. PatchReviewArtifact remains
+applied=false/security_verified=false until independent C03 verification; never
+reinterpret model rationale or adapter telemetry as security Evidence. See
+`docs/c02-llm-patch-proposals.md` for budgets, real runs and reproduction.
+
+# 43. C03 independent patch verification
+
+`app.independent_fix` specializes the existing isolated FixVerificationService.
+C01 scope, frozen B09 source, B01 binding, Validator, SafeExecutor and persisted
+execution/audit are mandatory. Patches cannot modify the evaluator or native
+tests. Fixed readonly runners execute all native unit files; separate source and
+HTTP checks cannot substitute for the original canonical runtime hypothesis.
+
+FIXED requires fresh BEFORE confirmed, explicit AFTER rejected, all required
+successful stages, original integrity and verified owned-resource cleanup.
+Offline replay checks receipts, stage inventory and source/patch digests; it
+cannot upgrade an inconclusive verifier result. No missing response, endpoint
+or model conclusion proves rejection. Reference engineering runs are not C02
+LLM generation claims.
+
+All upstream tests still execute unchanged. Roman subsequently authorized a
+protected security-contract replacement only for the two exact redirect
+assertions requiring vulnerable behavior. contracts/c03/native-security-contract.json
+pins their source hashes, names, assertion lines and false-vs-true outcomes.
+Raw native failures/exit 1 remain persisted; they permit continuation only after
+the exact contract is independently rechecked. No other failure/skip is accepted.
+Independent source/HTTP tests and canonical AFTER rejected remain mandatory;
+the exception itself never creates FIXED. Historical REGRESSION evidence stays
+unchanged. See docs/c03-independent-patch-verification.md.
+
+# 44. C04 bounded repair loop
+
+`app.repair` composes real C02 generation with independent C03 verification for
+the existing C01 SQL/redirect families. Each proposal uses a newly verified copy
+of the original commit and a new verifier instance. Always pass the generated
+review explicitly: C03's reference-patch default is never a C04 fallback.
+
+Raw/canonical diff and resulting-file duplicates stop the campaign. Attempts,
+provider/stage deadlines, typed feedback, execution/audit Evidence, integrity,
+cleanup and terminal reasons remain persisted. Feedback is a bounded registered
+projection, not raw private tests, secrets, stderr or instructions to change policy.
+Feedback v2 identifies the failed AFTER build/native-test stage without claiming
+its cause. The next request includes only the previous validated diff projected
+through the same source redaction as C02, bound to its canonical patch digest;
+never forward rationale, evaluator annotations or raw test output. Replay checks
+the prior-attempt binding, and legacy bundles retain their original contract.
+Shared work deadlines cannot prevent bounded cleanup. Transport process groups
+must be isolated before cancellation can terminate a child.
+
+FIXED requires persisted C03 replay plus matching model-response/proposal/source
+bindings, original integrity and cleanup. C04 NOT_FIXED is an unsuccessful repair
+campaign, not independently confirmed vulnerability persistence. Interruptions and
+technical failures preserve partial sealed history without success claims.
+
+`app.repair --replay <directory>` validates saved C04/C03 artifacts without target,
+Docker or LLM. Keep complete local evidence and any redacted/partial public
+readout distinct. Never modify original target files or merge automatically.
+See `docs/c04-bounded-repair-loop.md` and `docs/evidence/c04/README.md`.
+
+# 45. C05 repair measurements
+
+`app.repair_measurement` freezes three interleaved repetitions of both C01
+eligible benchmark cases before real C04 calls. Case labels and the complete B09
+archive are evaluator inputs, never model context. Count unique cases rather
+than duplicate findings; keep every planned slot in verified/eligible, including
+technical failures and interruptions. Do not replace unsuccessful attempts or
+reinterpret C04 technical outcomes as safe/fixed.
+
+Every verified row requires independent C04/C03 replay, the fixed provider/image,
+original source and scope binding. Preserve the full B09 separately from the fix
+slice. Public projections cannot substitute for a complete private source bundle.
+Outer seals and receipts are operator provenance, not cryptographic attestation.
+
+Primary laboratory timing starts at acceptance of archived confirmed input and
+ends after C04 replay, including generation/retries and cleanup. Fresh BEFORE
+timing and historical calendar elapsed time are separate. Production/historical
+MTTR remain N/A without actual operational remediation events. Report the n of
+successful latency observations alongside all unsuccessful durations. See
+`docs/c05-repair-measurement.md` for the fixed protocol and reproduction.

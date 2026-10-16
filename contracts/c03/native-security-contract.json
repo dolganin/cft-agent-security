@@ -1,0 +1,26 @@
+{
+  "schema_version": "cft.c03.native-security.v1",
+  "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "family": "redirect-allowlist",
+  "phase": "after",
+  "failures": [
+    {
+      "file": "test/server/insecurity.unit.test.ts",
+      "name": "returns true for URLs containing allowed URLs",
+      "line": 259,
+      "source_sha256": "b5527abae401896346caa23845d57d68a26982962043191f08a84bc37300f9f3",
+      "code": "ERR_ASSERTION",
+      "actual": false,
+      "expected": true
+    },
+    {
+      "file": "test/server/redirect.unit.test.ts",
+      "name": "tricking the allowlist should solve \"redirectChallenge\"",
+      "line": 84,
+      "source_sha256": "cb724ac8dccaaa25aa0b62344e065beed38646cc2726d9cc659ae20bd10e6895",
+      "code": "ERR_ASSERTION",
+      "actual": false,
+      "expected": true
+    }
+  ]
+}

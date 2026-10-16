@@ -1,0 +1,7 @@
+{
+  "attempt": 1,
+  "stage": "verification",
+  "code": "REGRESSION",
+  "summary": "The patched application failed required functional checks. Preserve the supplied legitimate behavior and revise only the permitted source window.",
+  "previous_patch_sha256": "aab90e8c3e0eee28ee7759ac2d5198c9cf0a6b22de1a517c3a716b4dfae1fe66"
+}

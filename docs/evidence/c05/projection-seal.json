@@ -1,0 +1,22 @@
+{
+  "files": {
+    ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+    "01-sql-search.zip": "6c0d3d3baa3223bc3b482efccd3f0fab7df6d425068583b8f666e837fbff05e0",
+    "02-sql-search.zip": "c3a23df09c3b788ee2d264bab4d49ed2c255d828476e1cdd28a41249ead3fb9a",
+    "03-sql-search.zip": "f93137a7f818900b6692298fdfca2ceab1c8d12f9f18bb9d0f10d3f3772b879d",
+    "app-main.txt": "1970499bd4d691847f112045f1b5171219568bb1bcde3795cdf6f5a0094b75b6",
+    "delivery.json": "263a0ea30330c10b4a196ecb18027a5c09578bb8797e2d65fe95fac4e6752c40",
+    "extracted-replay.txt": "de2fcbfad3b20903787c9b36a0a4cc3ba1f620e81b269e3768db99e252a8f5d4",
+    "focused-pytest.txt": "0cf56d162afd1aa0b826a3f97a3236de1a77becbc72575535336274cc4962c15",
+    "historical-unsuccessful.json": "6b1d4aaea72b04f6fcc96d77885e80715f2be7f2c92aed5015cdc1809ce60d0e",
+    "measurement.json": "03a20ed8b8e3740a9cb14671f133346a1eac534a4b485a603653b124802e0f85",
+    "native-and-gates.json": "6e1a9e933122ab41b33cc60ab3f4ff2283e5d8a2ca1330da370a1f8836637b4f",
+    "original-series-seal.json": "146004049e8a35ea5129c5f6a7d35484f5b42115a5efc8830226f2fb4609dbd0",
+    "protocol.json": "00841636e4afa6cfa7076759c58c1500b104816e0cac0be1dd2d97fc926c8939",
+    "pytest.txt": "fcd601c18f88fb89f896616c225695b349c40e067a66dbf4a24d168ca0db5587",
+    "README.md": "805fdda8f690088c7608adf2ac2c4b0a0a9241911d0b0a92dc6bfe1b8ccbdd8f",
+    "report.md": "83e98bf1e51e56deefc6df5a8387d8f93051973b65a59cc9e203b83418471197",
+    "ruff.txt": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0",
+    "slots.csv": "f33cc16027c3b37ff3eef1d9107768041e9e7f509d49d68cb37ec9859a41a5a2"
+  }
+}

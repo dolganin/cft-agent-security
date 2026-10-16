@@ -89,6 +89,25 @@ LLM не является границей безопасности. Реаль�
 
 ## Быстрый запуск
 
+Область исправлений C01: [два выбранных семейства, независимые тесты и eligibility](docs/c01-fix-scope.md).
+Пересчёт исходных подтверждений: `python -m app.fix_scope --output artifacts/c01-fresh.json`.
+Это выбор области; генерация патчей и их полная runtime-проверка относятся к C02/C03.
+
+[C02: реальные LLM-предложения патчей](docs/c02-llm-patch-proposals.md):
+`python -m app.patch_propose --target <pinned-checkout> --family sql-search --output <new-directory>`.
+Предложение сохраняется без применения к оригиналу.
+
+[C03: независимая проверка патча](docs/c03-independent-patch-verification.md):
+SQL и redirect проверяются в изолированных копиях. Для двух устаревших redirect
+assertions действует защищённый security contract; raw failures сохраняются.
+
+[C04: ограниченный цикл исправления](docs/c04-bounded-repair-loop.md) связывает
+реальную генерацию LLM, verifier, feedback и повторы без изменения оригинала.
+
+[C05: повторяемые измерения исправлений](docs/c05-repair-measurement.md):
+`python -m app.repair_measurement --target <pinned-checkout> --output <new-directory>`.
+Полный B09 сохраняется отдельно от fix-среза; лабораторное время не является MTTR.
+
 ### Требования
 
 - Python `3.11+`;

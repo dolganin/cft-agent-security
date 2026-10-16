@@ -1,0 +1,8 @@
+{
+  "schema_version": "cft.c03.protected-contract-delivery-seal.v1",
+  "files": {
+    "protected-contract-results.json": "e7511875229cc78d2f50faf5e1c6efe9dd0ee542c10bd2df8b750ef6258c84c9",
+    "protected-contract-pytest.txt": "74752ff1ab7e21572a7a069cdfbff0926c9941a9f5c368cfae4ad2873dfa3408",
+    "sql-protected-contract-runtime.zip": "73cccfda019df0fca6da9d2968b0f76d4dfa60a0815ce53ef3c05e9dbb6abfae"
+  }
+}

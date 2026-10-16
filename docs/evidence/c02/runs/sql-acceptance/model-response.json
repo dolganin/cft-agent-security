@@ -1,0 +1,5 @@
+{
+  "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+  "rationale": "Строка 23 напрямую интерполирует пользовательский ввод (criteria) в SQL-запрос через шаблонную строку, что позволяет SQL-инъекцию. Исправление заменяет интерполяцию на именованный параметр :criteria с опцией replacements в Sequelize. Значение подстановки устанавливается как %${criteria}%, что сохраняет поведение LIKE с wildcard-символами. Условия deletedAt IS NULL и ORDER BY name остаются без изменений.",
+  "unified_diff": "--- a/routes/search.ts\n+++ b/routes/search.ts\n@@ -23,1 +23,1 @@\n-    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) \n+    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE :criteria OR description LIKE :criteria) AND deletedAt IS NULL) ORDER BY name`, { replacements: { criteria: `%${criteria}%` } })"
+}

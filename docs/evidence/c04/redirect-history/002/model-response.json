@@ -1,0 +1,5 @@
+{
+  "finding_id": "model-scout-1a6367342c866e273428",
+  "rationale": "Функция isRedirectAllowed использует подстрочное сравнение url.includes(allowedUrl), что позволяет атакующему обойти проверку, встроив разрешённый URL как подстроку в вредоносный адрес (например, https://evil.com/?x=https://allowed.com). Исправление заменяет подстрочное сравнение на строгое равенство (===), сохраняя булев аккумулятор, цикл и исходный allowlist без изменений.",
+  "unified_diff": "--- a/lib/insecurity.ts\n+++ b/lib/insecurity.ts\n@@ -136,1 +136,1 @@\n-    allowed = allowed || url.includes(allowedUrl) \n+    allowed = allowed || url === allowedUrl"
+}

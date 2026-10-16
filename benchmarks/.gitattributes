@@ -1,0 +1,2 @@
+# Historical scanner locks hash these exact LF YAML bytes.
+baselines-a06-v5/*.yaml text eol=lf

@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "id": "patch-e86a5f27030e4f09bf0cf87a3bdf97f3",
+  "run_id": "c02-2ffab9a81b164f659755ea133a4f0287",
+  "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+  "file": "routes/search.ts",
+  "status": "ready_for_review",
+  "source_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+  "proposal_sha256": "25f8896ee29a3a33f4b2128157f4aeecf32d50e113a69f837c51a9c13cdc2b52",
+  "model": "nsu/qwen3.8-flash-next",
+  "generated_at": "2026-10-15T12:10:59.313190Z",
+  "proposal": {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+    "rationale": "Строка 23 напрямую интерполирует пользовательский ввод (criteria) в SQL-запрос через шаблонную строку, что позволяет SQL-инъекцию. Исправление заменяет интерполяцию на именованный параметр :criteria с опцией replacements в Sequelize. Значение подстановки устанавливается как %${criteria}%, что сохраняет поведение LIKE с wildcard-символами. Условия deletedAt IS NULL и ORDER BY name остаются без изменений.",
+    "unified_diff": "--- a/routes/search.ts\n+++ b/routes/search.ts\n@@ -20,7 +20,7 @@\n   return (req: Request, res: Response, next: NextFunction) => {\n     let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''\n     criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)\n-    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) // vuln-code-snippet vuln-line unionSqlInjectionChallenge dbSchemaChallenge\n+    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE :criteria OR description LIKE :criteria) AND deletedAt IS NULL) ORDER BY name`, { replacements: { criteria: `%${criteria}%` } })\n       .then(([products]: any) => {\n         const dataString = JSON.stringify(products)\n         if (challengeUtils.notSolved(challenges.unionSqlInjectionChallenge)) { // vuln-code-snippet hide-start\n"
+  },
+  "validation_detail": "C01 scope, bounded AST window and C02 defensive shape checked; not applied",
+  "validation_policy": "single_file_scope_v1",
+  "editable_start": 23,
+  "editable_end": 23,
+  "applied": false,
+  "security_verified": false,
+  "limitations": [
+    "LLM proposal only; no build, tests, apply or security verification",
+    "C03 must repeat independent BEFORE/AFTER runtime verification"
+  ]
+}

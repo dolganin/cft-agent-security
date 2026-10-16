@@ -1,0 +1,1220 @@
+[
+  {
+    "slot": "01-sql-search",
+    "attempt": "001",
+    "status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "native": [
+      {
+        "action_id": "fix-3f2ce320f08245d195ef3d2a5e7647cd-before-0-tests",
+        "execution": {
+          "run_id": "60f9fbcdc27f4d02b05cf79824083185",
+          "action_id": "fix-3f2ce320f08245d195ef3d2a5e7647cd-before-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":15069.66548},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"sql-search\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-2fed2cbd7ee841989b32a92b009f3272",
+          "audit_ref": "audit:60f9fbcdc27f4d02b05cf79824083185",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/01-sql-search/attempts/001/verification/fix-3f2ce320f08245d195ef3d2a5e7647cd/before/evidence/execution-2fed2cbd7ee841989b32a92b009f3272.json"
+          ],
+          "duration_ms": 15362,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-3f2ce320f08245d195ef3d2a5e7647cd-after-0-tests",
+        "execution": {
+          "run_id": "5f6b54433f104012872cf77c26c32428",
+          "action_id": "fix-3f2ce320f08245d195ef3d2a5e7647cd-after-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16547.230337},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"sql-search\",\"phase\":\"after\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-7ccb554658304980b1b1194f4e4f743b",
+          "audit_ref": "audit:5f6b54433f104012872cf77c26c32428",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/01-sql-search/attempts/001/verification/fix-3f2ce320f08245d195ef3d2a5e7647cd/after/evidence/execution-7ccb554658304980b1b1194f4e4f743b.json"
+          ],
+          "duration_ms": 16827,
+          "error": null
+        }
+      }
+    ]
+  },
+  {
+    "slot": "01-redirect-allowlist",
+    "attempt": "001",
+    "status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "native": [
+      {
+        "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-before-0-tests",
+        "execution": {
+          "run_id": "3676e0c9cf4e44c7a6df2a4330a1c71e",
+          "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-before-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16549.481894},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-43fc46de486c4488ad22b2b8b3f45d80",
+          "audit_ref": "audit:3676e0c9cf4e44c7a6df2a4330a1c71e",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/01-redirect-allowlist/attempts/001/verification/fix-41cb97bcbda74d6eb8798b54c1583fb4/before/evidence/execution-43fc46de486c4488ad22b2b8b3f45d80.json"
+          ],
+          "duration_ms": 16846,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-before-1-tests",
+        "execution": {
+          "run_id": "7ff89599fd034cacb2d576eb44fb2ae8",
+          "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-before-1-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":15803.92072},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-2d6af3faf09e4ccf946c63b3da948f0a",
+          "audit_ref": "audit:7ff89599fd034cacb2d576eb44fb2ae8",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/01-redirect-allowlist/attempts/001/verification/fix-41cb97bcbda74d6eb8798b54c1583fb4/before/evidence/execution-2d6af3faf09e4ccf946c63b3da948f0a.json"
+          ],
+          "duration_ms": 16183,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-after-0-tests",
+        "execution": {
+          "run_id": "a589d7440cb443a8a2584dae60d3d3f3",
+          "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-after-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":20512.211272},\"assertion_failures\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true}],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"after\",\"raw_exit_code\":1,\"native_suite_success\":false,\"accepted_security_assertions\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84}],\"independent_security_verification_required\":true}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-dbc1f574fec34ace97640dee1c3dba16",
+          "audit_ref": "audit:a589d7440cb443a8a2584dae60d3d3f3",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/01-redirect-allowlist/attempts/001/verification/fix-41cb97bcbda74d6eb8798b54c1583fb4/after/evidence/execution-dbc1f574fec34ace97640dee1c3dba16.json"
+          ],
+          "duration_ms": 20862,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-after-1-tests",
+        "execution": {
+          "run_id": "2d55cfd2dd574d57a960f4ffc25a0705",
+          "action_id": "fix-41cb97bcbda74d6eb8798b54c1583fb4-after-1-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16989.606063},\"assertion_failures\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true}],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"after\",\"raw_exit_code\":1,\"native_suite_success\":false,\"accepted_security_assertions\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84}],\"independent_security_verification_required\":true}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-eefef8caadc04385be79e1e3a243c3a1",
+          "audit_ref": "audit:2d55cfd2dd574d57a960f4ffc25a0705",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/01-redirect-allowlist/attempts/001/verification/fix-41cb97bcbda74d6eb8798b54c1583fb4/after/evidence/execution-eefef8caadc04385be79e1e3a243c3a1.json"
+          ],
+          "duration_ms": 17316,
+          "error": null
+        }
+      }
+    ]
+  },
+  {
+    "slot": "02-sql-search",
+    "attempt": "001",
+    "status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "native": [
+      {
+        "action_id": "fix-f1af829c21ed4df98fc16703ba1877e7-before-0-tests",
+        "execution": {
+          "run_id": "f88db117c6d742ae9b6f973702227ce3",
+          "action_id": "fix-f1af829c21ed4df98fc16703ba1877e7-before-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16063.762148},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"sql-search\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-edc0c27afdfb49e2b0175fd9738b0ecb",
+          "audit_ref": "audit:f88db117c6d742ae9b6f973702227ce3",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/02-sql-search/attempts/001/verification/fix-f1af829c21ed4df98fc16703ba1877e7/before/evidence/execution-edc0c27afdfb49e2b0175fd9738b0ecb.json"
+          ],
+          "duration_ms": 16396,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-f1af829c21ed4df98fc16703ba1877e7-after-0-tests",
+        "execution": {
+          "run_id": "b19341da20964dde888f4d79e6f5763b",
+          "action_id": "fix-f1af829c21ed4df98fc16703ba1877e7-after-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":14942.929983},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"sql-search\",\"phase\":\"after\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-30d7edc4d6d24be4967fb9e1111e6e16",
+          "audit_ref": "audit:b19341da20964dde888f4d79e6f5763b",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/02-sql-search/attempts/001/verification/fix-f1af829c21ed4df98fc16703ba1877e7/after/evidence/execution-30d7edc4d6d24be4967fb9e1111e6e16.json"
+          ],
+          "duration_ms": 15245,
+          "error": null
+        }
+      }
+    ]
+  },
+  {
+    "slot": "02-redirect-allowlist",
+    "attempt": "001",
+    "status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "native": [
+      {
+        "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-before-0-tests",
+        "execution": {
+          "run_id": "19c71b12fdb94669836a31bc8556f2b3",
+          "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-before-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16565.947454},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-c8edd76a249842af85c59a148ffa5982",
+          "audit_ref": "audit:19c71b12fdb94669836a31bc8556f2b3",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/02-redirect-allowlist/attempts/001/verification/fix-6ded03085a67409da52f0fda8c946d6d/before/evidence/execution-c8edd76a249842af85c59a148ffa5982.json"
+          ],
+          "duration_ms": 16875,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-before-1-tests",
+        "execution": {
+          "run_id": "059278179fca4e2bb84081f851ad1e45",
+          "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-before-1-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16149.140795},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-fbe6a29bc04c423f9b58cc056a9dc3fa",
+          "audit_ref": "audit:059278179fca4e2bb84081f851ad1e45",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/02-redirect-allowlist/attempts/001/verification/fix-6ded03085a67409da52f0fda8c946d6d/before/evidence/execution-fbe6a29bc04c423f9b58cc056a9dc3fa.json"
+          ],
+          "duration_ms": 16456,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-after-0-tests",
+        "execution": {
+          "run_id": "b094fff6da2c47b1b1f3599fe51b1f9b",
+          "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-after-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":15526.608327},\"assertion_failures\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true}],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"after\",\"raw_exit_code\":1,\"native_suite_success\":false,\"accepted_security_assertions\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84}],\"independent_security_verification_required\":true}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-017272b855b5453f8c4ed6e934d753cb",
+          "audit_ref": "audit:b094fff6da2c47b1b1f3599fe51b1f9b",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/02-redirect-allowlist/attempts/001/verification/fix-6ded03085a67409da52f0fda8c946d6d/after/evidence/execution-017272b855b5453f8c4ed6e934d753cb.json"
+          ],
+          "duration_ms": 15838,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-after-1-tests",
+        "execution": {
+          "run_id": "d7b18bea15c64defab10fb40dfd7a563",
+          "action_id": "fix-6ded03085a67409da52f0fda8c946d6d-after-1-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":18601.461204},\"assertion_failures\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true}],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"after\",\"raw_exit_code\":1,\"native_suite_success\":false,\"accepted_security_assertions\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84}],\"independent_security_verification_required\":true}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-cc7b9b7273d64186b1ccb077c216cf88",
+          "audit_ref": "audit:d7b18bea15c64defab10fb40dfd7a563",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/02-redirect-allowlist/attempts/001/verification/fix-6ded03085a67409da52f0fda8c946d6d/after/evidence/execution-cc7b9b7273d64186b1ccb077c216cf88.json"
+          ],
+          "duration_ms": 18912,
+          "error": null
+        }
+      }
+    ]
+  },
+  {
+    "slot": "03-sql-search",
+    "attempt": "001",
+    "status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_fixture",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "native": [
+      {
+        "action_id": "fix-8ed4d856281147758c0a4c74788e3be0-before-0-tests",
+        "execution": {
+          "run_id": "7448ce5fd7434d6097ddd44300db5366",
+          "action_id": "fix-8ed4d856281147758c0a4c74788e3be0-before-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":15168.957978},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"sql-search\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-a2b6ef381f8241e69aee5abb63474918",
+          "audit_ref": "audit:7448ce5fd7434d6097ddd44300db5366",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/03-sql-search/attempts/001/verification/fix-8ed4d856281147758c0a4c74788e3be0/before/evidence/execution-a2b6ef381f8241e69aee5abb63474918.json"
+          ],
+          "duration_ms": 15483,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-8ed4d856281147758c0a4c74788e3be0-after-0-tests",
+        "execution": {
+          "run_id": "f78825b62f6e42a7b91afcfe6dd98802",
+          "action_id": "fix-8ed4d856281147758c0a4c74788e3be0-after-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":20560.653785},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"sql-search\",\"phase\":\"after\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-6d9145d8243847cca5de8c9a0183388d",
+          "audit_ref": "audit:f78825b62f6e42a7b91afcfe6dd98802",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/03-sql-search/attempts/001/verification/fix-8ed4d856281147758c0a4c74788e3be0/after/evidence/execution-6d9145d8243847cca5de8c9a0183388d.json"
+          ],
+          "duration_ms": 20843,
+          "error": null
+        }
+      }
+    ]
+  },
+  {
+    "slot": "03-redirect-allowlist",
+    "attempt": "001",
+    "status": "FIXED",
+    "before": "confirmed",
+    "after": "rejected",
+    "original_unchanged": true,
+    "cleanup_complete": true,
+    "stages": [
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "before",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "prepare",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "build",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "tests",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "start",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_source",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      },
+      {
+        "phase": "after",
+        "stage": "c03_http",
+        "status": "passed",
+        "exit_code": 0,
+        "timed_out": false
+      }
+    ],
+    "native": [
+      {
+        "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-before-0-tests",
+        "execution": {
+          "run_id": "0c1444c6d9d94111a484d053fcce37fc",
+          "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-before-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16039.307576},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-d88cc6162aef42d99cf285765203dd7a",
+          "audit_ref": "audit:0c1444c6d9d94111a484d053fcce37fc",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/03-redirect-allowlist/attempts/001/verification/fix-aeb4a2203d5d43f581ab3699b932d197/before/evidence/execution-d88cc6162aef42d99cf285765203dd7a.json"
+          ],
+          "duration_ms": 16445,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-before-1-tests",
+        "execution": {
+          "run_id": "a2fa42ab932b4947ae8ef9e61ec8738f",
+          "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-before-1-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "C03 TEST REPORT {\"summary\":{\"success\":true,\"counts\":{\"tests\":415,\"failed\":0,\"passed\":413,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":14878.763091},\"assertion_failures\":[],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"91479df7f3e99f66c939f4181878aecb971c58efdee98fc40d5c0ae47d6edd33\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"before\",\"raw_exit_code\":0,\"native_suite_success\":true,\"accepted_security_assertions\":[],\"independent_security_verification_required\":false}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-b8ccd1ffc64443f3b3e2443972c1f77f",
+          "audit_ref": "audit:a2fa42ab932b4947ae8ef9e61ec8738f",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/03-redirect-allowlist/attempts/001/verification/fix-aeb4a2203d5d43f581ab3699b932d197/before/evidence/execution-b8ccd1ffc64443f3b3e2443972c1f77f.json"
+          ],
+          "duration_ms": 15202,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-after-0-tests",
+        "execution": {
+          "run_id": "0856ef246abc4a6199d5b9adc98cfa41",
+          "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-after-0-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":415,\"failed\":2,\"passed\":411,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":40,\"suites\":130},\"duration_ms\":16945.119555},\"assertion_failures\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true}],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":545,\"events_sha256\":\"091b43485621909b1080c699ed8a8fdb0ee166e219771013305af5316c0497dc\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"after\",\"raw_exit_code\":1,\"native_suite_success\":false,\"accepted_security_assertions\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84}],\"independent_security_verification_required\":true}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-6762efbc7eb94d47a654196dd94e1e7c",
+          "audit_ref": "audit:0856ef246abc4a6199d5b9adc98cfa41",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/03-redirect-allowlist/attempts/001/verification/fix-aeb4a2203d5d43f581ab3699b932d197/after/evidence/execution-6762efbc7eb94d47a654196dd94e1e7c.json"
+          ],
+          "duration_ms": 17293,
+          "error": null
+        }
+      },
+      {
+        "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-after-1-tests",
+        "execution": {
+          "run_id": "a56f9236a94740b48a6ac5788fd7f7ec",
+          "action_id": "fix-aeb4a2203d5d43f581ab3699b932d197-after-1-tests",
+          "status": "completed",
+          "exit_code": 0,
+          "stdout": "FAIL returns true for URLs containing allowed URLs: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/insecurity.unit.test.ts:259:14) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at Suite.processPendingSubtests (node:internal/test_runner/test:974:18) at Test.postRun (node:internal/test_runner/test:1542:19) at Test.run (node:internal/test_runner/test:1467:12) at async Promise.all (index 0) at async Suite.run (node:internal/test_runner/test:1905:7) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL isRedirectAllowed: Error: 1 subtest failed FAIL insecurity: Error: 1 subtest failed FAIL tricking the allowlist should solve \"redirectChallenge\": AssertionError [ERR_ASSERTION]: Expected values to be strictly equal: false !== true at TestContext.<anonymous> (/workspace/target/test/server/redirect.unit.test.ts:84:12) at Test.runInAsyncScope (node:async_hooks:227:14) at Test.run (node:internal/test_runner/test:1402:25) at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) FAIL redirect: Error: 1 subtest failed C03 TEST REPORT {\"summary\":{\"success\":false,\"counts\":{\"tests\":406,\"failed\":2,\"passed\":402,\"cancelled\":0,\"skipped\":2,\"todo\":0,\"topLevel\":39,\"suites\":127},\"duration_ms\":15955.684398},\"assertion_failures\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84,\"failure_type\":\"testCodeFailure\",\"code\":\"ERR_ASSERTION\",\"actual\":false,\"expected\":true}],\"files\":[\"test/server/accuracy.unit.test.ts\",\"test/server/angular.unit.test.ts\",\"test/server/antiCheat.unit.test.ts\",\"test/server/appConfiguration.unit.test.ts\",\"test/server/appVersion.unit.test.ts\",\"test/server/b2bOrder.unit.test.ts\",\"test/server/blueprint.unit.test.ts\",\"test/server/challengeCountryMapping.unit.test.ts\",\"test/server/challengeTag.unit.test.ts\",\"test/server/challengeTutorialSequence.unit.test.ts\",\"test/server/challengeUtils.unit.test.ts\",\"test/server/chat.unit.test.ts\",\"test/server/codeSnippet.unit.test.ts\",\"test/server/codingChallengeFixes.unit.test.ts\",\"test/server/codingChallenges.unit.test.ts\",\"test/server/configValidation.unit.test.ts\",\"test/server/continueCode.unit.test.ts\",\"test/server/countryMapping.unit.test.ts\",\"test/server/currentUser.unit.test.ts\",\"test/server/dataExport.unit.test.ts\",\"test/server/easterEgg.unit.test.ts\",\"test/server/fileServer.unit.test.ts\",\"test/server/fileUpload.unit.test.ts\",\"test/server/insecurity.unit.test.ts\",\"test/server/is-docker.unit.test.ts\",\"test/server/keyServer.unit.test.ts\",\"test/server/noUpdate.unit.test.ts\",\"test/server/order.unit.test.ts\",\"test/server/preconditionValidation.unit.test.ts\",\"test/server/premiumReward.unit.test.ts\",\"test/server/redirect.unit.test.ts\",\"test/server/rsn.unit.test.ts\",\"test/server/saveLoginIp.unit.test.ts\",\"test/server/system-prompt-extraction.unit.test.ts\",\"test/server/utils.unit.test.ts\",\"test/server/verify.unit.test.ts\",\"test/server/webhook.unit.test.ts\",\"test/server/xml.unit.test.ts\"],\"skipped\":[{\"name\":\"infinite loop payload does not succeed but solves \\\"rceChallenge\\\"\",\"reason\":\"true\"},{\"name\":\"timeout after 2 seconds solves \\\"rceOccupyChallenge\\\"\",\"reason\":\"true\"}],\"event_count\":533,\"events_sha256\":\"f85a81a23ad89c50771abeafd6f59fb013ae0aa2cbe9afdcf63f215f5305a6d7\"} C03 NATIVE CONTRACT {\"schema_version\":\"cft.c03.native-contract-result.v1\",\"contract_sha256\":\"c923cd3aadc0c70d2b620664e1e6ca456002ea6f599d6512a8ebd61e88213a3e\",\"family\":\"redirect-allowlist\",\"phase\":\"after\",\"raw_exit_code\":1,\"native_suite_success\":false,\"accepted_security_assertions\":[{\"file\":\"test/server/insecurity.unit.test.ts\",\"name\":\"returns true for URLs containing allowed URLs\",\"line\":259},{\"file\":\"test/server/redirect.unit.test.ts\",\"name\":\"tricking the allowlist should solve \\\"redirectChallenge\\\"\",\"line\":84}],\"independent_security_verification_required\":true}",
+          "stderr": "",
+          "timed_out": false,
+          "evidence_ref": "execution-654427a6fe954472aed60297d018914e",
+          "audit_ref": "audit:a56f9236a94740b48a6ac5788fd7f7ec",
+          "artifacts": [
+            "C:/Users/Roman/Documents/GitHub/cft-security-agent/artifacts/c05-series-final-2026-10-16/runs/03-redirect-allowlist/attempts/001/verification/fix-aeb4a2203d5d43f581ab3699b932d197/after/evidence/execution-654427a6fe954472aed60297d018914e.json"
+          ],
+          "duration_ms": 16311,
+          "error": null
+        }
+      }
+    ]
+  }
+]

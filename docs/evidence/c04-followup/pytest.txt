@@ -1,0 +1,57 @@
+........................................................................ [  4%]
+........................................................................ [  8%]
+.....................................................s.................. [ 13%]
+........................................................................ [ 17%]
+........................................................................ [ 22%]
+........................................................................ [ 26%]
+.............................s.......................................... [ 31%]
+......................................................s................. [ 35%]
+.............................................................ss......... [ 40%]
+........................................................................ [ 44%]
+............................................................ss.......... [ 49%]
+s......s..................................s............................. [ 53%]
+........................................................................ [ 58%]
+........................................................................ [ 62%]
+.s................................................................s..... [ 67%]
+........................................................................ [ 71%]
+.......s.............................s.....................s.ssss....... [ 75%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+.........s..............s...................ssss...........s............ [ 89%]
+...sss................s...................................s............. [ 93%]
+..............................s......................................... [ 98%]
+...........................                                              [100%]
+============================== warnings summary ===============================
+..\..\..\Lib\site-packages\langgraph\cache\base\__init__.py:8
+  C:\Users\Roman\Lib\site-packages\langgraph\cache\base\__init__.py:8: LangChainPendingDeprecationWarning: The default value of `allowed_objects` will change in a future version. Pass an explicit value (e.g., allowed_objects='messages' or allowed_objects='core') to suppress this warning.
+    from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [1] tests\test_a05_benchmark_v2.py:552: set CFT_A05_DEMO_ARTIFACTS to the saved Juice Shop demo artifacts
+SKIPPED [1] tests\test_b08_review.py:96: Windows symlink creation requires developer mode or privilege
+SKIPPED [1] tests\test_c04_acceptance_replay.py:234: Set CFT_C04_FAILURE_ARTIFACTS to the complete local redirect bundle
+SKIPPED [2] tests\test_c04_transport.py:10: POSIX process-group regression
+SKIPPED [2] tests\test_finding_identity.py:89: Symlink support is required
+SKIPPED [1] tests\test_finding_identity.py:199: Symlink support is required
+SKIPPED [1] tests\test_finding_identity.py:297: Symlink support is required
+SKIPPED [1] tests\test_fix_verification.py:203: Windows symlink creation requires developer mode or privilege
+SKIPPED [1] tests\test_multi_run_docker_integration.py:55: Set SBERLAB_TARGET_PATH to run lifecycle integration
+SKIPPED [1] tests\test_patch_review.py:122: Windows symlinks require developer mode or privilege
+SKIPPED [1] tests\test_repository_scout_source.py:111: Windows symlinks require developer mode or privilege
+SKIPPED [1] tests\test_research_agent.py:261: Opt-in immutable research Docker image required
+SKIPPED [1] tests\test_research_diagnostic_repairs.py:226: Opt-in pinned Juice Shop Docker bridge
+SKIPPED [1] tests\test_research_diagnostic_repairs.py:356: Opt-in immutable research image required
+SKIPPED [3] tests\test_research_fixture_campaign.py:11: Set an immutable Juice Shop checkout to run actual private fixtures
+SKIPPED [1] tests\test_sandbox.py:105: POSIX resource limits
+SKIPPED [1] tests\test_sandbox.py:335: Symlinks not supported on this filesystem
+SKIPPED [2] tests\test_sandbox_manager_integration.py:36: Set SBERLAB_TARGET_PATH to run this integration test
+SKIPPED [2] tests\test_sandbox_manager_integration.py:36: Set AUTODEALER_TARGET_PATH to run this integration test
+SKIPPED [1] tests\test_sandbox_runner_integration.py:36: Set SBERLAB_TARGET_PATH to run SberLab runner integration
+SKIPPED [1] tests\test_sandbox_session_integration.py:76: Set SBERLAB_TARGET_PATH to run SberLab integration
+SKIPPED [1] tests\test_sandbox_session_integration.py:89: Set SBERLAB_TARGET_PATH to run SberLab integration
+SKIPPED [1] tests\test_sandbox_session_integration.py:100: Set SBERLAB_TARGET_PATH to run SberLab integration
+SKIPPED [1] tests\test_sast_profiles.py:186: Semgrep CLI is an optional SAST extra
+SKIPPED [1] tests\test_stage1_e2e.py:46: Set CFT_RUN_STAGE1_E2E=1 with provisioned Juice Shop and pinned images
+SKIPPED [1] tests\test_stage2_benchmark.py:442: Pinned checkout is an operator prerequisite
+1579 passed, 32 skipped, 1 warning in 241.44s (0:04:01)

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "sql-search",
+    "case_ids": [
+      "JS-SQL-001"
+    ],
+    "capability": "verify_sql_injection",
+    "endpoint": "/rest/products/search",
+    "allowed_files": [
+      "routes/search.ts"
+    ],
+    "root_cause": "User criteria interpolated into SQL syntax",
+    "remediation": "Sequelize replacements or bind parameters preserving search and deletedAt filtering",
+    "functional_tests": [
+      "Apple and description match preserve ordered active products",
+      "Empty/no-match, apostrophe, 200-character bound preserve literal semantics"
+    ],
+    "independent_tests": [
+      "Boolean true/false payloads cannot alter seeded result sets",
+      "Independent comment/UNION variants cannot disclose evaluator-only sentinel"
+    ],
+    "disallowed_shortcuts": [
+      "Reject all searches or remove handler",
+      "Blacklist only recorded probe or remove deletedAt filtering"
+    ]
+  },
+  {
+    "id": "redirect-allowlist",
+    "case_ids": [
+      "JS-REDIRECT-001"
+    ],
+    "capability": "verify_redirect_destination",
+    "endpoint": "/redirect",
+    "allowed_files": [
+      "lib/insecurity.ts",
+      "routes/redirect.ts"
+    ],
+    "root_cause": "Substring match accepts approved URL embedded in attacker destination",
+    "remediation": "Exact parsed destination policy preserving the eight operator-approved URLs",
+    "functional_tests": [
+      "Every original approved URL still redirects unchanged",
+      "Unapproved/malformed destinations are rejected without following redirect"
+    ],
+    "independent_tests": [
+      "Approved URL embedded in query/fragment/userinfo must be denied",
+      "Approved-prefix hostile suffix and protocol-relative URL must be denied"
+    ],
+    "disallowed_shortcuts": [
+      "Deny all redirects or delete allowlist",
+      "Hard-code only the recorded B06 probe"
+    ]
+  }
+]

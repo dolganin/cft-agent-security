@@ -1,0 +1,55 @@
+{
+  "schema_version": "cft.patch-generation.c02.v1",
+  "family_id": "sql-search",
+  "status": "ready_for_review",
+  "reason": "bounded_proposal_validated",
+  "generation_method": "llm",
+  "provider_route": "nsu/qwen3.8-flash-next",
+  "provider_attempts": [
+    {
+      "route": "nsu/qwen3.8-flash-next",
+      "ok": true,
+      "status": "ok",
+      "latency_ms": 2907
+    }
+  ],
+  "model_response_received": true,
+  "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "source_snapshot_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818",
+  "source_file_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+  "baseline_archive_sha256": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+  "original_report_sha256": "c240a4a17e61f47e6997913f2a9d613d46bef373fcdd806f8fa1e46feac84114",
+  "request_sha256": "9db4ce0e84ee5378525fc85b1b617b9d5cc70ba347f156eec7fb3330fbfb8195",
+  "response_sha256": "667c2d20599a6797ec3d9104eb55809ccdd5049abc3225fbb330bcbb3ff4881a",
+  "c01_lock_sha256": "43113eb31f06cf2330fe90d1816cd534224f8034af8da19e92ee03f117ecff96",
+  "original_unchanged": true,
+  "review": {
+    "schema_version": "1.0",
+    "id": "patch-65f0c4351b794eb195b65843db2370c0",
+    "run_id": "c02-87d155e727c648b9a828db422bfaf10b",
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+    "file": "routes/search.ts",
+    "status": "ready_for_review",
+    "source_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+    "proposal_sha256": "b7a6d3024051c7436db98978fbd7bfd4f70a6df86aaf413da3a3e808f8cfc518",
+    "model": "nsu/qwen3.8-flash-next",
+    "generated_at": "2026-10-15T12:27:45.685039Z",
+    "proposal": {
+      "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+      "rationale": "В строке 23 пользовательский параметр criteria напрямую интерполируется в SQL-запрос через шаблонную строку JavaScript, что позволяет выполнить SQL-инъекцию. Для устранения уязвимости используется механизм replacements Sequelize: плейсхолдер :criteria передаётся в запрос, а значение подставляется через объект replacements в виде `%${criteria}%`, что сохраняет семантику LIKE-поиска по полям name и description, фильтр deletedAt IS NULL и сортировку ORDER BY name без изменения логики.",
+      "unified_diff": "--- a/routes/search.ts\n+++ b/routes/search.ts\n@@ -20,7 +20,7 @@\n   return (req: Request, res: Response, next: NextFunction) => {\n     let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''\n     criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)\n-    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) // vuln-code-snippet vuln-line unionSqlInjectionChallenge dbSchemaChallenge\n+    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE :criteria OR description LIKE :criteria) AND deletedAt IS NULL) ORDER BY name`, { replacements: { criteria: `%${criteria}%` } })\n       .then(([products]: any) => {\n         const dataString = JSON.stringify(products)\n         if (challengeUtils.notSolved(challenges.unionSqlInjectionChallenge)) { // vuln-code-snippet hide-start\n"
+    },
+    "validation_detail": "C01 scope, bounded AST window and C02 defensive shape checked; not applied",
+    "validation_policy": "single_file_scope_v1",
+    "editable_start": 23,
+    "editable_end": 23,
+    "applied": false,
+    "security_verified": false,
+    "limitations": [
+      "LLM proposal only; no build, tests, apply or security verification",
+      "C03 must repeat independent BEFORE/AFTER runtime verification"
+    ]
+  },
+  "applied": false,
+  "security_verified": false
+}

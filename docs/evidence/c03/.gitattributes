@@ -1,0 +1,3 @@
+protected-contract-*.json text eol=lf
+protected-contract-*.txt text eol=lf
+sql-protected-contract-runtime.zip binary

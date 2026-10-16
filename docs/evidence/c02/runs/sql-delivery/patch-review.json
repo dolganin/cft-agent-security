@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "id": "patch-65f0c4351b794eb195b65843db2370c0",
+  "run_id": "c02-87d155e727c648b9a828db422bfaf10b",
+  "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+  "file": "routes/search.ts",
+  "status": "ready_for_review",
+  "source_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057",
+  "proposal_sha256": "b7a6d3024051c7436db98978fbd7bfd4f70a6df86aaf413da3a3e808f8cfc518",
+  "model": "nsu/qwen3.8-flash-next",
+  "generated_at": "2026-10-15T12:27:45.685039Z",
+  "proposal": {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+    "rationale": "В строке 23 пользовательский параметр criteria напрямую интерполируется в SQL-запрос через шаблонную строку JavaScript, что позволяет выполнить SQL-инъекцию. Для устранения уязвимости используется механизм replacements Sequelize: плейсхолдер :criteria передаётся в запрос, а значение подставляется через объект replacements в виде `%${criteria}%`, что сохраняет семантику LIKE-поиска по полям name и description, фильтр deletedAt IS NULL и сортировку ORDER BY name без изменения логики.",
+    "unified_diff": "--- a/routes/search.ts\n+++ b/routes/search.ts\n@@ -20,7 +20,7 @@\n   return (req: Request, res: Response, next: NextFunction) => {\n     let criteria: any = req.query.q === 'undefined' ? '' : req.query.q ?? ''\n     criteria = (criteria.length <= 200) ? criteria : criteria.substring(0, 200)\n-    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE '%${criteria}%' OR description LIKE '%${criteria}%') AND deletedAt IS NULL) ORDER BY name`) // vuln-code-snippet vuln-line unionSqlInjectionChallenge dbSchemaChallenge\n+    models.sequelize.query(`SELECT * FROM Products WHERE ((name LIKE :criteria OR description LIKE :criteria) AND deletedAt IS NULL) ORDER BY name`, { replacements: { criteria: `%${criteria}%` } })\n       .then(([products]: any) => {\n         const dataString = JSON.stringify(products)\n         if (challengeUtils.notSolved(challenges.unionSqlInjectionChallenge)) { // vuln-code-snippet hide-start\n"
+  },
+  "validation_detail": "C01 scope, bounded AST window and C02 defensive shape checked; not applied",
+  "validation_policy": "single_file_scope_v1",
+  "editable_start": 23,
+  "editable_end": 23,
+  "applied": false,
+  "security_verified": false,
+  "limitations": [
+    "LLM proposal only; no build, tests, apply or security verification",
+    "C03 must repeat independent BEFORE/AFTER runtime verification"
+  ]
+}

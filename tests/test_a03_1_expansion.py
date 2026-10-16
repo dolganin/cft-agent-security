@@ -181,7 +181,8 @@ def test_all_slices_and_source_only_semantics_preserved():
         assert control.runtime_verdict is None and not control.agent_verifiable_now
         if control.validation_basis=="source_review":
             assert control.control_type=="original_safe"
-    row=copy.deepcopy(rows[0]);row["runtime_verdict"]="rejected"
+    row=copy.deepcopy(rows[0])
+    row["runtime_verdict"]="rejected"
     with pytest.raises(ValidationError):
         ExpandedControl.model_validate(row)
 

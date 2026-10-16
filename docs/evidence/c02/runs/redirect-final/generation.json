@@ -1,0 +1,29 @@
+{
+  "schema_version": "cft.patch-generation.c02.v1",
+  "family_id": "redirect-allowlist",
+  "status": "rejected",
+  "reason": "invalid_diff_format_or_window",
+  "generation_method": "llm",
+  "provider_route": "nsu/qwen3.8-flash-next",
+  "provider_attempts": [
+    {
+      "route": "nsu/qwen3.8-flash-next",
+      "ok": true,
+      "status": "ok",
+      "latency_ms": 2214
+    }
+  ],
+  "model_response_received": true,
+  "source_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "source_snapshot_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818",
+  "source_file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d",
+  "baseline_archive_sha256": "6ba2f4d4fcc23871f96f1bb141eb62bfae5b792904252cdb2ff2c28980a2d5c7",
+  "original_report_sha256": "43157affaeb04f82dcb02ceddba6f9d3ee23504e8422ad47e47c7c2c6c6e3bd1",
+  "request_sha256": "12f7c3800c6085a91b624cf8f7eed38ecbc0b5a43a4aa80791b2a15d5410743b",
+  "response_sha256": "2f3d61a1c169cc9c9e1cf7e4e845f301d75ff1898bbeedd9a45a294011c77eaf",
+  "c01_lock_sha256": "43113eb31f06cf2330fe90d1816cd534224f8034af8da19e92ee03f117ecff96",
+  "original_unchanged": true,
+  "review": null,
+  "applied": false,
+  "security_verified": false
+}

@@ -89,7 +89,12 @@ def test_bad_reviews_fail_closed_without_changing_verdict(tmp_path, problem):
     elif problem == "other_cvss":
         review.cvss.finding_id = "other"
     else:
-        (tmp_path / "link.ts").symlink_to(tmp_path / "example.ts")
+        try:
+            (tmp_path / "link.ts").symlink_to(tmp_path / "example.ts")
+        except OSError as error:
+            if getattr(error, "winerror", None) == 1314:
+                pytest.skip("Windows symlink creation requires developer mode or privilege")
+            raise
         ref.file = "link.ts"
     assessment, refs, severity, resolution = resolve_review(finding, tmp_path, review)
     assert assessment is None
