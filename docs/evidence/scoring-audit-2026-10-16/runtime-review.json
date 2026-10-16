@@ -1,0 +1,381 @@
+[
+  {
+    "finding_id": "juice-source-4e16a8cc3be2ba52e023",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-4e16a8cc3be2ba52e023"
+    ],
+    "route_id": "juice-basket-own-read",
+    "action_id": "research-b05-8439cc5ea16c4534a1644bff1fc1eae0",
+    "capability": "verify_access_control",
+    "service": "juice",
+    "endpoint": "/rest/basket/:id",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/0/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-a36bb34ccb7549df3916",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-a36bb34ccb7549df3916"
+    ],
+    "route_id": "juice-basket-insert-owner-check",
+    "action_id": "research-b05-a3b1158c409f441983bb993e9a46be54",
+    "capability": "verify_access_control",
+    "service": "juice",
+    "endpoint": "/api/BasketItems",
+    "method": "POST",
+    "evidence": "campaign/preverification/checks/1/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-1915ef982ac1b584d2d3",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-1915ef982ac1b584d2d3"
+    ],
+    "route_id": "role-registration",
+    "action_id": "research-juice-proof-27f61ac09ecf4cc7a7030c83e403e79c",
+    "capability": "verify_juice_proof",
+    "service": null,
+    "endpoint": "/api/Users",
+    "method": "POST",
+    "evidence": "campaign/preverification/checks/10/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "HIGH",
+      "assessment_status": "assessed",
+      "impact_facts": [
+        "administrative_role_acquisition"
+      ],
+      "reasoning": "Deterministic source-impact.a04.v1 assessment of an independently replayed fixed runtime property: administrative_role_acquisition. Not CVSS or a human operator review."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:288",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:288"
+    ],
+    "route_id": "juice-directory-ftp",
+    "action_id": "research-bridge-a3671bcc58f842f091cb98248dc78fd8",
+    "capability": "verify_sensitive_directory",
+    "service": "juice",
+    "endpoint": "/ftp",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/11/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:292",
+    "status": "inconclusive",
+    "job_finding_ids": [
+      "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:292"
+    ],
+    "route_id": "juice-directory-well-known",
+    "action_id": "research-bridge-d997883f84344880bad40f843e05bb07",
+    "capability": "verify_sensitive_directory",
+    "service": "juice",
+    "endpoint": "/.well-known",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/12/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:296",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:296"
+    ],
+    "route_id": "juice-directory-encryptionkeys",
+    "action_id": "research-bridge-336e64dcbf2f4336a4e796a32bd98070",
+    "capability": "verify_sensitive_directory",
+    "service": "juice",
+    "endpoint": "/encryptionkeys",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/13/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:300",
+    "status": "inconclusive",
+    "job_finding_ids": [
+      "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:300"
+    ],
+    "route_id": "juice-directory-support-logs",
+    "action_id": "research-bridge-aae2dabdea6f41a18245f25915d1bbc2",
+    "capability": "verify_sensitive_directory",
+    "service": "juice",
+    "endpoint": "/support/logs",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/14/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-85ad39a3ef89ef955fb7",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-85ad39a3ef89ef955fb7"
+    ],
+    "route_id": "anonymous-product-put",
+    "action_id": "research-juice-proof-6ff77a7632dc4be2ac39ae13f1cfb371",
+    "capability": "verify_juice_proof",
+    "service": null,
+    "endpoint": "/api/Products/:id",
+    "method": "PUT",
+    "evidence": "campaign/preverification/checks/15/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "HIGH",
+      "assessment_status": "assessed",
+      "impact_facts": [
+        "unauthorized_persistent_update"
+      ],
+      "reasoning": "Deterministic source-impact.a04.v1 assessment of an independently replayed fixed runtime property: unauthorized_persistent_update. Not CVSS or a human operator review."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-314eb7655729bfa2fca1",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-314eb7655729bfa2fca1"
+    ],
+    "route_id": "juice-feedback-owner",
+    "action_id": "research-b05-365ee73d7c2b4c35b89e260ed75ccfc8",
+    "capability": "verify_access_control",
+    "service": "juice",
+    "endpoint": "/api/Feedbacks",
+    "method": "POST",
+    "evidence": "campaign/preverification/checks/16/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-a212eea090575bc3233a",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-a212eea090575bc3233a"
+    ],
+    "route_id": "b06-reauthentication",
+    "action_id": "research-b06-19557fa5e7424d9f9d83377879e6cf54",
+    "capability": "verify_auth_reauthentication",
+    "service": "juice",
+    "endpoint": "/rest/user/change-password",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/2/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/login.ts:34",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/login.ts:34",
+      "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/login.ts:34",
+      "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query:routes/login.ts:34"
+    ],
+    "route_id": "juice-login",
+    "action_id": "research-bridge-c3320a62f24440b4a0ee54390df43190",
+    "capability": "verify_sql_injection",
+    "service": "juice",
+    "endpoint": "/rest/user/login",
+    "method": "POST",
+    "evidence": "campaign/preverification/checks/4/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "HIGH",
+      "assessment_status": "assessed",
+      "impact_facts": [
+        "authentication_bypass"
+      ],
+      "reasoning": "Deterministic source-impact.a04.v1 assessment of an independently replayed fixed runtime property: authentication_bypass. Not CVSS or a human operator review."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/search.ts:23",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/search.ts:23",
+      "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+      "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query:routes/search.ts:23"
+    ],
+    "route_id": "juice-search",
+    "action_id": "research-bridge-f188b3fdb2ec466d9763825f9362a664",
+    "capability": "verify_sql_injection",
+    "service": "juice",
+    "endpoint": "/rest/products/search",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/5/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-104e679fd5df61466a05",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-104e679fd5df61466a05"
+    ],
+    "route_id": "juice-review-own-write",
+    "action_id": "research-b05-256c412ddd65480eaf878004dae42633",
+    "capability": "verify_access_control",
+    "service": "juice",
+    "endpoint": "/rest/products/reviews",
+    "method": "PATCH",
+    "evidence": "campaign/preverification/checks/6/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-1c9e9299890728691a56",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-1c9e9299890728691a56"
+    ],
+    "route_id": "juice-review-nosql-selector",
+    "action_id": "research-b05-bc8b6bbe7fed463db5d96bec538e6e1b",
+    "capability": "verify_access_control",
+    "service": "juice",
+    "endpoint": "/rest/products/reviews",
+    "method": "PATCH",
+    "evidence": "campaign/preverification/checks/7/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "juice-source-41f0bce0ef70a7d15b2d",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "juice-source-41f0bce0ef70a7d15b2d"
+    ],
+    "route_id": "juice-user-private-fields",
+    "action_id": "research-b05-613ca5529fbc4573a027c5693b40a436",
+    "capability": "verify_access_control",
+    "service": "juice",
+    "endpoint": "/rest/user/whoami",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/8/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  },
+  {
+    "finding_id": "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+    "status": "confirmed",
+    "job_finding_ids": [
+      "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+      "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18"
+    ],
+    "route_id": "b06-redirect",
+    "action_id": "research-b06-4ed138e796784a81b93f92662fbb9b1d",
+    "capability": "verify_redirect_destination",
+    "service": "juice",
+    "endpoint": "/redirect",
+    "method": "GET",
+    "evidence": "campaign/preverification/checks/9/result.json",
+    "approval_execution_audit_replayed": true,
+    "impact_assessment": {
+      "scheme": "source-impact.a04.v1",
+      "level": "UNASSESSED",
+      "assessment_status": "unassessed",
+      "impact_facts": [],
+      "reasoning": "The verified property does not establish a supported ordinal impact."
+    },
+    "assessment_origin": "posthoc_replayed_runtime_property.v1"
+  }
+]

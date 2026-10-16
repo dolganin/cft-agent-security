@@ -1566,3 +1566,34 @@ timing and historical calendar elapsed time are separate. Production/historical
 MTTR remain N/A without actual operational remediation events. Report the n of
 successful latency observations alongside all unsuccessful durations. See
 `docs/c05-repair-measurement.md` for the fixed protocol and reproduction.
+
+# 46. Offline scoring audit
+
+`scoring.runtime_impact` is a separate deterministic posthoc ordinal assessment,
+not an operator ScoringReview or CVSS input. `app.research_score` calls it only
+after canonical execution/audit Evidence replay. Administrative-role acquisition,
+unauthorized persistent product update and authenticated SQL differential controls
+can establish the existing narrow HIGH source-impact category. Search SQL response
+counts alone do not establish confidential disclosure and remain UNASSESSED.
+No model labels, benchmark case IDs, expected severity or scanner ratings enter
+the impact assessor. It cannot change Evidence, FinalReport status, Gate or permissions.
+
+Research rescoring exports compatible ordinal/CP values and separately reports
+reviewed, assessed and correct case counts. Full CP requires assessed status and
+no unknown inputs. Existing human/operator B08 reviews retain their source-only
+trust contract; runtime assessment never fabricates a reviewed_by identity.
+
+`app.scoring_audit` produces a new sealed derivative and a blinded CP reference
+draft bound to all 35 original source/HTTP anchors. It never changes frozen A04
+labels or the measured run. Unknown exposure, business criticality, per-route
+authentication and blast radius remain explicit. A database-only partial priority
+preview is not an independent CP label or a final low-risk verdict. Independent
+reference review and explicit architecture/business facts are still required for
+CP accuracy. See `docs/scoring-audit-2026-10-16.md`.
+
+`scoring.context_bounds` preserves unknown architecture inputs and emits an ordinal
+level only when every bounded completion agrees. `app.public_commerce_priority`
+evaluates the user-declared public-commerce scenario posthoc, without changing the
+measured lab context. Its blinded model reference is a draft requiring human review;
+report agreement and coverage, never human-validated CP accuracy. Neither producer
+reads reference labels or silently promotes partial scores to complete assessments.

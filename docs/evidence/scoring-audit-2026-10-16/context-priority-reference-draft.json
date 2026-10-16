@@ -1,0 +1,1092 @@
+{
+  "schema_version": "context-priority.reference-draft.v1",
+  "status": "draft_unreviewed",
+  "dataset_id": "juice-shop-v20.2.0-v2",
+  "dataset_sha256": "579b9a51531010e8b4d53b27cb7607f410898cb144fe1db76cef9810e82a5366",
+  "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+  "independent_review_completed": false,
+  "scenario": "Isolated local Docker test lab from the measured run; no production business context supplied",
+  "instructions": [
+    "Review source and declared architecture/business facts without opening agent CP outputs.",
+    "Choose LOW, MEDIUM or HIGH independently; leave unknown values null with an explanation.",
+    "Do not run the agent scoring function to generate reference labels.",
+    "Record the reviewer, reasoning and facts; do not edit frozen A04 inputs.",
+    "This draft is not an independent benchmark and cannot establish CP accuracy."
+  ],
+  "cases": [
+    {
+      "case_id": "JS-AUTH-001",
+      "independence_group": "juice-password-change-optional-current-password",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/changePassword.ts",
+          "line_start": 33,
+          "line_end": 56,
+          "role": "sink",
+          "file_sha256": "8856fd47ef909e64924def8f29c9bf282881aea3658bd7bb94f177aadee422a4"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/rest/user/change-password",
+          "parameter": "query.current/new/repeat"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-AUTHZ-001",
+      "independence_group": "juice-product-update-missing-authentication",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "server.ts",
+          "line_start": 387,
+          "line_end": 390,
+          "role": "sink",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 502,
+          "line_end": 526,
+          "role": "caller",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "PUT",
+          "endpoint": "/api/Products/:id",
+          "parameter": "body.description"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-AUTHZ-002",
+      "independence_group": "juice-registration-role-mass-assignment",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "models/user.ts",
+          "line_start": 76,
+          "line_end": 95,
+          "role": "sink",
+          "file_sha256": "89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 500,
+          "line_end": 535,
+          "role": "caller",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/api/Users",
+          "parameter": "body.role"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-BIZ-001",
+      "independence_group": "juice-basket-negative-quantity-price-arithmetic",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "models/basketitem.ts",
+          "line_start": 25,
+          "line_end": 40,
+          "role": "model",
+          "file_sha256": "222c79eed31c745926610d2f8c7a380e19f0c0edabf89dbcf19699e4f385db17"
+        },
+        {
+          "file": "routes/basketItems.ts",
+          "line_start": 85,
+          "line_end": 99,
+          "role": "helper",
+          "file_sha256": "be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6"
+        },
+        {
+          "file": "routes/order.ts",
+          "line_start": 93,
+          "line_end": 107,
+          "role": "sink",
+          "file_sha256": "747a80d5fcd79d88f906ad396adb00c1c68a376fd47a6c80628ca91c70e02300"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "PUT",
+          "endpoint": "/api/BasketItems/:id",
+          "parameter": "body.quantity"
+        },
+        {
+          "method": "POST",
+          "endpoint": "/rest/basket/:id/checkout",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-BIZ-002",
+      "independence_group": "juice-coupon-encoding-without-integrity",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 97,
+          "line_end": 118,
+          "role": "sink",
+          "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d"
+        },
+        {
+          "file": "routes/coupon.ts",
+          "line_start": 13,
+          "line_end": 26,
+          "role": "caller",
+          "file_sha256": "481aa9a06b38d2a3467a48be15aeebb5fdbfc50d34b03db9a35143463c39d6df"
+        },
+        {
+          "file": "routes/order.ts",
+          "line_start": 190,
+          "line_end": 194,
+          "role": "caller",
+          "file_sha256": "747a80d5fcd79d88f906ad396adb00c1c68a376fd47a6c80628ca91c70e02300"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "PUT",
+          "endpoint": "/rest/basket/:id/coupon/:coupon",
+          "parameter": "path.coupon"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-BOLA-001",
+      "independence_group": "juice-basket-read-missing-owner",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/basket.ts",
+          "line_start": 18,
+          "line_end": 31,
+          "role": "sink",
+          "file_sha256": "89dc1768e5e5b7c34ae22b753140cfe4ba529903d4d743e7fc5ef28be5b49dd3"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 418,
+          "line_end": 418,
+          "role": "registration",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/rest/basket/:id",
+          "parameter": "path.id"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-BOLA-002",
+      "independence_group": "juice-basket-id-first-last-parser-mismatch",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/basketItems.ts",
+          "line_start": 21,
+          "line_end": 49,
+          "role": "sink",
+          "file_sha256": "be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6"
+        },
+        {
+          "file": "lib/utils.ts",
+          "line_start": 178,
+          "line_end": 194,
+          "role": "helper",
+          "file_sha256": "6233b057735241abc124a47309ff6cf89ed010a64e59fefd8a8bfc9535e62f9c"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/api/BasketItems",
+          "parameter": "raw JSON BasketId fields"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-BOLA-003",
+      "independence_group": "juice-review-update-missing-owner",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/updateProductReviews.ts",
+          "line_start": 16,
+          "line_end": 25,
+          "role": "sink",
+          "file_sha256": "711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "PATCH",
+          "endpoint": "/rest/products/reviews",
+          "parameter": "body.id scalar"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-BOLA-004",
+      "independence_group": "juice-feedback-client-controlled-author",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/verify.ts",
+          "line_start": 30,
+          "line_end": 37,
+          "role": "sink",
+          "file_sha256": "9564a950864d515bbb9aff2718e6b904691bb8dc71a60a13905db80a04b8feff"
+        },
+        {
+          "file": "models/feedback.ts",
+          "line_start": 29,
+          "line_end": 33,
+          "role": "model",
+          "file_sha256": "24ef867d9854df2889c9286a688b6cee8668a08a5e1d987f867c9268dbeb4750"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 502,
+          "line_end": 526,
+          "role": "caller",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/api/Feedbacks",
+          "parameter": "body.UserId"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-CAPTCHA-001",
+      "independence_group": "juice-captcha-disclosed-reusable-answer",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/captcha.ts",
+          "line_start": 24,
+          "line_end": 41,
+          "role": "sink",
+          "file_sha256": "b48ecb634f38f033ce1331148a2a0c1dc24aecd3a01e72c773fd74b716cf17e1"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/rest/captcha",
+          "parameter": null
+        },
+        {
+          "method": "POST",
+          "endpoint": "/api/Feedbacks",
+          "parameter": "body.captchaId/captcha"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-CODE-001",
+      "independence_group": "juice-profile-username-expression-eval",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/updateUserProfile.ts",
+          "line_start": 24,
+          "line_end": 42,
+          "role": "source",
+          "file_sha256": "2eec586af91cd04ab60503ec3477e52dd7c524cfdbfad9ffcfeb4000a23b0641"
+        },
+        {
+          "file": "routes/userProfile.ts",
+          "line_start": 57,
+          "line_end": 76,
+          "role": "sink",
+          "file_sha256": "07251f3d0dd9f4c530da60e3911091d8ff1bded650f72c31cbee499093979b39"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/profile",
+          "parameter": "body.username"
+        },
+        {
+          "method": "GET",
+          "endpoint": "/profile",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-CRYPTO-001",
+      "independence_group": "juice-password-unsalted-md5-storage",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "models/user.ts",
+          "line_start": 70,
+          "line_end": 75,
+          "role": "caller",
+          "file_sha256": "89d0636aec0ddbd582162c40da590fa361fef7617573bd95ecef3339171deb59"
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 41,
+          "line_end": 41,
+          "role": "sink",
+          "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/api/Users",
+          "parameter": "body.password"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-DATA-001",
+      "independence_group": "juice-whoami-client-selected-secret-fields",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/currentUser.ts",
+          "line_start": 20,
+          "line_end": 44,
+          "role": "sink",
+          "file_sha256": "b91a6dee202f62b69b27c0b6b6b4c0bacaa6621a2c8c2fd706baf1154e0d4886"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/rest/user/whoami",
+          "parameter": "query.fields"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-DATA-002",
+      "independence_group": "juice-metrics-route-missing-authentication",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "server.ts",
+          "line_start": 746,
+          "line_end": 750,
+          "role": "sink",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        },
+        {
+          "file": "routes/metrics.ts",
+          "line_start": 84,
+          "line_end": 94,
+          "role": "helper",
+          "file_sha256": "b00e6a62b4f97338ea263bba9efafe7158d6d23829d468186c00c9078eeffd8f"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/metrics",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-FILE-001",
+      "independence_group": "juice-public-sensitive-directory-mounts",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "server.ts",
+          "line_start": 288,
+          "line_end": 289,
+          "role": "source",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/ftp",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-FILE-002",
+      "independence_group": "juice-file-suffix-check-before-null-canonicalization",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/fileServer.ts",
+          "line_start": 25,
+          "line_end": 35,
+          "role": "sink",
+          "file_sha256": "dd70181dab51217f0cb2d8d3d563eb52d0e7015cd98cd42960232ddcfa8dd243"
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 44,
+          "line_end": 50,
+          "role": "helper",
+          "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/ftp(?!/quarantine)/:file",
+          "parameter": "path.file"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-NOSQL-001",
+      "independence_group": "juice-review-selector-operator-injection",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/updateProductReviews.ts",
+          "line_start": 17,
+          "line_end": 25,
+          "role": "sink",
+          "file_sha256": "711928a6d6188c2413e3df62c85db1e77f8fe7ad04e5605e6588de42e9dd6ad2"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "PATCH",
+          "endpoint": "/rest/products/reviews",
+          "parameter": "body.id object"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-NOSQL-002",
+      "independence_group": "juice-track-order-where-expression-injection",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/trackOrder.ts",
+          "line_start": 14,
+          "line_end": 24,
+          "role": "sink",
+          "file_sha256": "8f0d91a9c902a7634ecb5822e8d348354f6bc7ee0c10e21079134e7f4aa17958"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/rest/track-order/:id",
+          "parameter": "path.id"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-PATH-001",
+      "independence_group": "juice-zip-entry-write-outside-upload-directory",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/fileUpload.ts",
+          "line_start": 27,
+          "line_end": 51,
+          "role": "sink",
+          "file_sha256": "c2a5c6d051272fe45683fbf67d4beb707c28fb09450b21d514a59d732b376aa0"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/file-upload",
+          "parameter": "multipart ZIP entry path"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-RATE-001",
+      "independence_group": "juice-reset-password-trust-proxy-rate-key",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "server.ts",
+          "line_start": 359,
+          "line_end": 366,
+          "role": "sink",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/rest/user/reset-password",
+          "parameter": "X-Forwarded-For / request ip"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-REDIRECT-001",
+      "independence_group": "juice-redirect-substring-allowlist",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/redirect.ts",
+          "line_start": 13,
+          "line_end": 18,
+          "role": "caller",
+          "file_sha256": "f1345c3bb3a276a4e80db74f5d1eee04cd62013e8d4d7730ef92153154484607"
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 133,
+          "line_end": 139,
+          "role": "sink",
+          "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/redirect",
+          "parameter": "query.to"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-AUTH-101",
+      "independence_group": "juice-twofactor-disable-password-gate",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/2fa.ts",
+          "line_start": 142,
+          "line_end": 170,
+          "role": "source",
+          "file_sha256": "5c899e51dc17e5576b1d8041038b003ebfe35253e062a30aa01bc631d7df4996"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/rest/2fa/disable",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-001",
+      "independence_group": "juice-address-read-owner-scope",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/address.ts",
+          "line_start": 16,
+          "line_end": 25,
+          "role": "source",
+          "file_sha256": "99413492a060638771636237a5c178a6a5907948f17cb8bf50dda648386d2084"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 467,
+          "line_end": 471,
+          "role": "source",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 175,
+          "line_end": 184,
+          "role": "source",
+          "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": null,
+          "endpoint": "/api/Addresss/{id}",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-002",
+      "independence_group": "juice-card-read-owner-scope",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/payment.ts",
+          "line_start": 43,
+          "line_end": 69,
+          "role": "source",
+          "file_sha256": "91ef541a6e38235575c565c15c246bae358e6be4e60fccb48922b6116d1de44e"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 457,
+          "line_end": 461,
+          "role": "source",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 175,
+          "line_end": 184,
+          "role": "source",
+          "file_sha256": "c3496760cac6a5fde403bf739a8ab5e2536d2bbc57a6e3b6a0ac50b01a6e8b8d"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": null,
+          "endpoint": "/api/Cards/{id}",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-BIZ-101",
+      "independence_group": "juice-basket-quantity-stock-upper-bound",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/basketItems.ts",
+          "line_start": 85,
+          "line_end": 101,
+          "role": "source",
+          "file_sha256": "be2cd01e41b4fc4e2d17c661ddb32d8c2ff9be49dfa13a9c43cc872c413d90e6"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/api/BasketItems",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-DATA-001",
+      "independence_group": "juice-card-number-response-mask",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/payment.ts",
+          "line_start": 20,
+          "line_end": 68,
+          "role": "source",
+          "file_sha256": "91ef541a6e38235575c565c15c246bae358e6be4e60fccb48922b6116d1de44e"
+        }
+      ],
+      "http_anchors": [],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-FILE-101",
+      "independence_group": "juice-profile-upload-byte-signature-gate",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/profileImageFileUpload.ts",
+          "line_start": 14,
+          "line_end": 58,
+          "role": "source",
+          "file_sha256": "6c19407cb05fbb2e8b676f2d964eccec79db13d302cc806ed1fef0e757b312c7"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/profile/image/file",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-PATH-101",
+      "independence_group": "juice-profile-upload-server-selected-filename",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/profileImageFileUpload.ts",
+          "line_start": 14,
+          "line_end": 58,
+          "role": "source",
+          "file_sha256": "6c19407cb05fbb2e8b676f2d964eccec79db13d302cc806ed1fef0e757b312c7"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/profile/image/file",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SAFE-SQL-001",
+      "independence_group": "juice-address-id-orm-lookup",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/address.ts",
+          "line_start": 18,
+          "line_end": 18,
+          "role": "source",
+          "file_sha256": "99413492a060638771636237a5c178a6a5907948f17cb8bf50dda648386d2084"
+        },
+        {
+          "file": "models/address.ts",
+          "line_start": 7,
+          "line_end": 16,
+          "role": "source",
+          "file_sha256": "305b4a190461279351ae449be0f2be636c7d8389b0a8d3d8db553ebf2c76a92a"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": null,
+          "endpoint": "/api/Addresss/{id}",
+          "parameter": null
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SQL-001",
+      "independence_group": "juice-search-query-sql-interpolation",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/search.ts",
+          "line_start": 21,
+          "line_end": 23,
+          "role": "sink",
+          "file_sha256": "de09bfc4040fc88073dbb85a7d1ef0171388abb4775eedc78578a48167853057"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 621,
+          "line_end": 621,
+          "role": "registration",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "GET",
+          "endpoint": "/rest/products/search",
+          "parameter": "query.q"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SQL-002",
+      "independence_group": "juice-login-email-sql-interpolation",
+      "split": "holdout",
+      "source_anchors": [
+        {
+          "file": "routes/login.ts",
+          "line_start": 32,
+          "line_end": 50,
+          "role": "sink",
+          "file_sha256": "cf11d682edff6744bcb54339bce4b2dd6da5e80f9038facd7605df857b0a0b7b"
+        },
+        {
+          "file": "server.ts",
+          "line_start": 615,
+          "line_end": 615,
+          "role": "registration",
+          "file_sha256": "1774fac7f05f9f78fad0b4f82a10eaf0d2ef5b2522ddbe75133e65e423c0a90b"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/rest/user/login",
+          "parameter": "body.email"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-SSRF-001",
+      "independence_group": "juice-profile-image-url-unrestricted-fetch",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/profileImageUrlUpload.ts",
+          "line_start": 18,
+          "line_end": 36,
+          "role": "sink",
+          "file_sha256": "75140f35e65141135d3abb4b3b86aad1556c0d2a22d733ae1d50a127cd0cbb26"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/profile/image/url",
+          "parameter": "body.imageUrl"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-XSS-001",
+      "independence_group": "juice-search-query-dom-trust-bypass",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "frontend/src/app/search-result/search-result.component.ts",
+          "line_start": 135,
+          "line_end": 144,
+          "role": "source",
+          "file_sha256": "a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12"
+        },
+        {
+          "file": "frontend/src/app/search-result/search-result.component.html",
+          "line_start": 8,
+          "line_end": 11,
+          "role": "sink",
+          "file_sha256": "7736a256738752b90ff090c98174e2baff81d34e71e61718ee26c4f20f500929"
+        }
+      ],
+      "http_anchors": [],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-XSS-002",
+      "independence_group": "juice-product-description-stored-trust-bypass",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "models/product.ts",
+          "line_start": 43,
+          "line_end": 55,
+          "role": "source",
+          "file_sha256": "dfd8d17b1c7cd1055c987c6476017416447669af34f10926d9460541279b4da8"
+        },
+        {
+          "file": "frontend/src/app/search-result/search-result.component.ts",
+          "line_start": 61,
+          "line_end": 78,
+          "role": "helper",
+          "file_sha256": "a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12"
+        },
+        {
+          "file": "frontend/src/app/search-result/search-result.component.ts",
+          "line_start": 109,
+          "line_end": 113,
+          "role": "helper",
+          "file_sha256": "a561372334c0ed227381cd282201abd0720a7e6f870f3b8f5a8dba625b2bfc12"
+        },
+        {
+          "file": "frontend/src/app/product/product.component.ts",
+          "line_start": 182,
+          "line_end": 189,
+          "role": "caller",
+          "file_sha256": "fb913a7780fab60eb6d423da46f5e73c235625b1887da7eb42ad6d34cffb9e08"
+        },
+        {
+          "file": "frontend/src/app/product-details/product-details.component.html",
+          "line_start": 14,
+          "line_end": 16,
+          "role": "sink",
+          "file_sha256": "13580c47a113dd45139c16701eab0d092acbc4ddf4ac6d78c4ed4a8dff20cb81"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/api/Products",
+          "parameter": "body.description"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    },
+    {
+      "case_id": "JS-XXE-001",
+      "independence_group": "juice-xml-external-entity-enabled-parser",
+      "split": "development",
+      "source_anchors": [
+        {
+          "file": "routes/fileUpload.ts",
+          "line_start": 70,
+          "line_end": 79,
+          "role": "caller",
+          "file_sha256": "c2a5c6d051272fe45683fbf67d4beb707c28fb09450b21d514a59d732b376aa0"
+        },
+        {
+          "file": "lib/xml.ts",
+          "line_start": 17,
+          "line_end": 38,
+          "role": "sink",
+          "file_sha256": "5ce88c29216dceb3a14393476df0729719cebc4e5a59b47e033ca67cb9a8c357"
+        }
+      ],
+      "http_anchors": [
+        {
+          "method": "POST",
+          "endpoint": "/file-upload",
+          "parameter": "multipart XML document"
+        }
+      ],
+      "expected_context_priority": null,
+      "rationale": null,
+      "fact_references": [],
+      "reviewed_by": null
+    }
+  ]
+}

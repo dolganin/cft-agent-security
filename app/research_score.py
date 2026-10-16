@@ -108,6 +108,9 @@ def replay_runtime(root):
             raise ValueError("Persisted runtime verdict failed independent replay")
         incremental = action.juice_proof_binding is not None
         check_id = action.juice_proof_binding.check_id if incremental else None
+        from scoring.runtime_impact import assess_verified_impact
+
+        impact = assess_verified_impact(action, rebuilt)
         dispositions.append({"finding_id": row["finding_id"], "status": rebuilt.verdict,
             "job_finding_ids": job_finding_ids,
             "route_id": check_id if incremental else binding.route_id, "action_id": action.id,
@@ -116,7 +119,9 @@ def replay_runtime(root):
                 if incremental else action.endpoint,
             "method": ("POST" if check_id == "role-registration" else "PUT")
                 if incremental else binding.method,
-            "evidence": str(path.relative_to(root)), "approval_execution_audit_replayed": True})
+            "evidence": str(path.relative_to(root)), "approval_execution_audit_replayed": True,
+            "impact_assessment": impact.model_dump(mode="json"),
+            "assessment_origin": "posthoc_replayed_runtime_property.v1"})
     return dispositions
 
 
@@ -148,6 +153,25 @@ def observation(finding, *, report=None, runtime=None):
         status = "technical_error"
     if runtime:
         status = runtime["status"]
+    from schemas.scoring import ContextPriority, TechnicalSeverity
+
+    severity = None
+    if runtime and runtime.get("impact_assessment"):
+        impact = TechnicalSeverity.model_validate(runtime["impact_assessment"])
+        if impact.assessment_status == "assessed":
+            severity = impact.level
+    resolution = (report or {}).get("scoring_review_resolution") or {}
+    ordinal = (report or {}).get("technical_severity")
+    if ordinal and resolution.get("status") == "accepted":
+        impact = TechnicalSeverity.model_validate(ordinal)
+        if impact.assessment_status == "assessed":
+            severity = impact.level
+    priority = None
+    if (report or {}).get("context_priority"):
+        cp = ContextPriority.model_validate(report["context_priority"])
+        if (cp.scheme == "context-priority.v0.1" and cp.assessment_status == "assessed"
+                and not cp.unknown_inputs):
+            priority = cp.level
     return BenchmarkObservationV2(id=finding.id, source=finding.source,
         family=finding.provenance.family if finding.provenance else finding.rule_id,
         service=finding.service, source_file=finding.file,
@@ -157,7 +181,8 @@ def observation(finding, *, report=None, runtime=None):
         evidence=[runtime["evidence"]] if runtime else [],
         capability=runtime["capability"] if runtime else None,
         http_endpoint=runtime["endpoint"] if runtime else None,
-        http_method=runtime["method"] if runtime else None)
+        http_method=runtime["method"] if runtime else None,
+        severity=severity, context_priority=priority)
 
 
 def score_research(root, dataset_path, output):
@@ -230,7 +255,8 @@ def score_research(root, dataset_path, output):
         write(output / f"{split}-agent.json", scored.model_dump(mode="json"))
         write(output / f"{split}-sast.json", sast.model_dump(mode="json"))
         summary["metrics"][split] = {"detection": scored.detection.model_dump(),
-            "verification": scored.verification.model_dump(), "sast_detection": sast.detection.model_dump()}
+            "verification": scored.verification.model_dump(), "sast_detection": sast.detection.model_dump(),
+            "severity": scored.severity.model_dump(), "context_priority": scored.context_priority.model_dump()}
         groups = {}
         for case in scored.cases:
             group = groups.setdefault(case.family, {"positive": 0, "safe": 0, "detected_positive": 0,
@@ -243,6 +269,17 @@ def score_research(root, dataset_path, output):
                     losses.append({"split": split, "case_id": case.case_id, "family": case.family,
                                    "detected": case.detected, "verification": case.verification})
         families[split] = groups
+    scoring_metrics = {}
+    for metric in ("severity", "context_priority"):
+        counts = {key: sum(summary["metrics"][split][metric][key]
+                           for split in ("development", "holdout"))
+                  for key in ("reviewed_cases", "assessed_cases", "correct_cases")}
+        counts["accuracy"] = counts["correct_cases"] / counts["assessed_cases"] if counts["assessed_cases"] else None
+        counts["assessed_coverage"] = counts["assessed_cases"] / counts["reviewed_cases"] if counts["reviewed_cases"] else None
+        scoring_metrics[metric] = counts
+        summary[metric + "_accuracy"] = counts["accuracy"]
+    summary["scoring_metrics"] = scoring_metrics
+    summary["scoring_method"] = "Compatible saved B08 assessments plus posthoc replayed fixed-runtime ordinal impacts; not a new LLM scoring run"
     write(output / "case-losses.json", losses)
     write(output / "family-metrics.json", families)
     write(output / "summary.json", summary)

@@ -1,0 +1,70 @@
+{
+  "schema_version": "context-priority.architecture-preview.v1",
+  "status": "partial_unreviewed",
+  "target_snapshot": {
+    "commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+    "tracked_files": 1300,
+    "files_sha256": "491447f460032ff590bb08b50ef8cc87d04ab6123898d9ea3091b31f10dba818"
+  },
+  "context": {
+    "service": "juice",
+    "public_exposure": false,
+    "criticality": "unknown",
+    "trust_zone": null,
+    "connected_services": [],
+    "databases": [
+      "sqlite",
+      "marsdb"
+    ],
+    "critical_paths": [],
+    "authentication": "unknown",
+    "blast_radius": "unknown",
+    "unknown_inputs": [
+      "public_exposure",
+      "criticality",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ]
+  },
+  "references": [
+    {
+      "file": "models/index.ts",
+      "sha256": "42bf703e1dfa70883a509b0bd59f8d1c9982951222ad87f6ad87e6ea312061bb",
+      "line": 34
+    },
+    {
+      "file": "data/mongodb.ts",
+      "sha256": "72bd8763e317801d1a3f52afae02505ae07a515dba5cdc777d5c03fcc5ad67af",
+      "line": 10
+    }
+  ],
+  "priority_preview": {
+    "level": "LOW",
+    "score": 2.0,
+    "reasons": [
+      "public_exposure:not_public:+0",
+      "asset_criticality:unknown:+0",
+      "database_access:direct:+2",
+      "critical_path:none:+0",
+      "authentication:unknown:+0",
+      "blast_radius:unknown:+0"
+    ],
+    "assessment_status": "partial",
+    "unknown_inputs": [
+      "public_exposure",
+      "criticality",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ],
+    "scheme": "context-priority.v0.1"
+  },
+  "scope": "Backend service context only, not automatically assigned to frontend findings or all cases",
+  "accuracy_claimed": false,
+  "notes": [
+    "Docker lab isolation is not evidence of the application's production exposure.",
+    "Business criticality, critical service paths, per-route authentication and blast radius remain unknown.",
+    "The partial LOW score is a lower-bound calculation from known facts, not a final low-risk verdict."
+  ]
+}

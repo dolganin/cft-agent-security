@@ -50,6 +50,7 @@ def aggregate_search(summary):
         "sast_detection_precision": ratio(baseline["tp"], baseline["tp"] + baseline["fp"]),
         "severity_accuracy": summary["severity_accuracy"],
         "context_priority_accuracy": summary["context_priority_accuracy"],
+        "scoring_metrics": summary.get("scoring_metrics", {}),
         "reproducibility": {"value": None, "reason": "not_measured_by_user_request"},
         "outside_observations_are_not_automatic_false_positives": True,
         "observation_accounting_by_split": {
@@ -160,6 +161,14 @@ def percent(metric):
     return f'{metric["value"] * 100:.2f}% ({metric["numerator"]}/{metric["denominator"]})'
 
 
+def rubric_text(search, metric):
+    values = search.get("scoring_metrics", {}).get(metric, {})
+    if values.get("accuracy") is None:
+        return "N/A: нет сопоставимых оценок или независимой разметки"
+    return (f'{values["accuracy"] * 100:.2f}% ({values["correct_cases"]}/{values["assessed_cases"]}); '
+            f'покрытие размеченного среза {values["assessed_cases"]}/{values["reviewed_cases"]}')
+
+
 def render(data):
     search, repair = data["search"], data["repair"]
     baseline = data["historical_a06_baseline"]["metrics"]
@@ -180,8 +189,8 @@ def render(data):
         f'| Precision обнаружения | {percent(search["detection_precision"])} |',
         f'| SAST без агента: Recall обнаружения | {percent(search["sast_detection_recall"])} |',
         f'| SAST без агента: Precision обнаружения | {percent(search["sast_detection_precision"])} |',
-        "| Точность серьезности | N/A: совместимые оценки в этом запуске отсутствуют |",
-        "| Точность Context Priority | N/A: независимой разметки CP нет |",
+        f'| Точность серьезности | {rubric_text(search, "severity")} |',
+        f'| Точность Context Priority | {rubric_text(search, "context_priority")} |',
         f'| Исторический A06 SAST: Recall обнаружения | {percent(baseline["sast"]["detection_recall"])} |',
         f'| Исторический A06 DAST: Recall обнаружения | {percent(baseline["dast"]["detection_recall"])} |',
         f'| Исторический A06 SAST + DAST: Recall обнаружения | {percent(baseline["union"]["detection_recall"])} |',

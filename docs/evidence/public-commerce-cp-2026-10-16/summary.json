@@ -1,0 +1,274 @@
+{
+  "schema_version": "context-priority.public-commerce-evaluation.v1",
+  "scenario": {
+    "id": "public-real-commerce.v1",
+    "declared_by": "user",
+    "public_exposure": true,
+    "business_assets": "Real customer accounts and orders",
+    "asset_criticality": "high",
+    "backend_topology": "Shared centralized application with direct SQLite/MarsDB access",
+    "critical_path": "Backend -> customer/account/order data stores",
+    "topology_source_references": [
+      {
+        "file": "models/index.ts",
+        "sha256": "42bf703e1dfa70883a509b0bd59f8d1c9982951222ad87f6ad87e6ea312061bb",
+        "line": 34
+      },
+      {
+        "file": "data/mongodb.ts",
+        "sha256": "72bd8763e317801d1a3f52afae02505ae07a515dba5cdc777d5c03fcc5ad67af",
+        "line": 10
+      }
+    ],
+    "auth_prerequisites": "Unknown per finding; propagated as intervals",
+    "scope": "Posthoc declared deployment scenario; not the original lab's measured exposure",
+    "independent_human_cp_reference": false
+  },
+  "scoring_metrics": {
+    "severity": {
+      "reviewed_cases": 4,
+      "assessed_cases": 3,
+      "correct_cases": 3,
+      "accuracy": 1.0,
+      "assessed_coverage": 0.75
+    },
+    "context_priority": {
+      "reviewed_cases": 0,
+      "assessed_cases": 0,
+      "correct_cases": 0,
+      "accuracy": null,
+      "assessed_coverage": null
+    }
+  },
+  "context_priority_draft_agreement": {
+    "metric": "agreement_with_blinded_model_reference_draft",
+    "human_validated_accuracy": null,
+    "reviewed_cases": 21,
+    "assessed_cases": 20,
+    "correct_cases": 11,
+    "agreement": 0.55,
+    "assessed_coverage": 0.9523809523809523,
+    "cases": [
+      {
+        "case_id": "JS-AUTH-001",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-AUTHZ-001",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-AUTHZ-002",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-BIZ-001",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-BIZ-002",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-BOLA-001",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-BOLA-002",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-BOLA-003",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-BOLA-004",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-CAPTCHA-001",
+        "reference": null,
+        "predicted": "HIGH",
+        "correct": null
+      },
+      {
+        "case_id": "JS-CODE-001",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-CRYPTO-001",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-DATA-001",
+        "reference": null,
+        "predicted": "HIGH",
+        "correct": null
+      },
+      {
+        "case_id": "JS-DATA-002",
+        "reference": "LOW",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-FILE-001",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-FILE-002",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-NOSQL-001",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-NOSQL-002",
+        "reference": null,
+        "predicted": "HIGH",
+        "correct": null
+      },
+      {
+        "case_id": "JS-PATH-001",
+        "reference": null,
+        "predicted": "HIGH",
+        "correct": null
+      },
+      {
+        "case_id": "JS-RATE-001",
+        "reference": "MEDIUM",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-REDIRECT-001",
+        "reference": "LOW",
+        "predicted": "HIGH",
+        "correct": false
+      },
+      {
+        "case_id": "JS-SAFE-AUTH-101",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-AUTHZ-001",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-AUTHZ-002",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-BIZ-101",
+        "reference": null,
+        "predicted": "HIGH",
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-DATA-001",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-FILE-101",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-PATH-101",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SAFE-SQL-001",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-SQL-001",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-SQL-002",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-SSRF-001",
+        "reference": "HIGH",
+        "predicted": "HIGH",
+        "correct": true
+      },
+      {
+        "case_id": "JS-XSS-001",
+        "reference": "MEDIUM",
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-XSS-002",
+        "reference": null,
+        "predicted": null,
+        "correct": null
+      },
+      {
+        "case_id": "JS-XXE-001",
+        "reference": null,
+        "predicted": "HIGH",
+        "correct": null
+      }
+    ]
+  },
+  "new_target_checks": 0,
+  "new_application_model_calls": 0,
+  "reference_author_type": "blinded_model",
+  "reference_sha256": "7ced7b4ef2fe39be7808186a13e0776a2fda64f62a5a1c9c703913b81202ea29",
+  "limitations": [
+    "Reference is a model draft pending independent human review, not frozen A04 truth",
+    "Agent CP is deterministic and service-context based; reference judges case-level remediation priority",
+    "Interval-determined labels do not invent a complete numeric CP score",
+    "CP scenario and ratings were added after the original live run; no original ratings are retroactively claimed"
+  ]
+}

@@ -1,0 +1,6132 @@
+{
+  "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/about/about.component.ts:117": {
+    "finding_id": "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/about/about.component.ts:117",
+    "source_file": "frontend/src/app/about/about.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/administration/administration.component.ts:74": {
+    "finding_id": "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/administration/administration.component.ts:74",
+    "source_file": "frontend/src/app/administration/administration.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/last-login-ip/last-login-ip.component.ts:40": {
+    "finding_id": "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/last-login-ip/last-login-ip.component.ts:40",
+    "source_file": "frontend/src/app/last-login-ip/last-login-ip.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "generic.secrets.security.detected-google-oauth.detected-google-oauth-url:frontend/src/app/login/login.component.ts:59": {
+    "finding_id": "generic.secrets.security.detected-google-oauth.detected-google-oauth-url:frontend/src/app/login/login.component.ts:59",
+    "source_file": "frontend/src/app/login/login.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var:frontend/src/app/navbar/navbar.component.html:17": {
+    "finding_id": "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var:frontend/src/app/navbar/navbar.component.html:17",
+    "source_file": "frontend/src/app/navbar/navbar.component.html",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var:frontend/src/app/purchase-basket/purchase-basket.component.html:15": {
+    "finding_id": "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var:frontend/src/app/purchase-basket/purchase-basket.component.html:15",
+    "source_file": "frontend/src/app/purchase-basket/purchase-basket.component.html",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-3795f621f91773479194": {
+    "finding_id": "juice-source-3795f621f91773479194",
+    "source_file": "frontend/src/app/search-result/search-result.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-83fa68d65959d92449d1": {
+    "finding_id": "juice-source-83fa68d65959d92449d1",
+    "source_file": "frontend/src/app/search-result/search-result.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/track-result/track-result.component.ts:49": {
+    "finding_id": "javascript.lang.security.html-in-template-string.html-in-template-string:frontend/src/app/track-result/track-result.component.ts:49",
+    "source_file": "frontend/src/app/track-result/track-result.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.unsafe-dynamic-method.unsafe-dynamic-method:frontend/src/app/web3-sandbox/web3-sandbox.component.ts:243": {
+    "finding_id": "javascript.lang.security.audit.unsafe-dynamic-method.unsafe-dynamic-method:frontend/src/app/web3-sandbox/web3-sandbox.component.ts:243",
+    "source_file": "frontend/src/app/web3-sandbox/web3-sandbox.component.ts",
+    "context": {
+      "service": "browser",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [
+        "browser -> commerce backend"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "MEDIUM",
+      "score": 5.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:none:+0",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 5.0,
+    "maximum_score": 8.0,
+    "possible_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.detect-non-literal-fs-filename.detect-non-literal-fs-filename:lib/antiCheat.ts:196": {
+    "finding_id": "javascript.lang.security.audit.detect-non-literal-fs-filename.detect-non-literal-fs-filename:lib/antiCheat.ts:196",
+    "source_file": "lib/antiCheat.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal:lib/antiCheat.ts:196": {
+    "finding_id": "javascript.lang.security.audit.path-traversal.path-join-resolve-traversal.path-join-resolve-traversal:lib/antiCheat.ts:196",
+    "source_file": "lib/antiCheat.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp:lib/codingChallenges.ts:76": {
+    "finding_id": "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp:lib/codingChallenges.ts:76",
+    "source_file": "lib/codingChallenges.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp:lib/codingChallenges.ts:78": {
+    "finding_id": "javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp:lib/codingChallenges.ts:78",
+    "source_file": "lib/codingChallenges.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.weak-hash-md5-sha1:lib/insecurity.ts:41": {
+    "finding_id": "cft.node.weak-hash-md5-sha1:lib/insecurity.ts:41",
+    "source_file": "lib/insecurity.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key:lib/insecurity.ts:42": {
+    "finding_id": "javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key:lib/insecurity.ts:42",
+    "source_file": "lib/insecurity.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret:lib/insecurity.ts:54": {
+    "finding_id": "javascript.jsonwebtoken.security.jwt-hardcode.hardcoded-jwt-secret:lib/insecurity.ts:54",
+    "source_file": "lib/insecurity.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key:lib/insecurity.ts:150": {
+    "finding_id": "javascript.lang.security.audit.hardcoded-hmac-key.hardcoded-hmac-key:lib/insecurity.ts:150",
+    "source_file": "lib/insecurity.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.html-in-template-string.html-in-template-string:lib/startup/customizeApplication.ts:85": {
+    "finding_id": "javascript.lang.security.html-in-template-string.html-in-template-string:lib/startup/customizeApplication.ts:85",
+    "source_file": "lib/startup/customizeApplication.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.ssrf-request-url:lib/startup/validatePreconditions.ts:165": {
+    "finding_id": "cft.node.ssrf-request-url:lib/startup/validatePreconditions.ts:165",
+    "source_file": "lib/startup/validatePreconditions.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.ssrf-request-url:lib/startup/validatePreconditions.ts:236": {
+    "finding_id": "cft.node.ssrf-request-url:lib/startup/validatePreconditions.ts:236",
+    "source_file": "lib/startup/validatePreconditions.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.ssrf-request-url:lib/webhook.ts:18": {
+    "finding_id": "cft.node.ssrf-request-url:lib/webhook.ts:18",
+    "source_file": "lib/webhook.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.dynamic-code-evaluation:lib/xml.ts:12": {
+    "finding_id": "cft.node.dynamic-code-evaluation:lib/xml.ts:12",
+    "source_file": "lib/xml.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-0365ccc6dfad916d006f": {
+    "finding_id": "model-scout-0365ccc6dfad916d006f",
+    "source_file": "lib/xml.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.xml-external-entities:lib/xml.ts:35-244c06435260407b": {
+    "finding_id": "cft.node.xml-external-entities:lib/xml.ts:35-244c06435260407b",
+    "source_file": "lib/xml.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.xml-external-entities:lib/xml.ts:35-bba62d05530ad697": {
+    "finding_id": "cft.node.xml-external-entities:lib/xml.ts:35-bba62d05530ad697",
+    "source_file": "lib/xml.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-314eb7655729bfa2fca1": {
+    "finding_id": "juice-source-314eb7655729bfa2fca1",
+    "source_file": "models/feedback.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-1915ef982ac1b584d2d3": {
+    "finding_id": "juice-source-1915ef982ac1b584d2d3",
+    "source_file": "models/user.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-fd6e12d4a1c70fbe3df3": {
+    "finding_id": "juice-source-fd6e12d4a1c70fbe3df3",
+    "source_file": "routes/address.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-b7e0fe37e5a5131cfa7d": {
+    "finding_id": "juice-source-b7e0fe37e5a5131cfa7d",
+    "source_file": "routes/address.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-3054590f9136883f88fe": {
+    "finding_id": "juice-source-3054590f9136883f88fe",
+    "source_file": "routes/address.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-2c22c0b729c300b4dcc3": {
+    "finding_id": "model-scout-2c22c0b729c300b4dcc3",
+    "source_file": "routes/b2bOrder.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-bbdef444919da6fdbda3": {
+    "finding_id": "model-scout-bbdef444919da6fdbda3",
+    "source_file": "routes/b2bOrder.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-4e16a8cc3be2ba52e023": {
+    "finding_id": "juice-source-4e16a8cc3be2ba52e023",
+    "source_file": "routes/basket.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-a36bb34ccb7549df3916": {
+    "finding_id": "juice-source-a36bb34ccb7549df3916",
+    "source_file": "routes/basketItems.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-0fbcbd2ae87556ee6171": {
+    "finding_id": "juice-source-0fbcbd2ae87556ee6171",
+    "source_file": "routes/basketItems.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.dynamic-code-evaluation:routes/captcha.ts:22": {
+    "finding_id": "cft.node.dynamic-code-evaluation:routes/captcha.ts:22",
+    "source_file": "routes/captcha.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-9d4c6ad9ab4c0eeb6cfc": {
+    "finding_id": "juice-source-9d4c6ad9ab4c0eeb6cfc",
+    "source_file": "routes/captcha.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-1203062d0580a1093f16": {
+    "finding_id": "juice-source-1203062d0580a1093f16",
+    "source_file": "routes/captcha.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-a212eea090575bc3233a": {
+    "finding_id": "juice-source-a212eea090575bc3233a",
+    "source_file": "routes/changePassword.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-b2618568651a01e5d716": {
+    "finding_id": "model-scout-b2618568651a01e5d716",
+    "source_file": "routes/chat.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.nosql-where-interpolation:routes/chat.ts:149": {
+    "finding_id": "cft.node.nosql-where-interpolation:routes/chat.ts:149",
+    "source_file": "routes/chat.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-9f6c76474ae390c7ecf3": {
+    "finding_id": "model-scout-9f6c76474ae390c7ecf3",
+    "source_file": "routes/checkKeys.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-1145ef3dd7d5258d31fc": {
+    "finding_id": "model-scout-1145ef3dd7d5258d31fc",
+    "source_file": "routes/checkKeys.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-f7c23a621e40ceaabd4e": {
+    "finding_id": "juice-source-f7c23a621e40ceaabd4e",
+    "source_file": "routes/coupon.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-b748973056970d2eb5a4": {
+    "finding_id": "model-scout-b748973056970d2eb5a4",
+    "source_file": "routes/coupon.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-a1de5d5d0cd4f8aae5f0": {
+    "finding_id": "model-scout-a1de5d5d0cd4f8aae5f0",
+    "source_file": "routes/coupon.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-2bf9fff6a503ba752dbf": {
+    "finding_id": "model-scout-2bf9fff6a503ba752dbf",
+    "source_file": "routes/coupon.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-a3838a05a46736b240e6": {
+    "finding_id": "juice-source-a3838a05a46736b240e6",
+    "source_file": "routes/createProductReviews.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-cb00deafaf6b48771d96": {
+    "finding_id": "model-scout-cb00deafaf6b48771d96",
+    "source_file": "routes/currentUser.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-ec66a6e9aaae60eb2a25": {
+    "finding_id": "model-scout-ec66a6e9aaae60eb2a25",
+    "source_file": "routes/currentUser.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-41f0bce0ef70a7d15b2d": {
+    "finding_id": "juice-source-41f0bce0ef70a7d15b2d",
+    "source_file": "routes/currentUser.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.remote-property-injection.remote-property-injection:routes/currentUser.ts:31": {
+    "finding_id": "javascript.express.security.audit.remote-property-injection.remote-property-injection:routes/currentUser.ts:31",
+    "source_file": "routes/currentUser.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-d127039620c361c33b57": {
+    "finding_id": "juice-source-d127039620c361c33b57",
+    "source_file": "routes/deluxe.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-c852d8a46d8dafa6019d": {
+    "finding_id": "juice-source-c852d8a46d8dafa6019d",
+    "source_file": "routes/deluxe.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-d3498703a1a471dc5c84": {
+    "finding_id": "juice-source-d3498703a1a471dc5c84",
+    "source_file": "routes/deluxe.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-5c30505b4058638264bf": {
+    "finding_id": "juice-source-5c30505b4058638264bf",
+    "source_file": "routes/deluxe.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-39750be29af5e2eb5d77": {
+    "finding_id": "juice-source-39750be29af5e2eb5d77",
+    "source_file": "routes/fileServer.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/fileServer.ts:32": {
+    "finding_id": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/fileServer.ts:32",
+    "source_file": "routes/fileServer.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-fc32d99e74b3aaf9ce76": {
+    "finding_id": "model-scout-fc32d99e74b3aaf9ce76",
+    "source_file": "routes/fileUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-da3c0253f2fecf59edb8": {
+    "finding_id": "model-scout-da3c0253f2fecf59edb8",
+    "source_file": "routes/fileUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.archive-path-write:routes/fileUpload.ts:34": {
+    "finding_id": "cft.node.archive-path-write:routes/fileUpload.ts:34",
+    "source_file": "routes/fileUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-f930a7ee4067def9f17f": {
+    "finding_id": "model-scout-f930a7ee4067def9f17f",
+    "source_file": "routes/fileUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-b5e815a0e406b71c1eba": {
+    "finding_id": "juice-source-b5e815a0e406b71c1eba",
+    "source_file": "routes/imageCaptcha.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-a7c136121248f37891fe": {
+    "finding_id": "juice-source-a7c136121248f37891fe",
+    "source_file": "routes/imageCaptcha.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/keyServer.ts:14": {
+    "finding_id": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/keyServer.ts:14",
+    "source_file": "routes/keyServer.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/logfileServer.ts:14": {
+    "finding_id": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/logfileServer.ts:14",
+    "source_file": "routes/logfileServer.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/login.ts:34": {
+    "finding_id": "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/login.ts:34",
+    "source_file": "routes/login.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query:routes/login.ts:34": {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query:routes/login.ts:34",
+    "source_file": "routes/login.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/login.ts:34": {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/login.ts:34",
+    "source_file": "routes/login.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-4e18a3df4a7ea466bb14": {
+    "finding_id": "juice-source-4e18a3df4a7ea466bb14",
+    "source_file": "routes/metrics.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-17ffa73583dc999df5d9": {
+    "finding_id": "model-scout-17ffa73583dc999df5d9",
+    "source_file": "routes/nftMint.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-751627c68fe30100a32e": {
+    "finding_id": "juice-source-751627c68fe30100a32e",
+    "source_file": "routes/order.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-b461396d994d7ccc4b22": {
+    "finding_id": "juice-source-b461396d994d7ccc4b22",
+    "source_file": "routes/order.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-40d091c403876c8a76ef": {
+    "finding_id": "juice-source-40d091c403876c8a76ef",
+    "source_file": "routes/order.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-05667b7636af1731be15": {
+    "finding_id": "juice-source-05667b7636af1731be15",
+    "source_file": "routes/order.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-4aaf4588a5d9d23b5114": {
+    "finding_id": "juice-source-4aaf4588a5d9d23b5114",
+    "source_file": "routes/payment.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-e1e679ed1f4e6173a35e": {
+    "finding_id": "juice-source-e1e679ed1f4e6173a35e",
+    "source_file": "routes/payment.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-8ba5ce876344d4e80502": {
+    "finding_id": "juice-source-8ba5ce876344d4e80502",
+    "source_file": "routes/payment.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.open-redirect-user-url:routes/profileImageFileUpload.ts:56": {
+    "finding_id": "cft.node.open-redirect-user-url:routes/profileImageFileUpload.ts:56",
+    "source_file": "routes/profileImageFileUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-59c9d32a0c8c8b366c11": {
+    "finding_id": "model-scout-59c9d32a0c8c8b366c11",
+    "source_file": "routes/profileImageUrlUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.ssrf-request-url:routes/profileImageUrlUpload.ts:24": {
+    "finding_id": "cft.node.ssrf-request-url:routes/profileImageUrlUpload.ts:24",
+    "source_file": "routes/profileImageUrlUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.open-redirect-user-url:routes/profileImageUrlUpload.ts:49": {
+    "finding_id": "cft.node.open-redirect-user-url:routes/profileImageUrlUpload.ts:49",
+    "source_file": "routes/profileImageUrlUpload.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/quarantineServer.ts:14": {
+    "finding_id": "javascript.express.security.audit.express-res-sendfile.express-res-sendfile:routes/quarantineServer.ts:14",
+    "source_file": "routes/quarantineServer.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.open-redirect-user-url:routes/redirect.ts:18": {
+    "finding_id": "cft.node.open-redirect-user-url:routes/redirect.ts:18",
+    "source_file": "routes/redirect.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18": {
+    "finding_id": "javascript.express.security.audit.express-open-redirect.express-open-redirect:routes/redirect.ts:18",
+    "source_file": "routes/redirect.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/search.ts:23": {
+    "finding_id": "javascript.express.security.injection.tainted-sql-string.tainted-sql-string:routes/search.ts:23",
+    "source_file": "routes/search.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query:routes/search.ts:23": {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-raw-query.sequelize-raw-query:routes/search.ts:23",
+    "source_file": "routes/search.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23": {
+    "finding_id": "javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection:routes/search.ts:23",
+    "source_file": "routes/search.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-9087c5b7ae664fe92c9a": {
+    "finding_id": "model-scout-9087c5b7ae664fe92c9a",
+    "source_file": "routes/showProductReviews.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.nosql-where-interpolation:routes/showProductReviews.ts:36": {
+    "finding_id": "cft.node.nosql-where-interpolation:routes/showProductReviews.ts:36",
+    "source_file": "routes/showProductReviews.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-21823035d399e5a1cd98": {
+    "finding_id": "model-scout-21823035d399e5a1cd98",
+    "source_file": "routes/trackOrder.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.nosql-where-interpolation:routes/trackOrder.ts:18": {
+    "finding_id": "cft.node.nosql-where-interpolation:routes/trackOrder.ts:18",
+    "source_file": "routes/trackOrder.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-104e679fd5df61466a05": {
+    "finding_id": "juice-source-104e679fd5df61466a05",
+    "source_file": "routes/updateProductReviews.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-1c9e9299890728691a56": {
+    "finding_id": "juice-source-1c9e9299890728691a56",
+    "source_file": "routes/updateProductReviews.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.open-redirect-user-url:routes/updateUserProfile.ts:44": {
+    "finding_id": "cft.node.open-redirect-user-url:routes/updateUserProfile.ts:44",
+    "source_file": "routes/updateUserProfile.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.dynamic-code-evaluation:routes/userProfile.ts:65": {
+    "finding_id": "cft.node.dynamic-code-evaluation:routes/userProfile.ts:65",
+    "source_file": "routes/userProfile.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.code-string-concat.code-string-concat:routes/userProfile.ts:65": {
+    "finding_id": "javascript.lang.security.audit.code-string-concat.code-string-concat:routes/userProfile.ts:65",
+    "source_file": "routes/userProfile.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-7067ba3847ddcc7ea8dd": {
+    "finding_id": "model-scout-7067ba3847ddcc7ea8dd",
+    "source_file": "routes/verify.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.html-in-template-string.html-in-template-string:routes/verify.ts:227": {
+    "finding_id": "javascript.lang.security.html-in-template-string.html-in-template-string:routes/verify.ts:227",
+    "source_file": "routes/verify.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "model-scout-a3137555d1cc4afb2fac": {
+    "finding_id": "model-scout-a3137555d1cc4afb2fac",
+    "source_file": "routes/verify.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag:routes/videoHandler.ts:71": {
+    "finding_id": "javascript.lang.security.audit.unknown-value-with-script-tag.unknown-value-with-script-tag:routes/videoHandler.ts:71",
+    "source_file": "routes/videoHandler.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-ca9e3be884bae4b5f0e4": {
+    "finding_id": "juice-source-ca9e3be884bae4b5f0e4",
+    "source_file": "routes/wallet.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-804994970c0083ddb42f": {
+    "finding_id": "juice-source-804994970c0083ddb42f",
+    "source_file": "routes/wallet.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-6fd6f9791c36f2d49719": {
+    "finding_id": "juice-source-6fd6f9791c36f2d49719",
+    "source_file": "routes/wallet.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-5506cd5924fd1ee703f5": {
+    "finding_id": "juice-source-5506cd5924fd1ee703f5",
+    "source_file": "routes/wallet.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "cft.node.weak-hash-md5-sha1:scripts/package.mjs:121": {
+    "finding_id": "cft.node.weak-hash-md5-sha1:scripts/package.mjs:121",
+    "source_file": "scripts/package.mjs",
+    "context": {
+      "service": "juice",
+      "public_exposure": false,
+      "criticality": "unknown",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "public_exposure",
+        "criticality",
+        "databases",
+        "critical_paths",
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "LOW",
+      "score": 0.0,
+      "reasons": [
+        "public_exposure:not_public:+0",
+        "asset_criticality:unknown:+0",
+        "database_access:none:+0",
+        "critical_path:none:+0",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "public_exposure",
+        "criticality",
+        "databases",
+        "critical_paths",
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 0.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH",
+      "LOW",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring:server.ts:157": {
+    "finding_id": "javascript.lang.security.audit.unsafe-formatstring.unsafe-formatstring:server.ts:157",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:268": {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:268",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:288": {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:288",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:292": {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:292",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:296": {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:296",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:300": {
+    "finding_id": "javascript.express.security.audit.express-check-directory-listing.express-check-directory-listing:server.ts:300",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-9df889c515d4dbd16790": {
+    "finding_id": "juice-source-9df889c515d4dbd16790",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "juice-source-85ad39a3ef89ef955fb7": {
+    "finding_id": "juice-source-85ad39a3ef89ef955fb7",
+    "source_file": "server.ts",
+    "context": {
+      "service": "juice",
+      "public_exposure": true,
+      "criticality": "high",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [
+        "sqlite",
+        "marsdb"
+      ],
+      "critical_paths": [
+        "juice -> account/order databases"
+      ],
+      "authentication": "unknown",
+      "blast_radius": "shared",
+      "unknown_inputs": [
+        "authentication"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "HIGH",
+      "score": 9.0,
+      "reasons": [
+        "public_exposure:internet:+2",
+        "asset_criticality:high:+2",
+        "database_access:direct:+2",
+        "critical_path:direct:+1",
+        "authentication:unknown:+0",
+        "blast_radius:shared:+2"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "authentication"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 9.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH"
+    ],
+    "level": "HIGH",
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "authentication"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var:views/dataErasureForm.hbs:38": {
+    "finding_id": "generic.html-templates.security.unquoted-attribute-var.unquoted-attribute-var:views/dataErasureForm.hbs:38",
+    "source_file": "views/dataErasureForm.hbs",
+    "context": {
+      "service": "juice",
+      "public_exposure": false,
+      "criticality": "unknown",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "public_exposure",
+        "criticality",
+        "databases",
+        "critical_paths",
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "LOW",
+      "score": 0.0,
+      "reasons": [
+        "public_exposure:not_public:+0",
+        "asset_criticality:unknown:+0",
+        "database_access:none:+0",
+        "critical_path:none:+0",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "public_exposure",
+        "criticality",
+        "databases",
+        "critical_paths",
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 0.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH",
+      "LOW",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  },
+  "javascript.express.security.audit.xss.pug.explicit-unescape.template-explicit-unescape:views/promotionVideo.pug:75": {
+    "finding_id": "javascript.express.security.audit.xss.pug.explicit-unescape.template-explicit-unescape:views/promotionVideo.pug:75",
+    "source_file": "views/promotionVideo.pug",
+    "context": {
+      "service": "juice",
+      "public_exposure": false,
+      "criticality": "unknown",
+      "trust_zone": null,
+      "connected_services": [],
+      "databases": [],
+      "critical_paths": [],
+      "authentication": "unknown",
+      "blast_radius": "unknown",
+      "unknown_inputs": [
+        "public_exposure",
+        "criticality",
+        "databases",
+        "critical_paths",
+        "authentication",
+        "blast_radius"
+      ]
+    },
+    "scheme": "context-priority.v0.1",
+    "original_priority": {
+      "level": "LOW",
+      "score": 0.0,
+      "reasons": [
+        "public_exposure:not_public:+0",
+        "asset_criticality:unknown:+0",
+        "database_access:none:+0",
+        "critical_path:none:+0",
+        "authentication:unknown:+0",
+        "blast_radius:unknown:+0"
+      ],
+      "assessment_status": "partial",
+      "unknown_inputs": [
+        "public_exposure",
+        "criticality",
+        "databases",
+        "critical_paths",
+        "authentication",
+        "blast_radius"
+      ],
+      "scheme": "context-priority.v0.1"
+    },
+    "minimum_score": 0.0,
+    "maximum_score": 10.0,
+    "possible_levels": [
+      "HIGH",
+      "LOW",
+      "MEDIUM"
+    ],
+    "level": null,
+    "assessment_method": "deterministic_interval_over_unknown_context_facts",
+    "unknown_inputs_preserved": [
+      "public_exposure",
+      "criticality",
+      "databases",
+      "critical_paths",
+      "authentication",
+      "blast_radius"
+    ],
+    "complete_numeric_assessment": false
+  }
+}

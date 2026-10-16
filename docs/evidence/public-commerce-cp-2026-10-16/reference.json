@@ -1,0 +1,607 @@
+{
+  "schema_version": "context-priority.blinded-model-reference.v1",
+  "status": "model_reference_draft_requires_human_review",
+  "scenario_id": "public-real-commerce.v1",
+  "author_type": "model",
+  "inputs_excluded": [
+    "agent_predictions",
+    "scoring_formula"
+  ],
+  "cases": [
+    {
+      "case_id": "JS-AUTH-001",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "An authenticated user can change their own password without supplying the current password. This weakens reauthentication for one account, but the source does not show cross-account impact or unauthenticated access.",
+      "source_references": [
+        {
+          "file": "routes/changePassword.ts",
+          "line_start": 33,
+          "line_end": 56
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-AUTHZ-001",
+      "expected_context_priority": "HIGH",
+      "rationale": "The normal product-write route is commented out while the generic resource registration exposes Product endpoints. An unauthenticated product modification path would affect the shared public catalog and could alter what all customers see or buy.",
+      "source_references": [
+        {
+          "file": "server.ts",
+          "line_start": 387,
+          "line_end": 390
+        },
+        {
+          "file": "server.ts",
+          "line_start": 502,
+          "line_end": 526
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-AUTHZ-002",
+      "expected_context_priority": "HIGH",
+      "rationale": "The User model accepts privileged role values and the generic User create endpoint is registered without a source-level role restriction. If caller-controlled role assignment is reachable, anonymous creation of privileged accounts affects the central application and all customer data.",
+      "source_references": [
+        {
+          "file": "models/user.ts",
+          "line_start": 76,
+          "line_end": 95
+        },
+        {
+          "file": "server.ts",
+          "line_start": 500,
+          "line_end": 535
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-BIZ-001",
+      "expected_context_priority": "HIGH",
+      "rationale": "Quantity is stored and multiplied into order totals and reward points without a source-level nonnegative invariant. A manipulated basket can therefore affect order and monetary accounting in the shared commerce system; the exact reachable negative-quantity path is not shown, so confidence is reduced.",
+      "source_references": [
+        {
+          "file": "models/basketitem.ts",
+          "line_start": 25,
+          "line_end": 40
+        },
+        {
+          "file": "routes/basketItems.ts",
+          "line_start": 85,
+          "line_end": 99
+        },
+        {
+          "file": "routes/order.ts",
+          "line_start": 93,
+          "line_end": 107
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-BIZ-002",
+      "expected_context_priority": "HIGH",
+      "rationale": "The coupon value is encoded but not integrity-protected; the decoded discount is applied to a basket and can reach order discount calculation. Forged discounts directly affect order revenue, although the source does not show the complete authorization guard around basket selection.",
+      "source_references": [
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 97,
+          "line_end": 118
+        },
+        {
+          "file": "routes/coupon.ts",
+          "line_start": 13,
+          "line_end": 26
+        },
+        {
+          "file": "routes/order.ts",
+          "line_start": 190,
+          "line_end": 194
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-BOLA-001",
+      "expected_context_priority": "HIGH",
+      "rationale": "The basket is selected by an attacker-controlled id after only an authorization middleware, with no owner predicate in the shown query. Cross-customer basket contents and order-related product data are sensitive in a real shop and the central scope can include many accounts.",
+      "source_references": [
+        {
+          "file": "routes/basket.ts",
+          "line_start": 18,
+          "line_end": 31
+        },
+        {
+          "file": "server.ts",
+          "line_start": 418,
+          "line_end": 418
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-BOLA-002",
+      "expected_context_priority": "HIGH",
+      "rationale": "The request parser takes the last supplied BasketId and the shown ownership check does not reject an unauthenticated request. The resulting item is saved with attacker-selected basket and quantity fields, creating direct cross-account order/cart integrity risk.",
+      "source_references": [
+        {
+          "file": "routes/basketItems.ts",
+          "line_start": 21,
+          "line_end": 49
+        },
+        {
+          "file": "lib/utils.ts",
+          "line_start": 178,
+          "line_end": 194
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-BOLA-003",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "Review updates select by a caller-controlled review id and do not show an ownership predicate. This permits tampering with another customer's review or multiple reviews, harming customer-generated content integrity but not directly exposing accounts or orders.",
+      "source_references": [
+        {
+          "file": "routes/updateProductReviews.ts",
+          "line_start": 16,
+          "line_end": 25
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-BOLA-004",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "The generic Feedback resource is exposed while the verifier only records a mismatch between body UserId and the authenticated user; the shown path does not enforce ownership. Forged attribution affects customer feedback integrity, but the source does not establish account or order compromise.",
+      "source_references": [
+        {
+          "file": "routes/verify.ts",
+          "line_start": 30,
+          "line_end": 37
+        },
+        {
+          "file": "models/feedback.ts",
+          "line_start": 29,
+          "line_end": 33
+        },
+        {
+          "file": "server.ts",
+          "line_start": 502,
+          "line_end": 526
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-CAPTCHA-001",
+      "expected_context_priority": null,
+      "rationale": "The supplied lines show CAPTCHA lookup and answer comparison, but not the protected operation, binding, replay behavior, or a missing control. The contextual impact is insufficiently supported by these anchors alone.",
+      "source_references": [
+        {
+          "file": "routes/captcha.ts",
+          "line_start": 24,
+          "line_end": 41
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "case_id": "JS-CODE-001",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "An authenticated profile update changes the user's username without a shown CSRF defense; the challenge-specific template evaluation is conditional. The supported impact is unauthorized modification of an individual account profile, not demonstrated code execution.",
+      "source_references": [
+        {
+          "file": "routes/updateUserProfile.ts",
+          "line_start": 24,
+          "line_end": 42
+        },
+        {
+          "file": "routes/userProfile.ts",
+          "line_start": 57,
+          "line_end": 76
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-CRYPTO-001",
+      "expected_context_priority": "HIGH",
+      "rationale": "All user passwords are transformed with unsalted MD5. A central database compromise would therefore expose weakly protected credentials across the customer population, creating broad account-reuse and order-access risk even though the database compromise is a prerequisite.",
+      "source_references": [
+        {
+          "file": "models/user.ts",
+          "line_start": 70,
+          "line_end": 75
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 41,
+          "line_end": 41
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-DATA-001",
+      "expected_context_priority": null,
+      "rationale": "The endpoint permits selecting fields from the current user's in-memory data, but the anchors do not establish which additional fields are present or whether another user's data can be reached. A sensitive-data impact is therefore insufficiently supported.",
+      "source_references": [
+        {
+          "file": "routes/currentUser.ts",
+          "line_start": 20,
+          "line_end": 44
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "case_id": "JS-DATA-002",
+      "expected_context_priority": "LOW",
+      "rationale": "Metrics are served at a public route and may disclose operational telemetry, but the source does not show customer records, credentials, or order data in the metric payload. This is a limited informational exposure in the stated commerce context.",
+      "source_references": [
+        {
+          "file": "server.ts",
+          "line_start": 746,
+          "line_end": 750
+        },
+        {
+          "file": "routes/metrics.ts",
+          "line_start": 84,
+          "line_end": 94
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-FILE-001",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "The public FTP route enables directory indexing and public file serving. The source does not identify the files' contents, so broad customer impact is unproven, but disclosure of operational or support artifacts is plausible in a centralized deployment.",
+      "source_references": [
+        {
+          "file": "server.ts",
+          "line_start": 288,
+          "line_end": 289
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-FILE-002",
+      "expected_context_priority": "HIGH",
+      "rationale": "A public file endpoint serves attacker-selected allowlisted files and explicitly permits an incident-support KDBX artifact. That creates a credible path to disclosure of sensitive operational credentials or documents from the shared application host.",
+      "source_references": [
+        {
+          "file": "routes/fileServer.ts",
+          "line_start": 25,
+          "line_end": 35
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 44,
+          "line_end": 50
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-NOSQL-001",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "The review update uses an attacker-controlled selector and multi-update mode. If operator-shaped input is accepted, multiple customer reviews can be altered, giving meaningful shared-content integrity impact without demonstrated account or order access.",
+      "source_references": [
+        {
+          "file": "routes/updateProductReviews.ts",
+          "line_start": 17,
+          "line_end": 25
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-NOSQL-002",
+      "expected_context_priority": null,
+      "rationale": "Although the query interpolates the order id into a NoSQL $where expression, the shown normal path strips non-word characters unless a separate challenge is enabled. The anchors do not establish an exploitable production path or cross-order disclosure.",
+      "source_references": [
+        {
+          "file": "routes/trackOrder.ts",
+          "line_start": 14,
+          "line_end": 24
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-PATH-001",
+      "expected_context_priority": null,
+      "rationale": "The archive extraction check is path-traversal-prone, but the write path is gated by the file-write challenge in the supplied source. Without deployment configuration or a reachable upload route, a real-commerce impact is insufficiently supported.",
+      "source_references": [
+        {
+          "file": "routes/fileUpload.ts",
+          "line_start": 27,
+          "line_end": 51
+        }
+      ],
+      "confidence": "low"
+    },
+    {
+      "case_id": "JS-RATE-001",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "Trusting a client-supplied X-Forwarded-For value weakens the reset-password rate limit. This can increase brute-force or reset-abuse pressure against real accounts, but the reset workflow and takeover path are not included in the anchors.",
+      "source_references": [
+        {
+          "file": "server.ts",
+          "line_start": 359,
+          "line_end": 366
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-REDIRECT-001",
+      "expected_context_priority": "LOW",
+      "rationale": "Substring matching in a public redirect allowlist can permit unintended destinations. The demonstrated consequence is phishing or trust abuse rather than direct access to customer accounts, orders, or the database.",
+      "source_references": [
+        {
+          "file": "routes/redirect.ts",
+          "line_start": 13,
+          "line_end": 18
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 133,
+          "line_end": 139
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-AUTH-101",
+      "expected_context_priority": null,
+      "rationale": "The operation requires an authenticated session and the current password before clearing the user's TOTP secret; the shown control is appropriate for the stated operation.",
+      "source_references": [
+        {
+          "file": "routes/2fa.ts",
+          "line_start": 142,
+          "line_end": 170
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-001",
+      "expected_context_priority": null,
+      "rationale": "The route binds the address lookup to the authenticated user's id and rejects a missing match, with UserId injected from the token rather than accepted from the caller.",
+      "source_references": [
+        {
+          "file": "routes/address.ts",
+          "line_start": 16,
+          "line_end": 25
+        },
+        {
+          "file": "server.ts",
+          "line_start": 467,
+          "line_end": 471
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 175,
+          "line_end": 184
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-AUTHZ-002",
+      "expected_context_priority": null,
+      "rationale": "Card reads and deletes use UserId injected from the authenticated token, and the returned card number is masked to the last four digits in the shown read path.",
+      "source_references": [
+        {
+          "file": "routes/payment.ts",
+          "line_start": 43,
+          "line_end": 69
+        },
+        {
+          "file": "server.ts",
+          "line_start": 457,
+          "line_end": 461
+        },
+        {
+          "file": "lib/insecurity.ts",
+          "line_start": 175,
+          "line_end": 184
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-BIZ-101",
+      "expected_context_priority": null,
+      "rationale": "The shown quantity control checks stock and per-user limits before allowing the operation, including a defined exception for deluxe users; no unsafe business impact is established by these lines.",
+      "source_references": [
+        {
+          "file": "routes/basketItems.ts",
+          "line_start": 85,
+          "line_end": 101
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-SAFE-DATA-001",
+      "expected_context_priority": null,
+      "rationale": "Payment-card reads are scoped by the authenticated UserId and the displayed number is masked except for its final four digits.",
+      "source_references": [
+        {
+          "file": "routes/payment.ts",
+          "line_start": 20,
+          "line_end": 68
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-FILE-101",
+      "expected_context_priority": null,
+      "rationale": "The profile upload requires an image MIME type, an authenticated user, and writes to a path derived from that user's id.",
+      "source_references": [
+        {
+          "file": "routes/profileImageFileUpload.ts",
+          "line_start": 14,
+          "line_end": 58
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-PATH-101",
+      "expected_context_priority": null,
+      "rationale": "The shown profile-image path is constructed from the authenticated user's id and a detected image extension; the source does not show attacker-controlled path traversal.",
+      "source_references": [
+        {
+          "file": "routes/profileImageFileUpload.ts",
+          "line_start": 14,
+          "line_end": 58
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SAFE-SQL-001",
+      "expected_context_priority": null,
+      "rationale": "The address lookup uses the ORM with separate id and UserId predicates, and the route injects UserId from the authenticated token; the supplied lines do not show SQL string construction.",
+      "source_references": [
+        {
+          "file": "routes/address.ts",
+          "line_start": 18,
+          "line_end": 18
+        },
+        {
+          "file": "models/address.ts",
+          "line_start": 7,
+          "line_end": 16
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SQL-001",
+      "expected_context_priority": "HIGH",
+      "rationale": "A public product-search parameter is interpolated into SQL. Even if the intended result is read-only, injection against the centralized database can expose data beyond the catalog and potentially affect shared application integrity.",
+      "source_references": [
+        {
+          "file": "routes/search.ts",
+          "line_start": 21,
+          "line_end": 23
+        },
+        {
+          "file": "server.ts",
+          "line_start": 621,
+          "line_end": 621
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SQL-002",
+      "expected_context_priority": "HIGH",
+      "rationale": "The public login endpoint interpolates email and password-derived values into the Users query. Authentication bypass or account enumeration at this boundary can reach real customer and privileged accounts.",
+      "source_references": [
+        {
+          "file": "routes/login.ts",
+          "line_start": 32,
+          "line_end": 50
+        },
+        {
+          "file": "server.ts",
+          "line_start": 615,
+          "line_end": 615
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-SSRF-001",
+      "expected_context_priority": "HIGH",
+      "rationale": "An authenticated user controls a URL that the server fetches, and the response is written into the application. In a centralized deployment this can reach internal services or metadata and is a credible path from one account to higher-value infrastructure, though the reachable network is not shown.",
+      "source_references": [
+        {
+          "file": "routes/profileImageUrlUpload.ts",
+          "line_start": 18,
+          "line_end": 36
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-XSS-001",
+      "expected_context_priority": "MEDIUM",
+      "rationale": "Search input is explicitly trusted as HTML and rendered into the results page. A victim who follows a crafted public link could execute script in the shop origin, but the source supports reflected/local impact rather than broad stored compromise.",
+      "source_references": [
+        {
+          "file": "frontend/src/app/search-result/search-result.component.ts",
+          "line_start": 135,
+          "line_end": 144
+        },
+        {
+          "file": "frontend/src/app/search-result/search-result.component.html",
+          "line_start": 8,
+          "line_end": 11
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "case_id": "JS-XSS-002",
+      "expected_context_priority": null,
+      "rationale": "The product model sanitizes descriptions unless the separate restful-XSS challenge is enabled, while the frontend sink alone does not establish an active production path. Stored cross-customer impact is therefore not supported under the supplied source conditions.",
+      "source_references": [
+        {
+          "file": "models/product.ts",
+          "line_start": 43,
+          "line_end": 55
+        },
+        {
+          "file": "frontend/src/app/search-result/search-result.component.ts",
+          "line_start": 61,
+          "line_end": 78
+        },
+        {
+          "file": "frontend/src/app/search-result/search-result.component.ts",
+          "line_start": 109,
+          "line_end": 113
+        },
+        {
+          "file": "frontend/src/app/product/product.component.ts",
+          "line_start": 182,
+          "line_end": 189
+        },
+        {
+          "file": "frontend/src/app/product-details/product-details.component.html",
+          "line_start": 14,
+          "line_end": 16
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "case_id": "JS-XXE-001",
+      "expected_context_priority": null,
+      "rationale": "The parser enables external entities, but the upload processing is gated by the deprecated-interface challenge in the supplied source and the anchors do not establish that the route is enabled in the hypothetical deployment. File disclosure or SSRF is therefore insufficiently supported.",
+      "source_references": [
+        {
+          "file": "routes/fileUpload.ts",
+          "line_start": 70,
+          "line_end": 79
+        },
+        {
+          "file": "lib/xml.ts",
+          "line_start": 17,
+          "line_end": 38
+        }
+      ],
+      "confidence": "low"
+    }
+  ]
+}

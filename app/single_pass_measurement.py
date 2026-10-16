@@ -11,7 +11,7 @@ from time import monotonic
 from agent.llm import ProviderFailoverClient, parse_route_specs
 from app import research_diagnostic_run
 from app.config import Settings
-from app.delivery_metrics import ROOT, aggregate_search, percent
+from app.delivery_metrics import ROOT, aggregate_search, percent, rubric_text
 from app.research_score import score_research
 from fix_verification.measurement import statistics
 from fix_verification.repair_loop import run as repair_run
@@ -53,7 +53,8 @@ def render(result):
             f'| Покрытие бинарными вердиктами | {percent(search["decision_coverage"])} |',
             f'| Recall обнаружения | {percent(search["detection_recall"])} |',
             f'| SAST без агента: Recall обнаружения | {percent(search["sast_detection_recall"])} |',
-            "| Точность серьезности / Context Priority | N/A |", ""]
+            f'| Точность серьезности | {rubric_text(search, "severity")} |',
+            f'| Точность Context Priority | {rubric_text(search, "context_priority")} |', ""]
     lines += ["| Исправление | Исход | Причина |", "|---|---|---|"]
     lines += [f'| {row["family"]} | {row["status"]} | {row.get("stop_reason", "")} |'
               for row in repairs]

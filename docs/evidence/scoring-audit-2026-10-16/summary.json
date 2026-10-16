@@ -1,0 +1,37 @@
+{
+  "schema_version": "scoring.audit.v1",
+  "posthoc": true,
+  "new_model_calls": 0,
+  "new_target_checks": 0,
+  "severity_scheme": "source-impact.a04.v1",
+  "scoring_metrics": {
+    "severity": {
+      "reviewed_cases": 4,
+      "assessed_cases": 3,
+      "correct_cases": 3,
+      "accuracy": 1.0,
+      "assessed_coverage": 0.75
+    },
+    "context_priority": {
+      "reviewed_cases": 0,
+      "assessed_cases": 0,
+      "correct_cases": 0,
+      "accuracy": null,
+      "assessed_coverage": null
+    }
+  },
+  "cp_saved_report_statuses": {
+    "absent": 15,
+    "partial": 31
+  },
+  "cp_reference_status": "draft_unreviewed",
+  "original_run_changed": false,
+  "frozen_dataset_changed": false,
+  "scope": "35 original cases, 4 existing ordinal labels, no independent CP labels",
+  "caveats": [
+    "Posthoc deterministic impact assessment, not original LLM scoring or CVSS accuracy",
+    "All reviewed severity labels are HIGH; a tiny one-class slice does not measure broad classification quality",
+    "SQL search differential alone is insufficient to infer a supported high-impact category",
+    "Independent human review of CP reference and declared business context remains required"
+  ]
+}

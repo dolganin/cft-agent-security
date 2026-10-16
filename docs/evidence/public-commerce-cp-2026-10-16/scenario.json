@@ -1,0 +1,24 @@
+{
+  "id": "public-real-commerce.v1",
+  "declared_by": "user",
+  "public_exposure": true,
+  "business_assets": "Real customer accounts and orders",
+  "asset_criticality": "high",
+  "backend_topology": "Shared centralized application with direct SQLite/MarsDB access",
+  "critical_path": "Backend -> customer/account/order data stores",
+  "topology_source_references": [
+    {
+      "file": "models/index.ts",
+      "sha256": "42bf703e1dfa70883a509b0bd59f8d1c9982951222ad87f6ad87e6ea312061bb",
+      "line": 34
+    },
+    {
+      "file": "data/mongodb.ts",
+      "sha256": "72bd8763e317801d1a3f52afae02505ae07a515dba5cdc777d5c03fcc5ad67af",
+      "line": 10
+    }
+  ],
+  "auth_prerequisites": "Unknown per finding; propagated as intervals",
+  "scope": "Posthoc declared deployment scenario; not the original lab's measured exposure",
+  "independent_human_cp_reference": false
+}
