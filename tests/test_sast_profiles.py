@@ -11,7 +11,12 @@ import yaml
 from evaluation.b02_baseline_adapter import observations_semgrep_b02
 from sast.identity import rule_family
 from sast.normalizer import normalize_semgrep_result
-from sast.profiles import classify_diagnostics, load_scan_profile, validate_target_snapshot
+from sast.profiles import (
+    _parse_index_records,
+    classify_diagnostics,
+    load_scan_profile,
+    validate_target_snapshot,
+)
 from sast.semgrep_runner import SemgrepError, run_semgrep_scan
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,6 +137,45 @@ def test_target_snapshot_rejects_dirty_and_untracked_files(tmp_path: Path) -> No
     (target / "extra.js").write_text("const untracked = true\n", encoding="utf-8")
     with pytest.raises(ValueError, match="clean"):
         validate_target_snapshot(target, commit)
+
+
+def test_target_snapshot_supports_utf8_paths_with_spaces(tmp_path: Path) -> None:
+    import subprocess
+
+    target = tmp_path / "target"
+    target.mkdir()
+    subprocess.run(["git", "init", "-q", str(target)], check=True)
+    subprocess.run(["git", "-C", str(target), "config", "user.email", "test@example.invalid"], check=True)
+    subprocess.run(["git", "-C", str(target), "config", "user.name", "Test"], check=True)
+    # UTF-8 for Cyrillic И contains 0x98, undefined in the Windows cp1251 codec.
+    source = target / "src" / "И файл.ts"
+    source.parent.mkdir()
+    source.write_text("export const safe = true\n", encoding="utf-8", newline="\n")
+    subprocess.run(["git", "-C", str(target), "add", "--", "src/И файл.ts"], check=True)
+    subprocess.run(["git", "-C", str(target), "commit", "-qm", "unicode path fixture"], check=True)
+    commit = subprocess.run(
+        ["git", "-C", str(target), "rev-parse", "HEAD"], check=True,
+        capture_output=True,
+    ).stdout.decode("ascii", errors="strict").strip()
+
+    clean = validate_target_snapshot(target, commit)
+    assert clean["tracked_files"] == 1
+
+    (target / "ещё один файл.ts").write_text("untracked\n", encoding="utf-8", newline="\n")
+    with pytest.raises(ValueError, match="clean"):
+        validate_target_snapshot(target, commit)
+
+
+def test_git_index_parser_rejects_invalid_utf8_path() -> None:
+    record = b"100644 " + b"a" * 40 + b" 0\tinvalid-\xff.js\0"
+    with pytest.raises(ValueError, match="invalid UTF-8"):
+        _parse_index_records(record)
+
+
+def test_git_index_parser_rejects_malformed_nul_records() -> None:
+    record = b"100644 " + b"a" * 40 + b" 0\tmissing-final-nul.js"
+    with pytest.raises(ValueError, match="malformed"):
+        _parse_index_records(record)
 
 
 def test_only_known_partial_parse_warnings_are_coverage_limitations() -> None:

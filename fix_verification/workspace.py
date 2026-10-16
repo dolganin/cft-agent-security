@@ -71,8 +71,13 @@ def original_commit(root: Path) -> str | None:
     if not (root / ".git").exists():
         return None
     result = subprocess.run(["git", "-C", str(root), "rev-parse", "HEAD"],
-                            capture_output=True, text=True, timeout=10, check=False)
-    return result.stdout.strip() if result.returncode == 0 else None
+                            capture_output=True, timeout=10, check=False)
+    if result.returncode != 0:
+        return None
+    try:
+        return result.stdout.decode("ascii", errors="strict").strip()
+    except UnicodeDecodeError:
+        return None
 
 
 def check_review(review: PatchReviewArtifact, root: Path, finding_id: str, run_id: str, file: str) -> str:

@@ -232,9 +232,11 @@ class IndependentPatchVerificationService(FixVerificationService):
                 'b09-single-2026-10-15-final/run-result.json'))['target_snapshot_after']
         if actual_snapshot != baseline:
             raise ValueError('source_snapshot_mismatch')
-        status = subprocess.run(['git', '-C', str(source), 'status', '--porcelain', '--untracked-files=all'],
-                                capture_output=True, text=True, timeout=15, check=True)
-        if status.stdout.strip():
+        status = subprocess.run(
+            ['git', '-C', str(source), 'status', '--porcelain', '--untracked-files=all', '-z'],
+            capture_output=True, timeout=15, check=True,
+        )
+        if status.stdout:
             raise ValueError('original_checkout_not_clean')
         manifest = snapshot(source)
         if any(Path(name).name.startswith('.env') for name in manifest):

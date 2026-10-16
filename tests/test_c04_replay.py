@@ -9,11 +9,22 @@ from pydantic import ValidationError
 from fix_verification import repair_loop
 from fix_verification.repair_replay import edit_operations
 from fix_verification.review import validate_review_diff
+from fix_verification.workspace import original_commit
 from schemas.fix import ProposedPatch
 from schemas.repair_loop import RepairLimits
 from tools.repository_source import _safe_line
 
 FILE = "routes/search.ts"
+
+
+def test_original_commit_fails_closed_on_non_ascii_git_output(tmp_path, monkeypatch):
+    (tmp_path / ".git").mkdir()
+    monkeypatch.setattr(
+        "fix_verification.workspace.subprocess.run",
+        lambda *_args, **_kwargs: subprocess.CompletedProcess([], 0, stdout=b"\xff\n", stderr=b""),
+    )
+
+    assert original_commit(tmp_path) is None
 
 
 def diff(before, after, *, context=3):
