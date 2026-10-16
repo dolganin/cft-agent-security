@@ -8,6 +8,10 @@ class ResearchFixtureGrant(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     protocol: Literal[
         "b05.own-read.v1", "b05.basket-insert.v1",
+        "b05.review-owner.v1",
+        "b05.review-nosql.v1",
+        "b05.user-fields.v1",
+        "b05.feedback-owner.v1",
         "b06.redirect.v1", "b06.password-reauth.v1",
     ]
     wall_seconds: int = Field(default=300, ge=10, le=600)

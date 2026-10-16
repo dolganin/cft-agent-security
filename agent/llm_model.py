@@ -258,6 +258,7 @@ class FallbackLLMAgentModel:
                         expected_evidence=step.expected_observation,
                         service=_optional_string(candidate.get("service")),
                         endpoint=_optional_string(candidate.get("endpoint")),
+                        juice_proof_binding=candidate.get("juice_proof_binding"),
                     )
                 planned_steps.append(
                     PlannedAction(
@@ -316,6 +317,7 @@ class FallbackLLMAgentModel:
                 "Structured result from the registered, bounded verification capability."
             ), service=_optional_string(candidate.get("service")),
             endpoint=_optional_string(candidate.get("endpoint")),
+            juice_proof_binding=candidate.get("juice_proof_binding"),
         )
         step = PlannedAction(index=1, action=action,
                              expected_observation=action.expected_evidence,
@@ -459,8 +461,15 @@ def _reasoning_context(state: AgentState) -> dict[str, Any]:
 
 
 def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
+    from agent.verification import verification_candidates
+
+    if _has_incremental_proof_route(state):
+        return [{
+            "name": candidate["tool"],
+            "parameters": dict(candidate["parameters"]),
+            "purpose": candidate["purpose"],
+        } for candidate in verification_candidates(state)]
     if _has_b05_access_route(state):
-        from agent.verification import verification_candidates
         return [
             {
                 "name": candidate["tool"],
@@ -518,6 +527,8 @@ def _allowed_execution_tools(state: AgentState) -> list[dict[str, Any]]:
 
 
 def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
+    if _has_incremental_proof_route(state):
+        return verification_candidates(state)
     if _has_b05_access_route(state):
         return verification_candidates(state)
     if _has_javascript_artifact(state):
@@ -583,6 +594,7 @@ def _allowed_plan_candidates(state: AgentState) -> list[dict[str, Any]]:
 def _requires_registered_candidate(state: AgentState) -> bool:
     return (
         _has_b05_access_route(state)
+        or _has_incremental_proof_route(state)
         or
         _is_dockerfile_user_finding(state)
         or _is_unvalidated_password_finding(state)
@@ -606,6 +618,15 @@ def _has_b05_access_route(state: AgentState) -> bool:
     return bool(profile and finding and any(
         route.tool == "verify_access_control" for route in profile.verification_routes
     ))
+
+
+def _has_incremental_proof_route(state: AgentState) -> bool:
+    profile = state.get("target_profile")
+    finding = state.get("finding")
+    if profile is None or finding is None or getattr(profile, "juice_incremental_proofs", None) is None:
+        return False
+    from security.juice_incremental_binding import bind_finding
+    return bind_finding(profile, finding) is not None
 
 
 def _public_candidate(candidate: dict[str, Any]) -> dict[str, Any]:

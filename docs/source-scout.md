@@ -95,3 +95,32 @@ PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m app.scout \
 
 Такая проверка измеряет работу поиска. Количество кандидатов не является
 количеством подтвержденных уязвимостей или измерением recall.
+
+## Изолированный blind-поиск по широкой поверхности
+
+Для диагностического мини-цикла можно исследовать зарегистрированную широкую
+часть приложения, не передавая Scout готовые SAST-находки. Сейчас доступны
+операторские профили `account-lifecycle` и `catalog-and-reviews`:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m app.scout \
+  --target artifacts/benchmark-target/juice-shop \
+  --output-dir artifacts/scout-account-mini-01 \
+  --blind-discovery --surface account-lifecycle \
+  --max-turns 4 --max-source-chars 60000 --wall-clock-seconds 120
+```
+
+`--blind-discovery` несовместим с `--sast-findings`: команда завершится до
+создания клиента модели. `--surface` ограничивает одновременно исходники,
+импортные переходы и карту маршрутов точным allowlist профиля; отсутствующий,
+исключённый или неиндексируемый файл отклоняет запуск целиком. Это
+`targeted_development_run`, а не измерение общего Recall. Для полного поиска
+укажи `--blind-discovery` без `--surface`.
+
+`blind-manifest.json` фиксирует target Git revision (если доступна), хеши
+профиля, prompt, карты маршрутов и именно той безопасной проекции исходников,
+которую индексирует Scout. Он также явно указывает отсутствие SAST-seed,
+benchmark labels, oracle-контроллеров и размеченных vulnerability-регионов.
+Манифест не содержит полный текст исходников и сам по себе не означает, что
+модель вызвана или что кандидат подтверждён. Вызов модели требует настроенного
+провайдера; проверки прав и runtime-доказательство остаются отдельной фазой.

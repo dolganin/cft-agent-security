@@ -1344,8 +1344,10 @@ SAST baseline. `evaluation.juice_source_progress` is the separate offline A04
 comparison; detection gains are not runtime confirmations or unseen evaluation.
 All historical A04 cases and matching stay unchanged.
 
-The total targeted campaign budget is 1024 HTTP reservations, including complete
-fixed fixture lifecycles. Each research runtime stays capped at 256. Preverification
+The default targeted campaign budget is 1024 charged HTTP requests/reservations.
+An operator may explicitly select up to 2048 using `--max-http-requests`; the
+all-ready-protocol measurement on 16 October uses 1708 (1696 fixture reservations
+plus 12 for registered B01 routes). Each research runtime stays capped at 256. Preverification
 also obeys the campaign action budget. Record actual exchanges separately from
 reserved ceilings; an exhausted budget never implies that the target is safe.
 
@@ -1381,3 +1383,71 @@ source-condition proof, never runtime exploitation or another runtime-confirmed
 case. Scanner source reviews attach it separately when both files are in the
 trusted source inventory. `app.juice_password_source_review` runs the pinned
 source-only acceptance. See `docs/juice-verification-gap-plan-2026-10-15.md`.
+
+# 39. Fixed review ownership and NoSQL selector checks
+
+The B05 profile registers separate review routes/check IDs for scalar cross-owner
+updates and NoSQL selector interpretation. Both use the existing registered
+capability and deterministic policy. No model-supplied selectors, record IDs,
+request bodies or credentials are accepted. The fixed worker uses two isolated
+Docker generations and thirteen exchanges per trial; persisted execution/audit
+must replay through the independent property-specific Evidence evaluator.
+
+The NoSQL protocol creates two reviews owned by the same fixture actor and uses
+only a fixed operator selector restricted to their exact generated IDs. Confirmed
+requires both independent readbacks, server modification count two, scalar and
+anonymous controls, preserved owners/nonmessage fields, unchanged unrelated rows,
+distinct markers, reset, source binding and cleanup. Scalar ownership Evidence
+cannot confirm the NoSQL claim or vice versa.
+
+Review update checks accept findings anchored only in
+`routes/updateProductReviews.ts`. Creation/read handlers remain source-binding
+context for fixture controls, never a substitute claim about update authorization.
+Validator and the runtime registry both reject helper-anchored findings.
+
+`b05.review-nosql.v1` is enabled in the diagnostic runner's default grants and
+available through the campaign CLI. The scheduler reserves the complete per-action
+ceiling before execution and releases unused capacity only after a trusted fixed
+verifier returns terminal Evidence, complete request accounting and verified cleanup.
+Unknown/incomplete execution keeps the full reservation. Historical cumulative
+reservations are reported separately from charged capacity; the default campaign
+cap stays 1024, with an explicit operator override up to 2048. B05 accounting includes readiness attempts and provisioning deltas; B06 includes
+setup, trials and readiness. Model output cannot settle or refund a reservation.
+The six-protocol Docker acceptance and offline reconstruction are documented in
+`docs/juice-fixture-budget-integration-2026-10-16.md`. Property-specific review
+proofs: `docs/juice-review-verification-report-2026-10-16.md`.
+
+# 40. Fixed user-field and feedback-attribution checks
+
+The registered B05 profile also has separate fixed checks for selecting a
+private `password` property from the authenticated `/rest/user/whoami` response
+and for assigning a feedback record to another fixture user's `UserId`. These
+are source-bound operator checks, not arbitrary HTTP capabilities. The worker
+uses only synthetic fixture accounts/feedback, keeps tokens and response values
+inside Docker tmpfs, and serializes only status, identity/marker hashes and
+booleans. Each check is repeated after destroying and recreating the lab; 10
+protocol HTTP exchanges per generation, 20 total. Full lifecycle accounting
+includes setup, controls and readiness; reserve 244, observed 154 in the accepted
+standalone runs.
+
+CAPTCHA arithmetic uses a tiny AST evaluator with only integer constants and
+`+`, `-`, `*`; CAPTCHA ID zero is valid because the pinned target counter starts
+at zero. This exception does not relax positive user/object ID checks.
+
+The feedback endpoint intentionally supports public/anonymous feedback. Its
+confirmed property is narrower: authenticated fixture A can create a row whose
+`UserId` is fixture B, and B's independent readback observes that attribution.
+Do not describe this as unauthorized creation of feedback generally, access to
+existing private feedback, or a full benchmark metric. The whoami property is
+that an unapproved requested field returns the fixture user's password hash;
+this does not mean plaintext password disclosure. Details and sealed runtime
+evidence: `docs/juice-feedback-owner-report-2026-10-16.md`.
+
+Both checks are explicit registered grants. The default campaign HTTP cap is
+1024. The two accepted standalone lifecycle costs are 154 each. Combined
+with the historical six-protocol cost of 759, running both would exceed the cap;
+the sequential scheduler must leave any candidate without sufficient remaining
+reservation pending rather than exceed the cap or imply safety. The operator's
+all-ready-protocol run explicitly selects 1708 requests, covering 1696 reserved
+fixture requests and 12 reserved B01 requests; the individual research scope
+cap remains 256 and no tool/target permissions are added by a quota override.

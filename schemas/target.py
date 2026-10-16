@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from schemas.access_fixture import AccessFixtureProfile
 from schemas.b06_verification import B06Profile
+from schemas.juice_incremental_proof import JuiceProofProfile
 from schemas.verification_binding import VerificationRoute
 
 _REQUEST_HOST = re.compile(r"^(?:[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?|\[[0-9A-Fa-f:.]+\])(?::([0-9]{1,5}))?$")
@@ -240,6 +241,7 @@ class TargetProfile(BaseModel):
     verification_routes: list[VerificationRoute] = Field(default_factory=list, max_length=64)
     access_fixture: AccessFixtureProfile | None = None
     b06_verification: B06Profile | None = None
+    juice_incremental_proofs: JuiceProofProfile | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -315,12 +317,23 @@ class TargetProfile(BaseModel):
                 route.check != "source_metadata" or route.family != "file-exposure"
                 or route.mode is not None or route.method != "GET"
             )) or (route.tool == "verify_access_control" and (
-                route.family != "access-control" or route.mode is not None
-                or (route.check, route.method) not in {
+                route.mode is not None
+                or (route.family == "access-control" and (route.check, route.method) not in {
                     ("own_read", "GET"), ("own_write", "PUT"), ("ownership_transfer", "PUT"),
-                    ("own_write", "POST")
-                }
-                or (route.method == "POST" and route.endpoint != "/api/BasketItems")
+                    ("own_write", "POST"), ("own_write", "PATCH")
+                })
+                or (route.family == "nosql-injection" and
+                    (route.check, route.method, route.endpoint) !=
+                    ("nosql_selector", "PATCH", "/rest/products/reviews"))
+                or (route.family == "sensitive-data-exposure" and
+                    (route.check, route.method, route.endpoint) !=
+                    ("private_fields", "GET", "/rest/user/whoami"))
+                or route.family not in {"access-control", "nosql-injection", "sensitive-data-exposure"}
+                or (route.method == "POST" and route.endpoint not in {"/api/BasketItems", "/api/Feedbacks"})
+                or (route.endpoint == "/api/Feedbacks" and
+                    (route.family != "access-control" or route.method != "POST" or route.check != "own_write"))
+                or (route.method == "PATCH" and route.endpoint != "/rest/products/reviews")
+                or (route.family == "sensitive-data-exposure" and route.method != "GET")
             )):
                 raise ValueError("Verification route capability/method contract mismatch")
             b06 = {"verify_redirect_destination": ("redirect_destination", "open-redirect", "/redirect"),

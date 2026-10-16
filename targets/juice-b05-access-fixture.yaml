@@ -19,6 +19,11 @@ services:
     - /api/BasketItems
     - /api/BasketItems/:id
     - /api/Addresss/:id
+    - /rest/products/reviews
+    - /rest/user/whoami
+    - /rest/captcha
+    - /api/Feedbacks
+    - /api/Feedbacks/:id
 constraints:
   external_network: false
   host_filesystem: false
@@ -57,8 +62,89 @@ access_fixture:
   b05_basket_write_v3_candidate: true
   b05_basket_insert_candidate: true
   b05_ownership_transfer_candidate: true
+  b05_review_write_candidate: true
+  b05_review_nosql_candidate: true
+  b05_user_fields_candidate: true
+  b05_feedback_owner_candidate: true
   worker_image: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
 verification_routes:
+- id: juice-review-nosql-selector
+  handler_id: juice.review.update
+  family: nosql-injection
+  service: juice
+  endpoint: /rest/products/reviews
+  method: PATCH
+  tool: verify_access_control
+  check: nosql_selector
+  registration:
+    file: server.ts
+    anchor: app.patch('/rest/products/reviews', security.isAuthorized(), updateProductReviews())
+  sources:
+  - file: server.ts
+    anchor: app.patch('/rest/products/reviews', security.isAuthorized(), updateProductReviews())
+  - file: routes/updateProductReviews.ts
+    anchor: export function updateProductReviews () {
+    extent: function
+- id: juice-review-own-write
+  handler_id: juice.review.update
+  family: access-control
+  service: juice
+  endpoint: /rest/products/reviews
+  method: PATCH
+  tool: verify_access_control
+  check: own_write
+  registration:
+    file: server.ts
+    anchor: app.patch('/rest/products/reviews', security.isAuthorized(), updateProductReviews())
+  sources:
+  - file: server.ts
+    anchor: app.patch('/rest/products/reviews', security.isAuthorized(), updateProductReviews())
+  - file: routes/updateProductReviews.ts
+    anchor: export function updateProductReviews () {
+    extent: function
+  - file: routes/createProductReviews.ts
+    anchor: export function createProductReviews () {
+    extent: function
+  - file: routes/showProductReviews.ts
+    anchor: export function showProductReviews () {
+    extent: function
+- id: juice-user-private-fields
+  handler_id: juice.user.whoami
+  family: sensitive-data-exposure
+  service: juice
+  endpoint: /rest/user/whoami
+  method: GET
+  tool: verify_access_control
+  check: private_fields
+  registration:
+    file: server.ts
+    anchor: app.get('/rest/user/whoami', utils.asyncHandler(retrieveLoggedInUser()))
+  sources:
+  - file: server.ts
+    anchor: app.get('/rest/user/whoami', utils.asyncHandler(retrieveLoggedInUser()))
+  - file: routes/currentUser.ts
+    anchor: export function retrieveLoggedInUser () {
+    extent: function
+  - file: models/user.ts
+    anchor: "password: {"
+- id: juice-feedback-owner
+  handler_id: juice.feedback.create
+  family: access-control
+  service: juice
+  endpoint: /api/Feedbacks
+  method: POST
+  tool: verify_access_control
+  check: own_write
+  registration:
+    file: server.ts
+    anchor: app.post('/api/Feedbacks', verify.forgedFeedbackChallenge())
+  sources:
+  - file: server.ts
+    anchor: app.post('/api/Feedbacks', verify.forgedFeedbackChallenge())
+  - file: routes/verify.ts
+    anchor: export const forgedFeedbackChallenge = () =>
+  - file: models/feedback.ts
+    anchor: "UserId: {"
 - id: juice-basket-own-read
   handler_id: juice.retrieveBasket
   family: access-control

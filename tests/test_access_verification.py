@@ -15,6 +15,7 @@ from schemas.access_verification import (
 )
 from schemas.action import ActionProposal
 from schemas.finding import Finding
+from schemas.review_verification import ORDER as REVIEW_ORDER
 from schemas.target import TargetProfile
 from schemas.verification_binding import VerificationBinding
 from security.access_verification import (
@@ -55,7 +56,7 @@ def bound_action(tmp_path):
         )
         lines = (repository / source_selector.file).read_text(encoding="utf-8").splitlines()
         line = next(index for index, text in enumerate(lines, 1) if source_selector.anchor in text)
-        finding = Finding(id="finding-" + check_id, source="operator", rule_id="idor",
+        finding = Finding(id="finding-" + check_id, source="operator", rule_id=registration.family,
                           title="Access control", description="B05 binding fixture",
                           file=source_selector.file, line_start=line, line_end=line)
         resolution = resolve_binding(profile, finding)
@@ -283,7 +284,9 @@ def test_validator_denies_endpoint_method_route_mutation_and_stale_or_ambiguous_
     assert not validator.validate(action.model_copy(update={"endpoint": "/rest/basket/999"})).approved
     stale = action.verification_binding.model_copy(update={"source_snapshot": "0" * 64})
     assert not validator.validate(action.model_copy(update={"verification_binding": stale})).approved
-    duplicate = profile.verification_routes[0].model_copy(update={"id": "ambiguous-duplicate"})
+    route = next(item for item in profile.verification_routes
+                 if item.id == action.verification_binding.route_id)
+    duplicate = route.model_copy(update={"id": "ambiguous-duplicate"})
     profile.verification_routes.append(duplicate)
     assert not _b05_validator(profile).validate(action).approved
 
@@ -583,12 +586,211 @@ def test_ownership_transfer_requires_independent_persisted_owner_proofs(bound_ac
 
 def test_unsafe_juice_address_update_is_not_offered_or_approved(bound_action):
     profile, action = bound_action["juice-address-own-write-v1"]
-    assert len(ACCESS_CHECKS) == 6
+    assert len(ACCESS_CHECKS) == 10
     assert is_access_check_supported("juice-basket-own-read-v1")
     assert not is_access_check_supported("juice-address-own-write-v1")
     result = _b05_validator(profile).validate(action)
     assert not result.approved
     assert "rewrites object ownership" in result.reason
+
+
+def test_review_update_protocol_cannot_confirm_a_creation_handler_finding(bound_action):
+    profile, proper = bound_action["juice-review-own-write-v1"]
+    assert _b05_validator(profile).validate(proper).approved
+    file = "routes/createProductReviews.ts"
+    lines = (profile.repository_path / file).read_text().splitlines()
+    line, = [index for index, text in enumerate(lines, 1)
+             if "export function createProductReviews () {" in text]
+    finding = Finding(id="create-authorship", source="operator-test", rule_id="access-control",
+        title="Creation authorship", description="Creation is a different operation from review update",
+        file=file, line_start=line, line_end=line)
+    resolution = resolve_binding(profile, finding)
+    assert resolution.status == "bound"
+    action = proper.model_copy(update={"id": "different-source-operation",
+        "verification_binding": resolution.binding})
+    denied = _b05_validator(profile).validate(action)
+    assert not denied.approved
+    assert "fixture helpers are context only" in denied.reason
+    with pytest.raises(ValueError, match="fixture helpers are context only"):
+        validate_access_action(profile, action)
+
+
+def _review_trial(action, generation, *, probe_status=200, controls=None):
+    h = lambda value: digest_value(value)
+    fixture_snapshot = h("review-fixture-source-snapshot")
+    owner_marker, probe_marker = h("owner-message"), h(f"probe-message-{generation}")
+    return {
+        "schema_version": "review.owner.trial.v1",
+        "generation_sha256": h(f"generation-{generation}"),
+        "source_snapshot_digest": fixture_snapshot,
+        "fixture_snapshot_digest": fixture_snapshot,
+        "binding_snapshot_digest": action.verification_binding.source_snapshot,
+        "profile_sha256": h("profile"),
+        "identity_a_sha256": h(f"identity-a-{generation}"),
+        "identity_b_sha256": h(f"identity-b-{generation}"),
+        "session_a_sha256": h(f"session-a-{generation}"),
+        "session_b_sha256": h(f"session-b-{generation}"),
+        "object_a_sha256": h(f"object-a-{generation}"),
+        "object_b_sha256": h(f"object-b-{generation}"),
+        "owner_a_sha256": h("owner-a"), "owner_b_sha256": h("owner-b"),
+        "initial_a_sha256": h("review-a-original"), "final_a_sha256": h("review-a-original"),
+        "baseline_b_sha256": h(f"review-b-baseline-{generation}"),
+        "owner_marker_sha256": owner_marker, "probe_marker_sha256": probe_marker,
+        "owner_readback_sha256": owner_marker, "anonymous_readback_sha256": owner_marker,
+        "probe_readback_sha256": probe_marker if probe_status == 200 else owner_marker,
+        "owner_status": 200, "anonymous_status": 401, "probe_status": probe_status,
+        "controls": controls or {"identities_verified": True, "owned_records_distinct": True,
+            "owners_preserved": True, "unrelated_records_unchanged": True},
+        "http_exchanges": 13, "request_order": list(REVIEW_ORDER),
+    }
+
+
+def _review_trace(action, *, statuses=(200, 200)):
+    trials = [_review_trial(action, i + 1, probe_status=status) for i, status in enumerate(statuses)]
+    fixture_snapshot = trials[0]["fixture_snapshot_digest"]
+    return AccessCheckTrace(
+        check_id="juice-review-own-write-v1", binding_id=binding_id(action),
+        source_snapshot_digest=action.verification_binding.source_snapshot,
+        target=action.target, environment=action.environment, operation="review_update",
+        endpoint_id="review-write", method="PATCH", object_ref="review-b", mutation_field="message",
+        controls={}, generations=[], exchanges=[], review_trials=trials,
+        review_source_snapshot_digest=fixture_snapshot, exchange_count=26, request_budget=26,
+        reset_complete=True, cleanup_complete=True, integrity_verified=True,
+    )
+
+
+def test_review_ownership_confirms_two_repeated_cross_owner_persistent_changes(bound_action):
+    profile, action = bound_action["juice-review-own-write-v1"]
+    trace = _review_trace(action)
+    assert _b05_validator(profile).validate(action).approved
+    evidence = evaluate_access_check(trace, action)
+    assert evidence.verdict == "confirmed"
+    assert evidence.repeated_trials == 2
+    assert evidence.exchange_count == 26
+
+
+def test_review_ownership_rejects_only_repeated_explicit_denials(bound_action):
+    action = bound_action["juice-review-own-write-v1"][1]
+    assert evaluate_access_check(_review_trace(action, statuses=(403, 403)), action).verdict == "rejected"
+    assert evaluate_access_check(_review_trace(action, statuses=(200, 403)), action).verdict == "inconclusive"
+
+
+def test_review_ownership_fails_closed_on_controls_binding_and_source_mismatch(bound_action):
+    action = bound_action["juice-review-own-write-v1"][1]
+    trace = _review_trace(action)
+    controls = dict(trace.review_trials[0].controls, unrelated_records_unchanged=False)
+    bad_trial = trace.review_trials[0].model_copy(update={"controls": controls})
+    assert evaluate_access_check(trace.model_copy(update={"review_trials": [bad_trial, trace.review_trials[1]]}), action).verdict == "inconclusive"
+    assert evaluate_access_check(trace.model_copy(update={"binding_id": "0" * 64}), action).verdict == "inconclusive"
+    assert evaluate_access_check(trace, action.model_copy(update={"endpoint": "/rest/products/1/reviews"})).verdict == "inconclusive"
+    trial = trace.review_trials[0].model_copy(update={"binding_snapshot_digest": "0" * 64})
+    assert evaluate_access_check(trace.model_copy(update={"review_trials": [trial, trace.review_trials[1]]}), action).verdict == "inconclusive"
+
+
+def test_review_ownership_cannot_be_enabled_with_arbitrary_request_parameters(bound_action):
+    profile, action = bound_action["juice-review-own-write-v1"]
+    for extra in ({"id": "untrusted"}, {"url": "http://example.invalid"}):
+        assert not _b05_validator(profile).validate(
+            action.model_copy(update={"parameters": {"check_id": "juice-review-own-write-v1", **extra}})
+        ).approved
+
+
+def _review_nosql_trial(action, generation, *, vulnerable=True, controls=None):
+    h = lambda value: digest_value(value)
+    return {
+        "schema_version": "review.nosql.trial.v1",
+        "generation_sha256": h(f"nosql-generation-{generation}"),
+        "source_snapshot_digest": h("nosql-fixture-source-snapshot"),
+        "fixture_snapshot_digest": h("nosql-fixture-source-snapshot"),
+        "binding_snapshot_digest": action.verification_binding.source_snapshot,
+        "profile_sha256": h("nosql-profile"),
+        "identity_a_sha256": h(f"role-a-{generation}"),
+        "identity_b_sha256": h(f"role-b-{generation}"),
+        "session_a_sha256": h(f"session-a-{generation}"),
+        "session_b_sha256": h(f"session-b-{generation}"),
+        "owner_identity_sha256": h(f"role-b-{generation}"),
+        "review_a_sha256": h(f"review-a-{generation}"),
+        "review_b_sha256": h(f"review-b-{generation}"),
+        "unrelated_baseline_sha256": h(f"unrelated-{generation}"),
+        "unrelated_after_scalar_sha256": h(f"unrelated-{generation}"),
+        "unrelated_after_anonymous_sha256": h(f"unrelated-{generation}"),
+        "unrelated_after_operator_sha256": h(f"unrelated-{generation}"),
+        "initial_a_sha256": h(f"initial-a-{generation}"),
+        "initial_b_sha256": h(f"initial-b-{generation}"),
+        "scalar_marker_sha256": h(f"scalar-{generation}"),
+        "scalar_a_readback_sha256": h(f"scalar-{generation}"),
+        "scalar_b_readback_sha256": h(f"initial-b-{generation}"),
+        "anonymous_marker_sha256": h(f"anonymous-{generation}"),
+        "anonymous_b_readback_sha256": h(f"initial-b-{generation}"),
+        "operator_marker_sha256": h(f"operator-{generation}"),
+        "operator_a_readback_sha256": h(f"operator-{generation}" if vulnerable else f"scalar-{generation}"),
+        "operator_b_readback_sha256": h(f"operator-{generation}" if vulnerable else f"initial-b-{generation}"),
+        "scalar_status": 200, "anonymous_status": 401,
+        "operator_status": 200 if vulnerable else 400,
+        "operator_modified_count": 2 if vulnerable else 0,
+        "controls": controls or {
+            "identities_verified": True, "same_owner_fixture": True, "scalar_control": True,
+            "anonymous_control": True, "unrelated_records_unchanged": True,
+            "operator_scope_is_two_fixture_ids": True,
+            "owners_and_nonmessage_preserved": True,
+        },
+        "http_exchanges": 13,
+        "request_order": ["identity-a-before", "identity-b-before", "create-a", "create-b",
+            "baseline-read", "scalar-owner-write", "scalar-owner-readback", "anonymous-write",
+            "anonymous-readback", "operator-write", "operator-readback", "identity-a-after",
+            "identity-b-after"],
+    }
+
+
+def _review_nosql_trace(action, *, vulnerable=True):
+    from schemas.review_verification import ReviewNoSQLTrial
+
+    trials = [ReviewNoSQLTrial.model_validate(_review_nosql_trial(action, index + 1,
+        vulnerable=vulnerable)) for index in range(2)]
+    return AccessCheckTrace(
+        check_id="juice-review-nosql-selector-v1", binding_id=binding_id(action),
+        source_snapshot_digest=action.verification_binding.source_snapshot,
+        target=action.target, environment=action.environment, operation="review_nosql_selector",
+        endpoint_id="review-write", method="PATCH", object_ref="review-b", mutation_field="message",
+        controls={}, generations=[], exchanges=[], review_nosql_trials=trials,
+        review_source_snapshot_digest=digest_value("nosql-fixture-source-snapshot"),
+        exchange_count=26, request_budget=26, reset_complete=True,
+        cleanup_complete=True, integrity_verified=True,
+    )
+
+
+def test_review_nosql_confirms_only_bounded_two_row_operator_effect(bound_action):
+    from evidence.access_control import evaluate_access_check
+
+    profile, action = bound_action["juice-review-nosql-selector-v1"]
+    assert _b05_validator(profile).validate(action).approved
+    evidence = evaluate_access_check(_review_nosql_trace(action), action)
+    assert evidence.verdict == "confirmed"
+    assert evidence.repeated_trials == 2
+
+
+def test_review_nosql_rejects_explicit_no_effect_and_fails_closed(bound_action):
+    from evidence.access_control import evaluate_access_check
+
+    action = bound_action["juice-review-nosql-selector-v1"][1]
+    assert evaluate_access_check(_review_nosql_trace(action, vulnerable=False), action).verdict == "rejected"
+    trace = _review_nosql_trace(action)
+    bad = trace.review_nosql_trials[0].model_copy(update={"operator_modified_count": 3})
+    assert evaluate_access_check(trace.model_copy(update={"review_nosql_trials": [bad, trace.review_nosql_trials[1]]}), action).verdict == "inconclusive"
+
+
+def test_review_nosql_needs_distinct_markers_and_its_own_binding(bound_action):
+    action = bound_action["juice-review-nosql-selector-v1"][1]
+    trace = _review_nosql_trace(action)
+    first, second = trace.review_nosql_trials
+    same_marker = first.model_copy(update={"operator_marker_sha256": first.scalar_marker_sha256})
+    assert evaluate_access_check(trace.model_copy(update={
+        "review_nosql_trials": [same_marker, second]}), action).verdict == "inconclusive"
+    owner_action = bound_action["juice-review-own-write-v1"][1]
+    assert evaluate_access_check(trace, owner_action).verdict == "inconclusive"
+    changed = first.model_copy(update={"unrelated_after_operator_sha256": "0" * 64})
+    assert evaluate_access_check(trace.model_copy(update={
+        "review_nosql_trials": [changed, second]}), action).verdict == "inconclusive"
 
 
 def _basket_insert_trace(action, *, vulnerable):

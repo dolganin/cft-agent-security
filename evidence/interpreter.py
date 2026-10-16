@@ -1,4 +1,5 @@
 import json
+from hashlib import sha256
 from pathlib import Path
 from uuid import uuid4
 
@@ -93,6 +94,13 @@ def build_evidence(
             sandbox_session_id=sandbox_session_id,
         )
 
+    if action.tool == "verify_juice_proof":
+        return _juice_proof_evidence(
+            action=action, execution=execution, record=record,
+            evidence_loaded=evidence_loaded, artifact_refs=artifact_refs,
+            hypothesis_id=hypothesis_id,
+        )
+
     specialized = _SPECIALIZED_RESULTS.get(action.tool)
     if specialized is not None:
         evidence = _structured_capability_evidence(
@@ -133,6 +141,97 @@ def build_evidence(
         reliability="high" if evidence_loaded and record_status == "completed" else "low",
         hypothesis_id=hypothesis_id,
         sandbox_session_id=sandbox_session_id,
+    )
+
+
+def _juice_proof_evidence(*, action, execution, record, evidence_loaded,
+                          artifact_refs, hypothesis_id):
+    from schemas.juice_incremental_proof import (
+        ProductPutTrial,
+        RoleRegistrationTrial,
+        product_put_disposition,
+        role_registration_disposition,
+    )
+
+    verdict = "inconclusive"
+    facts: dict[str, object] = {
+        "record_loaded": evidence_loaded,
+        "executor_status": execution.status,
+        "check_id": action.parameters.get("check_id"),
+        "finding_id": (action.juice_proof_binding.finding_id
+                       if action.juice_proof_binding else None),
+    }
+    summary = "Fixed Juice Shop proof did not produce a valid, bound runtime verdict."
+    valid = False
+    if evidence_loaded and action.juice_proof_binding is not None:
+        try:
+            from executor.approvals import proposal_digest
+            raw = json.loads(str(record.get("stdout", "")))
+            check_id = action.juice_proof_binding.check_id
+            trial_raw = raw["result"]["trial"]
+            if check_id == "role-registration":
+                trial = RoleRegistrationTrial.model_validate(trial_raw)
+                computed = role_registration_disposition(trial)
+                expected_protocol = "role-registration"
+            else:
+                trial = ProductPutTrial.model_validate(trial_raw)
+                computed = product_put_disposition(trial)
+                expected_protocol = "anonymous-product-put"
+            valid = (
+                execution.status == "completed"
+                and execution.exit_code == 0
+                and raw.get("protocol") == expected_protocol
+                and raw.get("failure_type") is None
+                and raw.get("cleanup_complete") is True
+                and raw.get("target_source_unchanged") is True
+                and isinstance(raw.get("generation"), str)
+                and bool(raw["generation"])
+                and raw["generation"] == record.get("session_id")
+                and trial.generation_sha256 == sha256(
+                    json.dumps(raw["generation"], sort_keys=True, separators=(",", ":")).encode()
+                ).hexdigest()
+                and raw["result"].get("disposition") == computed
+                and trial.source_snapshot_sha256
+                    == action.juice_proof_binding.source_snapshot_sha256
+                and record.get("action_digest") == proposal_digest(action)
+                and record.get("juice_proof_binding")
+                    == action.juice_proof_binding.model_dump(mode="json")
+                and record.get("status") == "completed"
+                and int(record.get("exit_code", 1)) == 0
+            )
+            if valid:
+                verdict = computed
+                summary = (
+                    f"Fixed Juice Shop {check_id} proof: {computed}; "
+                    "verdict recomputed from typed controls, readback and cleanup."
+                )
+                facts.update({
+                    "protocol": expected_protocol,
+                    "disposition": computed,
+                    "http_exchanges": trial.http_exchanges,
+                    "generation_sha256": trial.generation_sha256,
+                    "source_snapshot_sha256": trial.source_snapshot_sha256,
+                    "profile_sha256": trial.profile_sha256,
+                    "worker_sha256": trial.worker_sha256,
+                    "cleanup_complete": True,
+                    "target_source_unchanged": True,
+                    "audit_bound": True,
+                })
+        except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+            valid = False
+    facts["proof_binding_valid"] = valid
+    return _evidence(
+        action=action, execution=execution,
+        evidence_type="juice_incremental_runtime_proof",
+        summary=summary, facts=facts,
+        scope_description=(
+            "one fixed proof protocol against a fresh pinned Juice Shop v20.2.0 "
+            "Docker generation; no claim beyond the bound finding"
+        ),
+        artifact_refs=artifact_refs,
+        reliability="high" if valid else "low", verdict=verdict,
+        hypothesis_id=hypothesis_id,
+        sandbox_session_id=record.get("session_id") if evidence_loaded else None,
     )
 
 

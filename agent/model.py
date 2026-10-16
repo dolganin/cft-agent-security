@@ -181,7 +181,10 @@ class DeterministicAgentModel:
         analysis: AnalysisResult,
         hypothesis: Hypothesis,
     ) -> DynamicPlan:
-        if state.get("target_profile") and state["target_profile"].verification_routes:
+        if state.get("target_profile") and (
+            state["target_profile"].verification_routes
+            or state["target_profile"].juice_incremental_proofs is not None
+        ):
             from agent.verification import verification_candidates
             candidates = verification_candidates(state)
             if not candidates:
@@ -192,9 +195,10 @@ class DeterministicAgentModel:
                 target=state["target_profile"].id, environment=state["target_profile"].environment,
                 tool=candidate["tool"], parameters=candidate["parameters"],
                 purpose=candidate["purpose"], expected_evidence=hypothesis.expected_evidence,
-                service=candidate["service"], endpoint=candidate["endpoint"],
-                verification_binding=candidate["verification_binding"],
+                service=candidate.get("service"), endpoint=candidate.get("endpoint"),
+                verification_binding=candidate.get("verification_binding"),
                 fixture_binding=candidate.get("fixture_binding"),
+                juice_proof_binding=candidate.get("juice_proof_binding"),
             )
         else:
             action = self.propose_action(state, analysis, hypothesis)

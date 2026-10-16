@@ -21,6 +21,7 @@ from pipeline.research_verification import (
     verification_handoff,
     verify_bound_candidate,
 )
+from pipeline.verification_budget import verification_http_charge
 from reporting.builder import build_final_report
 from reporting.checkpoints import write_json
 from reporting.research_diagnostics import saved_campaign_diagnostics
@@ -109,13 +110,13 @@ def _preverify_bound_findings(*, queue, profile, configuration, output, limits,
         wall_seconds=limits.wall_seconds, max_actions=1,
         max_http_requests=min(256, limits.max_http_requests))
     reviews, by_key = [], {}
-    actions = unknown_actions = reserved = observed = 0
+    actions = unknown_actions = reserved = observed = charged = 0
     checks_directory = preverification / "checks"
     checks_directory.mkdir()
     with runtime:
         for ordinal, (key, question) in enumerate(selected.items()):
             remaining_wall = limits.wall_seconds - int(time.monotonic() - started)
-            remaining_http = max(0, limits.max_http_requests - reserved)
+            remaining_http = max(0, limits.max_http_requests - charged)
             if remaining_wall <= 0 or actions + unknown_actions >= limits.max_actions:
                 break
             try:
@@ -127,8 +128,9 @@ def _preverify_bound_findings(*, queue, profile, configuration, output, limits,
                     remaining_wall_seconds=remaining_wall)
             except (OSError, ValueError, RuntimeError, TypeError, KeyError, IndexError,
                     AssertionError, subprocess.SubprocessError) as exc:
+                max_reserved = max([4, *(int(g.max_http_requests) for g in fixture_grants)])
                 review = {"finding_id": question.finding.id, "status": "inconclusive",
-                    "executed": None, "actions": 1, "requests_reserved": min(4, remaining_http),
+                    "executed": None, "actions": 1, "requests_reserved": min(max_reserved, remaining_http),
                     "worker_cleanup_verified": False, "reason": redact_error_message(exc)}
             review["job_finding_ids"] = _job_finding_ids(queue, key)
             review.setdefault("finding_id", question.finding.id)
@@ -136,6 +138,7 @@ def _preverify_bound_findings(*, queue, profile, configuration, output, limits,
             review.setdefault("actions", 0)
             review.setdefault("requests_reserved", 0)
             reserved += int(review["requests_reserved"])
+            charged += verification_http_charge(review)
             observed += int(review.get("requests_observed", 0))
             if review["executed"] is True:
                 actions += int(review.get("actions", 0))
@@ -210,6 +213,11 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     if verification_worker_image or fixture_grants or verification_grants:
         grants = configuration.get("http_grants", configuration.get("services", {}))
         for operator_profile in verification_profiles:
+            if operator_profile.juice_incremental_proofs is not None:
+                from security.juice_incremental_binding import _protocol_files
+
+                for proof_route in operator_profile.juice_incremental_proofs.routes:
+                    verification_paths.update(_protocol_files(proof_route.check_id))
             for route in operator_profile.verification_routes:
                 grant = grants.get(route.service, {})
                 if (route.tool in REQUEST_RESERVATIONS and route.method == "GET" and
@@ -275,6 +283,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     unknown_action_reservations = 0
     verification_http_reserved = 0
     verification_http_observed = 0
+    verification_http_charged = 0
     runtime_reviews = []
     model_io = observation_bytes = write_bytes = 0
     ledgers, reports, reviews, runs = [], [], [], []
@@ -295,6 +304,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
     unknown_action_reservations += pre_unknown_actions
     verification_http_reserved += pre_reserved
     verification_http_observed += pre_observed
+    verification_http_charged += sum(verification_http_charge(row) for row in pre_reviews)
     write_json(output / "questions.json", [q.model_dump(mode="json") for q in queue.questions])
     write_json(output / "findings.json", [f.model_dump(mode="json") for f in queue.findings])
     write_json(output / "canonical-runtime-reviews.json", runtime_reviews)
@@ -358,7 +368,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         question_config = {**configuration, "max_http_requests": min(
             256,
             configuration.get("max_http_requests", 128 if configuration.get("browser_image") else 32),
-            max(0, limits.max_http_requests - http_requests - verification_http_reserved))}
+            max(0, limits.max_http_requests - http_requests - verification_http_charged))}
         stage_started = time.monotonic()
         state, summary = run_research(profile=profile, configuration=question_config, finding=question.finding,
             client=client, output=directory, limits=scoped_limits, surface_context=related)
@@ -408,7 +418,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
                 runtime_review = verify_bound_candidate(finding=question.finding,
                     profiles=verification_profiles, scope=scope, repository=profile.repository_path,
                     output=output / "canonical-verification" / str(ordinal),
-                    max_http_requests=max(0, limits.max_http_requests - http_requests - verification_http_reserved),
+                    max_http_requests=max(0, limits.max_http_requests - http_requests - verification_http_charged),
                     worker_image=verification_worker_image or "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7",
                     fixture_grants=fixture_grants,
                     verification_grants=verification_grants,
@@ -422,7 +432,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
                 max_reserved = max([4, *(int(g.max_http_requests) for g in fixture_grants)], default=4)
                 runtime_review = {"finding_id": question.finding.id, "status": "inconclusive",
                     "executed": None, "actions": 1, "requests_reserved": min(max_reserved,
-                        max(0, limits.max_http_requests - http_requests - verification_http_reserved)),
+                        max(0, limits.max_http_requests - http_requests - verification_http_charged)),
                     "worker_cleanup_verified": False, "reason": redact_error_message(exc)}
             runtime_review["job_finding_ids"] = _job_finding_ids(queue, verification_key)
             runtime_reviews.append(runtime_review)
@@ -433,6 +443,7 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
                 actions += runtime_review.get("actions", 0)
             verification_http_reserved += runtime_review.get("requests_reserved", 0)
             verification_http_observed += runtime_review.get("requests_observed", 0)
+            verification_http_charged += verification_http_charge(runtime_review)
             # Preserve research history while publishing the independently guarded
             # terminal report for this exact finding, never an unrelated candidate.
             reports[-1]["canonical_runtime_review"] = runtime_review
@@ -522,7 +533,8 @@ def _campaign(*, profile, configuration, client, output, sast=(), dast=(), limit
         "http_requests": http_requests,
         "canonical_verification_http_requests_reserved": verification_http_reserved,
         "canonical_verification_http_requests_observed": verification_http_observed,
-        "http_request_budget_used": http_requests + verification_http_reserved,
+        "canonical_verification_http_budget_charged": verification_http_charged,
+        "http_request_budget_used": http_requests + verification_http_charged,
         "canonical_runtime_reviews": [{"finding_id": r["finding_id"], "status": r["status"],
                                        "executed": r["executed"]} for r in runtime_reviews],
         "canonical_runtime_review_counts": {status: sum(r["status"] == status for r in runtime_reviews)
@@ -576,6 +588,9 @@ def main():
                         help="Operator profile for a source-bound handoff; does not execute new checks")
     parser.add_argument("--verification-worker-image", help="Enable fixed SQL/directory review using this immutable Docker image")
     parser.add_argument("--fixture-grant", choices=("b05.own-read.v1", "b05.basket-insert.v1",
+                        "b05.review-owner.v1", "b05.review-nosql.v1",
+                        "b05.user-fields.v1",
+                        "b05.feedback-owner.v1",
                         "b06.redirect.v1", "b06.password-reauth.v1"),
                         action="append", default=[], help="Explicit operator permission for one closed private fixture protocol")
     parser.add_argument("--verification-grant", choices=("b01.login-sql.v1",), action="append", default=[],
@@ -597,6 +612,10 @@ def main():
         verification_worker_image=args.verification_worker_image,
         fixture_grants=tuple(ResearchFixtureGrant(protocol=item, max_http_requests={
             "b05.own-read.v1": 238, "b05.basket-insert.v1": 238,
+            "b05.review-owner.v1": 250,
+            "b05.review-nosql.v1": 250,
+            "b05.user-fields.v1": 244,
+            "b05.feedback-owner.v1": 244,
             "b06.redirect.v1": 38, "b06.password-reauth.v1": 194}[item])
             for item in args.fixture_grant),
         verification_grants=tuple(ResearchVerificationGrant(protocol=item, route_id="juice-login")

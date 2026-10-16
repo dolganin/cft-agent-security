@@ -6,4 +6,4 @@ tools:
       allowed_keys: [check_id]
       required_keys: [check_id]
       enum_values:
-        check_id: [juice-basket-own-read-v1, juice-address-own-write-v1, juice-basket-own-write-v2, juice-basket-own-write-v3, juice-address-ownership-transfer-v1, juice-basket-insert-owner-check-v1]
+        check_id: [juice-basket-own-read-v1, juice-address-own-write-v1, juice-basket-own-write-v2, juice-basket-own-write-v3, juice-address-ownership-transfer-v1, juice-basket-insert-owner-check-v1, juice-review-own-write-v1, juice-review-nosql-selector-v1, juice-user-private-fields-v1, juice-feedback-owner-v1]

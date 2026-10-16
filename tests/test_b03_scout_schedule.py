@@ -237,3 +237,105 @@ def test_standalone_candidate_comparison_never_claims_confirmation(tmp_path, mon
     assert "sast-one" not in str(client.payloads)
     with pytest.raises(FileExistsError):
         cli.main()
+
+
+def test_blind_discovery_scopes_model_input_and_writes_manifest(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    from app import scout as cli
+
+    discovery = corpus(tmp_path / "target", {
+        "routes/account.ts": "router.post('/account', updateAccount)\n",
+        "routes/unrelated.ts": "router.get('/unrelated', handler)\n",
+        "lib/account.ts": "export function updateAccount() {}\n",
+    })
+    registry = tmp_path / "surfaces.yaml"
+    registry.write_text(
+        "schema_version: cft.scout_surfaces.v1\nsurfaces:\n"
+        "  - id: account-lifecycle\n"
+        "    focus: Review account handler and its related implementation\n"
+        "    source_paths: [routes/account.ts, lib/account.ts]\n",
+        encoding="utf-8",
+    )
+
+    class CapturingClient(Client):
+        def complete_model(self, **kwargs):
+            self.payloads.append(kwargs["user_payload"])
+            return ScoutTurn()
+
+    client = CapturingClient()
+    monkeypatch.setattr(cli.ProjectDiscovery, "discover", lambda *args: discovery)
+    monkeypatch.setattr(cli.FallbackLLMAgentModel, "from_settings",
+                        lambda *args: type("Model", (), {"client": client})())
+    output = tmp_path / "blind-results"
+    monkeypatch.setattr(sys, "argv", [
+        "scout", "--target", str(discovery.repository_root), "--output-dir", str(output),
+        "--blind-discovery", "--surface", "account-lifecycle",
+        "--surface-registry", str(registry), "--schedule", "handlers", "--max-turns", "1",
+    ])
+
+    assert cli.main() == 0
+    payload = client.payloads[0]
+    assert set(payload["source_files"]) == {"routes/account.ts", "lib/account.ts"}
+    assert "routes/unrelated.ts" not in str(payload)
+    assert "JS-" not in str(payload)
+    manifest = json.loads((output / "blind-manifest.json").read_text(encoding="utf-8"))
+    assert manifest["mode"] == "targeted_development_run"
+    assert manifest["surface"]["id"] == "account-lifecycle"
+    assert set(manifest["surface"]["projected_source_sha256"]) == {
+        "routes/account.ts", "lib/account.ts",
+    }
+    assert manifest["model_input_boundaries"] == {
+        "sast_findings_supplied": False,
+        "finding_seed_supplied": False,
+        "benchmark_labels_supplied": False,
+        "oracle_controllers_enabled": False,
+        "vulnerability_regions_enabled": False,
+    }
+
+
+def test_blind_discovery_refuses_sast_seed_before_model_call(tmp_path, monkeypatch):
+    import sys
+
+    from app import scout as cli
+
+    discovery = corpus(tmp_path / "target", {"routes/a.ts": "query(req.query.q)\n"})
+    baseline = tmp_path / "baseline.json"
+    baseline.write_text("[]", encoding="utf-8")
+    calls = []
+    monkeypatch.setattr(cli.FallbackLLMAgentModel, "from_settings",
+                        lambda *args: calls.append("provider-created"))
+    monkeypatch.setattr(sys, "argv", [
+        "scout", "--target", str(discovery.repository_root),
+        "--output-dir", str(tmp_path / "blocked-results"), "--blind-discovery",
+        "--sast-findings", str(baseline),
+    ])
+
+    with pytest.raises(SystemExit) as error:
+        cli.main()
+    assert error.value.code == 2
+    assert calls == []
+    assert not (tmp_path / "blocked-results").exists()
+
+
+def test_blind_manifest_does_not_mislabel_parent_repository_as_target(tmp_path, monkeypatch):
+    from app import scout as cli
+
+    target = tmp_path / "nested-target"
+    target.mkdir()
+    calls = []
+
+    class Result:
+        def __init__(self, stdout, returncode=0):
+            self.stdout = stdout
+            self.returncode = returncode
+
+    def fake_run(command, **kwargs):
+        calls.append(command)
+        return Result(str(tmp_path) if len(calls) == 1 else "a" * 40)
+
+    monkeypatch.setattr(cli.subprocess, "run", fake_run)
+
+    assert cli._git_revision(target) is None
+    assert len(calls) == 1

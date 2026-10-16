@@ -1,5 +1,15 @@
 # План повышения метрик на закрепленном Juice Shop
 
+Общий проход 16 октября дал **11/27 подтверждений** по неизменному A04 matcher
+вместо прежних 7/27. [Полный отчет и оставшиеся случаи](juice-all-ready-verification-report-2026-10-16.md).
+
+Обновления 16 октября: добавлены отдельные runtime-протоколы для review ownership,
+NoSQL review selector, выбора чувствительных полей `whoami` и атрибуции feedback.
+Их подтверждения не означают новый полный benchmark-run; отчеты и бюджетные
+ограничения собраны в [`juice-fixture-budget-integration-2026-10-16.md`](juice-fixture-budget-integration-2026-10-16.md),
+[`juice-review-verification-report-2026-10-16.md`](juice-review-verification-report-2026-10-16.md) и
+[`juice-feedback-owner-report-2026-10-16.md`](juice-feedback-owner-report-2026-10-16.md).
+
 ## Обновление после восстановления постоянной рабочей копии
 
 Следующий заход: [`juice-verification-gap-plan-2026-10-15.md`](juice-verification-gap-plan-2026-10-15.md)

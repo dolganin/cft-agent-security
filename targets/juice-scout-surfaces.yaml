@@ -1,0 +1,37 @@
+schema_version: cft.scout_surfaces.v1
+surfaces:
+  - id: account-lifecycle
+    focus: >-
+      Review the account lifecycle across registration, authentication, profile updates,
+      password changes, recovery and authorization. Trace relevant request data through
+      handlers into models and security helpers; report concrete source-backed risks,
+      assumptions and the next harmless verification needed.
+    source_paths:
+      - server.ts
+      - routes/login.ts
+      - routes/currentUser.ts
+      - routes/authenticatedUsers.ts
+      - routes/updateUserProfile.ts
+      - routes/userProfile.ts
+      - routes/changePassword.ts
+      - routes/resetPassword.ts
+      - routes/securityQuestion.ts
+      - models/user.ts
+      - lib/insecurity.ts
+  - id: catalog-and-reviews
+    focus: >-
+      Review the product catalog and customer review lifecycle, including search,
+      creation, display, updates and likes. Trace user-controlled data through route
+      handlers and related models, and assess access-control boundaries and output
+      handling. Return only concrete source-backed hypotheses and state what remains
+      unknown.
+    source_paths:
+      - server.ts
+      - routes/search.ts
+      - routes/createProductReviews.ts
+      - routes/showProductReviews.ts
+      - routes/updateProductReviews.ts
+      - routes/likeProductReviews.ts
+      - models/product.ts
+      - models/user.ts
+      - lib/insecurity.ts

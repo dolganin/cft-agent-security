@@ -1,0 +1,9 @@
+version: 1
+tools:
+  allowed: [verify_juice_proof]
+  parameter_contracts:
+    verify_juice_proof:
+      allowed_keys: [check_id]
+      required_keys: [check_id]
+      enum_values:
+        check_id: [role-registration, anonymous-product-put]

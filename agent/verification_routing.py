@@ -6,6 +6,12 @@ from security.verification_binding import resolve_binding
 def select_profile(finding, profiles):
     matches = []
     for profile in profiles:
+        if profile.juice_incremental_proofs is not None:
+            from security.juice_incremental_binding import bind_finding
+
+            if bind_finding(profile, finding) is not None:
+                matches.append(profile)
+            continue
         resolution = resolve_binding(profile, finding)
         if resolution.status == "bound":
             matches.append(profile)

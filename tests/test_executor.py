@@ -603,6 +603,7 @@ def test_executor_exposes_only_predefined_tools(tmp_path) -> None:
         "sandbox_command",
         "verify_access_control",
         "verify_auth_reauthentication",
+        "verify_juice_proof",
         "verify_redirect_destination",
         "verify_sensitive_directory",
         "verify_sql_injection",

@@ -37,11 +37,16 @@ VERIFICATION_PROFILE_PATHS = (
     "targets/juice-verification.yaml",
     "targets/juice-b05-access-fixture.yaml",
     "targets/juice-b06-verification.yaml",
+    "targets/juice-incremental-proof.yaml",
 )
 EXCLUDED = ["/socket.io", "/rest/challenges", "/api/Challenges", "/score-board", "/scoreboard",
             "/rest/score-board", "/rest/continue-code", "/rest/continue-code-findIt", "/rest/continue-code-fixIt",
             "/snippets", "/codefixes", "/solutions"]
 FIXTURE_GRANTS = (
+    ResearchFixtureGrant(protocol="b05.review-owner.v1", max_http_requests=250),
+    ResearchFixtureGrant(protocol="b05.review-nosql.v1", max_http_requests=250),
+    ResearchFixtureGrant(protocol="b05.user-fields.v1", max_http_requests=244),
+    ResearchFixtureGrant(protocol="b05.feedback-owner.v1", max_http_requests=244),
     ResearchFixtureGrant(protocol="b05.own-read.v1", max_http_requests=238),
     ResearchFixtureGrant(protocol="b05.basket-insert.v1", max_http_requests=238),
     ResearchFixtureGrant(protocol="b06.redirect.v1", max_http_requests=38),
@@ -50,10 +55,10 @@ FIXTURE_GRANTS = (
 VERIFICATION_GRANTS = (ResearchVerificationGrant(protocol="b01.login-sql.v1", route_id="juice-login"),)
 
 
-def limits():
+def limits(*, max_http_requests=1024):
     return CampaignLimits(max_questions=64, max_actions=256, max_model_calls=256,
         wall_seconds=1800, max_model_io_bytes=67108864, max_observation_bytes=16777216,
-        max_write_bytes=4194304, max_http_requests=1024, dev_preferred_families=[])
+        max_write_bytes=4194304, max_http_requests=max_http_requests, dev_preferred_families=[])
 
 
 def preflight(checkout, image, browser_image, *, probe_model=False, diagnostics_path=None):
@@ -94,7 +99,9 @@ def preflight(checkout, image, browser_image, *, probe_model=False, diagnostics_
                 if not candidate.is_relative_to(checkout) or not candidate.is_file():
                     raise ValueError("Operator verification source is missing or outside the pinned target")
 
-    image_refs = tuple(dict.fromkeys((image, browser_image, IMAGE, WORKER_IMAGE)))
+    proof_images = tuple(profile.juice_incremental_proofs.worker_image
+        for profile in verification_profiles if profile.juice_incremental_proofs is not None)
+    image_refs = tuple(dict.fromkeys((image, browser_image, IMAGE, WORKER_IMAGE, *proof_images)))
     images = [require_immutable_image(reference, docker) for reference in image_refs]
     generation = {"status": "not_run", "model": "nsu:qwen3.8-flash-next", "calls": 0}
     if probe_model:
@@ -244,14 +251,14 @@ def _run(checkout, image, browser_image, output, *, campaign_limits=None, questi
             "selection":"All fresh SAST observations; no family representatives or preferred proof families",
             "fresh_sast_observations":len(scan.findings), "fresh_dast":False,
             "source_detector_enabled": True, "source_detector_findings": len(source_detector_findings),
-            "runtime_scope":"anonymous read-only model research plus fixed B01 SQL/login verification and exact operator-granted B05 own-read and B06 redirect/re-auth protocols; model has no POST grant, credentials, or arbitrary fixture actions",
+            "runtime_scope":"anonymous read-only model research plus fixed B01 SQL/login, B05 own-read, basket insert, review-owner, NoSQL review-selector, whoami private-field and feedback-attribution, B06 redirect/re-auth, and registered Juice role-registration/anonymous-product-put protocols; model has no fixture credentials or arbitrary fixture actions",
             "operator_grants":config["http_grants"], "evaluator_labels_provided_to_model":False,
-            "canonical_verification_profiles":["targets/juice-verification.yaml",
-                "targets/juice-b05-access-fixture.yaml", "targets/juice-b06-verification.yaml"],
+            "canonical_verification_profiles":list(VERIFICATION_PROFILE_PATHS),
             "canonical_fixture_grants":[grant.model_dump() for grant in FIXTURE_GRANTS],
             "canonical_verification_grants":[grant.model_dump() for grant in VERIFICATION_GRANTS],
             "canonical_verification_worker_image":WORKER_IMAGE,
-            "canonical_verification_scope":"B01 SQL/directory plus the exact fixed juice-login SQL grant and explicitly granted B05 own-read/B06 redirect/re-auth; each protocol remains source-bound and independently validated",
+            "incremental_proof_http_reservation_per_check":114,
+            "canonical_verification_scope":"B01 SQL/directory/login, explicitly granted B05 own-read/basket-insert/review-owner/NoSQL-selector/whoami-private-fields/feedback-attribution, B06 redirect/re-auth, and registered Juice role-registration/anonymous-product-put; each protocol remains source-bound and independently validated",
             "full_benchmark_measurement":False, "mttr":"not_measured", "reproducibility":"not_measured"}
         write_json(output / "run-manifest.json", manifest)
         print(json.dumps({"phase":"campaign_started", "sast_observations":len(scan.findings),
@@ -318,6 +325,8 @@ if __name__ == "__main__":
                         help="Make one small generation/authentication request to the configured Qwen route")
     parser.add_argument("--wall-seconds", type=int, default=1800, help="Campaign budget; preparation is reported separately")
     parser.add_argument("--max-questions", type=int, default=64)
+    parser.add_argument("--max-http-requests", type=int, default=1024,
+                        help="Explicit total campaign HTTP budget (0..2048); per-runtime limit stays 256")
     parser.add_argument("--verification-only", action="store_true",
                         help="Explicit fixed-protocol acceptance with fresh source detection; no model calls")
     args = parser.parse_args()
@@ -332,7 +341,7 @@ if __name__ == "__main__":
         raise SystemExit(0)
     if args.output is None:
         parser.error("--output is required unless --preflight-only is selected")
-    selected_limits = CampaignLimits.model_validate({**limits().model_dump(),
+    selected_limits = CampaignLimits.model_validate({**limits(max_http_requests=args.max_http_requests).model_dump(),
         "wall_seconds": args.wall_seconds, "max_questions": args.max_questions})
     try:
         print(json.dumps(run(args.checkout, args.image, args.browser_image, args.output,

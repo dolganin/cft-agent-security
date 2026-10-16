@@ -82,13 +82,18 @@ def replay_runtime(root):
         validation = ValidationResult.model_validate(row["validation"])
         evidence = row["evidence"]
         report = row["report"]
+        binding = action.verification_binding or action.juice_proof_binding
         if (not validation.approved or validation.action_id != action.id
                 or not row.get("worker_cleanup_verified")
                 or report["finding_id"] != row["finding_id"]
-                or action.verification_binding.finding_id != row["finding_id"]):
+                or binding is None or binding.finding_id != row["finding_id"]):
             raise ValueError("Runtime review approval/finding/cleanup mismatch")
-        job_finding_ids = _validated_job_finding_ids(row["finding_id"],
-            review_index.get(row["finding_id"]), action.verification_binding, finding_by_id)
+        if action.juice_proof_binding is not None:
+            job_finding_ids = _validated_juice_proof_finding(
+                path, row["finding_id"], review_index.get(row["finding_id"]), binding, finding_by_id)
+        else:
+            job_finding_ids = _validated_job_finding_ids(row["finding_id"],
+                review_index.get(row["finding_id"]), binding, finding_by_id)
         record = read_protocol_execution(JsonExecutionEvidenceStore(path.parent / "execution"),
             JsonlAuditLog(path.parent / "audit.jsonl"), action, execution, evidence["sandbox_session_id"])
         # B06 replay reads its audit artifact. Resolve the already verified local
@@ -101,13 +106,40 @@ def replay_runtime(root):
         if (rebuilt.verdict != row["status"] or rebuilt.verdict != evidence["verdict"]
                 or rebuilt.source != "runtime" or rebuilt.reliability not in {"high", "medium"}):
             raise ValueError("Persisted runtime verdict failed independent replay")
+        incremental = action.juice_proof_binding is not None
+        check_id = action.juice_proof_binding.check_id if incremental else None
         dispositions.append({"finding_id": row["finding_id"], "status": rebuilt.verdict,
             "job_finding_ids": job_finding_ids,
-            "route_id": action.verification_binding.route_id, "action_id": action.id,
-            "capability": action.tool, "service": action.service, "endpoint": action.endpoint,
-            "method": action.verification_binding.method,
+            "route_id": check_id if incremental else binding.route_id, "action_id": action.id,
+            "capability": action.tool, "service": action.service,
+            "endpoint": ("/api/Users" if check_id == "role-registration" else "/api/Products/:id")
+                if incremental else action.endpoint,
+            "method": ("POST" if check_id == "role-registration" else "PUT")
+                if incremental else binding.method,
             "evidence": str(path.relative_to(root)), "approval_execution_audit_replayed": True})
     return dispositions
+
+
+def _validated_juice_proof_finding(path, primary_id, review, binding, findings):
+    """A fixed proof applies only to its exact detector finding and sealed source."""
+    from security.juice_incremental_binding import _digest
+
+    finding = findings.get(primary_id)
+    ids = (review or {}).get("job_finding_ids") or [primary_id]
+    profiles = list((path.parent / "juice-incremental").glob("*/profile.json"))
+    if (finding is None or ids != [primary_id] or len(profiles) != 1
+            or finding.rule_id != binding.rule_id or finding.file != binding.source_file
+            or finding.provenance is None or finding.provenance.anchor_status != "source_bound"):
+        raise ValueError("Fixed Juice proof includes an unrelated or unanchored finding")
+    profile = read(profiles[0])
+    route = {"check_id": binding.check_id, "rule_id": binding.rule_id,
+             "source_file": binding.source_file}
+    if (profile.get("source_snapshot_sha256") != binding.source_snapshot_sha256
+            or _digest(profile.get("source_files")) != binding.source_snapshot_sha256
+            or profile.get("source_files", {}).get(finding.file) != finding.provenance.file_sha256
+            or _digest(route) != binding.route_sha256):
+        raise ValueError("Fixed Juice proof source does not match the finding snapshot")
+    return ids
 
 
 def observation(finding, *, report=None, runtime=None):

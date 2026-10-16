@@ -170,7 +170,16 @@ def propose_action(state: AgentState) -> dict:
     check_cancelled()
     profile = state.get("target_profile")
     research = active_research(state)
-    if research is None and profile is not None and profile.verification_routes:
+    resolution = None
+    if (research is None and profile is not None
+            and getattr(profile, "juice_incremental_proofs", None) is not None):
+        from agent.verification import verification_candidates
+        if not verification_candidates(state):
+            return {**stop_update(
+                state, "binding_unavailable",
+                "No unused fixed Juice proof is bound to this finding and source snapshot.",
+            )}
+    elif research is None and profile is not None and profile.verification_routes:
         from security.verification_binding import resolve_binding
         resolution = resolve_binding(profile, state["finding"])
         from agent.verification import verification_candidates
@@ -209,7 +218,9 @@ def propose_action(state: AgentState) -> dict:
             }
 
     plan, diagnostics = _reasoning_call(state, "build_plan", state["analysis"], state["hypothesis"])
-    if research is None and profile is not None and profile.verification_routes:
+    if (research is None and profile is not None
+            and (profile.verification_routes
+                 or getattr(profile, "juice_incremental_proofs", None) is not None)):
         # The provider chooses a public candidate ID, never its provenance.
         # Attach only the exact application-owned candidate selected by scope/argv.
         candidates = verification_candidates(state)
@@ -217,14 +228,15 @@ def propose_action(state: AgentState) -> dict:
             action = step.action
             matches = [c for c in candidates if (
                 action.tool == c["tool"] and action.parameters == c["parameters"]
-                and action.service == c["service"] and action.endpoint == c["endpoint"])]
+                and action.service == c.get("service") and action.endpoint == c.get("endpoint"))]
             if len(matches) != 1:
                 return {**stop_update(state, "binding_unavailable", "Plan did not select an exact trusted candidate."),
                         "binding_resolution": resolution,
                         "plan_history": [*state.get("plan_history", []), plan], **diagnostics}
             step.action = action.model_copy(update={
-                "verification_binding": matches[0]["verification_binding"],
-                "fixture_binding": matches[0].get("fixture_binding")})
+                "verification_binding": matches[0].get("verification_binding"),
+                "fixture_binding": matches[0].get("fixture_binding"),
+                "juice_proof_binding": matches[0].get("juice_proof_binding")})
     plan_validation = DynamicPlanValidator().validate(plan, state)
     proposal = plan.steps[0].action
     if plan_validation.approved and (research.repeated(proposal) if research else action_was_attempted(state, proposal)):
@@ -275,6 +287,10 @@ def validate_action(state: AgentState) -> dict:
     if state["proposed_action"].tool == "verify_access_control":
         policy_options["capability_policy_file"] = (
             Path(__file__).resolve().parents[1] / "policies/b05-access.yaml"
+        )
+    elif state["proposed_action"].tool == "verify_juice_proof":
+        policy_options["capability_policy_file"] = (
+            Path(__file__).resolve().parents[1] / "policies/juice-incremental-proof.yaml"
         )
     research = active_research(state)
     validator = research.validator if research else PolicyValidator.from_yaml(
@@ -355,7 +371,9 @@ def execute_action(state: AgentState) -> dict:
                 workspace_directory=settings.executor_work_dir,
                 target_base_url=settings.target_base_url,
                 target_repository_path=str(state["target_profile"].repository_path),
-                backend_override=("docker" if action.tool in {"sandbox_command", "verify_access_control"} else None),
+                backend_override=("docker" if action.tool in {
+                    "sandbox_command", "verify_access_control", "verify_juice_proof",
+                } else None),
             )
         else:
             # Approval всё ещё привязано к proposal; B05 не переиспользует runtime.
@@ -414,6 +432,10 @@ def collect_evidence(state: AgentState) -> dict:
         active = active_executor()
         if action.research_binding is not None and active is not None:
             record = active.read_research_execution(action, execution)
+        elif action.juice_proof_binding is not None:
+            if active is None:
+                raise ValueError("Active Executor is required to verify the Juice proof audit")
+            record = active.read_juice_proof_execution(action, execution)
         elif action.fixture_binding is not None and active is not None:
             record = active.read_execution(execution.evidence_ref)
         else:

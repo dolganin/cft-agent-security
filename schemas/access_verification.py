@@ -3,10 +3,17 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from schemas.feedback_verification import FeedbackOwnershipTrial
+from schemas.review_verification import ReviewNoSQLTrial, ReviewOwnershipTrial
+from schemas.user_verification import UserFieldsTrial
+
 B05CheckId = Literal[
     "juice-basket-own-read-v1", "juice-address-own-write-v1",
     "juice-basket-own-write-v2", "juice-basket-own-write-v3",
     "juice-address-ownership-transfer-v1", "juice-basket-insert-owner-check-v1",
+    "juice-review-own-write-v1", "juice-review-nosql-selector-v1",
+    "juice-user-private-fields-v1",
+    "juice-feedback-owner-v1",
 ]
 AccessRole = Literal["role-a", "role-b"]
 AccessObjectRef = Literal[
@@ -148,12 +155,13 @@ class AccessCheckTrace(BaseModel):
     source_snapshot_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
     target: Literal["juice-access-fixture"]
     environment: Literal["sandbox"]
-    operation: Literal["own_read", "own_write", "ownership_transfer", "basket_insert"]
-    endpoint_id: Literal["basket-read", "basket-write", "address-write"]
-    method: Literal["GET", "PUT", "POST"]
+    operation: Literal["own_read", "own_write", "ownership_transfer", "basket_insert",
+                       "review_update", "review_nosql_selector", "user_private_fields", "feedback_owner"]
+    endpoint_id: Literal["basket-read", "basket-write", "address-write", "review-write", "user-fields", "feedback-create"]
+    method: Literal["GET", "PUT", "POST", "PATCH"]
     actor_ref: Literal["role-a"] = "role-a"
-    object_ref: Literal["basket-b", "basket-write-candidate-b", "address-b", "write-candidate-b"]
-    mutation_field: Literal["city", "quantity", "BasketId"] | None = None
+    object_ref: Literal["basket-b", "basket-write-candidate-b", "address-b", "write-candidate-b", "review-b", "user-a", "feedback-b"]
+    mutation_field: Literal["city", "quantity", "BasketId", "message"] | None = None
     mutation_value_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     allowed_technical_fields: list[Literal["updatedAt"]] = Field(default_factory=list, max_length=1)
     controls: dict[str, bool]
@@ -161,8 +169,14 @@ class AccessCheckTrace(BaseModel):
     exchanges: list[AccessExchange] = Field(max_length=14)
     ownership_proofs: list[DatabaseOwnershipProof] = Field(default_factory=list, max_length=4)
     basket_snapshots: list[AccessBasketSnapshot] = Field(default_factory=list, max_length=6)
-    exchange_count: int = Field(ge=0, le=14)
-    request_budget: Literal[7, 12, 14]
+    review_trials: list[ReviewOwnershipTrial] = Field(default_factory=list, max_length=2)
+    review_nosql_trials: list[ReviewNoSQLTrial] = Field(default_factory=list, max_length=2)
+    user_fields_trials: list[UserFieldsTrial] = Field(default_factory=list, max_length=2)
+    feedback_trials: list[FeedbackOwnershipTrial] = Field(default_factory=list, max_length=2)
+    review_source_snapshot_digest: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    fixture_source_snapshot_digest: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
+    exchange_count: int = Field(ge=0, le=26)
+    request_budget: Literal[7, 12, 14, 20, 26]
     reset_complete: bool
     cleanup_complete: bool
     integrity_verified: bool
@@ -204,7 +218,7 @@ class AccessCheckEvidence(BaseModel):
     source_snapshot_digest: str = Field(pattern=r"^[a-f0-9]{64}$")
     control_results: dict[str, bool]
     repeated_trials: int = Field(ge=0, le=2)
-    exchange_count: int = Field(ge=0, le=14)
+    exchange_count: int = Field(ge=0, le=26)
     reset_complete: bool
     cleanup_complete: bool
     integrity_verified: bool

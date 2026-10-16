@@ -25,6 +25,10 @@ SOURCES = ("server.ts", "lib/insecurity.ts", "routes/currentUser.ts", "routes/ad
            "models/address.ts", "models/basketitem.ts", "models/relations.ts", "models/index.ts", "lib/utils.ts")
 
 
+class FeedbackWorkerFailure(RuntimeError):
+    """Safe constant failure code from the fixed feedback worker."""
+
+
 def digest(value):
     return sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
@@ -56,6 +60,10 @@ class AccessFixtureLab:
             "juice-basket-own-read-v1", "juice-address-own-write-v1",
             "juice-basket-own-write-v2", "juice-basket-own-write-v3",
             "juice-address-ownership-transfer-v1", "juice-basket-insert-owner-check-v1",
+            "juice-review-own-write-v1",
+            "juice-review-nosql-selector-v1",
+            "juice-user-private-fields-v1",
+            "juice-feedback-owner-v1",
         }:
             raise ValueError("B05 active check is not registered")
         self.active_check_id = active_check_id
@@ -75,6 +83,13 @@ class AccessFixtureLab:
                 expected_endpoints.extend(["/rest/basket/:id", "/api/BasketItems/:id"])
             if self.profile.access_fixture.b05_basket_insert_candidate:
                 expected_endpoints.extend(["/api/BasketItems", "/rest/basket/:id"])
+            if (self.profile.access_fixture.b05_review_write_candidate
+                    or self.profile.access_fixture.b05_review_nosql_candidate):
+                expected_endpoints.append("/rest/products/reviews")
+            if self.profile.access_fixture.b05_user_fields_candidate:
+                expected_endpoints.append("/rest/user/whoami")
+            if self.profile.access_fixture.b05_feedback_owner_candidate:
+                expected_endpoints.extend(["/rest/captcha", "/api/Feedbacks", "/api/Feedbacks/:id"])
         if (self.profile.id != "juice-access-fixture" or self.profile.access_fixture is None
                 or self.profile.environment != "sandbox"
                 or self.profile.runtime.type != "operator_access_fixture"
@@ -89,6 +104,7 @@ class AccessFixtureLab:
         self.context = None
         self.resources = None
         self.source_files = {}
+        self.binding_snapshot_digest = None
         self.records = []
         self._lock = RLock()
         self.output.mkdir(parents=True)
@@ -119,7 +135,14 @@ class AccessFixtureLab:
 
     def _snapshot(self):
         result = {}
-        for name in SOURCES:
+        names = SOURCES
+        if (self.profile.access_fixture.b05_review_write_candidate
+                or self.profile.access_fixture.b05_review_nosql_candidate):
+            names = (*names, "routes/updateProductReviews.ts", "routes/createProductReviews.ts",
+                     "routes/showProductReviews.ts")
+        if self.profile.access_fixture.b05_feedback_owner_candidate:
+            names = (*names, "routes/verify.ts", "models/feedback.ts")
+        for name in names:
             path = self.repository / name
             resolved = path.resolve(strict=True)
             if (not resolved.is_relative_to(self.repository)
@@ -151,13 +174,20 @@ class AccessFixtureLab:
         try:
             validate_target(self.repository, SimpleNamespace(target_commit=COMMIT))
             self.source_files = self._snapshot()
+            if self.active_check_id in {"juice-review-own-write-v1", "juice-review-nosql-selector-v1",
+                                        "juice-user-private-fields-v1", "juice-feedback-owner-v1"}:
+                from security.verification_binding import source_snapshot
+
+                _, binding_sources = source_snapshot(self.profile)
+                self.binding_snapshot_digest = digest(binding_sources)
             worker_image = self.profile.access_fixture.worker_image
             for image in [TARGET_IMAGE, worker_image]:
                 self._docker(["image", "inspect", image])
             config = {"profile": self.profile.access_fixture.model_dump(mode="json"),
                       "active_check_id": self.active_check_id,
                       "fixture_id": self.fixture_id, "generation": self.generation,
-                      "source_snapshot": digest(self.source_files)}
+                      "source_snapshot": digest(self.source_files),
+                      "binding_snapshot_digest": self.binding_snapshot_digest}
             (directory / "profile.json").write_text(json.dumps(config), encoding="utf-8")
             self._persist({"phase": "prepare", "generation": self.generation,
                            "resources": self.resources, "source_files": self.source_files,
@@ -195,6 +225,9 @@ class AccessFixtureLab:
                           "--env", "CFT_B04_CONTAINER=1", "--env", "PYTHONDONTWRITEBYTECODE=1",
                           "--mount", f"type=bind,src={directory},dst=/input,readonly",
                           "--mount", f"type=bind,src={ROOT / 'executor/access_fixture_worker.py'},dst=/app/fixture.py,readonly",
+                          "--mount", f"type=bind,src={ROOT / 'executor/review_fixture_worker.py'},dst=/app/review.py,readonly",
+                          "--mount", f"type=bind,src={ROOT / 'executor/user_fixture_worker.py'},dst=/app/user.py,readonly",
+                          "--mount", f"type=bind,src={ROOT / 'executor/feedback_fixture_worker.py'},dst=/app/feedback.py,readonly",
                           "--entrypoint", "python", worker_image, "-c", "import time; time.sleep(1800)"])
             self.context = self._operation("prepare")
             if self.context.status != "ready":
@@ -274,6 +307,150 @@ class AccessFixtureLab:
             raise RuntimeError("B05 candidate provisioning failed")
         self.context = result
         return result
+
+    @serialized
+    def review_step(self, expected_binding_snapshot_digest):
+        """Closed scalar-only review trial; credentials never leave Docker tmpfs."""
+        from schemas.review_verification import ReviewOwnershipTrial
+
+        if (self.active_check_id not in {"juice-review-own-write-v1", "juice-review-nosql-selector-v1"}
+                or not (self.profile.access_fixture.b05_review_write_candidate
+                        if self.active_check_id == "juice-review-own-write-v1"
+                        else self.profile.access_fixture.b05_review_nosql_candidate)
+                or self.binding_snapshot_digest != expected_binding_snapshot_digest
+                or self.resources is None or self.context is None or self.context.status != "ready"
+                or self._snapshot() != self.source_files):
+            raise ValueError("Review protocol needs its registered ready fixture")
+        result = self._docker(["exec", self.resources["worker"], "python", "/app/review.py"],
+                              check=False, timeout=30)
+        try:
+            payload = json.loads(result.stdout)
+            if (not isinstance(payload, dict) or payload.get("status") not in {"completed", "inconclusive"}
+                    or set(payload) != ({"status", "trial"} if payload.get("status") == "completed"
+                                        else {"status", "reason", "trial"})
+                    or (payload.get("status") == "inconclusive"
+                        and payload.get("reason") not in {
+                            "review_ownership_controls_failed", "review_nosql_controls_failed"})
+                    or result.returncode != (0 if payload.get("status") == "completed" else 1)):
+                raise ValueError("Unsupported review worker result")
+            if self.active_check_id == "juice-review-own-write-v1":
+                trial = ReviewOwnershipTrial.model_validate(payload["trial"])
+            else:
+                from schemas.review_verification import ReviewNoSQLTrial
+                trial = ReviewNoSQLTrial.model_validate(payload["trial"])
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError):
+            self._persist({"phase": "review-trial-failed", "generation": self.generation,
+                           "worker_returncode": result.returncode})
+            raise ValueError("Review worker returned no valid trial") from None
+        roles = {role.id: role.identity_sha256 for role in self.context.roles}
+        if (result.returncode or trial.generation_sha256 != digest(self.generation)
+                or trial.fixture_snapshot_digest != digest(self.source_files)
+                or trial.binding_snapshot_digest != expected_binding_snapshot_digest
+                or trial.profile_sha256 != digest(self.profile.access_fixture.model_dump(mode="json"))
+                or trial.identity_a_sha256 != roles["role-a"]
+                or trial.identity_b_sha256 != roles["role-b"]
+                or self._snapshot() != self.source_files):
+            raise ValueError("Review trial fixture/source/identity mismatch")
+        self._persist({"phase": "review-trial", "generation": self.generation,
+                       "worker_status": payload["status"],
+                       "reason": payload.get("reason"),
+                       "http_exchanges": trial.http_exchanges, "trial": trial.model_dump(mode="json")})
+        return trial
+
+    @serialized
+    def user_fields_step(self, expected_binding_snapshot_digest):
+        """Run the exact private-field probe inside the disposable worker container."""
+        from schemas.user_verification import UserFieldsTrial
+
+        if (self.active_check_id != "juice-user-private-fields-v1"
+                or not self.profile.access_fixture.b05_user_fields_candidate
+                or self.binding_snapshot_digest != expected_binding_snapshot_digest
+                or self.resources is None or self.context is None or self.context.status != "ready"
+                or self._snapshot() != self.source_files):
+            raise ValueError("User-field protocol needs its registered ready fixture")
+        result = self._docker(["exec", self.resources["worker"], "python", "/app/user.py"],
+                              check=False, timeout=30)
+        try:
+            payload = json.loads(result.stdout)
+            if (not isinstance(payload, dict) or payload.get("status") not in {"completed", "inconclusive"}
+                    or set(payload) != {"status", "trial"}
+                    or result.returncode != (0 if payload.get("status") == "completed" else 1)):
+                raise ValueError("Unsupported user-field worker result")
+            trial = UserFieldsTrial.model_validate(payload["trial"])
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError):
+            self._persist({"phase": "user-fields-trial-failed", "generation": self.generation,
+                           "worker_returncode": result.returncode})
+            raise ValueError("User-field worker returned no valid trial") from None
+        roles = {role.id: role for role in self.context.roles}
+        if (trial.generation_sha256 != digest(self.generation)
+                or trial.source_snapshot_digest != digest(self.source_files)
+                or trial.fixture_snapshot_digest != digest(self.source_files)
+                or trial.binding_snapshot_digest != expected_binding_snapshot_digest
+                or trial.profile_sha256 != digest(self.profile.access_fixture.model_dump(mode="json"))
+                or trial.identity_a_sha256 != roles["role-a"].identity_sha256
+                or trial.identity_b_sha256 != roles["role-b"].identity_sha256
+                or trial.session_a_sha256 == trial.session_b_sha256
+                or self._snapshot() != self.source_files):
+            raise ValueError("User-field trial fixture/source/identity binding mismatch")
+        self._persist({"phase": "user-fields-trial", "generation": self.generation,
+                       "http_exchanges": trial.http_exchanges,
+                       "trial": trial.model_dump(mode="json")})
+        return trial
+
+    @serialized
+    def feedback_step(self, expected_binding_snapshot_digest):
+        """Run a fixed feedback-owner create/readback trial in the isolated worker."""
+        from schemas.feedback_verification import FeedbackOwnershipTrial
+
+        if (self.active_check_id != "juice-feedback-owner-v1"
+                or not self.profile.access_fixture.b05_feedback_owner_candidate
+                or self.binding_snapshot_digest != expected_binding_snapshot_digest
+                or self.resources is None or self.context is None or self.context.status != "ready"
+                or self._snapshot() != self.source_files):
+            raise ValueError("Feedback protocol needs its registered ready fixture")
+        result = self._docker(["exec", self.resources["worker"], "python", "/app/feedback.py"],
+                              check=False, timeout=30)
+        try:
+            payload = json.loads(result.stdout)
+            if isinstance(payload, dict) and payload.get("status") == "failed":
+                reason = payload.get("reason")
+                allowed_reasons = {
+                    "wrong_active_check", "stale_fixture_generation", "fixture_roles_missing",
+                    "fixture_role_invalid", "fixture_session_missing", "fixture_session_binding_missing",
+                    "captcha_expression_invalid", "captcha_id_invalid", "captcha_unavailable", "feedback_response_invalid",
+                    "feedback_readback_unavailable", "owner_feedback_control_failed",
+                    "owner_feedback_readback_mismatch", "feedback_request_schedule_invalid",
+                    "docker_only", "unsupported_cli", "fixture_technical_error",
+                }
+                safe_reason = reason if reason in allowed_reasons else "unrecognized_worker_failure"
+                self._persist({"phase": "feedback-trial-failed", "generation": self.generation,
+                               "worker_returncode": result.returncode, "reason": safe_reason})
+                raise FeedbackWorkerFailure(safe_reason)
+            if (not isinstance(payload, dict) or payload.get("status") != "completed"
+                    or set(payload) != {"status", "trial"} or result.returncode != 0):
+                raise ValueError("Unsupported feedback worker result")
+            trial = FeedbackOwnershipTrial.model_validate(payload["trial"])
+        except FeedbackWorkerFailure:
+            raise
+        except (ValueError, TypeError, KeyError, json.JSONDecodeError):
+            self._persist({"phase": "feedback-trial-failed", "generation": self.generation,
+                           "worker_returncode": result.returncode})
+            raise ValueError("Feedback worker returned no valid trial") from None
+        roles = {role.id: role for role in self.context.roles}
+        if (trial.generation_sha256 != digest(self.generation)
+                or trial.source_snapshot_digest != digest(self.source_files)
+                or trial.fixture_snapshot_digest != digest(self.source_files)
+                or trial.binding_snapshot_digest != expected_binding_snapshot_digest
+                or trial.profile_sha256 != digest(self.profile.access_fixture.model_dump(mode="json"))
+                or trial.identity_a_sha256 != roles["role-a"].identity_sha256
+                or trial.identity_b_sha256 != roles["role-b"].identity_sha256
+                or trial.session_a_sha256 == trial.session_b_sha256
+                or self._snapshot() != self.source_files):
+            raise ValueError("Feedback trial fixture/source/identity binding mismatch")
+        self._persist({"phase": "feedback-trial", "generation": self.generation,
+                       "http_exchanges": trial.http_exchanges,
+                       "trial": trial.model_dump(mode="json")})
+        return trial
 
     @serialized
     def b05_step(self, operation):

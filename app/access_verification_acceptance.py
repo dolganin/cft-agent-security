@@ -53,8 +53,8 @@ def _action(profile, check_id: str) -> tuple[ActionProposal, BindingResolution]:
     finding = Finding(
         id="operator-" + registration.route_id,
         source="b05-operator-acceptance",
-        rule_id="idor",
-        title="Operator-mapped access-control check",
+        rule_id=registration.family,
+        title="Operator-mapped access verification check",
         description="B05 acceptance binds a fixed check to one registered source route.",
         file=source_selector.file,
         line_start=matches[0],
@@ -72,8 +72,8 @@ def _action(profile, check_id: str) -> tuple[ActionProposal, BindingResolution]:
         target=profile.id,
         environment=profile.environment,
         parameters={"check_id": registration.check_id},
-        purpose="Execute one closed operator-registered access-control verification.",
-        expected_evidence="Identity-bound controls, repeated access result, reset and cleanup evidence.",
+        purpose="Execute one closed operator-registered verification.",
+        expected_evidence="Identity-bound controls, repeated result, reset and cleanup evidence.",
         service="juice",
         endpoint=registration.endpoint,
         verification_binding=binding,
@@ -194,7 +194,9 @@ def run(repository: Path, output: Path, check_ids: list[str] | None = None) -> d
         "ground_truth_read": False,
         "limitations": [
             "Synthetic B04 operator fixtures are used; no benchmark labels or holdout inputs are loaded.",
-            "The R01 OWN-READ schedule has 7 HTTP exchanges; OWN-WRITE has an explicit 12-exchange maximum.",
+            "The R01 OWN-READ schedule has 7 HTTP exchanges; legacy address OWN-WRITE is unsupported.",
+            "Each review protocol uses 26 exchanges across two isolated fixture generations; the NoSQL probe touches only its two synthetic IDs.",
+            "The user-fields and feedback-attribution protocols each use 20 exchanges across two isolated generations; public feedback creation is intentionally supported, so the feedback claim is only about UserId attribution.",
         ],
     }
     try:

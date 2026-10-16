@@ -53,6 +53,21 @@ def register_source_artifacts(profile, findings, repository):
 def verification_candidates(state):
     profile = state["target_profile"]
     finding = state["finding"]
+    if profile.juice_incremental_proofs is not None:
+        from security.juice_incremental_binding import bind_finding
+        binding = bind_finding(profile, finding)
+        if binding is None or any(
+            record.action.juice_proof_binding == binding
+            for record in state.get("action_history", [])
+        ):
+            return []
+        return [{
+            "candidate_id": "juice-proof:" + binding.check_id,
+            "tool": "verify_juice_proof",
+            "parameters": {"check_id": binding.check_id},
+            "juice_proof_binding": binding,
+            "purpose": "Run the fixed, source-bound Juice Shop proof in a fresh isolated Docker generation.",
+        }]
     try:
         file = normalize_source_path(finding.file, profile.repository_path)
     except ValueError:

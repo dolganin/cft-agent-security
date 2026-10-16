@@ -1,0 +1,24 @@
+id: juice-incremental-proof
+name: Juice Shop v20.2.0 fixed mini-proof target
+repository_path: artifacts/benchmark-target/juice-shop
+environment: sandbox
+runtime:
+  type: docker
+  allowed_local_addresses: []
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false
+juice_incremental_proofs:
+  schema_version: juice.incremental.proof-profile.v1
+  target_commit: 5658473cf8814459bf89000ce373b20ed0b4eb37
+  target_image: bkimminich/juice-shop@sha256:8739101ade29358abb5469ee66ae78e582c97ed0a5543a4ad102e5fa5193526b
+  worker_image: python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4
+  routes:
+    - check_id: role-registration
+      rule_id: juice.authorization.client-role-setter
+      source_file: models/user.ts
+    - check_id: anonymous-product-put
+      rule_id: juice.authorization.generated-product-put
+      source_file: server.ts

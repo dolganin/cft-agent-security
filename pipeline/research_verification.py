@@ -60,7 +60,13 @@ def read_protocol_execution(store, audit, action, execution, session_id):
             or (action.verification_binding is not None and
                 record.get("verification_binding") != action.verification_binding.model_dump(mode="json"))
             or (action.fixture_binding is not None and
-                record.get("fixture_binding") != action.fixture_binding.model_dump(mode="json"))):
+                record.get("fixture_binding") != action.fixture_binding.model_dump(mode="json"))
+            or (action.juice_proof_binding is not None and (
+                record.get("juice_proof_binding") != action.juice_proof_binding.model_dump(mode="json")
+                or matching[0].get("network_mode") != "internal"
+                or record.get("session_id") != session_id
+                or record.get("status") != execution.status
+                or record.get("exit_code") != execution.exit_code))):
         raise ValueError("Canonical protocol audit does not match persisted execution")
     return record
 
@@ -80,11 +86,17 @@ def verification_handoff(findings, profiles, repository):
         routed = verification_finding(finding)
         profile, reason = select_profile(routed, profiles)
         bound = resolve_binding(profile, routed) if profile else None
+        binding = bound.binding if bound else None
+        if profile and profile.juice_incremental_proofs is not None:
+            from security.juice_incremental_binding import bind_finding
+
+            binding = bind_finding(profile, routed)
+            reason = "Fixed Juice proof bound to the operator rule and source snapshot"
         rows.append({"finding_id": finding.id, "status": "ready_for_canonical_verification"
-                     if bound and bound.binding else "missing_binding_or_capability",
+                     if binding else "missing_binding_or_capability",
                      "profile_id": profile.id if profile else None,
-                     "reason": bound.reason if bound else reason,
-                     "binding": bound.binding.model_dump(mode="json") if bound and bound.binding else None,
+                     "reason": bound.reason if bound and bound.binding else reason,
+                     "binding": binding.model_dump(mode="json") if binding else None,
                      "rule_alias": {"original": finding.rule_id, "verification_family": routed.rule_id,
                                     "registry": "research-verification-aliases.v1"},
                      "runtime_provisioned": False, "executed": False, "security_verdict": None})
@@ -108,6 +120,12 @@ def verify_bound_candidate(*, finding, profiles, scope, repository, output, max_
         return pending
     profile = next(p for p in profiles if p.id == plan["profile_id"])
     routed = verification_finding(finding)
+    if profile.juice_incremental_proofs is not None:
+        from pipeline.juice_proof_verification import verify_incremental_candidate
+
+        return verify_incremental_candidate(finding=routed, profile=profile, scope=scope,
+            output=output, pending=pending, max_http_requests=max_http_requests,
+            remaining_wall_seconds=remaining_wall_seconds)
     binding = resolve_binding(profile, routed).binding
     cost = REQUEST_RESERVATIONS.get(binding.tool)
     if cost is None:

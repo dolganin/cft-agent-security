@@ -60,7 +60,8 @@ class FixtureClient:
         self.limit = config["profile"]["prepare_http_budget"]
         self.opener = build_opener(ProxyHandler({}), NoRedirect())
 
-    def request(self, method, path, data=None, role=None, *, json_response=True, raw_body=None):
+    def request(self, method, path, data=None, role=None, *, json_response=True, raw_body=None,
+                allow_error_response=False):
         if self.operation_exchanges >= self.limit or time.monotonic() >= self.deadline:
             raise FixtureFailure("fixture_budget_exhausted")
         if data is not None and raw_body is not None:
@@ -79,14 +80,18 @@ class FixtureClient:
                 raise FixtureFailure("request_body_limit")
             headers["Content-Type"] = "application/json"
         request = Request(BASE + path, data=encoded, headers=headers, method=method)
+        is_http_error = False
         try:
             try:
                 response = self.opener.open(request, timeout=min(
                     self.config["profile"]["request_timeout_seconds"], max(0.01, self.deadline - time.monotonic())))
             except HTTPError as error:
                 response = error
+                is_http_error = True
             with response:
                 status = response.status
+                if allow_error_response and is_http_error and status >= 400:
+                    return status, None
                 raw = response.read(65_537)
                 if len(raw) > 65_536:
                     raise FixtureFailure("response_truncated")
@@ -232,6 +237,8 @@ class FixtureClient:
                 raise FixtureFailure("user_login_failed")
             self.roles[role] = {
                 "user_id": user_id, "email": email, "token": auth["token"],
+                **({"password_value_sha256": digest(hashlib.md5(password.encode("utf-8")).hexdigest())}
+                   if self.config.get("active_check_id") == "juice-user-private-fields-v1" else {}),
                 "session_binding_sha256": hmac.new(
                     self.opaque_key, auth["token"].encode("utf-8"), hashlib.sha256,
                 ).hexdigest(),

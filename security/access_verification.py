@@ -23,9 +23,38 @@ class AccessCheckRegistration:
     mutation_field: str | None
     mutation_value: str | int | None
     request_budget: int
+    family: str = "access-control"
+    finding_source_files: tuple[str, ...] = ()
 
 
 ACCESS_CHECKS: dict[str, AccessCheckRegistration] = {
+    "juice-review-own-write-v1": AccessCheckRegistration(
+        check_id="juice-review-own-write-v1", route_id="juice-review-own-write",
+        check="own_write", method="PATCH", endpoint="/rest/products/reviews",
+        endpoint_id="review-write", operation="review_update", object_ref="review-b",
+        mutation_field="message", mutation_value=None, request_budget=26,
+        finding_source_files=("routes/updateProductReviews.ts",),
+    ),
+    "juice-review-nosql-selector-v1": AccessCheckRegistration(
+        check_id="juice-review-nosql-selector-v1", route_id="juice-review-nosql-selector",
+        check="nosql_selector", method="PATCH", endpoint="/rest/products/reviews",
+        endpoint_id="review-write", operation="review_nosql_selector", object_ref="review-b",
+        mutation_field="message", mutation_value=None, request_budget=26, family="nosql-injection",
+        finding_source_files=("routes/updateProductReviews.ts",),
+    ),
+    "juice-user-private-fields-v1": AccessCheckRegistration(
+        check_id="juice-user-private-fields-v1", route_id="juice-user-private-fields",
+        check="private_fields", method="GET", endpoint="/rest/user/whoami",
+        endpoint_id="user-fields", operation="user_private_fields", object_ref="user-a",
+        mutation_field=None, mutation_value=None, request_budget=20,
+        family="sensitive-data-exposure",
+    ),
+    "juice-feedback-owner-v1": AccessCheckRegistration(
+        check_id="juice-feedback-owner-v1", route_id="juice-feedback-owner",
+        check="own_write", method="POST", endpoint="/api/Feedbacks",
+        endpoint_id="feedback-create", operation="feedback_owner", object_ref="feedback-b",
+        mutation_field=None, mutation_value=None, request_budget=20,
+    ),
     "juice-basket-own-read-v1": AccessCheckRegistration(
         check_id="juice-basket-own-read-v1", route_id="juice-basket-own-read",
         check="own_read", method="GET", endpoint="/rest/basket/:id",
@@ -97,11 +126,22 @@ def validate_access_action(profile: TargetProfile, action: ActionProposal) -> Ac
             or action.endpoint != registration.endpoint or binding is None
             or binding.route_id != registration.route_id or binding.tool != action.tool
             or binding.check != registration.check or binding.method != registration.method
+            or binding.family != registration.family
             or binding.endpoint != registration.endpoint or binding.service != "juice"
             or binding.target != profile.id or binding.mode is not None):
         raise ValueError("B05 action differs from its registered target, operation or endpoint")
+    if registration.finding_source_files and binding.source_file not in registration.finding_source_files:
+        raise ValueError("B05 protocol does not verify the finding's source operation; fixture helpers are context only")
     if registration.check_id == "juice-address-own-write-v1" and not fixture.b05_write_candidate:
         raise ValueError("B05 write candidate is not enabled in the operator fixture")
+    if registration.check_id == "juice-review-own-write-v1" and not fixture.b05_review_write_candidate:
+        raise ValueError("B05 review candidate is not enabled in the operator fixture")
+    if registration.check_id == "juice-review-nosql-selector-v1" and not fixture.b05_review_nosql_candidate:
+        raise ValueError("B05 NoSQL review candidate is not enabled in the operator fixture")
+    if registration.check_id == "juice-user-private-fields-v1" and not fixture.b05_user_fields_candidate:
+        raise ValueError("B05 user-fields candidate is not enabled in the operator fixture")
+    if registration.check_id == "juice-feedback-owner-v1" and not fixture.b05_feedback_owner_candidate:
+        raise ValueError("B05 feedback-owner candidate is not enabled in the operator fixture")
     if registration.check_id == "juice-basket-own-write-v2" and not fixture.b05_basket_write_candidate:
         raise ValueError("B05 BasketItem v2 candidate is not enabled in the operator fixture")
     if registration.check_id == "juice-basket-own-write-v3" and not fixture.b05_basket_write_v3_candidate:
@@ -120,7 +160,7 @@ def validate_access_action(profile: TargetProfile, action: ActionProposal) -> Ac
     if resolution.status != "bound" or resolution.binding != binding:
         raise ValueError("B01 binding is stale, missing or ambiguous")
     routes = [route for route in profile.verification_routes if route.id == binding.route_id]
-    if len(routes) != 1 or routes[0].check != registration.check:
+    if len(routes) != 1 or routes[0].check != registration.check or routes[0].family != registration.family:
         raise ValueError("B05 route registry does not match the selected check")
     if registration.endpoint not in profile.services["juice"].runtime_endpoints:
         raise ValueError("B05 endpoint is outside the registered target scope")

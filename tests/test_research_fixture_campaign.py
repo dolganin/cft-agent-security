@@ -13,6 +13,10 @@ import pytest
      "verify_access_control", "juice-basket-own-read"),
     ("b05.basket-insert.v1", "targets/juice-b05-access-fixture.yaml", "access-control",
      "verify_access_control", "juice-basket-insert-owner-check"),
+    ("b05.review-owner.v1", "targets/juice-b05-access-fixture.yaml", "access-control",
+     "verify_access_control", "juice-review-own-write"),
+    ("b05.review-nosql.v1", "targets/juice-b05-access-fixture.yaml", "nosql-injection",
+     "verify_access_control", "juice-review-nosql-selector"),
     ("b06.redirect.v1", "targets/juice-b06-verification.yaml", "open-redirect",
      "verify_redirect_destination", "b06-redirect"),
     ("b06.password-reauth.v1", "targets/juice-b06-verification.yaml", "authentication",
@@ -22,7 +26,9 @@ import pytest
                     reason="Set an immutable Juice Shop checkout to run actual private fixtures")
 def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profile_file, family, tool, route_id):
     from app import research_campaign as module
+    from discovery.service import ProjectDiscovery
     from executor.access_fixture import WORKER_IMAGE
+    from pipeline.juice_source_detectors import detect_juice_source_candidates
     from sast.identity import normalize_finding
     from schemas.finding import Finding
     from schemas.research import ResearchFile, ResearchScope
@@ -35,15 +41,27 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
     checkout = Path(os.environ["CFT_RESEARCH_FIXTURE_ACCEPTANCE_CHECKOUT"]).resolve(strict=True)
     profile = TargetProfile.from_yaml(profile_file, repository_path_override=checkout)
     route = next(item for item in profile.verification_routes if item.id == route_id)
-    selector = next(item for item in route.sources if item.file != route.registration.file)
-    source = checkout / selector.file
-    lines = source.read_text(encoding="utf-8").splitlines()
-    matches = [n for n, line in enumerate(lines, 1) if selector.anchor in line]
-    assert len(matches) == 1
-    finding = normalize_finding(Finding(id="fixture-campaign-" + protocol, source="operator_acceptance",
-        rule_id=family, title="Fixed source-bound fixture check",
-        description="Integration acceptance only; not a discovery result", file=selector.file,
-        line_start=matches[0], line_end=matches[0]), repository_root=checkout)
+    source_findings = []
+    if protocol in {"b05.review-owner.v1", "b05.review-nosql.v1"}:
+        from tools.repository_source import RepositorySource
+
+        source = RepositorySource(ProjectDiscovery().discover(checkout), research_mode=True)
+        expected_rule = ("juice.access-control.review-selector-without-owner"
+                         if protocol == "b05.review-owner.v1"
+                         else "juice.nosql-injection.request-selector")
+        source_findings = [finding for finding in detect_juice_source_candidates(profile, source)
+                           if finding.rule_id == expected_rule]
+        finding, = source_findings
+    else:
+        selector = next(item for item in route.sources if item.file != route.registration.file)
+        source = checkout / selector.file
+        lines = source.read_text(encoding="utf-8").splitlines()
+        matches = [n for n, line in enumerate(lines, 1) if selector.anchor in line]
+        assert len(matches) == 1
+        finding = normalize_finding(Finding(id="fixture-campaign-" + protocol, source="operator_acceptance",
+            rule_id=family, title="Fixed source-bound fixture check",
+            description="Integration acceptance only; not a discovery result", file=selector.file,
+            line_start=matches[0], line_end=matches[0]), repository_root=checkout)
     binding = resolve_binding(profile, finding).binding
     assert binding is not None and binding.route_id == route.id
     scoped_sources = {name: ResearchFile(original_sha256=digest, visible_sha256=digest)
@@ -73,6 +91,7 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
               tmp_path / protocol.replace(".", "-"))
     grant = ResearchFixtureGrant(protocol=protocol, wall_seconds=300,
         max_http_requests={"b05.own-read.v1": 238, "b05.basket-insert.v1": 238,
+                           "b05.review-owner.v1": 250, "b05.review-nosql.v1": 250,
                            "b06.redirect.v1": 38,
                            "b06.password-reauth.v1": 194}[protocol])
     from pipeline.research_verification import verify_bound_candidate
@@ -87,15 +106,17 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
     assert rejected_budget["status"] == "review_pending"
     assert not (tmp_path / "insufficient-private-budget").exists()
     result = module.campaign(profile=research_profile, configuration={"worker_image": WORKER_IMAGE},
-        client=None, output=output, sast=[finding], limits=CampaignLimits(max_questions=1,
+        client=None, output=output, sast=[finding] if not source_findings else [], limits=CampaignLimits(max_questions=1,
             max_model_calls=1, max_actions=2, wall_seconds=600, max_http_requests=256),
         verification_profiles=(profile,), verification_worker_image=WORKER_IMAGE,
-        fixture_grants=(grant,))
+        fixture_grants=(grant,), source_detector_findings=source_findings,
+        verification_only=bool(source_findings))
     assert result["canonical_runtime_review_counts"]["confirmed"] + \
            result["canonical_runtime_review_counts"]["rejected"] == 1
     assert result["canonical_verification_http_requests_observed"] <= \
            result["canonical_verification_http_requests_reserved"]
-    assert result["http_request_budget_used"] == result["canonical_verification_http_requests_reserved"]
+    assert result["http_request_budget_used"] == result["canonical_verification_http_budget_charged"]
+    assert result["canonical_verification_http_budget_charged"] <= result["canonical_verification_http_requests_reserved"]
     assert result["cleanup_verified"] and result["source_unchanged"]
     reports = json.loads((output / "reports.json").read_text())
     review = reports[0]["canonical_runtime_review"]
@@ -124,7 +145,7 @@ def test_private_fixture_through_campaign(tmp_path, monkeypatch, protocol, profi
 @pytest.mark.skipif(not os.getenv("CFT_RESEARCH_FIXTURE_ACCEPTANCE_CHECKOUT"),
                     reason="Opt-in pinned Juice Shop Docker fixture acceptance")
 def test_all_registered_fixture_lifecycles_fit_one_campaign(tmp_path):
-    """Four real independent protocols share a campaign, never a model session."""
+    """All real independent protocols share a campaign, never a model session."""
     from app.research_campaign import campaign
     from app.research_diagnostic_run import FIXTURE_GRANTS
     from executor.access_fixture import WORKER_IMAGE
@@ -137,6 +158,8 @@ def test_all_registered_fixture_lifecycles_fit_one_campaign(tmp_path):
     access = TargetProfile.from_yaml("targets/juice-b05-access-fixture.yaml", repository_path_override=checkout)
     auth = TargetProfile.from_yaml("targets/juice-b06-verification.yaml", repository_path_override=checkout)
     selections = ((access, "juice-basket-own-read"), (access, "juice-basket-insert-owner-check"),
+                  (access, "juice-review-own-write"),
+                  (access, "juice-review-nosql-selector"),
                   (auth, "b06-redirect"), (auth, "b06-reauthentication"))
     findings = []
     for profile, route_id in selections:
@@ -155,14 +178,17 @@ def test_all_registered_fixture_lifecycles_fit_one_campaign(tmp_path):
         configuration={"worker_image": WORKER_IMAGE}, client=None, output=output,
         sast=findings, verification_profiles=(access, auth), verification_worker_image=WORKER_IMAGE,
         fixture_grants=FIXTURE_GRANTS,
-        limits=CampaignLimits(max_questions=1, max_model_calls=1, max_actions=4,
+        limits=CampaignLimits(max_questions=1, max_model_calls=1, max_actions=6,
                               wall_seconds=1200, max_http_requests=1024))
     reviews = json.loads((output / "canonical-runtime-reviews.json").read_text())
-    assert len(reviews) == 4
+    assert len(reviews) == 6
     assert all(row["status"] == "confirmed" for row in reviews), reviews
     assert all(row["worker_cleanup_verified"] for row in reviews)
-    assert result["canonical_verification_http_requests_reserved"] == 708
-    assert result["canonical_verification_http_requests_observed"] <= 708
+    assert result["canonical_verification_http_requests_reserved"] == 1208
+    assert result["canonical_verification_http_requests_observed"] <= 1024
+    assert result["canonical_verification_http_budget_charged"] == result["canonical_verification_http_requests_observed"]
+    assert result["http_request_budget_used"] <= 1024
+    assert all(row["request_accounting_complete"] for row in reviews)
     assert result["model_calls"] == 0
     assert result["source_unchanged"] and result["cleanup_verified"]
     seal = {p.relative_to(output).as_posix(): sha256(p.read_bytes()).hexdigest()

@@ -36,6 +36,18 @@ TRANSFER_SCHEDULE = [
 
 
 def evaluate_access_check(trace: AccessCheckTrace, action: ActionProposal | None = None) -> AccessCheckEvidence:
+    if trace.check_id == "juice-review-own-write-v1":
+        from evidence.review_ownership import evaluate_review_ownership
+        return evaluate_review_ownership(trace, action)
+    if trace.check_id == "juice-review-nosql-selector-v1":
+        from evidence.review_nosql import evaluate_review_nosql
+        return evaluate_review_nosql(trace, action)
+    if trace.check_id == "juice-user-private-fields-v1":
+        from evidence.user_fields import evaluate_user_fields
+        return evaluate_user_fields(trace, action)
+    if trace.check_id == "juice-feedback-owner-v1":
+        from evidence.feedback_owner import evaluate_feedback_owner
+        return evaluate_feedback_owner(trace, action)
     registration = registered_check({"check_id": trace.check_id})
     controls = dict(trace.controls)
     by_id = {item.exchange_id: item for item in trace.exchanges}

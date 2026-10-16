@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, model_serializer
 
 from schemas.b06_verification import FixtureExecutionBinding
+from schemas.juice_incremental_proof import JuiceProofBinding
 from schemas.research import ResearchBinding
 from schemas.verification_binding import VerificationBinding
 
@@ -20,6 +21,7 @@ class ActionProposal(BaseModel):
     verification_binding: VerificationBinding | None = None
     fixture_binding: FixtureExecutionBinding | None = None
     research_binding: ResearchBinding | None = None
+    juice_proof_binding: JuiceProofBinding | None = None
 
     @model_serializer(mode="wrap")
     def serialize(self, handler):
@@ -27,4 +29,6 @@ class ActionProposal(BaseModel):
         # Preserve the exact historical ActionProposal wire shape/approval digest.
         if self.research_binding is None:
             payload.pop("research_binding", None)
+        if self.juice_proof_binding is None:
+            payload.pop("juice_proof_binding", None)
         return payload

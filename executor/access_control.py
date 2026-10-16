@@ -117,6 +117,20 @@ class AccessVerificationRuntime:
 
     def execute(self, action):
         registration = validate_access_action(self.profile, action)
+        if registration.check_id == "juice-user-private-fields-v1":
+            from executor.user_verification import execute_user_fields_check
+            return execute_user_fields_check(self, action)
+        if registration.check_id == "juice-feedback-owner-v1":
+            from executor.feedback_verification import execute_feedback_check
+            return execute_feedback_check(self, action)
+        if registration.check_id in {"juice-review-own-write-v1", "juice-review-nosql-selector-v1"}:
+            from executor.review_verification import (
+                execute_review_check,
+                execute_review_nosql_check,
+            )
+            check = (execute_review_check if registration.check_id == "juice-review-own-write-v1"
+                     else execute_review_nosql_check)
+            return check(self, action)
         contexts = [self.lab.context]
         exchanges = []
         controls: dict[str, bool] = {}

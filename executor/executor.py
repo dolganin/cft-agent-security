@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import shutil
@@ -138,6 +139,7 @@ CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
     "inspect_python_password_assignment": True,
     "inspect_react_dangerous_html_flow": True,
     "verify_access_control": False,
+    "verify_juice_proof": False,
 }
 
 # Определяет, какой сетевой доступ разрешен для каждой capability
@@ -155,6 +157,7 @@ CAPABILITY_NETWORK_ACCESS: dict[str, str] = {
     "inspect_python_password_assignment": "none",
     "inspect_react_dangerous_html_flow": "none",
     "verify_access_control": "none",  # B04 broker owns the internal Docker network and sessions
+    "verify_juice_proof": "none",  # Fixed worker creates its own internal, disposable Docker lab
 }
 
 class SafeExecutor:
@@ -193,6 +196,7 @@ class SafeExecutor:
         self._registry.register("sandbox_command", self._sandbox_command_parameters)
         self._registry.register("observe_http_surface", self._no_parameters)
         self._registry.register("verify_access_control", self._access_control_parameters)
+        self._registry.register("verify_juice_proof", self._juice_proof_parameters)
         self._active_runtime_services: RuntimeServiceMap | None = None
         self._managed_lab: DockerSequenceRuntime | None = None
         self._sandbox_before_lab: Sandbox | None = None
@@ -250,6 +254,38 @@ class SafeExecutor:
                 or audit.get("evidence_ref") != execution.evidence_ref
                 or audit.get("runtime_backend") != "docker"):
             raise ValueError("Research execution and audit do not match")
+        return record
+
+    def read_juice_proof_execution(self, action, execution):
+        """Load fixed-proof output only when its separate audit and binding agree."""
+        from executor.approvals import proposal_digest
+        from executor.sandbox_audit import calculate_sha256_digest
+
+        record = self.read_execution(execution.evidence_ref)
+        matches = [item for item in self._audit_log.records()
+                   if item.get("run_id") == execution.run_id
+                   and item.get("action_id") == action.id]
+        if len(matches) != 1:
+            raise ValueError("Juice proof audit is missing or ambiguous")
+        audit = matches[0]
+        if (record.get("run_id") != execution.run_id
+                or record.get("action_id") != action.id
+                or execution.status != "completed" or execution.exit_code != 0
+                or record.get("action_digest") != proposal_digest(action)
+                or record.get("juice_proof_binding") != action.juice_proof_binding.model_dump(mode="json")
+                or audit.get("proposal_digest") != calculate_sha256_digest(action.model_dump())
+                or audit.get("evidence_digest") != calculate_sha256_digest(
+                    {key: value for key, value in record.items()
+                     if key not in {"id", "type", "created_at"}})
+                or audit.get("session_id") != record.get("session_id")
+                or audit.get("status") != record.get("status")
+                or audit.get("exit_code") != record.get("exit_code")
+                or audit.get("tool") != action.tool or audit.get("target") != action.target
+                or audit.get("run_id") != execution.run_id
+                or audit.get("runtime_backend") != "docker"
+                or audit.get("network_mode") != "internal"
+                or audit.get("evidence_ref") != execution.evidence_ref):
+            raise ValueError("Juice proof execution, binding and audit do not match")
         return record
 
     def bind_fix_runtime(self, runtime) -> None:
@@ -775,6 +811,54 @@ class SafeExecutor:
             finally:
                 self._run_limiter.release()
 
+        if action.tool == "verify_juice_proof":
+            try:
+                from security.juice_incremental_binding import validate_action_binding
+                validate_action_binding(target, action)
+                from executor.juice_incremental_fixture import JuiceIncrementalFixture
+                check_id = action.parameters["check_id"]
+                output = (self._evidence_store.directory.parent / "juice-incremental"
+                          / f"{action.id}-{uuid4().hex}")
+                fixture = JuiceIncrementalFixture(
+                    repository=target.repository_path,
+                    output=output,
+                    protocol=check_id,
+                )
+                result = fixture.run()
+                complete = (
+                    result["failure_type"] is None
+                    and result["cleanup_complete"] is True
+                    and result["target_source_unchanged"] is True
+                    and result["result"] is not None
+                )
+                return self._finish(
+                    action, run_id, started,
+                    status="completed" if complete else "failed",
+                    exit_code=0 if complete else 1,
+                    stdout=json.dumps(result, sort_keys=True, separators=(",", ":")),
+                    stderr="" if complete else "Fixed Juice proof did not complete safely",
+                    decision_reason=("Fixed Juice proof completed" if complete
+                                     else "Fixed Juice proof failed or cleanup was unverified"),
+                    error=None if complete else _system_error(
+                        "ISOLATION_BLOCKED" if not result["cleanup_complete"]
+                        else "EXECUTION_FAILED",
+                        message="Fixed Juice proof did not complete safely",
+                    ),
+                    session_id=result.get("generation"),
+                    runtime_backend="docker", network_mode="internal",
+                )
+            except Exception:
+                logger.exception("Fixed Juice proof failed for action %s", action.id)
+                return self._finish(
+                    action, run_id, started, status="failed", exit_code=127,
+                    stderr="Fixed Juice proof runtime failed",
+                    decision_reason="Fixed Juice proof runtime failed",
+                    error=_system_error("EXECUTION_FAILED", message="Fixed Juice proof runtime failed"),
+                    runtime_backend="docker", network_mode="internal",
+                )
+            finally:
+                self._run_limiter.release()
+
         try:
             try:
                 network_access = CAPABILITY_NETWORK_ACCESS[action.tool]
@@ -1035,6 +1119,7 @@ class SafeExecutor:
         session_id: str | None = None,
         runtime_backend: str | None = None,
         network_mode: str | None = None,
+        extra_artifacts: list[str] | None = None,
     ) -> ExecutionResult:
         duration_ms = int((perf_counter() - started) * 1000)
         policy_dict = self._json_safe(asdict(self._policy))
@@ -1064,6 +1149,8 @@ class SafeExecutor:
                                      if action.verification_binding else None),
             "fixture_binding": (action.fixture_binding.model_dump(mode="json")
                                 if action.fixture_binding else None),
+            "juice_proof_binding": (action.juice_proof_binding.model_dump(mode="json")
+                                    if action.juice_proof_binding else None),
             "research_binding": (action.research_binding.model_dump(mode="json")
                                  if action.research_binding else None),
             "endpoint": action.endpoint,
@@ -1081,7 +1168,7 @@ class SafeExecutor:
             "error": error.model_dump(mode="json") if error else None,
         }
 
-        artifacts: list[str] = []
+        artifacts: list[str] = list(extra_artifacts or [])
         try:
             evidence_ref, artifact_path = self._evidence_store.put_execution(
                 evidence_payload
@@ -1162,7 +1249,7 @@ class SafeExecutor:
                 evidence_ref, artifact_path = self._evidence_store.put_execution(
                     final_evidence
                 )
-                artifacts = [artifact_path]
+                artifacts.append(artifact_path)
             except Exception:
                 logger.exception(
                     "Failed to persist final audit-failure evidence for action %s",
@@ -1260,6 +1347,13 @@ class SafeExecutor:
         except Exception as exc:
             raise CapabilityInputError("B05 accepts only one registered check_id") from exc
         return selection.model_dump(mode="json")
+
+    @staticmethod
+    def _juice_proof_parameters(parameters: dict) -> dict:
+        if (set(parameters) != {"check_id"}
+                or parameters.get("check_id") not in {"role-registration", "anonymous-product-put"}):
+            raise CapabilityInputError("Juice proof accepts only one registered fixed check_id")
+        return {"check_id": parameters["check_id"]}
 
     @staticmethod
     def _artifact_id_parameter(parameters: dict) -> dict:

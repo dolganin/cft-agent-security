@@ -46,6 +46,10 @@ class AccessFixtureProfile(BaseModel):
     b05_basket_write_v3_candidate: bool = False
     b05_basket_insert_candidate: bool = False
     b05_ownership_transfer_candidate: bool = False
+    b05_review_write_candidate: bool = False
+    b05_review_nosql_candidate: bool = False
+    b05_user_fields_candidate: bool = False
+    b05_feedback_owner_candidate: bool = False
     worker_image: Literal[
         "python@sha256:9c900dea9e8fb7e16277c179b555cc72d29a352dbc33cff48ad5a0412fd5bfc7",
         "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4",

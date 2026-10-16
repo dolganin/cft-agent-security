@@ -104,7 +104,7 @@ def test_total_deadline_is_budget_expiration_not_provider_outage(provider):
 def test_expired_reasoning_keeps_current_research_accounting():
     from agent.recovery import protected_node
     from agent.research import ResearchAgentModel, research_context
-    from tests.test_research_agent import finding, scope
+    from test_research_agent import finding, scope
 
     model = ResearchAgentModel(client=None, scope=scope(), validator=None)
     def expired(_state):

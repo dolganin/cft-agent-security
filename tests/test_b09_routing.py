@@ -8,7 +8,7 @@ from schemas.target import TargetProfile
 
 
 def test_unique_profile(monkeypatch):
-    profiles = [SimpleNamespace(id="a"), SimpleNamespace(id="b")]
+    profiles = [TargetProfile(id="a", environment="sandbox"), TargetProfile(id="b", environment="sandbox")]
     monkeypatch.setattr("agent.verification_routing.resolve_binding", lambda p, f:
         SimpleNamespace(status="bound" if p.id == "b" else "inconclusive", candidates=[]))
     selected, reason = select_profile(SimpleNamespace(), profiles)
@@ -18,7 +18,7 @@ def test_unique_profile(monkeypatch):
 
 @pytest.mark.parametrize("ambiguous", [True, False])
 def test_ambiguous_profiles_fail_closed(monkeypatch, ambiguous):
-    profiles = [SimpleNamespace(id="a"), SimpleNamespace(id="b")]
+    profiles = [TargetProfile(id="a", environment="sandbox"), TargetProfile(id="b", environment="sandbox")]
     monkeypatch.setattr("agent.verification_routing.resolve_binding", lambda p, f:
         SimpleNamespace(status="inconclusive" if ambiguous else "bound",
                         candidates=["route1", "route2"], reason="ambiguous"))
@@ -30,7 +30,7 @@ def test_unregistered_finding_is_not_given_a_fallback_profile(monkeypatch):
     monkeypatch.setattr("agent.verification_routing.resolve_binding", lambda p, f:
         SimpleNamespace(status="inconclusive", candidates=[]))
     finding = SimpleNamespace(rule_id="cft.other", file="routes/other.ts")
-    selected, _ = select_profile(finding, [SimpleNamespace(b06_verification=None)])
+    selected, _ = select_profile(finding, [TargetProfile(id="unregistered", environment="sandbox")])
     assert selected is None
 
 
@@ -41,7 +41,8 @@ def test_disabled_code_family_reaches_existing_operator_availability_guard(monke
     monkeypatch.setattr("agent.verification_routing.resolve_binding", lambda p, f:
         SimpleNamespace(status="inconclusive", candidates=[]))
     finding = SimpleNamespace(rule_id=rule, file="routes/userProfile.ts")
-    profile = SimpleNamespace(id="juice-b06-verification", b06_verification=object())
+    profile = SimpleNamespace(id="juice-b06-verification", b06_verification=object(),
+                              juice_incremental_proofs=None)
     selected, _ = select_profile(finding, [profile])
     assert selected is profile
     assert "unsupported in the pinned Docker" in _unsupported_verification_reason(profile, finding)

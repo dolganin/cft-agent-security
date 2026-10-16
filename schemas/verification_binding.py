@@ -25,7 +25,7 @@ class VerificationRoute(BaseModel):
     family: str = Field(min_length=1)
     service: str
     endpoint: str
-    method: Literal["GET", "POST", "PUT"]
+    method: Literal["GET", "POST", "PUT", "PATCH"]
     tool: Literal[
         "verify_sql_injection",
         "verify_sensitive_directory",
@@ -41,6 +41,8 @@ class VerificationRoute(BaseModel):
         "own_read",
         "own_write",
         "ownership_transfer",
+        "nosql_selector",
+        "private_fields",
     ]
     mode: Literal["search", "authentication"] | None = None
     registration: SourceSelector
@@ -64,7 +66,7 @@ class VerificationBinding(BaseModel):
     map_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
     service: str
     endpoint: str
-    method: Literal["GET", "POST", "PUT"]
+    method: Literal["GET", "POST", "PUT", "PATCH"]
     tool: str
     check: str
     mode: str | None = None

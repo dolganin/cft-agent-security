@@ -18,6 +18,7 @@ from executor.sandbox import DockerSandbox, RunLimiter
 from executor.sandbox_policy import SandboxLimits, SandboxPolicy
 from executor.targets import TargetRegistry
 from pipeline.research_verification import read_protocol_execution
+from pipeline.verification_budget import b05_http_ledger
 from reporting.builder import build_final_report
 from schemas.action import ActionProposal
 from schemas.agent_loop import AgentActionRecord
@@ -27,6 +28,10 @@ from validator.validator import PolicyValidator
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOLS = {
+    "b05.review-owner.v1": ("juice-access-fixture", "juice-review-own-write", 250, "b05"),
+    "b05.review-nosql.v1": ("juice-access-fixture", "juice-review-nosql-selector", 250, "b05"),
+    "b05.user-fields.v1": ("juice-access-fixture", "juice-user-private-fields", 244, "b05"),
+    "b05.feedback-owner.v1": ("juice-access-fixture", "juice-feedback-owner", 244, "b05"),
     "b05.own-read.v1": ("juice-access-fixture", "juice-basket-own-read", 238, "b05"),
     "b05.basket-insert.v1": ("juice-access-fixture", "juice-basket-insert-owner-check", 238, "b05"),
     "b06.redirect.v1": ("juice-b06-verification", "verify_redirect_destination", 38, "b06"),
@@ -71,7 +76,7 @@ def _b05(*, finding, profile, route, scope, output, worker_image, wall_seconds,
         return None
     action = ActionProposal(id="research-b05-" + uuid4().hex, tool="verify_access_control",
         target=profile.id, environment="sandbox", parameters={"check_id": registration.check_id},
-        purpose="Operator-authorized fixed own-read verification", expected_evidence="Two-generation identity-bound B05 trace",
+        purpose="Operator-authorized fixed access-control verification", expected_evidence="Two-generation identity-bound B05 trace",
         service=binding.service, endpoint=registration.endpoint,
         verification_binding=binding)
     validator = PolicyValidator.from_yaml(ROOT / "policies/default.yaml", target_profile=profile,
@@ -108,24 +113,15 @@ def _b05(*, finding, profile, route, scope, output, worker_image, wall_seconds,
             artifact_refs=execution.artifacts, hypothesis_id=finding.id,
             sandbox_session_id=runtime.run_session_id)
         trace = evidence.observation.facts.get("b05_trace", {})
-        requests = 0
-        last_control_by_generation = {}
-        for item in runtime.lab.records:
-            phase, generation = item.get("phase"), item.get("generation")
-            context = item.get("context", {})
-            exchanges = int(context.get("http_exchanges", 0))
-            if phase in {"prepare", "control"}:
-                requests += exchanges
-                if phase == "control":
-                    last_control_by_generation[generation] = exchanges
-            elif phase == "b05-provision":
-                requests += max(0, exchanges - last_control_by_generation.get(generation, 0))
-        requests += int(trace.get("exchange_count", 0))
+        requests, complete_ledger = b05_http_ledger(runtime.lab.records, int(trace.get("exchange_count", 0)))
         if requests > request_reservation:
             raise ValueError("B05 actual HTTP exchange ledger exceeded its fixed reservation")
         result = {"status": evidence.verdict, "security_verdict": evidence.verdict,
             "executed": True, "runtime_provisioned": True, "actions": 1,
             "requests_reserved": request_reservation, "requests_observed": requests,
+            "request_accounting_complete": (complete_ledger and execution.status == "completed"
+                and evidence.verdict in {"confirmed", "rejected"}
+                and trace.get("cleanup_complete") is True and trace.get("technical_error") is None),
             "worker_cleanup_verified": True,
             "origin": "canonical_fixed_B05_verifier", "action": action.model_dump(mode="json"),
             "validation": validation.model_dump(mode="json"), "execution": execution.model_dump(mode="json"),
@@ -190,8 +186,8 @@ def _b06(*, finding, profile, route, scope, output, worker_image, wall_seconds):
         # Executor stdout is the canonical typed B06 result; account every setup and probe exchange.
         requests = sum(int(t.get("http_exchanges", 0)) + int(t.get("setup_http_exchanges", 0))
                        for t in payload.get("trials", []))
-        requests += sum(int(item.get("readiness_http_exchanges", 0))
-                        for item in runtime.records if item.get("phase") == "ready")
+        readiness = [item for item in runtime.records if item.get("phase") == "ready"]
+        requests += sum(int(item.get("readiness_http_exchanges", 0)) for item in readiness)
         reservation = PROTOCOLS["b06.redirect.v1" if tool == "verify_redirect_destination"
                                 else "b06.password-reauth.v1"][2]
         if requests > reservation:
@@ -199,6 +195,11 @@ def _b06(*, finding, profile, route, scope, output, worker_image, wall_seconds):
         result = {"status": evidence.verdict, "security_verdict": evidence.verdict,
             "executed": True, "runtime_provisioned": True, "actions": 1,
             "requests_reserved": reservation, "requests_observed": requests,
+            "request_accounting_complete": (execution.status == "completed"
+                and evidence.verdict in {"confirmed", "rejected"}
+                and len(payload.get("trials", [])) == len(readiness) == 2
+                and all(type(item.get("readiness_http_exchanges")) is int
+                        and item["readiness_http_exchanges"] > 0 for item in readiness)),
             "worker_cleanup_verified": True,
             "origin": "canonical_fixed_B06_verifier", "action": action.model_dump(mode="json"),
             "validation": validation.model_dump(mode="json"), "execution": execution.model_dump(mode="json"),

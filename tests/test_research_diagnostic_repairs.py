@@ -21,16 +21,32 @@ def scope():
         source_files={"app.ts": ResearchFile(original_sha256="d" * 64, visible_sha256="e" * 64)})
 
 
-def test_diagnostic_campaign_can_reserve_all_enabled_fixture_lifecycles():
+def test_diagnostic_campaign_keeps_caps_and_enables_both_review_protocols():
     from app.research_diagnostic_run import FIXTURE_GRANTS, limits
     from pipeline.research_fixture_verification import PROTOCOLS
 
     required = sum(PROTOCOLS[grant.protocol][2] for grant in FIXTURE_GRANTS)
-    assert required < limits().max_http_requests <= 1024
+    assert required > limits().max_http_requests == 1024
+    assert max(PROTOCOLS[grant.protocol][2] for grant in FIXTURE_GRANTS) <= 256
+    assert {"b05.review-owner.v1", "b05.review-nosql.v1"} <= {g.protocol for g in FIXTURE_GRANTS}
 
 
+def test_extended_campaign_quota_requires_explicit_bounded_operator_value():
+    from pydantic import ValidationError
+
+    from app.research_diagnostic_run import limits
+
+    assert limits().max_http_requests == 1024
+    assert limits(max_http_requests=1708).max_http_requests == 1708
+    with pytest.raises(ValidationError):
+        limits(max_http_requests=2049)
+
+
+@pytest.mark.parametrize("http_budget", [1024, 1708])
 @pytest.mark.parametrize("max_actions", [1, 4])
-def test_preverification_separates_campaign_budget_from_per_scope_cap(tmp_path, monkeypatch, max_actions):
+@pytest.mark.parametrize("settled", [False, True])
+def test_preverification_separates_campaign_budget_from_per_scope_cap(tmp_path, monkeypatch, max_actions, settled,
+                                                                    http_budget):
     import time
 
     from app import research_campaign as module
@@ -52,26 +68,28 @@ def test_preverification_separates_campaign_budget_from_per_scope_cap(tmp_path, 
     questions = [SimpleNamespace(id=str(n), finding=SimpleNamespace(id=str(n)),
                                  is_candidate=True) for n in range(4)]
     queue = SimpleNamespace(questions=questions, priority=lambda q: q.id,
-                            work_key=lambda f: f.id, source_files=["app.ts"])
+                            work_key=lambda f: f.id, source_files=["app.ts"], complete=lambda q: None)
     monkeypatch.setattr(module, "ResearchRuntime", Runtime)
     monkeypatch.setattr(module, "verification_handoff", lambda *_args: {
         "checks": [{"status": "ready_for_canonical_verification"}]})
 
     def verify(**kwargs):
         remaining.append(kwargs["max_http_requests"])
-        return {"status": "inconclusive", "executed": True, "actions": 1,
+        return {"status": "confirmed" if settled else "inconclusive", "executed": True, "actions": 1,
                 "requests_reserved": 238, "requests_observed": 100,
+                "request_accounting_complete": settled, "origin": "canonical_fixed_B05_verifier",
                 "worker_cleanup_verified": True}
 
     monkeypatch.setattr(module, "verify_bound_candidate", verify)
     result = module._preverify_bound_findings(queue=queue,
         profile=TargetProfile(id="repair-test", environment="sandbox", repository_path=tmp_path),
         configuration={"worker_image": "sha256:" + "b" * 64}, output=tmp_path,
-        limits=CampaignLimits(max_http_requests=1024, max_actions=max_actions), verification_profiles=(object(),),
+        limits=CampaignLimits(max_http_requests=http_budget, max_actions=max_actions), verification_profiles=(object(),),
         verification_worker_image="sha256:" + "b" * 64,
         fixture_grants=(), verification_grants=(), started=time.monotonic())
     assert captured_scopes == [256]
-    assert remaining == [1024, 786, 548, 310][:max_actions]
+    charge = 100 if settled else 238
+    assert remaining == [http_budget - charge * index for index in range(max_actions)]
     assert result[2:6] == (max_actions, 0, 238 * max_actions, 100 * max_actions)
 
 
@@ -90,6 +108,43 @@ def test_preverification_report_is_emitted_once_for_its_exact_group_representati
 
     assert len(reports) == 1
     assert reports[0]["question_id"] == "sql-primary"
+
+
+def test_unknown_fixture_execution_keeps_full_possible_reservation(tmp_path, monkeypatch):
+    import time
+
+    from app import research_campaign as module
+    from schemas.research_campaign import CampaignLimits
+
+    class Runtime:
+        def __init__(self, **kwargs):
+            self.scope = scope()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+    question = SimpleNamespace(id="fixture", finding=SimpleNamespace(id="fixture"), is_candidate=True)
+    queue = SimpleNamespace(questions=[question], priority=lambda q: q.id,
+        work_key=lambda f: f.id, source_files=["app.ts"])
+    monkeypatch.setattr(module, "ResearchRuntime", Runtime)
+    monkeypatch.setattr(module, "verification_handoff", lambda *_args: {
+        "checks": [{"status": "ready_for_canonical_verification"}]})
+
+    def interrupted(**kwargs):
+        raise RuntimeError("transport interrupted after possible execution")
+
+    monkeypatch.setattr(module, "verify_bound_candidate", interrupted)
+    result = module._preverify_bound_findings(queue=queue,
+        profile=TargetProfile(id="repair-test", environment="sandbox", repository_path=tmp_path),
+        configuration={"worker_image": "sha256:" + "b" * 64}, output=tmp_path,
+        limits=CampaignLimits(max_http_requests=256), verification_profiles=(object(),),
+        verification_worker_image="sha256:" + "b" * 64,
+        fixture_grants=(SimpleNamespace(max_http_requests=250),), verification_grants=(),
+        started=time.monotonic())
+    assert result[2:] == (0, 1, 250, 0, True)
 
 
 def test_preverification_report_with_unknown_finding_id_fails_closed():

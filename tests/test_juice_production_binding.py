@@ -17,8 +17,12 @@ TARGET = ROOT / "artifacts/benchmark-target/juice-shop"
 @pytest.mark.parametrize(("rule", "route_id"), [
     ("juice.access-control.path-selected-record", "juice-basket-own-read"),
     ("juice.access-control.inconsistent-basket-selector", "juice-basket-insert-owner-check"),
+    ("juice.access-control.review-selector-without-owner", "juice-review-own-write"),
+    ("juice.nosql-injection.request-selector", "juice-review-nosql-selector"),
+    ("juice.sensitive-data.client-selected-user-fields", "juice-user-private-fields"),
+    ("juice.access-control.generated-feedback-user-id", "juice-feedback-owner"),
 ])
-def test_detected_basket_sink_binds_inside_exact_operator_function(rule, route_id):
+def test_detected_source_candidate_binds_to_its_exact_operator_route(rule, route_id):
     profile = TargetProfile.from_yaml(ROOT / "targets/juice-b05-access-fixture.yaml",
                                      repository_path_override=TARGET)
     source = RepositorySource(ProjectDiscovery().discover(TARGET), research_mode=True)

@@ -48,23 +48,36 @@ class PolicyValidator:
             extension_tools = extension.get("tools", {})
             allowed = extension_tools.get("allowed", [])
             contracts = extension_tools.get("parameter_contracts", {})
+            supported_extensions = {
+                ("verify_access_control",): {
+                    "allowed_keys": ["check_id"],
+                    "required_keys": ["check_id"],
+                    "enum_values": {"check_id": [
+                        "juice-basket-own-read-v1", "juice-address-own-write-v1",
+                        "juice-basket-own-write-v2", "juice-basket-own-write-v3",
+                        "juice-address-ownership-transfer-v1",
+                        "juice-basket-insert-owner-check-v1",
+                        "juice-review-own-write-v1", "juice-review-nosql-selector-v1",
+                        "juice-user-private-fields-v1", "juice-feedback-owner-v1",
+                    ]},
+                },
+                ("verify_juice_proof",): {
+                    "allowed_keys": ["check_id"],
+                    "required_keys": ["check_id"],
+                    "enum_values": {"check_id": [
+                        "role-registration", "anonymous-product-put",
+                    ]},
+                },
+            }
+            expected_contract = supported_extensions.get(tuple(allowed))
             if (set(extension) != {"version", "tools"}
                     or set(extension_tools) != {"allowed", "parameter_contracts"}
                     or extension.get("version") != data.get("version")
-                    or allowed != ["verify_access_control"]
-                    or set(contracts) != {"verify_access_control"}
-                    or contracts["verify_access_control"] != {
-                        "allowed_keys": ["check_id"],
-                        "required_keys": ["check_id"],
-                        "enum_values": {"check_id": [
-                            "juice-basket-own-read-v1", "juice-address-own-write-v1",
-                            "juice-basket-own-write-v2", "juice-basket-own-write-v3",
-                            "juice-address-ownership-transfer-v1",
-                            "juice-basket-insert-owner-check-v1"
-                        ]},
-                    }
-                    or "verify_access_control" in data.get("tools", {}).get("allowed", [])
-                    or "verify_access_control" in data.get("tools", {}).get("parameter_contracts", {})):
+                    or expected_contract is None
+                    or set(contracts) != set(allowed)
+                    or contracts.get(allowed[0]) != expected_contract
+                    or allowed[0] in data.get("tools", {}).get("allowed", [])
+                    or allowed[0] in data.get("tools", {}).get("parameter_contracts", {})):
                 raise ValueError("Unsupported or overlapping capability policy extension")
             data.setdefault("tools", {}).setdefault("allowed", []).extend(allowed)
             data["tools"].setdefault("parameter_contracts", {}).update(contracts)
@@ -359,6 +372,16 @@ class PolicyValidator:
         self,
         action: ActionProposal,
     ) -> tuple[str, str] | None:
+        if action.tool == "verify_juice_proof":
+            profile = self.target_profiles.get(action.target)
+            if profile is None:
+                return "Juice proof requires a registered operator target profile", "juice_proof_profile_denied"
+            try:
+                from security.juice_incremental_binding import validate_action_binding
+                validate_action_binding(profile, action)
+            except (OSError, ValueError, TypeError) as exc:
+                return str(exc), "juice_proof_binding_denied"
+            return None
         if action.tool == "verify_access_control":
             profile = self.target_profiles.get(action.target)
             if profile is None:

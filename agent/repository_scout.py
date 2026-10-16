@@ -48,6 +48,7 @@ class RepositoryScout:
         inventory: ProjectDiscoveryResult,
         *,
         source_map: ExpressSourceMap | None = None,
+        surface_focus: str | None = None,
     ) -> CandidateFindingBatch:
         self.check_cancelled()
         started = time.monotonic()
@@ -60,6 +61,7 @@ class RepositoryScout:
             "accepted_candidates": 0, "dropped_candidates": 0,
             "max_candidates": self.max_candidates, "search_chars": 0,
             "schedule_mode": self.schedule_mode, "model_calls": 0,
+            "surface_focus": surface_focus,
             "budgets": {"max_turns": self.max_turns,
                         "max_source_chars": self.max_source_chars,
                         "wall_clock_seconds": self.wall_clock_seconds},
@@ -178,6 +180,7 @@ class RepositoryScout:
                             "description and rationale concise, preferably 2-3 short sentences, "
                             "so the complete JSON object fits the output budget."
                         ),
+                        "surface_focus": surface_focus,
                         "source_files": source.files,
                         "source_snippets": snippets,
                         "previous_context": previous,
