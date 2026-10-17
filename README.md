@@ -2,162 +2,110 @@
 
 # CFT Security Agent
 
-### Контекстный анализ и контролируемая проверка уязвимостей в CI/CD
+Контекстный анализ, доказательная проверка и ограниченное исправление уязвимостей.
 
-`SAST` · `LangGraph` · `CVSS 4.0` · `Validator` · `Docker Sandbox` · `Evidence` · `CI Gate`
+**Python · LangGraph · FastAPI · React · Semgrep · Docker**
+
+[Запуск](#быстрый-запуск) · [Документация](docs/README.md) · [Метрики](docs/bespalov-metrics-with-scoring-2026-10-16.md) · [Разработка](CONTRIBUTING.md)
 
 </div>
 
-<p align="center">
-  <img src="docs/images/cft-security-agent-ui.png" alt="Интерфейс CFT Security Agent" width="100%">
-</p>
+![Интерфейс CFT Security Agent](docs/images/cft-security-agent-ui.png)
 
-<p align="center"><sub>Импорт проекта, live timeline проверки, Evidence и итоговый CI Gate в одном интерфейсе</sub></p>
+## Что это
 
-## О проекте
+Агент для анализа безопасности ПО в CI/CD. Он объединяет результаты сканеров,
+исследование исходников и контролируемые проверки в изолированной лаборатории.
+Итоговый вердикт связан с сохраненными доказательствами, а не только с ответом LLM.
 
-CFT Security Agent превращает сырые SAST findings в проверяемый результат для разработчика и CI/CD. Система учитывает архитектуру проекта, формирует гипотезу, запускает только разрешенные проверки и связывает итоговый verdict с сохраненным Evidence.
+> Агент думает. Validator разрешает. Executor выполняет. Evidence определяет результат.
 
-Главный принцип:
+Проект находится на стадии исследовательского MVP. Текущий поиск и проверка
+специализированы под закрепленную версию OWASP Juice Shop. Есть интерфейс анализа
+проектов, но результаты этого корпуса нельзя переносить на произвольный проект.
 
-> **Агент думает. Validator разрешает. Executor выполняет. Evidence определяет результат.**
+## Возможности и границы
 
-На выходе команда получает:
+| Направление | Что реализовано |
+|---|---|
+| Поиск | Discovery, Semgrep, целевые source-detectors и LLM-исследование исходников |
+| Исследование | Чтение файлов, рабочая область, Python/Node-скрипты в Docker, разрешенные HTTP- и браузерные наблюдения |
+| Проверка | Зарегистрированные протоколы с source/endpoint-привязкой, контролями, execution/audit и независимым разбором Evidence |
+| Оценки | Раздельные CVSS и Context Priority; неизвестные входы сохраняются, оценки не заменяют доказательства |
+| Исправления | LLM-патчи и независимая BEFORE/AFTER-проверка для SQL-поиска и redirect allowlist; не универсальное автоисправление |
+| CI/CD и UI | API, история запусков, действия и доказательства, FinalReport и детерминированный Gate |
 
-- нормализованные findings из Semgrep;
-- CVSS и отдельный Context Priority;
-- объяснимую гипотезу и план проверки;
-- журнал действий, Evidence и FinalReport;
-- детерминированный CI Gate: `PASS`, `WARN` или `FAIL`.
+Интерфейс запускает канонический pipeline. Расширенный research-контур и ремонтные
+эксперименты включаются отдельно операторскими CLI/профилями; запуск UI их не активирует.
+
+## Последнее опубликованное измерение
+
+Один проход 16 октября 2026, Juice Shop **v20.2.0**, известный разработчикам
+original-срез: **27 уязвимых и 8 безопасных случаев**.
+
+| Показатель | Результат |
+|---|---|
+| Обнаружение уязвимых случаев | 27/27 |
+| Precision подтверждений | 13/13 = 100% |
+| Recall подтверждений | 13/27 = 48,15% |
+| Проверенные исправления | 2/2 поддерживаемых случая |
+| Среднее лабораторное время исправления | 80,986 с, n=2, без времени поиска |
+
+Это не оценка на неизвестном holdout и не заявление о качестве на всех проектах.
+Поиск завершился с ограничениями бюджета. Воспроизводимость не измерялась;
+эксплуатационный MTTR отсутствует. Серьезность сопоставлена только на трех случаях,
+а CP пока сравнен с модельным черновиком, требующим человеческой проверки.
+
+[Все метрики и ограничения](docs/bespalov-metrics-with-scoring-2026-10-16.md) ·
+[Состав прохода и архивы доказательств](docs/search-repair-integration-2026-10-16.md)
 
 ## Архитектура
 
-<p align="center">
-  <img src="docs/diagrams/architecture.svg" alt="Архитектура CFT Security Agent" width="100%">
-</p>
+![Архитектура системы](docs/diagrams/architecture.svg)
 
-Основной pipeline:
+Репозиторий и архитектурный контекст поступают в анализ. Агент предлагает действие;
+Validator проверяет разрешения; Executor выполняет одобренное действие;
+Evidence возвращается агенту и в финальный отчет. Gate передает результат в CI/CD.
+Ни UI, ни LLM не обходят эту цепочку.
 
-```text
-Репозиторий
-  -> Discovery и TargetProfile
-  -> SAST
-  -> Context Scoring
-  -> Security Agent
-  -> Validator
-  -> Executor в Docker Sandbox
-  -> Evidence
-  -> FinalReport
-  -> CI Gate
-```
+![Рабочий цикл агента](docs/diagrams/workflow.svg)
 
-`Discovery` строит inventory проекта, а trusted `TargetProfile` фиксирует разрешенный scope, Compose file, services, endpoints и registry артефактов. CVSS показывает техническую серьезность, Context Priority показывает важность finding для конкретной архитектуры. Оценки не смешиваются в одно число.
+Границы исполнения:
 
-## Как работает агент
+- активные проверки только в разрешенной локальной/test-среде, не в production;
+- каждая операция связана с одобрением и операторским scope;
+- произвольные команды и исследовательские скрипты исполняются только в Docker;
+- общие скрипты изолированы от сети; целевые запросы идут через доверенные capabilities;
+- исходники, секреты, сетевые права и бюджеты не расширяются решением модели;
+- `confirmed` требует доказательств, технический сбой не означает безопасный код.
 
-<p align="center">
-  <img src="docs/diagrams/workflow.svg" alt="Workflow агента на LangGraph" width="100%">
-</p>
-
-`AgentState` хранит общий контекст запуска: finding, код, архитектуру, scoring, гипотезу, план, решения Validator, результаты Executor, Evidence и историю итераций. Число шагов и wall time ограничены.
-
-В режиме `stub` reasoning полностью детерминирован. В режиме `llm` используется fallback цепочка провайдеров, но ответы модели проходят Pydantic validation и не обходят policy.
-
-## Границы безопасности
-
-LLM не является границей безопасности. Реальные границы системы:
-
-- каждый `ActionProposal` проходит `Validator`, approval связан с digest полного proposal;
-- Executor принимает только зарегистрированные capabilities и trusted artifacts из `TargetProfile`;
-- agent не передает произвольные host path, URL или target;
-- `sandbox_command` работает только в одноразовом networkless Docker container с read-only target;
-- CPU, RAM, PID, размер файлов, output и wall time ограничены;
-- `confirmed` и `rejected` требуют подходящий Evidence;
-- production access запрещен, технический сбой не маскируется под security verdict.
-
-## Возможности проверки
-
-| Capability | Что проверяет |
-|---|---|
-| `inspect_dockerfile_user` | Наличие и значение финального `USER` в Dockerfile |
-| `inspect_python_password_assignment` | Присвоение пароля и наличие безопасной обработки в Python AST |
-| `inspect_react_dangerous_html_flow` | Статический flow данных к опасному HTML sink в React |
-| `observe_http_surface` | Разрешенный endpoint активной sandbox session |
-| `sandbox_command` | Bounded argv внутри networkless Docker lab |
-
-Успешный exit code capability еще не означает подтвержденную уязвимость. Verdict формируется только из capability-specific Evidence.
+Контракты и правила реализации: [AGENTS.md](AGENTS.md).
 
 ## Быстрый запуск
 
-Область исправлений C01: [два выбранных семейства, независимые тесты и eligibility](docs/c01-fix-scope.md).
-Пересчёт исходных подтверждений: `python -m app.fix_scope --output artifacts/c01-fresh.json`.
-Это выбор области; генерация патчей и их полная runtime-проверка относятся к C02/C03.
+Нужны Python **3.11+**, Node.js **20.19+** и Git. Для активных проверок дополнительно
+нужны Docker с Compose, подготовленный target и соответствующие образы.
+Установка зависимостей сама по себе лабораторию не создает.
 
-[C02: реальные LLM-предложения патчей](docs/c02-llm-patch-proposals.md):
-`python -m app.patch_propose --target <pinned-checkout> --family sql-search --output <new-directory>`.
-Предложение сохраняется без применения к оригиналу.
-
-[C03: независимая проверка патча](docs/c03-independent-patch-verification.md):
-SQL и redirect проверяются в изолированных копиях. Для двух устаревших redirect
-assertions действует защищённый security contract; raw failures сохраняются.
-
-[C04: ограниченный цикл исправления](docs/c04-bounded-repair-loop.md) связывает
-реальную генерацию LLM, verifier, feedback и повторы без изменения оригинала.
-
-[C05: повторяемые измерения исправлений](docs/c05-repair-measurement.md):
-`python -m app.repair_measurement --target <pinned-checkout> --output <new-directory>`.
-Полный B09 сохраняется отдельно от fix-среза; лабораторное время не является MTTR.
-
-### Требования
-
-- Python `3.11+`;
-- Node.js `20.19+`;
-- Docker Desktop с Docker Compose для runtime проверок;
-- Git.
-
-### Backend и API
+### 1. Backend
 
 ```bash
-python -m venv .venv
-```
-
-Активация окружения:
-
-```bash
-# Windows PowerShell
-.venv\Scripts\Activate.ps1
-
-# Linux или macOS
+python3 -m venv .venv
 source .venv/bin/activate
-```
-
-Установка:
-
-```bash
 python -m pip install -e ".[dev,sast]"
-```
-
-Создайте локальный `.env` из `.env.example`. Для `stub` режима API keys не нужны.
-
-```bash
-# Windows
-Copy-Item .env.example .env
-
-# Linux или macOS
 cp .env.example .env
-```
-
-Запуск API:
-
-```bash
 cft-security-api
 ```
 
-API будет доступен на `http://127.0.0.1:8080`, OpenAPI UI на `http://127.0.0.1:8080/docs`.
+В Windows используйте `python` вместо `python3`, активацию
+`.venv\Scripts\Activate.ps1` и `Copy-Item .env.example .env`.
 
-### Frontend
+API: <http://127.0.0.1:8080> · OpenAPI: <http://127.0.0.1:8080/docs>.
+Не перезаписывайте существующий `.env`: это локальная конфигурация, она не входит в Git.
 
-Во втором терминале:
+### 2. Интерфейс
+
+В другом терминале:
 
 ```bash
 cd frontend
@@ -165,11 +113,13 @@ npm ci
 npm run dev
 ```
 
-Откройте `http://127.0.0.1:5173`. Через интерфейс можно импортировать папку или ZIP проекта, запустить анализ, наблюдать timeline, раскрывать действия и Evidence, читать FinalReport и задавать вопросы по результатам.
+Интерфейс: <http://127.0.0.1:5173>. Доступны импорт проекта, запуск анализа,
+история, журнал действий, доказательства и итоговый отчет.
 
-### Live LLM
+### 3. Режим модели
 
-Для live reasoning укажите ключ в `.env` и переключите режим:
+По умолчанию используется `stub`: детерминированная проверка интеграции без API-ключа,
+не полноценный LLM-поиск. Для живой модели настройте локальный `.env`:
 
 ```dotenv
 CFT_AGENT_MODE=llm
@@ -177,17 +127,19 @@ NSU_OPENWEBUI_KEY=your-local-key
 CFT_LLM_TRACE=false
 ```
 
-По умолчанию система использует NSU route chain. Внешние fallback включаются только явно:
+Маршруты задаются через `CFT_LLM_ROUTES`; встроенная NSU-цепочка описана в
+[.env.example](.env.example). Внешние fallback-провайдеры включаются только явно.
+Ключи не коммитятся и не передаются целевому приложению.
 
-```dotenv
-CFT_LLM_ALLOW_EXTERNAL_FALLBACKS=true
+## CLI и лаборатория
+
+Минимальная проверка графа без target и API-ключа:
+
+```bash
+python -m app.main
 ```
 
-API keys не попадают в target subprocess и не должны добавляться в Git.
-
-## Запуск из CLI
-
-Полный CI flow для зарегистрированного SberLab target:
+CI-проход на отдельно подготовленном SberLab:
 
 ```bash
 cft-security-ci \
@@ -198,91 +150,44 @@ cft-security-ci \
   --max-iterations 1
 ```
 
-Pipeline выполняет Discovery, поднимает Compose session, запускает SAST, проверяет findings, сохраняет отчеты и вычисляет Gate.
+Коды выхода: `0` — Gate не блокирует CI; `1` — завершенный security/policy FAIL;
+`2` — техническая ошибка. Повторные запуски сохраняйте в новых каталогах.
 
-Коды завершения:
+- [Подготовка закрепленного окружения](docs/k01-environment-passport.md).
+- [Исследовательский цикл](docs/research-loop-r04.md).
+- [Совместный поиск и проверенные исправления](docs/search-repair-integration-2026-10-16.md).
+- [Независимая проверка патчей](docs/c03-independent-patch-verification.md).
 
-| Код | Значение |
-|---:|---|
-| `0` | Pipeline завершен, Gate не блокирует CI |
-| `1` | Pipeline завершен, security или policy результат блокирует CI |
-| `2` | Технический сбой pipeline |
+## Структура репозитория
 
-Основные артефакты находятся в `artifacts/security-pipeline/`:
+| Каталоги | Назначение |
+|---|---|
+| `agent/`, `schemas/` | Reasoning, LangGraph и общие контракты |
+| `app/`, `api/`, `pipeline/` | CLI, API, оркестрация, Gate и жизненный цикл |
+| `discovery/`, `sast/`, `architecture/`, `scoring/` | Поиск и контекстные оценки |
+| `validator/`, `security/`, `policies/`, `targets/` | Разрешения, доверенные привязки и профили |
+| `executor/`, `tools/`, `evidence/`, `reporting/` | Исполнение, доказательства и отчеты |
+| `fix_verification/`, `contracts/` | Проверка исправлений и защищенные контракты |
+| `evaluation/`, `benchmarks/` | Оценщики, замороженный эталон и контроли |
+| `frontend/`, `tests/` | Интерфейс и тесты |
+| `docs/`, `artifacts/` | Документация и опубликованные доказательства |
 
-```text
-discovery.json
-target-profile.json
-runtime-service-map.json
-sast/findings.json
-reports/*.json
-reports-index.json
-evidence/*.json
-audit/executor.jsonl
-telemetry-index.json
-gate.json
-ci-summary.json
-```
+Локальные `.env`, окружения, кэши, runtime-данные и новые артефакты игнорируются Git.
+Опубликованные архивы в `artifacts/` нужны для независимой проверки результатов.
 
-## Проверки проекта
-
-B04: [операторские роли, ownership и availability controls](docs/b04-access-fixtures.md).
-Отдельный профиль `targets/juice-access-fixture.yaml`, credentials только в Docker
-tmpfs. Реальная приёмка двух независимых generations без LLM:
-
-```bash
-python -m app.access_fixture_acceptance --output artifacts/b04/new-acceptance
-```
-
-B01: [надёжная связь source/handler/endpoint и approval](docs/b01-reliable-verification-binding.md).
-Новый операторский профиль — `targets/juice-verification.yaml`; исторический
-профиль A остаётся замороженным. Реальная Docker-приёмка без LLM:
-
-```bash
-python -m app.binding_acceptance --output artifacts/b01/new-attempt
-```
-
-Сопоставимые scanner baseline для Juice Shop (A06): отдельные Semgrep community
-rules и OWASP ZAP в изолированной Docker lab, сырые результаты и экспорт для A05.
-Подготовка, бюджеты и ограничения описаны в [A06](docs/a06-scanner-baselines.md).
-
-```bash
-python -m app.scanner_baseline validate
-python -m app.scanner_baseline preflight --provision-images
-python -m app.scanner_baseline run --output artifacts/a06/attempt-001
-```
+## Разработка
 
 ```bash
 python -m pytest -q
 python -m ruff check .
+python -m app.main
 
 cd frontend
-npm test -- --run
+npm test
 npm run build
 ```
 
-Integration tests с реальным Docker помечены marker `integration` и могут быть пропущены без доступной lab среды.
+Docker/live-проверки включаются отдельно и могут быть пропущены без закрепленной
+лаборатории. Пропуски нужно учитывать, а не считать успешными проверками.
 
-## Структура репозитория
-
-```text
-cft-security-agent/
-├── api/                # FastAPI, очередь запусков и SQLite metadata
-├── app/                # CLI и оркестрация pipeline
-├── discovery/          # анализ структуры проекта и TargetProfile
-├── sast/               # запуск и normalization Semgrep
-├── architecture/       # архитектурный контекст
-├── scoring/            # CVSS и Context Priority
-├── agent/              # LangGraph, reasoning и DynamicPlan
-├── validator/          # deterministic policy gate
-├── executor/           # capabilities, sandbox и audit
-├── evidence/           # Evidence store, telemetry и Evidence Guard
-├── reporting/          # FinalReport
-├── pipeline/           # Gate, progress, errors и cancellation
-├── schemas/            # общие Pydantic contracts
-├── frontend/           # React UI
-├── targets/            # trusted target profiles
-├── policies/           # permission policy
-├── docs/               # схемы и скриншоты README
-└── tests/              # unit и integration tests
-```
+[Правила участия](CONTRIBUTING.md) · [Каталог документации](docs/README.md)
