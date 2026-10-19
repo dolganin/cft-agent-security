@@ -20,7 +20,11 @@ from evaluation.benchmark_protocol import ROOT, load_protocol, split_group
 from evaluation.control_catalog import anchor as grounded_anchor
 from evaluation.control_expansion import validate as validate_controls
 from evaluation.control_expansion_runtime import make_patch
-from evaluation.historical_baseline import BASELINE_REVISION, historical_input
+from evaluation.historical_baseline import (
+    BASELINE_REVISION,
+    frozen_presentation_input,
+    historical_input,
+)
 from evaluation.positive_catalog import validate_catalog
 
 DIRECTORY = ROOT / "benchmarks/juice-shop-v20.2.0-v2"
@@ -202,8 +206,8 @@ def render(target: Path) -> dict[str, str]:
         "negative_size_limit": "14 controls below approximately 20 target; no fabricated or unreviewed additions.",
         "cases": reviews}
     rubric = {"schema_version": "benchmark.rubric.a04.v1",
-        "severity_definition": "Narrow source-impact ordinal HIGH: direct database disclosure, authentication bypass, unauthorized persistent update or administrative role acquisition. Not numeric CVSS4 and not official Juice Shop severity.",
-        "severity_labels": ["HIGH"], "cvss_numeric_scores": "N/A: explicit justified CVSS4 metrics/calculator absent",
+        "severity_definition": "Narrow source-impact ordinal HIGH: direct database disclosure, authentication bypass, unauthorized persistent update or administrative role acquisition. Not numeric CVSS3.1 and not official Juice Shop severity.",
+        "severity_labels": ["HIGH"], "cvss_numeric_scores": "N/A: explicit justified CVSS3.1 metrics/calculator absent",
         "context_priority_definition": "Requires independently reviewed deployment facts: exposure, asset criticality, database/critical paths, auth and blast radius; do not self-grade production scorer output.",
         "null_policy": "N/A not safe/LOW and never in accuracy denominator; report reviewed/all and assessed/reviewed coverage separately.",
         "cases": labels}
@@ -263,6 +267,7 @@ def validate(directory: Path = DIRECTORY, *, target: Path | None = None) -> dict
         # implementation forever. Dataset/catalog/output bytes stay strict/local.
         raw = (historical_input(ROOT, relative)
                if relative.endswith(".py") and not relative.startswith("benchmarks/") else current)
+        raw = frozen_presentation_input(ROOT, relative, raw)
         if digest(raw) != expected:
             raise ValueError("Frozen input digest mismatch: " + relative)
     dataset = read_yaml(directory / "ground_truth.yaml")

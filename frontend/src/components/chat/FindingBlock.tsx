@@ -42,7 +42,8 @@ export function FindingBlock({ report }: { report: FinalReport }) {
       <div className="finding-details">
         <section>
           <span>Серьезность и приоритет</span>
-          <p>CVSS 4.0: {report.cvss?.assessment_status === "assessed"
+          <p>CVSS 3.1: {report.cvss?.assessment_status === "assessed"
+            && report.cvss?.scheme === "CVSS:3.1/B" && report.cvss?.vector?.startsWith("CVSS:3.1/")
             ? `${report.cvss.score} · ${report.cvss.severity}`
             : report.cvss?.assessment_status === "not_applicable" ? "не применимо" : "не оценено"}</p>
           {report.technical_severity ? <p>Оценка по исходникам: {report.technical_severity.level}

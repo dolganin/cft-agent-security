@@ -73,12 +73,19 @@ class ScoringReviewResolution(BaseModel):
 
 
 class CVSSResult(BaseModel):
+    """Readable score data, not proof that a declared version/number was verified.
+
+    Scores come from ScoringService. Numeric acceptance must explicitly pass
+    evaluation.cvss_replay with source-bound reviewed metrics.
+    """
     vector: str
     score: float | None = None
     severity: str
     reasoning: str = ""
     assessment_status: Literal["assessed", "unassessed", "not_applicable"] = "unassessed"
-    scheme: Literal["CVSS:4.0/B"] = "CVSS:4.0/B"
+    # Reading a version tag does not verify its numeric result.
+    # ScoringService always produces the default scheme below.
+    scheme: str = Field(default="CVSS:3.1/B", pattern=r"^CVSS:\d+\.\d+/B$")
     metric_facts: dict[str, CVSSMetricFact] = Field(default_factory=dict)
     missing_metrics: list[str] = Field(default_factory=list)
 

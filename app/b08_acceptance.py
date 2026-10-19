@@ -11,6 +11,7 @@ import yaml
 
 from agent.graph import build_graph
 from app.config import settings
+from evaluation.cvss_replay import verify_cvss_result
 from evaluation.scoring_b08 import evaluate_scoring
 from schemas.architecture import ArchitectureContext
 from schemas.benchmark_v2 import BenchmarkDatasetV2
@@ -41,8 +42,7 @@ def run(output: Path):
     finding = Finding(id="b08-fixture", source="synthetic", rule_id="fixture.rule",
                       title="Synthetic scoring acceptance", description="Not a Juice Shop measurement",
                       file="example.ts", line_start=2, severity="TEST_CONFIRMED", service="backend")
-    metrics = {"AV": "N", "AC": "L", "AT": "N", "PR": "N", "UI": "N", "VC": "H",
-               "VI": "H", "VA": "H", "SC": "H", "SI": "H", "SA": "N"}
+    metrics = {"AV": "N", "AC": "L", "PR": "N", "UI": "N", "S": "U", "C": "H", "I": "H", "A": "H"}
     review = ScoringReview.model_validate({
         "finding_id": finding.id, "finding_digest": finding_review_digest(finding),
         "reviewed_by": "synthetic-acceptance", "rationale": "Synthetic fixture only, not impact proof",
@@ -100,6 +100,7 @@ def run(output: Path):
              "schemas/report.py", "architecture/context.py", "scoring/service.py", "scoring/review.py",
              "agent/nodes.py", "agent/prompts.py", "reporting/builder.py", "reporting/presentation.py",
              "app/pipeline_run.py", "app/b08_acceptance.py", "evaluation/scoring_b08.py",
+             "evaluation/cvss_replay.py",
              "tests/test_b08_scoring.py", "tests/test_b08_review.py",
              "docs/b08-scoring-progress.md", "frontend/src/api/types.ts",
              "docs/b08-validation-2026-10-14.txt", "AGENTS.md",
@@ -129,7 +130,10 @@ def replay(root: Path):
     state = {"finding": finding, "target_profile": profile, "scoring_review": review,
              "architecture_context": ArchitectureContext(service="backend")}
     scored = score_state(state)
-    require(report.cvss == scored["cvss"] and report.cvss.score == 9.9, "CVSS replay mismatch")
+    require(scored['scoring_review_resolution'].status == 'accepted' and review.cvss is not None,
+            'CVSS review source binding rejected')
+    verify_cvss_result(report.cvss, review.cvss,
+                       trusted_evidence_refs=frozenset(ref.id for ref in review.references))
     require(report.technical_severity == scored["technical_severity"], "Ordinal replay mismatch")
     require(report.scoring_review_resolution == scored["scoring_review_resolution"], "Review replay mismatch")
     require(report.context_priority == scored["context_priority"], "Context replay mismatch")

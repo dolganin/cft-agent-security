@@ -56,7 +56,7 @@
 
   <rect class="focus" x="790" y="300" width="220" height="130" rx="14"/>
   <text class="name" x="900" y="340" text-anchor="middle">Context Scoring</text>
-  <text class="text" x="900" y="370" text-anchor="middle">CVSS 4.0</text>
+  <text class="text" x="900" y="370" text-anchor="middle">CVSS 3.1</text>
   <text class="text" x="900" y="396" text-anchor="middle">Context Priority</text>
 
   <path class="edgeGreen" d="M260 365H310"/>

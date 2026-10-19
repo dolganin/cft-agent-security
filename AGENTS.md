@@ -488,7 +488,7 @@ Runtime limits
 
 # 12. Scoring
 
-## 12.1. CVSS 4.0
+## 12.1. CVSS 3.1
 
 Purpose:
 
@@ -517,7 +517,8 @@ other findings without explicit metrics -> UNASSESSED
 Semgrep ERROR/WARNING -> never converted directly into CVSS
 ```
 
-The generic numeric CVSS calculator is still pending explicit metric inputs.
+The numeric CVSS 3.1 base calculator uses `cvss==3.6` with eight explicit,
+justified metrics: AV, AC, PR, UI, S, C, I and A. Missing facts stay UNASSESSED.
 
 ## 12.2. Context Priority
 
@@ -695,7 +696,7 @@ Miro is the source of truth for current team status.
 ### Лёха
 
 ```text
-Разобраться с CVSS 4.0
+Разобраться с CVSS 3.1
 Спроектировать Context Priority
 ```
 
@@ -774,7 +775,7 @@ SberLab Docker
   tool contracts after security inputs are known
 
 Лёха
-  CVSS 4.0
+  CVSS 3.1
   Context Priority
   scoring examples on real findings
   later scoring implementation
@@ -1118,7 +1119,7 @@ metric/impact references. Recheck binding before FinalReport; stale source means
 UNASSESSED. The semantic review remains operator responsibility, not proof that
 a hash validates CVSS assumptions. Runtime Evidence inputs are not enabled here.
 
-CVSS 4.0/B uses pinned `cvss==3.6` only for complete explicit justified base
+CVSS 3.1/B uses pinned `cvss==3.6` only for complete explicit justified base
 metrics. Keep numeric CVSS, `source-impact.a04.v1` ordinal severity, scanner
 severity and Context Priority separate. None creates a confirmed verdict.
 Architecture unknown_inputs survive serialization; partial CP is provisional.

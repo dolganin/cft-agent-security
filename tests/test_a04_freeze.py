@@ -21,6 +21,17 @@ def test_checked_in_freeze_valid():
     assert result["new_runtime_cycles"] == 0
 
 
+def test_scoring_version_prose_does_not_allow_ordinal_label_tampering():
+    from evaluation.historical_baseline import frozen_presentation_input, historical_input
+    relative = 'benchmarks/juice-shop-v20.2.0-v2/rubric.yaml'
+    current = (freeze.ROOT / relative).read_bytes()
+    historical = historical_input(freeze.ROOT, relative)
+    assert frozen_presentation_input(freeze.ROOT, relative, current) == historical
+    tampered = current.replace(b'severity: HIGH', b'severity: LOW', 1)
+    assert tampered != current
+    assert frozen_presentation_input(freeze.ROOT, relative, tampered) == tampered
+
+
 def test_membership_and_slices():
     data, scope, rubric = bundle()
     freeze.validate_membership(data, scope, rubric, load_protocol())

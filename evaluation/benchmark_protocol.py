@@ -10,7 +10,7 @@ from typing import Literal
 
 import yaml
 
-from evaluation.historical_baseline import historical_input
+from evaluation.historical_baseline import frozen_presentation_input, historical_input
 from schemas.benchmark import BenchmarkCaseV2, BenchmarkProtocolV2, SplitPolicy
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -63,6 +63,8 @@ def load_protocol(
                 # Python implementation is allowed to evolve independently.
                 if relative.endswith(".py") and not relative.startswith("benchmarks/"):
                     raw_input = historical
+                else:
+                    raw_input = frozen_presentation_input(ROOT, relative, raw_input)
             if baseline_digest(relative, raw_input) != digest:
                 raise ValueError("Frozen baseline input mismatch: " + relative)
     return protocol
