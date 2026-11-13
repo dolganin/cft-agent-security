@@ -78,6 +78,9 @@ def test_runner_uses_local_target_as_cwd(monkeypatch, tmp_path: Path) -> None:
     assert captured["command"][:2] == ["semgrep", "scan"]
     assert captured["command"][-1] == "."
     assert "--no-rewrite-rule-ids" in captured["command"]
+    assert captured["command"][2:4] == ["--config", "p/default"]
+    assert "--metrics=off" in captured["command"]
+    assert "auto" not in captured["command"]
     assert captured["kwargs"]["cwd"] == tmp_path.resolve()
     # run_cancellable_process сам всегда использует shell=False.
     assert "shell" not in captured["kwargs"]

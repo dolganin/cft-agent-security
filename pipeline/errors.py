@@ -4,6 +4,7 @@ import json
 import subprocess
 from collections.abc import Iterator
 
+from executor.sandbox_manager import SandboxConfigurationError
 from executor.sandbox_session import SandboxSessionError
 from sast.semgrep_runner import SemgrepError
 from schemas.errors import ErrorCode, ErrorDetail, ErrorLayer
@@ -23,7 +24,17 @@ def error_from_exception(
     retryable = False
     message = public_message
 
-    if any(isinstance(item, (TimeoutError, subprocess.TimeoutExpired)) for item in causes):
+    if any(
+        isinstance(item, SandboxConfigurationError)
+        and str(item) == "runtime.compose_file must explicitly select one Docker Compose file"
+        for item in causes
+    ):
+        code = "VALIDATION_ERROR"
+        message = (
+            "Не выбран Docker Compose для запуска проекта. "
+            "Укажите runtime.compose_file в профиле целевого проекта."
+        )
+    elif any(isinstance(item, (TimeoutError, subprocess.TimeoutExpired)) for item in causes):
         code = "TIMEOUT"
         retryable = True
     elif any(isinstance(item, FileNotFoundError) for item in causes):

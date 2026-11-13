@@ -109,7 +109,7 @@ class RunOrchestrator:
         self.pipeline_runner = pipeline_runner or _default_pipeline_runner
         self.chat_answerer = chat_answerer or _default_chat_answerer
         self._scheduler = scheduler or RunScheduler(
-            workers=max_workers or settings.api_max_concurrent_runs,
+            workers=1,  # Pipeline settings are process-global; concurrent runs corrupt isolation.
         )
         self._owns_scheduler = scheduler is None
         self._budget = resource_budget or ResourceBudget(
@@ -550,6 +550,20 @@ class RunOrchestrator:
             gate = context.get("gate") or {}
             findings = context.get("findings") or []
             decision = gate.get("decision", "unknown") if isinstance(gate, dict) else "unknown"
+            locations = []
+            for finding in findings:
+                if not isinstance(finding, dict) or not finding.get("file"):
+                    continue
+                label = {"confirmed": "подтверждено", "rejected": "опровергнуто",
+                         "inconclusive": "недостаточно данных",
+                         "policy_blocked": "заблокировано политикой"}.get(
+                             finding.get("status"), "статус неизвестен")
+                locations.append(f"- `{finding['file']}:{finding.get('line', '?')}` — {label}.")
+            if locations:
+                return (
+                    "Ответ модели сейчас получить не удалось. Ниже сохраненные данные отчета "
+                    "(без новой интерпретации):\n\n" + "\n".join(dict.fromkeys(locations))
+                )
             return (
                 f"Решение последнего запуска: {decision}. "
                 f"В отчете находок: {len(findings)}. "
@@ -1130,8 +1144,10 @@ def _run_summary(
         detail = error.message if error is not None else "неизвестная ошибка pipeline"
         return (
             f"Анализ остановлен из-за технической ошибки: {detail}. "
-            "Результат анализа безопасности не сформирован; находки и доказательства не оценивались. "
-            "Можно повторить запуск после устранения причины."
+            + (f"Сохранено отчетов по находкам: {len(reports)}. Полученные доказательства доступны в отчете; "
+             "полнота проверки ограничена указанной технической ошибкой. " if reports else
+             "Результат анализа безопасности не сформирован; отчеты по находкам пока отсутствуют. ")
+            + "Можно повторить запуск после устранения причины."
         )
     counts: dict[str, int] = {}
     for report in reports:
@@ -1252,7 +1268,8 @@ def _default_chat_answerer(question: str, context: dict[str, object]) -> str:
         routes=parse_route_specs(settings.llm_routes),
         credentials=settings.llm_provider_credentials(),
         timeout_seconds=settings.llm_timeout_seconds,
-        max_output_tokens=min(1800, max(400, settings.llm_max_output_tokens)),
+        max_output_tokens=min(6000, max(1800, settings.llm_max_output_tokens)),
+        reasoning_effort=settings.llm_reasoning_effort,
         trace=settings.llm_trace,
     )
     result = client.complete_model(
@@ -1267,6 +1284,8 @@ def _default_chat_answerer(question: str, context: dict[str, object]) -> str:
         ),
         user_payload={"question": question, "completed_run": context},
         operation="chat_followup",
+        schema_retries=1,
+        network_retries=1,
     )
     return result.answer.strip()
 

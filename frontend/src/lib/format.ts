@@ -214,6 +214,9 @@ export function findingTitle(ruleId: string, fallback: string): string {
 }
 
 export function evidenceSummary(summary: string): string {
+  if (summary.startsWith("Capability-specific Evidence confirmed")) return "Доказательства подтвердили указанное условие безопасности в пределах выполненной проверки.";
+  if (summary.startsWith("The trusted Python artifact sets passwords without a validate_password call.")) return "В проверенном Python-файле пароль задается без вызова validate_password. Значения паролей скрыты в доказательствах. Подтверждено условие в исходном коде.";
+
   if (summary.includes("does not establish an explicit non-root USER")) {
     return "В финальном слое Dockerfile не задан непривилегированный USER. Подтверждена проблема в исходном файле; UID процесса во время выполнения не проверялся.";
   }

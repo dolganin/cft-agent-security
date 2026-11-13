@@ -78,6 +78,18 @@ def test_source_artifact_registration_is_bounded_and_does_not_mutate_profile(tmp
     assert artifact.kind == "javascript" and artifact.relative_path == "routes/search.ts"
 
 
+def test_source_registration_preserves_operator_artifact_and_roles(tmp_path):
+    (tmp_path / "App.jsx").write_text("export const App = null")
+    artifact = TargetArtifact(id="frontend-app", kind="javascript", path="App.jsx",
+                              roles=["react_html_flow.frontend"])
+    profile = TargetProfile(id="fixture", repository_path=tmp_path,
+                            artifacts={artifact.id: artifact})
+    updated = register_source_artifacts(profile, [SimpleNamespace(file="App.jsx")], tmp_path)
+    assert updated.artifacts == profile.artifacts
+    assert updated.artifact_id_for_path("App.jsx") == artifact.id
+    assert updated.artifact_id_for_role("react_html_flow.frontend") == artifact.id
+
+
 def test_source_sql_check_does_not_confirm_bound_or_sanitized_input(tmp_path):
     cases = [
         "models.sequelize.query(`SELECT * FROM T WHERE name='${escape(req.query.q)}'`) ",

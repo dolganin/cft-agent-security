@@ -7,6 +7,7 @@ import {
 } from "@phosphor-icons/react";
 import type { FinalReport } from "../../api/types";
 import {
+  evidenceSummary,
   findingStatusLabel,
   findingTitle,
   severityLabel,
@@ -42,14 +43,16 @@ export function FindingBlock({ report }: { report: FinalReport }) {
       <div className="finding-details">
         <section>
           <span>Серьезность и приоритет</span>
-          <p>CVSS 4.0: {report.cvss?.assessment_status === "assessed"
-            ? `${report.cvss.score} · ${report.cvss.severity}`
-            : report.cvss?.assessment_status === "not_applicable" ? "не применимо" : "не оценено"}</p>
-          {report.technical_severity ? <p>Оценка по исходникам: {report.technical_severity.level}
-            {` (${report.technical_severity.scheme})`}</p> : null}
-          <p>Контекстный приоритет: {report.context_priority?.level ?? "не оценено"}
-            {report.context_priority?.assessment_status !== "assessed" ? " · предварительный" : ""}</p>
-          {report.context_priority?.unknown_inputs?.length ? <p>Неизвестные данные: {report.context_priority.unknown_inputs.join(", ")}</p> : null}
+          <p className="score-row">CVSS 4.0: <span className={`score-badge ${report.cvss?.assessment_status === "assessed" ? severityTone(report.cvss.severity) : "none"}`}>
+            {report.cvss?.assessment_status === "assessed"
+              ? `${report.cvss.score} · ${severityLabel(report.cvss.severity)}`
+              : report.cvss?.assessment_status === "not_applicable" ? "Не применимо" : "Не оценено"}</span></p>
+          {report.technical_severity ? <p className="score-row">Оценка по исходникам: <span className={`score-badge ${severityTone(report.technical_severity.level)}`} title={report.technical_severity.scheme}>
+            {report.technical_severity.level === "UNASSESSED" ? "Не оценено" : severityLabel(report.technical_severity.level)}</span></p> : null}
+          <p className="score-row">Контекстный приоритет: <span className={`score-badge ${severityTone(report.context_priority?.level)}`}>
+            {severityLabel(report.context_priority?.level)}</span>
+            {report.context_priority?.assessment_status !== "assessed" ? <span className="score-badge provisional">Предварительный</span> : null}</p>
+          {report.context_priority?.unknown_inputs?.length ? <p>Неизвестные данные: {report.context_priority.unknown_inputs.map(key => ({criticality: "критичность актива", authentication: "аутентификация", blast_radius: "масштаб последствий", public_exposure: "публичная доступность", databases: "доступ к базам данных", critical_paths: "критические связи"} as Record<string, string>)[key] ?? key).join(", ")}</p> : null}
         </section>
         {report.analysis_summary ? <p>{report.analysis_summary}</p> : null}
         {report.hypothesis ? (
@@ -60,7 +63,7 @@ export function FindingBlock({ report }: { report: FinalReport }) {
         ) : null}
         <section>
           <span>Вывод на основе доказательств</span>
-          <p>{report.explanation}</p>
+          <p>{evidenceSummary(report.explanation)}</p>
         </section>
         {report.limitations.length > 0 ? (
           <section>

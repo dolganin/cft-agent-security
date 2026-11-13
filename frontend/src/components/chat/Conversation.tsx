@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowDown, WifiSlash } from "@phosphor-icons/react";
+import { ArrowDown, CaretRight, CircleNotch, ListChecks, WifiSlash } from "@phosphor-icons/react";
 import type { SseState } from "../../hooks/useSse";
 import type { ConversationTimelineItem } from "../../lib/timeline";
 import { AssistantMessage } from "./AssistantMessage";
@@ -52,6 +52,8 @@ export function Conversation({
     mountedRef.current = true;
   }, [items.length, transientError]);
 
+  const displayItems = groupRunActivity(items);
+
   const jumpToLatest = () => {
     followRef.current = true;
     setUnread(false);
@@ -74,9 +76,11 @@ export function Conversation({
           {items.length === 0 && !runActive ? (
             <SuggestedActions onSelect={onSuggestedAction} />
           ) : null}
-          {items.map((item) => (
-            <div className={`timeline-entry ${item.kind}`} key={item.id}>
-              <TimelineContent item={item} onRetry={onRetry} />
+          {displayItems.map((entry) => entry.kind === "activity_group" ? (
+            <RunActivity key={entry.id} items={entry.items} finished={entry.finished} onRetry={onRetry} />
+          ) : (
+            <div className={`timeline-entry ${entry.kind}`} key={entry.id}>
+              <TimelineContent item={entry} onRetry={onRetry} />
             </div>
           ))}
 
@@ -142,4 +146,77 @@ function TimelineContent({
     case "gate":
       return <GateBlock gate={item.gate} reports={item.reports} run={item.run} />;
   }
+}
+
+interface ActivityGroup {
+  kind: "activity_group";
+  id: string;
+  items: ConversationTimelineItem[];
+  finished: boolean;
+}
+
+function groupRunActivity(items: ConversationTimelineItem[]): (ConversationTimelineItem | ActivityGroup)[] {
+  const groups = new Map<string, ActivityGroup>();
+  const result: (ConversationTimelineItem | ActivityGroup)[] = [];
+  for (const item of items) {
+    const isActivity = item.runId && item.kind !== "gate" && item.kind !== "technical_error"
+      && (item.kind !== "message" || (item.message.role !== "user" && item.message.kind === "status"));
+    if (!isActivity || !item.runId) {
+      result.push(item);
+      continue;
+    }
+    let group = groups.get(item.runId);
+    if (!group) {
+      group = { kind: "activity_group", id: `activity:${item.runId}`, items: [], finished: false };
+      groups.set(item.runId, group);
+      result.push(group);
+    }
+    group.items.push(item);
+  }
+  for (const [runId, group] of groups) {
+    group.finished = items.some(item => item.runId === runId && (
+      item.kind === "gate" || item.kind === "technical_error"
+      || (item.kind === "message" && item.message.kind === "summary")
+      || (item.kind === "run_start" && !["queued", "running"].includes(item.run.status))
+    ));
+  }
+  return result;
+}
+
+function RunActivity({ items, finished, onRetry }: {
+  items: ConversationTimelineItem[];
+  finished: boolean;
+  onRetry: () => void;
+}) {
+  const [expanded, setExpanded] = useState(!finished);
+  useEffect(() => { if (finished) setExpanded(false); }, [finished]);
+  const latest = new Map<string, string>();
+  for (const item of items) {
+    if (item.kind === "stage") latest.set(`stage:${item.stage.stage}`, item.id);
+    if (item.kind === "finding_progress") latest.set(`finding:${item.event.finding_id}`, item.id);
+  }
+  const hasDiscovery = items.some(item => item.kind === "discovery");
+  const compact = items.filter(item => {
+    if (item.kind === "run_start" || item.kind === "message") return false;
+    if (item.kind === "stage") return !(hasDiscovery && item.stage.stage === "discovery")
+      && latest.get(`stage:${item.stage.stage}`) === item.id;
+    if (item.kind === "finding_progress") return latest.get(`finding:${item.event.finding_id}`) === item.id
+      && !items.some(other => other.kind === "finding" && other.report.finding_id === item.event.finding_id);
+    return true;
+  });
+  return (
+    <section className={`run-activity ${finished ? "finished" : "active"}`}>
+      <button type="button" className="run-activity-toggle" aria-expanded={expanded}
+        onClick={() => setExpanded(value => !value)}>
+        {finished ? <ListChecks size={18} /> : <CircleNotch size={18} className="spin" />}
+        <span><strong>Ход проверки</strong><small>{finished ? "Действия и доказательства" : "Агент проверяет проект"}</small></span>
+        <CaretRight size={16} className={expanded ? "rotated" : ""} />
+      </button>
+      {expanded ? <div className="run-activity-body">
+        {compact.length ? compact.map(item => <div className={`timeline-entry ${item.kind}`} key={item.id}>
+          <TimelineContent item={item} onRetry={onRetry} />
+        </div>) : <p className="run-activity-wait">Подготовка анализа…</p>}
+      </div> : null}
+    </section>
+  );
 }

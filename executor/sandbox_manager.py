@@ -212,6 +212,10 @@ class DockerComposeAdapter:
         self.kwargs = kwargs
 
     def open(self) -> ManagedSandboxSession:
+        if self.target.runtime.compose_file is None:
+            raise SandboxConfigurationError(
+                "runtime.compose_file must explicitly select one Docker Compose file"
+            )
         logs: list[SandboxLog] = []
         runner = self.kwargs.get("runner", _run)
         if not callable(runner):
@@ -245,12 +249,15 @@ class DockerfileAdapter(_CommandAdapter):
         context = _inside(repo, service.root, directory=True)
         image = f"cft-target-{self.session_id[:12]}"
         container = f"cft-target-{self.session_id[:12]}"
+        network = f"cft-sandbox-{self.session_id[:12]}_default"
         self._created = [("container", [container]), ("image", [image])]
 
         def start() -> None:
             self._command("build", service.id, ["docker", "build", "--label", f"cft.session_id={self.session_id}", "--tag", image, "--file", str(dockerfile), str(context)])
+            self._command("prepare", service.id, ["docker", "network", "create", "--internal", network])
             argv = [
                 "docker", "run", "--detach", "--name", container,
+                "--network", network, "--network-alias", service.id,
                 "--label", f"cft.session_id={self.session_id}",
                 "--label", f"cft.service={service.id}",
             ]
@@ -263,9 +270,13 @@ class DockerfileAdapter(_CommandAdapter):
 
         def teardown() -> None:
             self._command("teardown", service.id, ["docker", "rm", "--force", container], allow_failure=True)
+            self._command("teardown", service.id, ["docker", "network", "rm", network], allow_failure=True)
             self._command("teardown", service.id, ["docker", "image", "rm", "--force", image], allow_failure=True)
 
-        return ManagedSandboxSession(self.session_id, self.name, self.target, start, teardown, self._state, self.logs)
+        def state() -> dict[str, object]:
+            return {**self._state(), "compose_project": f"cft-sandbox-{self.session_id[:12]}"}
+
+        return ManagedSandboxSession(self.session_id, self.name, self.target, start, teardown, state, self.logs)
 
 
 class FrameworkAdapter(_CommandAdapter):

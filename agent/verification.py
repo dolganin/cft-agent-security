@@ -40,6 +40,9 @@ def register_source_artifacts(profile, findings, repository):
             continue
         if not path.is_file() or len(artifacts) >= 64:
             continue
+        # Preserve operator-owned IDs/roles and keep path lookup unambiguous.
+        if any(item.relative_path == relative for item in artifacts.values()):
+            continue
         artifact_id = "source-" + sha256(relative.encode()).hexdigest()[:16]
         existing = artifacts.get(artifact_id)
         if existing is not None:

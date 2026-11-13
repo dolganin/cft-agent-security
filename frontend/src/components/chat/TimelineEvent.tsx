@@ -124,6 +124,7 @@ export function AgentDecisionBlock({
 }
 
 function decisionReason(reason: string): string {
+  if (reason === "Capability-specific structured Evidence confirmed the finding.") return "Структурированные доказательства подтвердили находку в пределах выполненной проверки.";
   const verdict = reason.match(
     /^Capability-specific structured Evidence established the finding verdict: (confirmed|rejected)\.$/,
   );

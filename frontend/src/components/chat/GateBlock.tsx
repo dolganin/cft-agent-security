@@ -31,9 +31,9 @@ export function GateBlock({
       </div>
 
       {!technicalFailure ? <div className="summary-counts" aria-label="Finding counts">
-        <span><strong>{gate.confirmed}</strong> подтверждено</span>
-        <span><strong>{gate.rejected}</strong> опровергнуто</span>
-        <span><strong>{gate.inconclusive}</strong> недостаточно данных</span>
+        <span className="count-confirmed"><strong>{gate.confirmed}</strong> подтверждено</span>
+        <span className="count-rejected"><strong>{gate.rejected}</strong> опровергнуто</span>
+        <span className="count-inconclusive"><strong>{gate.inconclusive}</strong> недостаточно данных</span>
         {gate.policy_blocked > 0 ? (
           <span><strong>{gate.policy_blocked}</strong> заблокировано политикой</span>
         ) : null}
@@ -45,10 +45,12 @@ export function GateBlock({
           <ol>
             {top.map((report) => (
               <li key={report.finding_id}>
-                <span className={`severity ${severityTone(report.finding.severity)}`}>
+                <span className={`severity ${severityTone(report.finding.severity === "ERROR" ? "HIGH" : report.finding.severity === "WARNING" ? "MEDIUM" : report.finding.severity)}`}>
                   {severityLabel(report.finding.severity)}
                 </span>
-                <span>{findingTitle(report.finding.rule_id, report.finding.title)}</span>
+                <span>{findingTitle(report.finding.rule_id, report.finding.title)}
+                  <small className="summary-finding-path">{report.finding.file}:{report.finding.line_start}</small>
+                </span>
               </li>
             ))}
           </ol>

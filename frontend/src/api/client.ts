@@ -73,8 +73,15 @@ export function getHealth(): Promise<{ status: string }> {
   return request("/health");
 }
 
-export function listProjects(): Promise<ApiProject[]> {
-  return request("/projects");
+const localProjectVisibility = import.meta.glob<{ hiddenProjectIds?: string[] }>(
+  "../local-project-visibility.json", { eager: true, import: "default" },
+);
+
+export async function listProjects(): Promise<ApiProject[]> {
+  const projects = await request<ApiProject[]>("/projects");
+  const hidden = new Set(Object.values(localProjectVisibility)
+    .flatMap((config) => config.hiddenProjectIds ?? []));
+  return projects.filter((project) => !hidden.has(project.id));
 }
 
 export async function uploadProjectZip(

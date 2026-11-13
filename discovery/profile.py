@@ -34,6 +34,23 @@ class TargetProfileBuilder:
 
         for component in discovery.components:
             detected = _service_from_component(component)
+            if detected.internal_port is None and detected.dockerfile:
+                root = Path(discovery.repository_root).resolve()
+                path = (root / detected.dockerfile).resolve()
+                if path.is_relative_to(root) and path.is_file():
+                    ports: set[int] = set()
+                    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+                        if re.match(r"^\s*FROM\s", line, re.IGNORECASE):
+                            ports.clear()
+                        match = re.match(r"^\s*EXPOSE\s+([^#]+)", line, re.IGNORECASE)
+                        if match:
+                            for token in match[1].split():
+                                if re.fullmatch(r"\d+(?:/tcp)?", token):
+                                    port = int(token.split("/")[0])
+                                    if 1 <= port <= 65535:
+                                        ports.add(port)
+                    if len(ports) == 1:
+                        detected = detected.model_copy(update={"internal_port": ports.pop()})
             existing = existing_by_root.get(component.root)
             if existing is not None:
                 service = _merge_service(detected, existing)

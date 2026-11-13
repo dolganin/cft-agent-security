@@ -51,6 +51,9 @@ def run_semgrep_scan(
 
     executable = shutil.which("semgrep") or _environment_semgrep()
     configs = [config] if isinstance(config, str) else list(config)
+    # Semgrep rejects auto discovery with --metrics=off. Use an explicit
+    # registry ruleset without enabling telemetry.
+    configs = ["p/default" if item == "auto" else item for item in configs]
     if not configs:
         raise SemgrepError("At least one Semgrep config is required")
     scanner_root = None

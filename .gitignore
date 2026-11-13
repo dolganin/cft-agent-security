@@ -16,3 +16,4 @@ output/
 tmp/
 
 api_data/
+frontend/src/local-project-visibility.json

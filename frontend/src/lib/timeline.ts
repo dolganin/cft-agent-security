@@ -96,11 +96,15 @@ export function buildConversationTimeline(
       .filter(({ run }) => run.status === "technical_failure")
       .map(({ run }) => run.id),
   );
+  const latestSummaries = new Map<string, string>();
+  for (const message of [...snapshot.messages].sort((a, b) => a.created_at.localeCompare(b.created_at))) {
+    if (message.kind === "summary" && message.run_id) latestSummaries.set(message.run_id, message.id);
+  }
   const messages = snapshot.messages.filter(
     (message) =>
       message.kind !== "summary" ||
       message.run_id === null ||
-      !technicalRunIds.has(message.run_id),
+      (!technicalRunIds.has(message.run_id) && latestSummaries.get(message.run_id) === message.id),
   );
   const items: ConversationTimelineItem[] = messages.map((message) => {
     const run = message.run_id ? runsById.get(message.run_id) : undefined;

@@ -13,10 +13,10 @@ describe("B08 scoring presentation", () => {
       technical_severity: { level: "HIGH", scheme: "source-impact.a04.v1", assessment_status: "assessed" },
     } as unknown as FinalReport;
     render(<FindingBlock report={report} />);
-    expect(screen.getByText("CVSS 4.0: не оценено")).toBeTruthy();
-    expect(screen.getByText("Контекстный приоритет: HIGH · предварительный")).toBeTruthy();
-    expect(screen.getByText("Неизвестные данные: authentication")).toBeTruthy();
+    expect(screen.getByText("Не оценено").closest("p")?.textContent).toBe("CVSS 4.0: Не оценено");
+    expect(screen.getByText("Предварительный").closest("p")?.textContent).toBe("Контекстный приоритет: ВЫСОКАЯПредварительный");
+    expect(screen.getByText("Неизвестные данные: аутентификация")).toBeTruthy();
     expect(screen.getByTitle("Уровень исходного сканера, не CVSS")).toBeTruthy();
-    expect(screen.getByText("Оценка по исходникам: HIGH (source-impact.a04.v1)")).toBeTruthy();
+    expect(screen.getByTitle("source-impact.a04.v1").closest("p")?.textContent).toBe("Оценка по исходникам: ВЫСОКАЯ");
   });
 });

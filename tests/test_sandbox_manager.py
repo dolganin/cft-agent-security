@@ -46,6 +46,20 @@ def test_manager_selects_compose_adapter(tmp_path: Path) -> None:
     assert isinstance(SandboxManager().select_adapter(profile), DockerComposeAdapter)
 
 
+def test_compose_requires_explicit_file_and_reports_actionable_error(tmp_path: Path) -> None:
+    from pipeline.errors import error_from_exception
+
+    profile = _profile(tmp_path, "docker_compose", "fastapi")
+    profile.runtime.compose_file = None
+    runner = FakeRunner()
+    with pytest.raises(SandboxConfigurationError) as caught:
+        SandboxManager(runner=runner).open(profile)
+    assert not runner.commands
+    error = error_from_exception(caught.value, layer="pipeline", public_message="Pipeline failed")
+    assert error.code == "VALIDATION_ERROR"
+    assert "runtime.compose_file" in error.message
+
+
 def test_manager_selects_dockerfile_adapter(tmp_path: Path) -> None:
     profile = _profile(tmp_path, "dockerfile", "unknown")
     assert isinstance(SandboxManager().select_adapter(profile), DockerfileAdapter)
@@ -91,6 +105,9 @@ def test_dockerfile_lifecycle_uses_fixed_argv_logs_and_teardown(tmp_path: Path) 
     assert any(command.startswith("docker build --label cft.session_id=") for command in commands)
     assert any(command.startswith("docker run --detach --name cft-target-") for command in commands)
     assert any(command.startswith("docker rm --force cft-target-") for command in commands)
+    assert any(command.startswith("docker network create --internal cft-sandbox-") for command in commands)
+    assert any(command.startswith("docker network rm cft-sandbox-") for command in commands)
+    assert any("--network-alias app" in command for command in commands)
     assert all(isinstance(command, list) for command in runner.commands)
 
 
