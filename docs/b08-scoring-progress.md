@@ -8,13 +8,25 @@
 
 | Результат | Основание | Что нельзя подставлять вместо него |
 |---|---|---|
-| CVSS 4.0/B | 11 явно обоснованных базовых метрик; `cvss==3.6` | Semgrep ERROR/WARNING, сложность задания, A04 HIGH |
+| CVSS 3.1/B | 8 явно обоснованных базовых метрик; `cvss==3.6` | Semgrep ERROR/WARNING, сложность задания, A04 HIGH |
 | Source-impact severity | Отдельная рубрика `source-impact.a04.v1` | Числовой CVSS и его категории |
 | Context Priority | Архитектурные факты; прежние веса v0.1 | Серьезность сканера и CVSS |
 
 Калькулятор: https://github.com/RedHatProductSecurity/cvss.
+Текущий расчёт использует восемь base metrics `AV/AC/PR/UI/S/C/I/A` и вектор
+`CVSS:3.1/...`. Scope и значения остальных метрик требуют собственного
+обоснования; несовместимый набор метрик не преобразуется автоматически.
+Спецификация: https://www.first.org/cvss/v3-1/specification-document.
+
+Расчёт и независимый replay используют CVSS 3.1/B. Интерфейс показывает число
+только при совпадении схемы и префикса вектора.
+`evaluation.cvss_replay` требует согласованность схемы, префикса и полного набора
+base metrics с source-bound review, заново вычисляет балл/категорию.
+Неизвестная версия, смешанные метрики или неверное число дают отказ, даже после
+пересоздания seal. Простое чтение CVSSResult не является проверкой оценки.
+
 Обоснованные нулевые impacts дают CVSS 0.0; неизвестные impacts дают UNASSESSED.
-Docker USER hardening сохраняет прежнее N/A. Environmental/threat metrics пока
+Docker USER hardening сохраняет прежнее N/A. Environmental/temporal metrics пока
 не поддерживаются. Числовые оценки не создают Evidence или runtime verdict.
 
 Узкая ordinal рубрика HIGH включает: прямое раскрытие базы, обход аутентификации,
@@ -104,7 +116,7 @@ python -m app.b08_acceptance package --input artifacts/b08-acceptance-new --outp
 ```
 
 `run` использует два синтетических safe_noop workflow, без Docker target scripts,
-LLM и SAST. Проверяет путь score → Validator/Executor → FinalReport, 9.9 reference
+LLM и SAST. Проверяет путь score → Validator/Executor → FinalReport, 9.8 reference
 vector, независимость действий от scores, partial context, hash binding и отказ
 при устаревшем источнике. Сохраняет source, review/finding, оба отчета, действия,
 execution/audit и копии реализации. seal.json связывает SHA256 и точный состав
@@ -130,7 +142,3 @@ execution/audit и копии реализации. seal.json связывает
 - 18 skips: 1 A05 saved-artifact opt-in, 6 Docker boundary, 1 multi-run lifecycle,
   4 sandbox manager, 1 sandbox runner, 3 SberLab sessions, 1 Stage1 E2E opt-in,
   1 Stage2 pinned-checkout prerequisite. Они не выдаются за пройденные интеграции.
-
-Переносимый пакет: `artifacts/b08-handoff-2026-10-14.zip` и `.zip.sha256`.
-В нем содержатся source/review/report/control, audit, seal и снимки реализации;
-полный pytest output — `docs/b08-validation-2026-10-14.txt`.

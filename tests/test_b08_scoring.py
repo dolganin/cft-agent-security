@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from architecture.context import ProjectDescriptionAdapter
 from schemas.architecture import ArchitectureContext, ProjectDescription
 from schemas.finding import Finding
-from schemas.scoring import CVSSAssessmentInput, CVSSMetricFact
+from schemas.scoring import CVSSAssessmentInput, CVSSMetricFact, CVSSResult
 from scoring.service import ScoringService
 
 
@@ -24,15 +24,12 @@ def assessment():
     values = {
         "AV": "N",
         "AC": "L",
-        "AT": "N",
         "PR": "N",
         "UI": "N",
-        "VC": "H",
-        "VI": "H",
-        "VA": "H",
-        "SC": "H",
-        "SI": "H",
-        "SA": "N",
+        "S": "U",
+        "C": "H",
+        "I": "H",
+        "A": "H",
     }
     return CVSSAssessmentInput(
         finding_id="reviewed",
@@ -56,11 +53,40 @@ def test_reference_vector_is_deterministic_and_keeps_justifications():
     assert first == scorer.score_cvss(
         finding(), inputs, trusted_evidence_refs=frozenset({"fixture:reviewed"})
     )
-    assert first.score == 9.9
+    assert first.score == 9.8
     assert first.severity == "CRITICAL"
     assert first.assessment_status == "assessed"
     assert first.metric_facts == inputs.metrics
-    assert first.scheme == "CVSS:4.0/B"
+    assert first.scheme == "CVSS:3.1/B"
+    assert first.vector == "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+
+
+@pytest.mark.parametrize('scope,privileges,expected', [('U', 'N', 9.8), ('C', 'N', 10.0),
+                                                    ('U', 'L', 8.8), ('C', 'L', 9.9)])
+def test_scope_and_privilege_weights_use_base_equations(scope, privileges, expected):
+    inputs = assessment()
+    for key, value in {'S': scope, 'PR': privileges}.items():
+        inputs.metrics[key] = inputs.metrics[key].model_copy(update={'value': value})
+    result = ScoringService().score_cvss(finding(), inputs, trusted_evidence_refs=frozenset({'fixture:reviewed'}))
+    assert result.score == expected
+    assert result.vector.startswith('CVSS:3.1/')
+
+
+def test_archived_version_tag_is_preserved_without_relabelling_its_score():
+    archived = {'vector': 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+                'scheme': 'CVSS:3.0/B', 'score': 9.8, 'severity': 'CRITICAL', 'assessment_status': 'assessed'}
+    result = CVSSResult.model_validate(archived)
+    assert result.scheme == archived['scheme'] and result.vector == archived['vector']
+    assert result.score == archived['score']
+
+
+@pytest.mark.parametrize('key,value', [('S', 'N'), ('UI', 'P'), ('AT', 'N'), ('VC', 'H')])
+def test_incompatible_metric_vocabulary_cannot_be_silently_converted(key, value):
+    inputs = assessment()
+    inputs.metrics[key] = CVSSMetricFact(value=value, reasoning='Invalid vocabulary', evidence_refs=['fixture:reviewed'])
+    result = ScoringService().score_cvss(finding(), inputs, trusted_evidence_refs=frozenset({'fixture:reviewed'}))
+    assert result.score is None
+    assert result.assessment_status == 'unassessed'
 
 
 @pytest.mark.parametrize("problem", ["wrong_finding", "missing", "extra", "invalid", "untrusted"])
@@ -70,7 +96,7 @@ def test_bad_inputs_never_produce_numeric_scores(problem):
     if problem == "wrong_finding":
         inputs.finding_id = "other"
     elif problem == "missing":
-        del inputs.metrics["VC"]
+        del inputs.metrics["C"]
     elif problem == "extra":
         inputs.metrics["E"] = inputs.metrics["AV"]
     elif problem == "invalid":
@@ -103,7 +129,7 @@ def test_justification_is_required_and_vector_injection_is_rejected(field, value
 
 def test_all_no_impact_metrics_are_zero_not_unassessed():
     inputs = assessment()
-    for key in ("VC", "VI", "VA", "SC", "SI", "SA"):
+    for key in ("C", "I", "A"):
         inputs.metrics[key] = inputs.metrics[key].model_copy(update={"value": "N"})
     result = ScoringService().score_cvss(
         finding(), inputs, trusted_evidence_refs=frozenset({"fixture:reviewed"})

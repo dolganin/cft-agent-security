@@ -75,7 +75,7 @@ default checkout даже при переданном другом target. Polic
 В `rubric.yaml` заморожена узкая экспертная ordinal HIGH рубрика для четырех
 source-grounded случаев: двух SQL sinks и двух public authorization/role flows.
 Это НЕ официальная severity Juice Shop, НЕ оценка сложности задания и НЕ numeric
-CVSS 4.0. Для остальных 37 записей severity N/A; это не LOW и не safe.
+CVSS 3.1. Для остальных 37 записей severity N/A; это не LOW и не safe.
 Сопоставлять эти четыре labels допустимо только с assessment той же рубрики;
 UNASSESSED/N/A не входят в assessed accuracy, но остаются в coverage.
 

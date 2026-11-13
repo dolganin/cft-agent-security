@@ -15,6 +15,9 @@ import {
 } from "../../lib/format";
 
 export function FindingBlock({ report }: { report: FinalReport }) {
+  const currentCvss = report.cvss?.assessment_status === "assessed"
+    && report.cvss.scheme === "CVSS:3.1/B"
+    && report.cvss.vector?.startsWith("CVSS:3.1/");
   const location = [
     report.finding.file,
     report.finding.line_start ? String(report.finding.line_start) : null,
@@ -43,9 +46,9 @@ export function FindingBlock({ report }: { report: FinalReport }) {
       <div className="finding-details">
         <section>
           <span>Серьезность и приоритет</span>
-          <p className="score-row">CVSS 4.0: <span className={`score-badge ${report.cvss?.assessment_status === "assessed" ? severityTone(report.cvss.severity) : "none"}`}>
-            {report.cvss?.assessment_status === "assessed"
-              ? `${report.cvss.score} · ${severityLabel(report.cvss.severity)}`
+          <p className="score-row">CVSS 3.1: <span className={`score-badge ${currentCvss ? severityTone(report.cvss!.severity) : "none"}`}>
+            {currentCvss
+              ? `${report.cvss!.score} · ${severityLabel(report.cvss!.severity)}`
               : report.cvss?.assessment_status === "not_applicable" ? "Не применимо" : "Не оценено"}</span></p>
           {report.technical_severity ? <p className="score-row">Оценка по исходникам: <span className={`score-badge ${severityTone(report.technical_severity.level)}`} title={report.technical_severity.scheme}>
             {report.technical_severity.level === "UNASSESSED" ? "Не оценено" : severityLabel(report.technical_severity.level)}</span></p> : null}

@@ -1,10 +1,10 @@
 schema_version: benchmark.rubric.a04.v1
 severity_definition: 'Narrow source-impact ordinal HIGH: direct database disclosure, authentication bypass,
-  unauthorized persistent update or administrative role acquisition. Not numeric CVSS4 and not official
+  unauthorized persistent update or administrative role acquisition. Not numeric CVSS3.1 and not official
   Juice Shop severity.'
 severity_labels:
 - HIGH
-cvss_numeric_scores: 'N/A: explicit justified CVSS4 metrics/calculator absent'
+cvss_numeric_scores: 'N/A: explicit justified CVSS3.1 metrics/calculator absent'
 context_priority_definition: 'Requires independently reviewed deployment facts: exposure, asset criticality,
   database/critical paths, auth and blast radius; do not self-grade production scorer output.'
 null_policy: N/A not safe/LOW and never in accuracy denominator; report reviewed/all and assessed/reviewed

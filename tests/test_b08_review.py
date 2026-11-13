@@ -28,8 +28,7 @@ def example(root):
     finding = Finding(id="fixture", source="test", rule_id="fixture.rule", title="Scoring fixture",
                       description="Not a discovery measurement", file="example.ts", line_start=2,
                       severity="TEST_CONFIRMED", service="backend")
-    values = {"AV": "N", "AC": "L", "AT": "N", "PR": "N", "UI": "N", "VC": "H",
-              "VI": "H", "VA": "H", "SC": "H", "SI": "H", "SA": "N"}
+    values = {"AV": "N", "AC": "L", "PR": "N", "UI": "N", "S": "U", "C": "H", "I": "H", "A": "H"}
     review = ScoringReview(
         finding_id=finding.id, finding_digest=finding_review_digest(finding),
         reviewed_by="synthetic-acceptance", rationale="Synthetic binding/calculator test only",
@@ -56,7 +55,7 @@ def test_full_graph_report_and_roundtrip(tmp_path, monkeypatch):
     _, _, state = example(tmp_path)
     result = build_graph().invoke(state)
     report = FinalReport.model_validate_json(result["final_report"].model_dump_json())
-    assert report.cvss.score == 9.9
+    assert report.cvss.score == 9.8
     assert report.technical_severity.level == "HIGH"
     assert report.scoring_review_resolution.status == "accepted"
     assert report.context_priority.assessment_status == "partial"
@@ -108,7 +107,7 @@ def test_review_rechecked_at_report_time(tmp_path):
     _, _, state = example(tmp_path)
     from agent.nodes import score_finding
     state.update(score_finding(state))
-    assert state["cvss"].score == 9.9
+    assert state["cvss"].score == 9.8
     (tmp_path / "example.ts").write_text("changed\n")
     state["status"] = "inconclusive"
     report = build_final_report(state)
@@ -166,7 +165,7 @@ def test_static_report_keeps_scoring_without_claiming_runtime_verification(tmp_p
     finding, review, _ = example(tmp_path)
     report = _build_static_finding_report(finding, tmp_path, reason="Unsupported fixture",
                                           scoring_review=review)
-    assert report.cvss.score == 9.9
+    assert report.cvss.score == 9.8
     assert report.technical_severity.level == "HIGH"
     assert report.status == "inconclusive"
     assert report.verification.evidence_count == 0
@@ -223,6 +222,6 @@ def test_pipeline_accepts_operator_reviews_and_freezes_input(tmp_path, monkeypat
     assert run_pipeline(_parse_args()) == 1  # Synthetic confirmed; not technical error exit 2.
     report_path = next((output / "reports").glob("*.json"))
     report = FinalReport.model_validate_json(report_path.read_text())
-    assert report.cvss.score == 9.9
+    assert report.cvss.score == 9.8
     assert report.scoring_review_resolution.status == "accepted"
     assert json.loads((output / "scoring-reviews.json").read_text()) == [review.model_dump(mode="json")]

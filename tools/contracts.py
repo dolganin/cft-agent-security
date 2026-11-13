@@ -61,7 +61,7 @@ class CVSSCalculationInput(BaseModel):
     finding: Finding
     metrics: dict[str, str] = Field(
         description=(
-            "Explicit CVSS 4.0 metric values selected from known facts. "
+            "Explicit CVSS 3.1 metric values selected from known facts. "
             "The deterministic scorer must not invent missing metrics."
         ),
     )
@@ -154,7 +154,7 @@ TOOL_CONTRACTS: tuple[ToolContract, ...] = (
     ToolContract(
         name="calculate_cvss",
         purpose=(
-            "Calculate CVSS 4.0 deterministically from explicit, justified metrics."
+            "Calculate CVSS 3.1 deterministically from explicit, justified metrics."
         ),
         access=ToolAccess.SCORING,
         input_model=CVSSCalculationInput,
