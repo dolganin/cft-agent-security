@@ -72,13 +72,32 @@ def env_image(path: Path, image: str):
         path.chmod(0o600)
 
 
+def configured_demo_routes(config) -> str:
+    """Respect the operator's provider selection; retain the tested default."""
+    return config.llm_routes.strip() or DEMO_ROUTES
+
+
+def require_model_credentials(config):
+    from agent.llm import parse_route_specs
+
+    routes = parse_route_specs(configured_demo_routes(config))
+    credentials = config.llm_provider_credentials()
+    for route in routes:
+        if credentials.get(route.key_env) and (
+            route.provider != "cloudflare" or credentials.get("CLOUDFLARE_ACCOUNT_ID")
+        ):
+            return routes
+    required = list(dict.fromkeys(route.key_env for route in routes))
+    if any(route.provider == "cloudflare" for route in routes):
+        required.append("CLOUDFLARE_ACCOUNT_ID")
+    raise SetupError("Укажите в .env учетные данные выбранного провайдера: " + ", ".join(required))
+
+
 def check_model(config):
-    from agent.llm import LLMUnavailableError, ProviderFailoverClient, parse_route_specs
+    from agent.llm import LLMUnavailableError, ProviderFailoverClient
     from schemas.llm import LLMProbeResult
 
-    if not config.nsu_openwebui_key or not config.nsu_openwebui_key.get_secret_value().strip():
-        raise SetupError("Укажите действующий NSU_OPENWEBUI_KEY в .env. Ключ нужен для живой модели.")
-    client = ProviderFailoverClient(routes=parse_route_specs(DEMO_ROUTES),
+    client = ProviderFailoverClient(routes=require_model_credentials(config),
         credentials=config.llm_provider_credentials(), timeout_seconds=20,
         max_output_tokens=256, reasoning_effort="low")
     try:
@@ -86,8 +105,8 @@ def check_model(config):
             system_prompt="Connectivity check. Return only the requested JSON object; do not call tools.",
             user_payload={"task": "Return status=ready and note=connection works."}, operation="setup_probe")
     except (LLMUnavailableError, ValueError):
-        raise SetupError("Модель NSU не ответила: проверьте ключ, доступ к интернету и доступность Qwen3.8-27B.") from None
-    print("Живая модель Qwen3.8-27B ответила корректно.")
+        raise SetupError("Модель не ответила: проверьте ключ, CFT_LLM_ROUTES и доступ к провайдеру.") from None
+    print("Подключение к выбранной модели проверено.")
 
 
 def check_demo(*, config, port=8080, preview_port=8090, probe_model=False):
@@ -109,8 +128,8 @@ def check_demo(*, config, port=8080, preview_port=8090, probe_model=False):
             raise SetupError(f"Порт {selected} занят. Остановите предыдущий сервер или выберите другой порт.") from None
     if probe_model:
         check_model(config)
-    elif not config.nsu_openwebui_key or not config.nsu_openwebui_key.get_secret_value().strip():
-        raise SetupError("Укажите NSU_OPENWEBUI_KEY в .env, затем повторите запуск.")
+    else:
+        require_model_credentials(config)
 
 
 def main():

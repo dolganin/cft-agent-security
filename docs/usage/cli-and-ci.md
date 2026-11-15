@@ -3,6 +3,35 @@
 Команды выполняются из корня репозитория с активной `.venv` после установки
 зависимостей по [README](../../README.md#быстрый-запуск).
 
+## Настройка модели
+
+В `.env` задайте ключ провайдера и `CFT_LLM_ROUTES` в формате `провайдер:модель`.
+API, CLI и подготовка окружения используют эту настройку. Пустой маршрут в
+быстром запуске означает `nsu:Qwen3.8-27B`.
+
+| Провайдер | Ключ | Формат маршрута |
+|---|---|---|
+| NSU | `NSU_OPENWEBUI_KEY` | `nsu:MODEL_ID` |
+| Groq | `GROQ_API_KEY` | `groq:MODEL_ID` |
+| Mistral | `MISTRAL_API_KEY` | `mistral:MODEL_ID` |
+| Gemini | `GEMINI_API_KEY` | `gemini:MODEL_ID` |
+| OpenRouter | `OPENROUTER_API_KEY` | `openrouter:MODEL_ID` |
+| NVIDIA NIM | `NVIDIA_NIM_API_KEY` | `nvidia:MODEL_ID` |
+| Z.ai | `ZAI_API_KEY` | `zai:MODEL_ID` |
+| Cloudflare | `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` | `cloudflare:MODEL_ID` |
+
+`MODEL_ID` замените идентификатором модели из своего аккаунта провайдера.
+Несколько маршрутов через запятую образуют последовательность переключения
+при ошибках. Пример с проверенной в проекте моделью NSU:
+
+```dotenv
+NSU_OPENWEBUI_KEY=ваш-ключ
+CFT_LLM_ROUTES=nsu:Qwen3.8-27B
+```
+
+Для другого провайдера укажите его ключ и маршрут вместо этих двух строк.
+Ключи не передаются контейнеру анализируемого приложения.
+
 ## Быстрый CLI с живой моделью
 
 ```bash
@@ -14,7 +43,7 @@ python -m json.tool artifacts/demo-cli/gate.json
 магазина и вызывает тот же `app.demo.run_demo_pipeline`, что чат. Он использует
 канонический `app.ci_pipeline`: Discovery → Docker → Semgrep → модель → Validator
 → Executor → Evidence → отчеты → Gate. Профиль, правила, бюджет и модель
-`nsu:Qwen3.8-27B` совпадают с быстрым сценарием UI. Шаблон магазина не меняется;
+из `CFT_LLM_ROUTES` совпадают с быстрым сценарием UI. Шаблон магазина не меняется;
 Docker-среда и временная копия удаляются после выполнения.
 
 Результаты сохраняются независимо от процесса. Новый запуск требует нового
@@ -136,9 +165,10 @@ Quickstart также запускается при изменениях соо�
 должна совпасть с `target_repository`. Публичный fork не предоставляет доступ
 к приватным SberLab/AutoDealer: этот workflow требует настройки владельцем.
 
-Для режима `llm` добавьте `NSU_OPENWEBUI_KEY` в **Settings → Secrets and variables
+Для NSU добавьте `NSU_OPENWEBUI_KEY` в **Settings → Secrets and variables
 → Actions**; ключ не хранится в YAML и не передается контейнеру приложения.
-В reusable-вызове секрет передается явно под тем же именем.
+В reusable-вызове секрет передается явно под тем же именем. Для другого
+провайдера передайте его ключ и `CFT_LLM_ROUTES` через `env` шага запуска CLI.
 Режим `stub` не использует модель. Итоговые артефакты сохраняются шагом
 `Upload security artifacts` даже при блокирующем решении Gate.
 

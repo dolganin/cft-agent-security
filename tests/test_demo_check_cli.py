@@ -5,12 +5,13 @@ from pydantic import SecretStr
 
 from app import demo_check
 from app.config import settings
+from app.setup import DEMO_ROUTES
 
 
 def test_cli_keeps_canonical_pipeline_exit_code_and_disposable_target(tmp_path, monkeypatch):
     output = tmp_path / "result"
     captured = {}
-    original = settings.llm_routes
+    monkeypatch.setattr(settings, "llm_routes", "")
     monkeypatch.setattr(settings, "nsu_openwebui_key", SecretStr("not-a-real-key"))
 
     def pipeline(args):
@@ -19,7 +20,7 @@ def test_cli_keeps_canonical_pipeline_exit_code_and_disposable_target(tmp_path, 
         captured["target"] = Path(args.target)
         assert captured["target"].is_dir() and captured["target"] != demo_check.ORDER_TEMPLATE
         assert args.profile == str(demo_check.ORDER_PROFILE)
-        assert settings.llm_routes == demo_check.DEMO_ROUTES
+        assert settings.llm_routes == DEMO_ROUTES
         output.mkdir()
         (output / "gate.json").write_text(json.dumps({
             "decision": "fail", "confirmed": 4, "inconclusive": 0,
@@ -29,7 +30,7 @@ def test_cli_keeps_canonical_pipeline_exit_code_and_disposable_target(tmp_path, 
     monkeypatch.setattr(demo_check, "run_demo_pipeline", pipeline)
     assert demo_check.main(["--output-dir", str(output)]) == 1
     assert not captured["target"].exists()
-    assert settings.llm_routes == original
+    assert settings.llm_routes == ""
     assert (output / "gate.json").is_file()
 
 
@@ -43,6 +44,7 @@ def test_cli_never_overwrites_saved_evidence(tmp_path):
 
 def test_live_cli_requires_key_but_stub_is_explicit(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(settings, "nsu_openwebui_key", None)
+    monkeypatch.setattr(settings, "llm_routes", "nsu:example")
     with pytest.raises(SystemExit) as exc:
         demo_check.main(["--output-dir", str(tmp_path / "live")])
     assert exc.value.code == 2
@@ -57,3 +59,17 @@ def test_live_cli_requires_key_but_stub_is_explicit(tmp_path, monkeypatch, capsy
         demo_check.main(["--agent-mode", "stub", "--output-dir", str(tmp_path / "stub")])
     assert settings.llm_routes == original
     assert "качество поиска не измеряется" in capsys.readouterr().out
+
+
+def test_cli_uses_selected_provider_without_nsu_credentials(tmp_path, monkeypatch):
+    monkeypatch.setattr(settings, "llm_routes", "mistral:selected-model")
+    monkeypatch.setattr(type(settings), "llm_provider_credentials",
+                        lambda self: {"MISTRAL_API_KEY": "fake"})
+
+    def pipeline(args):
+        assert settings.llm_routes == "mistral:selected-model"
+        return 0
+
+    monkeypatch.setattr(demo_check, "run_demo_pipeline", pipeline)
+    assert demo_check.main(["--output-dir", str(tmp_path / "result")]) == 0
+    assert settings.llm_routes == "mistral:selected-model"

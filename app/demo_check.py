@@ -10,13 +10,13 @@ from pathlib import Path
 
 from app.config import settings
 from app.demo import ORDER_PROFILE, ORDER_TEMPLATE, ROOT, run_demo_pipeline
-from app.setup import DEMO_ROUTES
+from app.setup import SetupError, configured_demo_routes, require_model_credentials
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--agent-mode", choices=("llm", "stub"), default="llm",
-                        help="llm: real model; stub: CI wiring check, not vulnerability verification")
+                        help="llm: real model; stub: registered checks without LLM reasoning")
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/demo-cli"),
                         help="New or empty output directory; previous evidence is never overwritten")
     args = parser.parse_args(argv)
@@ -25,15 +25,16 @@ def main(argv: list[str] | None = None) -> int:
     destination = args.output_dir.expanduser().resolve()
     if destination.exists() and (not destination.is_dir() or any(destination.iterdir())):
         parser.error("Каталог результатов уже содержит данные. Выберите новый --output-dir.")
-    if args.agent_mode == "llm" and (
-        not settings.nsu_openwebui_key or not settings.nsu_openwebui_key.get_secret_value().strip()
-    ):
-        parser.error("Укажите NSU_OPENWEBUI_KEY в .env; подготовка описана в README.")
+    if args.agent_mode == "llm":
+        try:
+            require_model_credentials(settings)
+        except (SetupError, ValueError) as exc:
+            parser.error(str(exc))
     print("Режим: живая модель" if args.agent_mode == "llm" else
           "Режим: stub — проверка CI-интеграции без модели; качество поиска не измеряется.")
     previous_routes = settings.llm_routes
     try:
-        settings.llm_routes = DEMO_ROUTES
+        settings.llm_routes = configured_demo_routes(settings)
         with tempfile.TemporaryDirectory(prefix="cft-demo-cli-") as temporary:
             target = Path(temporary) / "order-store"
             shutil.copytree(ORDER_TEMPLATE, target)

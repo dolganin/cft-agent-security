@@ -1630,3 +1630,6 @@ codes, refuses nonempty artifact directories, and cleans its disposable source
 copy. In `stub` mode registered deterministic protocols still collect real
 Evidence; no LLM search quality is measured. Chat is the primary UI navigation;
 run reports remain reachable from chat without the old demo/debug footer links.
+Quickstart API/CLI and setup honor explicit `CFT_LLM_ROUTES` and require credentials
+for at least one selected route. Only an empty selection uses the tested
+`nsu:Qwen3.8-27B` default; choosing another provider never requires an NSU key.

@@ -48,7 +48,38 @@ def test_listening_port_is_still_rejected(monkeypatch):
 
 def test_missing_model_key_is_not_silently_treated_as_live_analysis():
     with pytest.raises(setup.SetupError, match="NSU_OPENWEBUI_KEY"):
-        setup.check_model(SimpleNamespace(nsu_openwebui_key=None))
+        setup.check_model(SimpleNamespace(llm_routes="", llm_provider_credentials=dict))
+
+
+def test_explicit_provider_is_respected_without_an_nsu_key(monkeypatch):
+    captured = {}
+    config = SimpleNamespace(llm_routes="openrouter:operator-selected-model",
+                             llm_provider_credentials=lambda: {"OPENROUTER_API_KEY": "fake"})
+
+    class Client:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+
+        def complete_model(self, **kwargs):
+            return None
+
+    monkeypatch.setattr("agent.llm.ProviderFailoverClient", Client)
+    setup.check_model(config)
+    assert [(r.provider, r.model) for r in captured["routes"]] == [
+        ("openrouter", "operator-selected-model"),
+    ]
+    assert setup.configured_demo_routes(SimpleNamespace(llm_routes="")) == setup.DEMO_ROUTES
+
+
+def test_provider_key_must_belong_to_selected_routes_and_cloudflare_needs_account():
+    wrong = SimpleNamespace(llm_routes="mistral:example",
+                            llm_provider_credentials=lambda: {"NSU_OPENWEBUI_KEY": "fake"})
+    with pytest.raises(setup.SetupError, match="MISTRAL_API_KEY"):
+        setup.require_model_credentials(wrong)
+    cloudflare = SimpleNamespace(llm_routes="cloudflare:@cf/example",
+                                 llm_provider_credentials=lambda: {"CLOUDFLARE_API_TOKEN": "fake"})
+    with pytest.raises(setup.SetupError, match="CLOUDFLARE_ACCOUNT_ID"):
+        setup.require_model_credentials(cloudflare)
 
 
 def test_docker_failure_does_not_print_private_subprocess_output(monkeypatch):

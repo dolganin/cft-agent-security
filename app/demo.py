@@ -287,9 +287,9 @@ def main() -> None:
         shutil.rmtree(temporary_root, ignore_errors=True)
         raise
     settings.agent_mode = "llm"
-    # The old DeepSeek identifier returns Model not found on NSU; keep this
-    # presentation route explicit without changing the user's main .env chain.
-    settings.llm_routes = "nsu:Qwen3.8-27B"
+    from app.setup import configured_demo_routes
+
+    settings.llm_routes = configured_demo_routes(settings)
     # The first-run .env defaults to high reasoning. Keep chat summaries and
     # followups on the same bounded low-reasoning route as the demo workflow;
     # otherwise thinking alone can exhaust the conversational output budget.
