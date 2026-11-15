@@ -19,7 +19,7 @@
 
 ## Быстрый запуск
 
-**Требования:** Python 3.11 · Node.js 22.12+ · Docker с Compose v2 · API-ключ LLM-провайдера.
+**Требования:** Python 3.11+ (зависимости проверены на 3.11) · Node.js 22.12+ · Docker с Compose v2 · API-ключ LLM-провайдера.
 
 ### 1. Установка
 
@@ -29,7 +29,7 @@
 ```bash
 git clone https://github.com/Ultramind-AI/cft-security-agent.git
 cd cft-security-agent
-python3.11 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -c requirements-first-run.txt -e ".[dev,sast]"
 npm --prefix frontend ci
@@ -41,15 +41,33 @@ cp .env.example .env
 <details>
 <summary><b>Windows: подготовка WSL2</b></summary>
 
-В PowerShell:
+Установите Ubuntu из PowerShell.
 
 ```powershell
 wsl --install -d Ubuntu
+```
+
+Если установка сама открыла Ubuntu и появилось приглашение `user@...$`, переходите к командам `apt` ниже. Чтобы открыть уже установленную Ubuntu позже, выполните в PowerShell:
+
+```powershell
 wsl -d Ubuntu
 ```
 
+В Ubuntu установите системный Python и поддержку виртуальных окружений.
+
+```bash
+sudo apt update
+sudo apt install python3 python3-venv
+```
+
+Перед клонированием перейдите в домашнюю папку Ubuntu.
+
+```bash
+cd ~
+```
+
 В Docker Desktop включите **Settings → Resources → WSL Integration**.
-Python и Node.js установите внутри Ubuntu, затем выполните команды Linux выше.
+Установите Node.js 22.12+ внутри Ubuntu, затем выполните команды Linux выше. Если вы уже в папке проекта, пропустите `git clone` и `cd cft-security-agent`.
 
 </details>
 
