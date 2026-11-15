@@ -1,5 +1,5 @@
 import { ArrowSquareOut, ShieldCheck } from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { ApiRun, FinalReport, GateResult } from "../../api/types";
 import { findingTitle, gateLabel, severityLabel, severityTone } from "../../lib/format";
 import { groupReports } from "../../lib/report-groups";
@@ -13,6 +13,9 @@ export function GateBlock({
   reports: FinalReport[];
   run: ApiRun;
 }) {
+  const location = useLocation();
+  const returnToChat = location.pathname.startsWith("/chats/")
+    ? location.pathname : location.state?.returnToChat;
   const technicalFailure = run.status === "technical_failure" || gate.exit_code === 2;
   const grouped = groupReports(reports);
   const counts = grouped.reduce((result, item) => {
@@ -63,7 +66,7 @@ export function GateBlock({
         </div>
       ) : null}
 
-      <Link className="summary-link" to={`/runs/${run.id}`}>
+      <Link className="summary-link" to={`/runs/${run.id}`} state={{ returnToChat }}>
         Открыть полный отчет
         <ArrowSquareOut size={15} />
       </Link>

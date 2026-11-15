@@ -1,6 +1,6 @@
 import { ArrowLeft, CircleNotch } from "@phosphor-icons/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   getGate,
   getReports,
@@ -20,6 +20,10 @@ import { groupReports } from "../lib/report-groups";
 
 export function RunPage() {
   const { runId } = useParams();
+  const location = useLocation();
+  const candidate = location.state?.returnToChat;
+  const chatPath = typeof candidate === "string" && /^\/chats\/[A-Za-z0-9_-]+$/.test(candidate)
+    ? candidate : "/";
   const queryClient = useQueryClient();
   const runQuery = useQuery({
     queryKey: ["run", runId],
@@ -65,7 +69,7 @@ export function RunPage() {
     <div className="full-report-page">
       <header className="full-report-header">
         <div>
-          <Link to="/debug/runs" className="back-link"><ArrowLeft size={15} /> Прогоны и диагностика</Link>
+          <Link to={chatPath} className="back-link"><ArrowLeft size={15} /> {chatPath === "/" ? "К чатам" : "Вернуться в чат"}</Link>
           <h1>Анализ безопасности</h1>
           <p>{run.target_id} · <code>{shortId(run.id)}</code></p>
         </div>
