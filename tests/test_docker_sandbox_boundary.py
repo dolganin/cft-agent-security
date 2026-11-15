@@ -25,7 +25,7 @@ def _docker_available() -> bool:
             timeout=5,
             check=False,
         )
-    except OSError:
+    except (OSError, subprocess.TimeoutExpired):
         return False
 
     return result.returncode == 0
@@ -34,7 +34,7 @@ def _docker_available() -> bool:
 pytestmark = [
     pytest.mark.integration,
     pytest.mark.skipif(
-        not _docker_available() or not os.getenv("CFT_SANDBOX_IMAGE"),
+        not os.getenv("CFT_SANDBOX_IMAGE") or not _docker_available(),
         reason="Docker integration tests require a working Docker daemon and CFT_SANDBOX_IMAGE pinned by digest",
     ),
 ]
