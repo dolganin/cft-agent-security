@@ -150,9 +150,8 @@ def _evaluate(record: Evidence, family: dict) -> list[str]:
                 deficiencies.append("unexpected_trial_result")
             if not _truthy(facts, "identity_proof_established"):
                 deficiencies.append("identity_unverified")
-        elif record.verdict == "rejected":
-            if effect is not False or outcome is not True:
-                deficiencies.append("unexpected_trial_result")
+        elif record.verdict == "rejected" and (effect is not False or outcome is not True):
+            deficiencies.append("unexpected_trial_result")
 
         family_id = family["id"]
         if family_id in {"R01-OWN-READ", "R01-OWN-WRITE"} and facts.get("role_a_own_control_passed") is not True:
