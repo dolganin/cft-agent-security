@@ -17,9 +17,11 @@ def rule_family(rule: str) -> str:
         ("authorization", ("juice.authorization.",)),
         ("open-redirect", ("redirect",)),
         ("path-traversal", ("path-traversal", "zip-slip", "archive-path")),
-        ("authentication", ("authn", "authentication", "credential")),
+        # Check specific injection families before generic authentication rules:
+        # e.g. ``demo-sql-injection.authentication`` is still SQL injection.
         ("nosql-injection", ("nosql-injection", "nosql-where")),
         ("sql-injection", ("sql-injection", "sequelize-injection", "sqli")),
+        ("authentication", ("authn", "authentication", "credential")),
         ("code-evaluation", ("code-evaluation", "dynamic-code", "eval")),
         ("weak-cryptography", ("weak-cryptography", "weak-hash", "md5", "sha1")),
         ("ssrf", ("ssrf", "request-url")),

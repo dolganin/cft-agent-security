@@ -20,6 +20,7 @@
 - [Правила разработки](../CONTRIBUTING.md).
 - [Подготовка лаборатории](k01-environment-passport.md).
 - [Демонстрационный сценарий](demo/README.md).
+- [Локальный магазин для короткого показа](demo/order-store.md).
 - [RepositoryScout](source-scout.md).
 - [Исследовательский цикл](research-loop-r04.md).
 - [Базовые исследовательские инструменты](research-foundation-report-2026-10-15.md).

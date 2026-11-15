@@ -291,6 +291,8 @@ def _pipeline_args(
         base_findings=args.base_findings,
         base_architecture=args.base_architecture,
         cancellation_token=getattr(args, "cancellation_token", None),
+        coalesce_bound_scout=getattr(args, "coalesce_bound_scout", False),
+        reasoning_prefetch_workers=getattr(args, "reasoning_prefetch_workers", 1),
     )
 
 

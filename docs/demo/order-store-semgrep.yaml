@@ -1,0 +1,31 @@
+# Narrow demo rules surface candidates; the agent's bound runtime checks decide verdicts.
+rules:
+  - id: demo-sql-injection.search
+    languages: [javascript]
+    severity: ERROR
+    message: "Поисковый ввод попадает в SQL-выражение; требуется проверка параметризации."
+    paths:
+      include: ["**/routes/search.js"]
+    pattern-regex: '(?s)const statement = db\.prepare\(.*?statement\.all\(\)'
+  - id: demo-idor.order-read
+    languages: [javascript]
+    severity: ERROR
+    message: "Заказ читается по идентификатору без ограничения владельца."
+    paths:
+      include: ["**/routes/orders.js"]
+    pattern-regex: '(?s)const order = db\.prepare\(\s*"SELECT id, user_id AS userId, item, total FROM orders WHERE id = \?"\s*\)\.get\(request\.params\.orderId\);\s*if \(!order\) return response\.status\(404\)\.json\(\{ error: "Заказ не найден" \}\);\s*return response\.json\(\{ order \}\);'
+  - id: demo-sql-injection.authentication
+    languages: [javascript]
+    severity: ERROR
+    message: "Данные формы входа напрямую включаются в SQL-запрос; требуется проверка обхода аутентификации."
+    paths:
+      include: ["**/routes/login.js"]
+    pattern-regex: >-
+      (?s)const user = db\.prepare\(\s*`SELECT id, email, name FROM accounts WHERE email = '\$\{email\}' AND password = '\$\{password\}'`\s*\)\.get\(\);
+  - id: demo-file-exposure.directory-listing
+    languages: [javascript]
+    severity: WARNING
+    message: "Открытый каталог раскрывает имя резервного файла."
+    paths:
+      include: ["**/routes/files.js"]
+    pattern-regex: '(?s)Index of /api/files.{0,300}backup\.env'

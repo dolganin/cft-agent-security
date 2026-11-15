@@ -393,7 +393,7 @@ class PolicyValidator:
                 return str(exc), "access_binding_denied"
             return None
         if action.tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory",
-                           "verify_redirect_destination", "verify_auth_reauthentication"}:
+                           "verify_redirect_destination", "verify_auth_reauthentication", "verify_demo_idor"}:
             profile = self.target_profiles.get(action.target)
             artifact = profile.artifacts.get(action.parameters.get("artifact_id")) if profile else None
             line = action.parameters.get("line")

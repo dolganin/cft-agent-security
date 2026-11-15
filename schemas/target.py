@@ -342,6 +342,13 @@ class TargetProfile(BaseModel):
             if route.tool in b06 and (self.b06_verification is None or route.mode is not None
                     or route.method != "GET" or (route.check, route.family, route.endpoint) != b06[route.tool]):
                 raise ValueError("B06 capability requires its exact operator protocol and endpoint")
+            if route.tool == "verify_demo_idor" and (
+                route.mode is not None or route.method != "GET"
+                or (route.check, route.family, route.endpoint) != (
+                    "order_owner_read", "access-control", "/api/orders/:orderId"
+                )
+            ):
+                raise ValueError("Demo IDOR capability requires its fixed owner-read protocol")
         if any(key != service.id for key, service in self.services.items()):
             raise ValueError("Target service mapping key must match service id")
         if any(key != artifact.id for key, artifact in self.artifacts.items()):

@@ -1,5 +1,8 @@
 # Демонстрация CFT Security Agent
 
+Новый короткий веб-сценарий с отдельным локальным магазином описан в
+[order-store.md](order-store.md). Исторический показ Juice Shop ниже не изменён.
+
 ## Реальный Stage 1 Fix Verification
 
 После подготовки Juice Shop v20.2.0 и локальных images:

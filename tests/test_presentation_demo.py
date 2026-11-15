@@ -33,3 +33,28 @@ def test_demo_runner_keeps_canonical_pipeline_and_records_limited_scope(tmp_path
 def test_demo_runner_does_not_accept_arbitrary_profiles(tmp_path):
     with pytest.raises(ValueError, match="registered demo profile"):
         demo.run_demo_pipeline(argparse.Namespace(profile=str(tmp_path / "untrusted.yaml")))
+
+
+def test_order_demo_uses_separate_policy_and_restores_settings(tmp_path, monkeypatch):
+    import yaml
+
+    original = settings.policy_file
+    captured = {}
+
+    def runner(args):
+        captured["policy"] = settings.policy_file
+        captured["workers"] = args.reasoning_prefetch_workers
+        captured["coalesce"] = args.coalesce_bound_scout
+        return 0
+
+    monkeypatch.setattr(demo, "run_ci_pipeline", runner)
+    args = argparse.Namespace(profile=str(demo.ORDER_PROFILE), output_dir=str(tmp_path),
+                              agent_mode="stub", max_iterations=2)
+    assert demo.run_demo_pipeline(args) == 0
+    assert captured["policy"] == demo.ROOT / "policies/demo-order-store.yaml"
+    assert captured["workers"] == 2 and captured["coalesce"]
+    assert settings.policy_file == original
+    default = yaml.safe_load((demo.ROOT / "policies/default.yaml").read_text())
+    scoped = yaml.safe_load(captured["policy"].read_text())
+    assert "verify_demo_idor" not in default["tools"]["allowed"]
+    assert "verify_demo_idor" in scoped["tools"]["allowed"]

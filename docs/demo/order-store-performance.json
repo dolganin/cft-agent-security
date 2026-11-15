@@ -1,0 +1,82 @@
+{
+  "kind": "local_demo_performance_comparison",
+  "same_model": "Qwen3.8-27B",
+  "baseline": {
+    "run_id": "run-eeb37799d6614990801fb9aec36378ec",
+    "seconds": 176.239,
+    "run_status": "completed",
+    "raw_reports": 8,
+    "unique_source_findings": {
+      "routes/files.js:3": "confirmed",
+      "routes/login.js:7": "confirmed",
+      "routes/orders.js:12": "confirmed",
+      "routes/search.js:4": "confirmed",
+      "server.js:53": "inconclusive"
+    },
+    "model_requests": 23,
+    "model_operations": {
+      "repository_scout": 1,
+      "analyse": 8,
+      "form_hypothesis": 8,
+      "build_dynamic_plan": 6
+    },
+    "model_errors_or_fallbacks": [],
+    "execution_tools": {
+      "verify_sensitive_directory": 1,
+      "verify_sql_injection": 3,
+      "verify_demo_idor": 2
+    },
+    "runtime_execution_count": 6,
+    "execution_statuses": {
+      "completed": 6
+    },
+    "scout_reviewed_files": 6,
+    "workflow_errors": 0,
+    "artifact_sha256": {
+      "gate.json": "ab9a851e43b8539c3fefaa48431d5bee9136314317ee8150a7f6d6a98329fe46",
+      "scout/summary.json": "fa5d53633eaa2848191deb23bd1b49246aa7f4e439f6a62b93fdddab00bdfed2",
+      "audit/llm-attempts.jsonl": "5339102990f0b6bf11e0dfa21b24422fe7ff0cdd636898f9f89f3742f3f2f74d",
+      "audit/executor.jsonl": "0b96b38efa6d66033f35f7cd1e96320e0430778d846e9dcc7a711255736df36d"
+    }
+  },
+  "optimized": {
+    "run_id": "run-9fb6365c166c4b2ebf50791bc265fe52",
+    "seconds": 51.789,
+    "run_status": "completed",
+    "raw_reports": 5,
+    "unique_source_findings": {
+      "routes/files.js:3": "confirmed",
+      "routes/login.js:7": "confirmed",
+      "routes/orders.js:12": "confirmed",
+      "routes/search.js:4": "confirmed",
+      "server.js:53": "inconclusive"
+    },
+    "model_requests": 6,
+    "model_operations": {
+      "repository_scout": 1,
+      "registered_reasoning_turn": 5
+    },
+    "model_errors_or_fallbacks": [],
+    "execution_tools": {
+      "verify_sensitive_directory": 1,
+      "verify_sql_injection": 2,
+      "verify_demo_idor": 1
+    },
+    "runtime_execution_count": 4,
+    "execution_statuses": {
+      "completed": 4
+    },
+    "scout_reviewed_files": 6,
+    "workflow_errors": 0,
+    "artifact_sha256": {
+      "gate.json": "51f176bd7550e7de128b41abf83b7fb61d5f41f66495bafdf6a10736b6b4418b",
+      "scout/summary.json": "aa189f004d735d670f711765d7e1cc1cc7df8f2f2b90f3646256e6146e210302",
+      "audit/llm-attempts.jsonl": "c8ae944e91c36499919c33dbc6b70eaf8a0ed5074001fba8c88ccea11b1a32d0",
+      "audit/executor.jsonl": "a6033331f16e28b62bd4a0b4251f0c9046c466d0d32ea23c163f47c14184a237"
+    }
+  },
+  "speedup": 3.403,
+  "same_unique_outcomes": true,
+  "limits": "One warm local comparison, not a general quality benchmark or latency guarantee. All active checks remain sequential and validator/evidence guarded.",
+  "publication_scope": "Performance readout and hashes only; full local run artifacts are not included in this JSON."
+}

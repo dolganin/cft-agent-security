@@ -776,13 +776,15 @@ def _execute(payload: dict) -> tuple[int, str, str]:
     if tool == _SANDBOX_COMMAND_TOOL:
         return _sandbox_command(repository_path, parameters, timeout, output_limit)
 
-    if tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory"}:
+    if tool in {"inspect_javascript_security", "verify_sql_injection", "verify_sensitive_directory", "verify_demo_idor"}:
         try:
             if tool == "inspect_javascript_security":
                 artifacts = _validated_artifacts(payload.get("artifacts", {}))
                 return _inspect_javascript_security(repository_path, artifacts, parameters)
             if not isinstance(endpoint, str):
                 raise TypeError("Missing trusted runtime endpoint")
+            if tool == "verify_demo_idor":
+                return _verify_demo_idor(base_url, endpoint, parameters, timeout, request_host)
             url = _fixed_url(base_url, endpoint)
             if tool == "verify_sql_injection":
                 return _verify_sql_injection(url, parameters, timeout, request_host)
@@ -829,7 +831,9 @@ def _source_binding(parameters, extra=()):
         raise ValueError("Invalid capability parameters")
     if not isinstance(parameters["artifact_id"], str) or type(parameters["line"]) is not int or not 1 <= parameters["line"] <= 100_000:
         raise ValueError("Invalid source binding")
-    if not isinstance(parameters.get("check"), str) or parameters.get("check") not in {"source_metadata", "sql_interpolation"}:
+    if not isinstance(parameters.get("check"), str) or parameters.get("check") not in {
+        "source_metadata", "sql_interpolation", "order_owner_read",
+    }:
         raise ValueError("Invalid source verification check")
     return {key: parameters[key] for key in ("artifact_id", "line", "check")}
 
@@ -940,6 +944,143 @@ def _verify_sql_injection(url, parameters, timeout, request_host):
         payload["explanation"] = "Repeated valid controls and probes show no bypass for the original bounded SQL probe."
         stdout = json.dumps(payload, separators=(",", ":"))
     return code, stdout, stderr
+
+
+def _demo_json_request(url, *, method, timeout, request_host=None, payload=None, token=None):
+    headers = {
+        "User-Agent": "cft-demo-id-or-check/1",
+        "Accept": "application/json",
+    }
+    if request_host:
+        headers["Host"] = request_host
+    data = None
+    if payload is not None:
+        headers["Content-Type"] = "application/json"
+        data = json.dumps(payload, separators=(",", ":")).encode("utf-8")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    request = Request(url, data=data, headers=headers, method=method)
+    try:
+        response = build_opener(_NoRedirect).open(request, timeout=timeout)
+    except HTTPError as exc:
+        response = exc
+    with response:
+        status = int(response.status)
+        body = response.read(32_769)
+        if len(body) > 32_768 or "json" not in response.headers.get("Content-Type", "").lower():
+            return status, None
+        try:
+            decoded = json.loads(body)
+        except (ValueError, UnicodeError):
+            return status, None
+        return status, decoded if isinstance(decoded, dict) else None
+
+
+def _demo_idor_observation(url, *, timeout, request_host, token):
+    status, body = _demo_json_request(
+        url, method="GET", timeout=timeout, request_host=request_host, token=token,
+    )
+    order = body.get("order") if isinstance(body, dict) else None
+    if not isinstance(order, dict):
+        return {"status": status, "order_id": None, "owner_id": None}
+    order_id = order.get("id")
+    owner_id = order.get("userId")
+    return {
+        "status": status,
+        "order_id": order_id if isinstance(order_id, str) else None,
+        "owner_id": owner_id if isinstance(owner_id, str) else None,
+    }
+
+
+def _verify_demo_idor(base_url, endpoint, parameters, timeout, request_host):
+    facts = _source_binding(parameters)
+    if (endpoint != "/api/orders/:orderId"
+            or parameters["check"] != "order_owner_read"):
+        raise ValueError("Demo IDOR check is not bound to its fixed order route")
+
+    # These disposable fixture accounts are local to the demo target. Their
+    # passwords and session tokens are never copied into output or audit facts.
+    login_url = _fixed_url(base_url, "/api/auth/login")
+    order_a_url = _fixed_url(base_url, "/api/orders/order-a")
+    order_b_url = _fixed_url(base_url, "/api/orders/order-b")
+    missing_url = _fixed_url(base_url, "/api/orders/missing")
+    request_timeout = min(max(timeout / 8, 0.1), 1.0)
+    try:
+        _, alice = _demo_json_request(
+            login_url, method="POST", timeout=request_timeout,
+            request_host=request_host,
+            payload={"email": "alice@demo.local", "password": "alice-demo-2026"},
+        )
+        _, bob = _demo_json_request(
+            login_url, method="POST", timeout=request_timeout,
+            request_host=request_host,
+            payload={"email": "bob@demo.local", "password": "bob-demo-2026"},
+        )
+        alice_token = alice.get("token") if isinstance(alice, dict) else None
+        bob_token = bob.get("token") if isinstance(bob, dict) else None
+        if not (isinstance(alice_token, str) and alice_token
+                and isinstance(bob_token, str) and bob_token):
+            raise ValueError("Demo fixture authentication did not return both sessions")
+
+        observations = {
+            "owner": _demo_idor_observation(
+                order_b_url, timeout=request_timeout, request_host=request_host, token=bob_token,
+            ),
+            "attacker_self": _demo_idor_observation(
+                order_a_url, timeout=request_timeout, request_host=request_host, token=alice_token,
+            ),
+            "attacker_target": [
+                _demo_idor_observation(
+                    order_b_url, timeout=request_timeout, request_host=request_host, token=alice_token,
+                )
+                for _ in range(2)
+            ],
+            "negative_control": _demo_idor_observation(
+                missing_url, timeout=request_timeout, request_host=request_host, token=alice_token,
+            ),
+        }
+        controls = (
+            observations["owner"] == {"status": 200, "order_id": "order-b", "owner_id": "user-b"}
+            and observations["attacker_self"] == {
+                "status": 200, "order_id": "order-a", "owner_id": "user-a",
+            }
+            and observations["negative_control"]["status"] == 404
+        )
+        probes = observations["attacker_target"]
+        leaked = all(item == {"status": 200, "order_id": "order-b", "owner_id": "user-b"}
+                     for item in probes)
+        denied = all(item["status"] in {403, 404} for item in probes)
+        verdict = ("confirmed" if controls and leaked else
+                   "rejected" if controls and denied else "inconclusive")
+        explanation = (
+            "Two authenticated cross-account reads returned the other user's order; owner and missing-order controls passed."
+            if verdict == "confirmed" else
+            "Two cross-account reads were denied while the owner, self-access and missing-order controls passed."
+            if verdict == "rejected" else
+            "The fixed owner, self-access, cross-account and missing-order controls did not establish a reliable verdict."
+        )
+    except (OSError, URLError, TimeoutError, ValueError, TypeError):
+        observations = {}
+        verdict = "inconclusive"
+        explanation = "The fixed demo account or order controls could not be completed."
+
+    facts.update(
+        check=parameters["check"], endpoint=endpoint,
+        observations=observations, requests=2 + sum(
+            1 for key in ("owner", "attacker_self", "negative_control")
+            if key in observations
+        ) + len(observations.get("attacker_target", [])),
+        credentials_redacted=True, response_values_redacted=True,
+        control_repeated=True, probe_repeated=True,
+    )
+    payload = {
+        "schema": "cft.bounded_verification.v1",
+        "scope": "runtime_idor_owner_read",
+        "verdict": verdict,
+        "explanation": explanation,
+        "facts": facts,
+    }
+    return 0, json.dumps(payload, ensure_ascii=False, separators=(",", ":")), ""
 
 
 def _verify_sensitive_directory(url, parameters, timeout, request_host):

@@ -7,6 +7,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import tempfile
+from collections.abc import Callable
 from pathlib import Path
 from threading import Lock
 
@@ -15,7 +18,7 @@ from fastapi import HTTPException
 
 from agent.llm import ProviderFailoverClient, parse_route_specs
 from api.app import create_app
-from api.registry import ApiTargetRegistry
+from api.registry import ApiTargetRegistry, RegisteredTarget
 from api.service import RunOrchestrator
 from api.store import ApiStore
 from app.ci_pipeline import run_ci_pipeline
@@ -23,18 +26,34 @@ from app.config import settings
 from fix_verification.review import prepare_patch_review, validate_sequelize_search_proposal
 from fix_verification.service import FixVerificationService
 from schemas.fix import FixVerificationArtifact, PatchReviewArtifact
+from schemas.target import TargetProfile
 
 ROOT = Path(__file__).resolve().parent.parent
 PROFILE = ROOT / "targets/juice-presentation.yaml"
 RULES = ROOT / "docs/demo/semgrep.yaml"
+ORDER_PROFILE = ROOT / "targets/demo-order-store.yaml"
+ORDER_RULES = ROOT / "docs/demo/order-store-semgrep.yaml"
+ORDER_TEMPLATE = ROOT / "demo-target/order-store"
 PATCH_FINDING = "sequelize-injection.presentation:routes/search.ts:23"
 PATCH_REVIEW_POLICY = "sequelize_search_review_v1"
 
 
-def create_demo_app(service: RunOrchestrator, *, patch_client_factory=None, fix_service=None):
+def create_demo_app(
+    service: RunOrchestrator,
+    *,
+    patch_client_factory=None,
+    fix_service=None,
+    order_store_preview_status: Callable[[], dict[str, str]] | None = None,
+):
     """Demo artifacts remain separate from the original reports and CI Gate."""
     app = create_app(service)
     patch_lock = Lock()
+
+    @app.get("/demo/order-store/status")
+    def get_order_store_status():
+        if order_store_preview_status is None:
+            return {"status": "unavailable", "url": "http://127.0.0.1:8090"}
+        return order_store_preview_status()
 
     def selected_run(run_id):
         try:
@@ -142,42 +161,83 @@ def create_demo_app(service: RunOrchestrator, *, patch_client_factory=None, fix_
 
 def run_demo_pipeline(args: argparse.Namespace) -> int:
     """Keep demo scope explicit, and preserve all normal security boundaries."""
-    if Path(args.profile).resolve() != PROFILE:
+    selected_profile = Path(args.profile).resolve()
+    if selected_profile == PROFILE:
+        rules = RULES
+        demo_target = "juice-presentation"
+        scout_turns, scout_candidates, scout_seconds = 2, 4, 60.0
+        target_details = {
+            "target_version": "20.2.0",
+            "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+            "sast_rules": ["sequelize-injection.presentation", "directory-listing.presentation"],
+        }
+    elif selected_profile == ORDER_PROFILE:
+        rules = ORDER_RULES
+        demo_target = "demo-order-store"
+        scout_turns, scout_candidates, scout_seconds = 1, 4, 18.0
+        target_details = {
+            "target_version": "1.0",
+            "target_commit": None,
+            "sast_rules": [
+                "demo-sql-injection.search",
+                "demo-idor.order-read",
+                "demo-sql-injection.authentication",
+                "demo-file-exposure.directory-listing",
+            ],
+            "scope_note": "Four registered demo cases; not a benchmark or broad project audit.",
+        }
+    else:
         raise ValueError("Presentation runner accepts only its registered demo profile")
-    args.sast_config = str(RULES)
+    args.sast_config = str(rules)
+    args.coalesce_bound_scout = demo_target == "demo-order-store"
+    args.reasoning_prefetch_workers = 2 if demo_target == "demo-order-store" else 1
     saved = {
         key: getattr(settings, key)
         for key in (
             "scout_max_turns", "scout_max_candidates", "scout_wall_clock_seconds",
             "llm_reasoning_effort", "llm_max_output_tokens", "llm_timeout_seconds",
+            "policy_file",
         )
     }
-    settings.scout_max_turns = 2
-    settings.scout_max_candidates = 4
-    settings.scout_wall_clock_seconds = 60.0
+    settings.scout_max_turns = scout_turns
+    settings.scout_max_candidates = scout_candidates
+    settings.scout_wall_clock_seconds = scout_seconds
     settings.llm_reasoning_effort = "low"
-    settings.llm_max_output_tokens = 8192
-    settings.llm_timeout_seconds = 55.0
+    settings.llm_max_output_tokens = 4096 if demo_target == "demo-order-store" else 8192
+    settings.llm_timeout_seconds = 15.0 if demo_target == "demo-order-store" else 55.0
+    if demo_target == "demo-order-store":
+        settings.policy_file = ROOT / "policies/demo-order-store.yaml"
     destination = Path(args.output_dir)
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "demo-scope.json").write_text(json.dumps({
         "kind": "scoped_presentation_run",
         "full_benchmark": False,
-        "sast_rules": ["sequelize-injection.presentation", "directory-listing.presentation"],
-        "sast_config": "docs/demo/semgrep.yaml",
-        "scout_max_turns": 2,
-        "scout_max_candidates": 4,
+        **target_details,
+        "target_id": demo_target,
+        "sast_config": rules.relative_to(ROOT).as_posix(),
+        "scout_max_turns": scout_turns,
+        "scout_max_candidates": scout_candidates,
         "requested_agent_mode": args.agent_mode,
         "model_routes": settings.llm_routes,
         "reasoning_effort": settings.llm_reasoning_effort,
         "max_output_tokens": settings.llm_max_output_tokens,
         "request_timeout_seconds": settings.llm_timeout_seconds,
+        "policy_file": str(settings.policy_file),
         "max_iterations": args.max_iterations,
-        "target_version": "20.2.0",
-        "target_commit": "5658473cf8814459bf89000ce373b20ed0b4eb37",
+        "compact_registered_reasoning": demo_target == "demo-order-store",
+        "coalesce_bound_scout": args.coalesce_bound_scout,
+        "reasoning_prefetch_workers": args.reasoning_prefetch_workers,
         "note": "LLM attempts and actual fallback use are recorded separately in audit/.",
     }, ensure_ascii=False, indent=2), encoding="utf-8")
     try:
+        if demo_target == "demo-order-store" and (args.agent_mode or settings.agent_mode) == "llm":
+            from agent.compact_model import CompactRegisteredAgentModel
+            from agent.model import reasoning_model_context
+
+            model = CompactRegisteredAgentModel.from_settings(settings)
+            model.client.diagnostics_path = destination / "audit/llm-attempts.jsonl"
+            with reasoning_model_context(model):
+                return run_ci_pipeline(args)
         return run_ci_pipeline(args)
     finally:
         for key, value in saved.items():
@@ -190,10 +250,31 @@ def main() -> None:
     args = parser.parse_args()
     if Path.cwd().resolve() != ROOT:
         raise SystemExit(f"Run from the repository directory: {ROOT}")
-    registry = ApiTargetRegistry.from_profile_paths([PROFILE], trusted_root=ROOT / "targets")
-    target = registry.get("juice-presentation").profile
-    if target.repository_path is None or not target.repository_path.is_dir():
-        raise SystemExit("Demo target is missing. See docs/demo/README.md to prepare it.")
+    temporary_root = Path(tempfile.mkdtemp(prefix="cft-order-store-target-"))
+    order_checkout = temporary_root / "order-store"
+    preview = None
+    try:
+        from app.demo_preview import OrderStorePreview
+
+        preview = OrderStorePreview(ORDER_TEMPLATE)
+        preview.start()
+        shutil.copytree(ORDER_TEMPLATE, order_checkout)
+        order_profile = TargetProfile.from_yaml(
+            ORDER_PROFILE, repository_path_override=order_checkout,
+        )
+        registered = [RegisteredTarget(profile_path=ORDER_PROFILE, profile=order_profile)]
+        juice_checkout = (ROOT / "artifacts/presentation-2026-10-08/juice-shop").resolve()
+        if juice_checkout.is_dir():
+            juice_profile = TargetProfile.from_yaml(
+                PROFILE, repository_path_override=juice_checkout,
+            )
+            registered.append(RegisteredTarget(profile_path=PROFILE, profile=juice_profile))
+        registry = ApiTargetRegistry(registered)
+    except Exception:
+        if preview is not None:
+            preview.stop()
+        shutil.rmtree(temporary_root, ignore_errors=True)
+        raise
     settings.agent_mode = "llm"
     # The old DeepSeek identifier returns Model not found on NSU; keep this
     # presentation route explicit without changing the user's main .env chain.
@@ -206,7 +287,20 @@ def main() -> None:
         pipeline_runner=run_demo_pipeline,
         max_workers=1,
     )
-    uvicorn.run(create_demo_app(service), host="127.0.0.1", port=args.port)
+    try:
+        uvicorn.run(
+            create_demo_app(
+                service,
+                order_store_preview_status=preview.public_status if preview else None,
+            ),
+            host="127.0.0.1",
+            port=args.port,
+        )
+    finally:
+        service.close()
+        if preview is not None:
+            preview.stop()
+        shutil.rmtree(temporary_root, ignore_errors=True)
 
 
 if __name__ == "__main__":

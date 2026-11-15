@@ -1,0 +1,16 @@
+services:
+  store:
+    type: web_application
+    public: false
+    criticality: low
+    trust_zone: demo
+    authentication: public catalog; token-authenticated demo orders
+    blast_radius: fictional data in this local container
+    connects_to: [demo-data]
+  demo-data:
+    type: database
+    public: false
+    criticality: low
+    trust_zone: demo-data
+    authentication: application-managed
+    blast_radius: fictional orders and products only

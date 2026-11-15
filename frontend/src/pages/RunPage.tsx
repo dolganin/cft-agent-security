@@ -10,12 +10,13 @@ import {
 } from "../api/client";
 import type { ApiRun } from "../api/types";
 import { EvidenceBlock } from "../components/chat/EvidenceBlock";
-import { FindingBlock } from "../components/chat/FindingBlock";
+import { GroupedFindingBlock } from "../components/chat/GroupedFindingBlock";
 import { GateBlock } from "../components/chat/GateBlock";
 import { StageBlock } from "../components/chat/TimelineEvent";
 import { ToolCall } from "../components/chat/ToolCall";
 import { useSse } from "../hooks/useSse";
 import { formatDateTime, formatDuration, runStatusLabel, shortId } from "../lib/format";
+import { groupReports } from "../lib/report-groups";
 
 export function RunPage() {
   const { runId } = useParams();
@@ -58,6 +59,7 @@ export function RunPage() {
 
   if (!run) return <div className="workspace-state">Загрузка прогона…</div>;
   const reports = reportsQuery.data ?? [];
+  const reportGroups = groupReports(reports);
 
   return (
     <div className="full-report-page">
@@ -94,10 +96,10 @@ export function RunPage() {
         {gateQuery.data ? <GateBlock gate={gateQuery.data} reports={reports} run={run} /> : null}
 
         <div className="full-report-findings">
-          {reports.map((report) => (
-            <section className="full-report-finding" key={report.finding_id}>
-              <FindingBlock report={report} />
-              {report.sandbox_actions.map((action) => (
+          {reportGroups.map((group) => (
+            <section className="full-report-finding" key={group.report.finding_id}>
+              <GroupedFindingBlock group={group} />
+              {group.report.sandbox_actions.map((action) => (
                 <ToolCall
                   key={action.action_id}
                   tool={{
@@ -119,7 +121,7 @@ export function RunPage() {
                   }}
                 />
               ))}
-              {report.evidence.map((evidence) => (
+              {group.report.evidence.map((evidence) => (
                 <EvidenceBlock key={evidence.id} evidence={evidence} />
               ))}
             </section>

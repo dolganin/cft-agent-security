@@ -1,5 +1,7 @@
 import hashlib
 import re
+from contextlib import contextmanager
+from contextvars import ContextVar
 from typing import Protocol
 
 from app.config import settings
@@ -328,6 +330,19 @@ class DeterministicAgentModel:
         )
 
 
+_active_model: ContextVar[AgentReasoningModel | None] = ContextVar("active_reasoning_model", default=None)
+
+
+@contextmanager
+def reasoning_model_context(model: AgentReasoningModel):
+    """Bind a runtime-only adapter; never put live clients in AgentState."""
+    token = _active_model.set(model)
+    try:
+        yield model
+    finally:
+        _active_model.reset(token)
+
+
 def get_agent_model() -> AgentReasoningModel:
     """
     Центральная фабрика моделей.
@@ -344,6 +359,8 @@ def get_agent_model() -> AgentReasoningModel:
         return DeterministicAgentModel()
 
     if settings.agent_mode == "llm":
+        if _active_model.get() is not None:
+            return _active_model.get()
         from agent.llm_model import FallbackLLMAgentModel
 
         return FallbackLLMAgentModel.from_settings(settings)

@@ -1598,3 +1598,18 @@ evaluates the user-declared public-commerce scenario posthoc, without changing t
 measured lab context. Its blinded model reference is a draft requiring human review;
 report agreement and coverage, never human-validated CP accuracy. Neither producer
 reads reference labels or silently promotes partial scores to complete assessments.
+
+# 47. Presentation reasoning latency
+
+Only the registered `demo-order-store` runner opts into compact reasoning and
+source/route-bound Scout deduplication, with its separate
+`policies/demo-order-store.yaml`. The frozen default policy is unchanged.
+`CompactRegisteredAgentModel` requests
+AnalysisResult, Hypothesis and a registered one-step plan together, with at most
+two independent provider requests in parallel. Each thread owns its client and
+inherits cancellation/deadlines. Cached outputs bind the full reasoning input
+and trusted candidates; no live client enters AgentState. Canonical LangGraph
+nodes still validate the plan and approvals, execute checks sequentially and
+derive verdicts from fresh Evidence. Invalid compact answers fall back to the
+ordinary adapter. No previous-run verdict/Evidence cache is used. Other profiles,
+research and historical benchmark settings keep their existing behavior.

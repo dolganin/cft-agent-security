@@ -6,6 +6,7 @@ import type {
   ChatSession,
   ChatSnapshot,
   CreateRunRequest,
+  DemoPreviewStatus,
   FinalReport,
   GateResult,
   ImportedFileEntry,
@@ -71,6 +72,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export function getHealth(): Promise<{ status: string }> {
   return request("/health");
+}
+
+export function getOrderStoreDemoStatus(): Promise<DemoPreviewStatus> {
+  return request("/demo/order-store/status");
 }
 
 const localProjectVisibility = import.meta.glob<{ hiddenProjectIds?: string[] }>(

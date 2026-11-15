@@ -16,6 +16,12 @@ export interface ApiProject {
   repository_available: boolean;
 }
 
+export interface DemoPreviewStatus {
+  status: "starting" | "ready" | "unavailable" | "stopped";
+  url: string;
+  message?: string;
+}
+
 export interface ErrorDetail {
   code: string;
   layer: string;
@@ -175,6 +181,35 @@ export interface ReportFinding {
   file: string;
   line_start?: number | null;
   line_end?: number | null;
+  provenance?: FindingProvenance | null;
+}
+
+export interface FindingProvenance {
+  family: string;
+  normalized_file: string;
+  file_sha256: string | null;
+  anchor_sha256: string | null;
+  anchor_status: "source_bound" | "location_only";
+  aliases: string[];
+  observations: FindingObservation[];
+}
+
+export interface FindingObservation {
+  source_id: string;
+  source: string;
+  rule_id: string;
+  original_file: string;
+  title: string;
+  description: string;
+  line_start?: number | null;
+  line_end?: number | null;
+  column_start?: number | null;
+  column_end?: number | null;
+}
+
+export interface GroupedReport {
+  report: FinalReport;
+  duplicates: FinalReport[];
 }
 
 export interface SandboxActionSummary {

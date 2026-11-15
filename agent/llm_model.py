@@ -199,7 +199,8 @@ class FallbackLLMAgentModel:
                 "workspace": "ephemeral writable /workspace",
             }
         try:
-            choice = self.client.complete_model(
+            choice = self._choose_plan(
+                state,
                 output_model=(
                     LLMRegisteredDynamicPlanChoice
                     if registered_only
@@ -258,6 +259,7 @@ class FallbackLLMAgentModel:
                         expected_evidence=step.expected_observation,
                         service=_optional_string(candidate.get("service")),
                         endpoint=_optional_string(candidate.get("endpoint")),
+                        verification_binding=candidate.get("verification_binding"),
                         juice_proof_binding=candidate.get("juice_proof_binding"),
                     )
                 planned_steps.append(
@@ -294,6 +296,9 @@ class FallbackLLMAgentModel:
             if not validation.approved:
                 self._record_application_event("build_dynamic_plan", "plan_rejected", "scope_or_budget")
             return plan
+
+    def _choose_plan(self, state, **kwargs):
+        return self.client.complete_model(**kwargs)
 
     def _fallback_plan(self, state, analysis, hypothesis):
         from agent.model import _build_action_id, _build_plan_id

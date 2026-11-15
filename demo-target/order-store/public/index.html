@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f2ea" />
+    <title>Тихий дом — магазин для повседневной жизни</title>
+    <link rel="stylesheet" href="/store.css" />
+  </head>
+  <body>
+    <div class="announcement">Бесплатная доставка от 5 000 ₽ <span>·</span> Возврат в течение 30 дней</div>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Тихий дом — главная">тихий<span>дом</span></a>
+      <nav aria-label="Основная навигация"><a href="#catalog">Каталог</a><a href="#story">О нас</a><a href="#orders">Мои заказы</a></nav>
+      <button class="account" id="accountButton" type="button">Войти</button>
+    </header>
+    <main>
+      <section class="hero">
+        <div class="hero-copy"><p class="overline">МАЛЕНЬКИЕ РАДОСТИ КАЖДЫЙ ДЕНЬ</p><h1>Вещи, с которыми<br />дома <em>теплее.</em></h1><p>Продуманные предметы для кухни и спокойных вечеров. Выбираем качество, которое хочется оставить надолго.</p><a class="primary-link" href="#catalog">Выбрать для дома <span>↗</span></a></div>
+        <div class="hero-art" aria-label="Кофейный сервиз на деревянном столе"><div class="sun"></div><div class="art-shelf"></div><div class="vase"><i></i></div><div class="cup"><i></i></div><div class="art-caption">Коллекция<br /><b>Северное утро</b></div></div>
+      </section>
+      <section class="catalog section" id="catalog">
+        <div class="section-heading"><div><p class="overline">ВЫБРАЛИ ДЛЯ ВАС</p><h2>Для повседневных ритуалов</h2></div><span>03 предмета</span></div>
+        <form class="search" id="searchForm"><label for="searchInput">Поиск по каталогу</label><div><input id="searchInput" name="q" placeholder="Например, чайник" autocomplete="off" /><button type="submit" aria-label="Искать">⌕</button></div></form>
+        <div class="product-grid" id="products" aria-live="polite"></div>
+      </section>
+      <section class="story section" id="story"><div class="story-mark">тд</div><div><p class="overline">НЕ СПЕШИТЬ — ТОЖЕ ВЫБОР</p><h2>Меньше вещей.<br /><em>Больше смысла.</em></h2><p>Мы собираем каталог небольшими сериями и честно рассказываем, из чего сделан каждый предмет.</p></div></section>
+      <section class="orders section" id="orders"><div class="section-heading"><div><p class="overline">ЛИЧНЫЙ КАБИНЕТ</p><h2>Ваши заказы</h2></div><span id="signedInAs">Войдите, чтобы посмотреть</span></div><div class="order-card" id="ordersList"><div class="order-placeholder">Здесь появятся ваши покупки</div></div></section>
+    </main>
+    <footer><a class="brand" href="/">тихий<span>дом</span></a><span>Предметы для дома, к которым хочется возвращаться.</span><span>© 2026</span></footer>
+    <dialog id="loginDialog"><form method="dialog" id="loginForm"><button class="dialog-close" value="cancel" aria-label="Закрыть">×</button><p class="overline">РАДЫ ВАС ВИДЕТЬ</p><h2>Войти в магазин</h2><label>Email<input name="email" type="email" value="alice@demo.local" required /></label><label>Пароль<input name="password" type="password" value="alice-demo-2026" required /></label><button class="primary-button" value="default">Войти</button><p class="dialog-note">Демо-аккаунт: alice@demo.local</p></form></dialog>
+    <script src="/store.js" defer></script>
+  </body>
+</html>

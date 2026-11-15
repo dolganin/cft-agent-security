@@ -1,0 +1,92 @@
+id: demo-order-store
+name: Тихий дом | локальный демонстрационный магазин
+environment: sandbox
+architecture:
+  file: targets/demo-order-store-architecture.yaml
+runtime:
+  type: docker_compose
+  compose_file: compose.yaml
+services:
+  store:
+    type: node
+    root: .
+    dependency_files: [package.json, package-lock.json]
+    compose_service: order-store
+    internal_port: 3000
+    healthcheck: {path: /health}
+    runtime_endpoints:
+      - /health
+      - /
+      - /api/products/search
+      - /api/auth/login
+      - /api/files/
+      - /api/files/backup.env
+      - /api/orders
+      - /api/orders/:orderId
+constraints:
+  external_network: false
+  host_filesystem: false
+  docker_socket: false
+  ci_secrets: false
+metadata:
+  demo.scope: "Четыре учебных сценария: SQL-инъекция в поиске и при входе, чтение чужого заказа и раскрытие имён файлов"
+  demo.version: "1.0"
+verification_routes:
+  - id: order-store-search
+    handler_id: demo.searchProducts
+    family: sql-injection
+    service: store
+    endpoint: /api/products/search
+    method: GET
+    tool: verify_sql_injection
+    check: sql_interpolation
+    mode: search
+    registration: &search_route
+      file: server.js
+      anchor: 'app.get("/api/products/search", searchProducts(db));'
+    sources:
+      - {file: routes/search.js, anchor: "function searchProducts (db) {", extent: function}
+      - *search_route
+  - id: order-store-login
+    handler_id: demo.login
+    family: sql-injection
+    service: store
+    endpoint: /api/auth/login
+    method: POST
+    tool: verify_sql_injection
+    check: sql_interpolation
+    mode: authentication
+    registration: &login_route
+      file: server.js
+      anchor: 'app.post("/api/auth/login", login(db, sessions));'
+    sources:
+      - {file: routes/login.js, anchor: "function login (db, sessions) {", extent: function}
+      - *login_route
+  - id: order-store-file-listing
+    handler_id: demo.listPublicFiles
+    family: file-exposure
+    service: store
+    endpoint: /api/files/
+    method: GET
+    tool: verify_sensitive_directory
+    check: source_metadata
+    registration: &files_route
+      file: server.js
+      anchor: 'app.get("/api/files/", listPublicFiles);'
+    sources:
+      - {file: routes/files.js, anchor: "function listPublicFiles (_request, response) {", extent: function}
+      - *files_route
+  - id: order-store-owner-read
+    handler_id: demo.getOrderById
+    family: access-control
+    service: store
+    endpoint: /api/orders/:orderId
+    method: GET
+    tool: verify_demo_idor
+    check: order_owner_read
+    registration: &order_route
+      file: server.js
+      anchor: 'app.get("/api/orders/:orderId", requireUser, getOrderById(db));'
+    sources:
+      - {file: routes/orders.js, anchor: "function getOrderById (db) {", extent: function}
+      - *order_route

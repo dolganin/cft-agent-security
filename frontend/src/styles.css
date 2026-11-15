@@ -240,6 +240,10 @@ details[open] > summary .details-caret { transform: rotate(90deg); }
 .raw-evidence { margin-top: 12px; }
 
 .finding-block { border-left: 2px solid var(--yellow); }
+.grouped-finding { display: grid; min-width: 0; gap: 7px; }
+.finding-merge-note { margin-left: 10px; color: var(--muted); font-size: 11px; }
+.finding-merge-note summary { cursor: pointer; overflow-wrap: anywhere; }
+.finding-merge-note ul { display: grid; gap: 4px; margin: 7px 0 0; padding-left: 18px; }
 .finding-block.confirmed { border-left-color: var(--red); }
 .finding-block.rejected { border-left-color: var(--green); }
 .finding-block.policy_blocked { border-left-color: var(--yellow); }
@@ -471,4 +475,33 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 .top-findings li { padding: 12px; border: 1px solid var(--border); border-radius: 9px; background: #ffffff03; gap: 12px; }
 .top-findings .severity { flex-shrink: 0; padding: 4px 7px; border-radius: 5px; }
 .summary-finding-path { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.summary-finding-duplicates { display: inline-block; margin: 5px 0 0 9px; color: var(--muted); font-size: 10px; }
 .summary-link { color: #a8c9e9; }
+
+/* Keep long labels inside the sidebar; reveal their full text on hover/focus. */
+.sidebar { min-width: 0; }
+.sidebar-scroll { overflow-x: hidden; }
+.sidebar-list { grid-template-columns: minmax(0, 1fr); }
+.sidebar-section, .chat-row-shell, .sidebar-row { min-width: 0; max-width: 100%; }
+.sidebar-row > svg, .project-row > i { flex-shrink: 0; }
+.chat-row strong { display: block; }
+.sidebar-label { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-label-text { display: inline-block; white-space: nowrap; vertical-align: top; }
+.sidebar-row:hover .sidebar-label[data-overflow="true"],
+.sidebar-row:focus-visible .sidebar-label[data-overflow="true"] { text-overflow: clip; }
+.sidebar-row:hover .sidebar-label[data-overflow="true"] .sidebar-label-text,
+.sidebar-row:focus-visible .sidebar-label[data-overflow="true"] .sidebar-label-text {
+  animation: sidebar-label-reveal var(--label-duration) ease-in-out infinite alternate;
+}
+.chat-row-shell:focus-within .chat-delete-button { opacity: 1; }
+@media (hover: none) { .chat-delete-button { opacity: 1; } }
+@keyframes sidebar-label-reveal {
+  0%, 18% { transform: translateX(0); }
+  82%, 100% { transform: translateX(var(--label-offset)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-row:hover .sidebar-label[data-overflow="true"] .sidebar-label-text,
+  .sidebar-row:focus-visible .sidebar-label[data-overflow="true"] .sidebar-label-text { animation: none; }
+  .sidebar-row:hover .sidebar-label, .sidebar-row:focus-visible .sidebar-label { white-space: normal; }
+  .sidebar-row:hover .sidebar-label-text, .sidebar-row:focus-visible .sidebar-label-text { white-space: normal; overflow-wrap: anywhere; }
+}

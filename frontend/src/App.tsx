@@ -4,6 +4,7 @@ import { AppLayout } from "./components/layout/AppLayout";
 import { ChatPage } from "./pages/ChatPage";
 import { DebugRunsPage } from "./pages/DebugRunsPage";
 import { DemoPage } from "./pages/DemoPage";
+import { OrderStoreDemoPage } from "./pages/OrderStoreDemoPage";
 import { RunPage } from "./pages/RunPage";
 
 const queryClient = new QueryClient({
@@ -26,6 +27,7 @@ export default function App() {
             <Route path="/chats/:sessionId" element={<ChatPage />} />
             <Route path="/debug/runs" element={<DebugRunsPage />} />
             <Route path="/demo" element={<DemoPage />} />
+            <Route path="/demo/order-store" element={<OrderStoreDemoPage />} />
             <Route path="/dashboard" element={<Navigate to="/debug/runs" replace />} />
             <Route path="/runs/:runId" element={<RunPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -32,6 +32,7 @@ class VerificationRoute(BaseModel):
         "verify_redirect_destination",
         "verify_auth_reauthentication",
         "verify_access_control",
+        "verify_demo_idor",
     ]
     check: Literal[
         "sql_interpolation",
@@ -43,6 +44,7 @@ class VerificationRoute(BaseModel):
         "ownership_transfer",
         "nosql_selector",
         "private_fields",
+        "order_owner_read",
     ]
     mode: Literal["search", "authentication"] | None = None
     registration: SourceSelector

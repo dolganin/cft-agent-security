@@ -36,6 +36,7 @@ _SPECIALIZED_RESULTS: dict[str, tuple[type[BaseModel], str]] = {
     "verify_access_control": (AccessCheckTrace, "access_control_verification"),
     "inspect_javascript_security": (BoundedVerificationResult, "javascript_source_metadata"),
     "verify_sql_injection": (BoundedVerificationResult, "sql_differential_check"),
+    "verify_demo_idor": (BoundedVerificationResult, "demo_order_owner_check"),
     "verify_sensitive_directory": (BoundedVerificationResult, "sensitive_directory_check"),
     DOCKERFILE_USER_TOOL: (DockerfileUserCheckResult, "dockerfile_user_check"),
     PYTHON_PASSWORD_TOOL: (
@@ -493,6 +494,43 @@ def _bounded_result_matches_action(payload: BoundedVerificationResult, action: A
                     and facts.get("file_contents_read") is False
                     and isinstance(names, list) and bool(names))
         return payload.verdict == ("confirmed" if evidence else "inconclusive")
+    if action.tool == "verify_demo_idor":
+        if (payload.scope != "runtime_idor_owner_read"
+                or facts.get("check") != action.parameters.get("check")
+                or facts.get("endpoint") != action.endpoint):
+            return False
+        observations = facts.get("observations")
+        if not isinstance(observations, dict):
+            return False
+        owner = observations.get("owner")
+        attacker_self = observations.get("attacker_self")
+        negative = observations.get("negative_control")
+        probes = observations.get("attacker_target")
+        if not all(isinstance(item, dict) for item in (owner, attacker_self, negative)):
+            return False
+        if not isinstance(probes, list) or len(probes) != 2 or not all(
+            isinstance(item, dict) for item in probes
+        ):
+            return False
+        controls = (
+            owner.get("status") == 200 and owner.get("order_id") == "order-b"
+            and owner.get("owner_id") == "user-b"
+            and attacker_self.get("status") == 200
+            and attacker_self.get("order_id") == "order-a"
+            and attacker_self.get("owner_id") == "user-a"
+            and negative.get("status") == 404
+            and facts.get("credentials_redacted") is True
+            and facts.get("response_values_redacted") is True
+        )
+        leaked = all(
+            item.get("status") == 200 and item.get("order_id") == "order-b"
+            and item.get("owner_id") == "user-b" for item in probes
+        )
+        denied = all(item.get("status") in {403, 404} for item in probes)
+        expected = "confirmed" if controls and leaked else (
+            "rejected" if controls and denied else "inconclusive"
+        )
+        return payload.verdict == expected
     return False
 
 

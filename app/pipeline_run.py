@@ -215,6 +215,7 @@ def run_pipeline(
         findings, discovery, output_dir=output_dir,
         service_resolver=profile.resolve_service,
         progress=progress,
+        coalesce_profile=profile if getattr(args, "coalesce_bound_scout", False) else None,
     )
     from agent.verification import register_source_artifacts
 
@@ -280,6 +281,19 @@ def run_pipeline(
     report_paths: dict[str, str] = {}
     graph = build_graph()
     routing_records = []
+    prepared_states = {}
+    reasoning_workers = getattr(args, "reasoning_prefetch_workers", 1)
+    if reasoning_workers > 1 and runtime_services is not None and not verification_profiles:
+        from agent.model import get_agent_model
+        model = get_agent_model()
+        if callable(getattr(model, "prefetch", None)):
+            from app.reasoning_prefetch import prefetch_reasoning
+            prepared_states = prefetch_reasoning(
+                model=model, findings=findings, profile=profile, runtime_services=runtime_services,
+                findings_path=findings_path, architecture=architecture,
+                architecture_overrides=architecture_overrides, scoring_reviews=scoring_reviews,
+                max_iterations=args.max_iterations, progress=progress, workers=reasoning_workers,
+            )
     if findings:
         progress.verification_started()
 
@@ -374,7 +388,7 @@ def run_pipeline(
                 print("  status=inconclusive capability=none context=unmapped")
                 continue
 
-            state = build_real_initial_state(
+            state = prepared_states.get(finding.id) or build_real_initial_state(
                 findings_path=findings_path,
                 target_root=target,
                 architecture_path=architecture,
@@ -472,6 +486,7 @@ def run_pipeline(
 
 def _append_scout_findings(
     findings, discovery, *, output_dir=None, service_resolver=None, progress=None,
+    coalesce_profile=None,
 ):
     """Scout дает дополнительные гипотезы, но сбой LLM не ломает SAST pipeline."""
     if settings.agent_mode != "llm" or discovery is None:
@@ -519,6 +534,11 @@ def _append_scout_findings(
         findings, candidates, service_resolver=service_resolver,
         repository_root=discovery.repository_root,
     )
+    bound_duplicates = 0
+    if coalesce_profile is not None:
+        from discovery.scout import coalesce_bound_scout_findings
+        merged, bound_duplicates = coalesce_bound_scout_findings(merged, coalesce_profile)
+        duplicates += bound_duplicates
     audit = getattr(scout, "audit", {})
     original_ids = {item.id for item in findings}
     added = sum(not original_ids.intersection(
@@ -526,6 +546,8 @@ def _append_scout_findings(
     ) for item in merged)
     audit.update(merged_candidates=added, duplicates=duplicates,
                  queue_before=len(findings), queue_after=len(merged))
+    if coalesce_profile is not None:
+        audit["bound_scout_duplicates"] = bound_duplicates
     audit["sast_vs_sast_scout"] = {
         "sast_queue": len(findings), "combined_queue": len(merged),
         "new_scout_candidates": added, "duplicates": duplicates,

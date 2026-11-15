@@ -87,6 +87,8 @@ export function stageLabel(stage: string): string {
       return "SAST-анализ";
     case "scout":
       return "Поиск по исходному коду";
+    case "reasoning":
+      return "Анализ находок моделью";
     case "verification":
       return "Проверка находок агентом";
     case "pipeline":
@@ -104,6 +106,8 @@ export function toolLabel(tool: string): string {
     inspect_dockerfile_user: "Проверка пользователя Dockerfile",
     inspect_python_password_assignment: "Проверка назначения пароля",
     inspect_react_dangerous_html_flow: "Проверка опасного HTML-потока React",
+    verify_sql_injection: "Проверка SQL-инъекции",
+    verify_demo_idor: "Проверка доступа к заказам",
   };
   if (labels[tool]) return labels[tool];
   return tool
@@ -175,6 +179,10 @@ export function stageDetailLabel(detail: string | null, status: string): string 
     };
     return `Кандидатов: ${scoutDone[1]}; файлов просмотрено: ${scoutDone[2]}; ${stopReasons[scoutDone[3]] ?? "остановлено"}`;
   }
+  const parallelReasoning = detail.match(/^(\d+) findings; up to (\d+) parallel model requests$/);
+  if (parallelReasoning) return `Находок: ${parallelReasoning[1]}; одновременно запросов к модели: ${parallelReasoning[2]}`;
+  const preparedReasoning = detail.match(/^(\d+) finding contexts prepared$/);
+  if (preparedReasoning) return `Подготовлен анализ находок: ${preparedReasoning[1]}`;
   return detail;
 }
 
@@ -215,6 +223,8 @@ export function findingTitle(ruleId: string, fallback: string): string {
 
 export function evidenceSummary(summary: string): string {
   if (summary.startsWith("Capability-specific Evidence confirmed")) return "Доказательства подтвердили указанное условие безопасности в пределах выполненной проверки.";
+  if (summary.startsWith("Two authenticated cross-account reads returned the other user's order")) return "Другой аккаунт дважды прочитал чужой заказ. Контроль владельца и проверка несуществующего заказа прошли.";
+  if (summary.startsWith("Repeated boolean SQL probe changed structured results")) return "Повторный SQL-запрос изменил число результатов, а контрольные запросы этого не сделали.";
   if (summary.startsWith("The trusted Python artifact sets passwords without a validate_password call.")) return "В проверенном Python-файле пароль задается без вызова validate_password. Значения паролей скрыты в доказательствах. Подтверждено условие в исходном коде.";
 
   if (summary.includes("does not establish an explicit non-root USER")) {

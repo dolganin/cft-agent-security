@@ -49,6 +49,7 @@ from schemas.api import (
     RunTimeline,
     SendChatMessageRequest,
 )
+from schemas.errors import ErrorDetail
 from schemas.pipeline import GateResult
 from schemas.report import FinalReport
 from schemas.target import TargetProfile
@@ -655,6 +656,24 @@ class RunOrchestrator:
                     cancelled = self.store.get_run(run_id).status == "cancelling"
         except RunCancelled:
             cancelled = True
+        except SystemExit:
+            # A malformed profile must fail this run, not terminate the scheduler
+            # worker and leave the run permanently in "running".
+            logger.exception("Run %s exited during pipeline configuration", run_id)
+            error = ErrorDetail(
+                code="VALIDATION_ERROR",
+                layer="pipeline",
+                message="Pipeline configuration is invalid",
+            )
+            if chat_session_id is not None:
+                self.store.append_chat_message(
+                    session_id=chat_session_id,
+                    role="assistant",
+                    kind="error",
+                    content=f"Анализ остановлен из-за ошибки конфигурации: {error.message}",
+                    run_id=run_id,
+                )
+            self.store.mark_failed(run_id, error)
         except Exception as exc:
             logger.exception("Run %s failed with an orchestration error", run_id)
             error = error_from_exception(

@@ -8,7 +8,7 @@ import {
   Trash,
   X,
 } from "@phosphor-icons/react";
-import { useState, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import type { ApiProject, ChatSession } from "../../api/types";
 import { formatDateTime } from "../../lib/format";
@@ -98,7 +98,7 @@ export function Sidebar({
                 onClick={() => onOpenExisting(project.id)}
               >
                 <FolderSimple size={15} weight="duotone" />
-                <span>{project.name}</span>
+                <ScrollingLabel text={project.name} />
                 <i className={project.repository_available ? "ready" : "missing"} />
               </button>
             ))
@@ -118,7 +118,7 @@ export function Sidebar({
                 >
                   <ChatCircle size={15} />
                   <span>
-                    <strong>{session.title}</strong>
+                    <strong><ScrollingLabel text={session.title} /></strong>
                     <small>{formatDateTime(session.updated_at)}</small>
                   </span>
                 </NavLink>
@@ -143,6 +143,10 @@ export function Sidebar({
         <NavLink to="/demo" onClick={onCloseMobile}>
           <ShieldCheck size={15} />
           Демонстрация продукта
+        </NavLink>
+        <NavLink to="/demo/order-store" onClick={onCloseMobile}>
+          <ShieldCheck size={15} />
+          Демо: магазин заказов
         </NavLink>
         <NavLink to="/debug/runs" onClick={onCloseMobile}>
           <Bug size={15} />
@@ -182,5 +186,34 @@ function SidebarSection({
       <h2>{title}</h2>
       <div className="sidebar-list">{children}</div>
     </section>
+  );
+}
+
+/** Only overflowing labels move; the row controls stay outside the clipped text. */
+function ScrollingLabel({ text }: { text: string }) {
+  const viewport = useRef<HTMLSpanElement>(null);
+  const content = useRef<HTMLSpanElement>(null);
+  const [overflow, setOverflow] = useState(0);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (viewport.current && content.current) {
+        setOverflow(Math.max(0, content.current.scrollWidth - viewport.current.clientWidth));
+      }
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    if (viewport.current) observer.observe(viewport.current);
+    if (content.current) observer.observe(content.current);
+    return () => observer.disconnect();
+  }, [text]);
+
+  return (
+    <span ref={viewport} className="sidebar-label" title={text}
+      data-overflow={overflow > 0}
+      style={{ "--label-offset": `${-overflow}px`, "--label-duration": `${Math.max(3, overflow / 28 + 2)}s` } as CSSProperties}>
+      <span ref={content} className="sidebar-label-text">{text}</span>
+    </span>
   );
 }

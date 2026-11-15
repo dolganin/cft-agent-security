@@ -4,7 +4,7 @@ import type { SseState } from "../../hooks/useSse";
 import type { ConversationTimelineItem } from "../../lib/timeline";
 import { AssistantMessage } from "./AssistantMessage";
 import { EvidenceBlock } from "./EvidenceBlock";
-import { FindingBlock } from "./FindingBlock";
+import { GroupedFindingBlock } from "./GroupedFindingBlock";
 import { GateBlock } from "./GateBlock";
 import {
   AgentDecisionBlock,
@@ -140,7 +140,7 @@ function TimelineContent({
     case "evidence":
       return <EvidenceBlock evidence={item.evidence} />;
     case "finding":
-      return <FindingBlock report={item.report} />;
+      return <GroupedFindingBlock group={item.group} />;
     case "technical_error":
       return <TechnicalErrorBlock run={item.run} onRetry={onRetry} />;
     case "gate":
@@ -201,7 +201,9 @@ function RunActivity({ items, finished, onRetry }: {
     if (item.kind === "stage") return !(hasDiscovery && item.stage.stage === "discovery")
       && latest.get(`stage:${item.stage.stage}`) === item.id;
     if (item.kind === "finding_progress") return latest.get(`finding:${item.event.finding_id}`) === item.id
-      && !items.some(other => other.kind === "finding" && other.report.finding_id === item.event.finding_id);
+      && !items.some(other => other.kind === "finding"
+        && [other.group.report, ...other.group.duplicates]
+          .some(report => report.finding_id === item.event.finding_id));
     return true;
   });
   return (

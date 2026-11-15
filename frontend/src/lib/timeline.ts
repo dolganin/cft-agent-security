@@ -6,6 +6,7 @@ import type {
   ChatSnapshot,
   Evidence,
   FinalReport,
+  GroupedReport,
   GateResult,
   RunActivityEvent,
   RunDiscoveryView,
@@ -13,6 +14,7 @@ import type {
   RunStageEvent,
   SandboxActionSummary,
 } from "../api/types";
+import { groupReports } from "./report-groups";
 
 export interface TimelineBase {
   id: string;
@@ -45,7 +47,7 @@ export type ConversationTimelineItem =
       evidence: Evidence;
       report: FinalReport;
     })
-  | (TimelineBase & { kind: "finding"; report: FinalReport })
+  | (TimelineBase & { kind: "finding"; group: GroupedReport })
   | (TimelineBase & {
       kind: "gate";
       gate: GateResult;
@@ -91,6 +93,7 @@ export function buildConversationTimeline(
 ): ConversationTimelineItem[] {
   const snapshots = runSnapshots(snapshot);
   const runsById = new Map(snapshots.map(({ run }) => [run.id, run]));
+  const snapshotsByRunId = new Map(snapshots.map((item) => [item.run.id, item]));
   const technicalRunIds = new Set(
     snapshots
       .filter(({ run }) => run.status === "technical_failure")
@@ -108,8 +111,12 @@ export function buildConversationTimeline(
   );
   const items: ConversationTimelineItem[] = messages.map((message) => {
     const run = message.run_id ? runsById.get(message.run_id) : undefined;
+    const runSnapshot = message.run_id ? snapshotsByRunId.get(message.run_id) : undefined;
     const messageTime = timeOf(message.created_at, 0);
     const isFinalSummary = message.kind === "summary" && run?.finished_at;
+    const displayedMessage = isFinalSummary && runSnapshot?.gate
+      ? { ...message, content: uniqueRunSummary(runSnapshot) }
+      : message;
     return {
       kind: "message",
       id: `message:${message.id}`,
@@ -119,7 +126,7 @@ export function buildConversationTimeline(
         ? Math.max(messageTime, timeOf(run.finished_at, messageTime) + 3)
         : messageTime,
       sortRank: isFinalSummary ? 100 : KIND_RANK.message,
-      message,
+      message: displayedMessage,
     };
   });
 
@@ -132,6 +139,26 @@ export function buildConversationTimeline(
     if (left.sortRank !== right.sortRank) return left.sortRank - right.sortRank;
     return left.id.localeCompare(right.id);
   });
+}
+
+function uniqueRunSummary(snapshot: ChatRunSnapshot): string {
+  const counts = groupReports(snapshot.reports).reduce((result, item) => {
+    result[item.report.status] += 1;
+    return result;
+  }, { confirmed: 0, rejected: 0, inconclusive: 0, policy_blocked: 0 });
+  const decisionLabels = {
+    pass: "без блокирующих замечаний",
+    warn: "с предупреждениями",
+    fail: "не пройдено",
+  };
+  const decisionValue = snapshot.gate?.decision;
+  const decision = decisionValue ? decisionLabels[decisionValue] : "не определено";
+  const statuses: string[] = [];
+  if (counts.confirmed) statuses.push(`${counts.confirmed} подтверждено`);
+  if (counts.rejected) statuses.push(`${counts.rejected} опровергнуто`);
+  if (counts.inconclusive) statuses.push(`${counts.inconclusive} недостаточно данных`);
+  if (counts.policy_blocked) statuses.push(`${counts.policy_blocked} заблокировано политикой`);
+  return `Анализ завершён: ${decision}. Уникальные находки: ${statuses.join(", ") || "не обнаружены"}. Подробности проверок и объединённых записей доступны в карточках ниже.`;
 }
 
 function runSnapshots(snapshot: ChatSnapshot): ChatRunSnapshot[] {
@@ -252,6 +279,7 @@ function appendReportEvents(
   );
   const summaries = new Map<string, SandboxActionSummary>();
 
+  const reportGroups = groupReports(reports);
   for (const report of reports) {
     for (const action of report.sandbox_actions) summaries.set(action.action_id, action);
 
@@ -282,15 +310,22 @@ function appendReportEvents(
       });
     }
 
-    const completedAt = reportCompletionTime(report, activities, run, startedMs);
+  }
+
+  for (const group of reportGroups) {
+    const completedAt = Math.max(
+      ...[group.report, ...group.duplicates].map((report) =>
+        reportCompletionTime(report, activities, run, startedMs),
+      ),
+    );
     items.push({
       kind: "finding",
-      id: `run:${run.id}:finding:${report.finding_id}`,
+      id: `run:${run.id}:finding:${group.report.finding_id}`,
       runId: run.id,
       at: new Date(completedAt).toISOString(),
       sortTime: completedAt + 1,
       sortRank: KIND_RANK.finding,
-      report,
+      group,
     });
   }
 

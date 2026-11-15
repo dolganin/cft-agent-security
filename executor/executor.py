@@ -139,6 +139,7 @@ CAPABILITY_REPOSITORY_ACCESS: dict[str, bool] = {
     "inspect_python_password_assignment": True,
     "inspect_react_dangerous_html_flow": True,
     "verify_access_control": False,
+    "verify_demo_idor": False,
     "verify_juice_proof": False,
 }
 
@@ -157,6 +158,7 @@ CAPABILITY_NETWORK_ACCESS: dict[str, str] = {
     "inspect_python_password_assignment": "none",
     "inspect_react_dangerous_html_flow": "none",
     "verify_access_control": "none",  # B04 broker owns the internal Docker network and sessions
+    "verify_demo_idor": "target",  # Fixed login/order protocol on the registered internal demo target
     "verify_juice_proof": "none",  # Fixed worker creates its own internal, disposable Docker lab
 }
 
@@ -196,6 +198,7 @@ class SafeExecutor:
         self._registry.register("sandbox_command", self._sandbox_command_parameters)
         self._registry.register("observe_http_surface", self._no_parameters)
         self._registry.register("verify_access_control", self._access_control_parameters)
+        self._registry.register("verify_demo_idor", self._demo_idor_parameters)
         self._registry.register("verify_juice_proof", self._juice_proof_parameters)
         self._active_runtime_services: RuntimeServiceMap | None = None
         self._managed_lab: DockerSequenceRuntime | None = None
@@ -721,7 +724,7 @@ class SafeExecutor:
                                     session_id=session_id)
         elif (action.verification_binding is not None or target.verification_routes) and action.tool in {
             "verify_sql_injection", "verify_sensitive_directory", "inspect_javascript_security",
-            "verify_redirect_destination", "verify_auth_reauthentication"
+            "verify_redirect_destination", "verify_auth_reauthentication", "verify_demo_idor"
         }:
             from security.verification_binding import validate_action_binding
             try:
@@ -1304,6 +1307,18 @@ class SafeExecutor:
                 or parameters["mode"] not in {"authentication", "search"}):
             raise CapabilityInputError("Invalid SQL differential mode")
         SafeExecutor._javascript_parameters({k: parameters[k] for k in ("artifact_id", "line", "check")})
+        return dict(parameters)
+
+    @staticmethod
+    def _demo_idor_parameters(parameters: dict) -> dict:
+        if set(parameters) != {"artifact_id", "line", "check"}:
+            raise CapabilityInputError("Demo IDOR check requires a bound source artifact")
+        if (not isinstance(parameters["artifact_id"], str) or not parameters["artifact_id"]
+                or len(parameters["artifact_id"]) > 64
+                or type(parameters["line"]) is not int or not 1 <= parameters["line"] <= 100_000):
+            raise CapabilityInputError("Invalid bound demo IDOR source")
+        if parameters["check"] != "order_owner_read":
+            raise CapabilityInputError("Unsupported demo IDOR check")
         return dict(parameters)
 
     @staticmethod
