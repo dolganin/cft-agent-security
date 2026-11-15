@@ -17,6 +17,7 @@
 ## Запуск и архитектура
 
 - [CLI, подключение проекта и CI/CD](usage/cli-and-ci.md).
+- [Проверка установки по README, UI и CI](usage/readme-verification.md).
 - [Контракты и границы безопасности](../AGENTS.md).
 - [Правила разработки](../CONTRIBUTING.md).
 - [Подготовка лаборатории](k01-environment-passport.md).
