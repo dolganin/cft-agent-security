@@ -108,7 +108,12 @@ class RunOrchestrator:
         self.project_root.mkdir(parents=True, exist_ok=True)
         self.max_upload_bytes = max_upload_bytes or settings.api_max_upload_bytes
         self.pipeline_runner = pipeline_runner or _default_pipeline_runner
-        self.chat_answerer = chat_answerer or _default_chat_answerer
+        # Store presets temporarily change pipeline settings; conversational
+        # requests for another project must keep the operator's normal options.
+        chat_config = settings.model_copy(deep=True)
+        self.chat_answerer = chat_answerer or (
+            lambda question, context: _default_chat_answerer(question, context, config=chat_config)
+        )
         self._scheduler = scheduler or RunScheduler(
             workers=1,  # Pipeline settings are process-global; concurrent runs corrupt isolation.
         )
@@ -599,7 +604,7 @@ class RunOrchestrator:
                     "«недостаточно данных» вместо Gate, finding, Evidence, confirmed и "
                     "inconclusive. Возвращай корректный Markdown без HTML."
                 ),
-                _summary_context(gate, reports),
+                {**_summary_context(gate, reports), "target_id": request.target_id},
             ).strip()
             return answer or fallback
         except (LLMUnavailableError, RuntimeError, ValueError, TypeError):
@@ -1285,14 +1290,23 @@ def _summary_context(
     }
 
 
-def _default_chat_answerer(question: str, context: dict[str, object]) -> str:
+def _default_chat_answerer(question: str, context: dict[str, object], *, config=None) -> str:
+    config = settings if config is None else config
+    run_context = context.get("run")
+    target_id = context.get("target_id") or (
+        run_context.get("target_id") if isinstance(run_context, dict) else None
+    )
+    from app.profile_pipeline import STORE_ID
+    from app.setup import configured_demo_routes
+
+    store = target_id == STORE_ID
     client = ProviderFailoverClient(
-        routes=parse_route_specs(settings.llm_routes),
-        credentials=settings.llm_provider_credentials(),
-        timeout_seconds=settings.llm_timeout_seconds,
-        max_output_tokens=min(6000, max(1800, settings.llm_max_output_tokens)),
-        reasoning_effort=settings.llm_reasoning_effort,
-        trace=settings.llm_trace,
+        routes=parse_route_specs(configured_demo_routes(config) if store else config.llm_routes),
+        credentials=config.llm_provider_credentials(),
+        timeout_seconds=config.llm_timeout_seconds,
+        max_output_tokens=4096 if store else min(6000, max(1800, config.llm_max_output_tokens)),
+        reasoning_effort="low" if store else config.llm_reasoning_effort,
+        trace=config.llm_trace,
     )
     result = client.complete_model(
         output_model=ChatLLMAnswer,
@@ -1320,6 +1334,6 @@ def _default_pipeline_runner(args: argparse.Namespace) -> int:
         # Readiness probe читает значение из process environment, а не из settings object
         os.environ.setdefault("CFT_SANDBOX_IMAGE", pipeline_settings.sandbox_image)
 
-    from app.ci_pipeline import run_ci_pipeline
+    from app.profile_pipeline import run_project_pipeline
 
-    return run_ci_pipeline(args)
+    return run_project_pipeline(args)

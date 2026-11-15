@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import asyncio
 import json
 from collections.abc import Callable
@@ -10,9 +11,7 @@ import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Query, Request, status
 from fastapi.responses import Response, StreamingResponse
 
-from api.registry import ApiTargetRegistry
 from api.service import ProjectImportError, RunNotReadyError, RunOrchestrator
-from api.store import ApiStore
 from app.config import settings
 from schemas.api import (
     ApiEvidence,
@@ -35,18 +34,34 @@ from schemas.report import FinalReport
 
 def create_app(orchestrator: RunOrchestrator | None = None, *,
                on_shutdown: Callable[[], None] | None = None) -> FastAPI:
-    service = orchestrator or _default_orchestrator()
+    example = None
+    if orchestrator is None:
+        from api.startup import build_default_service
+
+        service, example = build_default_service()
+    else:
+        service = orchestrator
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
+        preview_task = asyncio.create_task(asyncio.to_thread(example.start)) if example else None
         try:
             yield
         finally:
             try:
-                service.close()
+                await asyncio.to_thread(service.close)
             finally:
-                if on_shutdown is not None:
-                    await asyncio.to_thread(on_shutdown)
+                try:
+                    if example is not None:
+                        example.cancel()
+                        try:
+                            if preview_task is not None:
+                                await preview_task
+                        finally:
+                            await asyncio.to_thread(example.close)
+                finally:
+                    if on_shutdown is not None:
+                        await asyncio.to_thread(on_shutdown)
 
     app = FastAPI(
         title="CFT Security Agent API",
@@ -58,6 +73,10 @@ def create_app(orchestrator: RunOrchestrator | None = None, *,
     @app.get("/health")
     def health() -> dict[str, str]:
         return {"status": "ok"}
+
+    @app.get("/examples/order-store/status")
+    def store_status():
+        return example.status() if example else {"status": "disabled"}
 
     @app.get("/projects", response_model=list[ApiProject])
     def list_projects() -> list[ApiProject]:
@@ -271,23 +290,6 @@ def create_app(orchestrator: RunOrchestrator | None = None, *,
     return app
 
 
-def _default_orchestrator() -> RunOrchestrator:
-    profiles = [
-        item.strip()
-        for item in settings.api_target_profiles.split(",")
-        if item.strip()
-    ]
-    registry = ApiTargetRegistry.from_profile_paths(
-        profiles,
-        trusted_root=Path("targets"),
-    )
-    return RunOrchestrator(
-        registry=registry,
-        store=ApiStore(settings.api_database_path),
-        artifact_root=settings.api_artifact_root,
-    )
-
-
 def _not_found(call, detail: str):
     try:
         return call()
@@ -309,11 +311,28 @@ def _completed(call):
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="CFT Security Agent API")
+    parser.add_argument("--port", type=int, default=settings.api_port)
+    parser.add_argument("--store-port", type=int, default=settings.api_store_preview_port)
+    parser.add_argument("--data-dir", type=Path, help="Separate local database, projects and run artifacts")
+    args = parser.parse_args()
+    if not 1 <= args.port <= 65535 or not 1 <= args.store_port <= 65535 or args.port == args.store_port:
+        parser.error("API и магазин должны использовать разные порты от 1 до 65535")
+    settings.api_port = args.port
+    settings.api_store_preview_port = args.store_port
+    if args.data_dir:
+        directory = args.data_dir.expanduser().resolve()
+        settings.api_database_path = directory / "api.sqlite3"
+        settings.api_project_root = directory / "projects"
+        settings.api_artifact_root = directory / "runs"
     uvicorn.run(
         create_app(),
         host=settings.api_host,
         port=settings.api_port,
         log_level="info",
+        # Chat SSE connections can remain open until their run is cancelled.
+        # Bound draining so lifespan can cancel runs and clean up the preview.
+        timeout_graceful_shutdown=5,
     )
 
 

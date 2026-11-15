@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.error import URLError
 from urllib.request import urlopen
 
+from pipeline.cancellation import check_cancelled, suspend_cancellation
 from pipeline.subprocess_runner import run_cancellable_process
 
 
@@ -66,6 +67,7 @@ class OrderStorePreview:
             self._compose("up", "--build", "--detach", timeout=600)
             deadline = time.monotonic() + 35
             while time.monotonic() < deadline:
+                check_cancelled()
                 try:
                     with urlopen(f"{self.preview_url}/health", timeout=1) as response:
                         payload = json.loads(response.read(1024))
@@ -87,7 +89,8 @@ class OrderStorePreview:
         if not self._started:
             return
         try:
-            self._compose("down", "--volumes", "--remove-orphans", timeout=45)
+            with suspend_cancellation():
+                self._compose("down", "--volumes", "--remove-orphans", timeout=45)
         except (OSError, RuntimeError, subprocess.SubprocessError, TimeoutError):
             # The agent's disposable run still owns its independent cleanup path.
             pass

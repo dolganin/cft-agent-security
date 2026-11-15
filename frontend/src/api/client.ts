@@ -75,7 +75,7 @@ export function getHealth(): Promise<{ status: string }> {
 }
 
 export function getOrderStoreDemoStatus(): Promise<DemoPreviewStatus> {
-  return request("/demo/order-store/status");
+  return request("/examples/order-store/status");
 }
 
 const localProjectVisibility = import.meta.glob<{ hiddenProjectIds?: string[] }>(

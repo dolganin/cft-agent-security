@@ -25,7 +25,7 @@ def test_image_update_preserves_key_and_other_settings(tmp_path):
 def test_unprepared_image_stops_before_any_demo_start(monkeypatch):
     monkeypatch.setattr(setup, "check_tools", lambda: None)
     config = SimpleNamespace(sandbox_image="", nsu_openwebui_key=SecretStr("fake"))
-    with pytest.raises(setup.SetupError, match="prepare-demo"):
+    with pytest.raises(setup.SetupError, match="--prepare"):
         setup.check_demo(config=config)
 
 

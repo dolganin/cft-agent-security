@@ -1614,7 +1614,7 @@ derive verdicts from fresh Evidence. Invalid compact answers fall back to the
 ordinary adapter. No previous-run verdict/Evidence cache is used. Other profiles,
 research and historical benchmark settings keep their existing behavior.
 
-`python -m app.setup --prepare-demo` is explicit operator provisioning: it checks
+`python -m app.setup --prepare` is explicit operator provisioning: it checks
 the live demo model, pulls the worker image, records its repository digest in the
 local ignored `.env`, and builds the demo target. It never supplies a verdict or
 changes frozen policies. First-run dependencies are constrained by
@@ -1624,12 +1624,18 @@ Separate checkouts have separate preview Compose names; custom ports/data roots
 must remain loopback/local. First-run acceptance is in
 `docs/demo/first-run-verification.md`.
 
-`python -m app.demo_check` is a headless entrypoint for this same registered
-demo runner, not a parallel verification implementation. It preserves Gate exit
-codes, refuses nonempty artifact directories, and cleans its disposable source
-copy. In `stub` mode registered deterministic protocols still collect real
-Evidence; no LLM search quality is measured. Chat is the primary UI navigation;
-run reports remain reachable from chat without the old demo/debug footer links.
+`cft-security-api` is the single server entrypoint. It registers a disposable
+copy of the built-in store and starts an independently owned loopback preview
+in the background. Preview failure never prevents API startup. Shutdown cancels
+startup and joins runs before releasing that copy. Uploaded projects keep the
+ordinary canonical pipeline and budgets. `app.profile_pipeline` selects compact
+store presets only for the exact operator-owned store profile path, never an
+uploaded id or project name. It restores settings on success and failure; the API
+retains one pipeline worker because settings are process-global. Conversational
+configuration is captured before preset activation to prevent cross-project leaks.
+`cft-security-ci` uses the same dispatch. The old separate demo server and UI routes
+are removed; legacy internal helpers remain for archived compatibility tests.
+Chat is the primary UI navigation; reports remain reachable from chat.
 Quickstart API/CLI and setup honor explicit `CFT_LLM_ROUTES` and require credentials
 for at least one selected route. Only an empty selection uses the tested
 `nsu:Qwen3.8-27B` default; choosing another provider never requires an NSU key.

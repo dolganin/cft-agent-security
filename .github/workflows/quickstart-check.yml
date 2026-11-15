@@ -68,7 +68,9 @@ jobs:
           echo "CFT_SANDBOX_IMAGE=$worker_image" >> "$GITHUB_ENV"
       - name: Exercise documented CI entrypoint without model credentials
         run: |
-          python -m app.demo_check --agent-mode stub --output-dir artifacts/ci-smoke
+          cft-security-ci --target demo-target/order-store \
+            --profile targets/demo-order-store.yaml --agent-mode stub \
+            --output-dir artifacts/ci-smoke
           python -m json.tool artifacts/ci-smoke/gate.json
           python - <<'PY'
           import json

@@ -115,7 +115,7 @@ def check_demo(*, config, port=8080, preview_port=8090, probe_model=False):
     check_tools()
     image = config.sandbox_image
     if not DIGEST_IMAGE.fullmatch(image):
-        raise SetupError("Не подготовлен образ проверок. Выполните: python -m app.setup --prepare-demo")
+        raise SetupError("Не подготовлен образ проверок. Выполните: python -m app.setup --prepare")
     command(["docker", "image", "inspect", image, "--format", "{{.Id}}"])
     if not (ROOT / "frontend/node_modules/vite").is_dir():
         raise SetupError("Не установлены зависимости интерфейса. Выполните npm ci в каталоге frontend.")
@@ -134,7 +134,7 @@ def check_demo(*, config, port=8080, preview_port=8090, probe_model=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--prepare-demo", action="store_true", help="Явно загрузить и подготовить Docker-образы")
+    parser.add_argument("--prepare", action="store_true", help="Загрузить и подготовить Docker-образы")
     parser.add_argument("--check-model", action="store_true", help="Проверить ключ реальным коротким запросом")
     parser.add_argument("--port", type=int, default=8080)
     parser.add_argument("--preview-port", type=int, default=8090)
@@ -146,7 +146,7 @@ def main():
         from app.config import Settings
 
         config = Settings()
-        if args.prepare_demo:
+        if args.prepare:
             check_tools()
             check_model(config)
             print("Загружаем образ проверок. На первом запуске это может занять несколько минут.")
@@ -161,8 +161,8 @@ def main():
                      "build"], timeout=600)
             config = Settings()
         check_demo(config=config, port=args.port, preview_port=args.preview_port,
-                   probe_model=args.check_model and not args.prepare_demo)
-        print("Готово. Запустите python -m app.demo, затем npm run dev в каталоге frontend.")
+                   probe_model=args.check_model and not args.prepare)
+        print("Готово. Запустите cft-security-api, затем npm run dev в каталоге frontend.")
         return 0
     except (SetupError, OSError, ValueError) as exc:
         print(f"Подготовка не завершена: {exc}", file=sys.stderr)

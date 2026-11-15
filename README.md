@@ -88,7 +88,7 @@ CFT_LLM_ROUTES=nsu:Qwen3.8-27B
 Запустите Docker и подготовьте окружение:
 
 ```bash
-python -m app.setup --prepare-demo
+python -m app.setup --prepare
 ```
 
 <details>
@@ -109,7 +109,7 @@ docker compose -f demo-target/order-store/compose.yaml build
 **API** — в терминале с активной `.venv`:
 
 ```bash
-python -m app.demo
+cft-security-api
 ```
 
 **Интерфейс** — во втором терминале из корня проекта:
@@ -129,14 +129,19 @@ npm --prefix frontend run dev -- --strictPort
 Например: `Проведи полный анализ безопасности проекта`.
 В блоке **«Ход проверки»** видны команды и доказательства; в полном отчете —
 находки с файлами и строками. После анализа можно задавать уточняющие вопросы.
-Для первого знакомства доступен встроенный пример в разделе **«Проекты»**.
+Магазин автоматически появляется в разделе **«Проекты»**; его сайт доступен на
+[localhost:8090](http://localhost:8090). Для него действуют короткие бюджеты и
+специальные проверки. Загруженные проекты проходят полный анализ с обычными настройками.
+Отдельный демосервер не нужен.
 
 ## CLI
 
 Проверка встроенного примера без запуска интерфейса:
 
 ```bash
-python -m app.demo_check --output-dir artifacts/demo-cli
+cft-security-ci --target demo-target/order-store \
+  --profile targets/demo-order-store.yaml --agent-mode llm \
+  --output-dir artifacts/store-check
 ```
 
 Для своего проекта используйте **`cft-security-ci`** — полный pipeline с Docker,
@@ -149,7 +154,9 @@ python -m app.demo_check --output-dir artifacts/demo-cli
 собирает интерфейс и проверяет Docker/SAST-контур. Локальная проверка интеграции без LLM:
 
 ```bash
-python -m app.demo_check --agent-mode stub --output-dir artifacts/ci-smoke
+cft-security-ci --target demo-target/order-store \
+  --profile targets/demo-order-store.yaml --agent-mode stub \
+  --output-dir artifacts/ci-smoke
 ```
 
 | Код завершения | Значение |

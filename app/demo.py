@@ -7,26 +7,20 @@ from __future__ import annotations
 
 import argparse
 import json
-import shutil
-import tempfile
 from collections.abc import Callable
 from pathlib import Path
 from threading import Lock
 
-import uvicorn
 from fastapi import HTTPException
 
 from agent.llm import ProviderFailoverClient, parse_route_specs
 from api.app import create_app
-from api.registry import ApiTargetRegistry, RegisteredTarget
 from api.service import RunOrchestrator
-from api.store import ApiStore
 from app.ci_pipeline import run_ci_pipeline
 from app.config import settings
 from fix_verification.review import prepare_patch_review, validate_sequelize_search_proposal
 from fix_verification.service import FixVerificationService
 from schemas.fix import FixVerificationArtifact, PatchReviewArtifact
-from schemas.target import TargetProfile
 
 ROOT = Path(__file__).resolve().parent.parent
 PROFILE = ROOT / "targets/juice-presentation.yaml"
@@ -197,40 +191,43 @@ def run_demo_pipeline(args: argparse.Namespace) -> int:
         for key in (
             "scout_max_turns", "scout_max_candidates", "scout_wall_clock_seconds",
             "llm_reasoning_effort", "llm_max_output_tokens", "llm_timeout_seconds",
-            "policy_file",
+            "policy_file", "llm_routes",
         )
     }
-    settings.scout_max_turns = scout_turns
-    settings.scout_max_candidates = scout_candidates
-    settings.scout_wall_clock_seconds = scout_seconds
-    settings.llm_reasoning_effort = "low"
-    settings.llm_max_output_tokens = 4096 if demo_target == "demo-order-store" else 8192
-    settings.llm_timeout_seconds = 15.0 if demo_target == "demo-order-store" else 55.0
-    if demo_target == "demo-order-store":
-        settings.policy_file = ROOT / "policies/demo-order-store.yaml"
-    destination = Path(args.output_dir)
-    destination.mkdir(parents=True, exist_ok=True)
-    (destination / "demo-scope.json").write_text(json.dumps({
-        "kind": "scoped_presentation_run",
-        "full_benchmark": False,
-        **target_details,
-        "target_id": demo_target,
-        "sast_config": rules.relative_to(ROOT).as_posix(),
-        "scout_max_turns": scout_turns,
-        "scout_max_candidates": scout_candidates,
-        "requested_agent_mode": args.agent_mode,
-        "model_routes": settings.llm_routes,
-        "reasoning_effort": settings.llm_reasoning_effort,
-        "max_output_tokens": settings.llm_max_output_tokens,
-        "request_timeout_seconds": settings.llm_timeout_seconds,
-        "policy_file": str(settings.policy_file),
-        "max_iterations": args.max_iterations,
-        "compact_registered_reasoning": demo_target == "demo-order-store",
-        "coalesce_bound_scout": args.coalesce_bound_scout,
-        "reasoning_prefetch_workers": args.reasoning_prefetch_workers,
-        "note": "LLM attempts and actual fallback use are recorded separately in audit/.",
-    }, ensure_ascii=False, indent=2), encoding="utf-8")
     try:
+        settings.scout_max_turns = scout_turns
+        settings.scout_max_candidates = scout_candidates
+        settings.scout_wall_clock_seconds = scout_seconds
+        settings.llm_reasoning_effort = "low"
+        settings.llm_max_output_tokens = 4096 if demo_target == "demo-order-store" else 8192
+        settings.llm_timeout_seconds = 15.0 if demo_target == "demo-order-store" else 55.0
+        if demo_target == "demo-order-store":
+            from app.setup import configured_demo_routes
+
+            settings.llm_routes = configured_demo_routes(settings)
+            settings.policy_file = ROOT / "policies/demo-order-store.yaml"
+        destination = Path(args.output_dir)
+        destination.mkdir(parents=True, exist_ok=True)
+        (destination / "demo-scope.json").write_text(json.dumps({
+            "kind": "scoped_presentation_run",
+            "full_benchmark": False,
+            **target_details,
+            "target_id": demo_target,
+            "sast_config": rules.relative_to(ROOT).as_posix(),
+            "scout_max_turns": scout_turns,
+            "scout_max_candidates": scout_candidates,
+            "requested_agent_mode": args.agent_mode,
+            "model_routes": settings.llm_routes,
+            "reasoning_effort": settings.llm_reasoning_effort,
+            "max_output_tokens": settings.llm_max_output_tokens,
+            "request_timeout_seconds": settings.llm_timeout_seconds,
+            "policy_file": str(settings.policy_file),
+            "max_iterations": args.max_iterations,
+            "compact_registered_reasoning": demo_target == "demo-order-store",
+            "coalesce_bound_scout": args.coalesce_bound_scout,
+            "reasoning_prefetch_workers": args.reasoning_prefetch_workers,
+            "note": "LLM attempts and actual fallback use are recorded separately in audit/.",
+        }, ensure_ascii=False, indent=2), encoding="utf-8")
         if demo_target == "demo-order-store" and (args.agent_mode or settings.agent_mode) == "llm":
             from agent.compact_model import CompactRegisteredAgentModel
             from agent.model import reasoning_model_context
@@ -245,85 +242,5 @@ def run_demo_pipeline(args: argparse.Namespace) -> int:
             setattr(settings, key, value)
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--port", type=int, default=8080)
-    parser.add_argument("--preview-port", type=int, default=8090)
-    parser.add_argument("--data-dir", type=Path, help="Separate local metadata and artifacts for this installation")
-    args = parser.parse_args()
-    if Path.cwd().resolve() != ROOT:
-        raise SystemExit(f"Run from the repository directory: {ROOT}")
-    from app.setup import SetupError, check_demo
-    try:
-        check_demo(config=settings, port=args.port, preview_port=args.preview_port)
-    except SetupError as exc:
-        raise SystemExit(str(exc)) from None
-    data_dir = args.data_dir.expanduser().resolve() if args.data_dir else None
-    temporary_root = Path(tempfile.mkdtemp(prefix="cft-order-store-target-"))
-    order_checkout = temporary_root / "order-store"
-    preview = None
-    try:
-        from app.demo_preview import OrderStorePreview
-
-        preview = OrderStorePreview(ORDER_TEMPLATE, port=args.preview_port)
-        preview.start()
-        if preview.public_status()["status"] != "ready":
-            raise SystemExit(preview.public_status().get("message", "Не запущен локальный магазин"))
-        shutil.copytree(ORDER_TEMPLATE, order_checkout)
-        order_profile = TargetProfile.from_yaml(
-            ORDER_PROFILE, repository_path_override=order_checkout,
-        )
-        registered = [RegisteredTarget(profile_path=ORDER_PROFILE, profile=order_profile)]
-        juice_checkout = (ROOT / "artifacts/presentation-2026-10-08/juice-shop").resolve()
-        if juice_checkout.is_dir():
-            juice_profile = TargetProfile.from_yaml(
-                PROFILE, repository_path_override=juice_checkout,
-            )
-            registered.append(RegisteredTarget(profile_path=PROFILE, profile=juice_profile))
-        registry = ApiTargetRegistry(registered)
-    except (Exception, SystemExit):
-        if preview is not None:
-            preview.stop()
-        shutil.rmtree(temporary_root, ignore_errors=True)
-        raise
-    settings.agent_mode = "llm"
-    from app.setup import configured_demo_routes
-
-    settings.llm_routes = configured_demo_routes(settings)
-    # The first-run .env defaults to high reasoning. Keep chat summaries and
-    # followups on the same bounded low-reasoning route as the demo workflow;
-    # otherwise thinking alone can exhaust the conversational output budget.
-    settings.llm_reasoning_effort = "low"
-    settings.llm_max_output_tokens = 4096
-    service = RunOrchestrator(
-        registry=registry,
-        store=ApiStore(data_dir / "demo.sqlite3" if data_dir else ROOT / "api_data/presentation-2026-10-08.sqlite3"),
-        artifact_root=data_dir / "runs" if data_dir else ROOT / "artifacts/presentation-2026-10-08/runs",
-        project_root=data_dir / "projects" if data_dir else ROOT / "api_data/presentation-projects",
-        pipeline_runner=run_demo_pipeline,
-        max_workers=1,
-    )
-    def cleanup_demo():
-        if preview is not None:
-            preview.stop()
-        shutil.rmtree(temporary_root, ignore_errors=True)
-
-    try:
-        uvicorn.run(
-            create_demo_app(
-                service,
-                order_store_preview_status=preview.public_status if preview else None,
-                on_shutdown=cleanup_demo,
-            ),
-            host="127.0.0.1",
-            port=args.port,
-        )
-    finally:
-        try:
-            service.close()
-        finally:
-            cleanup_demo()
-
-
 if __name__ == "__main__":
-    main()
+    raise SystemExit("Отдельный демосервер удален. Запустите cft-security-api.")

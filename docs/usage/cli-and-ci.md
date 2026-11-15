@@ -32,59 +32,49 @@ CFT_LLM_ROUTES=nsu:Qwen3.8-27B
 Для другого провайдера укажите его ключ и маршрут вместо этих двух строк.
 Ключи не передаются контейнеру анализируемого приложения.
 
-## Быстрый CLI с живой моделью
-
-```bash
-python -m app.demo_check --output-dir artifacts/demo-cli
-python -m json.tool artifacts/demo-cli/gate.json
-```
-
-Сервер API, Vite и браузер не нужны. Команда создает временную копию учебного
-магазина и вызывает тот же `app.demo.run_demo_pipeline`, что чат. Он использует
-канонический `app.ci_pipeline`: Discovery → Docker → Semgrep → модель → Validator
-→ Executor → Evidence → отчеты → Gate. Профиль, правила, бюджет и модель
-из `CFT_LLM_ROUTES` совпадают с быстрым сценарием UI. Шаблон магазина не меняется;
-Docker-среда и временная копия удаляются после выполнения.
-
-Результаты сохраняются независимо от процесса. Новый запуск требует нового
-`--output-dir`. Код `1` означает блокирующий риск, `2` — техническую ошибку;
-они намеренно передаются вызывающему shell/CI без замены на `0`.
-
 ## Общие CLI-команды
 
 | Команда | Назначение |
 |---|---|
-| `python -m app.demo_check --help` | Короткий CLI встроенного магазина |
+| `cft-security-api --help` | Единый сервер чатов, загруженных проектов и встроенного магазина |
 | `cft-security-ci --help` | Полный pipeline с запуском и остановкой Docker-среды |
 | `cft-security-pipeline --help` | SAST, агент, отчеты и Gate без управления средой приложения |
-| `cft-security-api` | Сервер API для зарегистрированных оператором проектов |
 
-`cft-security-api` запускает API, а не первый демонстрационный сценарий. Его
-настройки задаются переменными `CFT_API_*` из `.env.example`; `--help` у этого
-entrypoint не является интерфейсом argparse. Для проверки API откройте `/docs`
-работающего сервера. Для первого знакомства используйте `python -m app.demo`.
+После активации `.venv` команды доступны в PATH. Их эквиваленты: `python -m
+api.app`, `python -m app.ci_pipeline` и `python -m app.pipeline_run`.
 
-После активации `.venv` установленные `cft-security-*` находятся в PATH.
-Эквиваленты первых двух общих команд: `python -m app.ci_pipeline` и
-`python -m app.pipeline_run`.
+`cft-security-api` автоматически добавляет магазин и запускает его предпросмотр
+на loopback-порту 8090. Сервер остается доступен, пока магазин собирается или
+Docker недоступен. Загруженные папки и ZIP используют обычный pipeline и бюджеты.
+Только доверенный профиль `targets/demo-order-store.yaml` включает короткий
+бюджет, локальные правила, компактное рассуждение и два параллельных запроса к модели.
+Имя или содержимое загруженного проекта не включает эти настройки.
+API доступен на `/docs`; дополнительные профили задаются в `CFT_API_TARGET_PROFILES`.
 
-### Проверка общего CI entrypoint на встроенном проекте
+### Проверка магазина без интерфейса
 
 ```bash
-CFT_POLICY_FILE=policies/demo-order-store.yaml cft-security-ci \
-  --target demo-target/order-store \
-  --profile targets/demo-order-store.yaml \
-  --sast-config docs/demo/order-store-semgrep.yaml \
-  --agent-mode stub \
-  --output-dir artifacts/ci-standard
+cft-security-ci --target demo-target/order-store \
+  --profile targets/demo-order-store.yaml --agent-mode llm \
+  --output-dir artifacts/store-check
+python -m json.tool artifacts/store-check/gate.json
 ```
 
-Это реальный Docker/Semgrep-проход без LLM: ожидается `warn`, четыре
-подтверждения, ноль технических ошибок и код `0`. Зарегистрированные
-детерминированные протоколы получают настоящие Evidence и сохраняют audit;
-режим не требует API-ключа и не измеряет качество reasoning модели.
-Для живого быстрого анализа этого магазина используйте `app.demo_check`:
-он также подключает операторскую политику и параметры компактного reasoning.
+Команда использует тот же профиль и pipeline, что чат: Discovery → Docker →
+Semgrep → модель → Validator → Executor → Evidence → отчеты → Gate. Docker-среда
+удаляется после проверки; результаты остаются в `--output-dir`.
+
+### Проверка интеграции без API-ключа
+
+```bash
+cft-security-ci --target demo-target/order-store \
+  --profile targets/demo-order-store.yaml --agent-mode stub \
+  --output-dir artifacts/ci-smoke
+```
+
+Ожидается `warn`, четыре подтверждения, ноль технических ошибок и код `0`.
+Детерминированные протоколы собирают настоящие Evidence и audit; качество
+рассуждений модели этот режим не измеряет.
 
 ### Pipeline без запуска приложения
 
@@ -138,12 +128,14 @@ Docker-среду приложения. Без runtime-контекста нел
 ### Проверить CI локально
 
 ```bash
-python -m app.demo_check --agent-mode stub --output-dir artifacts/ci-smoke
+cft-security-ci --target demo-target/order-store \
+  --profile targets/demo-order-store.yaml --agent-mode stub \
+  --output-dir artifacts/ci-smoke
 python -m json.tool artifacts/ci-smoke/gate.json
 ```
 
 Проверяйте три вещи: `ci-summary.json` содержит `status: completed`,
-в `gate.json` нет технических ошибок, а `warn` объяснен недостаточными
+в `gate.json` нет технических ошибок, а `warn` объяснен
 найденными неблокирующими проблемами магазина. Зеленый smoke означает успешное
 выполнение проверки, а не отсутствие уязвимостей.
 
@@ -182,20 +174,17 @@ Quickstart также запускается при изменениях соо�
 В первом терминале:
 
 ```bash
-python -m app.setup --prepare-demo --port 8082 --preview-port 8091
-python -m app.demo --port 8082 --preview-port 8091 --data-dir api_data/isolated-demo
+python -m app.setup --prepare --port 8082 --preview-port 8091
+cft-security-api --port 8082 --store-port 8091 --data-dir api_data/isolated
 ```
 
 Во втором терминале, в том же корне проекта:
 
 ```bash
-printf 'CFT_UI_API_PROXY=http://127.0.0.1:8082\n' > frontend/.env.local
-npm --prefix frontend run dev -- --port 5174 --strictPort
+CFT_UI_API_PROXY=http://127.0.0.1:8082 npm --prefix frontend run dev -- --port 5174 --strictPort
 ```
 
-Откройте <http://127.0.0.1:5174>. `frontend/.env.local` — локальная настройка,
-не API-ключ. Команда `printf` заменяет этот файл; при наличии других настроек
-измените только строку `CFT_UI_API_PROXY` редактором.
+Откройте <http://127.0.0.1:5174>. Переменная прокси действует только для этой команды.
 
 Диагностика на тех же свободных портах, при остановленном сервере:
 

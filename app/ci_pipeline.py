@@ -388,7 +388,9 @@ def _print_technical_failure(gate: GateResult) -> None:
 
 
 def main() -> int:
-    return run_ci_pipeline(_parse_args())
+    from app.profile_pipeline import run_project_pipeline
+
+    return run_project_pipeline(_parse_args())
 
 
 if __name__ == "__main__":
