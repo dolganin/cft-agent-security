@@ -67,7 +67,7 @@ cd ~
 ```
 
 В Docker Desktop включите **Settings → Resources → WSL Integration**.
-Установите Node.js 22.12+ внутри Ubuntu, затем выполните команды Linux выше. Если вы уже в папке проекта, пропустите `git clone` и `cd cft-security-agent`.
+Установите Node.js 22.12+ внутри Ubuntu, затем выполните команды Linux выше.
 
 </details>
 
