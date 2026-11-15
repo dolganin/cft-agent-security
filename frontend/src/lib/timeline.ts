@@ -114,7 +114,9 @@ export function buildConversationTimeline(
     const runSnapshot = message.run_id ? snapshotsByRunId.get(message.run_id) : undefined;
     const messageTime = timeOf(message.created_at, 0);
     const isFinalSummary = message.kind === "summary" && run?.finished_at;
-    const displayedMessage = isFinalSummary && runSnapshot?.gate
+    const needsUniqueSummary = runSnapshot
+      && groupReports(runSnapshot.reports).length < runSnapshot.reports.length;
+    const displayedMessage = isFinalSummary && runSnapshot?.gate && needsUniqueSummary
       ? { ...message, content: uniqueRunSummary(runSnapshot) }
       : message;
     return {

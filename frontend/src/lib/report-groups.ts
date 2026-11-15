@@ -1,8 +1,8 @@
 import type { FinalReport, FindingStatus, GroupedReport } from "../api/types";
 
 /**
- * Group only findings tied to the same source snapshot, file, family and start
- * line. Reports without a source digest are not guessed to be duplicates.
+ * Group findings tied to the same snapshot/file/family and an exact line or
+ * uniquely bound operator route with overlapping ranges. Unbound reports stay separate.
  */
 export function groupReports(reports: FinalReport[]): GroupedReport[] {
   const anchored = new Map<string, FinalReport[]>();
@@ -20,7 +20,7 @@ export function groupReports(reports: FinalReport[]): GroupedReport[] {
   }
 
   const groups = [...unanchored];
-  for (const [key, bucket] of anchored) {
+  for (const bucket of [...anchored.values()].flatMap(splitSourceBucket)) {
     const preciseColumns = new Set(
       bucket.map(columnKey).filter((value): value is string => value !== null),
     );
@@ -53,13 +53,39 @@ function sourceKey(report: FinalReport): string | null {
   const provenance = finding.provenance;
   if (!provenance?.file_sha256 || finding.line_start == null) return null;
   const family = canonicalFamily(finding.rule_id, provenance.family);
+  const resolution = report.binding_resolution;
+  const binding = resolution?.status === "bound" ? resolution.binding : null;
+  const location = binding?.source_file === finding.file
+    ? ["route", binding.route_id, binding.source_snapshot, binding.map_sha256].join(":")
+    : `line:${finding.line_start}`;
   return [
     provenance.file_sha256,
     finding.service ?? "",
     provenance.normalized_file || finding.file,
     family,
-    finding.line_start,
+    location,
   ].join("\u001f");
+}
+
+function splitSourceBucket(bucket: FinalReport[]): FinalReport[][] {
+  const scanners = bucket.filter((item) => item.finding.source !== "model_scout");
+  if (scanners.length === 1) {
+    const primary = scanners[0];
+    const matches = bucket.filter((item) => {
+      const a = primary.finding;
+      const b = item.finding;
+      return Math.max(a.line_start!, b.line_start!)
+        <= Math.min(a.line_end ?? a.line_start!, b.line_end ?? b.line_start!);
+    });
+    return [matches, ...bucket.filter((item) => !matches.includes(item)).map((item) => [item])];
+  }
+  // Do not let a broad model window choose among multiple scanner sinks.
+  const byStart = new Map<number, FinalReport[]>();
+  for (const item of bucket) {
+    const start = item.finding.line_start!;
+    byStart.set(start, [...(byStart.get(start) ?? []), item]);
+  }
+  return [...byStart.values()];
 }
 
 function canonicalFamily(ruleId: string, recordedFamily: string): string {

@@ -1,0 +1,75 @@
+{
+  "kind": "first-run-ui-acceptance",
+  "date": "2026-11-15",
+  "base_commit": "fe2f11ebdb83a7e57303eee6312cfd4f0d64f1f9",
+  "host": {
+    "os": "macOS 26.5.2 arm64",
+    "python": "3.11.9 (fresh venv)",
+    "node": "22.22.3",
+    "docker": "28.5.2",
+    "compose": "2.40.3"
+  },
+  "linux_smoke": {
+    "os": "Debian GNU/Linux 13 arm64",
+    "image": "python:3.11-slim",
+    "fresh_dependencies": true,
+    "pip_check": true,
+    "graph": true,
+    "semgrep": "1.185.0",
+    "full_ui_tested": false
+  },
+  "isolation": {
+    "fresh_checkout": true,
+    "fresh_venv": true,
+    "fresh_node_modules": true,
+    "fresh_npm_cache": true,
+    "fresh_api_database": true,
+    "operator_supplied_api_key": true,
+    "old_artifacts_copied": false
+  },
+  "ui": {
+    "real_browser": true,
+    "run_started_by": "textbox + Enter",
+    "run_id": "run-293032a794f14faab4a573ccf94d703e",
+    "initial_demo_button_run_id": "run-ef4c015df73441bf8202f198112e7a50",
+    "seconds": 54.005,
+    "confirmed": 4,
+    "inconclusive": 1,
+    "technical_errors": 0,
+    "all_confirmations_have_execution_audit": true,
+    "followup_answer_received": true,
+    "reload_completed_result": true,
+    "viewport_mobile": {
+      "width": 390,
+      "document_width": 390
+    },
+    "console_errors_stable_final_session": 0
+  },
+  "shutdown": {
+    "signal": "SIGTERM",
+    "preview_removed": true,
+    "name": "cft-store-preview-b4498a51d68e-order-store-1"
+  },
+  "checks": {
+    "clean_python": {
+      "passed": 1796,
+      "skipped": 82
+    },
+    "workspace_python": {
+      "passed": 1846,
+      "skipped": 32
+    },
+    "frontend": {
+      "passed": 36,
+      "build": true
+    },
+    "ruff": true
+  },
+  "artifact_hashes": {
+    "gate.json": "194b5a8c2ae6b20e12a6837b307c489c33add8f0cd6e7dfeebf9415994ccfae7",
+    "audit/executor.jsonl": "384f0f8b3e880247bdefe53374f2442d80710c6693f99545da863eea8d667e44",
+    "audit/llm-attempts.jsonl": "6fc360816600d313fd1ca8050c2a376edf5e8433842dbd0b0a4e3dd0c897e172",
+    "scout/summary.json": "3f7294747c63d52fc3336e18b95d36ad703482fbe7e78f18922002a6f4f390dd"
+  },
+  "scope": "Pinned demo acceptance; Linux install/graph smoke only. Native Windows and a full WSL UI pass were not executed."
+}

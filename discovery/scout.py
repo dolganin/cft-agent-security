@@ -66,8 +66,8 @@ def merge_scout_candidates(
 def coalesce_bound_scout_findings(findings: list[Finding], profile) -> tuple[list[Finding], int]:
     """Join a scout observation only to one uniquely matching scanner sink.
 
-    Different range ends are permitted only when the same start, file digest,
-    family and operator-resolved route agree. Distinct scanner sinks and unbound
+    Overlapping ranges are permitted only when file digest, family and the
+    operator-resolved route agree with one scanner sink. Distinct sinks and unbound
     observations stay separate. The primary anchor and every origin are retained.
     """
     from security.verification_binding import resolve_binding
@@ -81,7 +81,7 @@ def coalesce_bound_scout_findings(findings: list[Finding], profile) -> tuple[lis
         binding = resolution.binding
         if resolution.status != "bound" or binding is None:
             return None
-        return (finding.file, finding.line_start, provenance.file_sha256,
+        return (finding.file, provenance.file_sha256,
                 provenance.family, finding.service, binding.route_id,
                 binding.source_snapshot, binding.map_sha256)
 
@@ -99,7 +99,10 @@ def coalesce_bound_scout_findings(findings: list[Finding], profile) -> tuple[lis
     for item in findings:
         if item.source != "model_scout":
             continue
-        candidates = by_key.get(key(item), [])
+        candidates = [identifier for identifier in by_key.get(key(item), [])
+                      if max(item.line_start, originals[identifier].line_start)
+                      <= min(item.line_end or item.line_start,
+                             originals[identifier].line_end or originals[identifier].line_start)]
         if len(candidates) != 1:
             retained.append(item)
             continue

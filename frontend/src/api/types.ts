@@ -293,6 +293,10 @@ export interface ContextPriority {
 }
 
 export interface FinalReport {
+  binding_resolution?: {
+    status: string;
+    binding?: { route_id: string; map_sha256: string; source_snapshot: string; source_file: string } | null;
+  } | null;
   workflow_errors?: ErrorDetail[];
   reasoning_events?: { operation: string; status: string; category: string }[];
   technical_severity?: { level: string; scheme: string; assessment_status: string; reasoning: string } | null;

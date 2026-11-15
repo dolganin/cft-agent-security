@@ -134,6 +134,14 @@ def test_coalescing_keeps_origins_and_does_not_choose_among_scanner_sinks(prepar
     assert set(findings[0].provenance.aliases) == {primary.id, scout.id}
     assert len(findings[0].provenance.observations) == 2
     assert coalesce_bound_scout_findings(findings, profile) == (findings, 0)
+    shifted = normalize_finding(scout.model_copy(update={
+        "line_start": 5, "line_end": 6, "provenance": None,
+    }), repository_root=profile.repository_path)
+    assert coalesce_bound_scout_findings([primary, shifted], profile)[1] == 1
+    disjoint = normalize_finding(scout.model_copy(update={
+        "line_start": 8, "line_end": 8, "provenance": None,
+    }), repository_root=profile.repository_path)
+    assert coalesce_bound_scout_findings([primary, disjoint], profile)[1] == 0
     other_sink = primary.model_copy(update={"id": "scanner-other"})
     assert coalesce_bound_scout_findings([primary, other_sink, scout], profile)[1] == 0
     unmapped = normalize_finding(scout.model_copy(update={

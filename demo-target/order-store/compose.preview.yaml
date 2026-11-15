@@ -1,7 +1,7 @@
 services:
   order-store:
     ports:
-      - "127.0.0.1:8090:3000"
+      - "127.0.0.1:${CFT_DEMO_PREVIEW_PORT:-8090}:3000"
 
 networks:
   default:

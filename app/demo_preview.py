@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import subprocess
 import time
+from hashlib import sha256
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import urlopen
@@ -17,8 +18,13 @@ class OrderStorePreview:
     project_name = "cft-demo-order-store-preview"
     preview_url = "http://127.0.0.1:8090"
 
-    def __init__(self, target_directory: str | Path) -> None:
+    def __init__(self, target_directory: str | Path, *, port: int = 8090) -> None:
+        if not 1 <= port <= 65535:
+            raise ValueError("Invalid local preview port")
         self.target_directory = Path(target_directory).resolve(strict=True)
+        self.port = port
+        self.preview_url = f"http://127.0.0.1:{port}"
+        self.project_name = "cft-store-preview-" + sha256(str(self.target_directory).encode()).hexdigest()[:12]
         self.compose_file = self.target_directory / "compose.yaml"
         self.preview_override = self.target_directory / "compose.preview.yaml"
         self._started = False
@@ -36,6 +42,8 @@ class OrderStorePreview:
             raise FileNotFoundError("Demo Compose file is missing")
         from app.ci_pipeline import target_subprocess_environment
 
+        environment = target_subprocess_environment()
+        environment["CFT_DEMO_PREVIEW_PORT"] = str(self.port)
         result = run_cancellable_process(
             [
                 "docker", "compose", "--project-name", self.project_name,
@@ -44,7 +52,7 @@ class OrderStorePreview:
             ],
             cwd=self.target_directory,
             timeout=timeout,
-            environment=target_subprocess_environment(),
+            environment=environment,
         )
         if result.returncode:
             raise RuntimeError("Docker Compose could not start the local demo preview")
@@ -71,7 +79,7 @@ class OrderStorePreview:
             raise TimeoutError("Local demo preview did not become ready")
         except (OSError, RuntimeError, subprocess.SubprocessError, TimeoutError):
             self._status = "unavailable"
-            self._message = "Не удалось поднять предпросмотр. Проверьте, что Docker запущен и порт 8090 свободен."
+            self._message = f"Не удалось поднять предпросмотр. Проверьте, что Docker запущен и порт {self.port} свободен."
             self.stop()
             self._status = "unavailable"
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -32,13 +33,20 @@ from schemas.pipeline import GateResult
 from schemas.report import FinalReport
 
 
-def create_app(orchestrator: RunOrchestrator | None = None) -> FastAPI:
+def create_app(orchestrator: RunOrchestrator | None = None, *,
+               on_shutdown: Callable[[], None] | None = None) -> FastAPI:
     service = orchestrator or _default_orchestrator()
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
-        yield
-        service.close()
+        try:
+            yield
+        finally:
+            try:
+                service.close()
+            finally:
+                if on_shutdown is not None:
+                    await asyncio.to_thread(on_shutdown)
 
     app = FastAPI(
         title="CFT Security Agent API",

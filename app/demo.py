@@ -44,9 +44,10 @@ def create_demo_app(
     patch_client_factory=None,
     fix_service=None,
     order_store_preview_status: Callable[[], dict[str, str]] | None = None,
+    on_shutdown: Callable[[], None] | None = None,
 ):
     """Demo artifacts remain separate from the original reports and CI Gate."""
-    app = create_app(service)
+    app = create_app(service, on_shutdown=on_shutdown)
     patch_lock = Lock()
 
     @app.get("/demo/order-store/status")
@@ -247,17 +248,27 @@ def run_demo_pipeline(args: argparse.Namespace) -> int:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--preview-port", type=int, default=8090)
+    parser.add_argument("--data-dir", type=Path, help="Separate local metadata and artifacts for this installation")
     args = parser.parse_args()
     if Path.cwd().resolve() != ROOT:
         raise SystemExit(f"Run from the repository directory: {ROOT}")
+    from app.setup import SetupError, check_demo
+    try:
+        check_demo(config=settings, port=args.port, preview_port=args.preview_port)
+    except SetupError as exc:
+        raise SystemExit(str(exc)) from None
+    data_dir = args.data_dir.expanduser().resolve() if args.data_dir else None
     temporary_root = Path(tempfile.mkdtemp(prefix="cft-order-store-target-"))
     order_checkout = temporary_root / "order-store"
     preview = None
     try:
         from app.demo_preview import OrderStorePreview
 
-        preview = OrderStorePreview(ORDER_TEMPLATE)
+        preview = OrderStorePreview(ORDER_TEMPLATE, port=args.preview_port)
         preview.start()
+        if preview.public_status()["status"] != "ready":
+            raise SystemExit(preview.public_status().get("message", "Не запущен локальный магазин"))
         shutil.copytree(ORDER_TEMPLATE, order_checkout)
         order_profile = TargetProfile.from_yaml(
             ORDER_PROFILE, repository_path_override=order_checkout,
@@ -270,7 +281,7 @@ def main() -> None:
             )
             registered.append(RegisteredTarget(profile_path=PROFILE, profile=juice_profile))
         registry = ApiTargetRegistry(registered)
-    except Exception:
+    except (Exception, SystemExit):
         if preview is not None:
             preview.stop()
         shutil.rmtree(temporary_root, ignore_errors=True)
@@ -279,28 +290,39 @@ def main() -> None:
     # The old DeepSeek identifier returns Model not found on NSU; keep this
     # presentation route explicit without changing the user's main .env chain.
     settings.llm_routes = "nsu:Qwen3.8-27B"
+    # The first-run .env defaults to high reasoning. Keep chat summaries and
+    # followups on the same bounded low-reasoning route as the demo workflow;
+    # otherwise thinking alone can exhaust the conversational output budget.
+    settings.llm_reasoning_effort = "low"
+    settings.llm_max_output_tokens = 4096
     service = RunOrchestrator(
         registry=registry,
-        store=ApiStore(ROOT / "api_data/presentation-2026-10-08.sqlite3"),
-        artifact_root=ROOT / "artifacts/presentation-2026-10-08/runs",
-        project_root=ROOT / "api_data/presentation-projects",
+        store=ApiStore(data_dir / "demo.sqlite3" if data_dir else ROOT / "api_data/presentation-2026-10-08.sqlite3"),
+        artifact_root=data_dir / "runs" if data_dir else ROOT / "artifacts/presentation-2026-10-08/runs",
+        project_root=data_dir / "projects" if data_dir else ROOT / "api_data/presentation-projects",
         pipeline_runner=run_demo_pipeline,
         max_workers=1,
     )
+    def cleanup_demo():
+        if preview is not None:
+            preview.stop()
+        shutil.rmtree(temporary_root, ignore_errors=True)
+
     try:
         uvicorn.run(
             create_demo_app(
                 service,
                 order_store_preview_status=preview.public_status if preview else None,
+                on_shutdown=cleanup_demo,
             ),
             host="127.0.0.1",
             port=args.port,
         )
     finally:
-        service.close()
-        if preview is not None:
-            preview.stop()
-        shutil.rmtree(temporary_root, ignore_errors=True)
+        try:
+            service.close()
+        finally:
+            cleanup_demo()
 
 
 if __name__ == "__main__":

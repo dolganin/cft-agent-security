@@ -1613,3 +1613,13 @@ nodes still validate the plan and approvals, execute checks sequentially and
 derive verdicts from fresh Evidence. Invalid compact answers fall back to the
 ordinary adapter. No previous-run verdict/Evidence cache is used. Other profiles,
 research and historical benchmark settings keep their existing behavior.
+
+`python -m app.setup --prepare-demo` is explicit operator provisioning: it checks
+the live demo model, pulls the worker image, records its repository digest in the
+local ignored `.env`, and builds the demo target. It never supplies a verdict or
+changes frozen policies. First-run dependencies are constrained by
+`requirements-first-run.txt`. Preview cleanup belongs to the API lifespan as well
+as the outer CLI finalizer, because newer Uvicorn versions re-raise stop signals.
+Separate checkouts have separate preview Compose names; custom ports/data roots
+must remain loopback/local. First-run acceptance is in
+`docs/demo/first-run-verification.md`.

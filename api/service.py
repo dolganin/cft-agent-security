@@ -1174,21 +1174,24 @@ def _run_summary(
     decision_labels = {"pass": "пройден", "warn": "с предупреждениями", "fail": "не пройден"}
     parts = [f"Анализ завершен. Решение: {decision_labels.get(gate.decision, gate.decision)}."]
     if reports:
+        status_labels = {"confirmed": "подтверждено", "rejected": "опровергнуто",
+                         "inconclusive": "недостаточно данных", "policy_blocked": "заблокировано политикой"}
         parts.append(
-            "Findings: "
-            + ", ".join(f"{status}={count}" for status, count in sorted(counts.items()))
+            "Находки: "
+            + ", ".join(f"{status_labels.get(status, status)} — {count}"
+                        for status, count in sorted(counts.items()))
             + "."
         )
     important = [
         report
         for report in reports
         if report.status in {"confirmed", "policy_blocked"}
-    ][:3]
+    ]
     if important:
         parts.append(
             "Главное: "
             + "; ".join(
-                f"{report.finding.title} ({report.finding.severity or 'severity N/A'})"
+                f"{report.finding.title} (`{report.finding.file}:{report.finding.line_start or '?'}`)"
                 for report in important
             )
             + "."

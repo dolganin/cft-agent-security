@@ -44,7 +44,7 @@ export function OrderStoreDemoPage() {
 
       <section className="order-demo-workspace">
         <div className="order-demo-store">
-          <div className="order-demo-store-title"><div><span className="demo-eyebrow">ЦЕЛЕВОЕ ПРИЛОЖЕНИЕ</span><h2>Тихий дом</h2></div><a href="http://127.0.0.1:8090/" target="_blank" rel="noreferrer">Открыть отдельно ↗</a></div>
+          <div className="order-demo-store-title"><div><span className="demo-eyebrow">ЦЕЛЕВОЕ ПРИЛОЖЕНИЕ</span><h2>Тихий дом</h2></div><a href={`${preview.data?.url ?? "http://127.0.0.1:8090"}/`} target="_blank" rel="noreferrer">Открыть отдельно ↗</a></div>
           {preview.data?.status === "ready" ? (
             <iframe title="Демонстрационный магазин заказов" src={`${preview.data.url}/`} />
           ) : (
@@ -60,6 +60,8 @@ export function OrderStoreDemoPage() {
           <div className="order-demo-run-head"><div><span className="demo-eyebrow">ПРОВЕРКА</span><h2>Что проверяет агент</h2></div><span className={`debug-status ${run?.status ?? "queued"}`}>{run ? runStatusLabel(run.status) : "Готов к запуску"}</span></div>
           <div className="order-demo-case"><span className="case-number">01</span><div><b>SQL-инъекция в поиске</b><p>Сравнивает повторные контрольные запросы и безопасный булев запрос по числу результатов.</p></div></div>
           <div className="order-demo-case"><span className="case-number">02</span><div><b>Чтение чужого заказа</b><p>Сверяет доступ владельца, доступ другого аккаунта и контроль несуществующего заказа.</p></div></div>
+          <div className="order-demo-case"><span className="case-number">03</span><div><b>SQL-инъекция при входе</b><p>Проверяет, меняет ли контролируемый ввод результат аутентификации.</p></div></div>
+          <div className="order-demo-case"><span className="case-number">04</span><div><b>Раскрытие списка файлов</b><p>Проверяет открытый каталог и имена файлов без загрузки содержимого.</p></div></div>
           {run ? <div className="order-demo-metrics">
             {gate.data ? <>
               <div><b>{gate.data.confirmed}</b><span>подтверждено</span></div>

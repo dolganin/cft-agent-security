@@ -71,6 +71,9 @@ describe("buildConversationTimeline", () => {
     });
 
     const kinds = buildConversationTimeline(completed).map((item) => item.kind);
+    const summary = buildConversationTimeline(completed).find((item) =>
+      item.kind === "message" && item.message.id === "m-summary");
+    expect(summary?.kind === "message" && summary.message.content).toBe("**Итог анализа**");
     expect(kinds.at(-2)).toBe("gate");
     expect(kinds.at(-1)).toBe("message");
   });
