@@ -51,6 +51,8 @@ on:
         default: main
         type: string
     secrets:
+      NSU_OPENWEBUI_KEY:
+        required: false
       AGENT_REPOSITORY_TOKEN:
         required: false
       TARGET_REPOSITORY_TOKEN:
@@ -233,6 +235,7 @@ jobs:
           TARGET_REPOSITORY_INPUT: ${{ inputs.target_repository }}
           TARGET_PROFILE_INPUT: ${{ inputs.target_profile }}
           AGENT_MODE_INPUT: ${{ inputs.agent_mode }}
+          NSU_OPENWEBUI_KEY: ${{ secrets.NSU_OPENWEBUI_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

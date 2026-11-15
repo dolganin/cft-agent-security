@@ -1,0 +1,91 @@
+name: Quickstart check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - README.md
+      - requirements-first-run.txt
+      - pyproject.toml
+      - app/**
+      - api/**
+      - discovery/**
+      - frontend/**
+      - tests/**
+      - demo-target/order-store/**
+      - .github/workflows/quickstart-check.yml
+  pull_request:
+    paths:
+      - README.md
+      - requirements-first-run.txt
+      - pyproject.toml
+      - app/**
+      - api/**
+      - discovery/**
+      - frontend/**
+      - tests/**
+      - demo-target/order-store/**
+      - .github/workflows/quickstart-check.yml
+
+permissions:
+  contents: read
+
+jobs:
+  quickstart:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22.22.3"
+      - name: Install documented dependencies
+        run: |
+          python -m pip install -c requirements-first-run.txt -e ".[dev,sast]"
+          npm --prefix frontend ci
+      - name: Python checks
+        run: |
+          python -m ruff check .
+          python -m pytest -q -ra
+          python -m app.main
+      - name: UI checks
+        run: |
+          npm --prefix frontend test
+          npm --prefix frontend run build
+      - name: Prepare immutable worker image
+        shell: bash
+        run: |
+          docker pull python:3.12-alpine
+          worker_image=$(docker image inspect python:3.12-alpine --format '{{index .RepoDigests 0}}')
+          test -n "$worker_image"
+          echo "CFT_SANDBOX_IMAGE=$worker_image" >> "$GITHUB_ENV"
+      - name: Exercise documented CI entrypoint without model credentials
+        run: |
+          python -m app.demo_check --agent-mode stub --output-dir artifacts/ci-smoke
+          python -m json.tool artifacts/ci-smoke/gate.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("artifacts/ci-smoke")
+          gate = json.loads((root / "gate.json").read_text())
+          summary = json.loads((root / "ci-summary.json").read_text())
+          assert summary["status"] == "completed", summary
+          assert gate["technical_errors"] == 0, gate
+          assert gate["decision"] == "warn" and gate["confirmed"] == 4, gate
+          assert gate["inconclusive"] == 0 and gate["policy_blocked"] == 0, gate
+          PY
+      - name: Upload pipeline results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: quickstart-ci-smoke
+          path: artifacts/ci-smoke/
+          if-no-files-found: warn
+          retention-days: 7

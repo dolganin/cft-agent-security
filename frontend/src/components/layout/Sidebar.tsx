@@ -1,5 +1,4 @@
 import {
-  Bug,
   ChatCircle,
   FolderOpen,
   FolderSimple,
@@ -139,27 +138,12 @@ export function Sidebar({
         </SidebarSection>
       </nav>
 
-      <div className="sidebar-footer">
-        <NavLink to="/demo" onClick={onCloseMobile}>
-          <ShieldCheck size={15} />
-          Демонстрация продукта
-        </NavLink>
-        <NavLink to="/demo/order-store" onClick={onCloseMobile}>
-          <ShieldCheck size={15} />
-          Демо: магазин заказов
-        </NavLink>
-        <NavLink to="/debug/runs" onClick={onCloseMobile}>
-          <Bug size={15} />
-          Прогоны и диагностика
-        </NavLink>
-      </div>
-
       {pendingDelete ? (
         <div className="confirm-backdrop" role="presentation">
           <div className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-chat-title">
             <span className="eyebrow">Чат</span>
             <h2 id="delete-chat-title">Удалить этот чат?</h2>
-            <p>«{pendingDelete.title}» исчезнет из боковой панели. Прогоны анализа и доказательства останутся в разделе диагностики.</p>
+            <p>«{pendingDelete.title}» исчезнет из боковой панели. Сохраненные отчеты и доказательства не удалятся.</p>
             {deleteError ? <div className="confirm-error" role="alert">{deleteError}</div> : null}
             <div className="confirm-actions">
               <button type="button" onClick={() => setPendingDelete(null)} disabled={deleting}>Отмена</button>

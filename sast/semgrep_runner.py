@@ -54,6 +54,9 @@ def run_semgrep_scan(
     # Semgrep rejects auto discovery with --metrics=off. Use an explicit
     # registry ruleset without enabling telemetry.
     configs = ["p/default" if item == "auto" else item for item in configs]
+    # Local operator paths belong to the caller, not the target subprocess cwd.
+    configs = [str(Path(item).expanduser().resolve())
+               if Path(item).expanduser().exists() else item for item in configs]
     if not configs:
         raise SemgrepError("At least one Semgrep config is required")
     scanner_root = None

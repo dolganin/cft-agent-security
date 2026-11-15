@@ -101,13 +101,13 @@ code { overflow-wrap: anywhere; }
 .sidebar-brand small { color: var(--faint); font-size: 11px; }
 .sidebar-close { display: none; }
 .sidebar-actions { display: grid; gap: 4px; margin-bottom: 14px; }
-.sidebar-primary, .sidebar-action, .sidebar-row, .sidebar-footer a {
+.sidebar-primary, .sidebar-action, .sidebar-row {
   width: 100%; display: flex; align-items: center; gap: 9px; border: 0; border-radius: 7px;
   background: transparent; padding: 8px 10px; text-align: left; text-decoration: none;
 }
 .sidebar-primary { background: #2a2d2f; font-weight: 600; }
-.sidebar-primary:hover, .sidebar-action:hover, .sidebar-row:hover, .sidebar-footer a:hover { background: var(--surface-hover); }
-.sidebar-action, .sidebar-footer a { color: var(--muted); }
+.sidebar-primary:hover, .sidebar-action:hover, .sidebar-row:hover { background: var(--surface-hover); }
+.sidebar-action { color: var(--muted); }
 .sidebar-scroll { min-height: 0; flex: 1; overflow-y: auto; }
 .sidebar-section { margin-bottom: 18px; }
 .sidebar-section h2 { padding: 4px 10px 6px; color: var(--faint); font-size: 11px; font-weight: 600; }
@@ -127,7 +127,6 @@ code { overflow-wrap: anywhere; }
 .chat-delete-button { position: absolute; top: 50%; right: 5px; display: grid; width: 27px; height: 27px; transform: translateY(-50%); place-items: center; border: 0; border-radius: 6px; background: transparent; color: var(--faint); cursor: pointer; opacity: 0; }
 .chat-row-shell:hover .chat-delete-button, .chat-delete-button:focus-visible { opacity: 1; }
 .chat-delete-button:hover { background: #392325; color: var(--red); }
-.sidebar-footer { padding-top: 8px; border-top: 1px solid var(--border-soft); font-size: 12px; }
 
 /* Рабочая область */
 .chat-workspace { display: flex; height: 100%; min-height: 0; flex-direction: column; background: var(--bg); }

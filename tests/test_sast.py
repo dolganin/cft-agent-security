@@ -114,6 +114,26 @@ def test_runner_explains_missing_semgrep(monkeypatch, tmp_path: Path) -> None:
         run_semgrep_scan(tmp_path)
 
 
+def test_relative_operator_rules_are_resolved_before_entering_target(monkeypatch, tmp_path):
+    target = tmp_path / "target"
+    target.mkdir()
+    rules = tmp_path / "rules.yaml"
+    rules.write_text("rules: []\n")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr("sast.semgrep_runner.shutil.which", lambda _: "semgrep")
+    captured = {}
+
+    def run(command, **kwargs):
+        captured.update(command=command, cwd=kwargs["cwd"])
+        return SimpleNamespace(returncode=0, stdout='{"results": []}', stderr="")
+
+    monkeypatch.setattr("sast.semgrep_runner.run_cancellable_process", run)
+    run_semgrep_scan(target, config=["rules.yaml", "p/python"])
+    command = captured["command"]
+    assert command[2:6] == ["--config", str(rules), "--config", "p/python"]
+    assert captured["cwd"] == target
+
+
 def test_runner_falls_back_to_isolated_docker_after_windows_core_failure(
     monkeypatch, tmp_path: Path
 ) -> None:

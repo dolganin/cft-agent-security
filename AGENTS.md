@@ -1623,3 +1623,10 @@ as the outer CLI finalizer, because newer Uvicorn versions re-raise stop signals
 Separate checkouts have separate preview Compose names; custom ports/data roots
 must remain loopback/local. First-run acceptance is in
 `docs/demo/first-run-verification.md`.
+
+`python -m app.demo_check` is a headless entrypoint for this same registered
+demo runner, not a parallel verification implementation. It preserves Gate exit
+codes, refuses nonempty artifact directories, and cleans its disposable source
+copy. In `stub` mode registered deterministic protocols still collect real
+Evidence; no LLM search quality is measured. Chat is the primary UI navigation;
+run reports remain reachable from chat without the old demo/debug footer links.
